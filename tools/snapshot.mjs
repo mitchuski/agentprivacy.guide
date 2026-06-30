@@ -22,7 +22,7 @@ const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'site'
 // = standalone wiki hosts folded into the snapshot (own single source, linked,
 // not re-projected). glyph/color from the live federationmap.
 const SITES = [
-  { id: 'guide',     label: 'Guide',      glyph: '🏛️', color: '#8a6d3b', path: 'guide',      group: 'federation', blurb: 'The front door — the federated guide to agentprivacy.' },
+  { id: 'guide',     label: 'Guide',      glyph: '🧭', color: '#8a6d3b', path: 'guide',      group: 'federation', blurb: 'The front door — the path through the federated agentprivacy canon.' },
   { id: 'spellbooks',label: 'Spellbooks', glyph: '📚', color: '#5b6e9c', path: 'spellbooks', group: 'federation', blurb: 'The First Person Spellbook (“I”) — privacymage’s narrative: Story (Acts I–XXXI) · Zero · Canon · Society · Plurality, + Selene’s poems.',
     groups: [
       { label: '📜 First Person · The Story', re: /^story-/ },
@@ -124,25 +124,35 @@ function renderMarkdown(raw, site) {
 // Strip dev-host names from PUBLISHED output. By the time this runs on rendered
 // HTML, federation /view/ links are already relative; this catches stragglers,
 // roster rows, prose, and non-federation hosts so no *.localhost:3030 leaks.
-function deLocalhost(s) {
+// sites that are also a hosted product → bare-localhost dev URLs map to the public product
+const PRODUCT_URL = { game42: 'https://42.agentprivacy.ai' };
+function deLocalhost(s, site) {
   // any leftover federation /view/ link → relative path
   s = s.replace(/https?:\/\/([a-z][a-z0-9]*)\.localhost(?::\d+)?\/view\/([\w-]+)/gi,
     (m, h, slug) => SITE_IDS.has(h) ? `/${pathOf(h)}/${slug}.html` : 'https://guide.agentprivacy.ai');
-  // other localhost URLs → the public guide
+  // other *.localhost URLs → the public guide
   s = s.replace(/https?:\/\/[a-z0-9.-]+\.localhost(?::\d+)?(\/[^\s"'<)]*)?/gi, 'https://guide.agentprivacy.ai');
   // bare host.localhost text → the site Label (federation) or the stripped host
   s = s.replace(/\b([a-z][a-z0-9.-]*)\.localhost(?::\d+)?/gi, (m, h) => {
     const first = h.split('.')[0];
-    const site = SITES.find(x => x.id === first || hostOf(x) === first);
-    return site ? site.label : h;
+    const st = SITES.find(x => x.id === first || hostOf(x) === first);
+    return st ? st.label : h;
   });
+  // on a product site, localhost dev-server refs → its public product
+  const prod = PRODUCT_URL[site];
+  if (prod) {
+    s = s.replace(/https?:\/\/localhost(?::\d+)?/gi, prod);           // full URLs (path kept)
+    s = s.replace(/\blocalhost(?::\d+)?/gi, prod.replace(/^https?:\/\//, '')); // bare mentions → domain
+  }
   return s.replace(/:3030\b/g, '');
 }
 // JSON variant: keep it valid data but point the public origin, no localhost
-function deLocalhostJson(s) {
-  return s.replace(/https?:\/\/[a-z0-9.-]+\.localhost(?::\d+)?/gi, 'https://guide.agentprivacy.ai')
-    .replace(/([a-z0-9.-]+)\.localhost(?::\d+)?/gi, '$1.guide.agentprivacy.ai')
-    .replace(/:3030\b/g, '');
+function deLocalhostJson(s, site) {
+  s = s.replace(/https?:\/\/[a-z0-9.-]+\.localhost(?::\d+)?/gi, 'https://guide.agentprivacy.ai')
+    .replace(/([a-z0-9.-]+)\.localhost(?::\d+)?/gi, '$1.guide.agentprivacy.ai');
+  const prod = PRODUCT_URL[site];
+  if (prod) s = s.replace(/https?:\/\/localhost(?::\d+)?/gi, prod).replace(/\blocalhost(?::\d+)?/gi, prod.replace(/^https?:\/\//, ''));
+  return s.replace(/:3030\b/g, '');
 }
 
 // Parse the `key: value` line-block plugins (tileglyph, roster, federationmap).
@@ -234,6 +244,7 @@ function shell({ title, site, body, lineage, slug }) {
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)} · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
@@ -305,7 +316,7 @@ for (const site of SITES) {
     let page; try { page = JSON.parse(raw); } catch { continue; }
     const title = fixText(page.title || slug);
     const story = Array.isArray(page.story) ? page.story : [];
-    const body = deLocalhost(story.map(it => renderItem(it, site.id)).join('\n'));
+    const body = deLocalhost(story.map(it => renderItem(it, site.id)).join('\n'), site.id);
 
     // lineage from journal
     const journal = Array.isArray(page.journal) ? page.journal : [];
@@ -317,7 +328,7 @@ for (const site of SITES) {
     fs.writeFileSync(path.join(outDir, `${slug}.html`),
       shell({ title, site: site.id, body, lineage, slug }));
     // emit the page json — dev-host names rewritten to the public origin
-    fs.writeFileSync(path.join(outDir, `${slug}.json`), deLocalhostJson(raw));
+    fs.writeFileSync(path.join(outDir, `${slug}.json`), deLocalhostJson(raw, site.id));
 
     const plain = story.filter(s => s.text).map(s => fixText(s.text)).join(' ')
       .replace(/[#*_`>\[\]()]/g, ' ').replace(/\s+/g, ' ').slice(0, 280);
@@ -380,7 +391,7 @@ const siteRows = WEBSITES.map(w =>
 fs.writeFileSync(path.join(OUT, 'index.html'), shell({
   title: 'The Guide', site: 'guide', slug: 'index', lineage: '',
   body: `<section class="hero">
-    <h1>Hitchhikers Guide<br><em>to Privacy</em></h1>
+    <h1>Guide<br><em>to Privacy</em></h1>
     <p class="lede">A federated, forkable projection of the agentprivacy universe — the dual-agent
     privacy framework, the skills its agents carry, the lore that grounds it, the city it lives in,
     and the sites you can open. This is the <strong>static snapshot</strong>; the living wiki runs
@@ -403,6 +414,13 @@ fs.writeFileSync(path.join(OUT, 'index.html'), shell({
 }));
 
 fs.mkdirSync(path.join(OUT, 'assets'), { recursive: true });
+// favicon — the guide's compass-star: navy ground · cyan 8-point star · coral core
+fs.writeFileSync(path.join(OUT, 'assets', 'favicon.svg'),
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#080c20"/>
+  <path d="M32 6 L36 24 L44 14 L40 28 L58 32 L40 36 L44 50 L36 40 L32 58 L28 40 L20 50 L24 36 L6 32 L24 28 L20 14 L28 24 Z" fill="#4dd9e8"/>
+  <circle cx="32" cy="32" r="4.5" fill="#e8523a"/>
+</svg>`);
 fs.writeFileSync(path.join(OUT, 'assets', 'style.css'), THEME_CSS());
 fs.writeFileSync(path.join(OUT, 'assets', 'app.js'), APP_JS());
 
@@ -491,6 +509,8 @@ article li{margin:.3em 0} article code{font-family:var(--mono);font-size:.86em;b
 article pre{background:var(--ink);border:1px solid var(--border);border-radius:10px;padding:14px 16px;overflow:auto}
 article pre code{background:none;color:var(--white)}
 article blockquote{margin:1em 0;padding:.4em 1em;border-left:3px solid var(--coral);color:var(--dim);font-style:italic}
+.prov-from{display:block;font-style:normal;font-family:var(--mono);font-size:11px;color:var(--ghost);margin-top:3px}
+.prov-n{font-family:var(--mono);font-size:12px;color:var(--cyan);font-style:normal}
 article hr{border:none;border-top:1px solid var(--border);margin:2em 0}
 .wlink{border-bottom:1px dotted var(--border-hi)}
 .deadlink{color:var(--dim)}
