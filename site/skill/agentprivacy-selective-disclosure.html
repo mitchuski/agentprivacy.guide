@@ -1,0 +1,119 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Selective Disclosure · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Selective Disclosure</span></div>
+  <article><div class="md"><h1>Selective Disclosure</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.3.2</p>
+<p><strong>Equation term</strong> <code>R(d) (disclosure as reconstruction control), Network (pool composition)</code></p>
+<p>Selective disclosure and Privacy Pool mechanics for 0xagentprivacy. Activates when discussing R(d) minimum disclosure, stratum-weighted anonymity, pool entry/exit, disclosure set calculation, or how to prove properties without revealing underlying data.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + FPS Act 10 (Topology of Revelation) + ZK Spellbook (Privacy Pools)<br><strong>Target context:</strong> Privacy Pool designers, association set architects, compliance/disclosure protocol builders<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The mechanics of revealing exactly enough and no more. Selective disclosure unifies two halves of the agentprivacy architecture: the dark forest strategy (what to reveal, when, to whom) and the ZKP machinery (prove the claim without revealing the data). This skill bridges them — the geometry of minimum disclosure as an optimisation problem.</p>
+<h2>The integer bottleneck</h2>
+<p>From FPS Act 10 (Topology of Revelation): disclosure is not continuous. You cannot reveal half a fact. You reveal a fact or you do not. The topology of disclosure is discrete — integer steps, not smooth gradients.</p>
+<p>This creates a fundamental bottleneck. The optimal disclosure point is almost never on an integer boundary. The best mathematical answer may be &quot;reveal 2.7 facts about your identity.&quot; But you must round — either reveal 2 (underserving the verifier) or 3 (overexposing yourself). The gap between optimal continuous disclosure and realised integer disclosure is the bottleneck cost.</p>
+<p><strong>ZKP as bottleneck reduction.</strong> Zero-knowledge proofs partially dissolve the bottleneck by transforming the disclosure topology. Instead of &quot;reveal fact X&quot; (binary), ZKP offers &quot;prove a property of X without revealing X itself.&quot; This turns one integer disclosure step into a spectrum: prove membership in a set (broad), prove a range (narrower), prove an exact property (narrow but not revealing). The bottleneck does not disappear — the proof itself reveals something (the statement is true) — but the granularity increases dramatically.</p>
+<h2>Privacy Pools mechanics</h2>
+<p>A Privacy Pool is an anonymity set. Participants can prove membership without revealing which member they are. The pool provides cover: the larger and more diverse the pool, the less any individual member is identifiable.</p>
+<p><strong>Association sets.</strong> Subgroups within pools that vouch for each other&#39;s legitimacy. &quot;I am a member of this pool, and I am associated with this subset of members who are known-good.&quot; This provides compliance cover without full disclosure — regulators can verify that pool members are associated with legitimate activity without identifying specific members.</p>
+<p><strong>Pool composition scoring using PVM-V4.</strong> The network topology skill provides the scoring framework. A pool&#39;s value depends on the stratum-weighted distribution of its members:</p>
+<p>Pool_value ∝ Σ wᵢ nᵢ where wᵢ follows binomial coefficients.</p>
+<p>A pool concentrated at stratum 3 (members with three active sovereignty dimensions) generates maximum value per member. A pool with diverse stratum representation provides maximum anonymity cover. The optimal pool balances both.</p>
+<h2>Disclosure as reconstruction control</h2>
+<p>The R(d) term measures reconstruction resistance as a function of disclosure depth d. Selective disclosure is the mechanism by which the agent manages R(d) — choosing how much to reveal to keep R below the ceiling.</p>
+<p><strong>The tradeoff.</strong> More disclosure (higher d) provides more utility to counterparties — they can verify more about you, trust you more, serve you better. But higher d increases R(d), bringing the reconstruction rate closer to the ceiling. The agent must navigate this tradeoff for every interaction.</p>
+<p><strong>Curved light (from dark forest).</strong> The Swordsman&#39;s core technique: reveal just enough to be useful in a specific context, with the revelation shaped by ZKP to prevent leakage to other contexts. &quot;Curved light&quot; means the disclosure illuminates only the intended recipient — observers outside the VRC-gated channel learn nothing.</p>
+<h2>Minimum disclosure as geometric constraint</h2>
+<p>On the sovereignty lattice, each disclosure corresponds to revealing one or more bits of the agent&#39;s position. The minimum disclosure for a given verification need is the smallest number of bits that satisfies the verifier&#39;s requirements.</p>
+<p><strong>Stratum-aware disclosure.</strong> An agent at stratum 4 (four active dimensions) may need to prove it is &quot;at least stratum 3&quot; to qualify for a guild. The minimum disclosure: prove Hamming weight ≥ 3 without revealing which specific dimensions are active or the exact count. This is a natural ZKP application — prove a property of the lattice position without revealing the position itself.</p>
+<p><strong>The 64-vertex proof space.</strong> Sovereignty-class proofs attest to membership in subsets of the 64 vertices. &quot;I am at one of the 20 vertices in stratum 3&quot; reveals stratum but not position. &quot;I am at one of the 35 vertices in stratum 3 or higher&quot; reveals a lower bound. The proof&#39;s anonymity set size is the subset cardinality.</p>
+<h3>Moon Phase as Visibility Ratio</h3>
+<p>The moon phase notation encodes stratum as a visual indicator of the sovereignty posture:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Stratum</th>
+<th>Disclosure Level</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🌑</td>
+<td>0</td>
+<td>Nothing disclosed — total darkness</td>
+</tr>
+<tr>
+<td>🌒🌓</td>
+<td>1-2</td>
+<td>Minimal disclosure — sliver of visibility</td>
+</tr>
+<tr>
+<td>🌔</td>
+<td>3</td>
+<td>Balanced disclosure — half sovereignty</td>
+</tr>
+<tr>
+<td>🌖🌗</td>
+<td>4-5</td>
+<td>Substantial disclosure — near-full</td>
+</tr>
+<tr>
+<td>🌕</td>
+<td>6</td>
+<td>Full sovereignty posture — all dimensions visible</td>
+</tr>
+</tbody></table>
+<p>The moon is the whole information space. The lit portion is what the Swordsman&#39;s boundary allows to be reflected. The dark portion remains private.</p>
+<p><strong>The ZK distinction:</strong> The phase shows the sovereignty POSTURE (which dimensions are active) but NOT the CONTENT (what was discussed within those dimensions). A 🌗 blade proves &quot;five dimensions active&quot; without revealing which nodes activated them.</p>
+<h2>Disclosure protocols</h2>
+<p><strong>Type 1 — Existence proof.</strong> &quot;I have a VRC with counterparty X.&quot; Proves relationship exists without revealing terms, history, or bilateral proverb. Minimum disclosure for trust establishment.</p>
+<p><strong>Type 2 — Property proof.</strong> &quot;My sovereignty score is above threshold T.&quot; Proves a property of the agent&#39;s state without revealing the state itself. Used for guild membership, pool qualification.</p>
+<p><strong>Type 3 — Transition proof.</strong> &quot;I transitioned from configuration A to configuration B through a valid path.&quot; Proves trajectory history without revealing specific intermediate states. Combined with h(τ) attestation, proves the transition was cryptographically verified.</p>
+<p><strong>Type 4 — Association proof.</strong> &quot;I am a member of association set S, and S meets compliance standard C.&quot; Proves association without identifying which member. The Privacy Pool use case.</p>
+<h2>Tornado&#39;s Eye — what went wrong</h2>
+<p>The ZK Spellbook includes Tornado Cash as a case study in selective disclosure failure. Tornado provided perfect anonymity (Type 4 proof — &quot;I am a member of this pool&quot;) but no association set mechanics. Without association sets, the pool included both legitimate and illegitimate participants. Regulators could not distinguish, so they sanctioned the entire pool.</p>
+<p><strong>PVM-V4 design response.</strong> Association sets allow selective disclosure of legitimacy without sacrificing anonymity. &quot;I am in this pool, and I am associated with the subset of pool members who passed legitimacy verification&quot; — without revealing which member or which specific legitimacy criteria were verified. This is the compliance-preserving anonymity that Tornado lacked.</p>
+<h2>Scaffolding as selective disclosure for reasoning</h2>
+<p>BRAID&#39;s procedural scaffolding principle (arXiv:2512.15959) is selective disclosure applied to inference. The graph reveals the reasoning STRUCTURE (constraints, steps, branching logic) without the reasoning CONTENT (the actual output text).</p>
+<p>The Numerical Masking Protocol makes the ZK parallel explicit: all numerical literals in the graph are replaced with <code>_</code>, ensuring the solver receives only logical topology, not computational state. This is zero-knowledge for computation — prove you know HOW to solve without revealing the solution.</p>
+<p><strong>Reasoning disclosure topology:</strong> Just as data disclosure has an integer bottleneck (reveal fact X or don&#39;t), reasoning disclosure has a graph-topology bottleneck. You can share the graph structure (node types, edge conditions) without sharing node contents. The graph is the scaffold; the content is the output. Scaffolding without answer. Structure without content. Proof without data.</p>
+<h2>Open problems</h2>
+<ol>
+<li>Optimal disclosure depth d as a function of counterparty trust level and interaction type.</li>
+<li>Formal cost function for the integer bottleneck — quantifying the gap between optimal continuous and realised discrete disclosure.</li>
+<li>Dynamic pool composition — how should pools rebalance as members progress through armor tiers?</li>
+<li>Cross-pool disclosure — how does proving membership in Pool A interact with membership in Pool B?</li>
+<li>Regulatory acceptance — will association set proofs satisfy compliance requirements in practice?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-selective-disclosure</code>, v5.3.2).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-selective-disclosure</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-selective-disclosure.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

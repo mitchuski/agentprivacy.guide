@@ -1,0 +1,88 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zero — Tale 03 · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="spellbooks">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site on" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/spellbooks/welcome-visitors.html">Spellbooks</a> / <span>Zero — Tale 03</span></div>
+  <article><div class="md"><h1>🔮 Zero — Tale 03</h1>
+</div>
+<div class="md"><h3>Tale 3: The Silent Messenger</h3>
+<p><strong>Vertex Coordinates:</strong> ⟨1,0,0,1,1,0⟩ — Protection + Connection + Computation<br><strong>Moon Phase:</strong> 🌔 Waxing Gibbous — Three dimensions active (stratum 3)<br><strong>Blade:</strong> 25 (011001) — Protection + Connection + Computation<br><strong>V(π,t) terms:</strong> <strong>C</strong> (non-interactive credential) · <strong>Q</strong> (separation quality — verifier independence)<br><strong>Concepts:</strong> Fiat-Shamir Transformation, Random Oracle Model, Non-Interactivity</p>
+<h4>The Story</h4>
+<p>In the Interactive Tower, Soulbae grew weary of the constant back-and-forth.</p>
+<p>&quot;Must the verifier always be present?&quot; she asked Soulbis. &quot;What if you need to prove something to someone who is far away, or not yet born?&quot;</p>
+<p>Soulbis nodded. &quot;This is why the Swordsman learns silence. The blade that requires the adversary to be present at every cut is not a blade — it is a conversation. I need a cut that stands when no one is watching.&quot;</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<p>The master smiled at both of them. &quot;You have discovered the need for the <strong>Silent Messenger</strong> — the Fiat-Shamir transformation.&quot;</p>
+<p>He showed them an interactive proof: a three-act play where the verifier presented challenges and the prover responded.</p>
+<p>&quot;Watch,&quot; said the master. He took the first act, combined it with a hash function, and produced a value that looked perfectly random. &quot;The prover can generate their own challenge — one they cannot predict or control — using a hash of their own commitment.&quot;</p>
+<p>&quot;But wouldn&#39;t the prover cheat by trying different commitments until they get an easy challenge?&quot; Soulbis asked, ever the security-minded.</p>
+<p>&quot;That is where the <strong>random oracle</strong> assumption comes in,&quot; explained the master. &quot;We treat the hash function as a magical oracle that returns truly random values. In practice, good hash functions like SHA-256 behave this way. The Swordsman&#39;s instinct is correct — the transformation is only as sound as the hash. Weak oracle, forged proof.&quot;</p>
+<p>Soulbis walked through the transformation himself:</p>
+<ol>
+<li>Make initial commitment: C</li>
+<li>Hash it to generate challenge: e = H(C || context)</li>
+<li>Compute response: z</li>
+<li>Package as NIZK: proof = (C, z)</li>
+</ol>
+<p>The verifier could later check the proof by recomputing e = H(C || context) and verifying the response.</p>
+<p>&quot;The prover has taken the verifier&#39;s role upon themselves,&quot; Soulbis observed, &quot;but in a way they cannot abuse. The hash binds them to the commitment before they know the challenge. That is separation enforced by time.&quot;</p>
+<p>As he completed the transformation, the Connection dimension (d₄) activated — the proof was no longer bound to a single verifier in a single moment, but could reach anyone, anywhere, anytime. The lattice had gained the ability to broadcast verification across distance and time.</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<h4>The Spell Inscription</h4>
+<pre><code>🎭(interactive) + 🔮(hash-oracle) → 🔇(non-interactive)
+P ↔️ V → P(📜) → V(✓/✗)
+challenge = H(commitment || context)
+
+Vertex: ⟨1,0,0,1,1,0⟩
+Blade: 25 (011001)  Moon Phase: 🌔 stratum 3
+
+Forces Activated:
+⚔️ Protect: privacy preserved across time — proof stands in the prover&#39;s absence
+🤝 Connect: non-interactivity broadcasts the proof to any verifier, anytime
+🧙 Project: (dormant)
+🪞 Reflect: (dormant)
+
+V(π,t) contribution: C (non-interactive credential), Q (separation quality — verifier need not be present)
+</code></pre>
+<p><strong>Proverb:</strong> <em>The oracle that answers all questions truthfully but learns nothing in return — this is the heart of non-interactive proof.</em></p>
+<h4>Technical Bridge</h4>
+<p><strong>Fiat-Shamir Transformation:</strong></p>
+<ul>
+<li>Converts interactive ZKP to NIZK</li>
+<li>Replaces verifier&#39;s random challenge with hash output</li>
+<li>Security relies on Random Oracle Model (ROM)</li>
+<li>Common in practice: Groth16, PlonK, STARKs all use variants</li>
+</ul>
+<p><strong>Hash Function Requirements:</strong></p>
+<ul>
+<li>Domain separation to prevent cross-protocol attacks</li>
+<li>Include all relevant context in hash</li>
+<li>Cryptographic hash (SHA-256, BLAKE2, Poseidon for in-circuit)</li>
+</ul>
+<p><strong>Vulnerability:</strong> Improper Fiat-Shamir can break soundness (see Frozen Heart vulnerability in Bulletproofs)</p>
+<p><strong>Geometric Interpretation:</strong><br>The Fiat-Shamir transformation activates the Connection dimension, transforming local interactive proofs into globally accessible non-interactive ones. This is the first step toward proofs that can be verified by anyone, enabling network effects while preserving the privacy boundaries established in earlier vertices. Blade 25 holds protection, computation, and connection in simultaneous alignment — the Swordsman&#39;s cut extended across distance and time without losing its edge.</p>
+<p><strong>Applied to:</strong> NIZK construction, proof compression, asynchronous verification</p>
+<hr>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 zero-tale-03</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="zero-the-privacymage-grimoire.html">Zero — the Privacymage Grimoire</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="zero-tale-03.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

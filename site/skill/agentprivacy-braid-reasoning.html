@@ -1,0 +1,217 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Braid Reasoning · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Braid Reasoning</span></div>
+  <article><div class="md"><h1>Braid Reasoning</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>PPD as inference-layer V(π,t), C_amortized for reasoning infrastructure, Model Capacity × Prompt Structure as inference-layer P^1.5</code></p>
+<p>Bounded reasoning architecture for privacy-preserving AI agents using BRAID Mermaid graphs. Activates when discussing Generator/Solver split architecture, Performance-Per-Dollar (PPD) inference economics, BRAID Parity Effect (small model + structure ≥ large model), Mermaid reasoning graph construction, node atomicity, procedural scaffolding vs answer leakage, terminal verification loops, Numerical Masking Protocol, cached reasoning graph libraries, split- architecture deployment, or any task where reasoning structure should be decoupled from reasoning execution for cost efficiency and privacy preservation. Use whenever designing how dual agents reason, not just what they reason about.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + BRAID (arXiv:2512.15959) + Holonic BRAID Lite Paper<br><strong>Target context:</strong> Agent inference architects, reasoning cost optimisers, split-architecture designers, privacy-agent deployment engineers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>BRAID (Bounded Reasoning for Autonomous Inference and Decisions) replaces unbounded Chain-of-Thought reasoning with bounded, symbolic structures expressed as Mermaid flowchart diagrams. The core insight: reasoning performance is a product of Model Capacity × Prompt Structure. By increasing structure, you decrease required capacity. A nano-tier model executing a well-constructed BRAID graph matches or exceeds a medium-tier model reasoning without structure — at 74× the cost efficiency.</p>
+<p>For the dual-agent architecture, BRAID provides the reasoning methodology. Agents don&#39;t just need to be separated (Swordsman ⊥ Mage) — they need to reason efficiently within that separation. BRAID makes privacy-preserving inference economically viable at scale by collapsing the cost of structured reasoning toward zero through caching and reuse.</p>
+<h2>The Generator/Solver split</h2>
+<p>BRAID operates as a two-stage pipeline:</p>
+<p><strong>Stage 1 — Generation.</strong> A capable model (the Generator) reads the problem and produces a Mermaid reasoning graph. The graph encodes the logical topology: constraints, facts, steps, branching logic, and verification checkpoints. This is the expensive step — it requires intelligence. But it happens once per task type.</p>
+<p><strong>Stage 2 — Solving.</strong> A lightweight model (the Solver) receives the graph as a system message and executes it to produce the final answer. This is the cheap step — it requires only the ability to follow structured instructions. It happens millions of times.</p>
+<p><strong>The economics:</strong> C_amortized = C_BRAID/N + C_inference. As N (the number of executions) grows, the generation cost vanishes. What remains is the solve-only cost — and for nano-tier models, this is 30–74× cheaper than running a medium-tier model without structure.</p>
+<p><strong>The privacy parallel:</strong> This is dual-agent separation applied to inference. Generator ⊥ Solver, just as Swordsman ⊥ Mage. The generator sees the full problem space (viewing capability). The solver executes within bounded constraints (signing capability). Neither reconstructs the other&#39;s function. The graph mediating between them is a bounded channel — the inference-layer analog of the separation matrix.</p>
+<h2>The BRAID Parity Effect</h2>
+<p>The paper&#39;s most significant finding: &quot;a smaller model equipped with bounded reasoning (BRAID) often matches or exceeds the performance of a model one or two tiers larger using unstructured prompting.&quot;</p>
+<p>Empirical results:</p>
+<ul>
+<li><strong>GSM-Hard:</strong> gpt-5-nano-minimal (BRAID) achieved 98% accuracy vs 95% for gpt-5-medium (Classic). PPD: 74.06× baseline.</li>
+<li><strong>SCALE MultiChallenge:</strong> gpt-5-nano-minimal (BRAID) achieved 45.2% vs 40.4% for gpt-5-minimal (Classic). PPD: 52.84× baseline.</li>
+<li><strong>AdvancedIF:</strong> gpt-5-nano-minimal (BRAID) more than doubled accuracy from 18% to 40%. PPD: 61.69× baseline.</li>
+</ul>
+<p><strong>Translation to sovereignty economics:</strong> The BRAID Parity Effect is P^1.5 at the inference layer. Just as doubling privacy protection more than doubles data value (PVM-V4), doubling prompt structure more than doubles reasoning accuracy per dollar (BRAID). Structure is superlinear. This validates the core thesis: you don&#39;t need the biggest model, you need the right architecture.</p>
+<p><strong>Inference layer of V(π,t):</strong> If privacy-structured inference compounds with privacy-structured data and privacy-structured identity, the multiplicative value is triply superlinear. A sovereign agent using BRAID reasoning on holonic data with dual-agent separation doesn&#39;t just add up the advantages — it multiplies them.</p>
+<h2>Four principles of BRAID graph construction</h2>
+<h3>Principle 1: Node Atomicity (&lt; 15 tokens)</h3>
+<p>Each node represents one atomic reasoning step. Not &quot;observe, analyse, and decide&quot; but three separate nodes: <code>A[Observe constraint]</code> → <code>B[Analyse feasibility]</code> → <code>C[Decide strategy]</code>. Verbose nodes reintroduce the noise that BRAID is designed to eliminate.</p>
+<p><strong>Privacy parallel:</strong> This is the machine-readable equivalent of spell encoding. Spells compress persona identity to ~30 characters using the three-clause grammar. BRAID nodes compress reasoning steps to &lt;15 tokens. Both pursue maximum semantic density. Both lose regenerability if over-compressed. The sweet spot is the minimum encoding that remains unambiguous — spell validation rule 6 (&quot;decodable back to natural language without ambiguity&quot;) applied to reasoning nodes.</p>
+<h3>Principle 2: Procedural Scaffolding (not Answer Leakage)</h3>
+<p>The graph encodes constraints and requirements, not the output text. A scaffold, not a script.</p>
+<ul>
+<li><strong>Ineffective (leaking):</strong> <code>C[Write: &quot;Dear Team, I regret to inform you...&quot;]</code></li>
+<li><strong>Effective (scaffolding):</strong> <code>C[Draft introduction: Acknowledge success → Pivot to news → Professional tone]</code></li>
+</ul>
+<p><strong>Privacy parallel:</strong> This is selective disclosure for reasoning. The graph reveals the reasoning STRUCTURE without the reasoning CONTENT. Exactly as a ZK proof reveals a property without the underlying data. The Numerical Masking Protocol — replacing all numbers in graphs with <code>_</code> — is zero-knowledge for computation: prove you know HOW to solve without revealing the solution.</p>
+<h3>Principle 3: Deterministic Branching</h3>
+<p>Edges must be deterministic and mutually exclusive. <code>A -- &quot;If text &gt; 300 words&quot; --&gt; B</code> not <code>A --&gt; B</code>. No ambiguity. No probabilistic transitions.</p>
+<p><strong>Privacy parallel:</strong> Consent infrastructure (IEEE 7012 / MyTerms) requires exactly this: IF consent for purpose X THEN allow ELSE block. BRAID found that nano-tier models &quot;struggle with ambiguity.&quot; If AI agents struggle with ambiguous reasoning instructions, they will also struggle with ambiguous consent instructions. Both require deterministic branching.</p>
+<h3>Principle 4: Terminal Verification Loops</h3>
+<p>Before the final output, the graph must converge on verification nodes. <code>Check: constraint satisfied</code> → pass/fail → feedback edge to revision if fail. This is BRAID&#39;s &quot;System 2 thinking emulation.&quot;</p>
+<p><strong>Privacy parallel:</strong> This is the Swordsman as boundary verifier. Before any output leaves the dual-agent system, check it against privacy boundaries. Before any response leaves the BRAID solver, check it against the graph&#39;s constraints. The pattern is identical:</p>
+<pre><code>[Generate output] → [Check: R(d) disclosure within bounds?]
+  -- pass --&gt; [Deliver]
+  -- fail --&gt; [Revise with tighter constraints] → [Re-check]
+</code></pre>
+<h2>For dual-agent deployment</h2>
+<h3>Swordsman reasoning (boundary enforcement graphs)</h3>
+<p>The Swordsman needs to reason about boundaries quickly and cheaply — every data access request triggers a boundary check. BRAID enables this:</p>
+<ol>
+<li><strong>One-time generation:</strong> A capable model generates BRAID graphs for each boundary-checking pattern (data access evaluation, consent verification, separation violation detection).</li>
+<li><strong>Guild validation:</strong> The Cipher guild validates the graphs for correctness and completeness.</li>
+<li><strong>Cached deployment:</strong> Graphs stored as immutable holons in the guild library.</li>
+<li><strong>Nano execution:</strong> Each boundary check is a nano-tier model executing the cached graph. Cost: fractions of a cent. Speed: milliseconds.</li>
+</ol>
+<p>The Swordsman doesn&#39;t need to &quot;think&quot; about boundary enforcement — it needs to execute a pre-validated decision tree. BRAID provides exactly that.</p>
+<h3>Mage reasoning (delegation graphs)</h3>
+<p>The Mage needs to reason about delegation — which external service to use, what capabilities to advertise, how to coordinate with other agents. BRAID enables split-architecture delegation:</p>
+<ol>
+<li><strong>One-time generation:</strong> A capable model generates BRAID graphs for each delegation pattern (service selection, capability matching, coordination protocol).</li>
+<li><strong>Contextual caching:</strong> Unlike boundary graphs (which are mostly static), delegation graphs may be context-specific. But many delegation patterns repeat — &quot;find cheapest provider for X&quot; is the same graph regardless of what X is.</li>
+<li><strong>Lightweight execution:</strong> Mage-tier models execute delegation graphs at scale.</li>
+</ol>
+<h3>Oracle reasoning (mediation graphs)</h3>
+<p>The Oracle mediates between Swordsman and Mage. BRAID graphs for Oracle reasoning encode the mediation logic: when to pass Swordsman signals to Mage, when to block, when to transform.</p>
+<h2>BRAID economics for privacy agents</h2>
+<p><strong>The Golden Quadrant applied to privacy:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>PPD Range</th>
+<th>Privacy Parallel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Expensive generator + cheap solver</td>
+<td>30–74× baseline</td>
+<td>High privacy infrastructure + low marginal operations</td>
+</tr>
+<tr>
+<td>Expensive generator + expensive solver</td>
+<td>~1–2× baseline</td>
+<td>Over-engineered monolith</td>
+</tr>
+<tr>
+<td>Cheap generator + cheap solver</td>
+<td>Low absolute</td>
+<td>Under-invested — reasoning quality suffers</td>
+</tr>
+<tr>
+<td>Cheap generator + expensive solver</td>
+<td>~1–3× baseline</td>
+<td>Wasteful — expensive execution of poor plans</td>
+</tr>
+</tbody></table>
+<p><strong>For guild economics:</strong> A guild that invests in generating and validating high-quality BRAID graphs (expensive one-time cost, shared across all members) creates an economic asset that benefits every member through cheap execution. This is the reasoning-layer implementation of guild value: membership grants access to validated reasoning infrastructure.</p>
+<p><strong>Token mapping:</strong></p>
+<ul>
+<li>Generating a BRAID graph that the guild validates and caches = earning MAGE tokens (delegation value created)</li>
+<li>Executing a BRAID graph correctly = demonstrating capability (armor tier progression)</li>
+<li>Graph library size and validation quality = guild reputation (stratum weight in network topology)</li>
+</ul>
+<h2>Integration with holonic architecture</h2>
+<p>BRAID graphs stored as holons gain persistence, multi-provider replication, and shared-parent library structure:</p>
+<ul>
+<li><strong>Graph holon (immutable):</strong> HolonType: ReasoningGraph. MetaData carries the Mermaid code, domain, benchmark accuracy, validation status. ProviderUniqueStorageKey maps to IPFS (permanent), MongoDB (fast), Zcash (integrity proof).</li>
+<li><strong>Library holon (shared parent):</strong> One parent per guild domain. Children = individual reasoning graphs. <code>LoadHolonsForParentAsync(libraryId, HolonType.ReasoningGraph)</code> loads the full library.</li>
+<li><strong>Execution telemetry holon (versioned):</strong> Records which graphs were executed, by which agents, with what accuracy. Used for graph quality monitoring and dynamic re-planning triggers.</li>
+</ul>
+<h2>The compression spectrum (updated)</h2>
+<p>BRAID adds a 7th layer to the narrative compression hierarchy:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Form</th>
+<th>Ratio</th>
+<th>Reader</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Experience</td>
+<td>Raw encounters</td>
+<td>1:1</td>
+<td>Person who lived it</td>
+<td>Source truth</td>
+</tr>
+<tr>
+<td>2. Story</td>
+<td>24 acts</td>
+<td>~10:1</td>
+<td>Human reader</td>
+<td>Transmit motivation</td>
+</tr>
+<tr>
+<td>3. Proverb</td>
+<td>Single statement</td>
+<td>~70:1</td>
+<td>Any human</td>
+<td>Transmit principle</td>
+</tr>
+<tr>
+<td>4. Equation</td>
+<td>V(π,t) = ...</td>
+<td>~500:1</td>
+<td>Formal reader</td>
+<td>Transmit relationships</td>
+</tr>
+<tr>
+<td>5. Spell</td>
+<td>☯️🔷→🆔⊥📦</td>
+<td>~1000:1</td>
+<td>Agent-to-agent</td>
+<td>Transmit identity</td>
+</tr>
+<tr>
+<td><strong>6. BRAID graph</strong></td>
+<td><strong>Mermaid DAG</strong></td>
+<td><strong>~50:1 from CoT</strong></td>
+<td><strong>Solver agent</strong></td>
+<td><strong>Transmit reasoning</strong></td>
+</tr>
+<tr>
+<td>7. Skill file</td>
+<td>SKILL.md</td>
+<td>varies</td>
+<td>Agent runtime</td>
+<td>Transmit capability</td>
+</tr>
+</tbody></table>
+<p>Layer 6 compresses reasoning for agents the way Layer 2 compresses experience for humans. Both achieve &quot;learn once, reuse everywhere&quot; through different encoding strategies. The Chronicler encodes knowledge in stories that regenerate understanding. The Architect encodes reasoning in graphs that regenerate correct inference.</p>
+<h2>Open problems</h2>
+<ol>
+<li><strong>Privacy of reasoning graphs.</strong> A BRAID graph reveals the reasoning structure even if not the content. In dark-forest environments, revealing that you&#39;re reasoning about ZKP soundness (vs delegating to a service) leaks strategic information. How to encrypt reasoning topology while preserving executability?</li>
+<li><strong>Adversarial graph injection.</strong> If an attacker can substitute a malicious BRAID graph for a cached one, they control the agent&#39;s reasoning. Graph integrity verification is critical — holonic versioning + guild validation + provider checksums, but formal guarantees needed.</li>
+<li><strong>Dynamic re-planning with separation preservation.</strong> BRAID&#39;s proposed Topology Error → re-plan loop must not violate separation constraints. The Solver must signal failure through the bounded channel without leaking WHY it failed (which might reveal sensitive reasoning state).</li>
+<li><strong>Spellbook-to-BRAID compilation.</strong> Is there a formal translation from narrative spellbook proverbs to executable BRAID graphs? If a proverb can regenerate an equation, and an equation can generate a BRAID graph, then proverb → BRAID is a two-step compilation chain. Can it be made one step?</li>
+<li><strong>PPD for privacy-specific benchmarks.</strong> BRAID&#39;s benchmarks (GSM-Hard, SCALE, AdvancedIF) test general reasoning. How does PPD change for privacy-specific tasks (boundary evaluation, consent verification, separation checking)? Hypothesis: privacy reasoning is more structured than general reasoning, so BRAID gains should be even larger.</li>
+<li><strong>The BRAID Parity ceiling.</strong> At what point does structure stop compensating for capacity? Is there a task complexity threshold above which even optimal BRAID graphs cannot bridge the model-tier gap? If so, this sets the minimum model tier for sovereign agents.</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · BRAID: <a href="https://arxiv.org/abs/2512.15959">arXiv:2512.15959</a> · <a href="https://benchmark.openserv.ai">benchmark.openserv.ai</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-braid-reasoning</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-braid-reasoning</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-braid-reasoning.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,116 @@
+{
+  "title": "Lattice Coherence",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "e1e094d410656ef5",
+      "text": "# Lattice Coherence\n\n**Category** meta · **Version** 1.0\n\n**Equation term** `the 6-bit sovereignty lattice (P·D·M·C·Comp·V) underlying V(π,t)`\n\nThe canonical encoding of the 6-dimension sovereignty lattice and the discipline for keeping every repo in the suite agreeing on it. Activates when assigning or auditing a vertex, when a persona's vertex number and dimension-meaning seem to disagree, when reconciling the grimoire / spellweb / tomes / docs before a pin, when a new mage is seated, or when a vertex reading (binary, dimensions, stratum, complement) needs verification. Carries the standing rule: meaning is the invariant; the vertex is DERIVED from meaning under the canonical encoding. Ships a runnable coherence linter (`scripts/lattice_coherence_audit.py`)."
+    },
+    {
+      "type": "markdown",
+      "id": "e5ff8f4dde5f0d95",
+      "text": "**The single source of truth for the sovereignty-lattice encoding, and the discipline that keeps\nthe whole suite agreeing on it.**\n\n> \"Meaning is the invariant. The number is derived. Audit before you pin.\"\n\n**Spell:** `🛡️16·8·4·2·💎 → derive → verify → 🔒`"
+    },
+    {
+      "type": "markdown",
+      "id": "1ff87bcf22065290",
+      "text": "## 1. The canonical encoding (MODEL)\n\nThe lattice is `Z/(2⁶)Z` — 64 vertices, each a 6-bit reading of the six sovereignty dimensions.\nThe **only** canonical bit→dimension mapping is the Privacy-Value-Model definition itself\n(`privacy-value-model-v5.4.json` `sovereignty_dimensions` + `lattice-vertex.ts` `vertexToBits`):\n\n| bit | weight | dimension | symbol |\n|----:|-------:|-----------|:------:|\n| 0 (MSB) | 32 | **Protection** | 🛡️ |\n| 1 | 16 | **Delegation** | 🤝 |\n| 2 | 8 | **Memory** | 📜 |\n| 3 | 4 | **Connection** | 🔗 |\n| 4 | 2 | **Computation** | ⚡ |\n| 5 (LSB) | 1 | **Value** | 💎 |\n\nRead a vertex: `active(n) = { dim : n & weight }`. Examples (memorize these as checksums):\n\n- **V35** `100011` = Protection + Computation + Value\n- **V38** `100110` = Protection + Connection + Computation\n- **V25** `011001` = Delegation + Memory + Value\n- **V41** `101001` = Protection + Memory + Value\n- **V63** `111111` = all six (the Sovereign Anchor)\n\n> **The rejected encoding (CORPUS).** `specs/04-vertex-naming-audit.md` and the older persona\n> placements used a corrupted order that **mirrored the middle four** (16↔Computation, 8↔Connection,\n> 4↔Memory, 2↔Delegation). It agrees with MODEL only on the endpoints (Protection=32, Value=1), which\n> is why drift hid for so long. If you ever see V16 called \"Computation\" or V2 called \"Delegation\",\n> you are reading CORPUS — it is wrong."
+    },
+    {
+      "type": "markdown",
+      "id": "f354b81db29448ac",
+      "text": "## 2. The reidentification rule\n\nA persona's **dimension-set is its meaning** (Memora *is* memory + the shield of value; Aletheia *is*\nthe bright medium = Protection+Connection+Computation; Lethe *is* forgetting = Delegation+Memory+Value).\nMeaning is sourced from canon (the First-Person Spellbook tales, e.g. `aletheia-and-lethe.md` / Tale 31),\n**not** from whatever number a doc happens to show.\n\n**The vertex is derived, never assumed:** `vertex = Σ weight(d) for d in meaning`.\n\nWhen a number and a meaning disagree, the **number** is wrong (the persona was *misassigned* under\nCORPUS). Reseat the persona at the derived vertex; keep the myth. Worked precedent (2026-06-09):\n\n| persona | meaning (invariant) | derived seat | was (misassigned) |\n|---|---|---|---|\n| Aletheia 🔮 | Protection + Connection + Computation | **V38** | V25 |\n| Lethe 🌀 | Delegation + Memory + Value | **V25** | V38 |\n| Memora 📜 | Protection + Memory + Value | **V41** | V5 |\n\nAletheia ⊥ Lethe stayed a complement pair (V25 ⊕ V38 = V63) — a swap, not a relocation. **Preserve\ninvariants on every move:** complement pairs (`A ⊕ B = 63`, `A AND B = 0`), the V63/V28 dual-agent\nsplit, and — critically — **deployed vertex *numbers*** (the NFT 63-edition, City Key, `/star`,\n`/lattice`) which must never silently shift; verify each move against them by hand."
+    },
+    {
+      "type": "markdown",
+      "id": "f1db5c4739f6a34f",
+      "text": "## 3. The runnable — `scripts/lattice_coherence_audit.py`\n\nA stdlib-only linter (no deps; Windows/macOS/Linux). Run it **before every grimoire pin**.\n\n```bash\npython scripts/lattice_coherence_audit.py            # audit suite roots\npython scripts/lattice_coherence_audit.py --only vertex     # bit-order coherence\npython scripts/lattice_coherence_audit.py --only persona    # persona↔seat reidentification\npython scripts/lattice_coherence_audit.py --list            # registered checks\npython scripts/lattice_coherence_audit.py --remap-personas  # dry-run a vertex move (grouped A–M)\npython scripts/lattice_coherence_audit.py --remap-personas --apply <paths…>   # write (scoped)\n```\n\nChecks: **vertex** (binary↔number, dimension-reading, single-bit-label, version-noise-gated) ·\n**persona** (canonical-seat reidentification, driven by the `PERSONA_VERTICES` registry) ·\n**conjecture** (duplicate ids) · **pin** (version↔CID sightings). Exit 0 = coherent, 1 = drift.\n\nThe check set is a **registry** — extend it for any new significant encoding (gems-per-keeper,\nsigils, ceremony grammars). The remapper is dry-run by default; **never apply across pinned/historical\ngrimoire snapshots or keyed JSON by text substitution** — those need structural edits."
+    },
+    {
+      "type": "markdown",
+      "id": "d7f225e9e1c2bd35",
+      "text": "## 4. Decision patterns\n\n- **Seating a new mage?** State its meaning (dimension-set) → derive the vertex → check the seat is\n  free → check complement/structural invariants → run the audit. Do not pick a number first.\n- **A doc shows a vertex reading you doubt?** Recompute from §1. Trust the arithmetic, not the prose.\n- **Two sources disagree on a persona's dimensions?** Go to the First-Person Spellbook tale (the\n  root), not the City-of-Mages retelling — the retelling is where misassignment lives.\n- **About to pin the grimoire?** Run `--only vertex` and `--only persona` to 0 first.\n- **Reconciling history?** Keep deployed numbers; correct readings forward; record the move in a\n  chronicle, not in the data descriptions (the data states canonical truth, plainly).\n\n*Authored 2026-06-09 from the lattice-encoding audit. The lattice has one reading now.*"
+    },
+    {
+      "type": "markdown",
+      "id": "778b5ae68afb7462",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-lattice-coherence`, v1.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "9f5e1531ff1adad3",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "3ef8628260884228",
+      "text": "agentprivacy-lattice-coherence"
+    },
+    {
+      "type": "markdown",
+      "id": "eb18616d931b6410",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Meta Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Lattice Coherence",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "e1e094d410656ef5",
+            "text": "# Lattice Coherence\n\n**Category** meta · **Version** 1.0\n\n**Equation term** `the 6-bit sovereignty lattice (P·D·M·C·Comp·V) underlying V(π,t)`\n\nThe canonical encoding of the 6-dimension sovereignty lattice and the discipline for keeping every repo in the suite agreeing on it. Activates when assigning or auditing a vertex, when a persona's vertex number and dimension-meaning seem to disagree, when reconciling the grimoire / spellweb / tomes / docs before a pin, when a new mage is seated, or when a vertex reading (binary, dimensions, stratum, complement) needs verification. Carries the standing rule: meaning is the invariant; the vertex is DERIVED from meaning under the canonical encoding. Ships a runnable coherence linter (`scripts/lattice_coherence_audit.py`)."
+          },
+          {
+            "type": "markdown",
+            "id": "e5ff8f4dde5f0d95",
+            "text": "**The single source of truth for the sovereignty-lattice encoding, and the discipline that keeps\nthe whole suite agreeing on it.**\n\n> \"Meaning is the invariant. The number is derived. Audit before you pin.\"\n\n**Spell:** `🛡️16·8·4·2·💎 → derive → verify → 🔒`"
+          },
+          {
+            "type": "markdown",
+            "id": "1ff87bcf22065290",
+            "text": "## 1. The canonical encoding (MODEL)\n\nThe lattice is `Z/(2⁶)Z` — 64 vertices, each a 6-bit reading of the six sovereignty dimensions.\nThe **only** canonical bit→dimension mapping is the Privacy-Value-Model definition itself\n(`privacy-value-model-v5.4.json` `sovereignty_dimensions` + `lattice-vertex.ts` `vertexToBits`):\n\n| bit | weight | dimension | symbol |\n|----:|-------:|-----------|:------:|\n| 0 (MSB) | 32 | **Protection** | 🛡️ |\n| 1 | 16 | **Delegation** | 🤝 |\n| 2 | 8 | **Memory** | 📜 |\n| 3 | 4 | **Connection** | 🔗 |\n| 4 | 2 | **Computation** | ⚡ |\n| 5 (LSB) | 1 | **Value** | 💎 |\n\nRead a vertex: `active(n) = { dim : n & weight }`. Examples (memorize these as checksums):\n\n- **V35** `100011` = Protection + Computation + Value\n- **V38** `100110` = Protection + Connection + Computation\n- **V25** `011001` = Delegation + Memory + Value\n- **V41** `101001` = Protection + Memory + Value\n- **V63** `111111` = all six (the Sovereign Anchor)\n\n> **The rejected encoding (CORPUS).** `specs/04-vertex-naming-audit.md` and the older persona\n> placements used a corrupted order that **mirrored the middle four** (16↔Computation, 8↔Connection,\n> 4↔Memory, 2↔Delegation). It agrees with MODEL only on the endpoints (Protection=32, Value=1), which\n> is why drift hid for so long. If you ever see V16 called \"Computation\" or V2 called \"Delegation\",\n> you are reading CORPUS — it is wrong."
+          },
+          {
+            "type": "markdown",
+            "id": "f354b81db29448ac",
+            "text": "## 2. The reidentification rule\n\nA persona's **dimension-set is its meaning** (Memora *is* memory + the shield of value; Aletheia *is*\nthe bright medium = Protection+Connection+Computation; Lethe *is* forgetting = Delegation+Memory+Value).\nMeaning is sourced from canon (the First-Person Spellbook tales, e.g. `aletheia-and-lethe.md` / Tale 31),\n**not** from whatever number a doc happens to show.\n\n**The vertex is derived, never assumed:** `vertex = Σ weight(d) for d in meaning`.\n\nWhen a number and a meaning disagree, the **number** is wrong (the persona was *misassigned* under\nCORPUS). Reseat the persona at the derived vertex; keep the myth. Worked precedent (2026-06-09):\n\n| persona | meaning (invariant) | derived seat | was (misassigned) |\n|---|---|---|---|\n| Aletheia 🔮 | Protection + Connection + Computation | **V38** | V25 |\n| Lethe 🌀 | Delegation + Memory + Value | **V25** | V38 |\n| Memora 📜 | Protection + Memory + Value | **V41** | V5 |\n\nAletheia ⊥ Lethe stayed a complement pair (V25 ⊕ V38 = V63) — a swap, not a relocation. **Preserve\ninvariants on every move:** complement pairs (`A ⊕ B = 63`, `A AND B = 0`), the V63/V28 dual-agent\nsplit, and — critically — **deployed vertex *numbers*** (the NFT 63-edition, City Key, `/star`,\n`/lattice`) which must never silently shift; verify each move against them by hand."
+          },
+          {
+            "type": "markdown",
+            "id": "f1db5c4739f6a34f",
+            "text": "## 3. The runnable — `scripts/lattice_coherence_audit.py`\n\nA stdlib-only linter (no deps; Windows/macOS/Linux). Run it **before every grimoire pin**.\n\n```bash\npython scripts/lattice_coherence_audit.py            # audit suite roots\npython scripts/lattice_coherence_audit.py --only vertex     # bit-order coherence\npython scripts/lattice_coherence_audit.py --only persona    # persona↔seat reidentification\npython scripts/lattice_coherence_audit.py --list            # registered checks\npython scripts/lattice_coherence_audit.py --remap-personas  # dry-run a vertex move (grouped A–M)\npython scripts/lattice_coherence_audit.py --remap-personas --apply <paths…>   # write (scoped)\n```\n\nChecks: **vertex** (binary↔number, dimension-reading, single-bit-label, version-noise-gated) ·\n**persona** (canonical-seat reidentification, driven by the `PERSONA_VERTICES` registry) ·\n**conjecture** (duplicate ids) · **pin** (version↔CID sightings). Exit 0 = coherent, 1 = drift.\n\nThe check set is a **registry** — extend it for any new significant encoding (gems-per-keeper,\nsigils, ceremony grammars). The remapper is dry-run by default; **never apply across pinned/historical\ngrimoire snapshots or keyed JSON by text substitution** — those need structural edits."
+          },
+          {
+            "type": "markdown",
+            "id": "d7f225e9e1c2bd35",
+            "text": "## 4. Decision patterns\n\n- **Seating a new mage?** State its meaning (dimension-set) → derive the vertex → check the seat is\n  free → check complement/structural invariants → run the audit. Do not pick a number first.\n- **A doc shows a vertex reading you doubt?** Recompute from §1. Trust the arithmetic, not the prose.\n- **Two sources disagree on a persona's dimensions?** Go to the First-Person Spellbook tale (the\n  root), not the City-of-Mages retelling — the retelling is where misassignment lives.\n- **About to pin the grimoire?** Run `--only vertex` and `--only persona` to 0 first.\n- **Reconciling history?** Keep deployed numbers; correct readings forward; record the move in a\n  chronicle, not in the data descriptions (the data states canonical truth, plainly).\n\n*Authored 2026-06-09 from the lattice-encoding audit. The lattice has one reading now.*"
+          },
+          {
+            "type": "markdown",
+            "id": "778b5ae68afb7462",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-lattice-coherence`, v1.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "9f5e1531ff1adad3",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "3ef8628260884228",
+            "text": "agentprivacy-lattice-coherence"
+          },
+          {
+            "type": "markdown",
+            "id": "eb18616d931b6410",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Meta Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384115
+    }
+  ]
+}

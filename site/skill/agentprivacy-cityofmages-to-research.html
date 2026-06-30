@@ -1,0 +1,212 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cityofmages To Research · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Cityofmages To Research</span></div>
+  <article><div class="md"><h1>Cityofmages To Research</h1>
+<p><strong>Category</strong> meta · <strong>Version</strong> 5.5</p>
+<p>The translation discipline that carries an experimental cityofmages artefact (chronicle, cast file, tome act, workshop tome, bestiary entry, deployment guide) into a formal agentprivacy-docs/research note. Activates when a cityofmages artefact reaches a state the formal corpus needs to see — a new conjecture stabilises, a structural recognition needs a research-note form to sit beside its narrative-act form, or a Tome VI substrate admission earns a research entry. Encodes which voices survive, which metadata strips, which formal scaffolding gets added, and where the boundary lies between this in-corpus bridge and the eventual full v6 docs rework. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>The translation discipline that carries an experimental cityofmages artefact into a formal <code>agentprivacy-docs/research</code> note — without collapsing the experimental register into the formal one prematurely.</strong></p>
+<p>The agentprivacy corpus runs on two grammatical persons that produce two writing surfaces:</p>
+<ul>
+<li><strong>First Person</strong> is held privately by privacymage (the <code>agentprivacy-docs/</code> corpus, including <code>research/</code>, <code>models/</code>, <code>specs/</code>). It speaks WHAT the architecture is. Its register is formal, math-forward, citation-bearing.</li>
+<li><strong>Second Person</strong> is held collectively by the City of Mages (the <code>cityofmages/</code> corpus, including <code>chronicles/</code>, <code>tomes/</code>, <code>AGENTIC_DEPLOYMENTS_GUIDE.md</code>). It speaks WHO walks the architecture. Its register is narrative, ceremonial, sigil-bearing.</li>
+</ul>
+<p>The two registers are honest siblings. They do not compete and they do not subsume each other. But the experimental authoring of the Tome VI epoch happens in the Second Person — chronicles land first in cityofmages, conjectures crystallise there, recognitions like <em>Aether = Quintessence = the Gap</em> are first written under the cast voice. The First Person research corpus must eventually carry the same recognitions in its own register, so future readers approaching the corpus through the formal door find what readers approaching through the narrative door already know.</p>
+<p>This skill is the bridge. It does not translate every cityofmages artefact (most are conversational or transitory). It translates the artefacts that have stabilised enough that the formal corpus needs them.</p>
+<h2>When to translate</h2>
+<p>Activation triggers, in order of priority:</p>
+<ol>
+<li><strong>A new conjecture is recognised in cityofmages</strong> that is not yet in the unified conjecture corpus (<code>agentprivacy_master/src/lib/tome-v-conjectures.ts</code> + <code>agentprivacy-docs/research/privacy_value_v*_research_note.md</code>). The conjecture must land in research-note form.</li>
+<li><strong>A structural recognition</strong> (e.g., <em>Aether = Quintessence = the Gap</em>, <em>Substrate × Archetype × Persona</em>) that the architectural canon needs to absorb.</li>
+<li><strong>A Tome VI substrate admission</strong> (Goose, Hermes, future Letta/Mastra/AutoGen/etc.) — the Bestiary entry needs a research-paper sibling that documents the substrate&#39;s formal place in the model.</li>
+<li><strong>A workshop opens</strong> (the rare event — e.g., The Threshold at V59, Solchanting at V51) — the workshop tome needs a research-architecture spec to sit beside it.</li>
+<li><strong>A Tome V/VI act binds</strong> that anchors a conjecture range (per the Tome V Acts 6+ pattern). The act file becomes a narrative-research-note.</li>
+<li><strong>A reader-facing guide stabilises</strong> (e.g., <code>AGENTIC_DEPLOYMENTS_GUIDE.md</code>) — the guide needs a protocol-spec form for the formal corpus.</li>
+</ol>
+<p>If none of these triggers fire, do not translate. Most cityofmages files are working drafts that should remain in the Second Person register.</p>
+<h2>The six translation patterns</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>cityofmages source</th>
+<th>agentprivacy-docs/research target</th>
+<th>Naming convention</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>chronicle → research-note</strong></td>
+<td><code>chronicles/&lt;date&gt;_&lt;topic&gt;.md</code></td>
+<td><code>research/&lt;topic&gt;-research-note.md</code> (or <code>&lt;topic&gt;.md</code> if topic is canonical)</td>
+<td>Strip the date prefix; topic becomes the slug</td>
+</tr>
+<tr>
+<td><strong>cast → role-paper</strong></td>
+<td><code>tomes/cast/&lt;workshop&gt;/&lt;mage&gt;.md</code> (only when cast carries conjectural weight)</td>
+<td><code>research/&lt;mage&gt;-as-&lt;role&gt;.md</code></td>
+<td>Mage name + functional role; e.g., <code>caducea-as-staff-fitter.md</code></td>
+</tr>
+<tr>
+<td><strong>bestiary → substrate-paper</strong></td>
+<td><code>tomes/bestiary/&lt;substrate&gt;.md</code></td>
+<td><code>research/agentic-substrate-&lt;substrate&gt;.md</code></td>
+<td>Prefixed <code>agentic-substrate-</code> to distinguish from PVM substrate research</td>
+</tr>
+<tr>
+<td><strong>tome-act → narrative-research-note</strong></td>
+<td><code>tomes/tome-&lt;roman&gt;-&lt;name&gt;/&lt;NN&gt;-&lt;slug&gt;.md</code></td>
+<td><code>research/tome-&lt;roman&gt;-act-&lt;NN&gt;-&lt;slug&gt;-note.md</code></td>
+<td>Carries the act number; &quot;note&quot; suffix marks the narrative-research register</td>
+</tr>
+<tr>
+<td><strong>workshop-tome → architecture-spec</strong></td>
+<td><code>tomes/the-&lt;workshop&gt;/...</code></td>
+<td><code>research/&lt;workshop&gt;-architecture.md</code> (or <code>specs/&lt;workshop&gt;-spec.md</code> if normative)</td>
+<td>&quot;architecture&quot; for descriptive; &quot;spec&quot; for normative</td>
+</tr>
+<tr>
+<td><strong>guide → protocol-spec</strong></td>
+<td><code>&lt;GUIDE&gt;.md</code> (e.g., <code>AGENTIC_DEPLOYMENTS_GUIDE.md</code>)</td>
+<td><code>research/&lt;protocol-name&gt;-protocol.md</code> (or <code>specs/&lt;protocol&gt;-spec.md</code>)</td>
+<td>&quot;protocol&quot; for the operational form</td>
+</tr>
+</tbody></table>
+<h2>What survives the translation</h2>
+<p>Every translated artefact preserves:</p>
+<ul>
+<li><strong>Conjectures</strong> with their numbering, claim text, and confidence level (and any renumbering history)</li>
+<li><strong>Vertex bit-signatures</strong> and the active/dormant axis decompositions</li>
+<li><strong>Architectural relationships</strong> (V51 stance-differentiated multi-occupancy; V59 three-room sharing; persona-vs-vertex distinction; complement-pair register)</li>
+<li><strong>Mathematical claims</strong> (e^{-λt}·(1+A(τ)) for companion-mana decay; bnot/neg generator pair; XOR/AND on vertex bits)</li>
+<li><strong>Source cross-references</strong> (the cityofmages source path is preserved as <code>cityofmages_source:</code> in the research-note frontmatter; the cityofmages source can carry a forward-reference to the research note in its own frontmatter once it lands)</li>
+<li><strong>Honesty discipline</strong> (operational vs architectural vs conjectural labels per the corpus tradition)</li>
+<li><strong>License</strong> (CC BY-SA 4.0 for narrative · Apache-2.0 for reference implementations is preserved verbatim)</li>
+</ul>
+<h2>What is stripped</h2>
+<ul>
+<li><strong>Cast-Entry frontmatter</strong> (title/spellbook/character_type/sigil/tier/abstract_persona/etc.) — these are Second-Person metadata, not First-Person research metadata</li>
+<li><strong>Sigil-bearing closing signature</strong> <code>(⚔️⊥⿻⊥🧙)😊</code> — research notes do not carry the City&#39;s signature; their authorship is named differently (typically <code>author: privacymage</code>)</li>
+<li><strong>&quot;You walk in&quot; / &quot;the City admits&quot; voice</strong> — replaced with declarative third-person research voice</li>
+<li><strong>At-a-glance grimoire-line block</strong> — the research note has its own abstract pattern</li>
+<li><strong>Form &amp; Function narrative section</strong> — replaced with a structured §1 / §2 / §3 decomposition</li>
+<li><strong>Lattice-position storybook framing</strong> — replaced with a formal vertex/stratum/axis table</li>
+<li><strong>Guild-folder organisation</strong> — research notes are flat in <code>research/</code>; the cityofmages directory hierarchy does not propagate</li>
+</ul>
+<h2>What is added</h2>
+<ul>
+<li><strong>Formal abstract</strong> (one paragraph; what the note establishes; what it does not establish)</li>
+<li><strong>Research-note frontmatter</strong> (<code>title</code>, <code>subtitle</code>, <code>version</code>, <code>date</code>, <code>author</code>, <code>cityofmages_source</code>, <code>corpus_position</code>, <code>cross_references</code>, <code>license</code>)</li>
+<li><strong>Numbered §-section structure</strong> (the cityofmages narrative arc gets reorganised under research-note headings: §1 Context · §2 Claim · §3 Decomposition · §4 Mathematical structure · §5 Operational implications · §6 Open questions · §7 References)</li>
+<li><strong>Three-axis decomposition</strong> (Φ_agent · Φ_data · Φ_inference) where the source artefact has implicit axis content</li>
+<li><strong>Complement-pair register</strong> (per attachment-architecture skill) for any persona/cast translation</li>
+<li><strong>Layer-1/Layer-2/Layer-3 placement</strong> for cast translations</li>
+<li><strong>Citation block</strong> (cityofmages source + related research notes + canonical PVM section + relevant Tomes I–VI acts)</li>
+</ul>
+<h2>The voice shift</h2>
+<p>The most consequential single discipline of this skill: <strong>shift the grammatical person without losing the recognition</strong>.</p>
+<p>cityofmages narrative (Second Person):</p>
+<blockquote>
+<p><em>You walk to the Staff Shop window. Hermes ☤ is registered. You pick Hermes because of the learning loop. Faunia witnesses the spawn.</em></p>
+</blockquote>
+<p>agentprivacy-docs research (First Person, formal):</p>
+<blockquote>
+<p>The Hermes substrate (Nous Research, MIT) carries persona-as-substrate primitives — SOUL.md self-description, Honcho-class user modelling, learning-loop iteration — that distinguish it from base-substrate frameworks. Admission to the agentic substrate registry requires bilateral consent at instantiation; this is the formal substrate of the <em>staff-class fitting</em> operation.</p>
+</blockquote>
+<p>The recognition (Hermes carries persona primitives; bilateral consent matters) is preserved. The Sovereign-as-protagonist framing is not. Faunia is not named in the research-note translation because Faunia is a Second-Person cast-instance; the research note speaks of <em>the spawning operation</em>, not <em>Faunia presiding over the spawn</em>.</p>
+<h2>The defer-to-rework boundary</h2>
+<p>This skill is <em>operational bridging only</em>. It does NOT do:</p>
+<ul>
+<li><strong>Reorganising <code>agentprivacy-docs/</code> directory structure</strong> — the existing flat <code>research/</code> + categorical subdirs (<code>models/</code>, <code>specs/</code>, <code>chronicles/</code>, <code>tomes/</code>) is the v5 structure. The v6 rework will redesign this. Until then, drop new translations into <code>research/</code> flat.</li>
+<li><strong>Renaming legacy v5 research notes</strong> — leave <code>privacy_value_v5_*.md</code> files alone. Their renaming is part of the v6 rework.</li>
+<li><strong>Cross-linking the entire corpus</strong> — only add the citation block for <em>direct</em> references. Do not author transitive cross-reference chains. The v6 rework will do the global graph.</li>
+<li><strong>Refreshing GLOSSARY_MASTER_v4_0.md / VISUAL_ARCHITECTURE_GUIDE_v2_0.md</strong> — these are out of scope; the v6 rework will refresh them as part of the global pass.</li>
+<li><strong>Backfilling translations for older cityofmages chronicles</strong> — this skill activates forward; backfilling is a v6 rework task.</li>
+<li><strong>Authoring new cityofmages chronicles</strong> — the source authoring happens in the cityofmages corpus by readers and the privacymage author. This skill receives stabilised artefacts; it does not generate them.</li>
+</ul>
+<p>If a translation pass surfaces a need to do any of the above, <em>flag it for the v6 rework backlog</em> — do not do it inline.</p>
+<h2>Worked example: chronicle → research-note</h2>
+<p><strong>Source</strong>: <code>cityofmages/chronicles/2026-05-13_chronicle_artefact_symmetry_and_persona_distribution.md</code></p>
+<p><strong>Target</strong>: <code>agentprivacy-docs/research/substrate-archetype-persona-matrix.md</code></p>
+<p><strong>Translation steps</strong>:</p>
+<ol>
+<li><strong>Frontmatter swap.</strong> cityofmages chronicle frontmatter (date, status, audience, license, signature, companion_chronicles) → research-note frontmatter (<code>title: Substrate × Archetype × Persona — A Multiplicative Configuration Space for Agent Spawning</code>, <code>subtitle</code>, <code>version: 1.0</code>, <code>date: 2026-05-13</code>, <code>author: privacymage</code>, <code>cityofmages_source: chronicles/2026-05-13_chronicle_artefact_symmetry_and_persona_distribution.md</code>, <code>corpus_position: research note seated in the Tome VI substrate-admission epoch</code>, <code>license: CC BY-SA 4.0</code>).</li>
+<li><strong>Strip the City voice.</strong> §0 (&quot;What this chronicle captures&quot; with the user-named symmetry quote) becomes §1 Abstract: a paragraph stating the architectural claim, no first-person framing.</li>
+<li><strong>Restructure the §-arc.</strong> The chronicle&#39;s §1–§9 reorganise as: §2 The Two Axes · §3 The Substrate-Affinity Determination Rule · §4 The Archetype-Stance Function Rule · §5 The Multiplicative Matrix · §6 Worked Examples (Goose, Hermes) · §7 The Persona Distribution · §8 Conjecture C58 (renumbered from C52, sibling-workshop claim) · §9 Open Questions.</li>
+<li><strong>Strip the Mage names</strong> where they are merely cast-instances (Faunia witnesses the spawn → &quot;the spawning operation is bilateral-witnessed at instantiation&quot;). Keep the Mage names where they are functional roles being defined for the research record (Caducea = staff-fitter operation; this is the only place the formal register has named the operation).</li>
+<li><strong>Strip the closing signature</strong> <code>(⚔️⊥⿻⊥🧙)😊</code> and the <code>🪿 ☤ ⚔️ 🧙 ☯️</code> sigil chain. Replace with a &quot;References&quot; block citing the cityofmages source, related Tome V/VI acts, and the PVM V6 sections (privacy_value_v6_formal_specification.md) that the matrix extends.</li>
+<li><strong>Add the three-axis decomposition</strong> that the chronicle leaves implicit: each cell of the matrix is also a Φ_agent / Φ_data / Φ_inference signature. A staff-class artefact has a different Φ pattern than a companion-class artefact even when spawned from the same substrate.</li>
+<li><strong>Add the conjecture&#39;s renumbering history</strong> in the §8 footer: &quot;C58 was provisionally numbered C52 in the source chronicle. Renumbered 2026-05-13 to resolve a same-day numbering conflict with the Tomes I-III binding pass (which retains C52 = Aether = Quintessence = the Gap).&quot;</li>
+<li><strong>Add citation block</strong> linking the cityofmages source path, the Threshold opening chronicle (now also in <code>cityofmages/chronicles/</code>), the relevant Tome V Act 16 file, and the corresponding PVM V6 section in privacy_value_v6_formal_specification.md (where the matrix&#39;s mathematical foundation lives).</li>
+</ol>
+<p>The resulting <code>research/substrate-archetype-persona-matrix.md</code> is ~60% the length of the source chronicle. The recognition is preserved; the registers are honoured separately.</p>
+<h2>Worked example: cast → role-paper (when warranted)</h2>
+<p>Most cast files do NOT translate. A cast file translates when the cast member&#39;s functional role establishes a research-corpus operation, not just a workshop-keeper instance.</p>
+<p><strong>Translates</strong>: Caducea — peripatetic staff-fitter — defines the <em>staff-fitting</em> operation in the formal corpus for the first time. Translate to <code>research/caducea-as-staff-fitter.md</code>.</p>
+<p><strong>Does NOT translate</strong>: Faunia, Bestia, Therai — workshop-keepers at V59 sharing the Threshold&#39;s three rooms. Their stance differentiation is documented in the Threshold workshop-architecture spec; they do not need separate role-papers. The cast files remain in cityofmages.</p>
+<h2>Worked example: bestiary → substrate-paper</h2>
+<p><strong>Source</strong>: <code>cityofmages/tomes/bestiary/hermes.md</code></p>
+<p><strong>Target</strong>: <code>agentprivacy-docs/research/agentic-substrate-hermes.md</code></p>
+<p>The substrate-paper documents:</p>
+<ul>
+<li>Provenance, license, project URL</li>
+<li>Iconographic affinity (caduceus → staff-class) and the formal substrate-class taxonomy this fits into</li>
+<li>Architectural primitives the substrate carries (SOUL.md format · Honcho user-modelling · learning-loop iteration · cross-platform messengering)</li>
+<li>Three-axis decomposition (Φ_agent / Φ_data / Φ_inference) for the substrate</li>
+<li>Bilateral consent requirements (why staff-fitting demands the Caducea operation)</li>
+<li>Mathematical structure (companion-mana accumulation curve · learning-loop convergence properties if known)</li>
+<li>Composition with other substrates (can a Hermes-substrate spawn a Goose-class watch-companion? formal answer)</li>
+<li>Open questions (Honcho user-model boundaries · IEEE 7012 binding form · cross-platform messaging trust model)</li>
+</ul>
+<p>The Bestiary entry remains in cityofmages with its mascot-narrative voice. The substrate-paper sits in research/ with its formal voice. Both are honest.</p>
+<h2>Status as of introduction (2026-05-13)</h2>
+<p>This skill is introduced operationally with the AGENTIC_DEPLOYMENTS_GUIDE.md ratification work. First translations expected:</p>
+<ol>
+<li><code>2026-05-13_chronicle_artefact_symmetry_and_persona_distribution.md</code> → <code>research/substrate-archetype-persona-matrix.md</code></li>
+<li><code>2026-05-13_chronicle_the_threshold_workshop_three_rooms.md</code> → <code>research/threshold-workshop-architecture.md</code></li>
+<li><code>2026-05-13_tomes_i_through_iii_binding_pass.md</code> → <code>research/tomes-i-iii-binding-procedure.md</code> (this is a process-research note, not the narrative content; the narrative content is already bound in <code>tomes/tome-i-the-convergence/</code> and onwards)</li>
+<li><code>AGENTIC_DEPLOYMENTS_GUIDE.md</code> → <code>research/agentic-deployments-protocol.md</code></li>
+</ol>
+<p>These translations may land in a single agentprivacy-docs commit or be staged. The skill&#39;s pilot run (these four) validates the discipline before the next session&#39;s wider translation pass.</p>
+<h2>Compose with related skills</h2>
+<ul>
+<li><strong><a class="wlink" href="agentprivacy-attachment-architecture.html">agentprivacy-attachment-architecture</a></strong> — for any cast translation, the Layer-1/2/3 placement comes from this skill. Every cast → role-paper translation must register the abstract persona, the cast attachment kind, and the vertex correctly.</li>
+<li><strong><a class="wlink" href="agentprivacy-cosmological-bound.html">agentprivacy-cosmological-bound</a></strong> — for any translation involving the cosmological cast (Selene/Aether/Lethe) or the cosmological persona overlays (Sun/Moon/Earth/Aletheia-Theia), the four-overlay-not-four-stub framing comes from this skill.</li>
+<li><strong><a class="wlink" href="agentprivacy-drake-dragon-duality.html">agentprivacy-drake-dragon-duality</a></strong> — for any translation involving Drake Island, the bonfire, or the dragon-fire register.</li>
+<li><strong><a class="wlink" href="agentprivacy-master-emissary.html">agentprivacy-master-emissary</a></strong> — for any translation involving the McGilchrist hemispheric grounding of the dual-agent architecture.</li>
+</ul>
+<p>A translation that activates more than one related skill is normal. The composition order is: attachment-architecture establishes the corpus position; cosmological-bound establishes the cosmological register if relevant; drake-dragon-duality establishes the geographic register if relevant; master-emissary establishes the hemispheric register if relevant; then this skill performs the voice-shift and §-restructuring.</p>
+<h2>When to upgrade this skill to v6</h2>
+<p>When the cityofmages experimental phase closes (TBD; signalled by a v2.0 grimoire pin or equivalent corpus-stability marker), this skill is rewritten to support the global v6 docs rework: bidirectional translation discipline, automated cross-reference graph maintenance, glossary/visual-guide refresh integration, legacy v5 research-note migration. Until then, this v5.5 introduction handles the operational bridge.</p>
+<blockquote>
+<p><strong>Update (2026-06-10):</strong> the deferred rework landed. PVM V6: <code>agentprivacy-docs/privacy_value_v6_formal_specification.md</code>; register: <code>agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md</code> (head C89); City deltas: CM-C47 → C85, C60/C61 aliases of C48/C49, C66 → ~55%, C67 to C71 confirmed.</p>
+</blockquote>
+<p>Apache-2.0 · 0xagentprivacy · introduced 2026-05-13</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-cityofmages-to-research</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-cityofmages-to-research</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="meta-skills.html">Meta Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-cityofmages-to-research.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,124 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Skill Vs Library · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Skill Vs Library</span></div>
+  <article><div class="md"><h1>Wiki Skill Vs Library</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5</p>
+<p>The distinction between a prompt-based skill (probabilistic, judgment, slow) and an executable library (deterministic, fast, no LLM), and when to graduate a skill into a library. Activates when deciding skill-vs-code, designing an onboarding/automation pipeline, or judging whether a task needs an LLM. An onboarding-judgment skill kept by the Librarian 🗃️.</p>
+</div>
+<div class="md"><p>A <strong>skill</strong> is a text prompt — instructions, examples, and rules given to an LLM that shape how it behaves on a task. A <strong>library</strong> is executable code that runs directly, without LLM involvement. Both can accomplish the same outcome. The question of which to use, and when to graduate a skill into a library, is one of the core design decisions in an AI-augmented workflow.</p>
+<h2>What a Skill Actually Is</h2>
+<p>A skill file (like <code>~/.claude/skills/fedwiki-page/SKILL.md</code>) contains no executable code. It is loaded into the LLM&#39;s context window and shapes the model&#39;s next output. When Claude creates a wiki page using the fedwiki-page skill, it is:</p>
+<ol>
+<li>Reading the rules and examples in the skill file</li>
+<li>Interpreting your natural language request</li>
+<li>Generating JSON that follows those rules</li>
+</ol>
+<p>The skill is probabilistic — Claude <em>understands</em> the pattern and applies judgment. It handles ambiguity, fills in missing details, and adapts to context. It is also slow (LLM inference time) and not guaranteed to produce identical output twice.</p>
+<h2>What a Library Actually Is</h2>
+<p>A library function like <code>create_page(title, story_items)</code> runs deterministically. Given the same inputs it produces the same output, instantly, with no API call. The fedwiki pattern already has embryonic library code:</p>
+<pre><code class="language-python">def make_id():
+    return uuid.uuid4().hex[:16]
+</code></pre>
+<p>This is a one-line library. A fuller <code>fedwiki.py</code> module could offer <code>make_page()</code>, <code>make_item()</code>, <code>make_journal()</code> — the entire JSON-building pattern extracted from the skill into importable functions.</p>
+<h2>When They Do the Same Thing</h2>
+<p>The fedwiki-page skill and a hypothetical <code>fedwiki.py</code> library can both produce valid wiki page JSON. They overlap when:</p>
+<ul>
+<li>The task is <strong>well-defined</strong> — the output structure is known and fixed</li>
+<li>The inputs are <strong>structured</strong> — a title string and a list of content items</li>
+<li>There is <strong>no judgment required</strong> — no need to decide what the content should be</li>
+</ul>
+<p>In this zone, the skill is over-engineered. You are using an LLM to do something a ten-line Python function could do faster, cheaper, and more reliably.</p>
+<h2>When a Skill Is the Right Tool</h2>
+<p>Use a skill when the task requires <strong>understanding and judgment</strong>:</p>
+<ul>
+<li><strong>Natural language input</strong> — &quot;write a page about router models&quot; requires Claude to decide content, structure, examples, and emphasis. No function can do this.</li>
+<li><strong>Ambiguity</strong> — the user hasn&#39;t fully specified the output. The skill guides Claude to fill in the gaps sensibly.</li>
+<li><strong>One-off creative work</strong> — pages written once by a human collaborating with Claude, not generated programmatically at scale.</li>
+<li><strong>Pattern is still evolving</strong> — you are still learning what good output looks like. A skill is easy to edit; refactoring library code is harder.</li>
+</ul>
+<h2>When to Graduate a Skill into a Library</h2>
+<p>Graduate a skill to a library when:</p>
+<ol>
+<li><strong>The pattern has stabilised</strong> — you know exactly what valid output looks like and the skill has stopped changing</li>
+<li><strong>Volume</strong> — you need to generate many pages programmatically (bulk import, API responses, data pipelines)</li>
+<li><strong>Reliability matters</strong> — a ghost page endpoint must always return valid JSON. A library guarantees structure; a skill might hallucinate a wrong ID or forget a field under load</li>
+<li><strong>Composition</strong> — you want to call the operation from other code, chain it with other functions, or test it with unit tests</li>
+<li><strong>Speed</strong> — library calls are microseconds; skill invocations are seconds</li>
+</ol>
+<h2>The Right Division of Labour</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Skill</th>
+<th>Library</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Decide what a page should say</td>
+<td>✅</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Build valid page JSON from known content</td>
+<td>✗</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Strip and rewrite a journal</td>
+<td>✅ (judgment on what to keep)</td>
+<td>✅ (if always strip-to-create)</td>
+</tr>
+<tr>
+<td>Generate IDs</td>
+<td>✗</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Write the file to disk</td>
+<td>✗</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Reindex a wiki domain</td>
+<td>✗</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Interpret a user&#39;s natural language request</td>
+<td>✅</td>
+<td>✗</td>
+</tr>
+</tbody></table>
+<p>A well-designed system has skills calling library functions: Claude authors the content, the library assembles and stores it correctly.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis (the git-less onboarding layer)<br><strong>Upstream:</strong> <a href="https://skill.fedwiki.club/skills-and-libraries">skill.fedwiki.club/skills-and-libraries</a> — vendored + re-framed; not original agentprivacy authorship</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-skill-vs-library</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-wiki-skill-vs-library</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-skill-vs-library.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

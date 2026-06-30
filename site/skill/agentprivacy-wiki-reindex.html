@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Reindex · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Reindex</span></div>
+  <article><div class="md"><h1>Wiki Reindex</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5</p>
+<p>Rebuild the sitemap and search index for a local federated-wiki domain after writing page JSON to disk directly (the server caches status/ indexes and won&#39;t notice file writes). Activates after creating/editing/bulk-importing pages, or when the page list or search looks stale. Merges the reindex-fedwiki-skill variant. Kept by the Librarian 🗃️.</p>
+</div>
+<div class="md"><p>The <code>fedwiki-reindex</code> skill rebuilds the sitemap and search index for a local federated wiki domain. It is needed because the wiki server caches these indexes in each domain&#39;s <code>status/</code> folder and does not detect when Claude Code writes page JSON files directly to disk.</p>
+<h2>Why It&#39;s Needed</h2>
+<p>When a page is created or edited through the wiki browser UI, the server updates its index automatically. When Claude writes a page file directly to <code>~/Music/Guides/Private/{domain}/pages/</code>, the server doesn&#39;t know — two cached files in the <code>status/</code> folder go stale:</p>
+<ul>
+<li><code>sitemap.json</code> — the page list used for navigation and federation neighbourhood</li>
+<li><code>site-index.json</code> — the full-text search index</li>
+</ul>
+<h2>How It Works</h2>
+<p>Delete the stale index files from <code>status/</code>, then <code>curl</code> the sitemap endpoint to trigger the server to rebuild them immediately.</p>
+<pre><code class="language-bash">FARM=&quot;$HOME/Music/Guides/Private&quot;
+DOMAIN=&quot;localhost&quot;
+
+rm -f &quot;$FARM/$DOMAIN/status/sitemap.json&quot;
+rm -f &quot;$FARM/$DOMAIN/status/site-index.json&quot;
+curl -s &quot;http://$DOMAIN/system/sitemap.json&quot; &gt; /dev/null
+echo &quot;Reindexed $DOMAIN&quot;
+</code></pre>
+<h2>When to Use</h2>
+<ul>
+<li>After Claude creates or edits page JSON files directly on disk</li>
+<li>After bulk import of pages</li>
+<li>When the wiki&#39;s page list or search results appear incomplete or stale</li>
+</ul>
+<h2>Public Wikis — nextcloud-reindex</h2>
+<p>For public wikis in <code>~/Nextcloud/fedwiki/</code>, the remote server needs its index rebuilt separately using <code>nextcloud-reindex</code>. This deletes the index files via WebDAV and triggers a rebuild on the remote server:</p>
+<pre><code class="language-bash">nextcloud-reindex skill.fedwiki.club
+</code></pre>
+<p>This is needed after bulk page changes — e.g. after running the merge skill&#39;s move/trash steps.</p>
+<h2>Related Skills</h2>
+<ul>
+<li><code>agentprivacy-wiki-page</code> — always reindex after writing pages to a private wiki</li>
+<li><code>agentprivacy-wiki-new-domain</code> — create a new wiki domain</li>
+<li><code>agentprivacy-wiki-nextcloud-push</code> — push public wiki pages when sync is stuck</li>
+<li><code>agentprivacy-wiki-merge</code> — uses nextcloud-reindex after bulk page moves</li>
+</ul>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis (the git-less onboarding layer)<br><strong>Upstream:</strong> <a href="https://skill.fedwiki.club/fedwiki-reindex-skill">skill.fedwiki.club/fedwiki-reindex-skill</a> (+ reindex-fedwiki-skill, merged) — vendored + re-framed; not original agentprivacy authorship</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-reindex</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-wiki-reindex</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-reindex.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

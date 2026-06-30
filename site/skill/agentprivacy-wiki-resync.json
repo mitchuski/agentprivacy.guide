@@ -1,0 +1,76 @@
+{
+  "title": "Wiki Resync",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "096b0ea70e117b65",
+      "text": "# Wiki Resync\n\n**Category** wikis · **Version** 5.5\n\nOperate the federated wiki on a research turn — lint it and auto-sync it in one command. `audit.js` reads every host and reports page counts, broken links, leak-scan, orphans, and cross-site refs (the LLM-Wiki \"lint\" op); `resync.js [area]` rebuilds the chosen sources, runs the post-passes, audits, and publishes the result. Activates when re-syncing a site after a repo change, health-checking the federation, publishing the audit, or running the per-turn ingest→lint→publish cycle. Part of the git-less onboarding/distribution layer kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "57c1aca4ffbf8812",
+      "text": "The **per-turn operation** of the agentprivacy federation (a governed LLM-Wiki — see\n`agentprivacy-wiki-llm-knowledge-base`). Two tools turn \"I changed a repo\" into \"the wiki is rebuilt,\ncross-linked, family-bound, linted, and the audit is published\" — in one command.\n\n## `resync.js [area...]` — one-command auto-sync\n\n```bash\nnode resync.js                  # full re-sync (all sites)\nnode resync.js research         # only research changed → rebuild it + post-passes + audit\nnode resync.js tomes grimoire   # several areas\n```\n\nRun order it encodes (so you never have to remember it):\n\n1. **`forkback.js`** — report any external contributions *before* the rebuild overwrites them (gate **G7**).\n   Non-zero OPEN → review first.\n2. **builders** — the chosen areas (default all): `build-all`(+`build-local-host skill.guide.agentprivacy.ai`) ·\n   `build-tomes` · `build-research` · `build-atlas` · `build-grimoire` · `build-library` · `build-guide-host`.\n3. **`link-tomes-research.js`** — re-wire act↔conjecture cross-site links (a rebuild wipes them).\n4. **`add-family.js`** — re-bind the family roster on every host (derived from `FAMILY`, never drifts).\n5. **`audit.js`** — lint (below).\n6. **`build-guide-extras.js`** — publish `log.md` → Federation Log, `notes/*` → The Notes, `AUDIT.md` →\n   **Federation Audit**, on the guide.\n\nAreas are the post-passes' prerequisite, but the post-passes always run — so the family, log, audit, and\nnotes stay coherent even on a one-area resync.\n\n## `audit.js` — the lint op (reads only)\n\n```bash\nnode audit.js                   # → AUDIT.md + a `lint` log entry + a PASS/WARN table\n```\n\nPer host it checks: **page count · broken wikilinks · leak-scan (sealed slugs) · orphan pages · cross-site\nref validity**. It writes `AUDIT.md` (timestamped) and publishes it (via `build-guide-extras`) as the live\n**Federation Audit** page. **It never edits the wiki or git.**\n\nReading the report — most non-zero numbers are *not* problems:\n\n- **Broken links** ≠ 0 is usually benign in-content example `[[ ]]` (DSL/syntax samples in the wiki-authoring\n  skills). Confirm the link is content, not navigation, before acting.\n- **Leak-scan hits** are *candidates*, not confirmed leaks — typically false positives (`chronicler` the\n  persona, a canonical `*-audit` spec, \"plan\" inside \"plane\"). Confirm each is an internal record, not content,\n  before sealing it out.\n- **Orphans** = pages with no inbound `[[ ]]` on their own host (hubs/index/node-lists excluded). A real orphan\n  wants a cross-reference or a home on a hub.\n- **Cross-refs (broken)** ≠ 0 *is* actionable — a `reference` item points at a page that doesn't exist on the\n  target host. Fix the slug or the target.\n\n## The operational layer (what gets published)\n\n- **`log.md`** — chronological, append-only, greppable (`grep \"^## \\[\" log.md`); `log.js <op> <detail>` appends.\n- **`AUDIT.md`** — the latest lint; the *Federation Audit* page.\n- **`notes/`** — good answers filed back (`file-answer.js`); the *The Notes* hub.\n\n## The turn loop\n\nA research/ingest turn is: change a source repo → `node resync.js <area>` → read the **Federation Audit** page\n→ adjudicate any leak candidates / orphans → (optionally) `file-answer.js` a synthesis. The wiki stays current,\ngoverned, and self-checked with near-zero bookkeeping cost.\n\n**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · the `agentprivacy-wiki-sync` skill (the schema + full\nregistry) · root index `~/.wiki/skill-fedwiki/INDEX.md`"
+    },
+    {
+      "type": "markdown",
+      "id": "a8878d5d044ed14a",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-resync`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "a0005d3148fef4c0",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "72e69edde978b9cf",
+      "text": "agentprivacy-wiki-resync"
+    },
+    {
+      "type": "markdown",
+      "id": "aa688146b863fa17",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Resync",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "096b0ea70e117b65",
+            "text": "# Wiki Resync\n\n**Category** wikis · **Version** 5.5\n\nOperate the federated wiki on a research turn — lint it and auto-sync it in one command. `audit.js` reads every host and reports page counts, broken links, leak-scan, orphans, and cross-site refs (the LLM-Wiki \"lint\" op); `resync.js [area]` rebuilds the chosen sources, runs the post-passes, audits, and publishes the result. Activates when re-syncing a site after a repo change, health-checking the federation, publishing the audit, or running the per-turn ingest→lint→publish cycle. Part of the git-less onboarding/distribution layer kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "57c1aca4ffbf8812",
+            "text": "The **per-turn operation** of the agentprivacy federation (a governed LLM-Wiki — see\n`agentprivacy-wiki-llm-knowledge-base`). Two tools turn \"I changed a repo\" into \"the wiki is rebuilt,\ncross-linked, family-bound, linted, and the audit is published\" — in one command.\n\n## `resync.js [area...]` — one-command auto-sync\n\n```bash\nnode resync.js                  # full re-sync (all sites)\nnode resync.js research         # only research changed → rebuild it + post-passes + audit\nnode resync.js tomes grimoire   # several areas\n```\n\nRun order it encodes (so you never have to remember it):\n\n1. **`forkback.js`** — report any external contributions *before* the rebuild overwrites them (gate **G7**).\n   Non-zero OPEN → review first.\n2. **builders** — the chosen areas (default all): `build-all`(+`build-local-host skill.guide.agentprivacy.ai`) ·\n   `build-tomes` · `build-research` · `build-atlas` · `build-grimoire` · `build-library` · `build-guide-host`.\n3. **`link-tomes-research.js`** — re-wire act↔conjecture cross-site links (a rebuild wipes them).\n4. **`add-family.js`** — re-bind the family roster on every host (derived from `FAMILY`, never drifts).\n5. **`audit.js`** — lint (below).\n6. **`build-guide-extras.js`** — publish `log.md` → Federation Log, `notes/*` → The Notes, `AUDIT.md` →\n   **Federation Audit**, on the guide.\n\nAreas are the post-passes' prerequisite, but the post-passes always run — so the family, log, audit, and\nnotes stay coherent even on a one-area resync.\n\n## `audit.js` — the lint op (reads only)\n\n```bash\nnode audit.js                   # → AUDIT.md + a `lint` log entry + a PASS/WARN table\n```\n\nPer host it checks: **page count · broken wikilinks · leak-scan (sealed slugs) · orphan pages · cross-site\nref validity**. It writes `AUDIT.md` (timestamped) and publishes it (via `build-guide-extras`) as the live\n**Federation Audit** page. **It never edits the wiki or git.**\n\nReading the report — most non-zero numbers are *not* problems:\n\n- **Broken links** ≠ 0 is usually benign in-content example `[[ ]]` (DSL/syntax samples in the wiki-authoring\n  skills). Confirm the link is content, not navigation, before acting.\n- **Leak-scan hits** are *candidates*, not confirmed leaks — typically false positives (`chronicler` the\n  persona, a canonical `*-audit` spec, \"plan\" inside \"plane\"). Confirm each is an internal record, not content,\n  before sealing it out.\n- **Orphans** = pages with no inbound `[[ ]]` on their own host (hubs/index/node-lists excluded). A real orphan\n  wants a cross-reference or a home on a hub.\n- **Cross-refs (broken)** ≠ 0 *is* actionable — a `reference` item points at a page that doesn't exist on the\n  target host. Fix the slug or the target.\n\n## The operational layer (what gets published)\n\n- **`log.md`** — chronological, append-only, greppable (`grep \"^## \\[\" log.md`); `log.js <op> <detail>` appends.\n- **`AUDIT.md`** — the latest lint; the *Federation Audit* page.\n- **`notes/`** — good answers filed back (`file-answer.js`); the *The Notes* hub.\n\n## The turn loop\n\nA research/ingest turn is: change a source repo → `node resync.js <area>` → read the **Federation Audit** page\n→ adjudicate any leak candidates / orphans → (optionally) `file-answer.js` a synthesis. The wiki stays current,\ngoverned, and self-checked with near-zero bookkeeping cost.\n\n**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · the `agentprivacy-wiki-sync` skill (the schema + full\nregistry) · root index `~/.wiki/skill-fedwiki/INDEX.md`"
+          },
+          {
+            "type": "markdown",
+            "id": "a8878d5d044ed14a",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-resync`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "a0005d3148fef4c0",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "72e69edde978b9cf",
+            "text": "agentprivacy-wiki-resync"
+          },
+          {
+            "type": "markdown",
+            "id": "aa688146b863fa17",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384139
+    }
+  ]
+}

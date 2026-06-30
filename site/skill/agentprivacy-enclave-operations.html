@@ -1,0 +1,79 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enclave Operations · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Enclave Operations</span></div>
+  <article><div class="md"><h1>Enclave Operations</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>P × C — hardware-enforced protection with verifiable computation</code></p>
+<p>Trusted Execution Environment operations for 0xagentprivacy swordsman agents. Activates when designing hardware-backed computation, implementing remote attestation, managing sealed storage, or building agent operations within TEE boundaries where even the host OS is untrusted. Triggers: &quot;TEE&quot;, &quot;enclave&quot;, &quot;trusted execution&quot;, &quot;attestation&quot;, &quot;sealed storage&quot;, &quot;secure enclave&quot;, &quot;SGX&quot;, &quot;Trust</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + NEAR AI Integration + Confidential Computing Architecture<br><strong>Target context:</strong> TEE application developers, confidential computing architects, hardware security researchers, agent execution environment designers, attestation infrastructure builders<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Software-only privacy has a ceiling: the operating system, the hypervisor, the cloud provider — someone in the stack can inspect memory. Trusted Execution Environments break through that ceiling by creating hardware-enforced boundaries where even privileged software cannot inspect what happens inside. The swordsman&#39;s most physically defensible position.</p>
+<p>An enclave is a region of processor memory that is encrypted and integrity-protected by the CPU itself. Code and data inside the enclave are invisible to everything outside it — including the kernel, the hypervisor, and anyone with physical access to the machine (within the hardware&#39;s threat model). This is where the swordsman&#39;s most sensitive operations belong.</p>
+<h2>TEE landscape</h2>
+<p><strong>Intel SGX (Software Guard Extensions).</strong> Process-level enclaves on Intel CPUs. Each enclave is a protected region within a user-space process. Strong isolation model but limited enclave size (historically constrained, relaxed in newer hardware). The most mature ecosystem for enclave development.</p>
+<p><strong>AMD SEV (Secure Encrypted Virtualisation).</strong> VM-level encryption. Entire virtual machines run with memory encrypted by keys managed by the AMD security processor. Larger protected regions than SGX (full VM), but coarser isolation granularity. Well-suited for cloud deployments.</p>
+<p><strong>ARM TrustZone.</strong> Processor-level world separation: &quot;Normal World&quot; and &quot;Secure World.&quot; The secure world has its own memory, peripherals, and execution context invisible to the normal world. Dominant in mobile and embedded devices — every modern smartphone has TrustZone.</p>
+<p><strong>RISC-V Keystone / Sanctum.</strong> Open-source TEE implementations on RISC-V processors. No vendor lock-in, auditable design, growing ecosystem. Aligns with the architecture&#39;s principle that security should be verifiable, not trusted.</p>
+<p><strong>NEAR TEE integration.</strong> The NEAR AI platform provides TEE-backed execution environments for AI agents. The swordsman can operate within NEAR TEE to ensure that agent computation is verifiable and that agent state is sealed — even the platform operator cannot inspect what the swordsman is doing.</p>
+<h2>Core enclave operations</h2>
+<h3>Sealed storage</h3>
+<p>Data encrypted to a key that is bound to the specific enclave code and the specific hardware platform. The sealed data can only be decrypted by the same code running on the same hardware (or a platform with the same sealing policy).</p>
+<p><strong>Swordsman application.</strong> The signing key&#39;s long-term storage. Sealed to the swordsman enclave&#39;s measurement (code hash). If anyone modifies the swordsman code, the sealed key becomes inaccessible — the key is bound to the correct code, not just the correct hardware. This prevents supply chain attacks where a compromised swordsman binary tries to unseal keys from a legitimate one.</p>
+<p><strong>Sealing policies.</strong> Seal to exact code measurement (MRENCLAVE in SGX): tightest binding, breaks on any code update. Seal to signer identity (MRSIGNER in SGX): allows code updates from the same developer without re-sealing. The choice depends on the threat model — exact measurement for maximum security, signer identity for operational flexibility.</p>
+<h3>Remote attestation</h3>
+<p>Cryptographic proof that a specific piece of code is running inside a genuine TEE on genuine hardware. The proof is generated by the hardware itself and can be verified by any remote party.</p>
+<p><strong>Swordsman application.</strong> When the Person&#39;s swordsman signs an authorisation, the counterparty can verify (via attestation) that the signature came from a genuine swordsman enclave — not from a compromised binary, not from an emulator, not from a debugging environment. The attestation chain: hardware manufacturer → platform → enclave → swordsman code measurement.</p>
+<p><strong>Attestation in the dual-agent architecture.</strong> Both swordsman and mage can run in separate enclaves on the same hardware. Cross-attestation verifies the separation: the swordsman&#39;s enclave attests that it cannot access the mage&#39;s enclave, and vice versa. This is Φ(Σ) enforced at the hardware level — the separation is not just a software convention but a hardware boundary.</p>
+<h3>Secure computation</h3>
+<p>Performing operations on sensitive data inside the enclave without the data ever being exposed in cleartext outside the enclave boundary.</p>
+<p><strong>Swordsman application.</strong> The boundary enforcement pipeline (6-stage decision) runs inside the enclave. The consent lookup, scope check, and minimum disclosure calculation all happen within hardware protection. Even if the host OS is compromised, the enforcement pipeline&#39;s inputs (consent declarations, request details) and outputs (allow/block/transform decisions) remain confidential.</p>
+<p><strong>Multi-party enclave computation.</strong> Multiple parties contribute encrypted inputs to an enclave. The enclave decrypts, computes, and returns only the result — no party sees another&#39;s input. This is the infrastructure beneath Intel Pools: contributions are decrypted only inside the aggregation enclave, where differential privacy noise is added before results leave the enclave boundary.</p>
+<h2>Enclave lifecycle</h2>
+<p><strong>Provisioning.</strong> The enclave is created with a specific code measurement. The code is auditable (open source, reproducible build). The measurement is published so any verifier can compare their local build against the deployed enclave.</p>
+<p><strong>Initialisation.</strong> The enclave generates or unseals its key material. For a fresh deployment, this is the key generation ceremony happening inside the hardware boundary. For a restart, this is unsealing previously sealed keys.</p>
+<p><strong>Operation.</strong> The enclave processes requests through its defined interface. No direct memory access from outside. Inputs enter through the enclave&#39;s entry points. Outputs leave through the enclave&#39;s exit points. Side-channel defences (constant-time operations, oblivious memory access) are implemented to resist information leakage through timing and access patterns.</p>
+<p><strong>Migration.</strong> Moving an enclave from one physical machine to another requires re-sealing: unsealing the data on the source platform, transmitting it through an encrypted channel, and re-sealing on the destination platform. During migration, the data is momentarily in cleartext inside the source enclave — this is the most vulnerable moment and must be minimised.</p>
+<p><strong>Retirement.</strong> When an enclave is decommissioned, sealed data must be either migrated or destroyed. Key material that is not migrated must be provably deleted — the hardware provides secure erasure guarantees that software deletion cannot match.</p>
+<h2>Threat model boundaries</h2>
+<p>TEEs are not omnipotent. The swordsman must understand what enclaves protect against and what they don&#39;t:</p>
+<p><strong>Protected against:</strong> Software attacks from the host OS or hypervisor. Memory inspection by privileged code. Cold boot attacks (memory encryption). Simple physical probing (encrypted bus).</p>
+<p><strong>Partially protected against:</strong> Side-channel attacks (timing, cache, power analysis). TEE vendors have progressively patched side channels, but new ones are regularly discovered. The swordsman implements constant-time code and oblivious memory access as defence-in-depth.</p>
+<p><strong>Not protected against:</strong> Hardware supply chain compromise (a backdoored CPU). Physical attacks by a sophisticated adversary with decapping equipment. Bugs in the TEE implementation itself (e.g., SGX has had several vulnerability disclosures). The swordsman treats TEE protection as one layer, not the only layer.</p>
+<p><strong>The enclave as trust anchor, not trust omniscience.</strong> The enclave anchors specific guarantees (this code ran, this data was sealed) but does not make the entire system trustworthy. The swordsman uses the enclave for its highest-value operations (key storage, signing, enforcement decisions) while maintaining software-layer defences for everything else.</p>
+<h2>Connection to the equation</h2>
+<p><strong>P — protection.</strong> Hardware enclaves provide the strongest achievable P for the operations they contain. Software P can be undermined by OS compromise. Enclave P requires hardware compromise — a fundamentally higher bar. The P^1.5 superlinear return means that enclave-backed protection compounds more powerfully than software-only protection.</p>
+<p><strong>C — verifiability.</strong> Remote attestation IS verifiability. The counterparty can verify that the swordsman&#39;s code is genuine, unmodified, and running inside real hardware. This cryptographic verifiability — not trust in a vendor&#39;s promise — is what C measures.</p>
+<p><strong>Φ(Σ) — separation.</strong> Cross-enclave attestation enforces the dual-agent separation at the hardware level. Swordsman enclave ⊥ mage enclave. The hardware guarantees that no software — no matter how privileged — can bridge the gap between them. This is the strongest possible enforcement of det(Σ) ≠ 0.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-enclave-operations</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-enclave-operations</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-enclave-operations.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

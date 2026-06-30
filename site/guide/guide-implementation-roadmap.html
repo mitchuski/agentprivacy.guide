@@ -1,0 +1,872 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide — Implementation Roadmap · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Guide — Implementation Roadmap</span></div>
+  <article><div class="md"><h1>Implementation Roadmap</h1>
+</div>
+<div class="md"><p><strong>Integration checklist and progress tracking</strong></p>
+<hr>
+</div>
+<div class="md"><h2>Overview</h2>
+<p>This roadmap tracks your progress through building the Proverb Revelation Protocol. Mark items as you complete them to maintain clear visibility of what&#39;s done and what&#39;s next.</p>
+<p><strong>Estimated Timeline</strong>: 3-4 weeks from setup to production</p>
+<hr>
+</div>
+<div class="md"><h2>Phase 0: Prerequisites (1-2 days)</h2>
+<h3>System Setup</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Ubuntu 20.04+ installed (or WSL2)</li>
+<li><input disabled="" type="checkbox"> Build essentials installed</li>
+<li><input disabled="" type="checkbox"> Git installed and configured</li>
+<li><input disabled="" type="checkbox"> 50GB+ storage available</li>
+</ul>
+<h3>Tool Installation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Rust installed (v1.70+)</li>
+<li><input disabled="" type="checkbox"> Node.js 20 installed</li>
+<li><input disabled="" type="checkbox"> Python 3.8+ installed</li>
+<li><input disabled="" type="checkbox"> PostgreSQL 12+ installed</li>
+</ul>
+<h3>Account Creation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Nillion Discord account</li>
+<li><input disabled="" type="checkbox"> Nillion API key requested</li>
+<li><input disabled="" type="checkbox"> NEAR Cloud AI account created</li>
+<li><input disabled="" type="checkbox"> NEAR Cloud AI API key generated</li>
+<li><input disabled="" type="checkbox"> Pinata account created</li>
+<li><input disabled="" type="checkbox"> Pinata JWT obtained</li>
+</ul>
+<h3>Project Structure</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Main directory created: <code>~/proverb-protocol</code></li>
+<li><input disabled="" type="checkbox"> Subdirectories created: <code>oracle-swordsman</code>, <code>mage-agent</code>, <code>scripts</code>, <code>logs</code>, <code>spellbook</code></li>
+<li><input disabled="" type="checkbox"> Git repository initialized</li>
+<li><input disabled="" type="checkbox"> <code>.gitignore</code> configured</li>
+<li><input disabled="" type="checkbox"> <code>.env</code> file created</li>
+</ul>
+<h3>Verification</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>rustc --version</code> shows 1.70+</li>
+<li><input disabled="" type="checkbox"> <code>node --version</code> shows v20.x</li>
+<li><input disabled="" type="checkbox"> <code>psql --version</code> shows 12+</li>
+<li><input disabled="" type="checkbox"> All API keys saved in <code>.env</code></li>
+</ul>
+<p><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete</p>
+<hr>
+</div>
+<div class="md"><h2>Phase 1: Foundation (Week 1)</h2>
+<h3>Database Setup</h3>
+<ul>
+<li><input disabled="" type="checkbox"> PostgreSQL service running</li>
+<li><input disabled="" type="checkbox"> Database user created: <code>proverb_user</code></li>
+<li><input disabled="" type="checkbox"> Database created: <code>proverb_protocol</code></li>
+<li><input disabled="" type="checkbox"> Schema applied successfully</li>
+<li><input disabled="" type="checkbox"> Test connection successful</li>
+<li><input disabled="" type="checkbox"> All tables created:<ul>
+<li><input disabled="" type="checkbox"> <code>submissions</code></li>
+<li><input disabled="" type="checkbox"> <code>verifications</code></li>
+<li><input disabled="" type="checkbox"> <code>inscriptions</code></li>
+<li><input disabled="" type="checkbox"> <code>spellbook_acts</code></li>
+<li><input disabled="" type="checkbox"> <code>oracle_status</code></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> Views created:<ul>
+<li><input disabled="" type="checkbox"> <code>submission_pipeline</code></li>
+<li><input disabled="" type="checkbox"> <code>proverb_stats</code></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> Indexes created</li>
+</ul>
+<h3>Zcash Setup</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>zecwallet-cli</code> installed</li>
+<li><input disabled="" type="checkbox"> Wallet directory created</li>
+<li><input disabled="" type="checkbox"> Light client synced (testnet)</li>
+<li><input disabled="" type="checkbox"> Transparent address generated</li>
+<li><input disabled="" type="checkbox"> Shielded address generated</li>
+<li><input disabled="" type="checkbox"> Testnet ZEC received from faucet</li>
+<li><input disabled="" type="checkbox"> Balance confirmed</li>
+</ul>
+<h3>Spellbook Creation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>spellbook-acts.json</code> created</li>
+<li><input disabled="" type="checkbox"> Spellbook uploaded to Pinata</li>
+<li><input disabled="" type="checkbox"> IPFS CID obtained</li>
+<li><input disabled="" type="checkbox"> CID added to <code>.env</code></li>
+<li><input disabled="" type="checkbox"> Spellbook accessible via gateway</li>
+<li><input disabled="" type="checkbox"> Content validated</li>
+</ul>
+<h3>Oracle Swordsman Project</h3>
+<ul>
+<li><input disabled="" type="checkbox"> TypeScript project initialized</li>
+<li><input disabled="" type="checkbox"> Dependencies installed:<ul>
+<li><input disabled="" type="checkbox"> <code>@nillion/client-web</code></li>
+<li><input disabled="" type="checkbox"> <code>axios</code></li>
+<li><input disabled="" type="checkbox"> <code>pg</code></li>
+<li><input disabled="" type="checkbox"> <code>dotenv</code></li>
+<li><input disabled="" type="checkbox"> <code>winston</code></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <code>tsconfig.json</code> configured</li>
+<li><input disabled="" type="checkbox"> <code>package.json</code> scripts added</li>
+<li><input disabled="" type="checkbox"> <code>src/</code> directory structure created</li>
+</ul>
+<h3>Core Modules Created</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>src/config.ts</code> - Configuration management</li>
+<li><input disabled="" type="checkbox"> <code>src/database.ts</code> - Database operations</li>
+<li><input disabled="" type="checkbox"> <code>src/zcash-client.ts</code> - Zcash wrapper</li>
+<li><input disabled="" type="checkbox"> <code>src/logger.ts</code> - Winston logger</li>
+</ul>
+<h3>Foundation Testing</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Configuration loads correctly</li>
+<li><input disabled="" type="checkbox"> Database connection works</li>
+<li><input disabled="" type="checkbox"> Zcash client connects</li>
+<li><input disabled="" type="checkbox"> Can create test submission</li>
+<li><input disabled="" type="checkbox"> Can query database</li>
+<li><input disabled="" type="checkbox"> Logs are being written</li>
+</ul>
+<p><strong>Week 1 Deliverables</strong>:</p>
+<ul>
+<li>✅ All tools installed and configured</li>
+<li>✅ Database operational</li>
+<li>✅ Zcash wallet synced with testnet ZEC</li>
+<li>✅ Basic project structure in place</li>
+</ul>
+<p><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete</p>
+<hr>
+</div>
+<div class="md"><h2>Phase 2: Backend Integration (Week 2)</h2>
+<h3>IPFS Integration</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>src/ipfs-client.ts</code> created</li>
+<li><input disabled="" type="checkbox"> Can fetch spellbook from IPFS</li>
+<li><input disabled="" type="checkbox"> Caching implemented</li>
+<li><input disabled="" type="checkbox"> Error handling added</li>
+<li><input disabled="" type="checkbox"> Test: Fetch spellbook successfully</li>
+<li><input disabled="" type="checkbox"> Test: Cache working</li>
+</ul>
+<h3>NEAR Cloud AI Integration</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>src/near-verifier.ts</code> created</li>
+<li><input disabled="" type="checkbox"> Can call verification API</li>
+<li><input disabled="" type="checkbox"> Response parsing works</li>
+<li><input disabled="" type="checkbox"> Fallback verification implemented</li>
+<li><input disabled="" type="checkbox"> Retry logic added</li>
+<li><input disabled="" type="checkbox"> Test: Verify sample proverb</li>
+<li><input disabled="" type="checkbox"> Test: Fallback triggers on error</li>
+</ul>
+<h3>Nillion Integration</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>src/nillion-signer.ts</code> created</li>
+<li><input disabled="" type="checkbox"> Nillion SDK installed</li>
+<li><input disabled="" type="checkbox"> Client initialized</li>
+<li><input disabled="" type="checkbox"> Test: Can connect to Nillion</li>
+<li><input disabled="" type="checkbox"> SecretSigner: Key stored</li>
+<li><input disabled="" type="checkbox"> SecretSigner: Can sign test message</li>
+<li><input disabled="" type="checkbox"> Attestation retrieved</li>
+<li><input disabled="" type="checkbox"> Attestation verified</li>
+</ul>
+<h3>Main Oracle Loop</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>src/index.ts</code> created</li>
+<li><input disabled="" type="checkbox"> Transaction monitoring implemented</li>
+<li><input disabled="" type="checkbox"> Memo parsing working</li>
+<li><input disabled="" type="checkbox"> Submission creation functional</li>
+<li><input disabled="" type="checkbox"> IPFS fetching integrated</li>
+<li><input disabled="" type="checkbox"> AI verification integrated</li>
+<li><input disabled="" type="checkbox"> Database updates working</li>
+<li><input disabled="" type="checkbox"> Error handling comprehensive</li>
+<li><input disabled="" type="checkbox"> Logging comprehensive</li>
+</ul>
+<h3>Transaction Processing</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Can detect new Zcash transactions</li>
+<li><input disabled="" type="checkbox"> Extracts tracking code from memo</li>
+<li><input disabled="" type="checkbox"> Extracts proverb from memo</li>
+<li><input disabled="" type="checkbox"> Creates submission record</li>
+<li><input disabled="" type="checkbox"> Fetches spellbook from IPFS</li>
+<li><input disabled="" type="checkbox"> Calls NEAR Cloud AI for verification</li>
+<li><input disabled="" type="checkbox"> Records verification result</li>
+<li><input disabled="" type="checkbox"> Updates submission status</li>
+</ul>
+<h3>Transaction Signing</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Public inscription transaction created</li>
+<li><input disabled="" type="checkbox"> Private shielded transaction created</li>
+<li><input disabled="" type="checkbox"> 61.8/38.2 golden ratio split calculated correctly</li>
+<li><input disabled="" type="checkbox"> Network fee included</li>
+<li><input disabled="" type="checkbox"> Both transactions signed</li>
+<li><input disabled="" type="checkbox"> Both transactions broadcast</li>
+<li><input disabled="" type="checkbox"> Confirmation monitoring working</li>
+</ul>
+<h3>End-to-End Test</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Send test transaction with memo</li>
+<li><input disabled="" type="checkbox"> Oracle detects transaction</li>
+<li><input disabled="" type="checkbox"> Proverb extracted correctly</li>
+<li><input disabled="" type="checkbox"> Verification completes</li>
+<li><input disabled="" type="checkbox"> Inscription transactions created</li>
+<li><input disabled="" type="checkbox"> Both transactions confirmed</li>
+<li><input disabled="" type="checkbox"> Database records complete</li>
+</ul>
+<p><strong>Week 2 Deliverables</strong>:</p>
+<ul>
+<li>✅ Complete backend working</li>
+<li>✅ TEE integration functional</li>
+<li>✅ AI verification operational</li>
+<li>✅ End-to-end test passing</li>
+</ul>
+<p><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete</p>
+<hr>
+</div>
+<div class="md"><h2>Phase 3: Frontend Development (Week 3)</h2>
+<h3>Mage Agent Setup</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Next.js project initialized</li>
+<li><input disabled="" type="checkbox"> TypeScript configured</li>
+<li><input disabled="" type="checkbox"> Tailwind CSS installed</li>
+<li><input disabled="" type="checkbox"> Dependencies installed:<ul>
+<li><input disabled="" type="checkbox"> <code>axios</code></li>
+<li><input disabled="" type="checkbox"> <code>qrcode.react</code></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> Project structure created</li>
+</ul>
+<h3>API Routes</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>/api/submit</code> endpoint created</li>
+<li><input disabled="" type="checkbox"> <code>/api/status/:code</code> endpoint created</li>
+<li><input disabled="" type="checkbox"> <code>/api/stats</code> endpoint created</li>
+<li><input disabled="" type="checkbox"> Database connection in API routes</li>
+<li><input disabled="" type="checkbox"> Error handling in place</li>
+<li><input disabled="" type="checkbox"> CORS configured</li>
+</ul>
+<h3>Main Page</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>app/page.tsx</code> created</li>
+<li><input disabled="" type="checkbox"> Proverb submission form</li>
+<li><input disabled="" type="checkbox"> Character counter</li>
+<li><input disabled="" type="checkbox"> Validation (min/max length)</li>
+<li><input disabled="" type="checkbox"> Submit button functionality</li>
+</ul>
+<h3>Payment Display</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Payment address shown</li>
+<li><input disabled="" type="checkbox"> Amount displayed (0.01 ZEC)</li>
+<li><input disabled="" type="checkbox"> Memo text displayed</li>
+<li><input disabled="" type="checkbox"> QR code generated</li>
+<li><input disabled="" type="checkbox"> Copy buttons for address/memo</li>
+<li><input disabled="" type="checkbox"> Mobile responsive</li>
+</ul>
+<h3>Status Tracking</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Status polling implemented</li>
+<li><input disabled="" type="checkbox"> Status display (pending/verified/inscribed)</li>
+<li><input disabled="" type="checkbox"> Quality score display</li>
+<li><input disabled="" type="checkbox"> Matched act display</li>
+<li><input disabled="" type="checkbox"> Reasoning text display</li>
+<li><input disabled="" type="checkbox"> Blockchain link (when inscribed)</li>
+<li><input disabled="" type="checkbox"> Auto-refresh until complete</li>
+</ul>
+<h3>AI Writing Assistance (Optional)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> &quot;Get AI Help&quot; button</li>
+<li><input disabled="" type="checkbox"> AI suggestion modal</li>
+<li><input disabled="" type="checkbox"> Calls NEAR Cloud AI for suggestions</li>
+<li><input disabled="" type="checkbox"> User can accept/edit suggestions</li>
+<li><input disabled="" type="checkbox"> Loading states</li>
+</ul>
+<h3>Styling &amp; UX</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Mobile responsive design</li>
+<li><input disabled="" type="checkbox"> Loading spinners</li>
+<li><input disabled="" type="checkbox"> Error messages</li>
+<li><input disabled="" type="checkbox"> Success notifications</li>
+<li><input disabled="" type="checkbox"> Smooth transitions</li>
+<li><input disabled="" type="checkbox"> Accessibility (ARIA labels)</li>
+</ul>
+<h3>Testing</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Can submit proverb</li>
+<li><input disabled="" type="checkbox"> Payment info displays</li>
+<li><input disabled="" type="checkbox"> QR code renders</li>
+<li><input disabled="" type="checkbox"> Status updates correctly</li>
+<li><input disabled="" type="checkbox"> Quality score shows</li>
+<li><input disabled="" type="checkbox"> Links work</li>
+<li><input disabled="" type="checkbox"> Mobile view works</li>
+</ul>
+<p><strong>Week 3 Deliverables</strong>:</p>
+<ul>
+<li>✅ Complete user interface</li>
+<li>✅ Payment flow working</li>
+<li>✅ Status tracking functional</li>
+<li>✅ Mobile responsive</li>
+</ul>
+<p><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete</p>
+<hr>
+</div>
+<div class="md"><h2>Phase 4: Production Deployment (Week 4)</h2>
+<h3>Pre-Deployment Testing</h3>
+<ul>
+<li><input disabled="" type="checkbox"> End-to-end test on testnet</li>
+<li><input disabled="" type="checkbox"> Multiple proverbs processed</li>
+<li><input disabled="" type="checkbox"> All inscriptions confirmed</li>
+<li><input disabled="" type="checkbox"> 61.8/38.2 golden ratio split verified</li>
+<li><input disabled="" type="checkbox"> Quality scores accurate</li>
+<li><input disabled="" type="checkbox"> No errors in logs</li>
+<li><input disabled="" type="checkbox"> Performance acceptable</li>
+</ul>
+<h3>Security Hardening</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Environment variables secured</li>
+<li><input disabled="" type="checkbox"> API keys not in code</li>
+<li><input disabled="" type="checkbox"> Database credentials encrypted</li>
+<li><input disabled="" type="checkbox"> HTTPS configured</li>
+<li><input disabled="" type="checkbox"> CORS properly restricted</li>
+<li><input disabled="" type="checkbox"> Input validation comprehensive</li>
+<li><input disabled="" type="checkbox"> SQL injection prevented</li>
+<li><input disabled="" type="checkbox"> Rate limiting implemented</li>
+</ul>
+<h3>Production Configuration</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Mainnet Zcash addresses generated</li>
+<li><input disabled="" type="checkbox"> Mainnet wallet synced</li>
+<li><input disabled="" type="checkbox"> Production database created</li>
+<li><input disabled="" type="checkbox"> Production schema applied</li>
+<li><input disabled="" type="checkbox"> Production <code>.env</code> configured</li>
+<li><input disabled="" type="checkbox"> Nillion production API key</li>
+<li><input disabled="" type="checkbox"> NEAR Cloud AI production tier</li>
+</ul>
+<h3>Oracle Deployment</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Production build created</li>
+<li><input disabled="" type="checkbox"> Systemd service file created</li>
+<li><input disabled="" type="checkbox"> Service installed</li>
+<li><input disabled="" type="checkbox"> Service started</li>
+<li><input disabled="" type="checkbox"> Service auto-starts on boot</li>
+<li><input disabled="" type="checkbox"> Logs rotating properly</li>
+</ul>
+<h3>Frontend Deployment</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Production build created</li>
+<li><input disabled="" type="checkbox"> Nginx configured</li>
+<li><input disabled="" type="checkbox"> SSL certificate installed</li>
+<li><input disabled="" type="checkbox"> Domain name configured</li>
+<li><input disabled="" type="checkbox"> Deployed and accessible</li>
+<li><input disabled="" type="checkbox"> Performance optimized</li>
+</ul>
+<h3>Monitoring Setup</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Logging configured</li>
+<li><input disabled="" type="checkbox"> Error tracking</li>
+<li><input disabled="" type="checkbox"> Uptime monitoring</li>
+<li><input disabled="" type="checkbox"> Zcash balance alerts</li>
+<li><input disabled="" type="checkbox"> Database space monitoring</li>
+<li><input disabled="" type="checkbox"> API response time tracking</li>
+</ul>
+<h3>Backup Strategy</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Database backup script</li>
+<li><input disabled="" type="checkbox"> Automated daily backups</li>
+<li><input disabled="" type="checkbox"> Wallet backup secured</li>
+<li><input disabled="" type="checkbox"> Recovery procedure documented</li>
+<li><input disabled="" type="checkbox"> Test restore successful</li>
+</ul>
+<h3>Documentation</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Deployment guide written</li>
+<li><input disabled="" type="checkbox"> Troubleshooting guide written</li>
+<li><input disabled="" type="checkbox"> Maintenance procedures documented</li>
+<li><input disabled="" type="checkbox"> API documentation complete</li>
+<li><input disabled="" type="checkbox"> User guide created</li>
+</ul>
+<h3>Launch Checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> All tests passing</li>
+<li><input disabled="" type="checkbox"> Security audit complete</li>
+<li><input disabled="" type="checkbox"> Backups configured</li>
+<li><input disabled="" type="checkbox"> Monitoring active</li>
+<li><input disabled="" type="checkbox"> Team trained</li>
+<li><input disabled="" type="checkbox"> Support channels ready</li>
+</ul>
+<h3>Post-Launch</h3>
+<ul>
+<li><input disabled="" type="checkbox"> First 10 proverbs processed</li>
+<li><input disabled="" type="checkbox"> No critical errors</li>
+<li><input disabled="" type="checkbox"> Performance metrics good</li>
+<li><input disabled="" type="checkbox"> User feedback positive</li>
+<li><input disabled="" type="checkbox"> Monitoring showing green</li>
+<li><input disabled="" type="checkbox"> Ready for scale</li>
+</ul>
+<p><strong>Week 4 Deliverables</strong>:</p>
+<ul>
+<li>✅ Production system live</li>
+<li>✅ All monitoring active</li>
+<li>✅ Documentation complete</li>
+<li>✅ Successfully processing proverbs</li>
+</ul>
+<p><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete</p>
+<hr>
+</div>
+<div class="md"><h2>Integration Status Matrix</h2>
+<h3>Core Components</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Setup</th>
+<th>Development</th>
+<th>Testing</th>
+<th>Integration</th>
+<th>Production</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>PostgreSQL</strong></td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>Zcash Light Client</strong></td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>Nillion TEE</strong></td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>NEAR Cloud AI</strong></td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>IPFS/Pinata</strong></td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>Oracle Backend</strong></td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>Mage Frontend</strong></td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+</tr>
+</tbody></table>
+<p><strong>Legend</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete</p>
+<hr>
+</div>
+<div class="md"><h2>Data Flow Verification</h2>
+<h3>Complete Transaction Path</h3>
+<ol>
+<li><p><strong>User Submission</strong> ⬜</p>
+<ul>
+<li>User writes proverb</li>
+<li>Generates tracking code</li>
+<li>Sends 0.01 ZEC with memo</li>
+</ul>
+</li>
+<li><p><strong>Transaction Detection</strong> ⬜</p>
+<ul>
+<li>Oracle monitors Zcash</li>
+<li>Detects incoming transaction</li>
+<li>Extracts memo data</li>
+</ul>
+</li>
+<li><p><strong>Submission Creation</strong> ⬜</p>
+<ul>
+<li>Parses tracking code</li>
+<li>Parses proverb text</li>
+<li>Creates database record</li>
+</ul>
+</li>
+<li><p><strong>Knowledge Fetch</strong> ⬜</p>
+<ul>
+<li>Fetches spellbook from IPFS</li>
+<li>Caches locally</li>
+<li>Validates structure</li>
+</ul>
+</li>
+<li><p><strong>AI Verification</strong> ⬜</p>
+<ul>
+<li>Calls NEAR Cloud AI API</li>
+<li>Receives quality score</li>
+<li>Records reasoning</li>
+</ul>
+</li>
+<li><p><strong>Verification Storage</strong> ⬜</p>
+<ul>
+<li>Saves to database</li>
+<li>Updates submission status</li>
+<li>Logs result</li>
+</ul>
+</li>
+<li><p><strong>Transaction Preparation</strong> ⬜</p>
+<ul>
+<li>Calculates 61.8/38.2 golden ratio split</li>
+<li>Creates inscription memo</li>
+<li>Prepares both transactions</li>
+</ul>
+</li>
+<li><p><strong>Signing</strong> ⬜</p>
+<ul>
+<li>Requests Nillion signature</li>
+<li>Both transactions signed</li>
+<li>Signatures validated</li>
+</ul>
+</li>
+<li><p><strong>Broadcasting</strong> ⬜</p>
+<ul>
+<li>Broadcasts public transaction</li>
+<li>Broadcasts private transaction</li>
+<li>Records TXIDs</li>
+</ul>
+</li>
+<li><p><strong>Confirmation</strong> ⬜</p>
+<ul>
+<li>Monitors for confirmations</li>
+<li>Updates inscription record</li>
+<li>Notifies user</li>
+</ul>
+</li>
+</ol>
+<p><strong>All 10 Steps Working</strong>: ⬜ Yes | ⬜ No</p>
+<hr>
+</div>
+<div class="md"><h2>Cost Tracking</h2>
+<h3>Monthly Costs (Production)</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Estimated</th>
+<th>Actual</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>VPS</strong></td>
+<td>$24/month</td>
+<td></td>
+<td>DigitalOcean/AWS</td>
+</tr>
+<tr>
+<td><strong>Nillion</strong></td>
+<td>$50/month</td>
+<td></td>
+<td>TEE compute</td>
+</tr>
+<tr>
+<td><strong>NEAR Cloud AI</strong></td>
+<td>$0.03/proverb</td>
+<td></td>
+<td>Variable</td>
+</tr>
+<tr>
+<td><strong>Pinata</strong></td>
+<td>$20/month</td>
+<td></td>
+<td>IPFS pinning</td>
+</tr>
+<tr>
+<td><strong>Domain</strong></td>
+<td>$1/month</td>
+<td></td>
+<td>Optional</td>
+</tr>
+<tr>
+<td><strong>SSL</strong></td>
+<td>$0</td>
+<td></td>
+<td>Let&#39;s Encrypt</td>
+</tr>
+<tr>
+<td><strong>Monitoring</strong></td>
+<td>$0</td>
+<td></td>
+<td>Self-hosted</td>
+</tr>
+<tr>
+<td><strong>Total Fixed</strong></td>
+<td>$95/month</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Total Variable</strong></td>
+<td>$0.03/proverb</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>At 100 proverbs/month</strong>: ~$98 total</p>
+<hr>
+</div>
+<div class="md"><h2>Performance Metrics</h2>
+<h3>Target Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Target</th>
+<th>Current</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Submission → Inscription</strong></td>
+<td>&lt;3 minutes</td>
+<td></td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>AI Verification</strong></td>
+<td>&lt;5 seconds</td>
+<td></td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>IPFS Fetch</strong></td>
+<td>&lt;2 seconds</td>
+<td></td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>Database Query</strong></td>
+<td>&lt;100ms</td>
+<td></td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>Uptime</strong></td>
+<td>&gt;99%</td>
+<td></td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>Error Rate</strong></td>
+<td>&lt;1%</td>
+<td></td>
+<td>⬜</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Known Issues</h2>
+<h3>Open Issues</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Issue 1: [Description]</li>
+<li><input disabled="" type="checkbox"> Issue 2: [Description]</li>
+<li><input disabled="" type="checkbox"> Issue 3: [Description]</li>
+</ul>
+<h3>Resolved Issues</h3>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Issue: [Description] - Resolved: [Date] - Solution: [Description]</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Future Enhancements</h2>
+<h3>Phase 5: Advanced Features (Post-Launch)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Multi-language support</li>
+<li><input disabled="" type="checkbox"> Proverb archive browser</li>
+<li><input disabled="" type="checkbox"> Search by quality score</li>
+<li><input disabled="" type="checkbox"> Leaderboard (top proverbs)</li>
+<li><input disabled="" type="checkbox"> Social sharing</li>
+<li><input disabled="" type="checkbox"> Email notifications</li>
+<li><input disabled="" type="checkbox"> Webhook support</li>
+<li><input disabled="" type="checkbox"> Analytics dashboard</li>
+</ul>
+<h3>Phase 6: Scaling (Month 2+)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Multiple Oracle instances</li>
+<li><input disabled="" type="checkbox"> Load balancing</li>
+<li><input disabled="" type="checkbox"> CDN for frontend</li>
+<li><input disabled="" type="checkbox"> Database read replicas</li>
+<li><input disabled="" type="checkbox"> Caching layer (Redis)</li>
+<li><input disabled="" type="checkbox"> Batch processing optimization</li>
+</ul>
+<h3>Phase 7: New Features (Month 3+)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> NFT minting option</li>
+<li><input disabled="" type="checkbox"> Community voting</li>
+<li><input disabled="" type="checkbox"> Proverb challenges</li>
+<li><input disabled="" type="checkbox"> AI training on best proverbs</li>
+<li><input disabled="" type="checkbox"> API for third parties</li>
+<li><input disabled="" type="checkbox"> Mobile app</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Weekly Progress Tracker</h2>
+<h3>Week 1: Foundation</h3>
+<p><strong>Goal</strong>: Database + Zcash operational<br><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete<br><strong>Blockers</strong>: [None]<br><strong>Notes</strong>: [Add notes here]</p>
+<h3>Week 2: Backend</h3>
+<p><strong>Goal</strong>: Complete Oracle with TEE + AI<br><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete<br><strong>Blockers</strong>: [None]<br><strong>Notes</strong>: [Add notes here]</p>
+<h3>Week 3: Frontend</h3>
+<p><strong>Goal</strong>: User interface complete<br><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete<br><strong>Blockers</strong>: [None]<br><strong>Notes</strong>: [Add notes here]</p>
+<h3>Week 4: Production</h3>
+<p><strong>Goal</strong>: Live system processing proverbs<br><strong>Status</strong>: ⬜ Not Started | 🔄 In Progress | ✅ Complete<br><strong>Blockers</strong>: [None]<br><strong>Notes</strong>: [Add notes here]</p>
+<hr>
+</div>
+<div class="md"><h2>Success Criteria</h2>
+<h3>MVP Success (First 10 Proverbs)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> All 10 submitted successfully</li>
+<li><input disabled="" type="checkbox"> All 10 verified by AI</li>
+<li><input disabled="" type="checkbox"> All 10 inscribed on blockchain</li>
+<li><input disabled="" type="checkbox"> Perfect 61.8/38.2 golden ratio split maintained</li>
+<li><input disabled="" type="checkbox"> Average quality score &gt;0.7</li>
+<li><input disabled="" type="checkbox"> Zero critical errors</li>
+<li><input disabled="" type="checkbox"> &lt;3 minute processing time</li>
+</ul>
+<h3>Production Success (First 100 Proverbs)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 100 submissions processed</li>
+<li><input disabled="" type="checkbox"> <blockquote>
+<p>95% inscription success rate</p>
+</blockquote>
+</li>
+<li><input disabled="" type="checkbox"> Average quality score &gt;0.8</li>
+<li><input disabled="" type="checkbox"> &lt;1% error rate</li>
+<li><input disabled="" type="checkbox"> 99%+ uptime</li>
+<li><input disabled="" type="checkbox"> Positive user feedback</li>
+<li><input disabled="" type="checkbox"> System stable and scalable</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Deployment Timeline</h2>
+<pre><code>Week 1 (Foundation)
+├─ Day 1-2: Setup &amp; Installation
+├─ Day 3-4: Database + Zcash
+├─ Day 5-6: Core modules
+└─ Day 7: Testing &amp; validation
+
+Week 2 (Backend)
+├─ Day 8-9: IPFS + NEAR Cloud AI
+├─ Day 10-11: Nillion integration
+├─ Day 12-13: Main oracle loop
+└─ Day 14: End-to-end testing
+
+Week 3 (Frontend)
+├─ Day 15-16: Next.js setup + API routes
+├─ Day 17-18: Submission UI
+├─ Day 19-20: Status tracking
+└─ Day 21: Testing + refinement
+
+Week 4 (Production)
+├─ Day 22-23: Security hardening
+├─ Day 24-25: Deployment
+├─ Day 26-27: Monitoring + docs
+└─ Day 28: Launch! ðŸš€
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Daily Standup Template</h2>
+<p><strong>Date</strong>: [YYYY-MM-DD]</p>
+<p><strong>Yesterday</strong>:</p>
+<ul>
+<li>[What did you complete?]</li>
+</ul>
+<p><strong>Today</strong>:</p>
+<ul>
+<li>[What will you work on?]</li>
+</ul>
+<p><strong>Blockers</strong>:</p>
+<ul>
+<li>[Any issues preventing progress?]</li>
+</ul>
+<p><strong>Notes</strong>:</p>
+<ul>
+<li>[Additional context]</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Emergency Contacts</h2>
+<h3>Services</h3>
+<ul>
+<li><strong>Nillion Support</strong>: Discord #developers</li>
+<li><strong>NEAR Cloud AI Support</strong>: <a href="https://cloud.near.ai">https://cloud.near.ai</a></li>
+<li><strong>Pinata Support</strong>: <a href="mailto:team@pinata.cloud">team@pinata.cloud</a></li>
+<li><strong>Zcash Community</strong>: Discord/Forum</li>
+</ul>
+<h3>Critical Procedures</h3>
+<ul>
+<li><strong>Oracle Down</strong>: Check logs, restart service</li>
+<li><strong>Database Full</strong>: Expand storage, archive old data</li>
+<li><strong>Zcash Sync Issue</strong>: Restart light client, check server</li>
+<li><strong>API Rate Limit</strong>: Wait for reset, upgrade tier</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Completion Certificate</h2>
+<p><strong>Project</strong>: Proverb Revelation Protocol<br><strong>Version</strong>: 4.0<br><strong>Status</strong>: ⬜ Complete</p>
+<p><strong>Sign-off</strong>:</p>
+<ul>
+<li><input disabled="" type="checkbox"> All phases complete</li>
+<li><input disabled="" type="checkbox"> All tests passing</li>
+<li><input disabled="" type="checkbox"> Production deployed</li>
+<li><input disabled="" type="checkbox"> Documentation complete</li>
+<li><input disabled="" type="checkbox"> Successfully processing proverbs</li>
+</ul>
+<p><strong>Completed by</strong>: [Your Name]<br><strong>Date</strong>: [YYYY-MM-DD]</p>
+<p><strong>Congratulations on building a privacy-first protocol!</strong> 🗡️🪄🤖</p>
+<hr>
+</div>
+<div class="md"><h2>Quick Status Overview</h2>
+<p><strong>Phase 0 (Prerequisites)</strong>: ⬜ Complete (__ / __ items)<br><strong>Phase 1 (Foundation)</strong>: ⬜ Complete (__ / __ items)<br><strong>Phase 2 (Backend)</strong>: ⬜ Complete (__ / __ items)<br><strong>Phase 3 (Frontend)</strong>: ⬜ Complete (__ / __ items)<br><strong>Phase 4 (Production)</strong>: ⬜ Complete (__ / __ items)</p>
+<p><strong>Overall Progress</strong>: __% complete</p>
+<p><strong>Estimated Completion</strong>: [Date]</p>
+<hr>
+</div>
+<div class="md"><h2>Notes Section</h2>
+<p>Use this space for implementation notes, decisions, and discoveries:</p>
+<pre><code>[Add your notes here as you build]
+</code></pre>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-architecture-guides.html">The Architecture Guides</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="guide-implementation-roadmap.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

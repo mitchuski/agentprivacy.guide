@@ -1,0 +1,106 @@
+{
+  "title": "Wiki To Skill",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "6ff3fe950891f777",
+      "text": "# Wiki To Skill\n\n**Category** wikis · **Version** 5.5\n\nThe fork desk / inclusion engine — converts a federated-wiki page into a Claude Code SKILL.md. Activates when materializing a fedwiki skill, exporting a wiki page to ~/.claude/skills, or pulling a skill from skill.fedwiki.club into a repo. This is the git-less clone: the wiki stays source of truth, the SKILL.md is a fork (a copy that remembers its origin). The Librarian's 🗃️ core forking act in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "a62dfefaa3ccaa05",
+      "text": "The **fedwiki-to-skill** skill converts a federated wiki page (page-json) into a Claude Code `SKILL.md` file. Author a skill as an ordinary wiki page, then export it to `~/.claude/skills/{slug}/SKILL.md` where Claude Code can load and invoke it. It is the inverse direction of the document-plugin skill — here the page itself *becomes* the skill.\n\n## How It Works\n\nA fedwiki page has a `title` and a `story` array of items, each with a `type` and a `text`. The converter maps each item type to markdown:\n\n- `markdown` → kept as-is (already markdown)\n- `paragraph` → plain text paragraph\n- `code` → fenced code block\n- `html` → wrapped HTML block\n- `reference`, `roster`, `assets` → omitted (navigation/structure, not instructions)\n\nThe page `title` derives the skill **name** (lowercase, hyphenated slug), used for the `name:` frontmatter field and the top `# Heading` of the body.\n\n## Skill Frontmatter\n\nEvery `SKILL.md` opens with YAML frontmatter. The `description` is the critical field — Claude Code uses it to decide *when* to auto-invoke the skill, so it must name the trigger phrases.\n\n```markdown"
+    },
+    {
+      "type": "markdown",
+      "id": "4a80a088aedf60b7",
+      "text": "name: skill-name\ndescription: One or two sentences describing WHEN to trigger — include the user phrases that should activate it."
+    },
+    {
+      "type": "markdown",
+      "id": "154ac5acf8bc20ca",
+      "text": "```\n\nPull the description from the first `paragraph` or `markdown` item if it reads like a purpose statement; otherwise ask the user to supply one.\n\n## Output Location\n\nPersonal skills (available in all projects):\n```\n~/.claude/skills/{skill-name}/SKILL.md\n```\n\nProject skills (current project only):\n```\n.claude/skills/{skill-name}/SKILL.md\n```\n\nDefault to `~/.claude/skills/` unless the user specifies otherwise.\n\n## Conversion Steps\n\n1. **Read the source** — a page-json path, or a slug + domain located under `~/Music/Guides/Private/{domain}/pages/{slug}` (local) or `~/Nextcloud/fedwiki/{domain}/pages/{slug}` (public).\n2. **Extract** the `title` and `story`.\n3. **Build frontmatter** — `name` from the slug, `description` from the first descriptive item (ask if unclear).\n4. **Convert story items** following the mapping above, with a blank line between items.\n5. **Write** to `~/.claude/skills/{slug}/SKILL.md`, creating the directory if needed.\n6. **Confirm** — show the output path and the first lines of the generated file.\n\n## What to Watch Out For\n\n- **`reference` items are navigation** — omit unless the user wants them kept as \"see also\" notes.\n- **`assets` and `roster` items** — always omit; they are structural wiki UI elements.\n- **Escaped characters** — fedwiki `text` fields may carry escaped newlines or quotes; unescape them when writing markdown.\n- **Wikilinks `[[Page Name]]`** — won't resolve inside a skill; convert to plain text or backticked names.\n- **Long pages** — many items make a large skill; consider splitting into focused skills.\n- **Missing description** — prompt the user before writing if no clear purpose statement exists.\n- **Existing skill** — if the target `SKILL.md` already exists, show a diff and ask before overwriting.\n\n## Note for the agentprivacy guide/ layer\n\nWhen materializing into `agentprivacy-skills/.../guide/`, the agentprivacy framing adds: full metadata frontmatter (`category: guide`, `layer: onboarding`, `keeper: librarian`), an `upstream:` provenance field, and a body footer crediting the source page. The skills are *vendored + re-framed* — the wiki remains the source of truth; the materialized file is a fork that carries its lineage.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — create the page-json this skill consumes\n- `agentprivacy-wiki-skill-library` — the convention that \"…Skill\" pages are a forkable library\n- `agentprivacy-wiki-document-plugin` — document a plugin instead of exporting a skill\n- `agentprivacy-wiki-create-plugin` — scaffold a new fedwiki plugin"
+    },
+    {
+      "type": "markdown",
+      "id": "4cce2f680623f32b",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-to-skill](https://skill.fedwiki.club/fedwiki-to-skill) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "bb25864698ba95a3",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-to-skill`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "4c220e3caf4ef6a7",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "7bd9db89b1dee224",
+      "text": "agentprivacy-wiki-to-skill"
+    },
+    {
+      "type": "markdown",
+      "id": "37c6a9b779f68ec3",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki To Skill",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "6ff3fe950891f777",
+            "text": "# Wiki To Skill\n\n**Category** wikis · **Version** 5.5\n\nThe fork desk / inclusion engine — converts a federated-wiki page into a Claude Code SKILL.md. Activates when materializing a fedwiki skill, exporting a wiki page to ~/.claude/skills, or pulling a skill from skill.fedwiki.club into a repo. This is the git-less clone: the wiki stays source of truth, the SKILL.md is a fork (a copy that remembers its origin). The Librarian's 🗃️ core forking act in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "a62dfefaa3ccaa05",
+            "text": "The **fedwiki-to-skill** skill converts a federated wiki page (page-json) into a Claude Code `SKILL.md` file. Author a skill as an ordinary wiki page, then export it to `~/.claude/skills/{slug}/SKILL.md` where Claude Code can load and invoke it. It is the inverse direction of the document-plugin skill — here the page itself *becomes* the skill.\n\n## How It Works\n\nA fedwiki page has a `title` and a `story` array of items, each with a `type` and a `text`. The converter maps each item type to markdown:\n\n- `markdown` → kept as-is (already markdown)\n- `paragraph` → plain text paragraph\n- `code` → fenced code block\n- `html` → wrapped HTML block\n- `reference`, `roster`, `assets` → omitted (navigation/structure, not instructions)\n\nThe page `title` derives the skill **name** (lowercase, hyphenated slug), used for the `name:` frontmatter field and the top `# Heading` of the body.\n\n## Skill Frontmatter\n\nEvery `SKILL.md` opens with YAML frontmatter. The `description` is the critical field — Claude Code uses it to decide *when* to auto-invoke the skill, so it must name the trigger phrases.\n\n```markdown"
+          },
+          {
+            "type": "markdown",
+            "id": "4a80a088aedf60b7",
+            "text": "name: skill-name\ndescription: One or two sentences describing WHEN to trigger — include the user phrases that should activate it."
+          },
+          {
+            "type": "markdown",
+            "id": "154ac5acf8bc20ca",
+            "text": "```\n\nPull the description from the first `paragraph` or `markdown` item if it reads like a purpose statement; otherwise ask the user to supply one.\n\n## Output Location\n\nPersonal skills (available in all projects):\n```\n~/.claude/skills/{skill-name}/SKILL.md\n```\n\nProject skills (current project only):\n```\n.claude/skills/{skill-name}/SKILL.md\n```\n\nDefault to `~/.claude/skills/` unless the user specifies otherwise.\n\n## Conversion Steps\n\n1. **Read the source** — a page-json path, or a slug + domain located under `~/Music/Guides/Private/{domain}/pages/{slug}` (local) or `~/Nextcloud/fedwiki/{domain}/pages/{slug}` (public).\n2. **Extract** the `title` and `story`.\n3. **Build frontmatter** — `name` from the slug, `description` from the first descriptive item (ask if unclear).\n4. **Convert story items** following the mapping above, with a blank line between items.\n5. **Write** to `~/.claude/skills/{slug}/SKILL.md`, creating the directory if needed.\n6. **Confirm** — show the output path and the first lines of the generated file.\n\n## What to Watch Out For\n\n- **`reference` items are navigation** — omit unless the user wants them kept as \"see also\" notes.\n- **`assets` and `roster` items** — always omit; they are structural wiki UI elements.\n- **Escaped characters** — fedwiki `text` fields may carry escaped newlines or quotes; unescape them when writing markdown.\n- **Wikilinks `[[Page Name]]`** — won't resolve inside a skill; convert to plain text or backticked names.\n- **Long pages** — many items make a large skill; consider splitting into focused skills.\n- **Missing description** — prompt the user before writing if no clear purpose statement exists.\n- **Existing skill** — if the target `SKILL.md` already exists, show a diff and ask before overwriting.\n\n## Note for the agentprivacy guide/ layer\n\nWhen materializing into `agentprivacy-skills/.../guide/`, the agentprivacy framing adds: full metadata frontmatter (`category: guide`, `layer: onboarding`, `keeper: librarian`), an `upstream:` provenance field, and a body footer crediting the source page. The skills are *vendored + re-framed* — the wiki remains the source of truth; the materialized file is a fork that carries its lineage.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — create the page-json this skill consumes\n- `agentprivacy-wiki-skill-library` — the convention that \"…Skill\" pages are a forkable library\n- `agentprivacy-wiki-document-plugin` — document a plugin instead of exporting a skill\n- `agentprivacy-wiki-create-plugin` — scaffold a new fedwiki plugin"
+          },
+          {
+            "type": "markdown",
+            "id": "4cce2f680623f32b",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-to-skill](https://skill.fedwiki.club/fedwiki-to-skill) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "bb25864698ba95a3",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-to-skill`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "4c220e3caf4ef6a7",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "7bd9db89b1dee224",
+            "text": "agentprivacy-wiki-to-skill"
+          },
+          {
+            "type": "markdown",
+            "id": "37c6a9b779f68ec3",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384147
+    }
+  ]
+}

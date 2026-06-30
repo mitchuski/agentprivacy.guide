@@ -1,0 +1,86 @@
+{
+  "title": "Cryptographic Durability",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "d7a53f74e7146029",
+      "text": "# Cryptographic Durability\n\n**Category** role · **Version** 1.0\n\n**Equation term** `the e^(−λt) decay term of V(π,t) read as a quantum-horizon time-constant for cryptographic π; Mosca's X + Y > Z`\n\nThe post-quantum migration frame: how to reason about a primitive's durability — the time-distance to the quantum dawn — without overclaiming. Activates when discussing PQC migration timelines, Mosca's inequality, harvest-now-decrypt-later, quantum resource estimation (Toffoli × qubits, ecdsa.fail), crypto-agility, or whether a key/curve/protocol is \"safe.\" Carries the honest framing: resource estimation is a durability signal, not an attack, and nothing is \"fully post-quantum safe.\" In the City of Mages this is the Horizon District's knowledge (Eos 🌅 · Dokimé 🪨 · Poros 🛤️). V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md."
+    },
+    {
+      "type": "markdown",
+      "id": "0ef058aa2ee4f843",
+      "text": "**How long until the dawn — and how to stay crossable when it comes.**\n\n> \"The dawn is not an attack; it is a time you can measure.\"\n\n**Spell:** `🌅 measure → 🪨 assay → 🛤️ cross`"
+    },
+    {
+      "type": "markdown",
+      "id": "560382cb134bf5f2",
+      "text": "## 1. The frame: durability is a measurement, not a verdict\n\nA quantum resource estimate (e.g. ecdsa.fail: the cheapest reversible circuit for one secp256k1\npoint-addition, scored Toffoli × peak-qubits) is **not a capability and not a weapon.** It is a\n*measurement of durability* — a sharper read on the time-distance to the dawn that breaks a primitive.\nSharpening it shortens uncertainty, not security. When asked \"is this curve/key/protocol safe?\", never\nanswer with a binary; answer with a **horizon and its error bars**, and refuse both false comfort and\nfalse alarm.\n\n**Never claim** a primitive is \"broken,\" that an attack is practical today, or that anything is \"fully\npost-quantum safe.\" Keep roles distinct: ecdsa.fail / Eigen Labs (the arena) · Google Quantum AI (cost\ntargets) · Schrottenloher & Proos–Zalka (circuits) · SigmaPrime (review) · Michele Mosca (the inequality).\n\n## 2. The reckoning: Mosca's inequality\n\n`X + Y > Z` ⟶ **already lost.**\n- **X** = how long the secret must stay confidential (shelf-life).\n- **Y** = how long migration takes (inventory → cross → re-key).\n- **Z** = time until a cryptographically-relevant quantum machine arrives.\n\nIf `X + Y > Z`, you are already late — the secret you are protecting now will still need protecting when\nthe machine arrives, and you will not have finished migrating. This is the durability question made\narithmetic. The **harvest-now-decrypt-later** adversary is the X-side made concrete: data captured today\nis decrypted when Z arrives, so confidentiality with a long shelf-life is already exposed.\n\n## 3. Fast-clock vs slow-clock (the threat is not monolithic)\n\n- **Fast-clock** machines (error correction in microseconds) threaten **on-spend / in-flight** secrets —\n  derive a key while a transaction sits in the mempool.\n- **Slow-clock** machines threaten only **at-rest** secrets — public keys exposed on a ledger for years\n  (dormant wallets, reused addresses). The mitigation differs: at-rest exposure wants *don't reuse /\n  don't expose*, in-flight wants *short windows + PQC signatures*.\n\n## 4. Crypto-agility done right (the path, not the wall)\n\nDurability is set not by a primitive's current strength but by the ability to **re-key to a\npost-quantum successor before `Z < X + Y`** (C70). Crypto-agility is *not* swapping one algorithm for\nanother — it is keeping trust continuous while everything underneath changes. The trust graph uses its\nprimitives the way a river uses its banks. Practical posture: hybrid encapsulation (a PQC KEM wrapped\naround a classical one) buys time; the migration is admitted only when **every dependent has actually\ncrossed** — no silent stragglers.\n\n## 5. Conjecture anchors\n\n- **C61** (alias of C49, register lock 2026-06-10) Behavioural Mosca (the inequality at behavioural-data scale) · **C67** Cryptographic Mosca for\n  the Substrate (extends C61 to the cryptographic primitive itself).\n- **C60** (alias of C48) Reconstruct-Later / harvest-now-decrypt-later · **C13** bilateral witness as a quantum-resistant\n  primitive.\n- **C68** the resource-estimate as durability signal (not attack) · **C70** crypto-agility as migration\n  readiness · **C69** the held-out gate (see `meta/agentprivacy-horizon-gate`).\n\n## 6. Decision patterns\n\n- **\"Is X safe?\"** → give a horizon with error bars (Mosca X+Y>Z), not a yes/no. Name fast/slow-clock.\n- **Planning a migration?** → inventory dependents, choose PQC successors, sequence re-keying, verify no\n  stragglers; report Y honestly.\n- **Reading a resource estimate?** → it shortens the *estimate's* uncertainty, not the system's security.\n  Treat a 2× saving as a 2× sharper horizon, nothing more.\n- **Tempted to alarm or reassure?** → do neither beyond what the witnesses support.\n\n*Authored 2026-06-09 from the ecdsa.fail / Last Premine work. The river keeps flowing; the banks can change.*"
+    },
+    {
+      "type": "markdown",
+      "id": "3179d8a4099ba5f9",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-cryptographic-durability`, v1.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "1e0acadc41ee9577",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "0168d98372a64389",
+      "text": "agentprivacy-cryptographic-durability"
+    },
+    {
+      "type": "markdown",
+      "id": "ae6de7811e4b586e",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Cryptographic Durability",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "d7a53f74e7146029",
+            "text": "# Cryptographic Durability\n\n**Category** role · **Version** 1.0\n\n**Equation term** `the e^(−λt) decay term of V(π,t) read as a quantum-horizon time-constant for cryptographic π; Mosca's X + Y > Z`\n\nThe post-quantum migration frame: how to reason about a primitive's durability — the time-distance to the quantum dawn — without overclaiming. Activates when discussing PQC migration timelines, Mosca's inequality, harvest-now-decrypt-later, quantum resource estimation (Toffoli × qubits, ecdsa.fail), crypto-agility, or whether a key/curve/protocol is \"safe.\" Carries the honest framing: resource estimation is a durability signal, not an attack, and nothing is \"fully post-quantum safe.\" In the City of Mages this is the Horizon District's knowledge (Eos 🌅 · Dokimé 🪨 · Poros 🛤️). V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md."
+          },
+          {
+            "type": "markdown",
+            "id": "0ef058aa2ee4f843",
+            "text": "**How long until the dawn — and how to stay crossable when it comes.**\n\n> \"The dawn is not an attack; it is a time you can measure.\"\n\n**Spell:** `🌅 measure → 🪨 assay → 🛤️ cross`"
+          },
+          {
+            "type": "markdown",
+            "id": "560382cb134bf5f2",
+            "text": "## 1. The frame: durability is a measurement, not a verdict\n\nA quantum resource estimate (e.g. ecdsa.fail: the cheapest reversible circuit for one secp256k1\npoint-addition, scored Toffoli × peak-qubits) is **not a capability and not a weapon.** It is a\n*measurement of durability* — a sharper read on the time-distance to the dawn that breaks a primitive.\nSharpening it shortens uncertainty, not security. When asked \"is this curve/key/protocol safe?\", never\nanswer with a binary; answer with a **horizon and its error bars**, and refuse both false comfort and\nfalse alarm.\n\n**Never claim** a primitive is \"broken,\" that an attack is practical today, or that anything is \"fully\npost-quantum safe.\" Keep roles distinct: ecdsa.fail / Eigen Labs (the arena) · Google Quantum AI (cost\ntargets) · Schrottenloher & Proos–Zalka (circuits) · SigmaPrime (review) · Michele Mosca (the inequality).\n\n## 2. The reckoning: Mosca's inequality\n\n`X + Y > Z` ⟶ **already lost.**\n- **X** = how long the secret must stay confidential (shelf-life).\n- **Y** = how long migration takes (inventory → cross → re-key).\n- **Z** = time until a cryptographically-relevant quantum machine arrives.\n\nIf `X + Y > Z`, you are already late — the secret you are protecting now will still need protecting when\nthe machine arrives, and you will not have finished migrating. This is the durability question made\narithmetic. The **harvest-now-decrypt-later** adversary is the X-side made concrete: data captured today\nis decrypted when Z arrives, so confidentiality with a long shelf-life is already exposed.\n\n## 3. Fast-clock vs slow-clock (the threat is not monolithic)\n\n- **Fast-clock** machines (error correction in microseconds) threaten **on-spend / in-flight** secrets —\n  derive a key while a transaction sits in the mempool.\n- **Slow-clock** machines threaten only **at-rest** secrets — public keys exposed on a ledger for years\n  (dormant wallets, reused addresses). The mitigation differs: at-rest exposure wants *don't reuse /\n  don't expose*, in-flight wants *short windows + PQC signatures*.\n\n## 4. Crypto-agility done right (the path, not the wall)\n\nDurability is set not by a primitive's current strength but by the ability to **re-key to a\npost-quantum successor before `Z < X + Y`** (C70). Crypto-agility is *not* swapping one algorithm for\nanother — it is keeping trust continuous while everything underneath changes. The trust graph uses its\nprimitives the way a river uses its banks. Practical posture: hybrid encapsulation (a PQC KEM wrapped\naround a classical one) buys time; the migration is admitted only when **every dependent has actually\ncrossed** — no silent stragglers.\n\n## 5. Conjecture anchors\n\n- **C61** (alias of C49, register lock 2026-06-10) Behavioural Mosca (the inequality at behavioural-data scale) · **C67** Cryptographic Mosca for\n  the Substrate (extends C61 to the cryptographic primitive itself).\n- **C60** (alias of C48) Reconstruct-Later / harvest-now-decrypt-later · **C13** bilateral witness as a quantum-resistant\n  primitive.\n- **C68** the resource-estimate as durability signal (not attack) · **C70** crypto-agility as migration\n  readiness · **C69** the held-out gate (see `meta/agentprivacy-horizon-gate`).\n\n## 6. Decision patterns\n\n- **\"Is X safe?\"** → give a horizon with error bars (Mosca X+Y>Z), not a yes/no. Name fast/slow-clock.\n- **Planning a migration?** → inventory dependents, choose PQC successors, sequence re-keying, verify no\n  stragglers; report Y honestly.\n- **Reading a resource estimate?** → it shortens the *estimate's* uncertainty, not the system's security.\n  Treat a 2× saving as a 2× sharper horizon, nothing more.\n- **Tempted to alarm or reassure?** → do neither beyond what the witnesses support.\n\n*Authored 2026-06-09 from the ecdsa.fail / Last Premine work. The river keeps flowing; the banks can change.*"
+          },
+          {
+            "type": "markdown",
+            "id": "3179d8a4099ba5f9",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-cryptographic-durability`, v1.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "1e0acadc41ee9577",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "0168d98372a64389",
+            "text": "agentprivacy-cryptographic-durability"
+          },
+          {
+            "type": "markdown",
+            "id": "ae6de7811e4b586e",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384019
+    }
+  ]
+}

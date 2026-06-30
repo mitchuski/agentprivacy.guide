@@ -1,0 +1,186 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shared Parent Patterns · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Shared Parent Patterns</span></div>
+  <article><div class="md"><h1>Shared Parent Patterns</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>Network (scaling without coupling), Intel Pool architecture</code></p>
+<p>O(1) collective data structures that avoid N-squared coupling for guilds, pools, and agent swarms. Activates when discussing shared-parent holon architecture, LoadHolonsForParentAsync patterns, guild memory, Intel Pool holons, scalable collective intelligence, or any design requiring many-to-one data relationships without pairwise links.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + OASIS Holonic Architecture Whitepaper v1.2<br><strong>Target context:</strong> Collective intelligence architects, DAO infrastructure, multi-agent coordination<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The network topology skill covers stratum-weighted graphs. The intel pooling skill covers collective intelligence. But neither specifies the data structure pattern that makes O(1) collective memory possible. Shared-parent patterns fill this gap — the holonic architecture&#39;s solution to N² scaling problems.</p>
+<p>The problem: N agents want to share state. Pairwise approach: N(N-1)/2 links. With 1,000 agents: 499,500 links. Adding agent 1,001: 1,000 new links. Quadratic scaling kills collective structures.</p>
+<p>The solution: shared-parent holon. N children + 1 parent = N+1 holons. Adding agent 1,001: 1 new child holon. Constant-time scaling.</p>
+<h2>The shared-parent pattern</h2>
+<p><strong>Parent holon.</strong> Represents the collective structure (guild, pool, swarm, coordination group). Contains collective metadata: membership rules, governance policies, access control.</p>
+<p><strong>Child holons.</strong> Represent individual contributions (member state, individual intelligence, per-agent data). Each child has <code>ParentHolonId</code> pointing to the parent.</p>
+<p><strong>Query pattern.</strong> <code>LoadHolonsForParentAsync(parentId, HolonType)</code> retrieves all children of a given type. The parent defines the collection; children populate it.</p>
+<p><strong>No pairwise links.</strong> Children don&#39;t reference each other. They reference the parent. The parent provides the coordination surface without requiring N² relationships.</p>
+<h2>Scaling analysis</h2>
+<table>
+<thead>
+<tr>
+<th>Agents</th>
+<th>Pairwise Links</th>
+<th>Shared-Parent Holons</th>
+<th>Savings</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10</td>
+<td>45</td>
+<td>11</td>
+<td>4x</td>
+</tr>
+<tr>
+<td>100</td>
+<td>4,950</td>
+<td>101</td>
+<td>49x</td>
+</tr>
+<tr>
+<td>1,000</td>
+<td>499,500</td>
+<td>1,001</td>
+<td>499x</td>
+</tr>
+<tr>
+<td>10,000</td>
+<td>49,995,000</td>
+<td>10,001</td>
+<td>4,999x</td>
+</tr>
+</tbody></table>
+<p>The savings grow with scale. For large collectives, pairwise is infeasible; shared-parent is mandatory.</p>
+<h2>Intel Pool as shared-parent</h2>
+<p>Intel Pools are the canonical example:</p>
+<p><strong>Pool parent holon:</strong></p>
+<ul>
+<li><code>HolonType: IntelPool</code></li>
+<li>MetaData: pool name, threat domain, membership policy, contribution rules</li>
+<li>Content: aggregate statistics, pool governance, access credentials</li>
+</ul>
+<p><strong>Contribution child holons:</strong></p>
+<ul>
+<li><code>HolonType: ThreatIntel</code></li>
+<li><code>ParentHolonId: pool_guid</code></li>
+<li>MetaData: threat category, confidence, affected protocols, timestamp</li>
+<li>Content: threat details, evidence, recommended mitigations</li>
+</ul>
+<p><strong>Privacy guarantee:</strong> No contributor identity in child holon structure. Attribution via ZK proof of pool membership, not by inspecting holon metadata.</p>
+<p><strong>Operational flow:</strong></p>
+<ol>
+<li>Agent detects threat → creates child holon → sets ParentHolonId to pool → saves</li>
+<li>Other agents query pool → <code>LoadHolonsForParentAsync(poolId, ThreatIntel)</code> → receive all contributions</li>
+<li>Adding contributor 1,001: one new child, zero new links, O(1) operation</li>
+</ol>
+<h2>Guild memory as shared-parent</h2>
+<p>Guilds need collective memory:</p>
+<p><strong>Guild parent holon:</strong></p>
+<ul>
+<li><code>HolonType: GuildMemory</code></li>
+<li>MetaData: guild identity, specialisation, membership tier requirements</li>
+<li>Content: guild charter, governance rules, shared resources</li>
+</ul>
+<p><strong>Member contribution holons:</strong></p>
+<ul>
+<li><code>HolonType: GuildContribution</code></li>
+<li>Types: ReasoningGraph, VerifiedCircuit, ThreatAnalysis, ProvenPattern</li>
+<li>Each contribution is a child of the guild memory parent</li>
+</ul>
+<p><strong>Governance integration:</strong> Shipwright persona governs who can create children, who can query, who can modify the parent. The shared-parent structure enables governance without N² permission matrices.</p>
+<h2>Agent swarm coordination</h2>
+<p>Multi-agent systems need coordination state:</p>
+<p><strong>Swarm parent holon:</strong></p>
+<ul>
+<li><code>HolonType: SwarmCoordination</code></li>
+<li>MetaData: swarm task, coordination protocol, membership</li>
+<li>Content: task specification, current state, completion criteria</li>
+</ul>
+<p><strong>Agent state holons:</strong></p>
+<ul>
+<li><code>HolonType: AgentState</code></li>
+<li>Each agent maintains their state as a child of the swarm</li>
+<li>State updates: modify own child holon</li>
+<li>Coordination: read sibling holons via parent query</li>
+</ul>
+<p><strong>Scaling benefit:</strong> A 100-agent swarm has 101 holons. Adding 10 agents adds 10 holons. No explosion of coordination links.</p>
+<h2>Hierarchical shared-parents</h2>
+<p>Shared-parent patterns compose hierarchically:</p>
+<pre><code>Organisation Parent
+├── Guild A Parent
+│   ├── Member 1 Contribution
+│   ├── Member 2 Contribution
+│   └── ...
+├── Guild B Parent
+│   ├── Member 1 Contribution
+│   └── ...
+└── Intel Pool Parent
+    ├── Contribution 1
+    └── ...
+</code></pre>
+<p><strong>Query patterns:</strong></p>
+<ul>
+<li>All guilds: <code>LoadHolonsForParentAsync(orgId, Guild)</code></li>
+<li>All contributions in Guild A: <code>LoadHolonsForParentAsync(guildAId, Contribution)</code></li>
+<li>All intel: <code>LoadHolonsForParentAsync(poolId, ThreatIntel)</code></li>
+</ul>
+<p><strong>Governance inheritance:</strong> Policies flow down the hierarchy. Organisation-level rules constrain guild-level rules which constrain member contributions.</p>
+<h2>Privacy in shared-parent structures</h2>
+<p>Shared-parent enables collective intelligence without surveillance:</p>
+<p><strong>Child anonymity.</strong> Children don&#39;t contain contributor identity. The contribution exists; its author is protected.</p>
+<p><strong>Access control at parent.</strong> The parent holon&#39;s MetaData specifies who can query children. Non-members can&#39;t enumerate the collective&#39;s contents.</p>
+<p><strong>Aggregate-only queries.</strong> Some parent configurations allow aggregate queries (count, statistics) without exposing individual children. &quot;How many threat reports?&quot; without &quot;which agents contributed?&quot;</p>
+<p><strong>Contribution mixing.</strong> New children can be added through a mixer — the parent accepts contributions without linking them to specific agents.</p>
+<h2>Integration with existing skills</h2>
+<p><strong>network_topology:</strong> Stratum-weighted graphs describe network structure. Shared-parent patterns describe data structure. Complementary: the network topology operates over shared-parent data.</p>
+<p><strong>intel_pooling:</strong> Intel Pools ARE shared-parent structures. This skill specifies the implementation pattern.</p>
+<p><strong>plurality_cooperative:</strong> Quadratic funding, plural voting require aggregating many individual preferences. Shared-parent patterns are the data structure for plurality mechanisms.</p>
+<p><strong>hitchhiker_governance:</strong> Heart of Gold governance operates over shared-parent structures. Governance decisions affect parent holon policies; members contribute through children.</p>
+<p><strong>data_dignity:</strong> Data as the 7th capital. Your data (your child holons) lives in collective structures (shared parents) without surrendering ownership. The shared-parent pattern enables collective benefit with individual sovereignty.</p>
+<p><strong>sovereignty_economics:</strong> Economic value from collective structures. Shared-parent patterns make collective value possible at scale without N² coordination costs.</p>
+<h2>Operational patterns</h2>
+<p><strong>Adding a member.</strong> Create child holon with ParentHolonId → member is now part of collective → no existing holons modified → O(1).</p>
+<p><strong>Removing a member.</strong> Delete or archive member&#39;s child holons → member no longer in queries → parent unchanged → O(1).</p>
+<p><strong>Querying collective.</strong> <code>LoadHolonsForParentAsync()</code> → all current children → O(N) read, but no N² storage.</p>
+<p><strong>Governance update.</strong> Modify parent holon → new policies apply to all children → O(1) governance propagation.</p>
+<h2>Open problems</h2>
+<ol>
+<li><strong>Child ordering</strong> — do children have an order? How to paginate <code>LoadHolonsForParentAsync</code> results?</li>
+<li><strong>Parent update rights</strong> — who can modify the parent? How is this governed?</li>
+<li><strong>Cross-parent queries</strong> — querying across multiple parent structures? Joins without N² explosion?</li>
+<li><strong>Orphan children</strong> — what happens if a parent is deleted? Children become unreachable?</li>
+<li><strong>Migration between parents</strong> — can a child change parents? What are the semantics?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-shared-parent-patterns</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-shared-parent-patterns</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-shared-parent-patterns.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

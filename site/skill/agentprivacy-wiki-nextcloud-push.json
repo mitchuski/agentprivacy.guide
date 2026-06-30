@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Nextcloud Push",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "fe3c7803a11527fe",
+      "text": "# Wiki Nextcloud Push\n\n**Category** wikis · **Version** 5.5\n\nUpload a federated-wiki page file directly to the remote Nextcloud server via WebDAV when the desktop sync client fails or deletes newly written files. Activates when a public wiki page is written locally but never reaches the live site (broken links / stuck sync). Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "1647c2b7278c2925",
+      "text": "`nextcloud-push` is a shell script at `~/bin/nextcloud-push` that uploads a single file from the local Nextcloud folder directly to the remote Nextcloud server via WebDAV. It was created to solve a recurring problem: the Nextcloud desktop sync client occasionally fails to upload new wiki page files written by Claude Code, leaving links broken on the live site.\n\n## The Problem It Solves\n\nWhen Claude Code writes a new page file to `~/Nextcloud/fedwiki/{domain}/pages/`, the Nextcloud desktop client should detect the new file and upload it automatically. This works most of the time. But the sync client has a bug: it occasionally reports `An unexpected error occurred` even when the server returns HTTP 201 (success), and marks the file as stuck in an error backoff state.\n\nWorse, for newly created wikis whose `pages/` folder has never been synced before, the client may delete newly written files entirely — treating them as \"deleted on the remote\" rather than \"new uploads\".\n\nThe result: pages written by Claude appear locally but never reach the server, so links on the live site return 404.\n\n## How It Works\n\nThe script bypasses the desktop client entirely and uploads the file directly using a WebDAV `PUT` request via `curl`. Before uploading, it walks the remote directory path and issues `MKCOL` requests to create any missing parent directories — necessary for new wikis whose folder structure doesn't yet exist on the server.\n\nAuthentication uses a Nextcloud **App Password** (not the login password), stored in the `NC_PASSWORD` environment variable.\n\n```bash\n# Push a single page file to the remote server:\nnextcloud-push ~/Nextcloud/fedwiki/skill.fedwiki.club/pages/journal-skill\n\n# Push all pages in a wiki at once:\nfor page in ~/Nextcloud/fedwiki/skill.fedwiki.club/pages/*; do\n  nextcloud-push \"$page\"\ndone\n```\n\n## Setup\n\nThe script lives at `~/bin/nextcloud-push` and is already executable. Two environment variables control it:\n\n- `NC_USER` — Nextcloud username\n- `NC_PASSWORD` — a Nextcloud App Password generated in the Nextcloud security settings\n\nAdd both to your shell profile so they are available in every terminal session and to Claude Code:\n\n```bash\nexport NC_USER=\"your-username\"\nexport NC_PASSWORD=\"your-app-password-here\"\n```\n\nHTTP 201 means a new file was created. HTTP 204 means an existing file was updated. Both are success.\n\n## Why Browsing the Web UI Also Fixes It\n\nBrowsing to the Nextcloud web UI and navigating into a folder causes the server to emit a push notification via the Nextcloud Notify Push service. The desktop sync client is subscribed to these notifications and wakes from its backoff state when it receives one — which is why navigating to the folder in a browser sometimes triggers an otherwise-stuck sync. `nextcloud-push` is simply a faster, more reliable version of that same effect.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — how pages are written to the Nextcloud folder\n- `agentprivacy-wiki-reindex` — rebuild indexes after pages land\n- `agentprivacy-wiki-merge` — uses this WebDAV push during bulk moves"
+    },
+    {
+      "type": "markdown",
+      "id": "38a2ef86bb5ecd2a",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/nextcloud-push](https://skill.fedwiki.club/nextcloud-push) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "ea2ca84972714d07",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-nextcloud-push`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "6e957eae38066196",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "cc8a1c62a6f502c3",
+      "text": "agentprivacy-wiki-nextcloud-push"
+    },
+    {
+      "type": "markdown",
+      "id": "433816d9ef660eac",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Nextcloud Push",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "fe3c7803a11527fe",
+            "text": "# Wiki Nextcloud Push\n\n**Category** wikis · **Version** 5.5\n\nUpload a federated-wiki page file directly to the remote Nextcloud server via WebDAV when the desktop sync client fails or deletes newly written files. Activates when a public wiki page is written locally but never reaches the live site (broken links / stuck sync). Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "1647c2b7278c2925",
+            "text": "`nextcloud-push` is a shell script at `~/bin/nextcloud-push` that uploads a single file from the local Nextcloud folder directly to the remote Nextcloud server via WebDAV. It was created to solve a recurring problem: the Nextcloud desktop sync client occasionally fails to upload new wiki page files written by Claude Code, leaving links broken on the live site.\n\n## The Problem It Solves\n\nWhen Claude Code writes a new page file to `~/Nextcloud/fedwiki/{domain}/pages/`, the Nextcloud desktop client should detect the new file and upload it automatically. This works most of the time. But the sync client has a bug: it occasionally reports `An unexpected error occurred` even when the server returns HTTP 201 (success), and marks the file as stuck in an error backoff state.\n\nWorse, for newly created wikis whose `pages/` folder has never been synced before, the client may delete newly written files entirely — treating them as \"deleted on the remote\" rather than \"new uploads\".\n\nThe result: pages written by Claude appear locally but never reach the server, so links on the live site return 404.\n\n## How It Works\n\nThe script bypasses the desktop client entirely and uploads the file directly using a WebDAV `PUT` request via `curl`. Before uploading, it walks the remote directory path and issues `MKCOL` requests to create any missing parent directories — necessary for new wikis whose folder structure doesn't yet exist on the server.\n\nAuthentication uses a Nextcloud **App Password** (not the login password), stored in the `NC_PASSWORD` environment variable.\n\n```bash\n# Push a single page file to the remote server:\nnextcloud-push ~/Nextcloud/fedwiki/skill.fedwiki.club/pages/journal-skill\n\n# Push all pages in a wiki at once:\nfor page in ~/Nextcloud/fedwiki/skill.fedwiki.club/pages/*; do\n  nextcloud-push \"$page\"\ndone\n```\n\n## Setup\n\nThe script lives at `~/bin/nextcloud-push` and is already executable. Two environment variables control it:\n\n- `NC_USER` — Nextcloud username\n- `NC_PASSWORD` — a Nextcloud App Password generated in the Nextcloud security settings\n\nAdd both to your shell profile so they are available in every terminal session and to Claude Code:\n\n```bash\nexport NC_USER=\"your-username\"\nexport NC_PASSWORD=\"your-app-password-here\"\n```\n\nHTTP 201 means a new file was created. HTTP 204 means an existing file was updated. Both are success.\n\n## Why Browsing the Web UI Also Fixes It\n\nBrowsing to the Nextcloud web UI and navigating into a folder causes the server to emit a push notification via the Nextcloud Notify Push service. The desktop sync client is subscribed to these notifications and wakes from its backoff state when it receives one — which is why navigating to the folder in a browser sometimes triggers an otherwise-stuck sync. `nextcloud-push` is simply a faster, more reliable version of that same effect.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — how pages are written to the Nextcloud folder\n- `agentprivacy-wiki-reindex` — rebuild indexes after pages land\n- `agentprivacy-wiki-merge` — uses this WebDAV push during bulk moves"
+          },
+          {
+            "type": "markdown",
+            "id": "38a2ef86bb5ecd2a",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/nextcloud-push](https://skill.fedwiki.club/nextcloud-push) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "ea2ca84972714d07",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-nextcloud-push`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "6e957eae38066196",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "cc8a1c62a6f502c3",
+            "text": "agentprivacy-wiki-nextcloud-push"
+          },
+          {
+            "type": "markdown",
+            "id": "433816d9ef660eac",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384134
+    }
+  ]
+}

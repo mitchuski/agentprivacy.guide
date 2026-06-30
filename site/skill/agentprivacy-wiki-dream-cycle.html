@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Dream Cycle · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Dream Cycle</span></div>
+  <article><div class="md"><h1>Wiki Dream Cycle</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5 · <strong>Keeper</strong> the Librarian 🗃️ · <strong>Author</strong> the Chronicler 🧙📖</p>
+<p>The standing research loop that keeps the static guide rebound to the source. Each relevant /mitch repo <em>dreams</em> about itself — a deep multi-lap pass that diffs the repo’s canon against the live FedWiki, writes a standing <code>chronicles/DREAM-&lt;date&gt;.md</code> (its resumable work-ledger), and feeds a single confirm-able GATE document. The First Person ticks the GATE; builders write the approved canon into ~/.wiki; the snapshot publishes it.</p>
+</div>
+<div class="md"><p>Where <a class="wlink" href="agentprivacy-wiki-resync.html">Wiki Resync</a> is the <em>per-turn</em> operation (“I changed a repo → rebuild the wiki”), the dream cycle is the <strong>discovery</strong> layer that runs <em>before</em> you know what to change. It is the Chronicler’s loop — it <em>produces chronicles</em> — cataloged by the Librarian, keeper of the wikis category.</p>
+</div>
+<div class="md"><h2>The four stages (looped)</h2>
+<pre><code>1. RESEARCH   scan source dirs → diff vs the live FedWiki → gap report
+2. GATE       the First Person reads the dreams and ticks what to fill  ← the only human step
+3. BUILD      builders write the approved canon into ~/.wiki (journal-versioned, &lt;a class=&quot;wlink&quot; href=&quot;linked.html&quot;&gt;linked&lt;/a&gt;, hub backlinks)
+4. SNAPSHOT   snapshot → site → review on :3200
+   ↺ loop until comfortable → push → guide.agentprivacy.ai
+</code></pre>
+</div>
+<div class="md"><h2>Two layers of dream</h2>
+<ul>
+<li><strong>Thematic dreams</strong> — cross-cutting passes by site/topic, plus a <strong>relevance-curated</strong> wider-universe pass that triages the ~80 /mitch dirs into <em>current · stale · irrelevant</em> so the fan-out never dreams on cruft.</li>
+<li><strong>Per-directory dreams</strong> — each current repo dreams about its own state + its link to the guide, into <code>&lt;repo&gt;/chronicles/DREAM-&lt;date&gt;.md</code>. The daily work-ledger.</li>
+</ul>
+</div>
+<div class="md"><h2>Discipline</h2>
+<ul>
+<li><strong>Relevance first</strong> — never treat a stale/version-named dir or system folder as a gap; triage, then verify against the live sites.</li>
+<li><strong>No duplicate information flows</strong> — fill what is <em>missing</em>; <strong>link</strong>, don’t re-create, what already lives elsewhere.</li>
+<li><strong>The dreams are research input, not content to paste.</strong></li>
+<li><strong>The human gate is load-bearing</strong> — nothing built or published without the First Person.</li>
+<li><strong>Honest framing carries</strong> — every dream preserves the source’s honesty.</li>
+</ul>
+</div>
+<div class="md"><h2>Run it</h2>
+<pre><code class="language-bash">node flow/run.mjs audit          # RESEARCH → gap-report.json
+node flow/run.mjs build &lt;site&gt;   # BUILD the approved gaps into ~/.wiki
+node flow/run.mjs snapshot       # SNAPSHOT → site → review on :3200
+node flow/run.mjs cycle &lt;site&gt;   # audit → build → snapshot → audit
+</code></pre>
+<p>Tooling home: <code>agentprivacy.guide/flow/</code>. See <code>DREAM-CYCLE.md</code> for the full convention.</p>
+</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · authored by <a class="wlink" href="agentprivacy-chronicler.html">Agentprivacy Chronicler</a> · sibling of <a class="wlink" href="agentprivacy-wiki-resync.html">Wiki Resync</a></p>
+</div>
+<a class="ref" href="/skill/agentprivacy-chronicler.html"><span class="ref-glyph">🗃️</span>
+      <span class="ref-body"><span class="ref-title">The Chronicler 🧙📖</span>
+      <span class="ref-text">the Mage who writes the dream chronicles.</span>
+      <span class="ref-site">skill</span></span></a></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-dream-cycle.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

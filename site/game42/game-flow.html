@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GAME-FLOW · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="game42">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site on" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/game42/welcome-visitors.html">Game of 42</a> / <span>GAME-FLOW</span></div>
+  <article><div class="md"><h1>GAME-FLOW</h1>
+</div>
+<div class="md"><h2>state machine, phases, gating</h2>
+<p>Pure logic, no rendering. Implement as a reducer over events. The geometry and visuals subscribe to this state; they never drive it.</p>
+<hr>
+</div>
+<div class="md"><h2>1. Slot lifecycle</h2>
+<p>Each of the 42 slots moves through five states:</p>
+<pre><code>empty -&gt; proposed -&gt; in_progress -&gt; verified -&gt; sealed
+</code></pre>
+<ul>
+<li><strong>empty</strong>: nothing yet.</li>
+<li><strong>proposed</strong>: a vision fish path has introduced a candidate (head-class slots can self-propose; others are proposed once their heptad is ignited).</li>
+<li><strong>in_progress</strong>: a trust task has started for this slot (a candidate is doing the work).</li>
+<li><strong>verified</strong>: the trust task passed and a VRC edge was issued and kappa-compressed. The integrity gate h(tau) must be satisfied to reach this state. Unverified history does not advance.</li>
+<li><strong>sealed</strong>: the slot is locked into the heptad. A sealed slot is immutable.</li>
+</ul>
+<p>Allowed transitions only as above, plus <code>in_progress -&gt; empty</code> on abandon, and <code>proposed -&gt; empty</code> on withdraw. No backward step out of <code>verified</code> or <code>sealed</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>2. Heptad lifecycle</h2>
+<p>Each of the 6 heptads:</p>
+<pre><code>dormant -&gt; ignited -&gt; fishing -&gt; building -&gt; sealing -&gt; locked
+</code></pre>
+<ul>
+<li><strong>ignited</strong>: the root lights; the axis is declared; the empty triangle appears.</li>
+<li><strong>fishing</strong>: the three vision-fish (head-class) slots are open for proposal and work. Fill order 1, 2, 3.</li>
+<li><strong>building</strong>: at least the lead advisor is verified; the three mouse slots open. Fill order 4, 5, 6.</li>
+<li><strong>sealing</strong>: all three vision fish and all three mice are verified; the centre guide slot opens. Fill order 7.</li>
+<li><strong>locked</strong>: all seven stations sealed, guide sealed last. The heptad folds (its flap lifts). Immutable.</li>
+</ul>
+<p><strong>Gating inside a heptad.</strong> The guide (centre, fill order 7) cannot reach <code>in_progress</code> until the other six are <code>verified</code>. This enforces guide-seals-last and gives the keystone its meaning.</p>
+<p>Heptads run in parallel. Six can be at different phases at once.</p>
+<hr>
+</div>
+<div class="md"><h2>3. Board lifecycle</h2>
+<pre><code>seeded -&gt; assembling -&gt; sealed
+</code></pre>
+<ul>
+<li><strong>seeded</strong>: board centre lit, six roots dormant or igniting.</li>
+<li><strong>assembling</strong>: one or more heptads past dormant, not all locked.</li>
+<li><strong>sealed</strong>: all six heptads locked. The board folds whole (p -&gt; 1), the group seal is computed, the game becomes a trust-graph node.</li>
+</ul>
+<p><strong>Multiplicative collapse (hard rule).</strong> The board reaches <code>sealed</code> only when all six heptads are <code>locked</code>. If any heptad is short even one verified slot, the board stays <code>assembling</code>. There is no partial seal. This is the any-axis-zero-zeros-the-whole property as a gate.</p>
+<hr>
+</div>
+<div class="md"><h2>4. Completion scalar p</h2>
+<pre><code>p = (count of slots in state &#39;sealed&#39;) / 42
+</code></pre>
+<p><code>p</code> drives the fold in GEOMETRY.md. It is derived state, never set directly.</p>
+<hr>
+</div>
+<div class="md"><h2>5. Events</h2>
+<p>The reducer consumes these. Names are suggestions; keep them stable for the visual layer.</p>
+<pre><code>ROOT_IGNITE        { axisId }
+FISH_PROPOSE       { slotId, candidateDid }        proposed
+TASK_START         { slotId, candidateDid }        in_progress
+TASK_VERIFY        { slotId, vrc, kappaLabel }     verified   (gate: h(tau) ok)
+SLOT_SEAL          { slotId }                       sealed
+HEPTAD_ADVANCE     { axisId, phase }                derived, emitted by reducer
+BOARD_SEAL         { groupSeal }                    emitted when all six lock
+TASK_ABANDON       { slotId }
+PROPOSAL_WITHDRAW  { slotId }
+</code></pre>
+<p><code>TASK_VERIFY</code> is the only event that may be rejected by the reducer (failed integrity gate, wrong fill order, guide opened too early). All rejections are explicit and logged; the visual layer shows the reason.</p>
+<hr>
+</div>
+<div class="md"><h2>6. Determinism and replay</h2>
+<p>The full game is a fold over an ordered event log. Given the same log, the same state and the same group seal result every time. This makes a game of 42 auditable and shareable as its log plus its seal. Persist the log; derive everything else.</p>
+<blockquote>
+<p>nothing seals until the keystone, and the keystone cannot be laid until the rest is true</p>
+</blockquote>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+</div>
+<div class="md"><hr>
+<p><a class="wlink" href="welcome.html">Welcome</a> · the Game of 42 — six axes × seven stations = 42</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">10 revisions</div>
+    <a class="json-link" href="game-flow.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

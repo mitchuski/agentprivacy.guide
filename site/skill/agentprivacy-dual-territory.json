@@ -1,0 +1,106 @@
+{
+  "title": "Dual Territory",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "bd36448e7bb6c5fa",
+      "text": "# Dual Territory\n\n**Category** role · **Version** 5.3.2\n\n**Equation term** `Territory(S) ⊥ Territory(M) connected by Ceremony(C)`\n\nDual-territory ceremony architecture specification. Activates when discussing Swordsman/Mage separation at infrastructure level, three territories (Spellweb, Agentprivacy, Bgin), ceremony channels, or territory sovereignty."
+    },
+    {
+      "type": "markdown",
+      "id": "89e1ae18e8f984ec",
+      "text": "**Source:** Privacy Value Model V5.2 + Dual Territory Ceremony Specification v1.0\n**Target context:** Infrastructure architects, protocol designers, separation specialists\n**Architecture:** [spellweb.ai](https://spellweb.ai) + [agentprivacy.ai](https://agentprivacy.ai) · **Contact:** mage@agentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "63ae0772f076a38d",
+      "text": "## What this is\n\nThe dual-territory architecture enforces Swordsman/Mage separation at the infrastructure level. This is not metaphor or best practice — it is hard separation through distinct processes, storage, permissions, and repositories.\n\n**Two kingdoms share a river. Neither owns the water, but both drink. The ceremony is the riverbed.**\n\n## The Core Rule\n\n**The Swordsman and Mage NEVER merge.**\n\nThis applies at every level:\n- Protocol\n- Extension\n- Website\n- Visual rendering\n- Database\n- Repository\n- Deployment\n\nViolation of this rule collapses the sovereignty gap.\n\n## The Three Territories\n\n### 1. Spellweb Territory (Swordsman)\n\n**Domain:** spellweb.ai\n**Owner:** Soulbis (privacyswordsman.eth)\n**Purpose:** Enforcement, boundaries, topology\n\n**Contains:**\n- Blade forge\n- Hexagram computations\n- Constellation topology\n- Cut segments\n- Signing key operations\n\n**Does NOT contain:**\n- Story content\n- Persona definitions\n- Training materials\n- User preferences\n\n### 2. Agentprivacy Territory (Mage)\n\n**Domain:** agentprivacy.ai\n**Owner:** Soulbae (privacymage.eth)\n**Purpose:** Delegation, projection, storytelling\n\n**Contains:**\n- Spellbook content\n- Persona configurations\n- Training ground\n- Path page\n- Pretext orbs\n- User journey state\n\n**Does NOT contain:**\n- Signing keys\n- Topology enforcement\n- Boundary verification\n- Cut operations\n\n### 3. Bgin Territory (Third Node)\n\n**Domain:** bgin.ai\n**Owner:** Neutral third party\n**Purpose:** Trust graph, verification anchor\n\n**Contains:**\n- Trust graph plane\n- Cross-territory verification\n- Neutral attestations\n- Dispute resolution anchors\n\n**Does NOT contain:**\n- Either party's private state\n- Content or enforcement logic\n- User data\n\n## Separation Layers\n\n### Layer 1: Process Separation\n\n```\n┌─────────────────┐     ┌─────────────────┐\n│ Swordsman Proc  │     │   Mage Process  │\n│                 │     │                 │\n│ PID: separate   │     │ PID: separate   │\n│ Memory: isolate │     │ Memory: isolate │\n│ Threads: own    │     │ Threads: own    │\n└────────┬────────┘     └────────┬────────┘\n         │       IPC only        │\n         └───────────────────────┘\n```\n\n### Layer 2: Storage Separation\n\n```\nSwordsman Storage        Mage Storage\n├── blades/              ├── spells/\n├── topology/            ├── personas/\n├── cuts/                ├── journeys/\n└── keys/ (encrypted)    └── preferences/\n\nNO SHARED STORAGE\n```\n\n### Layer 3: Permission Separation\n\n| Permission | Swordsman | Mage |\n|------------|-----------|------|\n| Sign transactions | Yes | No |\n| Read content | No | Yes |\n| Enforce boundaries | Yes | No |\n| Project personas | No | Yes |\n| Access trust graph | Verify only | Query only |\n| Modify topology | Yes | No |\n| Modify content | No | Yes |\n\n### Layer 4: Repository Separation\n\n```\ngithub.com/org/spellweb     (Swordsman)\ngithub.com/org/agentprivacy (Mage)\ngithub.com/org/ceremony     (Shared protocol only)\n```\n\nNo cross-repository dependencies except ceremony protocol.\n\n## Ceremony Channel\n\n### Purpose\n\nThe ceremony channel is the ONLY communication path between territories.\n\n### Protocol\n\n```typescript\ninterface CeremonyMessage {\n  type: 'SLASH' | 'WARD' | 'INSCRIBE' | 'SCAN';\n  payload: SignedPayload;\n  ceremony_id: string;\n  timestamp: number;\n  territory_origin: 'swordsman' | 'mage';\n}\n```\n\n### Message Types\n\n**Swordsman → Mage:**\n- `SLASH`: Boundary enforced, access revoked\n- `WARD`: Protective perimeter established\n\n**Mage → Swordsman:**\n- `INSCRIBE`: Request to record understanding\n- `SCAN`: Request to verify without modification\n\n### Security Properties\n\n1. **Typed messages:** No arbitrary data exchange\n2. **Signed payloads:** Origin verified\n3. **Ceremony scoped:** Messages tied to specific ceremonies\n4. **Auditable:** All messages logged (but content not exposed)\n5. **Atomic:** Ceremonies succeed or fail completely\n\n## Browser Extension Architecture\n\n### Two Extensions, Never One\n\n```\n┌─────────────────────────┐    ┌─────────────────────────┐\n│ Swordsman Extension     │    │ Mage Extension          │\n│ ID: abc123...           │    │ ID: xyz789...           │\n│                         │    │                         │\n│ Permissions:            │    │ Permissions:            │\n│ - webRequest            │    │ - storage               │\n│ - cookies               │    │ - tabs                  │\n│ - declarativeNetRequest │    │ - activeTab             │\n│                         │    │                         │\n│ CANNOT: read page text  │    │ CANNOT: block requests  │\n└────────────┬────────────┘    └────────────┬────────────┘\n             │    chrome.runtime.sendMessage │\n             └──────────────────────────────┘\n```\n\n### Why Two Extensions?\n\n1. **Permission isolation:** Each extension has minimal required permissions\n2. **Audit clarity:** Clear which extension does what\n3. **Failure isolation:** One extension failing doesn't compromise the other\n4. **Update independence:** Can update separately\n\n## Visual Separation\n\nEven UI must maintain separation:\n\n| Element | Swordsman | Mage |\n|---------|-----------|------|\n| Primary colour | Steel blue | Warm gold |\n| Icon shape | Angular, blade-like | Curved, orb-like |\n| Animation | Sharp, decisive | Flowing, smooth |\n| Feedback | Binary (blocked/allowed) | Gradient (progress) |\n\nUsers should ALWAYS know which territory they're interacting with.\n\n## Mapping to PVM-V5.2\n\n| Territory Concept | PVM Term |\n|-------------------|----------|\n| Dual territory | Φ_agent separation |\n| Ceremony channel | Bounded leakage |\n| Bgin third node | h(τ) integrity anchor |\n| Process isolation | R_max < 1 enforcement |\n| Permission separation | Three-axis Φ |\n| Repository separation | Codebase sovereignty |\n\n## Proverb\n\n> \"Two mirrors make a door. The Swordsman reflects. The Mage reflects. And where the reflections meet, the First Person walks through — not into another reflection, but into the next step of who they are becoming.\"\n\n**Secondary:**\n> \"Two kingdoms share a river. Neither owns the water, but both drink. The ceremony is the riverbed.\"\n\n## Emoji Spell\n\n**⚔️(neg) ⊕ 🧙(bnot) → 😊(succ) · ⬢D₂ₙ · 📐(datum,stratum,spectrum) · 96=Atlas=∂M · 🔄(query→resolve→close) · 🕸️∩🔢∩⚖️ = 1**\n\n*The Swordsman subtracts. The Mage flips. Their composition is the path.*"
+    },
+    {
+      "type": "markdown",
+      "id": "84d00113cc2cf1d7",
+      "text": "## PRISM Triadic Coordinates\n\nThe dihedral mirror reveals the triadic coordinate system for addressing any sovereignty configuration:\n\n| Coordinate | Constraint | Meaning |\n|------------|------------|---------|\n| **Datum** | Identity | The value itself. Binary encoding of the blade (hex). |\n| **Stratum** | Magnitude | Hamming weight. How many dimensions active (0-6). |\n| **Spectrum** | Structure | Which dimensions are active. The sovereignty posture. |\n\n**GPS for sovereignty:** Three coordinates fix any blade in the 64-vertex lattice. Collapse one and the blade shatters.\n\n## Open Problems\n\n1. **Synchronisation:** How to keep territories consistent without shared state?\n2. **Failure Modes:** What happens when one territory is down?\n3. **Migration:** How to migrate users between territory versions?\n4. **Mobile:** How to maintain separation on mobile platforms?\n5. **Decentralisation:** Can territories be run by different operators?"
+    },
+    {
+      "type": "markdown",
+      "id": "76a4f8fb8bb8bed7",
+      "text": "**Verify:** [spellweb.ai](https://spellweb.ai) · [agentprivacy.ai](https://agentprivacy.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+    },
+    {
+      "type": "markdown",
+      "id": "3cfd8e535976ac8e",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-dual-territory`, v5.3.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "cc2216c4c29cd49c",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "972df0d7feb81cff",
+      "text": "agentprivacy-dual-territory"
+    },
+    {
+      "type": "markdown",
+      "id": "b89a95c01319a753",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Dual Territory",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "bd36448e7bb6c5fa",
+            "text": "# Dual Territory\n\n**Category** role · **Version** 5.3.2\n\n**Equation term** `Territory(S) ⊥ Territory(M) connected by Ceremony(C)`\n\nDual-territory ceremony architecture specification. Activates when discussing Swordsman/Mage separation at infrastructure level, three territories (Spellweb, Agentprivacy, Bgin), ceremony channels, or territory sovereignty."
+          },
+          {
+            "type": "markdown",
+            "id": "89e1ae18e8f984ec",
+            "text": "**Source:** Privacy Value Model V5.2 + Dual Territory Ceremony Specification v1.0\n**Target context:** Infrastructure architects, protocol designers, separation specialists\n**Architecture:** [spellweb.ai](https://spellweb.ai) + [agentprivacy.ai](https://agentprivacy.ai) · **Contact:** mage@agentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "63ae0772f076a38d",
+            "text": "## What this is\n\nThe dual-territory architecture enforces Swordsman/Mage separation at the infrastructure level. This is not metaphor or best practice — it is hard separation through distinct processes, storage, permissions, and repositories.\n\n**Two kingdoms share a river. Neither owns the water, but both drink. The ceremony is the riverbed.**\n\n## The Core Rule\n\n**The Swordsman and Mage NEVER merge.**\n\nThis applies at every level:\n- Protocol\n- Extension\n- Website\n- Visual rendering\n- Database\n- Repository\n- Deployment\n\nViolation of this rule collapses the sovereignty gap.\n\n## The Three Territories\n\n### 1. Spellweb Territory (Swordsman)\n\n**Domain:** spellweb.ai\n**Owner:** Soulbis (privacyswordsman.eth)\n**Purpose:** Enforcement, boundaries, topology\n\n**Contains:**\n- Blade forge\n- Hexagram computations\n- Constellation topology\n- Cut segments\n- Signing key operations\n\n**Does NOT contain:**\n- Story content\n- Persona definitions\n- Training materials\n- User preferences\n\n### 2. Agentprivacy Territory (Mage)\n\n**Domain:** agentprivacy.ai\n**Owner:** Soulbae (privacymage.eth)\n**Purpose:** Delegation, projection, storytelling\n\n**Contains:**\n- Spellbook content\n- Persona configurations\n- Training ground\n- Path page\n- Pretext orbs\n- User journey state\n\n**Does NOT contain:**\n- Signing keys\n- Topology enforcement\n- Boundary verification\n- Cut operations\n\n### 3. Bgin Territory (Third Node)\n\n**Domain:** bgin.ai\n**Owner:** Neutral third party\n**Purpose:** Trust graph, verification anchor\n\n**Contains:**\n- Trust graph plane\n- Cross-territory verification\n- Neutral attestations\n- Dispute resolution anchors\n\n**Does NOT contain:**\n- Either party's private state\n- Content or enforcement logic\n- User data\n\n## Separation Layers\n\n### Layer 1: Process Separation\n\n```\n┌─────────────────┐     ┌─────────────────┐\n│ Swordsman Proc  │     │   Mage Process  │\n│                 │     │                 │\n│ PID: separate   │     │ PID: separate   │\n│ Memory: isolate │     │ Memory: isolate │\n│ Threads: own    │     │ Threads: own    │\n└────────┬────────┘     └────────┬────────┘\n         │       IPC only        │\n         └───────────────────────┘\n```\n\n### Layer 2: Storage Separation\n\n```\nSwordsman Storage        Mage Storage\n├── blades/              ├── spells/\n├── topology/            ├── personas/\n├── cuts/                ├── journeys/\n└── keys/ (encrypted)    └── preferences/\n\nNO SHARED STORAGE\n```\n\n### Layer 3: Permission Separation\n\n| Permission | Swordsman | Mage |\n|------------|-----------|------|\n| Sign transactions | Yes | No |\n| Read content | No | Yes |\n| Enforce boundaries | Yes | No |\n| Project personas | No | Yes |\n| Access trust graph | Verify only | Query only |\n| Modify topology | Yes | No |\n| Modify content | No | Yes |\n\n### Layer 4: Repository Separation\n\n```\ngithub.com/org/spellweb     (Swordsman)\ngithub.com/org/agentprivacy (Mage)\ngithub.com/org/ceremony     (Shared protocol only)\n```\n\nNo cross-repository dependencies except ceremony protocol.\n\n## Ceremony Channel\n\n### Purpose\n\nThe ceremony channel is the ONLY communication path between territories.\n\n### Protocol\n\n```typescript\ninterface CeremonyMessage {\n  type: 'SLASH' | 'WARD' | 'INSCRIBE' | 'SCAN';\n  payload: SignedPayload;\n  ceremony_id: string;\n  timestamp: number;\n  territory_origin: 'swordsman' | 'mage';\n}\n```\n\n### Message Types\n\n**Swordsman → Mage:**\n- `SLASH`: Boundary enforced, access revoked\n- `WARD`: Protective perimeter established\n\n**Mage → Swordsman:**\n- `INSCRIBE`: Request to record understanding\n- `SCAN`: Request to verify without modification\n\n### Security Properties\n\n1. **Typed messages:** No arbitrary data exchange\n2. **Signed payloads:** Origin verified\n3. **Ceremony scoped:** Messages tied to specific ceremonies\n4. **Auditable:** All messages logged (but content not exposed)\n5. **Atomic:** Ceremonies succeed or fail completely\n\n## Browser Extension Architecture\n\n### Two Extensions, Never One\n\n```\n┌─────────────────────────┐    ┌─────────────────────────┐\n│ Swordsman Extension     │    │ Mage Extension          │\n│ ID: abc123...           │    │ ID: xyz789...           │\n│                         │    │                         │\n│ Permissions:            │    │ Permissions:            │\n│ - webRequest            │    │ - storage               │\n│ - cookies               │    │ - tabs                  │\n│ - declarativeNetRequest │    │ - activeTab             │\n│                         │    │                         │\n│ CANNOT: read page text  │    │ CANNOT: block requests  │\n└────────────┬────────────┘    └────────────┬────────────┘\n             │    chrome.runtime.sendMessage │\n             └──────────────────────────────┘\n```\n\n### Why Two Extensions?\n\n1. **Permission isolation:** Each extension has minimal required permissions\n2. **Audit clarity:** Clear which extension does what\n3. **Failure isolation:** One extension failing doesn't compromise the other\n4. **Update independence:** Can update separately\n\n## Visual Separation\n\nEven UI must maintain separation:\n\n| Element | Swordsman | Mage |\n|---------|-----------|------|\n| Primary colour | Steel blue | Warm gold |\n| Icon shape | Angular, blade-like | Curved, orb-like |\n| Animation | Sharp, decisive | Flowing, smooth |\n| Feedback | Binary (blocked/allowed) | Gradient (progress) |\n\nUsers should ALWAYS know which territory they're interacting with.\n\n## Mapping to PVM-V5.2\n\n| Territory Concept | PVM Term |\n|-------------------|----------|\n| Dual territory | Φ_agent separation |\n| Ceremony channel | Bounded leakage |\n| Bgin third node | h(τ) integrity anchor |\n| Process isolation | R_max < 1 enforcement |\n| Permission separation | Three-axis Φ |\n| Repository separation | Codebase sovereignty |\n\n## Proverb\n\n> \"Two mirrors make a door. The Swordsman reflects. The Mage reflects. And where the reflections meet, the First Person walks through — not into another reflection, but into the next step of who they are becoming.\"\n\n**Secondary:**\n> \"Two kingdoms share a river. Neither owns the water, but both drink. The ceremony is the riverbed.\"\n\n## Emoji Spell\n\n**⚔️(neg) ⊕ 🧙(bnot) → 😊(succ) · ⬢D₂ₙ · 📐(datum,stratum,spectrum) · 96=Atlas=∂M · 🔄(query→resolve→close) · 🕸️∩🔢∩⚖️ = 1**\n\n*The Swordsman subtracts. The Mage flips. Their composition is the path.*"
+          },
+          {
+            "type": "markdown",
+            "id": "84d00113cc2cf1d7",
+            "text": "## PRISM Triadic Coordinates\n\nThe dihedral mirror reveals the triadic coordinate system for addressing any sovereignty configuration:\n\n| Coordinate | Constraint | Meaning |\n|------------|------------|---------|\n| **Datum** | Identity | The value itself. Binary encoding of the blade (hex). |\n| **Stratum** | Magnitude | Hamming weight. How many dimensions active (0-6). |\n| **Spectrum** | Structure | Which dimensions are active. The sovereignty posture. |\n\n**GPS for sovereignty:** Three coordinates fix any blade in the 64-vertex lattice. Collapse one and the blade shatters.\n\n## Open Problems\n\n1. **Synchronisation:** How to keep territories consistent without shared state?\n2. **Failure Modes:** What happens when one territory is down?\n3. **Migration:** How to migrate users between territory versions?\n4. **Mobile:** How to maintain separation on mobile platforms?\n5. **Decentralisation:** Can territories be run by different operators?"
+          },
+          {
+            "type": "markdown",
+            "id": "76a4f8fb8bb8bed7",
+            "text": "**Verify:** [spellweb.ai](https://spellweb.ai) · [agentprivacy.ai](https://agentprivacy.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+          },
+          {
+            "type": "markdown",
+            "id": "3cfd8e535976ac8e",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-dual-territory`, v5.3.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "cc2216c4c29cd49c",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "972df0d7feb81cff",
+            "text": "agentprivacy-dual-territory"
+          },
+          {
+            "type": "markdown",
+            "id": "b89a95c01319a753",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384024
+    }
+  ]
+}

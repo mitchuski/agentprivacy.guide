@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Reindex",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "155349b68f76964c",
+      "text": "# Wiki Reindex\n\n**Category** wikis · **Version** 5.5\n\nRebuild the sitemap and search index for a local federated-wiki domain after writing page JSON to disk directly (the server caches status/ indexes and won't notice file writes). Activates after creating/editing/bulk-importing pages, or when the page list or search looks stale. Merges the reindex-fedwiki-skill variant. Kept by the Librarian 🗃️."
+    },
+    {
+      "type": "markdown",
+      "id": "3a4d89e5bc17d183",
+      "text": "The `fedwiki-reindex` skill rebuilds the sitemap and search index for a local federated wiki domain. It is needed because the wiki server caches these indexes in each domain's `status/` folder and does not detect when Claude Code writes page JSON files directly to disk.\n\n## Why It's Needed\n\nWhen a page is created or edited through the wiki browser UI, the server updates its index automatically. When Claude writes a page file directly to `~/Music/Guides/Private/{domain}/pages/`, the server doesn't know — two cached files in the `status/` folder go stale:\n\n- `sitemap.json` — the page list used for navigation and federation neighbourhood\n- `site-index.json` — the full-text search index\n\n## How It Works\n\nDelete the stale index files from `status/`, then `curl` the sitemap endpoint to trigger the server to rebuild them immediately.\n\n```bash\nFARM=\"$HOME/Music/Guides/Private\"\nDOMAIN=\"localhost\"\n\nrm -f \"$FARM/$DOMAIN/status/sitemap.json\"\nrm -f \"$FARM/$DOMAIN/status/site-index.json\"\ncurl -s \"http://$DOMAIN/system/sitemap.json\" > /dev/null\necho \"Reindexed $DOMAIN\"\n```\n\n## When to Use\n\n- After Claude creates or edits page JSON files directly on disk\n- After bulk import of pages\n- When the wiki's page list or search results appear incomplete or stale\n\n## Public Wikis — nextcloud-reindex\n\nFor public wikis in `~/Nextcloud/fedwiki/`, the remote server needs its index rebuilt separately using `nextcloud-reindex`. This deletes the index files via WebDAV and triggers a rebuild on the remote server:\n\n```bash\nnextcloud-reindex skill.fedwiki.club\n```\n\nThis is needed after bulk page changes — e.g. after running the merge skill's move/trash steps.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — always reindex after writing pages to a private wiki\n- `agentprivacy-wiki-new-domain` — create a new wiki domain\n- `agentprivacy-wiki-nextcloud-push` — push public wiki pages when sync is stuck\n- `agentprivacy-wiki-merge` — uses nextcloud-reindex after bulk page moves"
+    },
+    {
+      "type": "markdown",
+      "id": "47f5706fb45e7f23",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-reindex-skill](https://skill.fedwiki.club/fedwiki-reindex-skill) (+ reindex-fedwiki-skill, merged) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "1b78eea0a98af0fd",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-reindex`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "7f9adaab219a1cac",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "72221c76282fefc2",
+      "text": "agentprivacy-wiki-reindex"
+    },
+    {
+      "type": "markdown",
+      "id": "6a3b1caf561a6748",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Reindex",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "155349b68f76964c",
+            "text": "# Wiki Reindex\n\n**Category** wikis · **Version** 5.5\n\nRebuild the sitemap and search index for a local federated-wiki domain after writing page JSON to disk directly (the server caches status/ indexes and won't notice file writes). Activates after creating/editing/bulk-importing pages, or when the page list or search looks stale. Merges the reindex-fedwiki-skill variant. Kept by the Librarian 🗃️."
+          },
+          {
+            "type": "markdown",
+            "id": "3a4d89e5bc17d183",
+            "text": "The `fedwiki-reindex` skill rebuilds the sitemap and search index for a local federated wiki domain. It is needed because the wiki server caches these indexes in each domain's `status/` folder and does not detect when Claude Code writes page JSON files directly to disk.\n\n## Why It's Needed\n\nWhen a page is created or edited through the wiki browser UI, the server updates its index automatically. When Claude writes a page file directly to `~/Music/Guides/Private/{domain}/pages/`, the server doesn't know — two cached files in the `status/` folder go stale:\n\n- `sitemap.json` — the page list used for navigation and federation neighbourhood\n- `site-index.json` — the full-text search index\n\n## How It Works\n\nDelete the stale index files from `status/`, then `curl` the sitemap endpoint to trigger the server to rebuild them immediately.\n\n```bash\nFARM=\"$HOME/Music/Guides/Private\"\nDOMAIN=\"localhost\"\n\nrm -f \"$FARM/$DOMAIN/status/sitemap.json\"\nrm -f \"$FARM/$DOMAIN/status/site-index.json\"\ncurl -s \"http://$DOMAIN/system/sitemap.json\" > /dev/null\necho \"Reindexed $DOMAIN\"\n```\n\n## When to Use\n\n- After Claude creates or edits page JSON files directly on disk\n- After bulk import of pages\n- When the wiki's page list or search results appear incomplete or stale\n\n## Public Wikis — nextcloud-reindex\n\nFor public wikis in `~/Nextcloud/fedwiki/`, the remote server needs its index rebuilt separately using `nextcloud-reindex`. This deletes the index files via WebDAV and triggers a rebuild on the remote server:\n\n```bash\nnextcloud-reindex skill.fedwiki.club\n```\n\nThis is needed after bulk page changes — e.g. after running the merge skill's move/trash steps.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — always reindex after writing pages to a private wiki\n- `agentprivacy-wiki-new-domain` — create a new wiki domain\n- `agentprivacy-wiki-nextcloud-push` — push public wiki pages when sync is stuck\n- `agentprivacy-wiki-merge` — uses nextcloud-reindex after bulk page moves"
+          },
+          {
+            "type": "markdown",
+            "id": "47f5706fb45e7f23",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-reindex-skill](https://skill.fedwiki.club/fedwiki-reindex-skill) (+ reindex-fedwiki-skill, merged) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "1b78eea0a98af0fd",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-reindex`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "7f9adaab219a1cac",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "72221c76282fefc2",
+            "text": "agentprivacy-wiki-reindex"
+          },
+          {
+            "type": "markdown",
+            "id": "6a3b1caf561a6748",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384138
+    }
+  ]
+}

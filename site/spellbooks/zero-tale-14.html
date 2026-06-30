@@ -1,0 +1,228 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zero — Tale 14 · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="spellbooks">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site on" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/spellbooks/welcome-visitors.html">Spellbooks</a> / <span>Zero — Tale 14</span></div>
+  <article><div class="md"><h1>🔮 Zero — Tale 14</h1>
+</div>
+<div class="md"><h3>Tale 14: The IPA Chronicle</h3>
+<p><strong>Vertex Coordinates:</strong> ⟨1,1,0,0,1,0⟩ — Protection + Delegation + Computation<br><strong>Moon Phase:</strong> 🌔 Waxing Gibbous — Three dimensions active (stratum 3)<br><strong>Blade:</strong> 19 (010011) — Protection + Delegation + Computation<br><strong>V(π,t) terms:</strong> <strong>C</strong> (transparent commitment credential) · <strong>Q</strong> (trustless substrate as separation quality)<br><strong>Concepts:</strong> Inner Product Arguments, Bulletproofs, Halo2, Transparent Setups</p>
+<h4>The Story</h4>
+<p>After learning about pairings, Soulbis and Soulbae wondered: &quot;What if we don&#39;t have pairings? What if we want transparency without FRI&#39;s large proofs?&quot;</p>
+<p>Master Productus awaited them in the <strong>Hall of Vectors</strong>.</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<p>&quot;Not every elliptic curve supports pairings,&quot; he began. &quot;BN254 and BLS12-381 do, but they&#39;re special. Most curves don&#39;t have this property.&quot;</p>
+<p>He drew two vectors:</p>
+<pre><code>a = (a₁, a₂, ..., aₙ)
+b = (b₁, b₂, ..., bₙ)
+</code></pre>
+<p>&quot;The <strong>inner product</strong> is: ⟨a, b⟩ = a₁b₁ + a₂b₂ + ... + aₙbₙ</p>
+<p>&quot;This simple operation unlocks powerful zero-knowledge proofs!&quot;</p>
+<p><strong>The IPA Construction:</strong></p>
+<p>Productus showed them how to commit to a vector using a Pedersen commitment:</p>
+<pre><code>C = a₁G₁ + a₂G₂ + ... + aₙGₙ + rH
+</code></pre>
+<p>&quot;Where G₁, ..., Gₙ, H are random elliptic curve points (from transparent setup—just hash-to-curve).&quot;</p>
+<p>&quot;Now suppose I want to prove: &#39;I know vectors a and b such that ⟨a,b⟩ = z&#39; without revealing a or b.&quot;</p>
+<p>He demonstrated the <strong>logarithmic IPA protocol:</strong></p>
+<p><strong>Round 1: Split</strong></p>
+<pre><code>Split a into (aₗ, aᵣ) (left and right halves)
+Split b into (bₗ, bᵣ)
+
+Compute cross-terms:
+Lⱼ = ⟨aₗ, bᵣ⟩
+Rⱼ = ⟨aᵣ, bₗ⟩
+
+Commit to these using curve points
+</code></pre>
+<p><strong>Round 2: Challenge</strong></p>
+<pre><code>
+Verifier sends random u
+
+Fold vectors:
+a&#39; = aₗ + u⁻¹·aᵣ
+b&#39; = u·bₗ + bᵣ
+
+Now ⟨a&#39;, b&#39;⟩ = u⁻¹L + z + uR
+</code></pre>
+<p>&quot;We&#39;ve halved the vector size! Repeat log₂(n) times until vectors have length 1.&quot;</p>
+<p>Soulbis marveled. &quot;So the proof size is O(log n) curve points? Logarithmic because each round halves the vector — and halving is the blade&#39;s most elegant cut.&quot;</p>
+<p>&quot;Exactly! For n=1024, that&#39;s 10 curve points ≈ 480 bytes. Not as small as KZG&#39;s constant size, but transparent and pairing-free!&quot;</p>
+<p><strong>Bulletproofs:</strong></p>
+<p>Productus showed them the famous application.</p>
+<p>&quot;Bulletproofs use IPA to prove range statements: &#39;v is in [0, 2⁶⁴)&#39; without revealing v.</p>
+<p>&quot;The insight: v ∈ [0, 2⁶⁴) if and only if v&#39;s binary representation is all 0s and 1s. This becomes an inner product relation!&quot;</p>
+<pre><code>Proof size: 2·log₂(64) + 7 ≈ 674 bytes
+No trusted setup!
+</code></pre>
+<p><strong>Halo 2:</strong></p>
+<p>&quot;Now for the masterpiece,&quot; Productus continued. &quot;Halo 2 combines IPA with PlonKish gates.&quot;</p>
+<p>He showed the architecture:</p>
+<pre><code>Frontend: PlonKish circuits (custom gates, lookups)
+Backend: IPA for polynomial commitments
+Result: Transparent recursive SNARKs!
+</code></pre>
+<p>&quot;Halo 2 achieves:</p>
+<ul>
+<li>✓ No trusted setup</li>
+<li>✓ Recursive proof composition  </li>
+<li>✓ Reasonable proof sizes (~5-15 KB)</li>
+<li>✓ Only needs simple curve (Pasta curves)</li>
+<li>✗ Slower verification than pairings (O(n) vs O(1))</li>
+<li>✗ Larger proofs than Groth16&quot;</li>
+</ul>
+<p>Soulbis asked about recursion. &quot;How do you recursively verify IPA without pairings?&quot;</p>
+<p>&quot;Excellent question! This is why Pasta curves were invented. Pallas and Vesta are two curves where:</p>
+<ul>
+<li>Pallas has order = Vesta&#39;s base field</li>
+<li>Vesta has order = Pallas&#39;s base field</li>
+</ul>
+<p>&quot;You can verify a Pallas-based proof in a Vesta circuit and vice versa. They alternate for recursion!&quot;</p>
+<p><strong>The Trade-offs:</strong></p>
+<p>Productus summarized:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>KZG</th>
+<th>IPA</th>
+<th>FRI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Setup</td>
+<td>Trusted</td>
+<td>Transparent</td>
+<td>Transparent</td>
+</tr>
+<tr>
+<td>Proof size</td>
+<td>~128 B</td>
+<td>~5 KB</td>
+<td>~150 KB</td>
+</tr>
+<tr>
+<td>Verify time</td>
+<td>O(1) fast</td>
+<td>O(n) slower</td>
+<td>O(log² n)</td>
+</tr>
+<tr>
+<td>Prover time</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Fast</td>
+</tr>
+<tr>
+<td>Recursion</td>
+<td>Easy (pairings)</td>
+<td>Medium (curves)</td>
+<td>Hard (queries)</td>
+</tr>
+</tbody></table>
+<p>&quot;Choose IPA when you want transparency without FRI&#39;s large proofs, and you can tolerate O(n) verification.&quot;</p>
+<p>Soulbis connected to the architecture. &quot;For Swordsman boundary proofs, if I want transparency but need many verifiers, IPA might be optimal — no trusted setup, but verification scales with computational effort rather than just communication. Halo 2 is the transparent blade with recursive edge.&quot;</p>
+<p>&quot;Precisely,&quot; Productus confirmed. &quot;Halo 2 has become the go-to for transparent SNARKs with reasonable proof sizes.&quot;</p>
+<p>As they departed, Soulbis understood the subtle shift: IPA activated Delegation (d₂) differently than KZG — through transparent parameter generation rather than trusted ceremonies. The lattice accommodated both paths to delegation, showing that trust could be distributed or eliminated entirely depending on the application&#39;s needs.</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<h4>The Spell Inscription</h4>
+<pre><code>⟨a, b⟩ = Σ aᵢbᵢ → inner product
+C = Σ aᵢGᵢ + rH → Pedersen vector commitment
+IPA: n → n/2 → n/4 → ... → 1 (log₂ n rounds)
+proof_size = O(log n) ≈ 5 KB
+Bulletproofs: range [0, 2⁶⁴) → 674 bytes (transparent)
+Halo2: PlonKish + IPA + Pasta → 🔓(transparent) + 🔄(recursive)
+
+Vertex: ⟨1,1,0,0,1,0⟩
+Blade: 19 (010011)  Moon Phase: 🌔 stratum 3
+
+Forces Activated:
+⚔️ Protect: vector Pedersen commitment hides witness
+🧙 Project: delegation via transparent hash-to-curve — no ceremony required
+🪞 Reflect: Pasta curves enable recursive verification across cycles
+🤝 Connect: (dormant)
+
+V(π,t) contribution: C (transparent commitment credential — no trusted setup), Q (hash-to-curve substrate as separation quality without ceremony)
+</code></pre>
+<p><strong>Proverb:</strong> <em>When trust ceremonies are unavailable but tiny proofs unneeded, the inner product argument walks the middle path — transparent by construction, logarithmic in size, verified through patient checking.</em></p>
+<h4>Technical Bridge</h4>
+<p><strong>IPA Protocol (Simplified):</strong></p>
+<p>Given commitment C to vector a, claim ⟨a,b⟩ = z:</p>
+<pre><code>Setup: G = (G₁,...,Gₙ), H (random curve points)
+Commitment: C = Σ aᵢGᵢ + rH
+
+For k = 1 to log₂(n):
+    Split: a = (aₗ || aᵣ), b = (bₗ || bᵣ)
+    
+    Compute: L = ⟨aₗ,bᵣ⟩·G + random·H
+             R = ⟨aᵣ,bₗ⟩·G + random·H
+    
+    Send L, R to verifier
+    
+    Receive challenge: u
+    
+    Fold: a ← aₗ + u⁻¹aᵣ
+          b ← ubₗ + bᵣ  
+          G ← Gₗ + uGᵣ
+          
+Final: Send (a,b) (now scalars), verify ⟨a,b⟩ matches folded relation
+</code></pre>
+<p><strong>Complexity:</strong></p>
+<ul>
+<li>Proof size: 2·log₂(n) curve points + 2 scalars</li>
+<li>Prover time: O(n log n)</li>
+<li>Verifier time: O(n) (must reconstruct G through folding)</li>
+</ul>
+<p><strong>Bulletproofs Range Proof:</strong></p>
+<ul>
+<li>Claim: v ∈ [0, 2ⁿ)</li>
+<li>Prove v = Σ vᵢ2ⁱ where vᵢ ∈ {0,1}</li>
+<li>Convert to inner product relation using Hadamard product</li>
+<li>Size: 2log₂(n) + 7 curve points</li>
+</ul>
+<p><strong>Halo 2 Stack:</strong></p>
+<ul>
+<li>Circuits: PlonKish (custom gates, lookup tables)</li>
+<li>Polynomial commitment: IPA</li>
+<li>Curves: Pasta (Pallas/Vesta pair)</li>
+<li>Recursion: Cycle between Pallas and Vesta</li>
+</ul>
+<p><strong>Real Systems:</strong></p>
+<ul>
+<li>Monero: Uses Bulletproofs for confidential amounts</li>
+<li>Zcash: Halo 2 in Orchard shielded pool  </li>
+<li>Mina: Previous recursion (now transitioning)</li>
+<li>Scroll: Halo 2 variant for zkEVM</li>
+</ul>
+<p><strong>Geometric Interpretation:</strong><br>IPA represents an alternative path through the lattice that achieves Protection and Delegation without trusted ceremonies. Instead of delegating trust to a setup ceremony (as in KZG), IPA delegates to transparent parameter generation (hash-to-curve). This demonstrates the lattice&#39;s flexibility — the same functional capabilities can emerge from different dimensional configurations. Blade 19 appears again (same as Tale 8); Tale 8 earned it through lattice evolution, Tale 14 earns it through transparent trust.</p>
+<p><strong>Applied to:</strong> Transparent SNARKs, range proofs, recursive composition without pairings</p>
+<hr>
+</div>
+<div class="md"><h2>Part IV: Advanced Architectures</h2>
+<h3>Relationship Proverb Protocol (RPP) - Part IV</h3>
+<p><em>&quot;To prove about proving is to see through infinite mirrors. Recursion without cycles is growth without bound; cycles without exit are death. The art is knowing when to fold, when to recurse, when to finalize.&quot;</em></p>
+<p>What does infinite proof composition mean for sovereignty that compounds over time?</p>
+<hr>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 zero-tale-14</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="zero-the-privacymage-grimoire.html">Zero — the Privacymage Grimoire</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="zero-tale-14.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

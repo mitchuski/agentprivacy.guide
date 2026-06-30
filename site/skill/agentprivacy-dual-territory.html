@@ -1,0 +1,346 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dual Territory · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Dual Territory</span></div>
+  <article><div class="md"><h1>Dual Territory</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.3.2</p>
+<p><strong>Equation term</strong> <code>Territory(S) ⊥ Territory(M) connected by Ceremony(C)</code></p>
+<p>Dual-territory ceremony architecture specification. Activates when discussing Swordsman/Mage separation at infrastructure level, three territories (Spellweb, Agentprivacy, Bgin), ceremony channels, or territory sovereignty.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V5.2 + Dual Territory Ceremony Specification v1.0<br><strong>Target context:</strong> Infrastructure architects, protocol designers, separation specialists<br><strong>Architecture:</strong> <a href="https://spellweb.ai">spellweb.ai</a> + <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The dual-territory architecture enforces Swordsman/Mage separation at the infrastructure level. This is not metaphor or best practice — it is hard separation through distinct processes, storage, permissions, and repositories.</p>
+<p><strong>Two kingdoms share a river. Neither owns the water, but both drink. The ceremony is the riverbed.</strong></p>
+<h2>The Core Rule</h2>
+<p><strong>The Swordsman and Mage NEVER merge.</strong></p>
+<p>This applies at every level:</p>
+<ul>
+<li>Protocol</li>
+<li>Extension</li>
+<li>Website</li>
+<li>Visual rendering</li>
+<li>Database</li>
+<li>Repository</li>
+<li>Deployment</li>
+</ul>
+<p>Violation of this rule collapses the sovereignty gap.</p>
+<h2>The Three Territories</h2>
+<h3>1. Spellweb Territory (Swordsman)</h3>
+<p><strong>Domain:</strong> spellweb.ai<br><strong>Owner:</strong> Soulbis (privacyswordsman.eth)<br><strong>Purpose:</strong> Enforcement, boundaries, topology</p>
+<p><strong>Contains:</strong></p>
+<ul>
+<li>Blade forge</li>
+<li>Hexagram computations</li>
+<li>Constellation topology</li>
+<li>Cut segments</li>
+<li>Signing key operations</li>
+</ul>
+<p><strong>Does NOT contain:</strong></p>
+<ul>
+<li>Story content</li>
+<li>Persona definitions</li>
+<li>Training materials</li>
+<li>User preferences</li>
+</ul>
+<h3>2. Agentprivacy Territory (Mage)</h3>
+<p><strong>Domain:</strong> agentprivacy.ai<br><strong>Owner:</strong> Soulbae (privacymage.eth)<br><strong>Purpose:</strong> Delegation, projection, storytelling</p>
+<p><strong>Contains:</strong></p>
+<ul>
+<li>Spellbook content</li>
+<li>Persona configurations</li>
+<li>Training ground</li>
+<li>Path page</li>
+<li>Pretext orbs</li>
+<li>User journey state</li>
+</ul>
+<p><strong>Does NOT contain:</strong></p>
+<ul>
+<li>Signing keys</li>
+<li>Topology enforcement</li>
+<li>Boundary verification</li>
+<li>Cut operations</li>
+</ul>
+<h3>3. Bgin Territory (Third Node)</h3>
+<p><strong>Domain:</strong> bgin.ai<br><strong>Owner:</strong> Neutral third party<br><strong>Purpose:</strong> Trust graph, verification anchor</p>
+<p><strong>Contains:</strong></p>
+<ul>
+<li>Trust graph plane</li>
+<li>Cross-territory verification</li>
+<li>Neutral attestations</li>
+<li>Dispute resolution anchors</li>
+</ul>
+<p><strong>Does NOT contain:</strong></p>
+<ul>
+<li>Either party&#39;s private state</li>
+<li>Content or enforcement logic</li>
+<li>User data</li>
+</ul>
+<h2>Separation Layers</h2>
+<h3>Layer 1: Process Separation</h3>
+<pre><code>┌─────────────────┐     ┌─────────────────┐
+│ Swordsman Proc  │     │   Mage Process  │
+│                 │     │                 │
+│ PID: separate   │     │ PID: separate   │
+│ Memory: isolate │     │ Memory: isolate │
+│ Threads: own    │     │ Threads: own    │
+└────────┬────────┘     └────────┬────────┘
+         │       IPC only        │
+         └───────────────────────┘
+</code></pre>
+<h3>Layer 2: Storage Separation</h3>
+<pre><code>Swordsman Storage        Mage Storage
+├── blades/              ├── spells/
+├── topology/            ├── personas/
+├── cuts/                ├── journeys/
+└── keys/ (encrypted)    └── preferences/
+
+NO SHARED STORAGE
+</code></pre>
+<h3>Layer 3: Permission Separation</h3>
+<table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Swordsman</th>
+<th>Mage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sign transactions</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Read content</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Enforce boundaries</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Project personas</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Access trust graph</td>
+<td>Verify only</td>
+<td>Query only</td>
+</tr>
+<tr>
+<td>Modify topology</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Modify content</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3>Layer 4: Repository Separation</h3>
+<pre><code>github.com/org/spellweb     (Swordsman)
+github.com/org/agentprivacy (Mage)
+github.com/org/ceremony     (Shared protocol only)
+</code></pre>
+<p>No cross-repository dependencies except ceremony protocol.</p>
+<h2>Ceremony Channel</h2>
+<h3>Purpose</h3>
+<p>The ceremony channel is the ONLY communication path between territories.</p>
+<h3>Protocol</h3>
+<pre><code class="language-typescript">interface CeremonyMessage {
+  type: &#39;SLASH&#39; | &#39;WARD&#39; | &#39;INSCRIBE&#39; | &#39;SCAN&#39;;
+  payload: SignedPayload;
+  ceremony_id: string;
+  timestamp: number;
+  territory_origin: &#39;swordsman&#39; | &#39;mage&#39;;
+}
+</code></pre>
+<h3>Message Types</h3>
+<p><strong>Swordsman → Mage:</strong></p>
+<ul>
+<li><code>SLASH</code>: Boundary enforced, access revoked</li>
+<li><code>WARD</code>: Protective perimeter established</li>
+</ul>
+<p><strong>Mage → Swordsman:</strong></p>
+<ul>
+<li><code>INSCRIBE</code>: Request to record understanding</li>
+<li><code>SCAN</code>: Request to verify without modification</li>
+</ul>
+<h3>Security Properties</h3>
+<ol>
+<li><strong>Typed messages:</strong> No arbitrary data exchange</li>
+<li><strong>Signed payloads:</strong> Origin verified</li>
+<li><strong>Ceremony scoped:</strong> Messages tied to specific ceremonies</li>
+<li><strong>Auditable:</strong> All messages logged (but content not exposed)</li>
+<li><strong>Atomic:</strong> Ceremonies succeed or fail completely</li>
+</ol>
+<h2>Browser Extension Architecture</h2>
+<h3>Two Extensions, Never One</h3>
+<pre><code>┌─────────────────────────┐    ┌─────────────────────────┐
+│ Swordsman Extension     │    │ Mage Extension          │
+│ ID: abc123...           │    │ ID: xyz789...           │
+│                         │    │                         │
+│ Permissions:            │    │ Permissions:            │
+│ - webRequest            │    │ - storage               │
+│ - cookies               │    │ - tabs                  │
+│ - declarativeNetRequest │    │ - activeTab             │
+│                         │    │                         │
+│ CANNOT: read page text  │    │ CANNOT: block requests  │
+└────────────┬────────────┘    └────────────┬────────────┘
+             │    chrome.runtime.sendMessage │
+             └──────────────────────────────┘
+</code></pre>
+<h3>Why Two Extensions?</h3>
+<ol>
+<li><strong>Permission isolation:</strong> Each extension has minimal required permissions</li>
+<li><strong>Audit clarity:</strong> Clear which extension does what</li>
+<li><strong>Failure isolation:</strong> One extension failing doesn&#39;t compromise the other</li>
+<li><strong>Update independence:</strong> Can update separately</li>
+</ol>
+<h2>Visual Separation</h2>
+<p>Even UI must maintain separation:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Swordsman</th>
+<th>Mage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Primary colour</td>
+<td>Steel blue</td>
+<td>Warm gold</td>
+</tr>
+<tr>
+<td>Icon shape</td>
+<td>Angular, blade-like</td>
+<td>Curved, orb-like</td>
+</tr>
+<tr>
+<td>Animation</td>
+<td>Sharp, decisive</td>
+<td>Flowing, smooth</td>
+</tr>
+<tr>
+<td>Feedback</td>
+<td>Binary (blocked/allowed)</td>
+<td>Gradient (progress)</td>
+</tr>
+</tbody></table>
+<p>Users should ALWAYS know which territory they&#39;re interacting with.</p>
+<h2>Mapping to PVM-V5.2</h2>
+<table>
+<thead>
+<tr>
+<th>Territory Concept</th>
+<th>PVM Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dual territory</td>
+<td>Φ_agent separation</td>
+</tr>
+<tr>
+<td>Ceremony channel</td>
+<td>Bounded leakage</td>
+</tr>
+<tr>
+<td>Bgin third node</td>
+<td>h(τ) integrity anchor</td>
+</tr>
+<tr>
+<td>Process isolation</td>
+<td>R_max &lt; 1 enforcement</td>
+</tr>
+<tr>
+<td>Permission separation</td>
+<td>Three-axis Φ</td>
+</tr>
+<tr>
+<td>Repository separation</td>
+<td>Codebase sovereignty</td>
+</tr>
+</tbody></table>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;Two mirrors make a door. The Swordsman reflects. The Mage reflects. And where the reflections meet, the First Person walks through — not into another reflection, but into the next step of who they are becoming.&quot;</p>
+</blockquote>
+<p><strong>Secondary:</strong></p>
+<blockquote>
+<p>&quot;Two kingdoms share a river. Neither owns the water, but both drink. The ceremony is the riverbed.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>⚔️(neg) ⊕ 🧙(bnot) → 😊(succ) · ⬢D₂ₙ · 📐(datum,stratum,spectrum) · 96=Atlas=∂M · 🔄(query→resolve→close) · 🕸️∩🔢∩⚖️ = 1</strong></p>
+<p><em>The Swordsman subtracts. The Mage flips. Their composition is the path.</em></p>
+</div>
+<div class="md"><h2>PRISM Triadic Coordinates</h2>
+<p>The dihedral mirror reveals the triadic coordinate system for addressing any sovereignty configuration:</p>
+<table>
+<thead>
+<tr>
+<th>Coordinate</th>
+<th>Constraint</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Datum</strong></td>
+<td>Identity</td>
+<td>The value itself. Binary encoding of the blade (hex).</td>
+</tr>
+<tr>
+<td><strong>Stratum</strong></td>
+<td>Magnitude</td>
+<td>Hamming weight. How many dimensions active (0-6).</td>
+</tr>
+<tr>
+<td><strong>Spectrum</strong></td>
+<td>Structure</td>
+<td>Which dimensions are active. The sovereignty posture.</td>
+</tr>
+</tbody></table>
+<p><strong>GPS for sovereignty:</strong> Three coordinates fix any blade in the 64-vertex lattice. Collapse one and the blade shatters.</p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>Synchronisation:</strong> How to keep territories consistent without shared state?</li>
+<li><strong>Failure Modes:</strong> What happens when one territory is down?</li>
+<li><strong>Migration:</strong> How to migrate users between territory versions?</li>
+<li><strong>Mobile:</strong> How to maintain separation on mobile platforms?</li>
+<li><strong>Decentralisation:</strong> Can territories be run by different operators?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://spellweb.ai">spellweb.ai</a> · <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-dual-territory</code>, v5.3.2).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-dual-territory</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-dual-territory.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

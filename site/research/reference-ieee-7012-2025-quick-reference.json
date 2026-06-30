@@ -1,0 +1,166 @@
+{
+  "title": "Reference — IEEE 7012-2025 Quick Reference",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "3c5681e64a9f3563",
+      "text": "# IEEE 7012-2025 Quick Reference"
+    },
+    {
+      "type": "markdown",
+      "id": "9305cc734ee97af7",
+      "text": "## Machine Readable Personal Privacy Terms for 0xagentprivacy\n\n**Version:** 1.0  \n**Date:** January 29, 2026  \n**Standard Published:** January 20, 2026  \n**Status:** ✅ CANONICAL REFERENCE\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "4bd61aad6cd7cf10",
+      "text": "## Overview\n\nIEEE Std 7012™-2025 establishes the foundational standard for machine-readable personal privacy terms. This standard inverts the traditional notice-and-consent model: individuals propose terms as first parties, organizations respond as second parties.\n\nThe Swordsman browser agent implements IEEE 7012 as its core agreement layer.\n\n**Standard Host:** Customer Commons (customercommons.org/p7012)  \n**Working Group Chair:** Doc Searls  \n**Vice Chair:** Justin Byrd  \n**Editor:** Mary Hodder\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "87ace5e8f152a7ce",
+      "text": "## Core Principles\n\n### The Inversion\n\n| Traditional Model | IEEE 7012 Model |\n|-------------------|-----------------|\n| Organization writes terms | Individual proposes terms |\n| Individual accepts or leaves | Organization accepts, negotiates, or declines |\n| Unilateral imposition | Bilateral agreement |\n| \"Notice and consent\" | \"Propose and respond\" |\n| Attack pattern | Invitation pattern |\n\n### Promise Theory Alignment\n\nIEEE 7012 implements the **invitation pattern** from Promise Theory:\n\n- **Invitation Pattern:** Acceptance relationship established BEFORE specific proposals\n- **Attack Pattern:** Extraction without prior consent (surveillance default)\n\nThe Swordsman presents terms BEFORE any data exchange. Site must accept terms to proceed.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "77298b3908c62252",
+      "text": "## Canonical Definitions\n\n*Note: These are paraphrased interpretations for 0xagentprivacy context. See official IEEE documentation for authoritative definitions.*\n\n| Term | Definition | 0xagentprivacy Mapping |\n|------|------------|------------------------|\n| **Agent** | An actor working on behalf of a person to represent them and present proposed terms to entities | Swordsman browser agent |\n| **Agreement** | A compound set of terms or clauses, proposed and offered before formal contract | MyTerms negotiation output |\n| **Contract** | A mutual agreement creating enforceable obligations between parties | Signed bilateral record |\n| **Entity** | Any organization with which a person makes contractual agreement (always organization) | Second party / service provider |\n| **First Party** | The individual (always a person, never organization) | First Person 😊 |\n| **Second Party** | The entity (always an organization) | Service provider |\n| **Policy** | Set of obligations for communication and cooperation (per ISO 22600-2:2014) | Privacy policy framework |\n| **Proposer** | A person who advances terms and agreements to another party | First Person via Swordsman |\n| **DPV** | Data Privacy Vocabulary - W3C machine-readable metadata standard | Semantic interoperability layer |\n| **Machine-readable** | Terms that can be processed by computer systems | JSON-LD, RDF, HTTP headers |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "18f625deac74c53b",
+      "text": "## Agreement Taxonomy\n\n### Service Delivery Agreements (SD)\n\nThese agreements govern what a service provider may do with data during service delivery.\n\n| Code | Name | Description |\n|------|------|-------------|\n| **SD-BASE** | Service Delivery Only | Service delivery only. No analytics, tracking, or profiling. |\n| **SD-BASE-DP** | + Data Portability | Service delivery with data portability rights included. |\n| **SD-BASE-A** | + Analytics | Analytics by second party permitted. No tracking or profiling. |\n| **SD-BASE-AT** | + Analytics + Tracking | Analytics and tracking by second party permitted. No profiling. |\n| **SD-BASE-ATP** | + Full Profiling | Full analytics, tracking, and profiling by second party permitted. |\n| **SD-BASE-ATP-S3P** | + Third Party Sharing | Full profiling plus anonymized data sharing with third parties. |\n\n**Hierarchy:** SD-BASE is most restrictive → SD-BASE-ATP-S3P is most permissive\n\n### Personal Data Contribution Agreements (PDC)\n\nThese agreements govern intentional data contributions by the First Person.\n\n| Code | Name | Description |\n|------|------|-------------|\n| **PDC-INTENT** | Intentcasting | Going to market with structured requirements. First Person declares what they seek; entities respond. |\n| **PDC-AI** | AI Training | Contributing data for AI model training. Explicit consent for machine learning use. |\n| **PDC-GOOD** | Public Good | Contributing data for public benefit purposes. Research, commons, collective intelligence. |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "885ba3dc24f55af2",
+      "text": "## Technical Specifications\n\n### Machine-Readable Formats\n\nIEEE 7012 specifies multiple formats for interoperability:\n\n| Format | Use Case | Notes |\n|--------|----------|-------|\n| **HTTP Headers** | Real-time negotiation | MRPAZ protocol for request/response |\n| **JSON / JSON-LD** | API integration | Structured data with semantic context |\n| **RDF / Turtle** | Semantic web | Linked data compatibility |\n| **Bitwise (CONTRACT ZONE)** | Compact encoding | Efficient binary representation |\n\n### HTTP Header Protocol (MRPAZ)\n\nThe MRPAZ protocol enables real-time term negotiation via HTTP headers:\n\n```\nRequest:\nP7012-Terms: SD-BASE\nP7012-Version: 1.0\n\nResponse:\nP7012-Accept: SD-BASE\nP7012-Status: ACCEPTED\n```\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "828905fd4db964d7",
+      "text": "## 0xagentprivacy Implementation Mapping\n\n| IEEE 7012 Element | 0xagentprivacy Component |\n|-------------------|--------------------------|\n| Individual Agent | Swordsman browser extension |\n| Entity Agent | Website MyTerms responder |\n| Agreement-chooser | MyTerms configuration UI |\n| Proposer function | Swordsman's automatic term presentation |\n| Recorder function | Chronicle system (bilateral proof storage) |\n| HTTP MRPAZ headers | Cookie-slashing protocol integration |\n| CONTRACT ZONE | Bitwise term encoding for efficiency |\n| Customer Commons | Neutral agreement registry host |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "6a03649520cf8710",
+      "text": "## Integration with Dual-Agent Architecture\n\n### Why IEEE 7012 Matters for Privacy\n\nThe standard provides the **agreement layer** that makes dual-agent architecture enforceable:\n\n| Layer | Function | Standard |\n|-------|----------|----------|\n| **Agreement** | What terms govern interaction | IEEE 7012 |\n| **Protection** | Enforce boundaries | Swordsman ⚔️ |\n| **Delegation** | Execute authorized actions | Mage 🧙 |\n| **Verification** | Prove compliance | ZKP / VRCs |\n\nWithout the agreement layer, the Swordsman has no terms to enforce. IEEE 7012 gives the blade meaning that persists.\n\n### The Blade and The Contract\n\n*\"The blade slashes surveillance. The contract binds behavior.\"*\n\n- **Slashing alone is insufficient:** Cookies respawn, trackers return\n- **Contracts create persistence:** Violation is breach, not just technical failure\n- **Both serve the First Person:** Destruction without agreement is endless war; agreement without enforcement is mere hope\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "3e20a64b80ff1c47",
+      "text": "## Customer Commons\n\nIEEE 7012 agreements are hosted by **Customer Commons**, a neutral nonprofit that:\n\n- Maintains the official agreement registry\n- Profits from neither individuals nor organizations\n- Provides permanence and trust through neutrality\n- Enables verification without centralized control\n\nThis neutral hosting is essential—it prevents capture by either side of the agreement.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "955162e6491bbf8c",
+      "text": "## Resources\n\n### Official Sources\n\n- **IEEE Standard:** IEEE Std 7012™-2025\n- **Customer Commons:** customercommons.org/p7012\n- **W3C DPV:** w3.org/ns/dpv (Data Privacy Vocabulary)\n\n### 0xagentprivacy Documentation\n\n- **Whitepaper v4.8:** §4.X The MyTerms Foundation\n- **Glossary v2.3:** Section 9 - IEEE 7012-2025 Standard\n- **Spellbook:** Integration with MyTerms Swordsman\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "3161fec73d6eae27",
+      "text": "## Version History\n\n| Version | Date | Changes |\n|---------|------|---------|\n| 1.0 | January 29, 2026 | Initial release aligned with IEEE 7012-2025 publication |\n\n---\n\n*\"The cookie crumbles, the contract remembers. Slash what violates, bind what agrees.\"*\n\n**⚔️📜 | 😊**"
+    },
+    {
+      "type": "markdown",
+      "id": "b9a9896da33ece0d",
+      "text": "# Assets"
+    },
+    {
+      "id": "3e9eca1165d34bcc",
+      "type": "assets",
+      "text": "reference-ieee-7012-2025-quick-reference"
+    },
+    {
+      "type": "markdown",
+      "id": "71afe62da37ec044",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Reference]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Reference — IEEE 7012-2025 Quick Reference",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "3c5681e64a9f3563",
+            "text": "# IEEE 7012-2025 Quick Reference"
+          },
+          {
+            "type": "markdown",
+            "id": "9305cc734ee97af7",
+            "text": "## Machine Readable Personal Privacy Terms for 0xagentprivacy\n\n**Version:** 1.0  \n**Date:** January 29, 2026  \n**Standard Published:** January 20, 2026  \n**Status:** ✅ CANONICAL REFERENCE\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "4bd61aad6cd7cf10",
+            "text": "## Overview\n\nIEEE Std 7012™-2025 establishes the foundational standard for machine-readable personal privacy terms. This standard inverts the traditional notice-and-consent model: individuals propose terms as first parties, organizations respond as second parties.\n\nThe Swordsman browser agent implements IEEE 7012 as its core agreement layer.\n\n**Standard Host:** Customer Commons (customercommons.org/p7012)  \n**Working Group Chair:** Doc Searls  \n**Vice Chair:** Justin Byrd  \n**Editor:** Mary Hodder\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "87ace5e8f152a7ce",
+            "text": "## Core Principles\n\n### The Inversion\n\n| Traditional Model | IEEE 7012 Model |\n|-------------------|-----------------|\n| Organization writes terms | Individual proposes terms |\n| Individual accepts or leaves | Organization accepts, negotiates, or declines |\n| Unilateral imposition | Bilateral agreement |\n| \"Notice and consent\" | \"Propose and respond\" |\n| Attack pattern | Invitation pattern |\n\n### Promise Theory Alignment\n\nIEEE 7012 implements the **invitation pattern** from Promise Theory:\n\n- **Invitation Pattern:** Acceptance relationship established BEFORE specific proposals\n- **Attack Pattern:** Extraction without prior consent (surveillance default)\n\nThe Swordsman presents terms BEFORE any data exchange. Site must accept terms to proceed.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "77298b3908c62252",
+            "text": "## Canonical Definitions\n\n*Note: These are paraphrased interpretations for 0xagentprivacy context. See official IEEE documentation for authoritative definitions.*\n\n| Term | Definition | 0xagentprivacy Mapping |\n|------|------------|------------------------|\n| **Agent** | An actor working on behalf of a person to represent them and present proposed terms to entities | Swordsman browser agent |\n| **Agreement** | A compound set of terms or clauses, proposed and offered before formal contract | MyTerms negotiation output |\n| **Contract** | A mutual agreement creating enforceable obligations between parties | Signed bilateral record |\n| **Entity** | Any organization with which a person makes contractual agreement (always organization) | Second party / service provider |\n| **First Party** | The individual (always a person, never organization) | First Person 😊 |\n| **Second Party** | The entity (always an organization) | Service provider |\n| **Policy** | Set of obligations for communication and cooperation (per ISO 22600-2:2014) | Privacy policy framework |\n| **Proposer** | A person who advances terms and agreements to another party | First Person via Swordsman |\n| **DPV** | Data Privacy Vocabulary - W3C machine-readable metadata standard | Semantic interoperability layer |\n| **Machine-readable** | Terms that can be processed by computer systems | JSON-LD, RDF, HTTP headers |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "18f625deac74c53b",
+            "text": "## Agreement Taxonomy\n\n### Service Delivery Agreements (SD)\n\nThese agreements govern what a service provider may do with data during service delivery.\n\n| Code | Name | Description |\n|------|------|-------------|\n| **SD-BASE** | Service Delivery Only | Service delivery only. No analytics, tracking, or profiling. |\n| **SD-BASE-DP** | + Data Portability | Service delivery with data portability rights included. |\n| **SD-BASE-A** | + Analytics | Analytics by second party permitted. No tracking or profiling. |\n| **SD-BASE-AT** | + Analytics + Tracking | Analytics and tracking by second party permitted. No profiling. |\n| **SD-BASE-ATP** | + Full Profiling | Full analytics, tracking, and profiling by second party permitted. |\n| **SD-BASE-ATP-S3P** | + Third Party Sharing | Full profiling plus anonymized data sharing with third parties. |\n\n**Hierarchy:** SD-BASE is most restrictive → SD-BASE-ATP-S3P is most permissive\n\n### Personal Data Contribution Agreements (PDC)\n\nThese agreements govern intentional data contributions by the First Person.\n\n| Code | Name | Description |\n|------|------|-------------|\n| **PDC-INTENT** | Intentcasting | Going to market with structured requirements. First Person declares what they seek; entities respond. |\n| **PDC-AI** | AI Training | Contributing data for AI model training. Explicit consent for machine learning use. |\n| **PDC-GOOD** | Public Good | Contributing data for public benefit purposes. Research, commons, collective intelligence. |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "885ba3dc24f55af2",
+            "text": "## Technical Specifications\n\n### Machine-Readable Formats\n\nIEEE 7012 specifies multiple formats for interoperability:\n\n| Format | Use Case | Notes |\n|--------|----------|-------|\n| **HTTP Headers** | Real-time negotiation | MRPAZ protocol for request/response |\n| **JSON / JSON-LD** | API integration | Structured data with semantic context |\n| **RDF / Turtle** | Semantic web | Linked data compatibility |\n| **Bitwise (CONTRACT ZONE)** | Compact encoding | Efficient binary representation |\n\n### HTTP Header Protocol (MRPAZ)\n\nThe MRPAZ protocol enables real-time term negotiation via HTTP headers:\n\n```\nRequest:\nP7012-Terms: SD-BASE\nP7012-Version: 1.0\n\nResponse:\nP7012-Accept: SD-BASE\nP7012-Status: ACCEPTED\n```\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "828905fd4db964d7",
+            "text": "## 0xagentprivacy Implementation Mapping\n\n| IEEE 7012 Element | 0xagentprivacy Component |\n|-------------------|--------------------------|\n| Individual Agent | Swordsman browser extension |\n| Entity Agent | Website MyTerms responder |\n| Agreement-chooser | MyTerms configuration UI |\n| Proposer function | Swordsman's automatic term presentation |\n| Recorder function | Chronicle system (bilateral proof storage) |\n| HTTP MRPAZ headers | Cookie-slashing protocol integration |\n| CONTRACT ZONE | Bitwise term encoding for efficiency |\n| Customer Commons | Neutral agreement registry host |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "6a03649520cf8710",
+            "text": "## Integration with Dual-Agent Architecture\n\n### Why IEEE 7012 Matters for Privacy\n\nThe standard provides the **agreement layer** that makes dual-agent architecture enforceable:\n\n| Layer | Function | Standard |\n|-------|----------|----------|\n| **Agreement** | What terms govern interaction | IEEE 7012 |\n| **Protection** | Enforce boundaries | Swordsman ⚔️ |\n| **Delegation** | Execute authorized actions | Mage 🧙 |\n| **Verification** | Prove compliance | ZKP / VRCs |\n\nWithout the agreement layer, the Swordsman has no terms to enforce. IEEE 7012 gives the blade meaning that persists.\n\n### The Blade and The Contract\n\n*\"The blade slashes surveillance. The contract binds behavior.\"*\n\n- **Slashing alone is insufficient:** Cookies respawn, trackers return\n- **Contracts create persistence:** Violation is breach, not just technical failure\n- **Both serve the First Person:** Destruction without agreement is endless war; agreement without enforcement is mere hope\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "3e20a64b80ff1c47",
+            "text": "## Customer Commons\n\nIEEE 7012 agreements are hosted by **Customer Commons**, a neutral nonprofit that:\n\n- Maintains the official agreement registry\n- Profits from neither individuals nor organizations\n- Provides permanence and trust through neutrality\n- Enables verification without centralized control\n\nThis neutral hosting is essential—it prevents capture by either side of the agreement.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "955162e6491bbf8c",
+            "text": "## Resources\n\n### Official Sources\n\n- **IEEE Standard:** IEEE Std 7012™-2025\n- **Customer Commons:** customercommons.org/p7012\n- **W3C DPV:** w3.org/ns/dpv (Data Privacy Vocabulary)\n\n### 0xagentprivacy Documentation\n\n- **Whitepaper v4.8:** §4.X The MyTerms Foundation\n- **Glossary v2.3:** Section 9 - IEEE 7012-2025 Standard\n- **Spellbook:** Integration with MyTerms Swordsman\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "3161fec73d6eae27",
+            "text": "## Version History\n\n| Version | Date | Changes |\n|---------|------|---------|\n| 1.0 | January 29, 2026 | Initial release aligned with IEEE 7012-2025 publication |\n\n---\n\n*\"The cookie crumbles, the contract remembers. Slash what violates, bind what agrees.\"*\n\n**⚔️📜 | 😊**"
+          },
+          {
+            "type": "markdown",
+            "id": "b9a9896da33ece0d",
+            "text": "# Assets"
+          },
+          {
+            "id": "3e9eca1165d34bcc",
+            "type": "assets",
+            "text": "reference-ieee-7012-2025-quick-reference"
+          },
+          {
+            "type": "markdown",
+            "id": "71afe62da37ec044",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Reference]]"
+          }
+        ]
+      },
+      "date": 1782602088902
+    }
+  ]
+}

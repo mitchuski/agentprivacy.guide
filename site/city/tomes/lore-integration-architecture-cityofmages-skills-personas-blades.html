@@ -1,0 +1,366 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lore — Integration Architecture · cityofmages × skills × personas × blades · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Lore — Integration Architecture · cityofmages × skills × personas × blades</span></div>
+  <article><div class="md"><h1>Integration Architecture · cityofmages × skills × personas × blades</h1>
+<p><em>How the City of Mages directory links with the three sibling repos along the dual-agent split — a working hypothesis pending the new repo-side docs</em></p>
+<h1>Integration Architecture</h1>
+<p><em>The City of Mages is the <strong>world model</strong>. Three sibling repos hold the three operational libraries the world&#39;s workings draw on: <strong>personas</strong> (who walks), <strong>skills</strong> (what Mages cast), <strong>blades</strong> (what Swordsmen hold). This document is the working hypothesis for how cityofmages links to them — explicitly open to revision when the sibling-repo docs arrive.</em></p>
+<hr>
+</div>
+<div class="md"><h2>§0 · Why this document exists</h2>
+<p>The corpus is currently structured as a <strong>single integrating directory</strong> (cityofmages) that holds the world model — the lattice, the workshops, the tomes, the grimoire, the specs, the protocol, the audit, the spellweb-item-creation guide. But several artefacts the corpus produces don&#39;t <em>live</em> in cityofmages by design:</p>
+<ul>
+<li>A <strong>persona&#39;s DID</strong> is the Sovereign&#39;s own — held by the Sovereign, not in any shared repo</li>
+<li>A <strong>skill&#39;s runtime definition</strong> is operational code — lives where skills are catalogued and executed</li>
+<li>A <strong>blade&#39;s witness</strong> is a Sovereign&#39;s local artefact — produced at spellweb, returned to a workshop, not committed to any shared repo</li>
+</ul>
+<p>What <em>does</em> live in shared repos is the <strong>schema</strong> for each — the contract every persona / skill / blade adheres to. Three sibling repos are emerging to carry those schemas. This doc captures the integration model so:</p>
+<ol>
+<li>Authors of those repos know what cityofmages expects of them</li>
+<li>cityofmages authors know what fields the sibling repos canonically own</li>
+<li>Future propagation skills can run the right recipe per change type</li>
+</ol>
+<p>This document is <strong>a working hypothesis</strong>. The sibling-repo docs (forthcoming) will refine or correct it. Treat the cells below as proposed canonicals, not locked-in commitments.</p>
+<hr>
+</div>
+<div class="md"><h2>§1 · The four-repo model · dual-agent grounded</h2>
+<p>The agentprivacy corpus&#39;s foundational primitive is the <strong>dual-agent split</strong>: every working has a Mage side and a Swordsman side. <strong>Soulbis ⚔️ ⊥ Soulbae 🧙.</strong> This split scales to the repo layer.</p>
+<pre><code>                 ╔══════════════════════════════════════════════╗
+                 ║           cityofmages — the world            ║
+                 ║                                              ║
+                 ║  lattice · workshops · tomes · grimoire ·    ║
+                 ║  specs · protocol · audit · creation guide   ║
+                 ║                                              ║
+                 ║  the integrating canonical                   ║
+                 ╚══════════════════════════════════════════════╝
+                       ↑              ↑              ↑
+                       │              │              │
+            ┌──────────┘              │              └──────────┐
+            │                         │                         │
+            ▼                         ▼                         ▼
+   ┌─────────────────┐      ┌──────────────────┐      ┌───────────────────┐
+   │   personas      │      │   skills (Mage)  │      │  blades (Sword)   │
+   │                 │      │                  │      │                   │
+   │ identity ·      │      │ what Mages cast  │      │ what Swordsmen    │
+   │ DID registry ·  │      │ how mana spends  │      │  hold ·           │
+   │ Mage+Sword pair │      │ what the work    │      │ stances bound ·   │
+   │ ecosystem       │      │  produces        │      │ proof shapes      │
+   │  provenance     │      │                  │      │  emitted          │
+   │                 │      │                  │      │                   │
+   │ (actors)        │      │ (Mage capabilities) │      │ (Swordsman boundaries) │
+   └─────────────────┘      └──────────────────┘      └───────────────────┘
+            ▲                         ▲                         ▲
+            └─────────────────────────┼─────────────────────────┘
+                                      │
+                                      │  all three contribute fields to
+                                      ▼
+                  ┌──────────────────────────────────────────┐
+                  │            artefact.md (artefact)            │
+                  │                                          │
+                  │    one Sovereign&#39;s local witness of      │
+                  │    one workshop walk on one date         │
+                  │                                          │
+                  │    not committed · Sovereign-held        │
+                  └──────────────────────────────────────────┘
+</code></pre>
+<h3>§1.1 · Canonical role per repo</h3>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Canonical role</th>
+<th>What it does NOT own</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>cityofmages</strong></td>
+<td>The <strong>world model</strong> — the canonical lattice, the workshops, the tomes, the grimoire, the specs, the protocols, the audits</td>
+<td>Persona identities (DIDs); runtime skill definitions; blade instance artefacts</td>
+</tr>
+<tr>
+<td><strong>personas</strong> <em>(emerging)</em></td>
+<td>The <strong>actor registry</strong> — DID schema, sigil binding, ecosystem-of-origin attestation, Mage/Swordsman pair contracts</td>
+<td>Skill catalogs (skills repo); blade catalogs (blades repo); workshop definitions (cityofmages)</td>
+</tr>
+<tr>
+<td><strong>skills</strong> <em>(agentprivacy-skills · extant)</em></td>
+<td>The <strong>Mage-side capability library</strong> — skill/spell definitions, the operational layer of grimoire spells, mana-axis spend per skill</td>
+<td>Persona identities; Swordsman stance definitions; world model</td>
+</tr>
+<tr>
+<td><strong>blades</strong> <em>(zk blades forge · extant, or new)</em></td>
+<td>The <strong>Swordsman-side boundary catalog</strong> — stance definitions, blade templates, proof shapes a workshop can emit</td>
+<td>Persona identities; Mage spell definitions; world model</td>
+</tr>
+</tbody></table>
+<h3>§1.2 · The artefact.md is the integration point</h3>
+<p>Every artefact.md (the artefact a Sovereign carries home from a spellweb walk) <strong>draws fields from all four repos</strong>. See <span class="deadlink" title="reference (not a live page)">SPELLWEB_ARTEFACT_CREATION_GUIDE §3.1</span> for the full frontmatter contract. The field ownership maps as follows:</p>
+<table>
+<thead>
+<tr>
+<th>artefact.md field</th>
+<th>Canonical owner</th>
+<th>Hypothesis flag</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>constellation_id</code>, <code>constellation_version</code></td>
+<td><strong>cityofmages</strong> (from the template)</td>
+<td>✅ confirmed</td>
+</tr>
+<tr>
+<td><code>workshop</code>, <code>workshop_route</code>, <code>workshop_gem</code>, <code>workshop_gem_color</code></td>
+<td><strong>cityofmages</strong></td>
+<td>✅ confirmed</td>
+</tr>
+<tr>
+<td><code>resident_mage</code>, <code>mage_sigil</code>, <code>mage_vertex</code>, <code>anchor_act</code></td>
+<td><strong>cityofmages</strong> (cast file + Tome V act)</td>
+<td>✅ confirmed</td>
+</tr>
+<tr>
+<td><code>ceremony_shape</code></td>
+<td><strong>cityofmages</strong> (template)</td>
+<td>✅ confirmed</td>
+</tr>
+<tr>
+<td><code>sovereign_did</code></td>
+<td><strong>personas</strong> (Sovereign&#39;s DID method)</td>
+<td>🟡 pending personas schema</td>
+</tr>
+<tr>
+<td><code>mage_did</code>, <code>mage_sigil_user</code></td>
+<td><strong>personas</strong> (the Sovereign&#39;s Mage agent identity)</td>
+<td>🟡 pending personas schema</td>
+</tr>
+<tr>
+<td><code>swordsman_did</code>, <code>swordsman_sigil_user</code></td>
+<td><strong>personas</strong> (the Sovereign&#39;s Swordsman identity)</td>
+<td>🟡 pending personas schema</td>
+</tr>
+<tr>
+<td><code>hexagram</code>, <code>moon_phase</code></td>
+<td><strong>runtime</strong> (spellweb derives from the walk)</td>
+<td>✅ confirmed</td>
+</tr>
+<tr>
+<td><code>signature</code> (<code>SPELL-XXXXXX-XX</code>)</td>
+<td><strong>runtime</strong> (spellweb signs)</td>
+<td>✅ confirmed</td>
+</tr>
+<tr>
+<td><code>mana_spent.landing</code> (chain, symbol, tx_ref)</td>
+<td><strong>skills</strong> (which chain the cast skill landed on)</td>
+<td>🟡 pending skills schema</td>
+</tr>
+<tr>
+<td><code>mana_spent.entropy</code> (register, symbol, source_ref)</td>
+<td><strong>skills</strong> (which entropy supply the skill drew)</td>
+<td>🟡 pending skills schema</td>
+</tr>
+<tr>
+<td><code>mana_spent.coordination</code>, <code>mana_spent.relationship</code></td>
+<td><strong>skills</strong> (future, when Resonance / VRC operationalise)</td>
+<td>🟡 architectural-only today</td>
+</tr>
+<tr>
+<td><code>swordsman_stance</code> <em>(proposed)</em></td>
+<td><strong>blades</strong> (which stance the Swordsman held during the walk)</td>
+<td>🟡 pending blades schema · also: this field is <strong>proposed</strong> for the contract, not yet in §3.1</td>
+</tr>
+<tr>
+<td><code>blade_template_id</code> <em>(proposed)</em></td>
+<td><strong>blades</strong> (the blade template the walk produced an instance of)</td>
+<td>🟡 pending blades schema</td>
+</tr>
+</tbody></table>
+<p>Note the <strong>proposed</strong> rows at the bottom. The current spellweb item creation guide doesn&#39;t yet specify a <code>swordsman_stance</code> or <code>blade_template_id</code> field — those fields are anticipated when the blades repo lands. The spec 08 v1.3 framework (the user-authored four-axis mana ⊥ swordsman stance taxonomy) is the architectural commitment that those fields <em>will</em> be needed.</p>
+<hr>
+</div>
+<div class="md"><h2>§2 · Cross-repo reference patterns</h2>
+<p>Once the sibling repos publish their schemas, the cityofmages files will gain cross-reference fields in their frontmatter. The proposed reference scheme:</p>
+<h3>§2.1 · ID notation</h3>
+<pre><code>cityofmages:&lt;artefact-id&gt;     # e.g. cityofmages:shop-tailor · cityofmages:V28 · cityofmages:act-tome-v-1
+personas:&lt;persona-id&gt;         # e.g. personas:cast-pallia · personas:did-key-zXyz (instance)
+skills:&lt;skill-id&gt;             # e.g. skills:pallia-cloak-weave · skills:vulcana-runecraft-forge
+blades:&lt;blade-id&gt;             # e.g. blades:cloak-blade-template · blades:cloak-bearer-stance
+</code></pre>
+<p>Each ID resolves against its repo&#39;s canonical index. The cross-references are bidirectional where structural; unidirectional where the architecture commits asymmetry (e.g. a Sovereign-held artefact.md instance references the schemas but the schemas do not reference instances).</p>
+<h3>§2.2 · Where cross-refs land in cityofmages</h3>
+<p>A persona file in <code>cityofmages/tomes/cast/&lt;guild&gt;/&lt;id&gt;.md</code> could carry:</p>
+<pre><code class="language-yaml"># existing fields (cityofmages canonical)
+persona_id: pallia
+name: Pallia
+sigil: 🪡
+vertex: V28
+shop_anchor: /tailor
+
+# new cross-refs (pointing at sibling repos)
+external_persona: personas:cast-pallia              # → personas repo
+skills_castable:                                    # → skills repo
+  - skills:pallia-cloak-weave
+  - skills:pallia-conceal-name
+blade_eligibility:                                  # → blades repo
+  - blades:cloak-blade-template
+stances_supported:                                  # → blades repo (Swordsman-side)
+  - blades:transparent-witness
+  - blades:selective-disclosure
+</code></pre>
+<p>A workshop&#39;s constellation.md template (under <code>agentprivacy-master/docs/tomes/workshops/</code>) could similarly carry:</p>
+<pre><code class="language-yaml">casting_skill: skills:pallia-cloak-weave
+produces_blade: blades:cloak-blade-template
+expected_stance: blades:cloak-bearer-stance
+</code></pre>
+<h3>§2.3 · What the sibling repos point back at</h3>
+<p><strong>personas</strong> repo entries reference cityofmages:</p>
+<pre><code class="language-yaml">persona_id: cast-pallia
+canonical_in: cityofmages:tomes/cast/weavers/pallia.md     # back-ref
+sigil: 🪡
+ecosystem_of_origin: agentprivacy
+</code></pre>
+<p><strong>skills</strong> repo entries reference cityofmages + personas:</p>
+<pre><code class="language-yaml">skill_id: pallia-cloak-weave
+caster_persona: personas:cast-pallia
+workshop_anchor: cityofmages:shop-tailor
+founded_in_act: cityofmages:act-tome-v-1
+mana_axes_spent:                                    # canonical from spec 08
+  - landing
+  - entropy
+produces_blade: blades:cloak-blade-template
+</code></pre>
+<p><strong>blades</strong> repo entries reference cityofmages + skills + personas:</p>
+<pre><code class="language-yaml">blade_template_id: cloak-blade-template
+workshop_anchor: cityofmages:shop-tailor
+casting_skill: skills:pallia-cloak-weave
+constellation_required: cityofmages:tailor-cloak-weave-v1
+stance: cloak-bearer-stance
+wielded_by: personas:cast-soulbae                   # default wielder
+</code></pre>
+<p>The pattern is: <strong>every cross-repo reference uses the <code>&lt;repo&gt;:&lt;id&gt;</code> convention; every repo&#39;s canonical index resolves its half</strong>.</p>
+<hr>
+</div>
+<div class="md"><h2>§3 · Propagation across repos</h2>
+<p>The <span class="deadlink" title="reference (not a live page)">INCANTATION_PROTOCOL.md</span> currently defines four recipes (A grimoire bump · B add cast · C add Tome V act · D switch symbol), plus the proposed Recipe E (constellation update) in <span class="deadlink" title="reference (not a live page)">SPELLWEB_ARTEFACT_CREATION_GUIDE.md §8</span>. Multi-repo changes require <strong>extended recipes</strong> that touch more than cityofmages.</p>
+<h3>§3.1 · Recipe B+ (Add a cast member · multi-repo)</h3>
+<p>When a new persona is added (a Mage from another ecosystem, per JOIN_THE_CITY.md), the propagation now touches <strong>all four repos</strong>:</p>
+<pre><code>1. Author the persona&#39;s cityofmages cast file
+   - cityofmages/tomes/cast/&lt;guild&gt;/&lt;persona-id&gt;.md
+   - Include the new cross-ref fields (external_persona, skills_castable, blade_eligibility, stances_supported)
+
+2. Register the persona in the personas repo
+   - personas/cast/&lt;persona-id&gt;.yaml (or wherever the personas schema lands)
+   - Include canonical_in back-ref to cityofmages
+
+3. Register the persona&#39;s skills in the skills repo
+   - One skill file per cast spell the Mage can cast
+   - Include caster_persona back-ref and workshop_anchor
+
+4. Register the persona&#39;s eligible blade templates in the blades repo
+   - One blade template per artefact type the Mage produces
+   - Include wielded_by, casting_skill, constellation_required cross-refs
+
+5. Bump the cityofmages grimoire (Recipe A)
+   - Add the persona to personas.summoned_mages (or appropriate tier)
+   - Verify cross-refs resolve
+
+6. Propagate the grimoire bump (Recipe A propagation surfaces · INCANTATION_PROTOCOL §2)
+</code></pre>
+<p>Order matters: cityofmages first (the world model establishes the canonical), then the three sibling repos (filling in the schemas), then the grimoire (which references the now-resolved cross-refs).</p>
+<h3>§3.2 · Recipe F (proposed · Add a skill or blade template)</h3>
+<p>A new skill or blade template doesn&#39;t always come with a new persona. When an existing Mage learns a new skill, or when a new blade template emerges from a Tome V act, the recipe is:</p>
+<pre><code>1. Author the skill/blade in its repo
+2. Update the casting Mage&#39;s persona file in cityofmages (add to skills_castable or blade_eligibility)
+3. If a new Tome V act introduced it, ensure the act references the skill/blade ID
+4. Bump the grimoire (Recipe A) if the skill is a registered spell
+</code></pre>
+<p>This is lighter than Recipe B+; the persona already exists.</p>
+<h3>§3.3 · What the cityofmages-incant skill will need</h3>
+<p>The proposed <code>cityofmages-incant</code> skill (per INCANTATION_PROTOCOL.md §6) will need to know:</p>
+<ul>
+<li>Which sibling repos exist on disk at runtime (paths configurable)</li>
+<li>How to resolve <code>&lt;repo&gt;:&lt;id&gt;</code> cross-refs against each repo&#39;s index</li>
+<li>How to surface missing cross-refs at audit time (an unresolved <code>skills:foo-bar</code> reference is a coherence failure)</li>
+<li>How to authorise per-repo commits when a single logical change spans repos (one confirmation per repo)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§4 · Open questions awaiting the new docs</h2>
+<p>When the personas / skills / blades repo-side docs arrive, this document needs refinement on each of these:</p>
+<h3>§4.1 · Schemas</h3>
+<ul>
+<li><strong>personas:</strong> What&#39;s the DID method? How are sigils registered? Is there a single persona registry or one-per-ecosystem? How does &quot;send us a Mage&quot; submission flow into the registry?</li>
+<li><strong>skills:</strong> What&#39;s the skill-definition schema? How does a skill declare its mana axes? How are skill versions tracked? Is there a parent/child relationship between grimoire <code>spells</code> and the skills repo?</li>
+<li><strong>blades:</strong> What&#39;s the blade-template schema? What&#39;s the stance catalog format? How does a blade template declare its required ceremony shape and minimum constellation version?</li>
+</ul>
+<h3>§4.2 · Operational boundaries</h3>
+<ul>
+<li>Does a Sovereign&#39;s <code>mage_did</code> persist across walks at multiple workshops, or is a fresh DID minted per walk?</li>
+<li>Does the blades repo store blade <em>instances</em> (the Sovereign-held witnesses) as well as templates, or only templates?</li>
+<li>Does the skills repo store the <em>operational implementation</em> of each skill (runtime code) or only the spec?</li>
+</ul>
+<h3>§4.3 · Naming + numbering</h3>
+<ul>
+<li>The <code>personas:</code> <code>skills:</code> <code>blades:</code> prefix convention proposed in §2.1 — does it match each repo&#39;s preferred form?</li>
+<li>Cityofmages spec numbering is now settled (per the 2026-05-12 renumber): spec 09 slot is <strong>reserved for <code>spellweb-artefact-md-format</code></strong> (mirror of <code>agentprivacy_master/docs/tomes/specs/09-spellweb-artefact-md-format.md</code> · master canonical); spec 10 is the <strong>attachment-architecture</strong> (V5.5 mirror); spec 11 anticipated as <strong>mage-candidates-from-the-corpus</strong> (per v5.5 chronicle). The cross-cutting governance docs (this file · INCANTATION_PROTOCOL · WORKSHOP_LATTICE_AUDIT · SPELLWEB_ARTEFACT_CREATION_GUIDE) stay top-level by design.</li>
+</ul>
+<h3>§4.4 · Mana-use operationalisation</h3>
+<p>The four-axis mana framework is canonical (spec 08 v1.3). The <strong>per-workshop quantification</strong> is deferred to workshop-level deliberation. When that lands, the skills repo will likely carry the per-skill mana cost specifications; the blades repo will carry the per-stance mana cost (if any); cityofmages will reference both. This integration doc will need a §5 then capturing the resolved economy.</p>
+<h3>§4.5 · The <code>swordsman_stance</code> field in artefact.md</h3>
+<p>Currently the SPELLWEB_ARTEFACT_CREATION_GUIDE §3.1 frontmatter contract doesn&#39;t specify a <code>swordsman_stance</code> field. Per spec 08 v1.3, every working has a stance. When the blades repo schema lands, §3.1 should grow a <code>swordsman_stance</code> row alongside the <code>mana_spent</code> quadruple — completing the Mage ⊥ Swordsman duality at the artefact.md contract.</p>
+<hr>
+</div>
+<div class="md"><h2>§5 · Editorial discipline preserved across repos</h2>
+<p>The four governance disciplines from cityofmages&#39; README must propagate to the sibling repos. These should appear in each repo&#39;s CONTRIBUTING.md or equivalent:</p>
+<ol>
+<li><strong>Honesty labels</strong> — operational / architectural / conjectural / resonant-but-not-absorbed visible on every claim</li>
+<li><strong>Pseudonyms in public narrative</strong> — real names only in <code>provenance</code> / <code>license</code> / <code>architect</code> / <code>character_license</code> fields</li>
+<li><strong>The signature <code>(⚔️⊥⿻⊥🧙)😊</code></strong> — closing seal on every chronicle, spec, post, act, blade, skill definition</li>
+<li><strong>No em-dashes</strong> — corpus convention</li>
+<li><strong>Sigils at native size</strong> — every persona reference preserves the emoji</li>
+<li><strong>Walked-not-signed</strong> for kindred-substrate / kindred-ecosystem relationships</li>
+</ol>
+<p>A sibling repo that drops these disciplines breaks coherence with the corpus even if its schemas align. The disciplines travel with the cross-refs.</p>
+<hr>
+</div>
+<div class="md"><h2>§6 · Status of this document</h2>
+<p><strong>This is a working hypothesis.</strong> Every cell in the field-ownership tables (§1.2), every cross-ref pattern (§2), every propagation recipe (§3) is open to refinement when the sibling-repo docs land.</p>
+<p>When the new docs arrive, this document gets revised — not rewritten — to reflect the canonical schemas. The version bumps from v0.1 to v1.0 when:</p>
+<ul>
+<li><input disabled="" type="checkbox"> The personas repo publishes its DID + sigil schema</li>
+<li><input disabled="" type="checkbox"> The skills repo publishes its skill-definition + mana-cost schema</li>
+<li><input disabled="" type="checkbox"> The blades repo publishes its blade-template + stance catalog schema</li>
+<li><input disabled="" type="checkbox"> At least one full Recipe B+ propagation has run end-to-end (a new persona added across all four repos with audit-passing cross-refs)</li>
+<li><input disabled="" type="checkbox"> The <code>cityofmages-incant</code> skill spec (per <span class="deadlink" title="reference (not a live page)">INCANTATION_PROTOCOL §6</span>) has consumed this document as input</li>
+</ul>
+<p>Until then: <strong>the model below is the corpus&#39;s current best guess.</strong> Sibling-repo authors are invited to correct, refine, or replace it freely.</p>
+<hr>
+</div>
+<div class="md"><h2>§7 · One-line summary</h2>
+<p>The City of Mages is the <strong>world model</strong>. The three sibling repos are the <strong>operational libraries</strong>: personas (who walks) · skills (what Mages cast) · blades (what Swordsmen hold). Every artefact.md a Sovereign carries home is the integration point — it draws fields from all four repos and witnesses one moment of their alignment. The architecture admits this much; the schemas are still arriving.</p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>CC BY-SA 4.0 · privacymage · 2026-05-11 · working draft v0.1</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 lore-integration-architecture-cityofmages-skills-personas-blades</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-city-lore.html">The City Lore</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lore-integration-architecture-cityofmages-skills-personas-blades.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

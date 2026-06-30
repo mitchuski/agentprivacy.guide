@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Skill Anatomy · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Skill Anatomy</span></div>
+  <article><div class="md"><h1>Wiki Skill Anatomy</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5</p>
+<p>What a Claude Code skill is — the SKILL.md folder format, frontmatter, storage location, and how skills are invoked (auto via description, or explicitly via /skill-name). Activates when explaining skills to a newcomer, authoring a new skill, or onboarding an agent into the skill model. The conceptual entry to the Librarian&#39;s 🗃️ Wikis.</p>
+</div>
+<div class="md"><p>Claude Code skills are markdown files that teach Claude how to perform specific tasks — reusable, invocable instructions that extend Claude&#39;s behaviour without modifying its core settings.</p>
+<h2>What is a Skill?</h2>
+<p>A skill is a folder containing a <code>SKILL.md</code> file. The frontmatter declares the skill&#39;s name and description. The body contains instructions, examples, patterns and checklists that Claude follows when the skill is invoked.</p>
+<h2>Where Skills are Stored</h2>
+<p>Skills live in <code>~/.claude/skills/</code>. Each skill is a named subfolder:</p>
+<pre><code>~/.claude/skills/
+    fedwiki-page/
+        SKILL.md
+    another-skill/
+        SKILL.md
+        references/
+        assets/
+        scripts/
+</code></pre>
+<h2>Skill Structure</h2>
+<p>A minimal <code>SKILL.md</code> looks like this:</p>
+<pre><code>
+</code></pre>
+</div>
+<div class="md"><p>name: my-skill<br>description: What this skill does and when to trigger it.</p>
+</div>
+<div class="md"><h1>Instructions</h1>
+<p>Step by step guidance for Claude...</p>
+<pre><code>
+The `description` field is the primary triggering mechanism — Claude reads it to decide whether to use the skill for a given request. A good description is specific about both what the skill does and when it should trigger.
+
+## Invoking a Skill
+
+Skills can be invoked in two ways:
+- **Automatically** — Claude reads the description and decides the skill applies to the current request
+- **Explicitly** — by typing `/skill-name` in the prompt
+
+## Creating a Skill
+
+Create a new folder under `~/.claude/skills/` and write a `SKILL.md` file inside it. The `/skill-creator` skill can help design, test and optimise new skills iteratively with evals.
+
+The fedwiki-page skill on this wiki is an example — it captures the patterns for creating fedwiki page JSON files and is stored at `~/.claude/skills/fedwiki-page/SKILL.md`.
+</code></pre>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis (the git-less onboarding layer)<br><strong>Upstream:</strong> <a href="https://skill.fedwiki.club/claude-skills">skill.fedwiki.club/claude-skills</a> — vendored + re-framed; not original agentprivacy authorship</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-skill-anatomy</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-wiki-skill-anatomy</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-skill-anatomy.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,160 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Academic · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Academic</span></div>
+  <article><div class="md"><h1>Academic</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 6.0</p>
+<p><strong>Equation term</strong> <code>Formal specification of all terms</code></p>
+<p>Formal academic specification and research methodology for 0xagentprivacy. Activates when writing papers, proofs, formal specifications, literature reviews, or preparing work for peer review. Use for LaTeX formatting, citation standards, theorem-proof structure, or research presentation. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V6 Formal Specification (privacy_value_v6_formal_specification.md, 2026-06-10); the V4 specification (Travers, Feb 2026) is the lineage stage this skill was first written against<br><strong>Target context:</strong> PETS, IEEE S&amp;P, USENIX Security, CCS, privacy economics venues, peer reviewers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>Contribution summary</h2>
+<p>This work presents a multiplicative economic model for privacy-preserving agent architectures with six formally specified valuation dimensions. The principal contributions are:</p>
+<ol>
+<li><p><strong>A proven reconstruction ceiling</strong> for dual-agent architectures: R_max = (C_S + C_M)/H(X) &lt; 1, establishing that mathematically separated privacy and delegation agents produce additive (not multiplicative) information leakage, bounding adversarial reconstruction below full behavioural recovery. V6: the ceiling is time-indexed, R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* = sup{t : R(t) &lt; 1} (C82, ~65%); the static result is Proven in the conditional regime (Precondition 1 non-collusion, Precondition 2 fixed adversary class).</p>
+</li>
+<li><p><strong>A temporal memory function</strong> A(τ) = α · ln(1+|τ|) · h(τ) that models verified history accumulation as a counterweight to data depreciation, gated by cryptographic integrity fraction h(τ). This formalises the intuition that attested histories are assets while unverified claims contribute nothing.</p>
+</li>
+<li><p><strong>A 64-vertex sovereignty lattice</strong> ({0,1}⁶) with stratum-weighted network effects, where agent contributions follow binomial coefficients across seven strata. This replaces homogeneous network models (Metcalfe, Reed) with a topology-aware valuation that accounts for heterogeneous sovereignty configurations.</p>
+</li>
+<li><p><strong>A 4×4 separation matrix</strong> Σ generalising the scalar dual-agent separation measure to four sovereignty forces (Protect, Project, Reflect, Connect), where det(Σ) measures the &quot;volume&quot; of the sovereignty tetrahedron and complete entanglement of any force pair collapses the entire value multiplier.</p>
+</li>
+<li><p><strong>An edge value term</strong> T(π) measuring trajectory through sovereignty configuration space, capturing the observation that transitions between states dominate states themselves (192 edges vs 64 vertices), with diminishing returns on repeated traversals.</p>
+</li>
+</ol>
+<h2>Threat model</h2>
+<p>The adversary has access to the complete output streams of both the Swordsman and Mage agents and seeks to reconstruct the principal&#39;s private state X. The adversary is computationally bounded (PPT). The security parameter is the conditional independence quality ε between the two agents&#39; information channels. The model requires ε &lt; 0.1 for the reconstruction ceiling to hold.</p>
+<p>The model does not address: side-channel attacks on the execution environment, collusion between the principal and an adversary, or adversaries with access to the agents&#39; internal states (rather than outputs). TEE integrity is assumed, not proven within the model.</p>
+<h2>Relationship to prior work</h2>
+<p><strong>Privacy economics.</strong> Acquisti et al. (2016) survey privacy valuation but focus on willingness-to-pay and revealed preference. PVM V6 models privacy as infrastructure value rather than consumer preference, providing a supply-side complement. The multiplicative gating structure is novel — it encodes the empirical observation that privacy failures are catastrophic rather than degrading.</p>
+<p><strong>Information-theoretic privacy.</strong> The reconstruction bound extends differential privacy&#39;s ε-δ framework to a dual-agent setting. Where DP bounds what a mechanism reveals about any individual record, PVM V6 bounds what two cooperating mechanisms reveal about a complete behavioural profile, inside Precondition 1 (non-collusion). The additive (rather than multiplicative) composition under conditional independence is the key structural difference from standard DP composition theorems; outside the regime, the compounding bound governs, (2^N − 1)ε versus Nε under amnesia (C83, ~55%).</p>
+<p><strong>Network economics.</strong> The stratum-weighted network effect generalises Metcalfe&#39;s Law and Reed&#39;s Law by weighting participants according to their position in a Boolean lattice. The binomial coefficient weighting has no direct precedent in network economics literature. The power-law exponent k is a free parameter requiring empirical calibration.</p>
+<p><strong>Agent architectures.</strong> The dual-agent separation requirement is related to but distinct from multi-agent system security (Sandhu et al.), compartmentalised access control (Bell-LaPadula), and federated learning&#39;s privacy guarantees. The distinction is that separation is between functional roles (privacy vs delegation) within a single principal&#39;s agent infrastructure, not between principals or data owners.</p>
+<p><strong>Lattice-based cryptography.</strong> The 64-vertex sovereignty lattice is a Boolean lattice, not a Euclidean lattice. It shares structural properties (partial ordering, meet/join operations) but is not directly related to lattice-based cryptographic assumptions (LWE, SIS). The conjectured mapping to UOR&#39;s toroidal structure would, if validated, connect to algebraic topology.</p>
+<h2>Formal results</h2>
+<p><strong>Theorem 1 (Reconstruction ceiling).</strong> Under dual-agent conditional independence with quality ε &lt; 0.1, the maximum fraction of private state X reconstructable from both agents&#39; output streams is R_max = (C_S + C_M)/H(X) &lt; 1, where C_S and C_M are the channel capacities of the Swordsman and Mage output channels respectively. (Proof in Research Paper v3.8.) V6: the ceiling is time-indexed, R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* = sup{t : R(t) &lt; 1} (C82, ~65%); the static result is Proven in the conditional regime (Precondition 1 non-collusion, Precondition 2 fixed adversary class).</p>
+<p><strong>Theorem 2 (Additive composition).</strong> Information leakage from conditionally independent agents composes additively: I(X; O_S, O_M) ≤ I(X; O_S) + I(X; O_M) + ε, where ε is the conditional independence violation. (Follows from standard mutual information chain rule under near-independence.)</p>
+<p><strong>Property 1 (Multiplicative gating).</strong> For all terms t_i in the model: t_i = 0 ⟹ V(π, t) = 0. (By construction.)</p>
+<p><strong>Property 2 (Temporal boundedness).</strong> For any finite derivation chain τ: Temporal(t, τ) → 0 as t → ∞, regardless of history depth. (Exponential decay dominates logarithmic growth.)</p>
+<h2>Conjecture status and open problems</h2>
+<p>Numbering authority: CONJECTURE_REGISTER_V6.md (head C89). When this skill and the register disagree, the register wins and this prose gets an erratum. Status of the original C1 to C5 set as of 2026-06-10:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Conjecture</th>
+<th>Status</th>
+<th>Disposition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>Golden ratio φ is optimal S/M (protect:project) ratio</td>
+<td>open</td>
+<td>Validation: numerical optimisation over parameterised agent simulations</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>A(τ) should be logarithmic</td>
+<td>open</td>
+<td>Validation: empirical measurement of trust/reputation accumulation dynamics</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Edge value is additive</td>
+<td>challenged</td>
+<td>The path integral T_∫(π) replaces it; do not cite as open</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>96 vs 64 discrepancy</td>
+<td>resolved</td>
+<td>Holographic + algebraic: 96 boundary edges encode 64 vertices; 96/64 = 1.5 = the P exponent</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>~3,000× ZKP reduction</td>
+<td>resolved</td>
+<td>Strengthened by BRAID + holographic bound</td>
+</tr>
+</tbody></table>
+<p>The live open problems a researcher should walk through at V6:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Conjecture</th>
+<th>Conf.</th>
+<th>Validation approach</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C7</td>
+<td>Three-axis separation is multiplicative</td>
+<td>30%</td>
+<td>The V6 falsification frontier. Boundary cases are register-bound: partial collapse (alternatives: additive-with-floor, min()), axis correlation under composition (candidate correction: det(Σ) form), time dependence (repair path: the differential form)</td>
+</tr>
+<tr>
+<td>C18</td>
+<td>Sovereignty path exhibits strange attractor dynamics (λ &gt; 0)</td>
+<td>25%</td>
+<td>Lyapunov exponent measurement on real traversal traces; λ is currently unmeasured</td>
+</tr>
+<tr>
+<td>C82</td>
+<td>The Moving Ceiling: R(t) drifts upward against fixed archives; every static guarantee has a finite shelf life t*</td>
+<td>65%</td>
+<td>Longitudinal re-runs of reconstruction attacks against archived corpora with successive decoder generations</td>
+</tr>
+<tr>
+<td>C86</td>
+<td>Obstruction-Theoretic Amnesia: Grade-2 forgetting = non-vanishing gluing obstruction; amnesia is the only t-independent term</td>
+<td>30%</td>
+<td>Falsification: exhibit any view-composition recovering a Grade-2-forgotten origin O</td>
+</tr>
+</tbody></table>
+<h2>Empirical calibration requirements</h2>
+<p>Four parameters lack empirical grounding: α (memory scaling), β (edge value scaling), λ (temporal decay rate), and the functional form of f(e) (edge weight) and g(n_e) (repetition discount). The model is structurally complete and qualitatively meaningful without calibration, but quantitative predictions (including the 17×–12,000× surveillance gap) depend on parameter choices. A calibration study against real agent economic data is the critical next step.</p>
+<h2>Falsifiability</h2>
+<p>The model explicitly states four breaking conditions: (B1) UOR structural incompatibility, now retired since C4 is resolved at the register; the live falsification frontier is C7 (multiplicative three-axis form, 30%), (B2) practical failure of ε &lt; 0.1 conditional independence, (B3) sublinear rather than power-law network effects, (B4) clustering of real architectures near singular Σ matrices. Any of these, if empirically demonstrated, would require fundamental revision rather than parameter adjustment.</p>
+<h2>Limitations and scope</h2>
+<p>The model values privacy-preserving agent architectures. It does not: provide a general theory of data valuation, address privacy in non-agent contexts, model adversaries with quantum computational capabilities, or account for regulatory arbitrage across jurisdictions. The golden ratio conjecture (C1) remains open and should not be treated as established. The UOR correspondence (C4) and the ZKP efficiency claim (C5) are resolved at the register; cite them with their register dispositions rather than as open questions.</p>
+<h2>Key external references</h2>
+<ul>
+<li>Amcalar, A. &amp; Cinar, E. &quot;BRAID: Bounded Reasoning for Autonomous Inference and Decisions.&quot; arXiv:2512.15959 (2025). [Structured prompting economics, PPD metric, Generator/Solver split architecture, Numerical Masking Protocol]</li>
+<li>Gershfield, M. &quot;Holonic Architecture: Identity-Independent Data Structures for Cross-Environment Interoperability.&quot; OASIS / NextGen Software Whitepaper v1.2 (2026). [Holon model, HyperDrive runtime, multi-provider persistence, shared-parent patterns, Holonic BRAID]</li>
+<li>Cunningham, W. et al. &quot;Smallest Federated Wiki.&quot; (federatedwiki.org) — the fork-with-attribution model the <code>guide/</code> onboarding layer builds on. [Federated page forking; the journal as lineage; pages-as-skills (skill.fedwiki.club); the git-less-clone distribution thesis — a fedwiki URL forks a <code>SKILL.md</code> whose journal carries its origin, kept by the Librarian 🗃️ in the Wikis]</li>
+</ul>
+<h2>Suggested review criteria</h2>
+<p>Reviewers may wish to evaluate: (1) whether the multiplicative gating assumption is empirically justified or overly restrictive; (2) whether the reconstruction ceiling proof in the companion paper (v3.8) is sound under the stated assumptions; (3) whether the 64-vertex lattice adds explanatory power beyond simpler network models; (4) whether the open conjectures are well-posed and falsifiable; and (5) whether the surveillance gap claims are robust to reasonable alternative parameterisations.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-academic</code>, v6.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-academic</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-academic.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

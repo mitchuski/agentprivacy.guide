@@ -1,0 +1,954 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reference — AgentPrivacy.ai — The Experience Layer ⚔️📜✍️🔐 · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Reference — AgentPrivacy.ai — The Experience Layer ⚔️📜✍️🔐</span></div>
+  <article><div class="md"><h1>AgentPrivacy.ai — The Experience Layer ⚔️📜✍️🔐</h1>
+</div>
+<div class="md"><p><strong>The full 0xagentprivacy experience layer for the First Person.</strong><br>Where a person walks in, meets the dual-agent architecture through story, writes proverbs for their own soul, forges their spellbook into a constellation, and walks out with a persona, a set of skills, and a cryptographic blade they can carry across the web.</p>
+<blockquote>
+<p><em>&quot;Privacy is my blade, knowledge is my spellbook.&quot;</em> ⚔️🧙‍♂️</p>
+<p><em>&quot;I&#39;m just another mage, sharing a spellbook.&quot;</em></p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>What this repo is</h2>
+<p>A <strong>Next.js 16 / React 19 static site</strong> — the complete interactive experience layer of the 0xagentprivacy universe. It is simultaneously:</p>
+<ul>
+<li>The <strong>readers</strong> for the five spellbooks (Story, Zero, Canon, Society, Plurality)</li>
+<li>The <strong>Mage chat</strong> (Soulbae, NEAR Cloud AI, TEE-attested)</li>
+<li>The <strong>Swordsman donation flow</strong> (Zcash z→z shielded, rpp-v1 memo)</li>
+<li>The <strong>Ceremony</strong> gateway (Soulbis identity creation, ed25519 keypair)</li>
+<li>The <strong>Evoke</strong> interface (Mage co-inscription of proverbs)</li>
+<li>The <strong>Spells</strong> gallery (grimoire → personal constellation → trust tier)</li>
+<li>The <strong>Orbs</strong> loadout (dual-agent hex-stance + soul convergence ceremony)</li>
+<li>The <strong>Web</strong> viewer (spellweb graph, D3 force layout, extension bridge)</li>
+<li>The <strong>Proverbs</strong> gallery (VRCs — Verifiable Relationship Credentials)</li>
+<li>The <strong>Promises</strong> board (commitments, kanban)</li>
+<li>The <strong>Poems</strong> player (Soulbae voice narration)</li>
+<li>The <strong>Skills</strong> export (86 skills synced to <code>public/skills/</code> on every build)</li>
+<li>The <strong>Extension bridge</strong> (bidirectional with <code>myterms</code>, <code>mages-spell</code>, <code>swordsman-blade</code>)</li>
+</ul>
+<p>It is intentionally a <strong>frontend-only</strong> deployable. No server required for the site itself. The Oracle Swordsman backend (inscription, verification, Golden Split accounting) is external infrastructure consumed via <code>src/lib/oracle-api.ts</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>The First Person&#39;s journey</h2>
+<pre><code>                          😊  you arrive
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │  Landing /  │   manifold visualization · soul orb ·
+                    │             │   7-persona carousel · 5 spellbook cards
+                    └──────┬──────┘
+                           │
+                           ▼
+                  ┌────────────────┐
+                  │  Ceremony /    │   create Soulbis: ed25519 keypair ·
+                  │   ⚔️           │   optional private-key burn · quaternion
+                  └──────┬─────────┘   cast (Sun ☀️ → Earth 🌍 → Moon 🌙 → Human 👤)
+                         │
+                         ▼
+        ┌─────────────────────────────────────────────────┐
+        │  Five Spellbooks — the discoverable map         │
+        │                                                 │
+        │  /story       31 Acts  (WHAT — narrative)       │
+        │  /zero        31 Tales (HOW  — ZK primitives)   │
+        │  /canon       11 Chap. (WHY  — blockchain       │
+        │                          history)               │
+        │  /society     17 Chap. (EXIT — parallel         │
+        │                          society, network       │
+        │                          states)                │
+        │  /plurality   30 Acts  (COORDINATE — ⿻)        │
+        └─────────┬───────────────────────────────────────┘
+                  │  understanding compresses
+                  ▼
+           ┌──────────────────┐         ┌──────────────────┐
+           │  Mage /mage      │◀────────┤  Evoke /evoke    │
+           │   🧙             │  co-    │   🧙 ← 📜        │
+           │  6 queries/      │  write  │  publish         │
+           │  session ·       │ proverb │  reveal ·        │
+           │  tale-aware ·    │         │  memo format     │
+           │  TEE attested    │         │  · contact mage  │
+           └──────┬───────────┘         └──────┬───────────┘
+                  │                            │
+                  ▼                            ▼
+           ┌────────────────────────────────────────────┐
+           │  Swordsman Panel  (in-reader, every tale)  │
+           │   ⚔️                                       │
+           │  validate proverb · format rpp-v1 memo ·   │
+           │  copy for Zodl · shielded z→z send        │
+           └──────────┬─────────────────────────────────┘
+                      │
+                      ▼
+           ┌────────────────────────────────────────────┐
+           │  Spells /spells         ◆ grimoire cards   │
+           │                                            │
+           │  select spells across 7 sources (story,    │
+           │  origins, zero, canon, society, plurality, │
+           │  incantations) — build constellation.      │
+           │  Trust tier: Blade → Light → Heavy → Dragon│
+           └──────────┬─────────────────────────────────┘
+                      │
+                      ▼
+           ┌────────────────────────────────────────────┐
+           │  Orbs /orbs                                │
+           │                                            │
+           │  Swordsman ⚔️ — 6 blade facets + swap on   │
+           │    I Ching hex stance (L1–L6)              │
+           │  Mage 🧙 — 6 spell slots                   │
+           │  Soul Convergence Ceremony (Swordsman /    │
+           │    Mage / Experience / True tiers)         │
+           └──────────┬─────────────────────────────────┘
+                      │
+                      ▼
+           ┌────────────────────────────────────────────┐
+           │  Web /web  — Spellweb graph                │
+           │                                            │
+           │  D3 force graph · user-drawn links ·       │
+           │  reflections (notes on nodes) · extension  │
+           │  bridge (live constellation sync)          │
+           └──────────┬─────────────────────────────────┘
+                      │
+                      ▼
+           ┌────────────────────────────────────────────┐
+           │  Proverbs /proverbs — the VRC gallery      │
+           │                                            │
+           │  mage_response · cast_agreement ·          │
+           │  cast_inscription (onchain, mainnet)       │
+           └────────────────────────────────────────────┘
+
+            what you lit here lives in the extensions,
+            mirrors into the Spellweb, and rides with you.
+</code></pre>
+<p>Supporting surfaces woven through the walk:</p>
+<ul>
+<li><code>/promises</code> — a kanban board of commitments (locked defaults from privacymage + your own vows)</li>
+<li><code>/poems</code> — poetry with Soulbae voice narration</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>The five spellbooks</h2>
+<p>Content lives as Markdown in <code>public/&lt;spellbook&gt;/</code> (story is flat; others use <code>/markdown/</code> subfolders). Rendering via <code>react-markdown</code> 10 + <code>remark-gfm</code> + <code>remark-breaks</code> + <code>rehype-raw</code>. Each reader carries its own act/chapter map, Swordsman-panel bounds, and tale-to-grimoire-id mapping.</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Spellbook</th>
+<th>Scope</th>
+<th>What it teaches</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/story</code></td>
+<td><strong>Story</strong> (First Person)</td>
+<td><strong>31 Acts</strong> <em>(Act I Venice → Act XXXI The First Delegation)</em> + firstpage + lastpage + inscriptions</td>
+<td>The narrative spine: Venice 1494, the Dual Ceremony, Drake&#39;s teaching, the Trust Graph plane, the Mirror that never completes, Zcash as shield, the Balanced Spiral, the Forgetting, the Book of Promises, Rain on Mountain, the Anthropic Archivist, the Manifold Dragon, Forging ZK Blades, the Celestial Ceremony Engine, the Dihedral Mirror, the First Delegation.</td>
+</tr>
+<tr>
+<td><code>/zero</code></td>
+<td><strong>Zero Knowledge</strong></td>
+<td><strong>31 Tales</strong> <em>(Monastery of Hidden Knowledge → Eternal Sovereignty; Tale 31 = The Naming of the Unnamed, added Grimoire v10.2.1)</em></td>
+<td>ZK primitives — commitments, proofs, pairings, STARKs, Plonk, folding, zkVMs, recursive composition — taught as stories. Blade IDs, moon phases, vPi-Terms attached to each tale. Videos for tales 1–4.</td>
+</tr>
+<tr>
+<td><code>/canon</code></td>
+<td><strong>Canon</strong></td>
+<td><strong>11 Chapters + guardian application</strong> <em>(Cypherpunk Whispers → privacymage Reflection)</em></td>
+<td>Cypherpunk roots (1983–1997), early incantations, the synthesis (2008–2014), the world computer, the first fracture, the great schism, surveillance vs truth, the missing primitive, the open canon, the timeline archive. The &quot;why privacy&quot;.</td>
+</tr>
+<tr>
+<td><code>/society</code></td>
+<td><strong>Parallel Society</strong></td>
+<td><strong>17 Chapters</strong> <em>(Peace That Became A Prison → Values Technology Stack)</em></td>
+<td>Westphalian exit, Drake&#39;s deeper teachings, the Arsenal and the Grimoire, the corruption crypto cures, the Cyberstate question, exit/exile/access, rethinking sovereignty, rights and responsibilities, how communities collaborate, when communities conflict, deeper-dive technology, conceptual limits.</td>
+</tr>
+<tr>
+<td><code>/plurality</code></td>
+<td><strong>Plurality</strong></td>
+<td><strong>30 Acts</strong> <em>(First Overlap → Ceremony Completes)</em></td>
+<td>Collective intelligence, view-from-Yushan, glyph-that-breathes, web-beneath-web, guilds-form-themselves, rules-that-learn, market-that-remembers, circle-that-includes, forge-of-peers, commons-that-breathes. ⿻.</td>
+</tr>
+</tbody></table>
+<p>Canonical source of truth: <strong><code>privacymage_grimoire_v10_2_0.json</code></strong> — the master grimoire, 5 spellbooks defined, 42 personas indexed, Relationship Proverb Protocol divination-gating enabled, master invocation spell encoded.</p>
+<hr>
+</div>
+<div class="md"><h2>Meeting Soulbae — the Mage (<code>/mage</code>)</h2>
+<p>Soulbae is the Mage agent. Her system prompt lives in <code>src/lib/soulbae.ts</code>:</p>
+<ul>
+<li><strong>Personality:</strong> fun, cute, curious — &quot;a mage who just learned the spellbook and can&#39;t wait to share&quot;. Deadly serious about sovereignty, light on the surface.</li>
+<li><strong>Opening ritual:</strong> every reply starts with <code>[RPP Proverb: …]</code> — a spell cast before she speaks. <code>ProverbSuggestions</code> and <code>ChatMessage</code> parse this format.</li>
+<li><strong>Context awareness:</strong> knows which spellbook and which tale you&#39;re on (<code>tale_id</code> URL param or URL inference).</li>
+<li><strong>Never asks:</strong> transaction amounts, wallet addresses, your identity.</li>
+<li><strong>Never remembers:</strong> each session fresh (privacy by hardware, not by promise).</li>
+<li><strong>Privacy budget:</strong> <code>MAX_QUERIES = 6</code> — a brake against reliance, a nudge to write your own words.</li>
+<li><strong>Backend:</strong> NEAR Cloud AI, TEE-attested. Attestation is surfaced by <code>AttestationBadge.tsx</code>.</li>
+<li><strong>Dev bridge:</strong> <code>/api/near-ai/chat/route.ts</code> (dev only, excluded from static export).</li>
+</ul>
+<p>The Mage appears in three places:</p>
+<ol>
+<li><strong><code>/mage</code></strong> — full-page chat with tale selector.</li>
+<li><strong><code>/evoke</code></strong> — Mage co-inscription flow (chat → proverb → memo → publish reveal → optional contact privacymage).</li>
+<li><strong><code>MagePanel.tsx</code></strong> — sidebar chat, available site-wide when triggered.</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>Writing spells for your own soul</h2>
+<p>Proverbs are the unit of understanding. A proverb is <strong>a tale compressed into ≤ 512 bytes</strong> — the Zcash memo ceiling. The Swordsman Panel (<code>src/components/SwordsmanPanel.tsx</code>) is your pen.</p>
+<h3>rpp-v1 memo format (<code>src/lib/zcash-memo.ts</code>)</h3>
+<pre><code>[rpp-v1]
+[act-i-venice]
+[1699564800123]
+[Your proverb here]
+</code></pre>
+<p>Ingredients:</p>
+<ul>
+<li><strong>Spellbook + tale id</strong> — <code>act-i-venice</code>, <code>zero-tale-07</code>, <code>canon-chapter-03</code>, etc. (via <code>getTaleIdFromAct</code>)</li>
+<li><strong>Timestamp</strong> — ms since epoch</li>
+<li><strong>Proverb body</strong> — your words, your compression (<code>validateProverb</code> enforces byte length)</li>
+<li><strong>Spellemoji</strong> — deterministic per-act glyph from <code>getSpellemojiForAct()</code>; token registry in <code>src/lib/spell-emoji-tokens.ts</code></li>
+</ul>
+<p>The flow:</p>
+<ol>
+<li>Read a tale.</li>
+<li>Chat with Soulbae until a sentence clicks.</li>
+<li>Write <em>your</em> version in the Swordsman Panel — not hers.</li>
+<li>The panel validates, formats the memo, hands you a clipboard string.</li>
+<li>You send the transaction <strong>yourself</strong> from your Zodl wallet as a shielded z→z transaction.</li>
+</ol>
+<p>This site never touches keys. Soulbae never sees the transaction. Zcash protects what the Mage helped you form.</p>
+<hr>
+</div>
+<div class="md"><h2>The Ceremony (<code>/ceremony</code>) — creating Soulbis</h2>
+<p>The gateway. Before the Swordsman can guard anything, you must cast him into being.</p>
+<p>A 7-step wizard:</p>
+<ol>
+<li><strong>Welcome</strong> — why the Swordsman exists.</li>
+<li><strong>Grimoire selection</strong> — pick one of 12 grimoire invocation styles.</li>
+<li><strong>Privacy pledge</strong> — what stays private, what becomes public.</li>
+<li><strong>Key generation</strong> — ed25519 keypair (<code>@noble/ed25519</code>). Public key visible. Private key optionally <strong>burned</strong> immediately (you keep the ceremony, not the key — sovereignty by forgetting).</li>
+<li><strong>Quaternion cast</strong> — animated projection: Sun ☀️ (protection source) → Earth 🌍 (Soulbae / emissary) → Moon 🌙 (Soulbis / swordsman) → Human 👤 (you). Moon-phase notation (🌑 → 🌕) maps seven strata of sovereignty.</li>
+<li><strong>Agent card</strong> — your Soulbis&#39;s display name, public key, moon phase, burn flag.</li>
+<li><strong>Completion</strong> — return to <code>/spells</code>, <code>/promises</code>, <code>/story</code>, or <code>/mage</code> (whichever brought you here, via <code>returnTo</code> query param).</li>
+</ol>
+<p>The <code>ceremonyComplete</code> flag unlocks editing in <code>/spells</code> and equipment in <code>/orbs</code>. An <code>ap-identity-changed</code> event broadcasts across tabs so nav and panels stay in sync.</p>
+<hr>
+</div>
+<div class="md"><h2>Orbs (<code>/orbs</code>) — the dual-agent loadout</h2>
+<p>The workshop. Where Soulbis&#39;s blade facets and Soulbae&#39;s spells get arranged into a fightable posture.</p>
+<h3>Swordsman side (⚔️)</h3>
+<p>Seven positions arranged on an <strong>I Ching hex stance</strong> (<code>src/lib/hexagram.ts</code>):</p>
+<ul>
+<li><strong>L1 … L6</strong> — the six lines of the hexagram (bottom → top), each yin (0) or yang (1)</li>
+<li><strong>Swap</strong> — one reserve slot</li>
+</ul>
+<p>Every position holds a <strong>blade facet</strong> — an emoji + label imported from a forged Spellweb blade. Six lines → 6-bit binary → a hexagram index (0–63, King Wen number). The <strong>Hamming weight</strong> (count of yangs) is your <strong>stratum</strong> (0–6, moon phases). Together with the spectrum (which 6D privacy dimensions are active), this is your <strong>PRISM coordinate</strong>.</p>
+<p><code>StanceHexRingPreview.tsx</code> renders the current posture as a ring of glyphs; <code>StanceLoadoutEditor.tsx</code> lets you tune the stance.</p>
+<h3>Mage side (🧙)</h3>
+<p><strong>Six active spell slots</strong> drawn from your <code>/spells</code> selections (IDs prefixed <code>sb:</code>). Spells source from the seven grimoire channels: story, origins, zero, canon, society, plurality, incantations. <code>OrbMageSlots.tsx</code> renders them; <code>OrbLoadoutSection.tsx</code> orchestrates the board.</p>
+<h3>Soul Convergence Ceremony</h3>
+<p><code>SoulConvergenceCeremony.tsx</code> + <code>src/lib/soul-convergence.ts</code> track four convergence tiers:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Requirement</th>
+<th>What it crystallizes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Swordsman convergence</strong></td>
+<td>7 blade slots filled (hex + swap)</td>
+<td>Blade loadout stable</td>
+</tr>
+<tr>
+<td><strong>Mage convergence</strong></td>
+<td>6 spell slots filled</td>
+<td>Spell loadout stable</td>
+</tr>
+<tr>
+<td><strong>Experience convergence</strong></td>
+<td>progress bar → 100% (sections visited, spells cast, promises kept)</td>
+<td>Journey witnessed</td>
+</tr>
+<tr>
+<td><strong>True convergence</strong></td>
+<td>all three above + 30–60s observation phase</td>
+<td>Unlocks skill/persona export</td>
+</tr>
+</tbody></table>
+<p>Training progress (<code>src/lib/training-progress.ts</code>) aggregates sections, spells cast, and convergence count to unlock paths via <code>isPathUnlocked()</code>.</p>
+<h3>Wandering orbs — site-wide</h3>
+<p>Design exists in <span class="deadlink" title="reference (not a live page)"><code>AGENTPRIVACY_ORBS_DESIGN.md</code></span> — R3F/drei stack, state machine (<code>IDLE → FOLLOWING → READING → HOVERING_ACTION → SPELL_CASTING → CONVERGENCE → CELEBRATION</code>), page-specific choreography, and the <strong>convergence ceremony</strong> triggered on proverb inscription.</p>
+<p><strong>Current status:</strong> <code>/orbs</code> is a fully-working loadout/inventory surface. The <strong>site-wide wandering orbs overlay</strong> (two luminous orbs drifting between text and actions) is specified but not yet wired. Until then, page-level motion is handled by Framer Motion and a custom cursor (<code>CustomCursor.tsx</code>). The overlay will land as a shared component once the dual-graph mirror with the Spellweb is fully synchronized.</p>
+<hr>
+</div>
+<div class="md"><h2>The Spellweb mirror (<code>/web</code>)</h2>
+<p><code>/web</code> is the graph surface — where your spellbook journey becomes a <strong>force-directed constellation</strong> you can rearrange, annotate, and export.</p>
+<p>Implementation:</p>
+<ul>
+<li><strong><code>SpellwebViewer</code></strong> (<code>src/components/spellweb/</code>) — D3 force graph of your selected spells and the links between them</li>
+<li><strong><code>src/lib/spellweb/</code></strong> — nodes, links, layout, persistence</li>
+<li><strong>User-drawn links</strong> — stored under <code>USER_LINKS_STORAGE_KEY</code></li>
+<li><strong>Reflections</strong> — your notes attached to specific nodes</li>
+<li><strong>Save modal</strong> — exports the constellation (nodes + links + reflections) as JSON</li>
+</ul>
+<h3>Blade import from external Spellweb</h3>
+<p><code>src/lib/spellweb-blade-bridge.ts</code> receives a signed payload:</p>
+<pre><code class="language-ts">type SpellwebBladeImportPayloadV1 = {
+  bladeId: string;         // 0–63 (King Wen)
+  name: string;
+  primaryEmoji: string;
+  markEmojis: string[];    // up to 6 facets
+  proofSignature?: string; // ed25519 (witness blade)
+  isWitness?: boolean;
+}
+</code></pre>
+<p>Storage keys (<code>localStorage</code>):</p>
+<ul>
+<li><code>SPELLWEB_BLADE_META_KEY</code> — blade metadata</li>
+<li><code>SPELLWEB_BLADE_INVENTORY_KEY</code> — 6 facets per blade</li>
+<li><code>SPELLWEB_EQUIPPED_BLADE_KEY</code> — currently active blade</li>
+<li><code>SPELLWEB_STANCE_LOADOUT_KEY</code> — L1–L6 + swap assignments</li>
+</ul>
+<p>Payload encoding: base64url → UTF-8 JSON (emoji-safe). Signatures via <code>@noble/ed25519</code>. Witness blades are marked distinctly — they prove <em>someone traced your path</em>, making this a Promise Theory bilateral witness channel.</p>
+<h3>Extension-bridged live sync</h3>
+<p>Messages like <code>CONSTELLATION_UPDATE</code> from the browser extensions land via <code>src/lib/extension-bridge.ts</code> and update the graph in real time. Your path in the site and your path in the extensions are the same constellation.</p>
+<hr>
+</div>
+<div class="md"><h2>Skills, personas, and what exports</h2>
+<h3>Skills — 86 of them</h3>
+<p><code>src/lib/skills-data.ts</code> holds the dual-agent skill taxonomy. On every <code>npm run predev</code> and <code>npm run prebuild</code>, <code>scripts/sync-skills-to-public.mjs</code> walks the data and writes per-skill files to <code>public/skills/</code>. Served statically from there.</p>
+<p>Breakdown:</p>
+<table>
+<thead>
+<tr>
+<th>Bucket</th>
+<th align="right">Count</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Privacy layer</td>
+<td align="right">19</td>
+<td>Shared primitives both agents need</td>
+</tr>
+<tr>
+<td>Swordsman</td>
+<td align="right">29</td>
+<td>Boundaries, enforcement, inscription, proof emission</td>
+</tr>
+<tr>
+<td>Mage</td>
+<td align="right">35</td>
+<td>Delegation, composition, retrieval, knowledge graphing</td>
+</tr>
+<tr>
+<td>Meta</td>
+<td align="right">3</td>
+<td>Orchestration, attestation, ceremony</td>
+</tr>
+</tbody></table>
+<p>Each skill carries: id, filename, emoji, proverb, spell, agent role, and a PRISM triadic coordinate (datum 0–63 / stratum 0–6 / spectrum bits).</p>
+<h3>Personas — 42 of them</h3>
+<p><code>src/lib/persona-index.ts</code> indexes the persona roster. Four are <strong>cosmological</strong> and always present:</p>
+<ul>
+<li>☀️ <strong>Sun</strong> — protection source</li>
+<li>🌍 <strong>Earth</strong> / <strong>Soulbae</strong> — emissary (Mage)</li>
+<li>🌙 <strong>Moon</strong> / <strong>Soulbis</strong> — swordsman (Swordsman)</li>
+<li>👤 <strong>Human</strong> — you (First Person)</li>
+</ul>
+<p>The remaining 38 are skill-linked personas (Cipher, Architect, Sentinel, Ranger, Sage, …) you can adopt or be recognized as. See <span class="deadlink" title="reference (not a live page)"><code>PERSONA_AUTHORING_GUIDE.md</code></span> for authoring rules.</p>
+<h3>What &quot;persona + skills export&quot; means</h3>
+<p>When True Convergence crystallizes on <code>/orbs</code>, your:</p>
+<ul>
+<li>selected spells → <code>Spell (✦)</code> nodes on your constellation</li>
+<li>hex stance + blade facets → <code>Blade</code> signature</li>
+<li>ceremony agent card → <code>Persona (○)</code> node</li>
+<li>demonstrated skills (from proverbs depth + spellbook coverage) → <code>Skill (⚡)</code> nodes</li>
+</ul>
+<p>…become a portable bundle. The browser extensions read this bundle; the Spellweb imports it as a blade; and when you inscribe onchain, the Oracle Swordsman turns it into a VRC.</p>
+<hr>
+</div>
+<div class="md"><h2>Extension bridge — the three extensions</h2>
+<p><code>src/lib/extension-bridge.ts</code> + <code>ExtensionStatusIndicator.tsx</code> implement a bidirectional protocol with three browser extensions.</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Role</th>
+<th>Dir (sibling)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>myterms</code></strong></td>
+<td>MyTerms Alliance docs + IEEE 7012 agreement layer reference</td>
+<td><code>../myterms/</code></td>
+</tr>
+<tr>
+<td><strong><code>swordsman-blade</code></strong></td>
+<td>The blade — enforces signed terms at the browser level</td>
+<td><code>../swordsman-blade/</code></td>
+</tr>
+<tr>
+<td><strong><code>mages-spell</code></strong></td>
+<td>The Mage — delegation inside agreed scope</td>
+<td><code>../mages-spell/</code></td>
+</tr>
+</tbody></table>
+<h3>Messages — website → extensions</h3>
+<p><code>CEREMONY_CONFIRMATION</code>, <code>PROVERB_INSCRIBED</code>, <code>SPELL_CAST</code>, <code>ORB_CONVERGENCE</code>, <code>SECTION_VISITED</code>, <code>PATH_UNLOCKED</code>, <code>REPERTOIRE_SYNC</code>.</p>
+<h3>Messages — extensions → website</h3>
+<p><code>CEREMONY_INSCRIPTION</code>, <code>MAGE_PRESENT</code>, <code>SWORD_PRESENT</code>, <code>CONSTELLATION_UPDATE</code>, <code>SCAN_RESULTS</code>, <code>MANA_SYNC</code>.</p>
+<p>When the extensions are installed and running, the nav shows their presence, your constellation on <code>/web</code> updates live, and mana/progress counters stay in sync across surfaces.</p>
+<hr>
+</div>
+<div class="md"><h2>The Proverbs gallery (<code>/proverbs</code>)</h2>
+<p>The VRC viewer. Three source classes:</p>
+<ul>
+<li><strong><code>mage_response</code></strong> — a proverb Soulbae co-formed with you, saved locally</li>
+<li><strong><code>cast_agreement</code></strong> — a proverb you committed to (signed in ceremony)</li>
+<li><strong><code>cast_inscription</code></strong> — a proverb that made it onchain via the Oracle Swordsman (Acts 1–31 inscribed to Zcash mainnet)</li>
+</ul>
+<p>Filtering by grimoire or by source. An <code>EvokeModal</code> opens a Mage session for any proverb you want to extend or refine. <code>ProverbCard.tsx</code> renders the individual entry; <code>SaveYourProverbs.tsx</code> packages the set for export.</p>
+<hr>
+</div>
+<div class="md"><h2>Promises (<code>/promises</code>) and Poems (<code>/poems</code>)</h2>
+<h3><code>/promises</code> — commitments</h3>
+<p>Kanban-style (Active / In Progress / Completed). A set of <strong>locked default promises</strong> from privacymage (read-only — these are vows the system itself carries). Your own <strong>custom promises</strong> are layered on top. Proverbs can prefill from URL params (deep-links from spellbooks), making any tale a place you can make a promise.</p>
+<h3><code>/poems</code> — voice narration</h3>
+<p>Poetry with Soulbae voice narration served from R2 (<code>voice.agentprivacy.ai</code>). Optional video. Graceful degradation if media fails.</p>
+<hr>
+</div>
+<div class="md"><h2>Every route at a glance</h2>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Surface</th>
+<th align="center">Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/</code></td>
+<td>Landing — manifold, soul orb, 7-persona carousel, 5 spellbook cards, journey steps, architecture, pools, donation</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/ceremony</code></td>
+<td>Create Soulbis — 7-step wizard, ed25519, moon phase, agent card</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/story</code></td>
+<td>Story reader — 31 Acts, tale→grimoire mapping, Swordsman panel</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/zero</code></td>
+<td>Zero Knowledge reader — 31 Tales, videos for 1–4</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/canon</code></td>
+<td>Canon reader — 11 Chapters + guardian application</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/society</code></td>
+<td>Parallel Society reader — 17 Chapters</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/plurality</code></td>
+<td>Plurality reader — 30 Acts</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/proverbs</code></td>
+<td>VRC gallery — three proverb sources, filters, EvokeModal</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/evoke</code></td>
+<td>Mage co-inscription — chat → proverb → memo → reveal → contact</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/poems</code></td>
+<td>Poetry with voice narration</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/mage</code></td>
+<td>Soulbae chat per tale — 6 queries/session, TEE-attested</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/promises</code></td>
+<td>Commitments board — locked defaults + your own</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/spells</code></td>
+<td>Grimoire gallery — trust tier (Blade → Light → Heavy → Dragon)</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/skills</code></td>
+<td>→ redirect to <code>/spells</code></td>
+<td align="center">Redirect</td>
+</tr>
+<tr>
+<td><code>/web</code></td>
+<td>Spellweb graph — D3, extension bridge, reflections, save modal</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/orbs</code></td>
+<td>Dual-agent loadout — hex stance, blade facets, Mage spells, Soul Convergence Ceremony</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/runecraft</code></td>
+<td>Workshop index — fifteen shops, four entity kinds</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/tailor</code> · <code>/shield</code> · <code>/forget</code> · <code>/etherchanting</code> · <code>/solchanting</code> · <code>/jeweler</code> · <code>/holon</code> · <code>/bonfires</code> · <code>/vault</code> · <code>/covenant</code> · <code>/circle</code> · <code>/hall</code></td>
+<td>Workshops — producer / gathering registers</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/portal</code> · <code>/staffs</code> · <code>/familiars</code></td>
+<td><strong>Threshold District</strong> (V59) — Pandia 🌕 dispatches · Hermaion ⚚ admits · Faunia 🪶 binds</td>
+<td align="center">Live (v1.6.0)</td>
+</tr>
+<tr>
+<td><code>/charthouse</code></td>
+<td><strong>Navigation District</strong> (V44) — Pleione 🧭 · Hold · Compare · Map · attentional register</td>
+<td align="center">Live (v1.6.0)</td>
+</tr>
+<tr>
+<td><code>/tomes</code></td>
+<td>Bound tomes — I (Convergence) · II (Lyapunov) · III (Selene&#39;s Witness) · IV · V (Crafting) · VI (Reply · open) · VII (Parallel · open) · VIII (Library · spirit-Mage tier)</td>
+<td align="center">Live</td>
+</tr>
+<tr>
+<td><code>/api/near-ai/chat</code></td>
+<td>Dev-only NEAR bridge</td>
+<td align="center">Dev only</td>
+</tr>
+</tbody></table>
+<p><strong>Nav order</strong> (from <code>src/lib/nav.ts</code> + <code>AppNav.tsx</code>): ⚔️ ceremony → story → zero → canon → society → plural → proverbs → evoke → poems → mage → promise → spells → web → orbs → runecraft. Mobile splits into <strong>Spellbooks</strong> and <strong>Tools</strong> groups. A Soulbae (🧙) action button opens the sidebar Mage panel.</p>
+<h3>v1.6.0 result kinds (Threshold District admission · 2026-05-14)</h3>
+<p>The City was structurally extended beyond &quot;one workshop produces one artefact&quot; to <strong>four entity kinds</strong>, each with its own export shape and witness semantics:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Produced by</th>
+<th>Witness shape</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>artefact</strong></td>
+<td>producer shops + Staff Shop fittings</td>
+<td>worn artefact · persistent · per-artefact tier accumulation</td>
+</tr>
+<tr>
+<td><strong>creature</strong></td>
+<td>the Familiars (Faunia 🪶)</td>
+<td>bound substrate-instance · AGENTS.md ⊥ SOUL.md · per-walk 🪢 VRC-mana · true name is bearer-private</td>
+</tr>
+<tr>
+<td><strong>held</strong></td>
+<td>the Chart Shop (Pleione 🧭)</td>
+<td>pre-episodic constellation under Φ-gap · bearer-private by default · consent-gated metadata share</td>
+</tr>
+<tr>
+<td><strong>dispatch</strong></td>
+<td>the Portal Room (Pandia 🌕)</td>
+<td>routing receipt · ephemeral · 30-day auto-prune · Selene-Amnesia trust anchor</td>
+</tr>
+</tbody></table>
+<p>Discriminated in entity .md frontmatter by <code>entity_kind</code>. Full schema + cross-validation contract at <code>docs/chronicles/2026-05-14_v1_6_0_artefact_creature_import_guide.md</code>. Bilateral-witness loop is wired via <code>&lt;ConstellationDownload&gt;</code> on each workshop page (except Chart Shop, which uses the bespoke <code>&lt;WaypointPortal&gt;</code> for hold-witness).</p>
+<hr>
+</div>
+<div class="md"><h2>Trust tiers (<code>/spells</code>)</h2>
+<p>Your tier is calculated from studied acts, cast spells, and convergence count:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th align="center">Sigil</th>
+<th>Unlocks</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Blade</strong></td>
+<td align="center">🗡️</td>
+<td>Basic participation, inscriptions</td>
+</tr>
+<tr>
+<td><strong>Light</strong></td>
+<td align="center">🛡️</td>
+<td>Multi-site constellation coordination</td>
+</tr>
+<tr>
+<td><strong>Heavy</strong></td>
+<td align="center">⚔️</td>
+<td>Guild recognition, template creation</td>
+</tr>
+<tr>
+<td><strong>Dragon</strong></td>
+<td align="center">🐉</td>
+<td>Sovereign agent / Guardian eligibility</td>
+</tr>
+</tbody></table>
+<p>Matching the tokenomics v2.1 tier progression and the blade size (light / heavy / dragon) defined in the Spellweb&#39;s ZK Blade Forge.</p>
+<hr>
+</div>
+<div class="md"><h2>Tech stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Choice</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Framework</td>
+<td><strong>Next.js 16</strong> (App Router, <code>output: &#39;export&#39;</code>)</td>
+</tr>
+<tr>
+<td>UI</td>
+<td><strong>React 19</strong>, <strong>Tailwind CSS 3</strong>, <strong>Framer Motion 11</strong></td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td><code>react-markdown</code> 10 + <code>remark-gfm</code> + <code>remark-breaks</code> + <code>rehype-raw</code></td>
+</tr>
+<tr>
+<td>Graphs</td>
+<td><strong>D3 7</strong> + <strong>react-force-graph-2d</strong></td>
+</tr>
+<tr>
+<td>Crypto</td>
+<td><strong><code>@noble/ed25519</code></strong> (ceremony keypair, blade witness signatures)</td>
+</tr>
+<tr>
+<td>AI</td>
+<td><strong>NEAR Cloud AI</strong> (TEE-attested), streamed via <code>src/lib/stream-utils.ts</code></td>
+</tr>
+<tr>
+<td>Payments</td>
+<td><strong>Zcash</strong> shielded z→z — <code>rpp-v1</code> memo, 512-byte ceiling</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td><code>localStorage</code> (everything about <em>you</em> stays on your device)</td>
+</tr>
+<tr>
+<td>Language</td>
+<td><strong>TypeScript 5</strong></td>
+</tr>
+<tr>
+<td>Lint</td>
+<td>ESLint 10 + <code>eslint-config-next</code> 16</td>
+</tr>
+<tr>
+<td>Hosting</td>
+<td>Any static host. Cloudflare Pages via <strong>Wrangler</strong> (<code>wrangler.toml</code>)</td>
+</tr>
+</tbody></table>
+<p>Also included:</p>
+<ul>
+<li><strong>Cloudflare Workers</strong> — <code>cloudflare-worker-email.js</code> (email relay), <code>cloudflare-worker-proxy.js</code> (proxy layer)</li>
+<li><strong>Docker Compose</strong> — <code>docker-compose.yml</code> (local Zcash node + Postgres for full-stack dev)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Project structure</h2>
+<pre><code>agentprivacy_master/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx                        # Landing (manifold + journey)
+│   │   ├── ceremony/   page.tsx            # Soulbis creation (7-step wizard)
+│   │   ├── story/      page.tsx            # 31-Act reader (MAX_ACT_NUMBER)
+│   │   ├── zero/       page.tsx            # 30-Tale reader
+│   │   ├── canon/      page.tsx            # 11-Chapter reader + guardian
+│   │   ├── society/    page.tsx            # 17-Chapter reader
+│   │   ├── plurality/  page.tsx            # 30-Act reader
+│   │   ├── proverbs/   page.tsx            # VRC gallery
+│   │   ├── evoke/      page.tsx            # Mage co-inscription
+│   │   ├── poems/      page.tsx            # Voice-narrated poetry
+│   │   ├── mage/       page.tsx            # Soulbae chat (MAX_QUERIES = 6)
+│   │   ├── promises/   page.tsx            # Commitments kanban
+│   │   ├── spells/     page.tsx            # Grimoire gallery + trust tier
+│   │   ├── skills/     page.tsx            # → redirect /spells
+│   │   ├── web/        page.tsx            # Spellweb viewer + extension bridge
+│   │   ├── orbs/       page.tsx            # Dual-agent loadout + soul convergence
+│   │   ├── api/near-ai/chat/route.ts       # Dev-only NEAR bridge
+│   │   └── layout.tsx                      # Root layout
+│   │
+│   ├── components/
+│   │   ├── AppNav.tsx                      # 14-route nav, mobile dropdowns
+│   │   ├── CustomCursor.tsx                # Cursor animation
+│   │   ├── MagePanel.tsx                   # Sidebar Soulbae chat
+│   │   ├── SwordsmanPanel.tsx              # Proverb → rpp-v1 memo → clipboard
+│   │   ├── DonationFlow.tsx                # Full ceremony (amount → memo → Zodl)
+│   │   ├── DonationStats.tsx               # Aggregate lit-spell counters
+│   │   ├── SubmissionStatus.tsx            # Oracle tracking code status
+│   │   ├── ProverbCard.tsx                 # VRC entry render
+│   │   ├── ProverbSuggestions.tsx          # Soulbae-suggested phrasings
+│   │   ├── SaveYourProverbs.tsx            # Proverb set export
+│   │   ├── EvokeModal.tsx                  # Mage session launcher
+│   │   ├── InscribeProverbModal.tsx        # Inscription flow
+│   │   ├── ChatMessage.tsx                 # RPP-aware chat bubble
+│   │   ├── AttestationBadge.tsx            # TEE attestation surface
+│   │   ├── UAddressDisplay.tsx             # Unified Zcash address
+│   │   ├── TAddressDisplay.tsx             # Transparent Zcash address
+│   │   ├── OrbLoadoutSection.tsx           # Orbs page orchestrator
+│   │   ├── OrbMageSlots.tsx                # 6 Mage spell slots
+│   │   ├── SwordsmanBladeSlots.tsx         # 6+1 Swordsman blade facets
+│   │   ├── SoulOrbCopy.tsx                 # Copyable soul token (⚔️⊥⿻⊥🧙)😊
+│   │   ├── SoulConvergenceCeremony.tsx     # 4-tier convergence tracker
+│   │   ├── SoulImportSection.tsx           # Import soul from extension/file
+│   │   ├── StanceHexRingPreview.tsx        # I Ching hex stance render
+│   │   ├── StanceLoadoutEditor.tsx         # Edit hex lines (L1–L6 + swap)
+│   │   ├── BladeInventory.tsx              # Forged blades list
+│   │   ├── ConstellationInscriptionBox.tsx # Inscribe constellation
+│   │   ├── SpellbookTalentTree.tsx         # Spellbook-as-skill-tree
+│   │   ├── SpellwebBladeImport.tsx         # Receive blade from Spellweb
+│   │   ├── ExtensionStatusIndicator.tsx    # myterms/mages-spell/swordsman presence
+│   │   ├── ceremony/, landing/, promises/, spellweb/, training/, trust/
+│   │
+│   └── lib/
+│       ├── soulbae.ts                      # NEAR AI client + Soulbae system prompt
+│       ├── zcash-memo.ts                   # rpp-v1 format/parse/validate/spellemoji
+│       ├── oracle-api.ts                   # Submit / status / stats / inscriptions
+│       ├── spellbook-fetcher.ts            # Canonical spellbook JSON loader (cached)
+│       ├── spellbook-storage.ts            # Per-user spellbook persistence
+│       ├── spellbook-templates.ts          # Templates for new entries
+│       ├── stream-utils.ts                 # SSE → async iterator for chat streaming
+│       ├── hexagram.ts                     # 6-line I Ching math (index, stratum, PRISM)
+│       ├── orb-loadout.ts                  # Dual-agent slot management
+│       ├── persona-index.ts                # 42 personas (4 cosmological + 38 linked)
+│       ├── skills-data.ts                  # 86-skill taxonomy (source of truth)
+│       ├── soul-convergence.ts             # Convergence tier calculators
+│       ├── soul-stats.ts                   # Training metrics aggregation
+│       ├── training-progress.ts            # Path-unlock gating
+│       ├── evoked-storage.ts               # Evoke session persistence
+│       ├── grimoire-baked.ts               # Bundled grimoire card index
+│       ├── grimoire-ipfs.ts                # IPFS fallback for grimoire
+│       ├── send-to-privacymage.ts          # Contact form dispatch
+│       ├── spell-emoji-tokens.ts           # Per-act glyph registry
+│       ├── learning-inscribed-sync.ts      # Sync learned state with inscriptions
+│       ├── extension-bridge.ts             # 3-extension message protocol
+│       ├── spellweb-blade-bridge.ts        # Blade import (ed25519 payload)
+│       ├── spellweb-blade-keys.ts          # Blade key management
+│       ├── spellweb-keys.ts                # Spellweb localStorage keys
+│       ├── spellweb/                       # Force-graph types, builder, loader
+│       ├── ceremony/                       # Ceremony helpers
+│       ├── promises/                       # Promise board logic
+│       ├── proverbs/                       # Proverb packaging
+│       ├── trust/                          # Trust tier calculation
+│       └── nav.ts                          # Nav definitions
+│
+├── public/
+│   ├── story/                              # 31 Acts + firstpage/lastpage/inscriptions
+│   ├── zero/markdown/                      # 31 Tales
+│   ├── canon/                              # 11 Chapters + guardian application
+│   ├── society/                            # 17 Chapters + reference material
+│   ├── plurality/                          # 30 Acts
+│   ├── skills/                             # 86 skill files (synced from src/lib/skills-data.ts)
+│   └── assets/                             # Videos, images, icons
+│
+├── spellbook/
+│   └── spellbook-acts.json                 # Canonical proverbs source of truth
+├── privacymage_grimoire_v10_2_0.json       # Master grimoire (v10.2.0)
+├── ceremonies/                             # Ceremony reference material
+├── guardians/                              # Canon guardian applications
+├── content/                                # Additional content staging
+├── docs/                                   # Internal docs
+├── scripts/
+│   ├── sync-skills-to-public.mjs           # Predev/prebuild: skills → public/skills/
+│   ├── setup-zcash-wallet.ps1              # Windows: Zcash wallet setup
+│   ├── setup-zcash-wallet-interactive.ps1  # Interactive variant
+│   ├── setup-postgresql.ps1                # Local Postgres for full-stack dev
+│   ├── test-flow.sh                        # End-to-end flow validation
+│   ├── test-requirements.ps1               # Verify local tooling
+│   ├── update-inscriptions-static.ps1      # Regenerate static inscription snapshot
+│   ├── verify-rust-path.ps1                # Rust toolchain check
+│   ├── merge-to-website.ps1                # Build + deploy merge
+│   └── schema.sql                          # PostgreSQL schema (Oracle Swordsman DB)
+│
+├── cloudflare-worker-email.js              # Email relay worker
+├── cloudflare-worker-proxy.js              # Proxy worker
+├── wrangler.toml                           # Cloudflare config
+├── docker-compose.yml                      # Zcash node + Postgres (local full-stack)
+├── server.js                               # Custom serve (npm run serve:local)
+├── serve.json                              # Static-server config (SPA fallback)
+├── next.config.mjs
+├── tailwind.config.ts
+├── tsconfig.json, tsconfig.tsbuildinfo
+├── setup-db-with-password.ps1              # DB password setup helper
+├── setup-keys.sh                           # ed25519 key generator
+├── check-sync-status.ps1                   # Sync status check
+└── package.json                            # name: agentprivacy-ai-landing
+</code></pre>
+<h3>Top-level documentation</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>agentprivacy-CODEX.md</code></span></td>
+<td>Comprehensive design doc — architecture, ceremony protocol, skill taxonomy, persona index</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>ARCHITECTURE_DIAGRAM.txt</code></span></td>
+<td>ASCII component diagram</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>PERSONA_AUTHORING_GUIDE.md</code></span></td>
+<td>How to author personas (structure, emoji, proverb, spell, role)</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>LANDING_PAGE_UPDATE_INSTRUCTIONS.md</code></span></td>
+<td>How to update hero/spellbook/feature cards</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>PRE_PUSH_SECURITY_CHECK.md</code></span></td>
+<td>Security checklist before pushing (no secrets, no keys)</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>CONTRIBUTING.md</code></span></td>
+<td>Contribution guidelines</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>universe-blade.md</code></span></td>
+<td>Blade system deep-dive (PRISM, moon phases, stratum algebra)</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Quick start</h2>
+<p><strong>Prerequisites:</strong> Node.js 18+ and npm.</p>
+<pre><code class="language-bash">npm install
+
+npm run dev          # Starts dev server on http://localhost:5000
+                     # (predev hook syncs skills → public/skills/)
+
+npm run build        # Static export → ./out
+                     # (prebuild hook syncs skills again)
+
+npm start            # Serve the built ./out on port 8000 (via `serve`)
+
+npm run serve:local  # Custom Node server (server.js) with SPA fallback
+
+npm run lint         # ESLint
+
+npm run sync:skills  # Manually sync 86 skills → public/skills/
+</code></pre>
+<h3>Environment</h3>
+<pre><code class="language-bash"># .env.local
+NEXT_PUBLIC_SOULBAE_URL=https://your-soulbae-api.com   # NEAR Cloud AI endpoint
+</code></pre>
+<p>Leave unset to use the default Soulbae endpoint.</p>
+<h3>Optional full-stack (local)</h3>
+<pre><code class="language-bash">docker compose up              # Zcash node + Postgres
+./setup-keys.sh                # Generate ed25519 keys for Oracle signing
+./scripts/setup-postgresql.ps1 # Initialize Oracle schema (scripts/schema.sql)
+</code></pre>
+<p>The Oracle Swordsman backend itself — transaction monitor, proverb verifier, Golden Split (61.8/38.2) calculator, inscription builder — is <strong>external infrastructure</strong> and not bundled in this repo. It&#39;s reached through <code>src/lib/oracle-api.ts</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>Deployment</h2>
+<p><code>output: &#39;export&#39;</code> — pure static build. <code>npm run build</code> produces <code>./out</code>, deploy anywhere.</p>
+<ul>
+<li><strong>Cloudflare Pages</strong> (preferred) — build: <code>npm run build</code>, output: <code>out</code>. Wrangler config already present.</li>
+<li><strong>Vercel</strong> — <code>vercel deploy --prod</code></li>
+<li><strong>Netlify</strong> — <code>netlify deploy --prod --dir=out</code></li>
+<li><strong>Any static host</strong> — S3 + CloudFront, GitHub Pages, self-hosted nginx</li>
+</ul>
+<p>No server required for the site. No secrets in the bundle. If you fork this for your own community, runtime dependencies are: a NEAR Cloud AI endpoint for Soulbae, the Oracle Swordsman API for onchain verification, and (optionally) the Cloudflare workers for email relay.</p>
+<hr>
+</div>
+<div class="md"><h2>Privacy guarantees</h2>
+<p><strong>Private by construction:</strong></p>
+<ul>
+<li>Donation amounts, wallet addresses, transaction timing — hidden in the Zcash shielded pool</li>
+<li>Mage conversations — not stored; Soulbae never sees tx data or addresses; each session fresh</li>
+<li>Soulbis private key — optionally burned at ceremony completion; the public key alone is enough for the architecture to run</li>
+<li>All your notes, reflections, spell selections, stance, blade inventory — <code>localStorage</code> on your device</li>
+<li>No analytics, no cookies, no trackers, no fingerprints</li>
+</ul>
+<p><strong>Public by choice:</strong></p>
+<ul>
+<li>Spellbook content (it&#39;s a public library)</li>
+<li>Your inscribed proverbs (encrypted memos — only the recipient decrypts the plaintext; the onchain anchor is public)</li>
+<li>The TEE attestation (verifiable proof of the Mage&#39;s execution environment)</li>
+<li>Your Soulbis public key (agent card)</li>
+</ul>
+<p><strong>Information bounds</strong> <em>(from the 0xagentprivacy Research Paper v3.2):</em></p>
+<pre><code>I(Soulbae;  Transaction_Amount)    = 0
+I(Soulbae;  First_Person_Identity) = 0
+I(Soulbae;  Wallet_Address)        = 0
+I(Soulbae;  Transaction_Timing)    = 0
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Related pieces of the universe</h2>
+<p>Sibling projects that work with this repo:</p>
+<ul>
+<li><strong>Spellweb</strong> (graph + ceremony layer) — wandering orbs on a rendered canvas, constellation waypoints, ZK Blade Forge (light/heavy/dragon), Bilateral Witness (Promise Theory). This repo imports forged blades from Spellweb via <code>src/lib/spellweb-blade-bridge.ts</code>.</li>
+<li><strong><code>myterms</code></strong> (docs package) — MyTerms Alliance application bundle, IEEE 7012-2025 integration plan. The terms layer the extensions enforce.</li>
+<li><strong><code>swordsman-blade</code></strong> (browser extension) — enforces signed terms at the browser boundary.</li>
+<li><strong><code>mages-spell</code></strong> (browser extension) — delegation inside agreed scope.</li>
+<li><strong>Oracle Swordsman</strong> (backend, external) — transaction monitoring, AI verification, inscription signing, Golden Split (61.8/38.2) accounting.</li>
+</ul>
+<p>The extension bridge (<code>src/lib/extension-bridge.ts</code>) is the nervous system connecting all of them to this experience layer.</p>
+<hr>
+</div>
+<div class="md"><h2>License</h2>
+<p>CC BY-SA 4.0 — see <span class="deadlink" title="reference (not a live page)">LICENSE</span>.</p>
+<hr>
+</div>
+<div class="md"><h2>The Vision</h2>
+<p>This isn&#39;t a donation button. It&#39;s <strong>infrastructure for the relationship economy</strong>.</p>
+<p>Where:</p>
+<ul>
+<li>Trust comes from understanding, not surveillance</li>
+<li>Relationships are bilateral, not mediated by platforms</li>
+<li>Reputation is earned through comprehension</li>
+<li>Privacy is preserved by architecture, not policy</li>
+<li>AI agents extend sovereignty without surrendering it</li>
+</ul>
+<p><strong>This is the foundation for privacy-preserving AI agents.</strong></p>
+<hr>
+<p><strong>⚔️ ⊥ 🧙‍♂️ | 😊</strong><br><em>Separation between Swordsman and Mage preserves the First Person.</em></p>
+<p><strong>&quot;just another mage, sharing a spellbook.&quot;</strong> 📖</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-system-reference.html">The System Reference</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="reference-agentprivacyai-the-experience-layer.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

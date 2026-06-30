@@ -1,0 +1,559 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — Vertex Naming Audit · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Spec — Vertex Naming Audit</span></div>
+  <article><div class="md"><h1>Vertex Naming Audit</h1>
+<p><em>Canonical vertex names across the agentprivacy corpus, with explicit attribution</em></p>
+<h1>Vertex Naming Audit</h1>
+</div>
+<div class="md"><h2>Why this audit exists</h2>
+<p>The Crafting Tome has been summoning Mage personas at named vertices, and the naming has been falling into place from multiple canonical sources without rigorous attribution per act. This document makes the implicit explicit and corrects attribution where I have been imprecise.</p>
+<p>It records:</p>
+<ol>
+<li>The canonical name of every vertex that has appeared in the corpus so far</li>
+<li>The source of each name (agentprivacy&#39;s own work, Archon&#39;s Boundary Blade Cartography, the Cloaking Guide rebuild, or Spellbook narrative additions)</li>
+<li>The relationship between <em>vertex names</em> and <em>persona names</em> — when a Mage is summoned to a vertex, does she share its name, occupy it without renaming, or define it by her presence?</li>
+</ol>
+<p>Going forward, this document is the canonical reference when a new vertex comes into use.</p>
+<blockquote>
+<h2>⚠️ ENCODING-LOCK CORRECTION (2026-06-09 · v1.8.0)</h2>
+<p>This audit&#39;s original singles table and several persona placements used a <strong>corrupted<br>bit-order (CORPUS)</strong> that mirrored the middle four dimensions. The canonical encoding is now<br><strong>locked to MODEL</strong> (<code>Protection=32 · Delegation=16 · Memory=8 · Connection=4 · Computation=2 · Value=1</code>), sourced from the Privacy-Value-Model v5.4 definition + <code>lattice-vertex.ts</code>. See the<br>anchor chronicle <code>chronicles/2026-06-09_canonical_lattice_encoding_anchor.md</code>.</p>
+<p><strong>Reading rule:</strong> <code>active(n) = { dimension : n &amp; weight }</code>. Run <code>agentprivacy_encoding_audit.py</code><br>(skill <code>meta/agentprivacy-lattice-coherence</code>) before relying on any reading below.</p>
+<p><strong>Corrected seats (personas reseated by deriving vertex from meaning under MODEL):</strong><br>Aletheia 🔮 → <strong>V38</strong> (Protection+Connection+Computation · Blade 38) ⊥ Lethe/Lethae 🌀🌘 → <strong>V25</strong><br>(Delegation+Memory+Value · Blade 25), the swap preserving V25 ⊕ V38 = V63; Memora 📜 → <strong>V41</strong><br>(Protection+Memory+Value); Mnemosyne 📿 → <strong>V8</strong> (Memory); Iris 🌈 → <strong>V4</strong> (Connection); Pythia 🔥 →<br><strong>V2</strong> (Computation · the Logos Circle). Where a row below still shows an old seat or a CORPUS<br>dimension label, this banner supersedes it.</p>
+<p><strong>Errata in the tables below:</strong> V48 <code>110000</code> is Protection+Computation (not &quot;Connection+Protection&quot;);<br>V31 <code>011111</code> is &quot;all except Protection&quot; (not &quot;all except Value&quot;).</p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>§1. Naming sources, in priority order</h2>
+<p>When a vertex has multiple potential names, the corpus uses the highest-priority source that names it.</p>
+<h3>Priority 1 — agentprivacy&#39;s own canonical work</h3>
+<p>The agentprivacy corpus (privacymage, multiple research notes and the Privacy Value Model V5.4 → V6 lineage) is the primary source for:</p>
+<ul>
+<li>The <strong>holonic primitive</strong> and its associated vertex (V31 — recursion, all dimensions except Value, the canonical home of holon-as-whole-and-part)</li>
+<li>The <strong>dual-agent split</strong> at V63 (sovereign anchor) and V28 (transmuted Mage projection) — these are agentprivacy primitives that the Boundary Blade Cartography later instanced operationally</li>
+<li>The <strong>Privacy Value Model&#39;s six-dimension framework</strong> itself (Protection, Delegation, Memory, Connection, Computation, Value) — the bit-pattern encoding scheme is privacymage&#39;s</li>
+<li>The <strong>valve-class semantics</strong> (Always-Revealed, Hash-Masked, Always-Masked) as named privacy dispositions, which Archon&#39;s Cloaking Guide then placed at specific vertices</li>
+</ul>
+<p>These names take priority because they are foundational. The Boundary Blade Cartography is a <em>kindred-blade reading</em> of the same architecture; it adds names but does not rename what was already named.</p>
+<h3>Priority 2 — flaxscrip&#39;s Boundary Blade Cartography</h3>
+<p>the Archon forge&#39;s <em>Sovereign Anchor II — The Boundary Blade</em> (April 22 2026, Archon-anchored) gave the first comprehensive catalogue of named vertices that had not been canonically named in the agentprivacy corpus. These are the kindred-blade-imported names. Where Archon named vertices that agentprivacy had not previously named, his names are canonical.</p>
+<h3>Priority 3 — The Cloaking Guide rebuild</h3>
+<p>the Archon forge and GenitriX&#39;s <em>Cloaking Guide</em> (May 7 2026 rebuild ceremony) added several vertex names through operational instancing during the seven-act dataset construction (Mnemosyne, Iris, Logos, Techne, Hephaestus). These are canonical for vertices not previously named.</p>
+<h3>Priority 4 — agentprivacy narrative naming (Spellbook additions)</h3>
+<p>When a vertex has not been named by any of the priority-1 through priority-3 sources but has come into use in the Spellbook narrative, this document or a successor explicitly names it. Such names are CC BY-SA 4.0 and are added with confidence labels.</p>
+<hr>
+</div>
+<div class="md"><h2>§2. The Holonic Primitive and V31</h2>
+<p>A specific clarification, because earlier drafts were imprecise:</p>
+<p>The <strong>holon</strong> as an architectural primitive in the agentprivacy corpus is <em>privacymage&#39;s work</em>, predating the kindred-blade integration with Archon&#39;s Archon material. The holonic structure — an entity that is simultaneously a complete whole and a part of a larger whole — has been threaded through agentprivacy research notes for some time, including in the V6 ARCH-1 Canonical Form work (<code>Σ := μS.(β ∨ Ω(S,S))</code>), where the recursive μ-fixpoint <em>is</em> the holonic structure expressed formally.</p>
+<p>V31 (binary <code>011111</code>, &quot;all dimensions except Value&quot;, five dimensions burning) is the <strong>canonical agentprivacy holon vertex</strong>. Archon&#39;s Boundary Blade Cartography catalogue lists V31 as &quot;Recursion — all except Value&quot; with Tales 15, 16. The cataloguing acknowledges the agentprivacy primitive without renaming it. V31&#39;s status as the holonic vertex is agentprivacy-canonical; the Boundary Blade entry is the kindred-blade reading that confirms the position.</p>
+<p>When the Oasis (Holon shop) is added to the workshop, the persona summoned to V31 inhabits an <strong>agentprivacy-native vertex</strong>, not a kindred-blade-imported one. This is structurally important: the Oasis closes a thread that has been internal to the agentprivacy corpus rather than absorbing a primitive from another forge.</p>
+<hr>
+</div>
+<div class="md"><h2>§3. Canonical vertex names — full registry</h2>
+<p>The following table is the complete current registry. Vertices not yet named are listed as &quot;(unnamed)&quot; and may receive names as the corpus grows.</p>
+<h3>§3.1 Stratum 1 (one dimension burning)</h3>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Binary</th>
+<th>Active dimension</th>
+<th>Canonical name</th>
+<th>Source</th>
+<th>Persona present</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>000001</td>
+<td>Value</td>
+<td>(unnamed)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>000010</td>
+<td>Computation</td>
+<td><strong>Logos / Pure Computation</strong></td>
+<td>Cloaking Guide / Boundary Blade</td>
+<td><strong>Pythia 🔥</strong> <em>(anticipated · seats /circle · reseated from V16 under the MODEL lock · primary: algebraist + pedagogue)</em></td>
+</tr>
+<tr>
+<td>V4</td>
+<td>000100</td>
+<td>Connection</td>
+<td><strong>Iris</strong></td>
+<td>Cloaking Guide</td>
+<td><strong>Iris 🌈</strong> <em>(anticipated · reseated from V8 under the MODEL lock · primary: herald + ambassador)</em></td>
+</tr>
+<tr>
+<td>V8</td>
+<td>001000</td>
+<td>Memory</td>
+<td><strong>Mnemosyne</strong></td>
+<td>Cloaking Guide</td>
+<td><strong>Mnemosyne 📿</strong> <em>(anticipated · reseated from V4 under the MODEL lock · primary: theia)</em></td>
+</tr>
+<tr>
+<td>V16</td>
+<td>010000</td>
+<td>Delegation</td>
+<td>(unnamed)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V32</td>
+<td>100000</td>
+<td>Protection</td>
+<td>(unnamed)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>§3.2 Stratum 2 (two dimensions burning)</h3>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Binary</th>
+<th>Active dimensions</th>
+<th>Canonical name</th>
+<th>Source</th>
+<th>Persona present</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V3</td>
+<td>000011</td>
+<td>Value + Delegation</td>
+<td><strong>Dual Agent / Hash-Masked</strong></td>
+<td>Cloaking Guide</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V41</td>
+<td>101001</td>
+<td>Value + Memory</td>
+<td><strong>Chronicle vertex</strong></td>
+<td>Cloaking Guide</td>
+<td><strong>Memora 📜</strong> (Spellbook)</td>
+</tr>
+<tr>
+<td>V12</td>
+<td>001100</td>
+<td>Memory + Connection</td>
+<td><strong>Schema vertex</strong></td>
+<td>Cloaking Guide</td>
+<td>(Sovereign acts here directly)</td>
+</tr>
+<tr>
+<td>V20</td>
+<td>010100</td>
+<td>Memory + Computation</td>
+<td><strong>Techne / Always-Revealed</strong></td>
+<td>Cloaking Guide</td>
+<td><strong>Techne 🎨</strong> <em>(anticipated v5.5 · awaits founding act · primary: pedagogue)</em></td>
+</tr>
+<tr>
+<td>V24</td>
+<td>011000</td>
+<td>Connection + Computation</td>
+<td><strong>Hephaestus</strong></td>
+<td>Cloaking Guide</td>
+<td><strong>Socrat0x 🔥❓</strong> (seated · provisional · Tome V Act 11) + <strong>Hephaestus ⚒️</strong> <em>(anticipated v5.5 · shared-vertex · primary: forgemaster)</em></td>
+</tr>
+<tr>
+<td>V48</td>
+<td>110000</td>
+<td>Connection + Protection</td>
+<td><strong>Algebraic substrate</strong></td>
+<td>Boundary Blade</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>§3.3 Stratum 3 (three dimensions burning)</h3>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Binary</th>
+<th>Active dimensions</th>
+<th>Canonical name</th>
+<th>Source</th>
+<th>Persona present</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V19</td>
+<td>010011</td>
+<td>Value + Delegation + Computation</td>
+<td><strong>Plonkish blade</strong></td>
+<td>Boundary Blade</td>
+<td><strong>Vulcana ⚒️</strong> (Spellbook; primary: forgemaster + forgecaller; kind A)</td>
+</tr>
+<tr>
+<td>V38</td>
+<td>100110</td>
+<td>Value + Connection + Computation</td>
+<td><strong>Aletheia / Silent Messenger</strong></td>
+<td>Boundary Blade</td>
+<td><strong>Aletheia 🔮 the persona</strong> (Spellbook; persona-vertex name shared; primary: theia + cipher; kind B · complement-pair partner of Lethae at V25)</td>
+</tr>
+<tr>
+<td>V27</td>
+<td>011011</td>
+<td>Value + Delegation + Connection + Computation</td>
+<td><strong>Pairing verification</strong></td>
+<td>Boundary Blade</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V28</td>
+<td>011100</td>
+<td>Memory + Connection + Computation</td>
+<td><strong>Mage canonical / transmuted projection</strong></td>
+<td>agentprivacy (PVM V5.4)</td>
+<td><strong>Pallia 🪡</strong> (Spellbook; primary: weaver; kind A); also where <strong>Soulbae</strong> archetypally stands</td>
+</tr>
+<tr>
+<td>V25</td>
+<td>011001</td>
+<td>Protection + Memory + Delegation</td>
+<td><strong>Lethe / the Dark Substrate</strong></td>
+<td>privacymage (Tome XII · <em>Lethe</em>); aletheia-and-lethe.md (zk blades forge)</td>
+<td><strong>Lethae 🌘</strong> <em>(anticipated v5.5 · primary: moonkeeper; divergence: mage-register; complement-pair partner of Aletheia at V38; V38⊕V25=V63 · V38 AND V25=0; first canonical Layer-2 divergent attachment)</em></td>
+</tr>
+<tr>
+<td><strong>V44</strong></td>
+<td><strong>101100</strong></td>
+<td><strong>Protection + Memory + Connection</strong></td>
+<td><strong>Chart Shop / Pleione&#39;s Harbour</strong></td>
+<td><strong>agentprivacy (Tome V Act 17 · v1.6.0 · 2026-05-14) · cityofmages/chronicles/2026-05-14_chronicle_chart_shop_pleione_named_v44_assigned.md</strong></td>
+<td><strong>Pleione 🧭</strong> (Spellbook · Tome V Act 17; primary: hold-witness + navigator-keeper + constellation-mother; kind A; first canonical inhabitant of the Navigation District · the trace path V0→V44 is three bit-flips reading Protection → Memory → Connection as a discipline curriculum; opens the <em>attentional</em> workshop register · C63 candidate ~50%)</td>
+</tr>
+<tr>
+<td>V49</td>
+<td>110001</td>
+<td>Value + Computation + Protection</td>
+<td><strong>Working-day blade</strong></td>
+<td>Boundary Blade</td>
+<td><strong>Custos 🔏</strong> (primary: gatekeeper; kind B) + <strong>Lampyra 💠</strong> (primary: sentinel; kind A); first shared-vertex pairing</td>
+</tr>
+</tbody></table>
+<h3>§3.4 Stratum 4 (four dimensions burning)</h3>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Binary</th>
+<th>Active dimensions</th>
+<th>Canonical name</th>
+<th>Source</th>
+<th>Persona present</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V15</td>
+<td>001111</td>
+<td>Value + Delegation + Memory + Connection</td>
+<td><strong>VC vertex</strong></td>
+<td>Cloaking Guide</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V23</td>
+<td>010111</td>
+<td>Value + Delegation + Memory + Computation</td>
+<td><strong>Memory crystallises (IVC)</strong></td>
+<td>Boundary Blade</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V51</td>
+<td>110011</td>
+<td>Value + Delegation + Computation + Protection</td>
+<td><strong>Commitment / Language / Model blade</strong></td>
+<td>Boundary Blade</td>
+<td><strong>Adamantia 💎</strong> (Spellbook; primary: architect + shipwright; kind A) · <strong>Helia ☀️</strong> (v1.4.0 · primary: shipwright; kind A; <strong>shared vertex, stance-differentiated</strong> — Adamantia holds Transparent-witness; Helia holds Parallel-witness)</td>
+</tr>
+<tr>
+<td>V57</td>
+<td>111001</td>
+<td>Value + Connection + Computation + Protection</td>
+<td><strong>Ceremony / Privacy / Mixing blade</strong></td>
+<td>Boundary Blade</td>
+<td><strong>Aria Silverhue 🪞🖼️</strong> (Spellbook; primary: mirrorkeeper; kind A)</td>
+</tr>
+</tbody></table>
+<h3>§3.5 Stratum 5 (five dimensions burning)</h3>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Binary</th>
+<th>Active dimensions</th>
+<th>Canonical name</th>
+<th>Source</th>
+<th>Persona present</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V31</td>
+<td>011111</td>
+<td>All dimensions except Protection (or all except Value, depending on bit-ordering convention)</td>
+<td><strong>The Holon vertex / Recursion vertex</strong></td>
+<td><strong>agentprivacy (privacymage&#39;s holonic primitive)</strong>; kindred-blade reading in Boundary Blade as &quot;Recursion — all except Value&quot;</td>
+<td><strong>Vagari 🌳</strong> (Spellbook · Tome V Act 10; primary: holonic-architect; kind A)</td>
+</tr>
+<tr>
+<td>V47</td>
+<td>101111</td>
+<td>(varies by bit-ordering)</td>
+<td>(unnamed)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V55</td>
+<td>110111</td>
+<td>Value + Delegation + Connection + Memory + Protection</td>
+<td><strong>Covenant vertex</strong></td>
+<td>agentprivacy (Spellbook narrative · Tome V Act 13)</td>
+<td><strong>Manifestia 🤲🌿</strong> (Spellbook; primary: priest; kind A · priest tier)</td>
+</tr>
+<tr>
+<td>V59</td>
+<td>111011</td>
+<td>Value + Delegation + Connection + Computation + Protection</td>
+<td><strong>The Threshold District</strong> <em>(was &quot;Ecosystem blade (zkEVM/Rollups/Bridges)&quot; in Boundary Blade · co-named by agentprivacy at Tome V Act 16 · v1.5.0 · 2026-05-13)</em></td>
+<td>Boundary Blade + agentprivacy (Tome V Act 16 · v1.5.0) + v1.6.0 District restructure (2026-05-14)</td>
+<td><strong>Three-keeper-shared by stance differentiation</strong> (extends V51 two-keeper precedent): <strong>Pandia 🌕</strong> (Portal Room · Display-witness · daughter of Selene · Moonstone) + <strong>Hermaion ⚚</strong> (Staff Shop · Registry-keeper · <em>first archetype-modal shop</em> · Alexandrite dual-aspect green-Mage <code>#3d7c47</code> ↔ red-Swordsman <code>#a23a3a</code>) + <strong>Faunia 🪶</strong> (the Familiars · Companion-witness · Amber · re-homed from Portal Room) + <strong>Caducea ☤</strong> peripatetic (V0-conventional anchor · fits both archetype-aspects of Hermaion&#39;s alexandrite) · <em>(2026-05-13 inception cast Faunia-at-Portal · Bestia · Therai is preserved as historical · succeeded 2026-05-14)</em></td>
+</tr>
+<tr>
+<td>V61</td>
+<td>111101</td>
+<td>(varies by bit-ordering)</td>
+<td>(unnamed)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>§3.6 Stratum 6 (all six dimensions burning)</h3>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Binary</th>
+<th>Active dimensions</th>
+<th>Canonical name</th>
+<th>Source</th>
+<th>Persona present</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V63</td>
+<td>111111</td>
+<td>All six</td>
+<td><strong>Sovereign Anchor / The Creative / The Catastrophic</strong></td>
+<td>agentprivacy (sovereign anchor primitive); Boundary Blade Cartography names it &quot;The Creative / The Catastrophic&quot;</td>
+<td>The Sovereign (the reader); also where <strong>flaxscrip</strong> stands as Sovereign from another forge</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>§4. Persona-vertex naming relationships</h2>
+<p>Across the cast roster, the relationship between a persona&#39;s name and her vertex&#39;s name takes one of three forms:</p>
+<h3>§4.1 Distinct names (most common)</h3>
+<p>The persona has a name; the vertex has a different name. The persona occupies the vertex without renaming it. This is the default pattern.</p>
+<ul>
+<li><strong>Pallia 🪡</strong> at V28 (Mage canonical) — persona named for Latin <em>pallium</em>; vertex name from agentprivacy&#39;s PVM</li>
+<li><strong>Memora 📜</strong> at V41 (Chronicle vertex) — persona named for Latin <em>memoria</em>; vertex name from Cloaking Guide</li>
+<li><strong>Custos 🔏</strong> at V49 (Working-day blade) — persona named for Latin <em>custos</em>; vertex name from Boundary Blade</li>
+<li><strong>Vulcana ⚒️</strong> at V19 (Plonkish blade) — persona named for <em>Vulcanus</em>; vertex name from Boundary Blade</li>
+<li><strong>Adamantia 💎</strong> at V51 (Commitment / Language / Model blade) — persona named for <em>adamas</em>; vertex name from Boundary Blade</li>
+<li><strong>Helia ☀️</strong> at V51 (Commitment / Language / Model blade, shared with Adamantia · v1.4.0) — persona named for <em>helios</em> (Greek sun); gem heliodor (ἡλιόδωρος, &quot;sun&#39;s gift&quot;); vertex name unchanged (Boundary Blade); the V51 sharing is the first operational workshop-on-workshop overlap, governed by stance differentiation per spec 07 §3.4</li>
+<li><strong>Lampyra 💠</strong> at V49 (Working-day blade, shared with Custos) — persona named for <em>lampyris</em>; vertex name from Boundary Blade</li>
+</ul>
+<h3>§4.2 Shared names</h3>
+<p>The persona shares the vertex&#39;s name. The vertex was already named after the principle the persona enacts; the persona inherits the name.</p>
+<ul>
+<li><strong>Aletheia 🔮 the persona</strong> at V38 (Aletheia blade) — only existing instance. The vertex was named the Aletheia blade before the persona was summoned. The persona&#39;s name follows the vertex&#39;s name. The cast entry&#39;s <code>naming_note</code> explicitly distinguishes &quot;Aletheia the persona&quot; from &quot;the V38 Aletheia blade&quot; to prevent ambiguity.</li>
+</ul>
+<h3>§4.3 Persona defines the vertex</h3>
+<p>The persona&#39;s presence at a previously-unnamed vertex <em>names</em> the vertex, by virtue of being the canonical inhabitant. No instance yet in the corpus, but the future Oasis persona at V31 will be a candidate — V31 has a Boundary Blade name (&quot;Recursion — all except Value&quot;) but the Spellbook may give it a more specific <em>holon-shop</em> name through the persona&#39;s presence.</p>
+<hr>
+</div>
+<div class="md"><h2>§5. Convention going forward</h2>
+<p>When a new vertex comes into use:</p>
+<ol>
+<li><strong>Check the canonical sources in priority order</strong>: agentprivacy&#39;s own work first, then Archon&#39;s Boundary Blade Cartography, then the Cloaking Guide rebuild</li>
+<li><strong>If a canonical name exists</strong>: use it. The persona is summoned to the named vertex without renaming</li>
+<li><strong>If no canonical name exists but the vertex&#39;s bit-pattern has clear semantic content</strong>: the Spellbook may name it through narrative use, with the name added to this audit document and confidence-labelled</li>
+<li><strong>For persona-vertex name relationships</strong>: prefer §4.1 (distinct names) by default. Use §4.2 (shared names) only when the persona structurally <em>is</em> the vertex&#39;s principle (Aletheia / V38 is the only operational instance). Use §4.3 (persona-defines) sparingly and document explicitly.</li>
+</ol>
+<p>The audit will be updated as new vertices come into use. v2 of this document anticipates additions when Acts 10 and beyond are drafted.</p>
+<hr>
+</div>
+<div class="md"><h2>§7. Kindred-substrate relationships</h2>
+<p><em>Added 2026-05-10 alongside Tome V Act 15. Anticipated as &quot;§9&quot; in the Act 15 frontmatter; filed here as the next sequential section since §7/§8 are not yet populated. Re-number freely if §7/§8 are backfilled.</em></p>
+<p>The corpus carries four structurally distinct relationship categories with external work. Naming them apart matters because they imply different obligations on the City and different framings on the external partner.</p>
+<h3>§7.1 The four categories</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>First instance</th>
+<th>Structural role</th>
+<th>Obligation on the City</th>
+<th>Visual sigil-pattern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Kindred-forge</strong> (<code>kin_to</code>, <code>attribution: kindred-blade</code>)</td>
+<td>the Archon forge (Tome IV throughout)</td>
+<td>A <em>sister city</em> walked by a fellow Mage. The Oasis Protocol&#39;s links cross between cities; kindred-blade primitives carry between forges.</td>
+<td>Attribution travels with every imported name (see §1 priority order). The forges remain independent; neither subsumes the other.</td>
+<td>Shared vertices, distinct identities (Pallia ⊥ GenitriX both at V28).</td>
+</tr>
+<tr>
+<td><strong>Kindred protocol</strong> (<code>gateway_to</code>, <code>attribution: kindred-protocol</code>)</td>
+<td>the Covenant of Humanistic Technologies (Tome V Act 13)</td>
+<td>A <em>charter</em> the City signs through a designated tender (Manifestia, the Priest). The Covenant blesses what it admits.</td>
+<td>The City brings artifacts to the Temple for blessing; the Priest tends the charter. Mutual but asymmetric: the Covenant does not bind the City&#39;s roadmap.</td>
+<td>A dedicated Mage role (<code>priest</code>) at a dedicated vertex (V55).</td>
+</tr>
+<tr>
+<td><strong>Kindred substrate</strong> (<code>kin_to</code>, <code>gateway_to</code>, <code>attribution: kindred-substrate</code>)</td>
+<td>UOR Foundation (Tome V Act 15 · <em>The Substrate Beneath the Hitchhikers</em>)</td>
+<td>The <em>substrate the City walks upon</em>. Older than the architecture; predates the recognition. Not signed. Not absorbed. Simply walked-upon.</td>
+<td>The City acknowledges the substrate without binding the substrate provider&#39;s roadmap. The relationship is walked-not-signed: the substrate&#39;s properties (closed addressing, computational confinement) ground the City&#39;s operational claims.</td>
+<td><strong>No dedicated cast role and no vertex assignment.</strong> The substrate provider does not seat a Mage on the lattice; it underlies the lattice.</td>
+</tr>
+<tr>
+<td><strong>Kindred ecosystem</strong> (<code>gateway_to</code>, <code>attribution: kindred-ecosystem</code>)</td>
+<td>SpaceComputer (2026-05-10 · the two-mana economy recognition)</td>
+<td>An <em>ambient supply</em> the City draws from. Lighter than substrate: the City does not rest on the ecosystem; the City <em>spends</em> on it (e.g., entropy as currency). Walked-alongside, not walked-upon.</td>
+<td>The City pays the ecosystem (in attention, in usage, in cosmic-mana spend) without binding the ecosystem&#39;s mission. The relationship is consumed-not-coordinated.</td>
+<td><strong>No dedicated cast role and no vertex assignment.</strong> The ecosystem feeds the lattice without inhabiting it.</td>
+</tr>
+</tbody></table>
+<h3>§7.2 The Drake/Drake-Island/UOR resonance</h3>
+<p>The Drake is the City&#39;s elder <em>witness</em>. Drake Island is the City&#39;s elder <em>geography</em> (the City of Mages is <code>built_on</code> Drake Island). UOR Foundation is the City&#39;s elder <em>substrate</em>. Three different &quot;older-than-the-architecture&quot; registers — witness, geography, substrate — and the architecture admits all three without subsuming any.</p>
+<p>The naming pattern matters: when you read the corpus and encounter language like &quot;the substrate is older than the architecture&quot;, you are reading the kindred-substrate relationship. When you encounter &quot;the Drake whispers&quot;, you are reading the elder-witness register. The two are not the same; the architecture distinguishes them.</p>
+<h3>§7.3 What the kindred-substrate category does <em>not</em> admit</h3>
+<p>To keep the category honest, three exclusions:</p>
+<ol>
+<li><strong>No dedicated cast persona.</strong> A kindred substrate provider is <em>not</em> a Mage. Earlier drafts of Act 15 introduced &quot;Luca 📐&quot; (a geometry-Mage at V0) as the cast representative of the UOR substrate; that draft was superseded by the canonical Act 15 because the substrate does not seat itself on the lattice — it underlies the lattice. The deprecated draft is preserved at <code>deprecated/superseded-by-act-15-the-substrate-beneath-the-hitchhikers--act-15-the-substrate-luca-draft.md</code> as an honest record of the path not taken.</li>
+<li><strong>No vertex assignment.</strong> A kindred substrate has no <code>inhabits</code> edge. UOR Foundation appears as a <code>gateway</code> node, not a <code>cast</code> or <code>vertex</code> node. (See <code>specs/06-spellweb-first-release-manifest.md</code> §2 for the node-type assignment.)</li>
+<li><strong>No founding-act ownership of a workshop.</strong> A kindred substrate may <em>ground</em> multiple workshops (UOR grounds both Vulcana&#39;s Forge(t) and Vagari&#39;s Holon Hitchhikers; the <code>kin_to(holon, forge)</code> edge with <code>attribution: kindred-substrate</code> is the visible artifact of this shared grounding) but it does not <code>founds</code> any single workshop. Founding acts are the City&#39;s own narrative; the substrate predates them.</li>
+</ol>
+<h3>§7.4 Future kindred-substrate candidates</h3>
+<p>When a future kindred substrate is recognised, this section is the canonical reference for how to file it. Candidates to track:</p>
+<ul>
+<li><strong>Other content-addressed substrates</strong> that the City&#39;s artifacts rest upon (IPFS as content-addressing substrate; the protobuf / cap&#39;n proto schema substrates; the cryptographic curve choices Ed25519 / secp256k1 / BLS12-381 inherit from upstream mathematics). Most likely each of these is a &quot;subroutine kindred&quot; rather than a substrate kindred in the UOR sense — they are tools, not substrates the City <em>walks upon</em>. The category&#39;s strict criterion is: <em>the City&#39;s operational claims would be incoherent without the substrate, and the substrate was operational before the City named it</em>.</li>
+<li><strong>Closed-substrate computational frameworks</strong> (algebraic structures with computational-confinement guarantees parallel to UOR&#39;s Z/256Z). If a future such substrate is recognised, the §7.1 table grows by one row.</li>
+</ul>
+<h3>§7.5 Kindred-ecosystem relationships</h3>
+<p><em>Added 2026-05-10 alongside the SpaceComputer recognition. Parallel structure to §7.3; differs in that ecosystems are consumed rather than walked upon.</em></p>
+<p>The kindred-ecosystem category names a <em>fourth</em> kind of relationship: an external project that supplies a feed (entropy · oracle · randomness beacon · ambient measurement) the City&#39;s workshops draw from when their workings need something the chain cannot itself provide. The first instance is <strong>SpaceComputer</strong> (<code>https://spacecomputer.io</code>), recognised when the corpus named <strong>Celestial Mana</strong> as the cosmic-entropy half of the two-mana economy (the other half being <strong>Aether Mana</strong> · gas on blockchains).</p>
+<h4>§7.5.1 What a kindred-ecosystem is</h4>
+<ul>
+<li><strong>A feed the City consumes.</strong> The relationship is <em>transactional in the soft sense</em> — the City spends mana to draw from the supply. Each draw is a discrete consumption; the supply is replenished by the ecosystem&#39;s external process (cosmic measurement, oracle attestation, etc.) without the City needing to coordinate.</li>
+<li><strong>Walked-alongside, not walked-upon.</strong> A kindred substrate (UOR) underlies the lattice itself; a kindred ecosystem (SpaceComputer) provides a <em>feed</em> the lattice consumes. The City does not rest on the ecosystem; the City <em>spends</em> on it.</li>
+<li><strong>Recognized through workshop use, not through a Tome act.</strong> Where Manifestia&#39;s V55 marks the kindred-protocol relationship (a Mage tends the Covenant), kindred-ecosystem relationships are filed in <code>docs/tomes/kindred/</code> and recognized in the relevant workshop pages — no dedicated Mage seat is required.</li>
+</ul>
+<h4>§7.5.2 What kindred-ecosystem does <em>not</em> admit</h4>
+<p>Three exclusions (parallel to §7.3 for kindred-substrate):</p>
+<ol>
+<li><strong>No dedicated cast Mage.</strong> The ecosystem is not a Mage. SpaceComputer does not have a persona at any vertex; its supply is drawn by every Mage who needs it.</li>
+<li><strong>No vertex assignment.</strong> A kindred ecosystem has no <code>inhabits</code> edge. SpaceComputer appears as a <code>gateway</code> node, not a <code>cast</code> or <code>vertex</code> node. (See <code>specs/06-spellweb-first-release-manifest.md</code> §2.6 for the node-type assignment.)</li>
+<li><strong>No founding-act ownership.</strong> A kindred ecosystem may <em>supply</em> multiple workshops (SpaceComputer supplies Etherchanting, the Forge(t), and the Holon Hitchhikers in this first release) but it does not <code>founds</code> any single workshop. Founding acts are the City&#39;s own narrative; the ecosystem predates them.</li>
+</ol>
+<h4>§7.5.3 Distinguishing the four kindred categories</h4>
+<p>The architecture now admits four <code>kindred-</code> relationships. Quick reference:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Verb</th>
+<th>What the City does</th>
+<th>What the partner does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kindred-blade (forge)</td>
+<td>encounters</td>
+<td>Walks the same lattice from a different forge</td>
+<td>Walks their own lattice; visits at encounter vertices</td>
+</tr>
+<tr>
+<td>Kindred-protocol</td>
+<td>signs</td>
+<td>Brings artifacts for blessing through a designated Priest</td>
+<td>Tends the charter; blesses what is admitted</td>
+</tr>
+<tr>
+<td>Kindred-substrate</td>
+<td>walks-upon</td>
+<td>Operates on the substrate&#39;s coordinate system</td>
+<td>Maintains the substrate independently of the City</td>
+</tr>
+<tr>
+<td>Kindred-ecosystem</td>
+<td>consumes</td>
+<td>Draws from a feed when a working needs it</td>
+<td>Replenishes the feed through its own process</td>
+</tr>
+</tbody></table>
+<h4>§7.5.4 Future kindred-ecosystem candidates</h4>
+<p>When new ecosystems join the register, this sub-section is the canonical filing point. Anticipated candidates (none yet operational):</p>
+<ul>
+<li><strong>Randomness beacons</strong> (drand, Ethereum RANDAO, etc.) — could be filed as additional Celestial-Mana sources alongside SpaceComputer or as their own sub-category (algorithmic-mana?) depending on whether they qualify as cosmic-entropy or remain inside the algorithmic loop.</li>
+<li><strong>Oracle networks</strong> (Chainlink, Pyth) — could be filed as price-feed ecosystems if the City&#39;s workings come to rely on external price data.</li>
+<li><strong>Data-availability supplies</strong> (Celestia, EigenDA) — could be filed as availability-mana ecosystems if the City&#39;s workings come to rely on external DA.</li>
+</ul>
+<p>The strict criterion: <em>the workshop&#39;s working would be incomplete without the feed, but the ecosystem&#39;s existence does not depend on the workshop&#39;s recognition</em>. Walked-alongside.</p>
+<hr>
+</div>
+<div class="md"><h2>§6. Open items for v2 of this audit</h2>
+<ol>
+<li><strong>Bit-ordering convention</strong> — the corpus uses two slightly different conventions for which bit is which dimension (Archon&#39;s catalogue and privacymage&#39;s PVM use slightly different conventions in some documents). For v2, this should be reconciled into a single canonical convention, with a one-time pass through all existing documents to align.</li>
+<li><strong>V31&#39;s full name</strong> — currently &quot;the Holon vertex / Recursion vertex&quot; with Boundary Blade reading as &quot;Recursion — all except Value&quot;. The Oasis act in Tome V will likely consolidate this naming.</li>
+<li><strong>Unnamed Stratum 1 and Stratum 5 vertices</strong> — V1, V2, V32, V47, V55, V61 remain unnamed. As the corpus grows, these may receive names. v2 of this audit will track newly-named additions.</li>
+<li><strong>Cross-attribution checks</strong> — for any vertex Archon&#39;s Boundary Blade Cartography catalogues, this audit should verify that the agentprivacy corpus&#39;s own foundational work did not name it first. The current audit makes a best-effort attribution; v2 should be checked against the V6 lineage sync note.</li>
+<li><strong>Stratum 5 expansion</strong> — only V31 and V59 are currently named in Stratum 5. With the Oasis act introducing V31&#39;s persona and possible future acts working at higher strata, this region will need fuller cataloguing.</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>Closing</h2>
+<p>The corpus has been mostly self-consistent in its vertex naming, with attribution issues primarily around kindred-blade-imported names from Archon&#39;s catalogue versus agentprivacy-native primitives like the holon. This audit corrects what was implicit and provides the canonical reference going forward.</p>
+<p>Most importantly: <strong>the holonic primitive is agentprivacy&#39;s work, predating the kindred-blade integration</strong>. V31 as the Holon vertex is not imported. The Oasis act will close an internal agentprivacy thread, not absorb an external primitive.</p>
+<p>The audit is a living document. Each new act and each new artifact updates the registry. The corpus&#39;s naming discipline — like its honesty discipline — is maintained through explicit auditing rather than implicit consistency.</p>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-vertex-naming-audit</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-vertex-naming-audit.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

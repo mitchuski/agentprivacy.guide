@@ -1,0 +1,108 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Claude Ghost · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Claude Ghost</span></div>
+  <article><div class="md"><h1>Wiki Claude Ghost</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5</p>
+<p>A ghost page whose content is written live by Claude via the Anthropic API, inserted between a wiki form submission and the page-JSON response. Activates when building a Claude-authored ghost endpoint, a /claude-ghost FastAPI handler, or live LLM page generation in a fedwiki. Kept by the Librarian 🗃️ in the Tower&#39;s Wikis.</p>
+</div>
+<div class="md"><p>A <strong>Claude ghost page</strong> is a ghost page whose content is written by Claude in response to a user&#39;s query. A ghost page appears in the wiki lineup but is never stored on disk. This extends the pattern by inserting the Anthropic API call between the form submission and the page JSON response.</p>
+<h2>How It Works</h2>
+<ol>
+<li>User types a topic in an <code>html</code> item form and submits</li>
+<li>The wiki POSTs <code>{&quot;query&quot;: &quot;...&quot;}</code> to the FastAPI endpoint</li>
+<li>FastAPI calls <code>claude-opus-4-8</code> with a system prompt instructing it to return page JSON</li>
+<li>Claude returns a complete wiki page as JSON (title + markdown story items)</li>
+<li>FastAPI parses and returns the JSON</li>
+<li>The wiki calls <code>wiki.showResult()</code> — the Claude-authored page appears in the lineup</li>
+</ol>
+<h2>html Item Pattern</h2>
+<p>Add an <code>html</code> item pointing to the <code>/claude-ghost</code> endpoint:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;html&quot;,
+  &quot;id&quot;: &quot;a1b2c3d4e5f60001&quot;,
+  &quot;text&quot;: &quot;&lt;form action=\&quot;https://guide.agentprivacy.ai method=\&quot;POST\&quot;&gt;\n  &lt;input name=\&quot;query\&quot; placeholder=\&quot;ask Claude anything…\&quot;&gt;\n  &lt;button type=\&quot;submit\&quot;&gt;Ask Claude&lt;/button&gt;\n&lt;/form&gt;&quot;
+}
+</code></pre>
+<h2>FastAPI Endpoint</h2>
+<pre><code class="language-python">import anthropic, json, re
+
+@app.post(&quot;/claude-ghost&quot;)
+def claude_ghost(params: dict):
+    query = params.get(&quot;query&quot;, &quot;&quot;).strip() or &quot;wiki&quot;
+    client = anthropic.Anthropic()
+    message = client.messages.create(
+        model=&quot;claude-opus-4-8&quot;,
+        max_tokens=2048,
+        thinking={&quot;type&quot;: &quot;adaptive&quot;},
+        system=(
+            &quot;You write federated wiki pages. &quot;
+            &quot;Return ONLY valid JSON: &quot;
+            &#39;{&quot;title&quot;: &quot;...&quot;, &quot;story&quot;: [{&quot;type&quot;: &quot;markdown&quot;, &quot;id&quot;: &quot;16hexchars&quot;, &quot;text&quot;: &quot;...&quot;}]}. &#39;
+            &quot;Generate 4-6 story items. IDs must be random 16 hex chars. &quot;
+            &quot;No prose outside the JSON. No markdown fences.&quot;
+        ),
+        messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: f&quot;Write a wiki page about: {query}&quot;}]
+    )
+    text = next(
+        (block.text for block in message.content if hasattr(block, &quot;text&quot;)),
+        &quot;{}&quot;
+    )
+    match = re.search(r&#39;\{.*\}&#39;, text, re.DOTALL)
+    return json.loads(match.group()) if match else {
+        &quot;title&quot;: f&quot;Claude: {query}&quot;,
+        &quot;story&quot;: [{&quot;type&quot;: &quot;markdown&quot;, &quot;id&quot;: make_id(), &quot;text&quot;: f&quot;*No response for: {query}*&quot;}]
+    }
+</code></pre>
+<p>Note: Thinking blocks in the response have no <code>.text</code> attribute — the <code>hasattr(block, &quot;text&quot;)</code> check skips them and extracts only the text content block.</p>
+<h2>Page JSON from Claude</h2>
+<p>Claude is instructed to return only raw JSON — no markdown fences, no prose. The system prompt specifies:</p>
+<ul>
+<li><code>title</code>: a short descriptive title</li>
+<li><code>story</code>: array of <code>markdown</code> items with random 16-char hex <code>id</code>s</li>
+<li>4–6 items covering the topic substantively</li>
+</ul>
+<p>The endpoint uses regex to extract the JSON in case Claude wraps it in any extra whitespace.</p>
+<h2>Requirements</h2>
+<ul>
+<li><code>anthropic</code> Python package installed (<code>pip install anthropic</code>)</li>
+<li><code>ANTHROPIC_API_KEY</code> set in the environment where FastAPI runs</li>
+<li>Fast Caddy routing <code>api</code> → FastAPI <code>:8000</code></li>
+<li>CORS middleware on FastAPI (<code>allow_origins=[&quot;*&quot;]</code>)</li>
+</ul>
+<h2>Related Skills</h2>
+<ul>
+<li><code>agentprivacy-wiki-ghost-pages</code> — the base ghost page pattern (no Claude)</li>
+<li><code>agentprivacy-wiki-page</code> — creating stored pages</li>
+<li><code>agentprivacy-wiki-skill-vs-library</code> — when to make the page-structure a deterministic library</li>
+</ul>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis (the git-less onboarding layer) · model id current as of skill authoring; confirm the latest Claude model when deploying<br><strong>Upstream:</strong> <a href="https://skill.fedwiki.club/claude-ghost-skill">skill.fedwiki.club/claude-ghost-skill</a> — vendored + re-framed; not original agentprivacy authorship</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-claude-ghost</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-wiki-claude-ghost</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-claude-ghost.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

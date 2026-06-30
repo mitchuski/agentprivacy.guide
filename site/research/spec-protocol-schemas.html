@@ -1,0 +1,372 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — Protocol Schemas · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Spec — Protocol Schemas</span></div>
+  <article><div class="md"><h1>Protocol Schemas</h1>
+</div>
+<div class="md"><p><strong>Version:</strong> 1.0<br><strong>Date:</strong> March 31, 2026<br><strong>Source:</strong> DUAL_TERRITORY_CEREMONY_SPEC_v1.md<br><strong>Purpose:</strong> Canonical TypeScript interfaces for ceremony channel, mana, and data structures</p>
+<hr>
+</div>
+<div class="md"><h2>Overview</h2>
+<p>These schemas define the message grammar and data structures for the dual-territory architecture. They are extracted from DUAL_TERRITORY_CEREMONY_SPEC_v1.md and serve as the implementation reference for both extension repositories.</p>
+<p><strong>Usage:</strong> Copy these interfaces directly into extension codebases. Keep this document as the single source of truth.</p>
+<hr>
+</div>
+<div class="md"><h2>1. Ceremony Messages</h2>
+<h3>1.1 Core Ceremony Message</h3>
+<pre><code class="language-typescript">interface CeremonyMessage {
+  type: &#39;INSCRIPTION&#39;;
+  source: &#39;swordsman_extension&#39; | &#39;mage_extension&#39; | &#39;agentprivacy&#39;;
+  payload: NodeAnnotation | CommunityEdge | ConstellationProjection | ProverbForge;
+  mana_cost: number;
+  mana_balance: number; // sender&#39;s remaining balance after deduction
+  signature: string;    // proof of mana ownership
+}
+</code></pre>
+<h3>1.2 Inscription Payloads</h3>
+<pre><code class="language-typescript">interface NodeAnnotation {
+  kind: &#39;node_annotation&#39;;
+  target_node_id: string;
+  text: string;        // max 280 chars
+  mana_cost: 1;
+}
+
+interface CommunityEdge {
+  kind: &#39;community_edge&#39;;
+  source_node_id: string;
+  target_node_id: string;
+  label?: string;
+  mana_cost: 2;
+}
+
+interface ConstellationProjection {
+  kind: &#39;constellation_projection&#39;;
+  nodes: string[];     // node IDs
+  connections: Array&lt;{ source: string; target: string }&gt;;
+  name: string;
+  mana_cost: 3;
+}
+
+interface ProverbForge {
+  kind: &#39;proverb_forge&#39;;
+  text: string;        // max 280 chars
+  source_constellation_hash: string;
+  mana_cost: 4;
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>2. Ceremony Channel Messages</h2>
+<h3>2.1 Swordsman → Mage</h3>
+<pre><code class="language-typescript">type SwordMessage =
+  | { type: &#39;SLASH&#39;; domain: string; trackers_found: number }
+  | { type: &#39;WARD&#39;; domain: string; myterms_asserted: boolean }
+  | { type: &#39;SWORD_POSITION&#39;; x: number; y: number }
+  | { type: &#39;CEREMONY_READY&#39;; ceremony_type: CeremonyType }
+  | { type: &#39;HOME_TERRITORY&#39;; hostname: string };
+</code></pre>
+<h3>2.2 Mage → Swordsman</h3>
+<pre><code class="language-typescript">type MageMessage =
+  | { type: &#39;INSCRIBE&#39;; spell_node: SpellNode }
+  | { type: &#39;SCAN&#39;; scan_result: PageScanResult }
+  | { type: &#39;MAGE_POSITION&#39;; x: number; y: number }
+  | { type: &#39;CONSTELLATION_UPDATE&#39;; constellation: Constellation }
+  | { type: &#39;DRAKE_EMERGE&#39;; conditions: DrakeConditions }
+  | { type: &#39;HEXAGRAM_UPDATE&#39;; hexagram: HexagramState };
+</code></pre>
+<h3>2.3 Ceremony Types</h3>
+<pre><code class="language-typescript">type CeremonyType =
+  | &#39;dual_convergence&#39;
+  | &#39;hexagram_cast&#39;
+  | &#39;emoji_cast&#39;
+  | &#39;constellation_wave&#39;
+  | &#39;bilateral_exchange&#39;;
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>3. Data Structures</h2>
+<h3>3.1 Forged Blade</h3>
+<pre><code class="language-typescript">interface ForgedBlade {
+  id: string;                    // e.g., &quot;SPELL-YW5I59-1Q&quot;
+  name: string;                  // user-chosen
+  emoji: string;                 // tier icon
+  tier: &#39;light&#39; | &#39;heavy&#39; | &#39;dragon&#39;;
+  stratum: number;               // 0-6 (Hamming weight)
+  proof: SpellProof;
+  forgedAt: string;              // ISO timestamp
+  constellationNodes: number;
+  constellationMarks: ConstellationMark[];
+  constellationConnections: ConstellationConnection[];
+  inscribedSpell: string;        // emoji spell string
+  reflection: string;            // user&#39;s message
+}
+
+interface SpellProof {
+  hash: string;
+  timestamp: number;
+  lapCount: number;
+  duration: number;              // seconds
+}
+
+interface ConstellationMark {
+  nodeId: string;
+  timestamp: number;
+}
+
+interface ConstellationConnection {
+  source: string;
+  target: string;
+}
+</code></pre>
+<h3>3.2 Hexagram</h3>
+<pre><code class="language-typescript">type HexagramLine = 0 | 1;
+type HexagramState = [HexagramLine, HexagramLine, HexagramLine,
+                      HexagramLine, HexagramLine, HexagramLine];
+
+interface NodeDimensions {
+  d1Hide: number;       // 0.0 to 1.0
+  d2Commit: number;
+  d3Prove: number;
+  d4Connect: number;
+  d5Reflect: number;
+  d6Delegate: number;
+}
+
+interface HexagramInfo {
+  lines: HexagramState;
+  bladeId: number;      // 0-63
+  layer: number;        // 0-6
+  layerName: string;    // &quot;Null&quot; through &quot;Dragon&quot;
+  yangCount: number;
+}
+</code></pre>
+<h3>3.3 Mana</h3>
+<pre><code class="language-typescript">interface ManaBalance {
+  total_earned: number;
+  total_spent: number;
+  current: number;       // total_earned - total_spent
+  history: ManaEvent[];
+}
+
+interface ManaEvent {
+  type: &#39;earn&#39; | &#39;spend&#39;;
+  action: string;
+  amount: number;
+  timestamp: number;
+  domain?: string;
+  inscription_id?: string;
+}
+
+interface ManaEarnEvent {
+  type: &#39;spell_cast&#39; | &#39;ceremony_complete&#39; | &#39;blade_forged&#39; | &#39;evocation_cycle&#39;;
+  timestamp: number;
+  domain: string;
+  amount: number;        // in mana units
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>4. Page Analysis Structures</h2>
+<h3>4.1 Scan Result</h3>
+<pre><code class="language-typescript">interface PageScanResult {
+  domain: string;
+  timestamp: number;
+  trackers: TrackerInfo[];
+  cookies: CookieAnalysis;
+  consentUI: ConsentUIAnalysis;
+  thirdPartyScripts: number;
+  mytermsEndpoint: boolean;
+  privacyPosture: number;        // 0.0 to 1.0
+}
+
+interface TrackerInfo {
+  name: string;
+  category: &#39;analytics&#39; | &#39;advertising&#39; | &#39;social&#39; | &#39;fingerprinting&#39; | &#39;unknown&#39;;
+  domain: string;
+}
+
+interface CookieAnalysis {
+  firstParty: number;
+  thirdParty: number;
+  sessionOnly: number;
+  persistent: number;
+  jurisdictions: string[];       // detected cookie jurisdictions
+}
+
+interface ConsentUIAnalysis {
+  present: boolean;
+  acceptRejectSymmetry: boolean; // true if equal prominence
+  darkPatterns: string[];        // detected dark pattern types
+}
+</code></pre>
+<h3>4.2 Hexagram Line Computation (Extension)</h3>
+<p>Extension hexagram lines are computed from page analysis, not graph node dimensions:</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Metric</th>
+<th>Yang Condition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Line 1</td>
+<td>Key custody</td>
+<td>HTTPS + no mixed content</td>
+</tr>
+<tr>
+<td>Line 2</td>
+<td>Credential disclosure</td>
+<td>Consent UI quality (accept/reject symmetry)</td>
+</tr>
+<tr>
+<td>Line 3</td>
+<td>Agent delegation</td>
+<td>Third-party script count &lt; 5</td>
+</tr>
+<tr>
+<td>Line 4</td>
+<td>Data residency</td>
+<td>Cookie jurisdictional analysis favourable</td>
+</tr>
+<tr>
+<td>Line 5</td>
+<td>Interaction mode</td>
+<td>First-party &gt; third-party interaction ratio</td>
+</tr>
+<tr>
+<td>Line 6</td>
+<td>Trust boundary</td>
+<td>MyTerms endpoint exists</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>5. Drake/Dragon Structures</h2>
+<h3>5.1 Drake Conditions</h3>
+<pre><code class="language-typescript">interface DrakeConditions {
+  bothExtensionsActive: boolean;
+  spellNodesOnDomain: number;    // &gt;= 10 required
+  ceremoniesOnDomain: number;    // &gt;= 5 required
+  trackersDetected: number;      // &gt;= 10 required (surveillance-heavy)
+  ready: boolean;                // all conditions met
+}
+</code></pre>
+<h3>5.2 Dragon Conditions</h3>
+<pre><code class="language-typescript">interface DragonConditions {
+  domainsAsserted: number;       // &gt;= 10 required
+  totalConstellationNodes: number; // &gt;= 64 required
+  drakeSummonings: number;       // &gt;= 3 required
+  aggregatePrivacyPosture: number; // &gt;= 0.7 required
+  ready: boolean;
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>6. Constellation Structures</h2>
+<pre><code class="language-typescript">interface Constellation {
+  id: string;
+  name: string;
+  nodes: string[];               // node IDs in marking order
+  connections: ConstellationConnection[];
+  createdAt: string;             // ISO timestamp
+  hash: string;                  // deterministic hash of nodes + connections
+}
+
+interface SpellNode {
+  id: string;
+  type: &#39;emoji&#39; | &#39;proverb&#39; | &#39;keyword&#39; | &#39;shield&#39;;
+  content: string;
+  position: { x: number; y: number };
+  createdAt: number;
+  domain: string;
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>7. Training Threshold</h2>
+<pre><code class="language-typescript">interface TrainingThreshold {
+  spells_cast: number;           // &gt;= 3
+  sections_visited: number;      // &gt;= 3
+  convergences_witnessed: number; // &gt;= 1
+}
+</code></pre>
+<p>Used to gate <code>/path</code> page access on agentprivacy.ai.</p>
+<hr>
+</div>
+<div class="md"><h2>8. Communication Patterns</h2>
+<h3>8.1 Extension Handshake</h3>
+<pre><code class="language-typescript">// On page load, each extension sends:
+interface HandshakeMessage {
+  type: &#39;HANDSHAKE&#39;;
+  extensionId: string;
+  version: string;
+}
+
+// Response:
+interface HandshakeAck {
+  type: &#39;HANDSHAKE_ACK&#39;;
+  extensionId: string;
+  capabilities: string[];
+}
+
+// If no response within 2000ms, operate solo.
+</code></pre>
+<h3>8.2 Position Sync</h3>
+<pre><code class="language-typescript">// Rate: 30fps (~33ms interval)
+// Swordsman renders both orbs; Mage sends position only
+
+interface PositionUpdate {
+  type: &#39;MAGE_POSITION&#39; | &#39;SWORD_POSITION&#39;;
+  x: number;
+  y: number;
+  timestamp: number;
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Implementation Notes</h2>
+<ol>
+<li><p><strong>Single Canvas Rule:</strong> Swordsman extension owns the canvas overlay. Mage sends data, Swordsman renders.</p>
+</li>
+<li><p><strong>Storage:</strong></p>
+<ul>
+<li>Extensions: <code>chrome.storage.local</code></li>
+<li>Websites: <code>localStorage</code></li>
+<li>Sync via Mana Bridge when on home territory</li>
+</ul>
+</li>
+<li><p><strong>Message Validation:</strong> Ceremony receivers should validate mana balance against inscription cost before rendering.</p>
+</li>
+<li><p><strong>Anti-Spam:</strong> Same-domain spell casts within 5 seconds don&#39;t earn mana.</p>
+</li>
+<li><p><strong>Decay:</strong> Community inscriptions fade over 30 days unless reinforced (0.5 mana).</p>
+</li>
+</ol>
+<hr>
+<p><em>&quot;The grammar is the lore.&quot;</em></p>
+<p><em>(⚔️⊥⿻⊥🧙) 😊</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-protocol-schemas</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-protocol-schemas.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

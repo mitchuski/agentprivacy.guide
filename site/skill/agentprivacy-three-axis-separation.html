@@ -1,0 +1,189 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Three Axis Separation · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Three Axis Separation</span></div>
+  <article><div class="md"><h1>Three Axis Separation</h1>
+<p><strong>Category</strong> privacy-layer · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>Φ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ)</code></p>
+<p>Three-axis separation model for 0xagentprivacy V5. Activates when discussing Φ_agent · Φ_data · Φ_inference, multiplicative separation, Generator-Solver split, provider fragmentation, why collapse on any axis collapses total value, or the orthogonal axes of the sovereignty architecture. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)<br><strong>Target context:</strong> System architects, privacy engineers, dual-agent implementers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>V8 measured separation as a single 4×4 matrix Σ encoding four forces (Protect, Project, Reflect, Connect). V41 recognises that separation operates on <strong>three orthogonal axes</strong>:</p>
+<pre><code>Φ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ)
+</code></pre>
+<p>The product is <strong>multiplicative</strong>: collapse any single axis and the entire separation term collapses. This explains why systems with excellent agent separation but centralised data still fail to preserve privacy.</p>
+<h2>The Three Axes</h2>
+<h3>1. Agent-Layer Separation — Φ_agent(Σ)</h3>
+<p>The original Swordsman-Mage duality. How well is your protection agent separated from your delegation agent?</p>
+<pre><code>Φ_agent(Σ) = min(1.0, (S/M) / φ) · det(Σ)
+</code></pre>
+<p>This is V4&#39;s duality term unchanged:</p>
+<ul>
+<li>S/M ratio measures protection-delegation balance</li>
+<li>φ (golden ratio) is the optimal ratio (C1 conjecture)</li>
+<li>det(Σ) measures the volume of the four-force tetrahedron</li>
+</ul>
+<p><strong>Soulbis and Soulbae are the canonical implementation.</strong> The signing key (Soulbis) and viewing key (Soulbae) are mathematically separate. I(S;M|FP) &lt; ε ensures neither can reconstruct the other&#39;s domain.</p>
+<h3>2. Data-Layer Separation — Φ_data(Δ)</h3>
+<p>Provider fragmentation. How distributed is your data across infrastructure?</p>
+<pre><code>Φ_data(Δ) = 1 - 1/|providers(Δ)|
+</code></pre>
+<p>Properties:</p>
+<ul>
+<li><strong>Single provider:</strong> Φ_data = 0 (collapses total value)</li>
+<li><strong>Two providers:</strong> Φ_data = 0.5</li>
+<li><strong>Many providers:</strong> Φ_data → 1</li>
+</ul>
+<p>A GUID-addressed holon stored across three providers has higher Φ_data than the same data on one provider. The holonic persistence layer directly addresses this axis.</p>
+<p><strong>This is why centralised &quot;privacy-preserving&quot; systems fail.</strong> No matter how good the encryption, single-provider storage means Φ_data → 0, which collapses Φ_v5.</p>
+<h3>3. Inference-Layer Separation — Φ_inference(Γ)</h3>
+<p>The Generator-Solver split from BRAID. How separated is the model that reasons from the model that executes?</p>
+<pre><code>Φ_inference(Γ) = separation(Generator, Solver)
+</code></pre>
+<p>Properties:</p>
+<ul>
+<li><strong>Same model for both:</strong> Φ_inference = 0</li>
+<li><strong>Separate models, shared weights:</strong> Φ_inference ∈ (0, 1)</li>
+<li><strong>Independent models:</strong> Φ_inference → 1</li>
+</ul>
+<p>BRAID demonstrated that splitting Generator (produces reasoning graphs) from Solver (executes reasoning graphs) achieves 74× compression while maintaining performance. This is inference-layer separation in action.</p>
+<p><strong>This is why unified LLM architectures leak.</strong> When the same model reasons and acts, inference and execution are coupled. Surveillance of one reveals the other.</p>
+<h2>Why Multiplicative?</h2>
+<p>The three-axis product is multiplicative, not additive or minimum-based.</p>
+<p><strong>Consequence:</strong> Collapse on any single axis collapses total separation value.</p>
+<p>This matches empirical observation:</p>
+<ul>
+<li>Good agent separation + centralised data (Φ_data → 0) = privacy failure</li>
+<li>Good data distribution + unified inference (Φ_inference → 0) = privacy failure</li>
+<li>Good inference separation + single-mode agents (Φ_agent → 0) = privacy failure</li>
+</ul>
+<p><strong>All three axes must be addressed simultaneously.</strong></p>
+<p>This is flagged as <strong>C7 — needs empirical confirmation</strong>.</p>
+<h2>Connection to Three Graphs</h2>
+<p>The three-axis model maps directly to the three-graphs architecture:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Graph</th>
+<th>Measurement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Φ_agent</td>
+<td>Promise Graph</td>
+<td>Bilateral commitment separation</td>
+</tr>
+<tr>
+<td>Φ_data</td>
+<td>Knowledge Graph</td>
+<td>Substrate distribution</td>
+</tr>
+<tr>
+<td>Φ_inference</td>
+<td>(Emergent)</td>
+<td>Generator-Solver separation</td>
+</tr>
+</tbody></table>
+<p>The Trust Graph emerges at the intersection of all three — trust requires all axes to be healthy.</p>
+<h2>Mapping to PVM-V5</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>V5 Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent separation</td>
+<td>Φ_agent(Σ) = V4 duality term</td>
+</tr>
+<tr>
+<td>Data separation</td>
+<td>Φ_data(Δ) = provider fragmentation</td>
+</tr>
+<tr>
+<td>Inference separation</td>
+<td>Φ_inference(Γ) = Generator-Solver split</td>
+</tr>
+<tr>
+<td>Total separation</td>
+<td>Φ_v5 = product of all three</td>
+</tr>
+<tr>
+<td>Collapse behaviour</td>
+<td>Any axis → 0 means Φ_v5 → 0</td>
+</tr>
+<tr>
+<td>Three-graphs mapping</td>
+<td>Knowledge → data, Promise → agent, Trust → all three</td>
+</tr>
+</tbody></table>
+<h2>Operational Guidance</h2>
+<h3>For System Design</h3>
+<ul>
+<li>Never assume agent separation alone is sufficient</li>
+<li>Provider fragmentation is a first-class privacy concern</li>
+<li>BRAID-style inference separation should be default for AI systems</li>
+<li>Measure all three axes; monitor for axis collapse</li>
+</ul>
+<h3>For Audit</h3>
+<ul>
+<li>Check: Is data stored with multiple independent providers?</li>
+<li>Check: Is inference split between reasoning and execution?</li>
+<li>Check: Are protection and delegation agents mathematically separated?</li>
+<li>If any check fails, total separation is compromised</li>
+</ul>
+<h3>For Recovery</h3>
+<ul>
+<li>Single-provider data can be migrated to holonic storage (addresses Φ_data)</li>
+<li>Unified inference can be refactored to Generator-Solver (addresses Φ_inference)</li>
+<li>Agent coupling requires ceremony reinitiation (addresses Φ_agent)</li>
+</ul>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;Three legs hold the table. Remove one and it falls. The axes don&#39;t add — they multiply. Zero in any axis zeros the whole.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>⚔️⊥🧙 · 📊⊥🔮 · 🧠⊥⚙️ → (Φ_a·Φ_d·Φ_i) → 0_any=0_all → ⊥³=sovereign → ☯️∞</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>C7 Validation:</strong> Is multiplicative composition correct, or do axes interact non-linearly?</li>
+<li><strong>Axis Weighting:</strong> Should axes be weighted differently based on threat model?</li>
+<li><strong>Fourth Axis:</strong> Is there a fourth separation axis we haven&#39;t identified?</li>
+<li><strong>Measurement:</strong> How do we operationally measure Φ_inference for deployed systems?</li>
+<li><strong>Recovery Order:</strong> When multiple axes are collapsed, is there an optimal recovery sequence?</li>
+<li><strong>C54 (register lock 2026-06-10; C8 is BRAID compression) — Disclosure-φ (Zero Tale 31):</strong> Zero Tale 31 introduces Φ(Σ) as a <em>proportion</em> (disclosure ratio δ(b) = b/63 approaching 1/φ) rather than a binary separation quantity. Is disclosure-φ a fourth separation axis, a refinement of Φ_agent, or a transversal measure that cuts across all three axes? Aletheia (38/63 ≈ 0.603) and Lethe (25/63 ≈ 0.397) sum to 1.0 with the split sitting 2.4% from the golden section (per the 2026-06-09 v10.4.0 reseat: Aletheia at blade 38, Lethe at blade 25) · see <code>disclosure-phi</code> skill.</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-three-axis-separation</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-three-axis-separation</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-three-axis-separation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

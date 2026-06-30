@@ -1,0 +1,118 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Ghost Pages · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Ghost Pages</span></div>
+  <article><div class="md"><h1>Wiki Ghost Pages</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5</p>
+<p>Server-generated federated-wiki pages that appear in the lineup but are never stored on disk — produced dynamically from an html-item form submission. Activates when building a ghost page, an html form story item, or a FastAPI handler returning page JSON. Kept by the Librarian 🗃️ in the Tower&#39;s Wikis.</p>
+</div>
+<div class="md"><p>A ghost page appears in the wiki lineup but is never stored on disk. It is generated dynamically by a server and returned as page JSON in response to a form submission from an <code>html</code> story item. The wiki displays it in the lineup just like any stored page.</p>
+<h2>The Mechanism</h2>
+<p>The <code>wiki-plugin-html</code> handles form submission inside an <code>html</code> item:</p>
+<ol>
+<li>User submits the form</li>
+<li>Plugin serialises all named inputs as a flat JSON object</li>
+<li>POSTs (or GETs) to the form <code>action</code> URL</li>
+<li>Expects <strong>page JSON</strong> back from the server</li>
+<li>Calls <code>wiki.showResult()</code> — the page appears to the right in the lineup</li>
+</ol>
+<p>The server never writes anything to disk. The page exists only in the browser.</p>
+<h2>html Item Pattern</h2>
+<p>Add an <code>html</code> story item containing a standard HTML form:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;html&quot;,
+  &quot;id&quot;: &quot;a1b2c3d4e5f60001&quot;,
+  &quot;text&quot;: &quot;&lt;form action=\&quot;https://guide.agentprivacy.ai method=\&quot;POST\&quot;&gt;\n  &lt;input name=\&quot;query\&quot; placeholder=\&quot;enter anything…\&quot;&gt;\n  &lt;button type=\&quot;submit\&quot;&gt;Generate&lt;/button&gt;\n&lt;/form&gt;&quot;
+}
+</code></pre>
+<p>Key rules:</p>
+<ul>
+<li><code>action</code> is the full URL of the server endpoint</li>
+<li><code>method</code> is <code>POST</code> (default) or <code>GET</code></li>
+<li>All <code>name</code>d inputs are collected and sent as a flat JSON object</li>
+<li>Double-quotes inside the JSON <code>text</code> field must be escaped as <code>\&quot;</code></li>
+<li>The html plugin sanitises with DOMPurify — standard form elements are always permitted</li>
+</ul>
+<h2>FastAPI Handler</h2>
+<p>The endpoint receives form params as a plain <code>dict</code> and returns page JSON:</p>
+<pre><code class="language-python">import uuid
+
+def make_id():
+    return uuid.uuid4().hex[:16]
+
+@app.post(&quot;/ghost&quot;)
+def ghost(params: dict):
+    query = params.get(&quot;query&quot;, &quot;&quot;).strip()
+    return {
+        &quot;title&quot;: f&quot;Result: {query}&quot;,
+        &quot;story&quot;: [
+            {
+                &quot;type&quot;: &quot;paragraph&quot;,
+                &quot;id&quot;: make_id(),
+                &quot;text&quot;: f&quot;Generated from: {query}&quot;
+            }
+        ]
+    }
+</code></pre>
+<p>Minimum valid page JSON: a dict with <code>title</code> and <code>story</code>. No <code>journal</code> is needed for ghost pages.</p>
+<h2>Named Buttons</h2>
+<p>Multiple submit buttons with <code>name</code> and <code>value</code> let one form trigger different behaviours:</p>
+<pre><code class="language-html">&lt;form action=&quot;https://guide.agentprivacy.ai method=&quot;POST&quot;&gt;
+  &lt;button type=&quot;submit&quot; name=&quot;action&quot; value=&quot;summarise&quot;&gt;Summarise&lt;/button&gt;
+  &lt;button type=&quot;submit&quot; name=&quot;action&quot; value=&quot;expand&quot;&gt;Expand&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<p>FastAPI receives <code>{&quot;action&quot;: &quot;summarise&quot;}</code> or <code>{&quot;action&quot;: &quot;expand&quot;}</code>.</p>
+<h2>Ghost Pages Can Reference Real Pages</h2>
+<p>Return <code>reference</code> items in the story to point back to real wiki pages the user can fork:</p>
+<pre><code class="language-python">{
+    &quot;type&quot;: &quot;reference&quot;,
+    &quot;id&quot;: make_id(),
+    &quot;site&quot;: &quot;localhost&quot;,
+    &quot;slug&quot;: &quot;fast-caddy&quot;,
+    &quot;title&quot;: &quot;Fast Caddy&quot;,
+    &quot;text&quot;: &quot;Optional synopsis&quot;
+}
+</code></pre>
+<h2>Requirements</h2>
+<ul>
+<li>Fast Caddy — Caddy routing <code>api</code> to FastAPI on <code>:8000</code></li>
+<li>FastAPI — running with <code>uvicorn main:app --port 8000 --reload</code></li>
+<li>CORS middleware enabled on FastAPI (<code>allow_origins=[&quot;*&quot;]</code>)</li>
+</ul>
+<h2>Related Skills</h2>
+<ul>
+<li><code>agentprivacy-wiki-claude-ghost</code> — ghost pages whose body is written live by Claude</li>
+<li><code>agentprivacy-wiki-page</code> — creating stored pages</li>
+<li><code>agentprivacy-wiki-journal</code> — cleaning page history</li>
+</ul>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis (the git-less onboarding layer)<br><strong>Upstream:</strong> <a href="https://skill.fedwiki.club/ghost-pages-skill">skill.fedwiki.club/ghost-pages-skill</a> — vendored + re-framed; not original agentprivacy authorship</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-ghost-pages</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-wiki-ghost-pages</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-ghost-pages.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

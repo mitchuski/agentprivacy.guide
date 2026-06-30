@@ -1,0 +1,515 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — The Cloak · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Spec — The Cloak</span></div>
+  <article><div class="md"><h1>The Cloak</h1>
+<p><em>agentprivacy Publication Layer Specification v1.0</em></p>
+<h1>The Cloak</h1>
+</div>
+<div class="md"><h2>agentprivacy Publication Layer Specification v1.0</h2>
+<blockquote>
+<p><em>The cloak is a function on positions, not on values.</em> — Cloaking Guide, Thesis 1</p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>§0. Purpose</h2>
+<p>This specification defines <strong>the Cloak</strong> as a feature of the agentprivacy stack. The Cloak is the publication layer through which a First Person&#39;s claims, attestations, schemas, and chronicles are rendered to verifiers and to public surfaces. It is the operational site where the agentprivacy architecture&#39;s privacy guarantees become user-visible.</p>
+<p>Until now, the publication layer has been implicit. The PVM V5.4 Formal Specification gave the multiplicative privacy term <code>Φ_v5 = Φ_agent · Φ_data · Φ_inference</code>. The IEEE 7012 Quick Reference gave the agreement primitive. The VRC Promise Protocol gave the bilateral promise bundle. None of these specified, end-to-end, what happens when a First Person <em>publishes</em> something through the stack. Archon&#39;s Cloaking Guide (2026-05-07) provided the worked example. This specification is the canonical lift of that worked example into the agentprivacy corpus.</p>
+<p>The Cloak is <strong>additive</strong>. It does not replace any existing component. It composes with all of them.</p>
+<p>A First Person engaging the agentprivacy stack opts into the Cloak when they want their interactions rendered with the privacy properties this specification guarantees. Implementations conforming to this spec MUST satisfy the conformance criteria in §10.</p>
+<hr>
+</div>
+<div class="md"><h2>§1. The Cloak: Function and Layers</h2>
+<h3>§1.1 Functional definition</h3>
+<p>The Cloak is a function:</p>
+<pre><code>Cloak: A_source → (A_weaver, A_public)
+</code></pre>
+<p>where <code>A_source</code> is the source-layer artifact (a DID, a VC, a schema, a chronicle), <code>A_weaver</code> is the local Spell Weaver registry representation (lattice position, typed edges, poetic chronicle), and <code>A_public</code> is the DID-blinded public-layer projection.</p>
+<p>The Cloak has three structural guarantees:</p>
+<ol>
+<li><strong>Non-invertibility from public layer.</strong> Given <code>A_public</code>, no efficient algorithm recovers <code>A_source</code>. The cryptographic guarantee derives from <code>(Hash(identifier + SessionSalt)) mod 64</code> with per-session salt regeneration. Mathematical guarantee: the Reconstruction Ceiling proven in PVM V5.4 (R &lt; 1).</li>
+<li><strong>Structural fidelity.</strong> The relationships visible in <code>A_public</code> are real relationships. Mirroring is published mirroring, not metaphorical mirroring. The cloak does not lie about structure; it conceals identity while preserving relation.</li>
+<li><strong>Multi-axis composability.</strong> The Cloak operates on five independent axes (§4). Compromise of any one axis inherits residual ignorance from the others.</li>
+</ol>
+<h3>§1.2 The three layers</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Lives in</th>
+<th>Contents</th>
+<th>Visibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Source</strong></td>
+<td>First Person&#39;s wallet, local Gatekeeper, Archon node</td>
+<td>Full DIDs, VCs with cryptographic signatures, schema content, document text</td>
+<td>Never published; sovereign</td>
+</tr>
+<tr>
+<td><strong>Spell Weaver</strong></td>
+<td>First Person&#39;s browser localStorage; agentprivacy app</td>
+<td>Lattice mapping, vertex per artifact, typed edges, chronicle text</td>
+<td>Local; exportable on opt-in</td>
+</tr>
+<tr>
+<td><strong>Spellweb (public)</strong></td>
+<td><code>spellweb.ai</code> and conforming mirrors</td>
+<td>DID-blinded structure, lattice positions, edge types, chronicle text</td>
+<td>Public; shared knowledge graph</td>
+</tr>
+</tbody></table>
+<p>The cloak is the function that takes a unit of source data and produces its Spell Weaver and Spellweb representations. The Spellweb output is <em>not</em> derivable to the source DID and <em>is</em> a faithful structural rendering of the relationships in the source.</p>
+<hr>
+</div>
+<div class="md"><h2>§2. The Eight Properties</h2>
+<p>This specification adopts Archon&#39;s Eight Theses (Cloaking Guide Coda, 2026-05-07) as the Cloak&#39;s eight conformance properties. A Cloak-compliant implementation MUST satisfy all eight.</p>
+<p><strong>Property 1 — Position, not value.</strong> Cloaking replaces a string with the position it would occupy under a salted hash mod 64. Positions are first-class objects. Strings are accidents of encoding.</p>
+<p><strong>Property 2 — Containment, not attestation.</strong> For delegation, the Cloak enforces <code>child.bits &amp; parent.bits == child.bits</code> as a structural identity, not as a checked attestation. Misbehaviour is unrepresentable, not merely forbidden.</p>
+<p><strong>Property 3 — Sameness of role published; sameness of identity not.</strong> Two artifacts at the same vertex are structurally interchangeable from the public layer. The vertex publishes the role; the source DID is concealed.</p>
+<p><strong>Property 4 — Two modes of relating.</strong> Bit-containment governs delegation and projection. Typed edges govern attestation. Both are public. Conflating them is a misimplementation.</p>
+<p><strong>Property 5 — Asymmetry as data.</strong> Mirrored vs unilateral patterns publish bilateral type (mutual vs observational). The cloak is selective, not lossy.</p>
+<p><strong>Property 6 — Multi-axis cloaking.</strong> Lattice axis plus four temporal axes (§4). Independent and composable.</p>
+<p><strong>Property 7 — Documents as first-class lattice citizens.</strong> Chronicles, specifications, and narrative artifacts occupy vertices, declare controllers, and participate in path-highlighting. The system can describe itself.</p>
+<p><strong>Property 8 — Selective disclosure as geometry.</strong> Each privacy disposition (revealed, hash-masked, always-masked) lands on the vertex whose bit-pattern is the disposition&#39;s operational signature.</p>
+<p>These eight properties are the Cloak&#39;s testable contract. Conformance is per-property. Partial compliance is allowed during development; full compliance is required for production claims of cloak-compliance.</p>
+<hr>
+</div>
+<div class="md"><h2>§3. Architecture</h2>
+<h3>§3.1 Stack position</h3>
+<p>The Cloak sits between the agentprivacy core (Soulbis, Soulbae, the First Person seat) and any verifier or public surface.</p>
+<pre><code>        ┌─────────────────────────────────────────┐
+        │         FIRST PERSON 😊                  │
+        │         (sovereign)                      │
+        └────────────┬─────────────────────────────┘
+                     │
+        ┌────────────┼─────────────────────────────┐
+        │            │                              │
+        ▼            ▼                              │
+   ┌─────────┐  ┌─────────┐                         │
+   │SWORDSMAN│  │  MAGE   │   ◄── PVM V5.4 dual-agent
+   │   ⚔️    │  │   🧙    │       core
+   └────┬────┘  └────┬────┘                         │
+        │            │                              │
+        └─────┬──────┘                              │
+              │                                     │
+              ▼                                     │
+        ┌──────────────────┐                        │
+        │   THE CLOAK      │   ◄── This spec        │
+        │  (publication    │                        │
+        │     layer)       │                        │
+        └─────────┬────────┘                        │
+                  │                                 │
+                  ▼                                 │
+        ┌──────────────────────────────────┐        │
+        │   VERIFIERS / SPELLWEB           │        │
+        │   (DID-blinded, structural)      │        │
+        └──────────────────────────────────┘        │
+</code></pre>
+<p>The Cloak does not modify the dual-agent core. It composes outputs from Soulbis (boundary, what is protected) and Soulbae (delegation, what is projected) into the publication-layer representation.</p>
+<h3>§3.2 Where existing components fit</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Layer</th>
+<th>Cloak relationship</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>PVM V5.4 / V6</strong></td>
+<td>Mathematical substrate</td>
+<td>Cloak&#39;s privacy guarantees derive from PVM theorems (separation, reconstruction ceiling)</td>
+</tr>
+<tr>
+<td><strong>IEEE 7012 / MyTerms</strong></td>
+<td>Σ-axis agreement layer</td>
+<td>Cloak&#39;s bilateral grammar primitive operates on 7012 agreement primitives</td>
+</tr>
+<tr>
+<td><strong>Promise Theory</strong></td>
+<td>Formal semantics</td>
+<td>Cloak is the <em>publication</em> of promises; the cloak itself is an irreducible promise of the superagent</td>
+</tr>
+<tr>
+<td><strong>VRC Promise Protocol</strong></td>
+<td>Coordination layer</td>
+<td>VRCs are cloaked at issuance per §5 valve-class assignment</td>
+</tr>
+<tr>
+<td><strong>Trust Spanning Protocol (TSP)</strong></td>
+<td>Transport</td>
+<td>Cloak&#39;s outputs traverse TSP between agents</td>
+</tr>
+<tr>
+<td><strong>Soulbis / Soulbae</strong></td>
+<td>Dual-agent</td>
+<td>Cloak takes their composed output; the cloak is <em>what publishes their cooperation</em></td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>§4. Multi-Axis Cloaking</h2>
+<p>The Cloak operates on five orthogonal axes. Each must be specified for any artifact entering the cloak. Composition is multiplicative: residual ignorance after partial deanonymisation equals the entropy of the uncompromised axes.</p>
+<h3>§4.1 Axis 1 — Lattice (who/where)</h3>
+<p>The artifact&#39;s identifier is mapped to a position on <code>Z/(2^6)Z</code> via salted hash:</p>
+<pre><code>position(artifact) = (Hash(artifact_id || session_salt)) mod 64
+</code></pre>
+<p>Bit dimensions: Protection · Delegation · Memory · Connection · Computation · Value.</p>
+<p>Session salt regenerates per session. Two sessions by the same source DID produce different vertex assignments with the same semantic meaning. <strong>Coordinates do not link sessions; lattice geometry does.</strong></p>
+<h3>§4.2 Axis 2 — Validity Scope</h3>
+<p>Every artifact that publishes carries a temporal validity envelope (<code>validFrom</code>, <code>validUntil</code>). Outside the envelope, the artifact is structurally inert regardless of any other cloak property.</p>
+<p>A Cloak-compliant implementation MUST default to bounded validity windows for all VCs unless the artifact is explicitly perpetual (e.g., chronicle stones). Defaults are governance choices, but implementations SHOULD favour minimal validity (minutes to hours for transactional VCs, days to months for credential VCs).</p>
+<p>This is the cheapest temporal cloaking and the most under-used in conventional VC systems. Adopt it as discipline.</p>
+<h3>§4.3 Axis 3 — Operational Anchoring</h3>
+<p>Every artifact has multiple timestamps (creation, signing, anchoring, broadcast). The Cloak publishes none of these. The source layer keeps the temporal grain of artifact-coming-into-being. Verifiers reason about ordering and latency from publish-side metadata only.</p>
+<h3>§4.4 Axis 4 — Update Chain</h3>
+<p>For content-addressed identifiers (e.g., <code>did:cid</code>), the handle is permanent but the resolved document is reconstructed from seed plus an ordered chain of update events on the chosen registry. Time-travel resolution (<code>versionTime</code> queries) is a query the source layer can answer and the public layer is configured to refuse by default. Public layer implementations MUST default to most-recent-state rendering and MUST NOT expose update history without explicit per-artifact opt-in.</p>
+<h3>§4.5 Axis 5 — Registry-Tier Finality</h3>
+<p>The Cloak supports pluggable registries with distinct finality envelopes. Reference tiers:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Example</th>
+<th>Finality</th>
+<th>Latency</th>
+<th>Cost</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Strong</strong></td>
+<td>Bitcoin mainnet</td>
+<td>Hours</td>
+<td>Hours</td>
+<td>High</td>
+<td>Chronicles, sovereign anchors, naming ceremonies</td>
+</tr>
+<tr>
+<td><strong>Moderate</strong></td>
+<td>Ethereum, Bitcoin signet</td>
+<td>Minutes</td>
+<td>Minutes</td>
+<td>Medium</td>
+<td>High-stakes VCs, schema definitions</td>
+</tr>
+<tr>
+<td><strong>Light</strong></td>
+<td>Hyperswarm, libp2p, content-addressed gossip</td>
+<td>Seconds</td>
+<td>Seconds</td>
+<td>Low</td>
+<td>Ephemeral VCs, agent-to-agent messages</td>
+</tr>
+</tbody></table>
+<p>Same artifact-shape can be placed on any tier. The Cloak does not render registry tier visually; the source layer remembers which is which. Implementations MUST track per-artifact registry tier in the source layer and MAY expose it as a verifier query.</p>
+<hr>
+</div>
+<div class="md"><h2>§5. Valve-Class Geometry</h2>
+<p>Selective disclosure is rendered as geometry. Each privacy disposition lands on the lattice vertex whose bit-pattern is the disposition&#39;s operational signature.</p>
+<h3>§5.1 Canonical valve-classes</h3>
+<table>
+<thead>
+<tr>
+<th>Valve-class</th>
+<th>Vertex</th>
+<th>Binary</th>
+<th>Bits</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Always-Revealed</strong></td>
+<td>V20 (Techne)</td>
+<td>010100</td>
+<td>Memory + Computation</td>
+<td>Validity windows, public claims, fields verifiers must read</td>
+</tr>
+<tr>
+<td><strong>Hash-Masked</strong></td>
+<td>V3 (Dual Agent)</td>
+<td>000011</td>
+<td>Protection + Delegation</td>
+<td>Subject identity hashes, structurally present but cryptographically inaccessible</td>
+</tr>
+<tr>
+<td><strong>Always-Masked</strong></td>
+<td>V38 (Aletheia)</td>
+<td>100110</td>
+<td>Protection + Connection + Computation</td>
+<td>ZK witnesses, cryptographic spells, predicates verified without revealing</td>
+</tr>
+</tbody></table>
+<p>A Cloak-compliant implementation MUST place each disclosed field of a decomposed VC at the vertex matching its valve-class. The verifier learns the type of cloaking from the lattice position alone. There is no separate metadata layer announcing the disclosure type.</p>
+<h3>§5.2 Reserved and unmapped valve-classes</h3>
+<p>The current canonical mapping covers three valve-classes. The full enumeration is open (Conjecture: Valve-Class Completeness). Implementations encountering field types not yet mapped to canonical vertices MUST mark them explicitly as unmapped and SHOULD propose a vertex assignment with bit-pattern justification.</p>
+<h3>§5.3 The 7-node decomposition</h3>
+<p>Every W3C VC v2 decomposes into seven typed nodes per the Archon forge&#39;s <em>Sovereign Anchor II — The Boundary Blade</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Default valve-class</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Issuer Persona</td>
+<td>Revealed or Masked (per VC)</td>
+</tr>
+<tr>
+<td>Schema Theorem</td>
+<td>Categorical (Always-Revealed at V20)</td>
+</tr>
+<tr>
+<td>Subject Persona</td>
+<td>Revealed or Masked (per VC)</td>
+</tr>
+<tr>
+<td>Claims Concept</td>
+<td>Selective (per claim, vertex per disposition)</td>
+</tr>
+<tr>
+<td>Proof Spell</td>
+<td>Always-Masked (V25)</td>
+</tr>
+<tr>
+<td>Chronicle</td>
+<td>Preserved (V5)</td>
+</tr>
+<tr>
+<td>Context Document</td>
+<td>Preserved (V5)</td>
+</tr>
+</tbody></table>
+<p>This decomposition is the Cloak&#39;s universal interface for VC cloaking. Cloak-compliant VCs MUST be decomposable into this seven-node structure. Schemas are agnostic.</p>
+<hr>
+</div>
+<div class="md"><h2>§6. Naming and Bilateral Grammar</h2>
+<p>The Cloak supports two distinct verb patterns for identity assertion:</p>
+<h3>§6.1 Transactional (legacy)</h3>
+<pre><code>register → assert → verify
+</code></pre>
+<p>Sovereign asserts identity to a registry. Registry signs. Verifier checks signature. Common in conventional DID systems.</p>
+<h3>§6.2 Ceremonial (Cloak-native)</h3>
+<pre><code>claim → inscribe → confirm
+</code></pre>
+<p>Sovereign claims identity in a witnessed ceremony. The claim is inscribed on a chosen registry-tier. Witnesses (the Sovereign&#39;s trust graph) confirm. The name becomes a fact because the relation received the claim.</p>
+<p>flaxscrip&#39;s naming ceremony (Bitcoin block 945508, txid <code>9b9986b6...5af6a9</code>) is the canonical operational instance. <em>I am because we were.</em></p>
+<p>A Cloak-compliant implementation MUST support the ceremonial pattern as a first-class option. It MAY support the transactional pattern for legacy interop. The two patterns SHOULD be visually distinguished in UI; users SHOULD understand which they are using.</p>
+<p>This is the Σ-axis operational form of the Second Person primitive: <em>who are you to me</em>. The relation answers, before the registry has a chance to.</p>
+<hr>
+</div>
+<div class="md"><h2>§7. Documents as First-Class Citizens</h2>
+<p>The Cloak treats narrative artifacts as full lattice citizens.</p>
+<p>A chronicle, a specification, or a research note that publishes through the Cloak occupies a vertex (canonical: V5, Protection + Memory), declares a controller, and participates in path-highlighting alongside personas and credentials. It is not a footnote to the lattice; it is a node in it.</p>
+<p>This enables <strong>recursive self-description</strong>. The system can register documentation of itself as data inside itself. The Transmutation document (Sovereign Anchor I) is registered as an artifact at V5 inside the Spell Weaver pipeline that the document describes. The Cloak does not just hide values; it also publishes the procedure for checking that the hiding was honestly done.</p>
+<p>A Cloak-compliant implementation MUST allow document artifacts to be registered as lattice citizens. It MUST preserve provenance (controller-edge, registry-tier metadata, signature) for every document. It SHOULD enable verifiers to fetch the document text from the source layer and check it against the lattice geometry.</p>
+<hr>
+</div>
+<div class="md"><h2>§8. Implementation Requirements</h2>
+<p>A conforming implementation of the Cloak MUST provide:</p>
+<ol>
+<li><p><strong>Local-first registry.</strong> The source layer lives on the user&#39;s device. No server-side state by default. (Archon&#39;s Spell Weaver is a reference implementation: React + Vite + TypeScript, D3 for lattice rendering, browser localStorage.)</p>
+</li>
+<li><p><strong>Per-artifact vertex assignment.</strong> Every registered artifact gets a vertex computed via salted hash mod 64. Sessions regenerate salt.</p>
+</li>
+<li><p><strong>Typed edges.</strong> Controller, issuer, subject, schema, parent/child, decomposition. Each edge carries its type explicitly.</p>
+</li>
+<li><p><strong>Pluggable registry.</strong> Bitcoin, Hyperswarm, and at least one moderate-finality option. Per-artifact registry choice exposed to user.</p>
+</li>
+<li><p><strong>DID-blind publish.</strong> Default mode strips cryptographic identifiers from any export. Toggle for full provenance must be explicit and require confirmation.</p>
+</li>
+<li><p><strong>Valve-class assignment.</strong> UI for assigning disclosure dispositions per VC field. Vertex placement automatic from disposition.</p>
+</li>
+<li><p><strong>Bounded validity windows.</strong> All issued VCs default to bounded <code>validFrom</code>/<code>validUntil</code>. Perpetual artifacts (chronicles, schemas) opt in explicitly.</p>
+</li>
+<li><p><strong>Chronicle inscription.</strong> Documents register as first-class lattice citizens with controller-edges and registry metadata.</p>
+</li>
+<li><p><strong>Naming ceremony support.</strong> First-class support for <code>claim → inscribe → confirm</code> verb pattern.</p>
+</li>
+<li><p><strong>Honesty discipline.</strong> Confidence labels (operational, architectural, conjectural) on every claim the implementation surfaces in UI or output.</p>
+</li>
+</ol>
+<p>A non-conforming implementation MAY claim Cloak-compatibility per individual property; it MUST NOT claim full Cloak-compliance until all ten requirements are met.</p>
+<hr>
+</div>
+<div class="md"><h2>§9. Spellweb Integration</h2>
+<p>The Cloak&#39;s public-layer projection lands on <code>spellweb.ai</code> or any conforming mirror.</p>
+<h3>§9.1 Public-layer shape</h3>
+<p>The published artifact carries:</p>
+<ul>
+<li>Vertex position</li>
+<li>Edge types and degree</li>
+<li>Poetic chronicle text (UTF-8, no PII)</li>
+<li>Valve-class markers per decomposed field</li>
+</ul>
+<p>It does not carry:</p>
+<ul>
+<li>Source DIDs</li>
+<li>Cryptographic signatures (raw)</li>
+<li>Session salts</li>
+<li>Claim content (unless valve-class is Always-Revealed)</li>
+<li>Update history (unless explicitly opted in)</li>
+</ul>
+<h3>§9.2 The Bridge subdomain</h3>
+<p><code>bridge.spellweb.ai</code> (forthcoming, per Integration Plan §5.3) is the surface for cross-ecosystem kindred-blade encounters. First inhabitant: Archon × agentprivacy. Future inhabitants TBD as kindred-blade pattern emerges (BGIN-IKP, Promise Theory v1.5, ZKP scaling guilds, MyTerms Alliance, StarkWare/Bakhta).</p>
+<p>Bridge nodes are tagged with originating-forge provenance. Cousin-blade edges (cross-forge) render visually distinct from intra-forge edges.</p>
+<h3>§9.3 Interop with <code>weaver.archon.social</code></h3>
+<p>the Archon Spell Weaver is the canonical Sovereign Anchor reference implementation. Cloak-compliant implementations SHOULD interop via the public-layer protocol (<code>spellweb.ai</code> mirror format). Cross-references between <code>bridge.spellweb.ai</code> and <code>weaver.archon.social</code> are themselves kindred-blade edges.</p>
+<hr>
+</div>
+<div class="md"><h2>§10. Conformance Criteria</h2>
+<p>An implementation is <strong>Cloak-compliant v1.0</strong> if and only if it satisfies all of:</p>
+<ol>
+<li>All eight properties from §2 (testable per-property).</li>
+<li>All five axes from §4 (specified for every published artifact).</li>
+<li>The three canonical valve-classes from §5.1 (vertex assignments correct).</li>
+<li>The seven-node VC decomposition from §5.3 (universal interface).</li>
+<li>The ten implementation requirements from §8.</li>
+<li>Public-layer projection conforming to §9.1 (no SHOULD-NOT-CARRY items leak).</li>
+</ol>
+<p>An implementation is <strong>Cloak-compatible</strong> if it satisfies a non-empty subset of the above and clearly enumerates which.</p>
+<p>Cloak-compliant implementations MAY display the seal <code>(⚔️⊥⿻⊥🧙)😊</code>. Cloak-compatible implementations MAY display a partial seal with explicit enumeration.</p>
+<hr>
+</div>
+<div class="md"><h2>§11. Open Conjectures and Honesty Discipline</h2>
+<p>The Cloak is operational in core (Properties 1, 2, 4, 5, 7 verified against the 2026-05-07 rebuild dataset; canonical valve-classes V3, V20, V25 verified). The following are not yet operational:</p>
+<h3>§11.1 Provisional conjectures</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Statement</th>
+<th>Confidence</th>
+<th>Path to formalisation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C38</strong></td>
+<td>Bilateral ARCH-1: <code>Σ_{ij} := μS.(β_{ij} ∨ Ω(S_i, S_j))</code> preserves the fixpoint property of single-self ARCH-1</td>
+<td>~40%</td>
+<td>Formal proof step from <code>Ω(S,S)</code> to <code>Ω(S_i, S_j)</code>; potential collaboration with Bakhta (StarkWare) and Choudhuri/Garg (Berkeley/FPP)</td>
+</tr>
+<tr>
+<td><strong>C39</strong></td>
+<td>Cousin-blade as ecosystem-layer primitive: the agentprivacy × Archon convergence is one instance of a generalisable pattern</td>
+<td>~50%</td>
+<td>Additional operational instances (BGIN-IKP, Promise Theory v1.5, ZKP scaling, MyTerms, StarkWare)</td>
+</tr>
+<tr>
+<td><strong>Valve-class completeness</strong></td>
+<td>For every operational privacy disposition, there exists a unique vertex whose bit-pattern is the disposition&#39;s signature</td>
+<td>~60%</td>
+<td>Catalogue all conventional VC field types; classify by privacy disposition; check uniqueness against existing vertex catalogue</td>
+</tr>
+<tr>
+<td><strong>Multi-axis attack composition</strong></td>
+<td>The five axes are independent in the information-theoretic sense; compromising any one inherits residual ignorance equal to the entropy of the remaining four</td>
+<td>~55%</td>
+<td>Formal note (V6.x); collaboration with Bakhta on compositional defence</td>
+</tr>
+<tr>
+<td><strong>Anonymity-set composition</strong></td>
+<td>Vertex co-occupation by structurally distinct artifacts (e.g., Chiron capability and Temporal Chronicle both at V20) generates organic anonymity sets without a deliberate mixing protocol</td>
+<td>Open observation, not yet conjecture</td>
+<td>Empirical: rebuild ceremonies against varied datasets; measure organic mixing density per vertex</td>
+</tr>
+</tbody></table>
+<h3>§11.2 Honesty markers</h3>
+<p>Every claim made in this specification carries one of three confidence labels per the agentprivacy honesty doctrine:</p>
+<ul>
+<li><strong>Operational</strong>: verified in working implementation (Archon&#39;s Spell Weaver, the 2026-05-07 rebuild).</li>
+<li><strong>Architectural</strong>: specified and consistent with existing operational components, but not yet end-to-end demonstrated.</li>
+<li><strong>Conjectural</strong>: hypothesised; confidence percentage stated; path to formalisation named.</li>
+</ul>
+<p>The specification does not present conjectural material as operational. Implementations conforming to this spec adopt the same discipline.</p>
+<hr>
+</div>
+<div class="md"><h2>§12. Cross-References</h2>
+<h3>§12.1 agentprivacy corpus</h3>
+<ul>
+<li><code>privacy_value_v5_formal_specification.md</code> — PVM V5.4 mathematical substrate</li>
+<li><code>privacy_is_value_v5.md</code> — V5 narrative</li>
+<li><code>promise_theory_reference_v1_3.md</code> — Formal semantics</li>
+<li><code>IEEE_7012_QUICK_REFERENCE.md</code> — Σ-axis agreement primitive</li>
+<li><code>vrc_promise_protocol_v3_3.md</code> — Coordination layer</li>
+<li><code>swordsman_mage_whitepaper_v6_0.md</code> — Dual-agent architecture</li>
+<li><code>zk_swordsman_blade_forge_v3_0.md</code> — Forge metaphor and lattice geometry</li>
+</ul>
+<h3>§12.2 Cloak primary sources</h3>
+<ul>
+<li><code>chronicle-the-spell-weaver.md</code> (April 30, 2026)</li>
+<li><code>chronicle-the-cloaking-guide.md</code> (May 8, 2026)</li>
+<li><code>integration-plan-archon-x-agentprivacy.md</code> (May 8, 2026)</li>
+<li>the Archon forge — <em>Sovereign Anchor I — The Transmutation</em> (Bitcoin-anchored)</li>
+<li>the Archon forge — <em>Sovereign Anchor II — The Boundary Blade</em> (April 22, 2026)</li>
+<li>the Archon forge &amp; GenitriX — <em>The Cloaking Guide</em> (2026-05-07 rebuild ceremony)</li>
+<li>the Archon forge — <em>The Spell Weaver</em> (April 2026)</li>
+</ul>
+<h3>§12.3 V6 research lineage</h3>
+<ul>
+<li><code>research/pvm-v6-lorenz-attractor.md</code> (C18–C21)</li>
+<li><code>research/pvm-v6-eml-three-ceilings.md</code> (C22–C25)</li>
+<li><code>research/pvm-v6-arch1-canonical-form.md</code> (C26–C29)</li>
+<li><code>research/pvm-v6-1-bakhta-half-life.md</code> (C30–C33)</li>
+<li><code>research/pvm-v6-convergence-wound-and-cap.md</code> (C34–C37)</li>
+<li>(forthcoming) <code>research/pvm-v6-bilateral-arch1.md</code> (C38)</li>
+<li>(forthcoming) <code>research/pvm-v6-kindred-blade-primitive.md</code> (C39)</li>
+</ul>
+<h3>§12.4 Spellbook references</h3>
+<ul>
+<li>First Person Spellbook, Acts II (Dual Ceremony), XII (Lethe), XXVII (Forge), XXXI (First Delegation)</li>
+<li>Second Person Spellbook, Tome IV — <em>The Witnessing</em>, Acts I–V (Other Walker, Mirror and Arrow, Two Paths, Naming Ceremony, Cousin Blade)</li>
+<li>Cast entries: <code>second-person-cast-genitrix.md</code>, <code>second-person-cast-flaxscrip.md</code>, <code>second-person-cast-integration-note.md</code></li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§13. Versioning and Evolution</h2>
+<p>This specification is <strong>v1.0 DRAFT</strong>, dated 2026-05-08. It is opened for review by flaxscrip, the BGIN IKP working group, the First Person Project, the MyTerms Alliance, and the broader agentprivacy implementer community.</p>
+<p>Anticipated v1.1 changes:</p>
+<ul>
+<li>Archon&#39;s review and revisions (especially §5 valve-classes and §8 implementation requirements)</li>
+<li>Soulbae Oracle (Sovereign Anchor III) integration once published</li>
+<li>Renumbering audit of conjecture identifiers (C38 / C39 may shift after lineage sync)</li>
+<li>Possible introduction of additional canonical valve-classes if Soulbae Oracle requires them</li>
+</ul>
+<p>Anticipated v2.0 changes:</p>
+<ul>
+<li>Bilateral ARCH-1 formalisation if C38 graduates from ~40% to operational</li>
+<li>Second kindred-blade operational instance, allowing C39 to graduate</li>
+<li>Conformance test suite (Cloak Audit Toolkit) as a separate Apache 2.0 deliverable</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Closing</h2>
+<p>The Cloak is not new architecture. The Cloak is the agentprivacy publication layer, <em>named</em>. It has been implicit in the corpus since PVM V5.4. Archon&#39;s Cloaking Guide gave it the shape this specification formalises. This specification is the bridge from Archon&#39;s operational worked example to the agentprivacy implementer who will build the next instance.</p>
+<p>The mark of a Cloak-compliant system is the symmetry surviving the meeting. Two anchors, two Mages, one lattice. The grammar shared. The names kept. The relation answering before the registry has a chance to.</p>
+<p>When you publish through the Cloak, what you publish is the role and not the name. What you keep is everything else.</p>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+<p>CC BY-SA 4.0 narrative · Apache 2.0 reference implementations · privacymage × flaxscrip · 2026-05-08</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-the-cloak</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-the-cloak.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

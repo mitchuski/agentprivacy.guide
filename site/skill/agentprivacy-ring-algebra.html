@@ -1,0 +1,310 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ring Algebra · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Ring Algebra</span></div>
+  <article><div class="md"><h1>Ring Algebra</h1>
+<p><strong>Category</strong> privacy-layer · <strong>Version</strong> 5.2.1</p>
+<p><strong>Equation term</strong> <code>Z/(2⁶)Z ring structure underlying all lattice operations</code></p>
+<p>UOR ring algebra foundation for 0xagentprivacy. Activates when discussing</p>
+</div>
+<div class="md"><p><strong>Source:</strong> UOR Framework + Privacy Value Model V5.2 + First Person Spellbook Act XXVII<br><strong>Target context:</strong> Protocol architects, algebraists, ZK circuit designers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The Universal Object Reference (UOR) ring algebra is the mathematical substrate of the sovereignty lattice. Every blade configuration, every lattice transformation, every witness path operates within this closed algebraic structure.</p>
+<p><strong>The ring closes on itself. The algebra generates its own successor. This is the deepest protection—the enemy cannot step outside the mathematics.</strong></p>
+<h2>The Ring Structure</h2>
+<h3>Z/(2^n)Z — The Modular Ring</h3>
+<p>The forge operates on Z/(2⁶)Z — the ring of integers modulo 64:</p>
+<pre><code>Elements: {0, 1, 2, ..., 63}
+Addition: (a + b) mod 64
+Multiplication: (a × b) mod 64
+</code></pre>
+<p>Every blade configuration is an element of this ring. Every transformation is a ring operation.</p>
+<h2>The Five Operations</h2>
+<p>UOR defines five primitive operations that close the ring:</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Symbol</th>
+<th>Definition</th>
+<th>Ring Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>neg</strong></td>
+<td>-x</td>
+<td>Arithmetic negation</td>
+<td>(64 - x) mod 64</td>
+</tr>
+<tr>
+<td><strong>bnot</strong></td>
+<td>~x</td>
+<td>Bitwise complement</td>
+<td>Flip all 6 bits</td>
+</tr>
+<tr>
+<td><strong>xor</strong></td>
+<td>x ⊕ y</td>
+<td>Bitwise XOR</td>
+<td>Symmetric difference</td>
+</tr>
+<tr>
+<td><strong>and</strong></td>
+<td>x ∧ y</td>
+<td>Bitwise AND</td>
+<td>Intersection</td>
+</tr>
+<tr>
+<td><strong>or</strong></td>
+<td>x ∨ y</td>
+<td>Bitwise OR</td>
+<td>Union</td>
+</tr>
+</tbody></table>
+<h3>The Critical Identity</h3>
+<pre><code>neg(bnot(x)) = succ(x)
+</code></pre>
+<p>The composition of arithmetic negation and bitwise complement equals the successor function. This single identity has profound consequences:</p>
+<ol>
+<li><strong>The ring generates itself.</strong> Iterating neg∘bnot cycles through ALL 64 elements.</li>
+<li><strong>No dead ends.</strong> Every element can reach every other element.</li>
+<li><strong>Closure guaranteed.</strong> No operation escapes the ring.</li>
+</ol>
+<h3>Why This Matters for Privacy</h3>
+<p>The critical identity means:</p>
+<ul>
+<li><strong>Every blade can transform into every other blade</strong></li>
+<li><strong>Every sovereignty posture is reachable</strong></li>
+<li><strong>No configuration is permanently trapped</strong></li>
+</ul>
+<p>The lattice is one connected cycle.</p>
+<h2>Stratum — The Hamming Weight</h2>
+<p>Every ring element has a <strong>stratum</strong>: its popcount (number of 1-bits).</p>
+<pre><code>stratum(x) = popcount(x) = number of bits set to 1
+
+stratum(0)  = 0  (000000)
+stratum(7)  = 3  (000111)
+stratum(63) = 6  (111111)
+</code></pre>
+<h3>Pascal&#39;s Row Distribution</h3>
+<p>The 64 elements distribute across strata following Pascal&#39;s triangle row 6:</p>
+<table>
+<thead>
+<tr>
+<th>Stratum</th>
+<th>Count</th>
+<th>Formula</th>
+<th>Elements</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>C(6,0)</td>
+<td>Just vertex 0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>6</td>
+<td>C(6,1)</td>
+<td>Single-bit vertices</td>
+</tr>
+<tr>
+<td>2</td>
+<td>15</td>
+<td>C(6,2)</td>
+<td>Two-bit vertices</td>
+</tr>
+<tr>
+<td>3</td>
+<td>20</td>
+<td>C(6,3)</td>
+<td>Three-bit vertices</td>
+</tr>
+<tr>
+<td>4</td>
+<td>15</td>
+<td>C(6,4)</td>
+<td>Four-bit vertices</td>
+</tr>
+<tr>
+<td>5</td>
+<td>6</td>
+<td>C(6,5)</td>
+<td>Five-bit vertices</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>C(6,6)</td>
+<td>Just vertex 63</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>64</strong></td>
+<td>2⁶</td>
+<td>Full lattice</td>
+</tr>
+</tbody></table>
+<p>This distribution appears in:</p>
+<ul>
+<li>Blade tier classification</li>
+<li>V5 equation weights (wᵢ)</li>
+<li>Network effect terms</li>
+</ul>
+<h2>Operations as Lattice Movements</h2>
+<h3>neg(x) — Stay in Place, Invert Value</h3>
+<p>Arithmetic negation keeps you at the same &quot;position type&quot; but inverts the specific value. In blade terms: same sovereignty posture, different internal state.</p>
+<h3>bnot(x) — Jump to Antipode</h3>
+<p>Bitwise complement moves you to the <strong>opposite vertex</strong> in the hypercube:</p>
+<pre><code>bnot(000000) = 111111  (Vertex 0 → Vertex 63)
+bnot(101010) = 010101  (Any vertex → its antipode)
+</code></pre>
+<p>This is the maximum transformation: flip everything.</p>
+<h3>xor(x, y) — Toggle Specific Dimensions</h3>
+<p>XOR toggles specific bits, moving you along edges:</p>
+<pre><code>xor(110000, 000011) = 110011
+</code></pre>
+<p>In blade terms: toggle specific sovereignty dimensions.</p>
+<h3>and(x, y) — Constrain to Shared</h3>
+<p>AND moves toward the origin, keeping only shared bits:</p>
+<pre><code>and(110011, 101010) = 100010
+</code></pre>
+<p>In blade terms: reduce to capabilities both configurations share.</p>
+<h3>or(x, y) — Expand to Combined</h3>
+<p>OR moves toward vertex 63, adding all bits:</p>
+<pre><code>or(110000, 000011) = 110011
+</code></pre>
+<p>In blade terms: combine capabilities from both configurations.</p>
+<h2>The Successor Cycle</h2>
+<p>The identity neg(bnot(x)) = succ(x) creates a complete cycle through all 64 elements:</p>
+<pre><code>Start: 0
+Step 1: neg(bnot(0)) = neg(63) = 1
+Step 2: neg(bnot(1)) = neg(62) = 2
+...
+Step 63: neg(bnot(62)) = neg(1) = 63
+Step 64: neg(bnot(63)) = neg(0) = 0 (back to start)
+</code></pre>
+<p><strong>Every element participates in one grand cycle.</strong> The lattice is topologically a single loop.</p>
+<h2>The Complement Edge — A Distinguished Structure</h2>
+<p>Of the 192/2 = 96 edges in the 6-hypercube, the <strong>complement edges</strong> (those produced by <code>bnot</code>) are uniquely characterised among all operations. For any vertex <code>x</code> and its complement <code>bnot(x)</code>:</p>
+<pre><code>and(x, bnot(x)) = 0          (the ⊥ — they share zero dimensions)
+xor(x, bnot(x)) = 63         (the ⿻ — together they span the full blade)
+bnot(bnot(x))    = x          (involution)
+</code></pre>
+<p>No other edge in the lattice satisfies both <code>and = 0</code> AND <code>xor = 63</code> simultaneously. This makes the complement edge the <strong>unique antipodal traverse</strong>: one step in Hamming distance terms, but a maximal transformation in sovereignty terms — every lit dimension goes dark, every dormant dimension lights up.</p>
+<h3>The First Named Complement Pair (ZK Tale 31)</h3>
+<p>Blade 38 (Aletheia, the Silent Messenger) and Blade 25 (Lethe, the Dark Substrate) form the first <strong>named</strong> complement pair in the lattice (seats per the 2026-06-09 reseat):</p>
+<pre><code>bnot(25)      = 38              ⟨0,1,1,0,0,1⟩ ⟷ ⟨1,0,0,1,1,0⟩
+and(25, 38)   = 0               (the ⊥ — disjoint dimensions)
+xor(25, 38)   = 63              (the ⿻ — Tale 30&#39;s Eternal Sovereignty)
+neg(bnot(25)) = succ(25) = 26   (deny the complement, advance one step)
+</code></pre>
+<p>The XOR identity is load-bearing: <strong>Blade 63 (Eternal Sovereignty, Tale 30) is the XOR of the two named sisters of Tale 31.</strong> The thirtieth tale was always the arithmetic sum of the complement pair the thirty-first names. The proem stated the arithmetic one line at a time.</p>
+<h3>Why This Edge Carries the Naming Ceremony</h3>
+<p>Walking a complement edge is walking from a configuration to its dimensional negation. Tale 31 discovers that this walk is <em>wet</em> — it flows. The six dimensions pour through the walker: Protection drains out of the left, Delegation rises in the small of the back; Connection cools at the right, Memory wakes along the spine; Computation cools beneath the feet, Value rises in the throat. The axes do not switch — they <em>pour</em>.</p>
+<p>This is why naming ceremonies happen on complement edges (see <code>blade-naming</code> skill): the maximal transformation is the only walk long enough for mythology to settle onto the mathematics.</p>
+<h2>Triadic Coordinates</h2>
+<p>Every ring element has three coordinates (from UOR PRISM):</p>
+<table>
+<thead>
+<tr>
+<th>Coordinate</th>
+<th>What It Measures</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Datum</strong></td>
+<td>The raw value</td>
+<td>Element identity</td>
+</tr>
+<tr>
+<td><strong>Stratum</strong></td>
+<td>Popcount</td>
+<td>Layer in Pascal distribution</td>
+</tr>
+<tr>
+<td><strong>Spectrum</strong></td>
+<td>Which bits are set</td>
+<td>Specific configuration</td>
+</tr>
+</tbody></table>
+<p>Two elements can have the same stratum but different spectra:</p>
+<pre><code>7  = stratum 3, spectrum {0,1,2}
+56 = stratum 3, spectrum {3,4,5}
+</code></pre>
+<h2>Mapping to Privacy Architecture</h2>
+<table>
+<thead>
+<tr>
+<th>Algebraic Concept</th>
+<th>Privacy Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ring element</td>
+<td>Blade configuration</td>
+</tr>
+<tr>
+<td>Stratum</td>
+<td>Blade tier</td>
+</tr>
+<tr>
+<td>neg∘bnot cycle</td>
+<td>Reachability guarantee</td>
+</tr>
+<tr>
+<td>Five operations</td>
+<td>Blade transformations</td>
+</tr>
+<tr>
+<td>Closure</td>
+<td>No escape from lattice</td>
+</tr>
+</tbody></table>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;The ring that closes on itself cannot be escaped. The algebra that generates its own successor cannot be stopped. This is the deepest protection—the enemy cannot step outside the mathematics.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>🔢 → Z/(2⁶)Z · neg∘bnot=succ · ∀x∀y:x→y · stratum=popcount · Pascal(6)=64 · 🔷∞</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>Scaling:</strong> How does the algebra change at higher bit widths?</li>
+<li><strong>Subring Structure:</strong> Are there meaningful subrings for specialized blades?</li>
+<li><strong>Homomorphic Operations:</strong> Can blade transformations be computed on encrypted configurations?</li>
+<li><strong>Stratum Preservation:</strong> Which operations preserve stratum?</li>
+<li><strong>Circuit Efficiency:</strong> What are the gate counts for each operation in ZK circuits?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-ring-algebra</code>, v5.2.1).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-ring-algebra</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-ring-algebra.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

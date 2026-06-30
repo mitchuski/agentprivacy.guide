@@ -1,0 +1,687 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide — Setup Guide · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Guide — Setup Guide</span></div>
+  <article><div class="md"><h1>Setup Guide</h1>
+</div>
+<div class="md"><p><strong>Prerequisites, installation, and environment configuration</strong></p>
+<hr>
+</div>
+<div class="md"><h2>System Requirements</h2>
+<h3>Hardware</h3>
+<ul>
+<li><strong>CPU</strong>: 4+ cores recommended</li>
+<li><strong>RAM</strong>: 8GB minimum, 16GB recommended</li>
+<li><strong>Storage</strong>: 50GB available space</li>
+<li><strong>Network</strong>: Stable internet connection</li>
+</ul>
+<h3>Operating System</h3>
+<ul>
+<li><strong>Linux</strong>: Ubuntu 20.04+ (recommended)</li>
+<li><strong>macOS</strong>: 11+ (supported)</li>
+<li><strong>Windows</strong>: Windows 10/11 (supported, tested on Windows 10)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Prerequisites Installation</h2>
+<h3>Core Tools</h3>
+<pre><code class="language-bash"># Update system
+sudo apt update &amp;&amp; sudo apt upgrade -y
+
+# Install build essentials
+sudo apt install -y build-essential git curl wget pkg-config \
+    libssl-dev python3 python3-pip python3-venv
+
+# Install PostgreSQL
+sudo apt install -y postgresql postgresql-contrib
+
+# Install Nginx (optional, for production)
+sudo apt install -y nginx
+</code></pre>
+<h3>Rust (for zecwallet-cli)</h3>
+<pre><code class="language-bash"># Install Rust
+curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Source environment
+source $HOME/.cargo/env
+
+# Verify installation
+rustc --version  # Should show 1.70+
+</code></pre>
+<h3>Node.js 20</h3>
+<pre><code class="language-bash"># Install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+# Load NVM
+export NVM_DIR=&quot;$HOME/.nvm&quot;
+[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \. &quot;$NVM_DIR/nvm.sh&quot;
+
+# Install Node.js 20
+nvm install 20
+nvm use 20
+
+# Verify installation
+node --version   # Should show v20.x
+npm --version    # Should show 10.x
+</code></pre>
+<h3>Zcash Light Client</h3>
+<p><strong>Linux/macOS:</strong></p>
+<pre><code class="language-bash"># Install zecwallet-cli
+cargo install --locked --git https://github.com/zingolabs/zecwallet-light-cli
+
+# Verify installation
+zecwallet-cli --version
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="language-powershell"># Install Rust first (if not installed)
+# Download from https://rustup.rs/ or use:
+# Invoke-WebRequest https://win.rustup.rs/x86_64 -OutFile rustup-init.exe
+# .\rustup-init.exe
+
+# Add Rust to PATH (if needed)
+$env:Path += &quot;;$env:USERPROFILE\.cargo\bin&quot;
+
+# Install zecwallet-cli
+cargo install --locked --git https://github.com/zingolabs/zecwallet-light-cli
+
+# Verify installation
+zecwallet-cli --version
+</code></pre>
+<p><strong>Note</strong>: Some <code>zecwallet-cli</code> versions don&#39;t support the <code>--data-dir</code> flag. The code has been updated to handle this automatically.</p>
+<hr>
+</div>
+<div class="md"><h2>API Keys &amp; Accounts</h2>
+<h3>1. Nillion (TEE)</h3>
+<p><strong>Sign up</strong>:</p>
+<ol>
+<li>Join Discord: <a href="https://discord.gg/nillion">https://discord.gg/nillion</a></li>
+<li>Go to #developers channel</li>
+<li>Request: &quot;API key for Proverb Protocol - TEE hackathon project&quot;</li>
+<li>Save: <code>NILLION_API_KEY</code></li>
+</ol>
+<p><strong>Install SDK</strong>:</p>
+<pre><code class="language-bash"># TypeScript/JavaScript
+npm install -g @nillion/client-web
+
+# Python (if needed)
+pip install nillion-client --break-system-packages
+</code></pre>
+<h3>2. NEAR Cloud AI (AI Verification)</h3>
+<p><strong>Sign up</strong>:</p>
+<ol>
+<li>Visit: <a href="https://cloud.near.ai/">https://cloud.near.ai/</a></li>
+<li>Create account</li>
+<li>Generate API key</li>
+<li>Save: <code>NEAR_API_KEY</code></li>
+</ol>
+<p><strong>Pricing</strong>:</p>
+<ul>
+<li>Free tier: 100 requests/month</li>
+<li>Paid: ~$0.03/request (openai/gpt-oss-120b)</li>
+</ul>
+<h3>3. Pinata (IPFS)</h3>
+<p><strong>Sign up</strong>:</p>
+<ol>
+<li>Visit: <a href="https://www.pinata.cloud/">https://www.pinata.cloud/</a></li>
+<li>Create account</li>
+<li>Generate API key (JWT)</li>
+<li>Save: <code>PINATA_JWT</code></li>
+</ol>
+<p><strong>Pricing</strong>:</p>
+<ul>
+<li>Free tier: 1GB storage</li>
+<li>Paid: $20/month (100GB)</li>
+</ul>
+<h3>4. PostgreSQL</h3>
+<p><strong>Setup</strong>:</p>
+<pre><code class="language-bash"># Start PostgreSQL
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+# Create user
+sudo -u postgres createuser -P proverb_user
+# Enter password when prompted
+
+# Create database
+sudo -u postgres createdb -O proverb_user proverb_protocol
+
+# Verify connection
+psql -U proverb_user -d proverb_protocol -h localhost
+# Enter password, then \q to quit
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Project Structure</h2>
+<pre><code class="language-bash"># Create main directory
+mkdir -p ~/proverb-protocol
+cd ~/proverb-protocol
+
+# Create subdirectories
+mkdir -p {oracle-swordsman/src,mage-agent/src,scripts,logs,spellbook,zcash-wallet}
+
+# Initialize git
+git init
+
+# Create .gitignore
+cat &gt; .gitignore &lt;&lt; &#39;EOF&#39;
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Database
+*.db
+*.sqlite
+
+# Zcash
+zcash-wallet/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+EOF
+
+git add .gitignore
+git commit -m &quot;Initial commit&quot;
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Environment Configuration</h2>
+<h3>Create .env File</h3>
+<pre><code class="language-bash"># Create environment file
+cat &gt; .env &lt;&lt; &#39;EOF&#39;
+# ============================================
+# Nillion Configuration
+# ============================================
+NILLION_API_KEY=your_nillion_api_key_here
+NILLION_NETWORK=testnet
+
+# ============================================
+# NEAR Cloud AI Configuration
+# ============================================
+NEAR_API_KEY=your_near_api_key_here
+NEAR_MODEL=gpt oss 120b
+
+# ============================================
+# IPFS/Pinata Configuration
+# ============================================
+PINATA_JWT=your_pinata_jwt_here
+PINATA_GATEWAY=https://your-gateway.mypinata.cloud
+SPELLBOOK_CID=bafkreietjoihzy4wnyvhtdfpn2g5n4j2rdcadanu5yinhkqyr2ax27znhy  # Current: v7.0.0-canonical
+
+# ============================================
+# Zcash Configuration
+# ============================================
+# Testnet
+ZCASH_NETWORK=testnet
+ZCASH_SERVER=https://zec.rocks:443
+ZCASH_DATA_DIR=C:\Users\yourusername\agentprivacy_master\zcash-wallet  # Windows path
+# ZCASH_DATA_DIR=/home/yourusername/proverb-protocol/zcash-wallet  # Linux/macOS path
+
+# Addresses (get from wallet setup)
+ZCASH_SHIELDED_RECEIVE_ADDRESS=zs1...   # Shielded address (receives user submissions)
+ZCASH_PUBLIC_INSCRIPTION_ADDRESS=t1...  # Transparent address (posts to spellbook)
+
+# Mainnet (for production)
+# ZCASH_NETWORK=mainnet
+# ZCASH_SERVER=https://mainnet.lightwalletd.com:9067
+
+# ============================================
+# PostgreSQL Configuration
+# ============================================
+DATABASE_URL=postgresql://proverb_user:your_password@localhost:5432/proverb_protocol
+
+# ============================================
+# Oracle Swordsman Configuration
+# ============================================
+ORACLE_CHECK_INTERVAL=30  # seconds
+ORACLE_RETRY_ATTEMPTS=3
+ORACLE_RETRY_DELAY=60  # seconds
+
+# ============================================
+# Economic Model
+# ============================================
+PROVERB_COST=0.01  # ZEC
+PUBLIC_SPLIT=0.618  # 61.8%
+PRIVATE_SPLIT=0.382  # 38.2%
+NETWORK_FEE=0.0001  # ZEC
+
+# ============================================
+# Logging
+# ============================================
+LOG_LEVEL=info
+LOG_FILE=logs/proverb-protocol.log
+
+# ============================================
+# Frontend Configuration (Mage Agent)
+# ============================================
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_NETWORK=testnet
+EOF
+
+# Secure the file
+chmod 600 .env
+</code></pre>
+<h3>Fill in Your Keys</h3>
+<pre><code class="language-bash"># Edit with your actual API keys
+nano .env
+
+# Or use environment-specific files
+cp .env .env.development
+cp .env .env.production
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Database Setup</h2>
+<h3>Create Schema</h3>
+<pre><code class="language-bash"># Create schema file
+cat &gt; scripts/schema.sql &lt;&lt; &#39;EOF&#39;
+-- Proverb Protocol Database Schema
+
+-- Submissions table
+CREATE TABLE IF NOT EXISTS submissions (
+    id SERIAL PRIMARY KEY,
+    tracking_code VARCHAR(64) UNIQUE NOT NULL,
+    sender_address VARCHAR(128) NOT NULL,
+    proverb_text TEXT NOT NULL,
+    amount_zec DECIMAL(18, 8) NOT NULL,
+    txid VARCHAR(128) NOT NULL,
+    received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(32) DEFAULT &#39;pending&#39;,
+    memo_text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Verification results table
+CREATE TABLE IF NOT EXISTS verifications (
+    id SERIAL PRIMARY KEY,
+    submission_id INTEGER REFERENCES submissions(id),
+    ai_provider VARCHAR(64) NOT NULL,
+    quality_score DECIMAL(5, 4),
+    matched_act VARCHAR(256),
+    reasoning TEXT,
+    verified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(32) DEFAULT &#39;verified&#39;
+);
+
+-- Inscriptions table
+CREATE TABLE IF NOT EXISTS inscriptions (
+    id SERIAL PRIMARY KEY,
+    submission_id INTEGER REFERENCES submissions(id),
+    public_txid VARCHAR(128),
+    private_txid VARCHAR(128),
+    public_amount DECIMAL(18, 8),
+    private_amount DECIMAL(18, 8),
+    network_fee DECIMAL(18, 8),
+    inscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    block_height INTEGER,
+    status VARCHAR(32) DEFAULT &#39;confirmed&#39;
+);
+
+-- Spellbook acts table (cached from IPFS)
+CREATE TABLE IF NOT EXISTS spellbook_acts (
+    id SERIAL PRIMARY KEY,
+    act_id VARCHAR(64) UNIQUE NOT NULL,
+    title VARCHAR(256) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(128),
+    ipfs_cid VARCHAR(128),
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Oracle status table
+CREATE TABLE IF NOT EXISTS oracle_status (
+    id SERIAL PRIMARY KEY,
+    check_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    submissions_processed INTEGER DEFAULT 0,
+    verifications_completed INTEGER DEFAULT 0,
+    inscriptions_made INTEGER DEFAULT 0,
+    errors_count INTEGER DEFAULT 0,
+    last_error TEXT,
+    status VARCHAR(32) DEFAULT &#39;running&#39;
+);
+
+-- Indexes for performance
+CREATE INDEX idx_submissions_status ON submissions(status);
+CREATE INDEX idx_submissions_tracking ON submissions(tracking_code);
+CREATE INDEX idx_verifications_submission ON verifications(submission_id);
+CREATE INDEX idx_inscriptions_submission ON inscriptions(submission_id);
+CREATE INDEX idx_oracle_status_timestamp ON oracle_status(check_timestamp DESC);
+
+-- Views for monitoring
+CREATE OR REPLACE VIEW submission_pipeline AS
+SELECT 
+    s.id,
+    s.tracking_code,
+    s.status AS submission_status,
+    v.quality_score,
+    v.matched_act,
+    i.public_txid,
+    i.inscribed_at,
+    s.created_at
+FROM submissions s
+LEFT JOIN verifications v ON s.id = v.submission_id
+LEFT JOIN inscriptions i ON s.id = i.submission_id
+ORDER BY s.created_at DESC;
+
+-- Proverb statistics view
+CREATE OR REPLACE VIEW proverb_stats AS
+SELECT 
+    COUNT(*) AS total_submissions,
+    COUNT(CASE WHEN status = &#39;completed&#39; THEN 1 END) AS completed,
+    COUNT(CASE WHEN status = &#39;pending&#39; THEN 1 END) AS pending,
+    COUNT(CASE WHEN status = &#39;failed&#39; THEN 1 END) AS failed,
+    AVG(v.quality_score) AS avg_quality_score,
+    SUM(amount_zec) AS total_zec_received
+FROM submissions s
+LEFT JOIN verifications v ON s.id = v.submission_id;
+EOF
+
+# Apply schema
+psql -U proverb_user -d proverb_protocol -h localhost -f scripts/schema.sql
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Zcash Wallet Setup</h2>
+<h3>Initialize Light Client</h3>
+<p><strong>Linux/macOS:</strong></p>
+<pre><code class="language-bash"># Create wallet directory
+mkdir -p ~/proverb-protocol/zcash-wallet
+
+# Start light client (testnet)
+# Note: If your version doesn&#39;t support --data-dir, omit it
+zecwallet-cli --server https://zec.rocks:443 \
+              --data-dir ~/proverb-protocol/zcash-wallet
+
+# Wait for sync (takes 4-6 hours for first sync)
+# You&#39;ll see sync progress in the output
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="language-powershell"># Create wallet directory
+New-Item -ItemType Directory -Force -Path &quot;$env:USERPROFILE\agentprivacy_master\zcash-wallet&quot;
+
+# Start light client (testnet)
+# Note: Some versions don&#39;t support --data-dir flag
+zecwallet-cli --server https://zec.rocks:443
+
+# Wait for sync (takes 4-6 hours for first sync)
+# You&#39;ll see sync progress in the output
+</code></pre>
+<h3>Create Addresses</h3>
+<pre><code class="language-zecwallet-cli"># In the zecwallet-cli prompt:
+
+# Create new wallet
+new
+
+# Get shielded address (for receiving user submissions - z→z transactions)
+new z
+
+# Get transparent address (for public inscriptions to spellbook)
+address
+
+# List all addresses
+addresses
+
+# Save these addresses!
+</code></pre>
+<h3>Get Testnet ZEC</h3>
+<pre><code class="language-bash"># Request from faucet
+# Visit: https://faucet.zecpages.com/
+
+# Or use CLI (if available)
+curl -X POST https://faucet.zecpages.com/api/claim \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{&quot;address&quot;:&quot;your_t_address_here&quot;}&#39;
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Spellbook Creation</h2>
+<h3>Current Spellbook</h3>
+<p>The spellbook is already created and uploaded to IPFS:</p>
+<ul>
+<li><strong>Version</strong>: 4.3.0-canonical</li>
+<li><strong>IPFS CID</strong>: <code>bafkreietjoihzy4wnyvhtdfpn2g5n4j2rdcadanu5yinhkqyr2ax27znhy</code></li>
+<li><strong>Description</strong>: Complete Spellbook - Canonical Edition combining First Person Spellbook and Zero Knowledge Spellbook with Relationship Proverb Protocol inscriptions</li>
+<li><strong>Location</strong>: <code>spellbook/spellbook-acts.json</code></li>
+</ul>
+<p>The spellbook contains:</p>
+<ul>
+<li><strong>Story Spellbook</strong>: 18 acts teaching privacy and delegation architecture</li>
+<li><strong>Zero Knowledge Spellbook</strong>: 30 tales on zero-knowledge proofs</li>
+<li><strong>Canon Spellbook</strong>: 10 chapters on blockchain history</li>
+<li><strong>Society Spellbook</strong>: 17 chapters on parallel society</li>
+<li><strong>Plurality Spellbook</strong>: 30 acts on plurality concepts</li>
+<li><strong>Relationship Proverb Protocol</strong>: Integration for AI verification</li>
+</ul>
+<p>To update the spellbook, edit <code>spellbook/spellbook-acts.json</code> and re-upload to Pinata (see upload script: <code>upload-spellbook.ps1</code>).</p>
+<h3>Upload to IPFS</h3>
+<p><strong>Current Status</strong>: Spellbook is already uploaded with CID <code>bafkreietjoihzy4wnyvhtdfpn2g5n4j2rdcadanu5yinhkqyr2ax27znhy</code></p>
+<p><strong>To Update Spellbook</strong>:</p>
+<p><strong>Windows (PowerShell):</strong></p>
+<pre><code class="language-powershell"># Use the provided script
+.\upload-spellbook.ps1 -JwtToken &quot;YOUR_PINATA_JWT&quot;
+
+# Or manually:
+$jwt = &quot;YOUR_PINATA_JWT&quot;
+$file = &quot;spellbook\spellbook-acts.json&quot;
+$boundary = [System.Guid]::NewGuid().ToString()
+$fileBytes = [System.IO.File]::ReadAllBytes($file)
+$fileName = [System.IO.Path]::GetFileName($file)
+
+$bodyLines = @(
+    &quot;--$boundary&quot;,
+    &quot;Content-Disposition: form-data; name=`&quot;file`&quot;; filename=`&quot;$fileName`&quot;&quot;,
+    &quot;Content-Type: application/json&quot;,
+    &quot;&quot;,
+    [System.Text.Encoding]::UTF8.GetString($fileBytes),
+    &quot;--$boundary--&quot;
+) -join &quot;`r`n&quot;
+
+$headers = @{
+    &quot;Authorization&quot; = &quot;Bearer $jwt&quot;
+    &quot;Content-Type&quot; = &quot;multipart/form-data; boundary=$boundary&quot;
+}
+
+$response = Invoke-RestMethod -Uri &quot;https://api.pinata.cloud/pinning/pinFileToIPFS&quot; -Method Post -Headers $headers -Body $bodyLines
+$response.IpfsHash  # This is your new CID
+</code></pre>
+<p><strong>Linux/macOS:</strong></p>
+<pre><code class="language-bash"># Use curl to upload
+curl -X POST https://api.pinata.cloud/pinning/pinFileToIPFS \
+  -H &quot;Authorization: Bearer YOUR_PINATA_JWT&quot; \
+  -F file=@spellbook/spellbook-acts.json
+
+# Save the returned CID and update .env
+</code></pre>
+<h3>Verify IPFS Access</h3>
+<pre><code class="language-bash"># Test retrieval (current spellbook)
+curl https://red-acute-chinchilla-216.mypinata.cloud/ipfs/bafkreietjoihzy4wnyvhtdfpn2g5n4j2rdcadanu5yinhkqyr2ax27znhy
+
+# Or use your gateway:
+curl https://YOUR_GATEWAY.mypinata.cloud/ipfs/bafkreietjoihzy4wnyvhtdfpn2g5n4j2rdcadanu5yinhkqyr2ax27znhy
+
+# Should return your JSON file with version 4.0.0-canonical
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Verification Checklist</h2>
+<h3>System Components</h3>
+<pre><code class="language-bash"># Check Rust
+rustc --version
+# ✓ Should show 1.70+
+
+# Check Node.js
+node --version
+# ✓ Should show v20.x
+
+# Check PostgreSQL
+psql --version
+# ✓ Should show 12+
+
+# Check zecwallet-cli
+zecwallet-cli --version
+# ✓ Should show version info
+
+# Check Nillion SDK
+npm list -g @nillion/client-web
+# ✓ Should show installed version
+</code></pre>
+<h3>Database Connection</h3>
+<pre><code class="language-bash"># Test connection
+psql -U proverb_user -d proverb_protocol -h localhost -c &quot;SELECT 1;&quot;
+# ✓ Should return 1
+
+# Check tables
+psql -U proverb_user -d proverb_protocol -h localhost -c &quot;\dt&quot;
+# ✓ Should show all tables
+</code></pre>
+<h3>API Keys</h3>
+<pre><code class="language-bash"># Load environment
+source .env
+
+# Check Nillion
+echo $NILLION_API_KEY
+# ✓ Should show your key
+
+# Check NEAR Cloud AI
+echo $NEAR_API_KEY
+# ✓ Should show your key
+
+# Check Pinata
+echo $PINATA_JWT
+# ✓ Should show your JWT
+</code></pre>
+<h3>Zcash Wallet</h3>
+<p><strong>Linux/macOS:</strong></p>
+<pre><code class="language-bash"># Check sync status
+zecwallet-cli --server https://zec.rocks:443 \
+              --data-dir ~/proverb-protocol/zcash-wallet \
+              --command &quot;sync&quot;
+
+# Check balance
+zecwallet-cli --data-dir ~/proverb-protocol/zcash-wallet \
+              --command &quot;balance&quot;
+# ✓ Should show non-zero balance for testnet
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="language-powershell"># Check sync status (if --data-dir supported)
+zecwallet-cli --server https://zec.rocks:443 --command &quot;sync&quot;
+
+# Check balance
+zecwallet-cli --server https://zec.rocks:443 --command &quot;balance&quot;
+# ✓ Should show non-zero balance for testnet
+</code></pre>
+<p><strong>Note</strong>: If your <code>zecwallet-cli</code> version doesn&#39;t support <code>--data-dir</code>, the wallet uses the default location. The code handles this automatically.</p>
+<hr>
+</div>
+<div class="md"><h2>Common Issues</h2>
+<h3>PostgreSQL Connection Refused</h3>
+<pre><code class="language-bash"># Check if running
+sudo systemctl status postgresql
+
+# Start if stopped
+sudo systemctl start postgresql
+
+# Check firewall
+sudo ufw allow 5432/tcp
+</code></pre>
+<h3>Zcash Sync Taking Too Long</h3>
+<pre><code class="language-bash"># Use different server
+zecwallet-cli --server https://mainnet.lightwalletd.com:9067
+
+# Or wait - first sync takes 4-6 hours
+# Subsequent syncs are much faster
+</code></pre>
+<h3>Nillion API Key Not Working</h3>
+<pre><code class="language-bash"># Verify in Discord
+# Check rate limits
+# Try regenerating key
+</code></pre>
+<h3>IPFS Upload Failing</h3>
+<pre><code class="language-bash"># Check Pinata JWT
+# Verify file size (&lt;25MB for free tier)
+# Try web interface instead
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Next Steps</h2>
+<p>✅ <strong>Setup Complete!</strong></p>
+<p>You now have:</p>
+<ul>
+<li>All tools installed</li>
+<li>API keys configured</li>
+<li>Database created</li>
+<li>Zcash wallet synced</li>
+<li>Spellbook uploaded to IPFS</li>
+<li>Environment configured</li>
+</ul>
+<p><strong>Next</strong>: Read <code>docs/02-ARCHITECTURE.md</code> to understand the system design</p>
+<p><strong>Then</strong>: Follow <code>docs/03-BUILD_GUIDE.md</code> to start implementing</p>
+<hr>
+</div>
+<div class="md"><h2>Quick Commands Reference</h2>
+<pre><code class="language-bash"># Start Zcash light client
+zecwallet-cli --server https://zec.rocks:443 --data-dir ~/proverb-protocol/zcash-wallet
+
+# Connect to database
+psql -U proverb_user -d proverb_protocol -h localhost
+
+# Check logs
+tail -f logs/proverb-protocol.log
+
+# Verify IPFS
+curl https://gateway.pinata.cloud/ipfs/$SPELLBOOK_CID
+
+# Test environment
+source .env &amp;&amp; env | grep NILLION
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Production Notes</h2>
+<p>When moving to production:</p>
+<ol>
+<li>Use mainnet Zcash server</li>
+<li>Generate new API keys</li>
+<li>Use production database</li>
+<li>Set up monitoring</li>
+<li>Configure backups</li>
+<li>Use SSL/TLS</li>
+<li>Set up firewall rules</li>
+</ol>
+<p>See production deployment guide for details.</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-architecture-guides.html">The Architecture Guides</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="guide-setup-guide.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

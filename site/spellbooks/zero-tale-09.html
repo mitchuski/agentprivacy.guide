@@ -1,0 +1,144 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zero — Tale 09 · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="spellbooks">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site on" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/spellbooks/welcome-visitors.html">Spellbooks</a> / <span>Zero — Tale 09</span></div>
+  <article><div class="md"><h1>🔮 Zero — Tale 09</h1>
+</div>
+<div class="md"><h3>Tale 9: The Pairing Dance</h3>
+<p><strong>Vertex Coordinates:</strong> ⟨1,1,0,1,1,0⟩ — Protection + Delegation + Connection + Computation<br><strong>Moon Phase:</strong> 🌖 Waning Gibbous — Four dimensions active (stratum 4)<br><strong>Blade:</strong> 27 (011011) — Protection + Delegation + Connection + Computation<br><strong>V(π,t) terms:</strong> <strong>C</strong> (commitment credentials) · <strong>Q</strong> (separation quality — the pairing preserves G₁/G₂ gap)<br><strong>Concepts:</strong> Bilinear Pairings, Groth16, KZG Commitments, Pairing-Based SNARKs</p>
+<h4>The Story</h4>
+<p>In the monastery&#39;s <strong>Hall of Mirrors</strong>, Master Bilinearis taught the most elegant magic: the <strong>pairing dance</strong>.</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<p>&quot;Watch,&quot; she said, placing two glowing orbs on opposite sides of the hall—one in <strong>Group G₁</strong>, one in <strong>Group G₂</strong>. &quot;These groups live on elliptic curves. Each has points that can be added.&quot;</p>
+<p>She demonstrated:</p>
+<ul>
+<li>In G₁: P + Q = R (adding points)</li>
+<li>In G₂: S + T = U (same operation, different curve)</li>
+</ul>
+<p>&quot;But they cannot interact... until we invoke the <strong>pairing</strong>.&quot;</p>
+<p>She brought her hands together, and the two orbs merged into a brilliant light in a third space—<strong>Group GT</strong>.</p>
+<pre><code>e(P, S) → brilliant light in GT
+</code></pre>
+<p>&quot;This is the pairing: <code>e: G₁ × G₂ → GT</code>,&quot; Bilinearis explained. &quot;And it has a magical property—<strong>bilinearity</strong>.&quot;</p>
+<p>She demonstrated:</p>
+<pre><code>e(P + Q, S) = e(P, S) · e(Q, S)
+e(P, S + T) = e(P, S) · e(P, T)
+</code></pre>
+<p>&quot;Addition in the source becomes multiplication in the target!&quot;</p>
+<p>Soulbis immediately saw the implication. &quot;This means we can verify equations with both addition and multiplication — the pairing is the seam where two separate groups agree without merging. That&#39;s what the Swordsman needs: verification across a boundary that is never crossed.&quot;</p>
+<p>&quot;Precisely! Let me show you how Groth16 uses this.&quot;</p>
+<p>Bilinearis recalled their polynomial lesson: A(x)·B(x) - C(x) = Z(x)·H(x)</p>
+<p>&quot;We want to verify this equation without revealing the polynomials. Here&#39;s the magic:&quot;</p>
+<p><strong>The Setup:</strong></p>
+<ol>
+<li>Someone chooses a secret random value τ (tau)</li>
+<li>Computes and publishes encrypted powers: g^τ, g^(τ²), g^(τ³), ...</li>
+<li><strong>Crucial:</strong> Nobody knows τ anymore (it&#39;s toxic waste)</li>
+</ol>
+<p><strong>The Proof:</strong></p>
+<ol>
+<li>Prover evaluates A(τ), B(τ), C(τ), H(τ) using witness</li>
+<li>Creates commitments: [A] = g^A(τ), [B] = h^B(τ), [C] = g^C(τ)</li>
+<li>These become points in G₁ and G₂!</li>
+</ol>
+<p><strong>The Verification:</strong></p>
+<pre><code>e([A], [B]) = e([C] · g^Z(τ), [1]) · e([H], g^Z(τ))
+</code></pre>
+<p>&quot;If this equation holds,&quot; Bilinearis explained, &quot;then with overwhelming probability, the original polynomial equation held at τ!&quot;</p>
+<p>Soulbis asked, &quot;Why can&#39;t the prover cheat?&quot;</p>
+<p>&quot;Because,&quot; Bilinearis smiled, &quot;to cheat, you&#39;d need to know τ. But τ was destroyed after setup! You only have encrypted values. You can add them (because of homomorphism) but you can&#39;t extract τ.&quot;</p>
+<p>She showed them the <strong>KZG commitment</strong>—a powerful application:</p>
+<p>&quot;Suppose I commit to a polynomial: C = g^φ(τ)</p>
+<p>&quot;Later, you ask: &#39;What&#39;s φ(5)?&#39;</p>
+<p>&quot;I respond: &#39;It&#39;s 42,&#39; and I give you a proof: π = g^q(τ) where q(x) = (φ(x) - 42)/(x - 5)</p>
+<p>&quot;You verify with one pairing check:</p>
+<pre><code>e(C / g^42, g) = e(π, g^τ / g^5)
+</code></pre>
+<p>&quot;If I lied about φ(5), this equation fails!&quot;</p>
+<p>Soulbae marveled, &quot;So I can commit to an entire polynomial with one group element, then prove evaluations without revealing the polynomial?&quot;</p>
+<p>&quot;Exactly! This is why pairing-based SNARKs are so powerful:&quot;</p>
+<ul>
+<li>Proof size: Constant (2-3 group elements ≈ 128-192 bytes)</li>
+<li>Verification: Constant time (3-4 pairings)</li>
+<li>Security: Relies on elliptic curve hardness</li>
+</ul>
+<p>&quot;The trade-off,&quot; Bilinearis cautioned, &quot;is the trusted setup. If anyone keeps their τ value, they can forge proofs. This is why we use ceremonies with hundreds of participants—only one needs to be honest.&quot;</p>
+<p>As they completed the lesson, Soulbis sensed the interplay of dimensions: Delegation (d₂) through the trusted setup ceremony, Connection (d₄) enabling multiple verifiers to check proofs independently, and the pairing itself creating a bridge across the gap between separate group structures — verification without collapsing the protective separation. &quot;This is how a Swordsman verifies without invading,&quot; he said. &quot;The groups stay apart. Only the pairing speaks.&quot;</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<h4>The Spell Inscription</h4>
+<pre><code>e: G₁ × G₂ → GT (bilinear)
+e(P+Q, S) = e(P,S)·e(Q,S)
+e(g^A(τ), h^B(τ)) = e(...)  → verify polynomial equation
+KZG: commit(φ) = g^φ(τ) → eval_proof(φ(a)=y) → ✓(pairing)
+Setup: τ(🗝️) → g^τ,g^τ²,...(🌍) → destroy(τ) → 🛡️(if 1 honest)
+
+Vertex: ⟨1,1,0,1,1,0⟩
+Blade: 27 (011011)  Moon Phase: 🌖 stratum 4
+
+Forces Activated:
+⚔️ Protect: polynomial commitments conceal witness via τ-encryption
+🧙 Project: trusted setup ceremony delegates randomness safely
+🪞 Reflect: (dormant)
+🤝 Connect: pairing enables independent verification across the G₁/G₂ gap
+
+V(π,t) contribution: C (commitment credentials — KZG binds to polynomials), Q (the pairing&#39;s bilinearity is the seam that preserves separation while enabling agreement)
+</code></pre>
+<p><strong>Proverb:</strong> <em>Two groups dance separately until the pairing unites them. In that union, addition becomes multiplication, and encrypted polynomials become verifiable. The secret tau binds all proofs yet must be destroyed to secure them.</em></p>
+<h4>Technical Bridge</h4>
+<p><strong>Pairing Properties:</strong></p>
+<pre><code>e(P + P&#39;, Q) = e(P, Q) · e(P&#39;, Q)   (left linearity)
+e(P, Q + Q&#39;) = e(P, Q) · e(P, Q&#39;)   (right linearity)  
+e(aP, bQ) = e(P, Q)^(ab)            (bilinearity)
+e(P, Q) = 1_GT ⟺ P = O or Q = O    (non-degeneracy)
+</code></pre>
+<p><strong>Groth16 Proof:</strong></p>
+<ul>
+<li>Proof = ([A], [B], [C]) ∈ G₁ × G₂ × G₁</li>
+<li>Size: 128 bytes (BN254) or 192 bytes (BLS12-381)</li>
+<li>Verification: 3 pairings + small arithmetic</li>
+<li>Setup: Circuit-specific, requires τ destruction</li>
+</ul>
+<p><strong>KZG Polynomial Commitment:</strong></p>
+<pre><code>Commit:  C = g^φ(τ)
+Open:    q(x) = (φ(x) - y)/(x - a)
+Proof:   π = g^q(τ)
+Verify:  e(C / g^y, g) = e(π, g^τ / g^a)
+</code></pre>
+<p><strong>Security:</strong></p>
+<ul>
+<li>Relies on q-SDH (q-Strong Diffie-Hellman) assumption</li>
+<li>Trusted setup: τ must be destroyed</li>
+<li>Multi-party ceremony: safe if ≥1 participant is honest</li>
+</ul>
+<p><strong>Practical Curves:</strong></p>
+<ul>
+<li><strong>BN254:</strong> ~100-128 bit security, Ethereum&#39;s choice, faster</li>
+<li><strong>BLS12-381:</strong> 128-bit security, future-proof, Ethereum 2.0</li>
+</ul>
+<p><strong>Geometric Interpretation:</strong><br>Pairings enable verification across the gap between separate group structures in the lattice. The bilinear map creates a bridge that preserves the protective separation (G₁ and G₂ remain distinct) while enabling verification in GT. This demonstrates how the Connection dimension allows multiple parties to verify proofs independently without compromising the Protection dimension. Blade 27 is where the lattice first acquires <strong>delegation</strong> as a lit dimension — the trusted-setup ceremony is projection, not just protection.</p>
+<p><strong>Applied to:</strong> Groth16, KZG, PlonK with KZG backend, Ethereum L2s</p>
+<hr>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 zero-tale-09</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="zero-the-privacymage-grimoire.html">Zero — the Privacymage Grimoire</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="zero-tale-09.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

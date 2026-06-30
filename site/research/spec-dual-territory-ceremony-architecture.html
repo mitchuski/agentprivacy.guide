@@ -1,0 +1,1061 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — Dual Territory Ceremony Architecture · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Spec — Dual Territory Ceremony Architecture</span></div>
+  <article><div class="md"><h1>Dual Territory Ceremony Architecture</h1>
+</div>
+<div class="md"><h2>Technical Specification v1.0</h2>
+<p><strong>Author:</strong> privacymage<br><strong>Date:</strong> March 31, 2026<br><strong>For:</strong> Coding agents working on agentprivacy.ai, spellweb.ai, and the extension repos<br><strong>Master inscription:</strong> <code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<hr>
+</div>
+<div class="md"><h2>1. Architectural Overview</h2>
+<p>The 0xagentprivacy ecosystem has two territories and two extensions connected by a mana bridge.</p>
+<pre><code>┌─────────────────────┐     ceremony      ┌─────────────────────┐
+│   agentprivacy.ai   │◄── channel  ──►   │    spellweb.ai      │
+│   (Mage Territory)  │     (mana)        │ (Swordsman Territory)│
+│                     │                    │                      │
+│  Stories, Spells    │                    │  Topology, Blades    │
+│  Personas, Training │                    │  Forge, Hexagrams    │
+│  Pretext Orbs       │                    │  Constellations      │
+│  Path Page          │                    │  Cut Segments        │
+└────────┬────────────┘                    └──────────┬───────────┘
+         │                                            │
+         │           ┌──────────────┐                 │
+         └──────────►│   bgin.ai    │◄────────────────┘
+                     │ (Third Node) │
+                     │ Trust Graph  │
+                     └──────────────┘
+         
+         ┌──────────────────────────────────┐
+         │        The Open Web              │
+         │                                  │
+         │  ┌────────────┐ ┌─────────────┐  │
+         │  │ Swordsman  │ │    Mage     │  │
+         │  │ Extension  │ │  Extension  │  │
+         │  │ (boundary) │ │ (knowledge) │  │
+         │  └─────┬──────┘ └──────┬──────┘  │
+         │        │  ceremony     │          │
+         │        │◄── channel ──►│          │
+         │        └───────────────┘          │
+         └──────────────────────────────────┘
+</code></pre>
+<p><strong>Core rule:</strong> The Swordsman and Mage never merge. Separate processes, separate storage, separate permissions, separate repos. This applies at every level — protocol, extension, website, visual rendering.</p>
+<hr>
+</div>
+<div class="md"><h2>2. Territory Definitions</h2>
+<h3>2.1 spellweb.ai — The Swordsman&#39;s Territory</h3>
+<p><strong>Purpose:</strong> Topology. Navigation. Proof generation. The territory you traverse.</p>
+<p><strong>Existing stack:</strong> Vite + React 18 + TypeScript + D3.js force-directed graph</p>
+<p><strong>Existing components:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SpellWeb.tsx</code></td>
+<td>Main graph + forge modal + global controls</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>SpellCeremony.tsx</code></td>
+<td>Ceremony panel + action bar + proof generation</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>WanderingOrbs.tsx</code></td>
+<td>Orb wandering + tracing mode + cut segments</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>SpellEffects.tsx</code></td>
+<td>Spell particles and visual effects</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>types/graph.ts</code></td>
+<td>Hexagram types + dimension computation</td>
+<td>✅ Operational</td>
+</tr>
+</tbody></table>
+<p><strong>Existing features:</strong></p>
+<ul>
+<li>478-node knowledge graph (984 edges) with D3 force simulation</li>
+<li>Dual orbs (Swordsman red <code>#e74c3c</code>, Mage purple <code>#9b59b6</code>)</li>
+<li>Constellation marking, saving, loading</li>
+<li>Evocation (orbs trace constellation path, count laps, accumulate charge)</li>
+<li>Blade forge (six-dimension activation, stratum/tier classification, SVG with inscribed constellation)</li>
+<li>Hexagram computation (node dimensions → 6 binary lines → 64 states)</li>
+<li>Node inspector with hexagram visualisation</li>
+<li>Blade inventory with tracing (click blade → orbs retrace path with tier-coloured cut segments)</li>
+<li>Blade export to markdown/JSON</li>
+</ul>
+<p><strong>Colour system (Swordsman territory):</strong></p>
+<ul>
+<li>Swordsman orb: <code>#e74c3c</code> (red/coral)</li>
+<li>Mage orb: <code>#9b59b6</code> (purple)</li>
+<li>Light tier: <code>#87ceeb</code> (sky blue)</li>
+<li>Heavy tier: <code>#c0c0c0</code> (silver)</li>
+<li>Dragon tier: <code>#ffd700</code> (gold)</li>
+<li>Forge glow: gold + computation blue <code>#4a9eff</code></li>
+</ul>
+<h3>2.2 agentprivacy.ai — The Mage&#39;s Territory</h3>
+<p><strong>Purpose:</strong> Story. Explanation. Spell learning. Training. The territory you read.</p>
+<p><strong>Existing stack:</strong> Next.js 14 + TypeScript + Tailwind CSS</p>
+<p><strong>Existing features:</strong></p>
+<ul>
+<li>Manifesto / homepage content</li>
+<li>Ecosystem/tools/built inventory pages</li>
+<li>Soul orb (existing central orb on homepage)</li>
+<li><code>useWaveField</code> canvas hook (existing)</li>
+<li><code>EcosystemNode</code> and <code>ToolCard</code> components (existing)</li>
+<li>CLAUDE.md encoding dual-agent rules</li>
+</ul>
+<p><strong>Colour system (Mage territory):</strong></p>
+<ul>
+<li>Mage orb: cyan/teal <code>#00d4aa</code></li>
+<li>Swordsman orb: coral/red <code>#e74c3c</code></li>
+<li>Constellation: amber <code>#f5a623</code></li>
+<li>Spell text: amber glow</li>
+<li>Background: dark, star-field aesthetic</li>
+</ul>
+<h3>2.3 bgin.ai — The Third Node</h3>
+<p><strong>Purpose:</strong> Reference application. Trust graph plane. Network layer. Where bilateral exchange finds its first counterparty.</p>
+<p><strong>Status:</strong> Live. Existing frontend. Future integration point for MyTerms bilateral exchange.</p>
+<hr>
+</div>
+<div class="md"><h2>3. What Needs Building</h2>
+<h3>3.1 spellweb.ai Additions</h3>
+<h4>3.1.1 Ceremony Receiver</h4>
+<p><strong>Purpose:</strong> Accept mana-powered inscriptions from extensions and from agentprivacy.ai visitors.</p>
+<p><strong>Communication:</strong> <code>window.postMessage</code> when on spellweb.ai domain. The receiver listens for ceremony messages from extensions or from the agentprivacy.ai iframe/redirect flow.</p>
+<p><strong>Message schema:</strong></p>
+<pre><code class="language-typescript">interface CeremonyMessage {
+  type: &#39;INSCRIPTION&#39;;
+  source: &#39;swordsman_extension&#39; | &#39;mage_extension&#39; | &#39;agentprivacy&#39;;
+  payload: NodeAnnotation | CommunityEdge | ConstellationProjection | ProverbForge;
+  mana_cost: number;
+  mana_balance: number; // sender&#39;s remaining balance after deduction
+  signature: string; // proof of mana ownership
+}
+
+interface NodeAnnotation {
+  kind: &#39;node_annotation&#39;;
+  target_node_id: string;
+  text: string; // max 280 chars
+  mana_cost: 1;
+}
+
+interface CommunityEdge {
+  kind: &#39;community_edge&#39;;
+  source_node_id: string;
+  target_node_id: string;
+  label?: string;
+  mana_cost: 2;
+}
+
+interface ConstellationProjection {
+  kind: &#39;constellation_projection&#39;;
+  nodes: string[]; // node IDs
+  connections: Array&lt;{ source: string; target: string }&gt;;
+  name: string;
+  mana_cost: 3;
+}
+
+interface ProverbForge {
+  kind: &#39;proverb_forge&#39;;
+  text: string; // max 280 chars
+  source_constellation_hash: string;
+  mana_cost: 4;
+}
+</code></pre>
+<p><strong>Rendering rules:</strong></p>
+<ul>
+<li>Community edges render dashed (canonical edges render solid)</li>
+<li>Forge-born proverbs shimmer differently from canonical nodes (animated opacity pulse)</li>
+<li>All community inscriptions carry author pseudonym + timestamp</li>
+<li>Inscriptions fade over 30 days unless reinforced (0.5 mana to reinforce)</li>
+</ul>
+<h4>3.1.2 Understanding-as-Key Ceremony Mode</h4>
+<p><strong>Purpose:</strong> Enable the bilateral proof-of-shared-understanding ceremony on the spellweb.</p>
+<p><strong>UX flow:</strong></p>
+<ol>
+<li><strong>Initiate ceremony</strong> — button in ceremony panel: &quot;Begin Bilateral Ceremony&quot;</li>
+<li><strong>Generate session link</strong> — creates a shareable URL with session ID</li>
+<li><strong>Both participants join</strong> — second participant opens link, sees the same graph state</li>
+<li><strong>Shared cursor</strong> — both participants&#39; cursors visible (Swordsman red, Mage teal)</li>
+<li><strong>Joint constellation marking</strong> — either participant can mark nodes; both see the constellation build in real time</li>
+<li><strong>Simultaneous evocation</strong> — both participants hit &quot;Evoke&quot; together; both sets of orbs trace the same constellation</li>
+<li><strong>Simultaneous blade forging</strong> — when evocation ends, both participants forge from the same constellation; blades share the constellation hash but have separate signatures</li>
+<li><strong>Proverb inscription</strong> — both participants write a proverb; the proverbs are linked as a bilateral pair</li>
+<li><strong>Bilateral witness</strong> — each participant sees the other&#39;s blade, other&#39;s proverb; the witness circuit closes</li>
+</ol>
+<p><strong>Technical approach:</strong> WebSocket or WebRTC peer connection for real-time sync. Fallback: shared constellation via URL hash + manual &quot;ready&quot; confirmation.</p>
+<p><strong>Proof strength indicator:</strong> Display current lap count mapped to tier threshold during evocation. &quot;5 laps — Light Armour&quot; → &quot;13 laps — Heavy&quot; → &quot;62 laps — Dragon, R &lt; 1&quot;</p>
+<h4>3.1.3 Mana Balance Display</h4>
+<p><strong>Purpose:</strong> Show the visitor&#39;s mana balance and available inscription actions.</p>
+<p><strong>Storage:</strong> <code>localStorage</code> (never sent to server). Mana balance is self-reported and self-enforced — the honour system is intentional. Sybil resistance comes from the difficulty of earning mana, not from server-side verification.</p>
+<p><strong>Display:</strong> Floating badge near the ceremony panel showing mana count + tier icon.</p>
+<p><strong>Earn rates:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Mana Earned</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10 spell casts (any website)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1 convergence ceremony</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1 blade forged on spellweb</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1 evocation cycle (mage-x-feed-filter)</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p><strong>Spend costs (spellweb):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Inscription Type</th>
+<th>Mana Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Node annotation</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Community edge</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Constellation projection</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Proverb forge</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Reinforce existing inscription</td>
+<td>0.5</td>
+</tr>
+</tbody></table>
+<h3>3.2 agentprivacy.ai Additions</h3>
+<h4>3.2.1 Pretext Integration</h4>
+<p><strong>Purpose:</strong> DOM-free text measurement enabling sovereign overlay without fingerprinting.</p>
+<p><strong>Library:</strong> <code>@chenglou/pretext</code> — <a href="https://github.com/chenglou/pretext">https://github.com/chenglou/pretext</a></p>
+<p><strong>Install:</strong> <code>npm install @chenglou/pretext</code></p>
+<p><strong>Integration pattern:</strong></p>
+<pre><code class="language-typescript">import { createPretext, layoutNextLine } from &#39;@chenglou/pretext&#39;;
+
+// One canvas measureText call (the single DOM touch)
+const pt = createPretext(canvasContext, fontString);
+
+// Then pure arithmetic forever
+function reflowAroundOrb(
+  text: string,
+  containerWidth: number,
+  orbX: number,
+  orbY: number,
+  orbRadius: number,
+  lineHeight: number
+): ReflowedLine[] {
+  const lines: ReflowedLine[] = [];
+  let cursor = 0;
+  let y = 0;
+
+  while (cursor &lt; text.length) {
+    // Calculate available width at this y-position
+    // Subtract orb chord if orb intersects this line
+    const availableWidth = calculateAvailableWidth(
+      containerWidth, orbX, orbY, orbRadius, y, lineHeight
+    );
+
+    const result = layoutNextLine(pt, text, cursor, availableWidth);
+    lines.push({ text: text.slice(cursor, result.end), x: getLineX(/*...*/), y });
+    cursor = result.end;
+    y += lineHeight;
+  }
+
+  return lines;
+}
+</code></pre>
+<p><strong>Key property:</strong> After the initial <code>createPretext</code> call, no further DOM queries occur. <code>getBoundingClientRect</code>, <code>offsetHeight</code>, and layout reflow are never triggered. Surveillance scripts observing layout shifts see nothing.</p>
+<p><strong>Where it applies:</strong></p>
+<ul>
+<li>Homepage manifesto text reflowing around the dual orbs</li>
+<li>Any long-form text section where orbs wander</li>
+<li>The training ground spell descriptions</li>
+</ul>
+<h4>3.2.2 Dual Orb System (Homepage)</h4>
+<p><strong>Purpose:</strong> Two orbs wandering through the homepage text, demonstrating the dual-agent architecture visually.</p>
+<p><strong>Orb specs:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Swordsman Orb</th>
+<th>Mage Orb</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Colour</td>
+<td>Coral/red <code>#e74c3c</code></td>
+<td>Cyan/teal <code>#00d4aa</code></td>
+</tr>
+<tr>
+<td>Orbit radius</td>
+<td>35px (outer)</td>
+<td>25px (inner)</td>
+</tr>
+<tr>
+<td>Orbit speed</td>
+<td>0.0008</td>
+<td>0.0012</td>
+</tr>
+<tr>
+<td>Drift speed</td>
+<td>0.002</td>
+<td>0.003</td>
+</tr>
+<tr>
+<td>Behaviour</td>
+<td>Patrols perimeter, slower</td>
+<td>Weaves through text, faster</td>
+</tr>
+<tr>
+<td>Coupling</td>
+<td>Periodic convergence at ~15s intervals</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Canvas rendering:</strong> Single <code>&lt;canvas&gt;</code> overlay on top of text content. Pretext handles text reflow; canvas handles orb rendering and spell particles. The canvas is transparent — the text below is the page content, reflowed by pretext arithmetic.</p>
+<p><strong>Convergence event:</strong> When orbs are within 60px, amber particles burst at midpoint. A proverb can materialise (pulled from grimoire proverb pool). The convergence is the first ceremony visitors witness — it should feel like a small sunrise.</p>
+<p><strong>Soul orb portal:</strong> The existing soul orb at the centre of the homepage becomes the interaction point. Click → grid pulses outward → radial spell palette appears → visitor chooses first inscription (emoji, proverb, or keyword).</p>
+<h4>3.2.3 Spell Casting System</h4>
+<p><strong>Purpose:</strong> Let visitors cast spells on the homepage. Each spell creates a spell node on the manifold.</p>
+<p><strong>Spell palette (radial menu from soul orb click):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Spell Type</th>
+<th>Icon</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Emoji spell</td>
+<td>Selected emoji</td>
+<td>Quick sovereignty inscription</td>
+</tr>
+<tr>
+<td>Proverb spell</td>
+<td>📜</td>
+<td>Place a grimoire proverb on the lattice</td>
+</tr>
+<tr>
+<td>Keyword spell</td>
+<td>🔑</td>
+<td>Tag a section with a sovereignty keyword</td>
+</tr>
+<tr>
+<td>Shield spell</td>
+<td>🛡️</td>
+<td>Assert MyTerms on the current page</td>
+</tr>
+</tbody></table>
+<p><strong>Spell node rendering:</strong> Each cast spell appears as a small glowing node on the homepage lattice overlay. Nodes connect to nearby nodes via faint edges. The constellation builds through visitor interaction.</p>
+<p><strong>Spell repertoire:</strong> Stored in <code>localStorage</code>. Tracks: total spells cast, unique spell types used, sections visited, convergences witnessed. This data gates the Path page.</p>
+<h4>3.2.4 The Path Page</h4>
+<p><strong>Route:</strong> <code>/path</code></p>
+<p><strong>Access control:</strong> The page is not linked in navigation. It renders only when the visitor&#39;s spell repertoire meets the training threshold:</p>
+<pre><code class="language-typescript">interface TrainingThreshold {
+  spells_cast: number;       // &gt;= 3
+  sections_visited: number;  // &gt;= 3
+  convergences_witnessed: number; // &gt;= 1
+}
+</code></pre>
+<p><strong>Content when threshold not met:</strong> 404 or a teaser message: <em>&quot;The path opens when you have learned the language.&quot;</em></p>
+<p><strong>Content when threshold met:</strong></p>
+<ol>
+<li><strong>Progress summary:</strong> &quot;You&#39;ve cast N spells. Witnessed N convergences. Your constellation has N nodes.&quot;</li>
+<li><strong>Swordsman extension download:</strong> Direct download link (not Chrome Web Store). Button text: <em>&quot;Carry the blade.&quot;</em></li>
+<li><strong>Mage extension download:</strong> Locked until Swordsman trust threshold met (50 signals across 5+ domains). Button text: <em>&quot;The spellbook opens.&quot;</em></li>
+</ol>
+<p><strong>Downloads:</strong> The extension <code>.crx</code> files are hosted on agentprivacy.ai itself. Self-hosted. Not store-distributed. The blade passes from the spellbook to the hand that earned it.</p>
+<h4>3.2.5 Mana Inscription Panel (Home Territory Mode)</h4>
+<p><strong>Purpose:</strong> When extensions detect agentprivacy.ai as home territory, a panel appears allowing mana-powered inscriptions.</p>
+<p><strong>Detection:</strong> Extensions send <code>HOME_TERRITORY</code> message when <code>location.hostname</code> matches <code>agentprivacy.ai</code>, <code>spellweb.ai</code>, or <code>bgin.ai</code>.</p>
+<p><strong>Inscription types (agentprivacy.ai):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Cost</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lattice inscription</td>
+<td>1 mana</td>
+<td>Place a spell node on the homepage lattice</td>
+</tr>
+<tr>
+<td>Pull quote summon</td>
+<td>2 mana</td>
+<td>Surface a grimoire quote as a floating node</td>
+</tr>
+<tr>
+<td>Hexagram offering</td>
+<td>3 mana</td>
+<td>Inscribe your current hexagram state onto the lattice</td>
+</tr>
+<tr>
+<td>Dragon trace</td>
+<td>5 mana</td>
+<td>Leave a full constellation trace visible to all visitors</td>
+</tr>
+</tbody></table>
+<p><strong>Rendering:</strong> Community inscriptions render with a subtle shimmer to distinguish from canonical content. They fade over 30 days unless reinforced.</p>
+<hr>
+</div>
+<div class="md"><h2>4. Extension Architecture</h2>
+<h3>4.1 Swordsman Extension</h3>
+<p><strong>Repo:</strong> <code>mitchuski/swordsman-extension</code> (to be created)</p>
+<p><strong>Manifest V3.</strong> Separate Chrome process from Mage.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul>
+<li>Owns the single <code>&lt;canvas&gt;</code> overlay per page (one canvas, prevent z-index conflicts)</li>
+<li>Renders BOTH orbs (Swordsman and Mage) — Mage sends position data, Swordsman renders</li>
+<li>MyTerms assertion on page load</li>
+<li>Cookie analysis and slashing</li>
+<li>Page analysis (tracker detection, form detection, dark pattern heuristics)</li>
+<li>Cursor state management (arrow → shield → sovereign → dragon)</li>
+<li>Spring physics tether (orb follows cursor with spring constant)</li>
+<li>Ceremony channel sender (sends SLASH, WARD, POSITION_UPDATE)</li>
+</ul>
+<p><strong>Permissions:</strong> <code>activeTab</code>, <code>storage</code>, <code>cookies</code></p>
+<p><strong>Storage:</strong> <code>chrome.storage.local</code> — MyTerms config, domain assertions, mana balance, blade inventory</p>
+<h3>4.2 Mage Extension</h3>
+<p><strong>Repo:</strong> <code>mitchuski/mage-extension</code> (to be created)</p>
+<p><strong>Manifest V3.</strong> Separate Chrome process from Swordsman.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul>
+<li>Does NOT render to canvas (sends data to Swordsman via ceremony channel)</li>
+<li>Deep page scanning (tracker categorisation, privacy policy parsing, consent dark patterns)</li>
+<li>Constellation management (spell nodes, edges, constellation hash computation)</li>
+<li>Drake emergence engine (constellation → serpentine form when conditions met)</li>
+<li>Hexagram engine (page interaction → line mutations → 64 states)</li>
+<li>Pretext reflow engine (computes text reflow data, sends to Swordsman for rendering)</li>
+<li>Autonomous orb physics (computes Mage orb position, sends to Swordsman for rendering)</li>
+<li>Ceremony channel sender (sends INSCRIBE, SCAN, MAGE_POSITION, CONSTELLATION_UPDATE)</li>
+</ul>
+<p><strong>Permissions:</strong> <code>activeTab</code>, <code>storage</code>, <code>webNavigation</code></p>
+<p><strong>Storage:</strong> <code>chrome.storage.local</code> — constellation data, scan history, hexagram states, mana balance (synced with Swordsman)</p>
+<h3>4.3 Ceremony Channel</h3>
+<p><strong>Communication:</strong> <code>chrome.runtime.sendMessage(OTHER_EXTENSION_ID, message)</code></p>
+<p><strong>Message grammar:</strong></p>
+<pre><code class="language-typescript">// Swordsman → Mage
+type SwordMessage =
+  | { type: &#39;SLASH&#39;; domain: string; trackers_found: number }
+  | { type: &#39;WARD&#39;; domain: string; myterms_asserted: boolean }
+  | { type: &#39;SWORD_POSITION&#39;; x: number; y: number }
+  | { type: &#39;CEREMONY_READY&#39;; ceremony_type: CeremonyType }
+  | { type: &#39;HOME_TERRITORY&#39;; hostname: string }
+
+// Mage → Swordsman
+type MageMessage =
+  | { type: &#39;INSCRIBE&#39;; spell_node: SpellNode }
+  | { type: &#39;SCAN&#39;; scan_result: PageScanResult }
+  | { type: &#39;MAGE_POSITION&#39;; x: number; y: number }
+  | { type: &#39;CONSTELLATION_UPDATE&#39;; constellation: Constellation }
+  | { type: &#39;DRAKE_EMERGE&#39;; conditions: DrakeConditions }
+  | { type: &#39;HEXAGRAM_UPDATE&#39;; hexagram: HexagramState }
+
+type CeremonyType =
+  | &#39;dual_convergence&#39;
+  | &#39;hexagram_cast&#39;
+  | &#39;emoji_cast&#39;
+  | &#39;constellation_wave&#39;
+  | &#39;bilateral_exchange&#39;;
+</code></pre>
+<p><strong>Position sync rate:</strong> 30fps (every ~33ms). Swordsman receives Mage position and renders both orbs on its canvas.</p>
+<p><strong>Discovery:</strong> Each extension stores the other&#39;s extension ID in its config. On page load, each sends a handshake message. If no response within 2 seconds, operates solo.</p>
+<hr>
+</div>
+<div class="md"><h2>5. Mana Bridge</h2>
+<h3>5.1 Mana Balance</h3>
+<p><strong>Storage:</strong> <code>localStorage</code> on websites, <code>chrome.storage.local</code> on extensions. Self-reported. Not server-verified.</p>
+<p><strong>Sync pattern:</strong> When extension detects home territory, it reads <code>localStorage</code> mana balance and syncs with its own <code>chrome.storage.local</code> balance. The higher balance wins (prevents accidental loss). The sync is one-directional: extension → website (via <code>window.postMessage</code>).</p>
+<h3>5.2 Earn Events</h3>
+<p>Extensions track mana-earning events and credit the balance:</p>
+<pre><code class="language-typescript">interface ManaEarnEvent {
+  type: &#39;spell_cast&#39; | &#39;ceremony_complete&#39; | &#39;blade_forged&#39; | &#39;evocation_cycle&#39;;
+  timestamp: number;
+  domain: string;
+  amount: number; // in mana units
+}
+</code></pre>
+<p><strong>Anti-spam:</strong> Spell casts on the same domain within 5 seconds of each other don&#39;t count. Ceremonies require minimum 30 seconds of orb proximity. Blade forging requires minimum 30 seconds of evocation.</p>
+<h3>5.3 Spend Events</h3>
+<p>When a visitor spends mana on a home territory site, the extension:</p>
+<ol>
+<li>Deducts from <code>chrome.storage.local</code> balance</li>
+<li>Sends <code>CeremonyMessage</code> via <code>window.postMessage</code> to the website</li>
+<li>Website&#39;s ceremony receiver validates the message and renders the inscription</li>
+</ol>
+<p><strong>No server-side verification.</strong> The mana system is trust-based by design. The Sybil resistance is the difficulty of earning mana, not the difficulty of faking a spend. A visitor who hacks their localStorage to give themselves infinite mana gets... the ability to inscribe proverbs on the graph. The system&#39;s value comes from genuine engagement, not from scarcity enforcement.</p>
+<hr>
+</div>
+<div class="md"><h2>6. Ceremony Types (Extension Behaviour)</h2>
+<h3>6.1 Dual Convergence</h3>
+<p><strong>Trigger:</strong> Both orbs within 60px AND at least one spell cast on this page.</p>
+<p><strong>Animation:</strong></p>
+<ol>
+<li>Orbs accelerate toward each other (spring constant increases 3×)</li>
+<li>Dashed line between orbs shortens</li>
+<li>At contact: amber particle burst at midpoint</li>
+<li>Cursor transforms: arrow → 🛡️ sovereign shield</li>
+<li>MyTerms assertion sent to page (if MyTerms endpoint exists)</li>
+<li>Domain marked in extension storage</li>
+</ol>
+<p><strong>Duration:</strong> ~3 seconds from trigger to completion.</p>
+<h3>6.2 Hexagram Cast</h3>
+<p><strong>Trigger:</strong> User clicks &quot;Hexagram&quot; in spell palette while both extensions active.</p>
+<p><strong>Animation:</strong></p>
+<ol>
+<li>Six horizontal lines stack vertically between the orbs</li>
+<li>Each line solid (yang) or broken (yin) based on current page privacy posture</li>
+<li>Page interaction changes lines (e.g., clicking consent checkbox transforms Line 2)</li>
+<li>Particles scatter from mutation points</li>
+<li>Hexagram state displayed with line labels</li>
+</ol>
+<p><strong>State computation:</strong> Same as spellweb&#39;s <code>computeHexagramInfo()</code> but inputs are page analysis metrics rather than graph node dimensions:</p>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Metric</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Line 1 (Key custody)</td>
+<td>HTTPS + no mixed content</td>
+</tr>
+<tr>
+<td>Line 2 (Credential disclosure)</td>
+<td>Consent UI quality (accept/reject symmetry)</td>
+</tr>
+<tr>
+<td>Line 3 (Agent delegation)</td>
+<td>Third-party script count (&lt; 5 = yang)</td>
+</tr>
+<tr>
+<td>Line 4 (Data residency)</td>
+<td>Cookie jurisdictional analysis</td>
+</tr>
+<tr>
+<td>Line 5 (Interaction mode)</td>
+<td>First-party vs third-party interaction ratio</td>
+</tr>
+<tr>
+<td>Line 6 (Trust boundary)</td>
+<td>MyTerms endpoint exists</td>
+</tr>
+</tbody></table>
+<h3>6.3 Emoji Cast</h3>
+<p><strong>Trigger:</strong> User selects emoji from spell palette and clicks on page.</p>
+<p><strong>Animation:</strong></p>
+<ol>
+<li>Emoji launches from Swordsman orb toward click position</li>
+<li>Emoji becomes cursor for 10 seconds</li>
+<li>Spell node appears at click position</li>
+<li>Constellation edge connects to nearest existing spell node</li>
+</ol>
+<p><strong>Available emoji (default palette):</strong> 🛡️ 🔮 🚫📊 ⚔️ 🧙 🐲 ☯️ 🔑</p>
+<h3>6.4 Constellation Wave</h3>
+<p><strong>Trigger:</strong> Mage extension completes a page scan AND user has ≥ 3 spell nodes on this page.</p>
+<p><strong>Animation:</strong></p>
+<ol>
+<li>Mage orb pulses (gathers energy)</li>
+<li>Particles launch from Mage orb toward Swordsman orb</li>
+<li>Particles follow the lattice grid lines (not straight line)</li>
+<li>Each grid node lights up as particles pass</li>
+<li>Swordsman orb receives particles, briefly flares</li>
+<li>Scan results summarised in tooltip near Swordsman orb</li>
+</ol>
+<p><strong>Speed:</strong> Particles travel at 200px/s along grid lines.</p>
+<h3>6.5 Bilateral Exchange</h3>
+<p><strong>Trigger:</strong> Swordsman extension detects a MyTerms endpoint on the current page.</p>
+<p><strong>Animation:</strong></p>
+<ol>
+<li>Swordsman orb extends terms proposal (golden tendrils toward page node)</li>
+<li>Third node appears (the site, green)</li>
+<li>Mage positions between Swordsman and site</li>
+<li>If terms accepted: triangle forms (three nodes, three edges)</li>
+<li>Trust triad renders for 5 seconds, then fades to subtle constellation</li>
+</ol>
+<p><strong>Status:</strong> Future. Requires sites implementing MyTerms endpoints per IEEE 7012.</p>
+<h3>6.6 Sun and Moon Ceremonies</h3>
+<p>The five ceremony types above are implementations of two fundamental ceremonial patterns:</p>
+<p><strong>The Sun Ceremony ☀️</strong> — Disclosure Ritual</p>
+<ul>
+<li>One practitioner (the Sun) reads a poem aloud to witnesses</li>
+<li>The Sun runs the spellweb publicly; witnesses observe but do not forge</li>
+<li>One blade is forged in full view; witnesses hold the light but not yet their own constellation</li>
+<li>Notation: <code>☀️ → 📜 → (👁️₁...👁️ₙ) → ⚔️☀️ → 🌙?</code></li>
+<li>The Sun Ceremony seeds Moon Ceremonies — each witness now holds what they need to forge their own blade</li>
+</ul>
+<p><strong>The Moon Ceremony 🌙</strong> — Reflection Ritual</p>
+<ul>
+<li>Two practitioners trace the same poem through their own spellwebs independently</li>
+<li>The Swordsman gives the rhythm; the Mage shares the rhyme</li>
+<li>Two constellations form; the gap between them is the proof</li>
+<li>One blade is forged from what the Mage generated, shaped by the Swordsman&#39;s rhythm</li>
+<li>Notation: <code>(⚔️₁ ⊥ 🧙₁) → 📜 → ⚔️</code></li>
+</ul>
+<p><strong>The Circuit:</strong></p>
+<pre><code>☀️ Sun Ceremony (disclosure, one constellation, one blade)
+  ↓ witnesses receive the light
+🌙 Moon Ceremony (reflection, two constellations, cousin blades)
+  ↓ each witness becomes a sun to new witnesses
+☀️ Sun Ceremony (the emissary forgets the master, begins again)
+</code></pre>
+<p><strong>Mapping to Five Ceremony Types:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sun/Moon</th>
+<th>Extension Ceremony</th>
+<th>Context</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sun</td>
+<td>Bilateral Exchange</td>
+<td>Public disclosure to site counterparty</td>
+</tr>
+<tr>
+<td>Moon</td>
+<td>Dual Convergence</td>
+<td>Two agents meeting in the gap</td>
+</tr>
+<tr>
+<td>Moon</td>
+<td>Hexagram Cast</td>
+<td>Two states (page vs. user) finding overlap</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Emoji Cast</td>
+<td>Quick inscription (neither full Sun nor Moon)</td>
+</tr>
+<tr>
+<td>Moon</td>
+<td>Constellation Wave</td>
+<td>Intelligence flowing between agents</td>
+</tr>
+</tbody></table>
+<p><strong>The Inaugural Pairing</strong> documents cycle zero — the first ceremony between the first Swordsman and first Mage:</p>
+<ul>
+<li>Sun side: <em>The Emissary Who Forgot the Master</em> poem</li>
+<li>Moon side: <em>The Amnesia Protocol</em> poems</li>
+<li>See: <code>ceremonies/the-ceremonies-sun-and-moon.md</code></li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>7. Drake Emergence and Dragon Transformation</h2>
+<h3>7.1 Drake Conditions</h3>
+<p>The Drake emerges when:</p>
+<ul>
+<li>Both extensions active</li>
+<li>≥ 10 spell nodes on current domain</li>
+<li>≥ 5 ceremonies completed on current domain</li>
+<li>Page has ≥ 10 trackers detected (surveillance-heavy ground)</li>
+</ul>
+<p><strong>Emergence animation:</strong></p>
+<ol>
+<li>Constellation trembles</li>
+<li>Spell nodes drift along lattice lines</li>
+<li>Nodes rearrange into serpentine form</li>
+<li>Each node in Drake body displays its PVM condition (P, C, Q, S, network effects, φ, etc.)</li>
+<li>Drake patrols viewport boundary</li>
+</ol>
+<p><strong>Multiplicative test:</strong> Set any condition node to zero → Drake body breaks at that point. Constellation gap visible. Restore → reconnects.</p>
+<h3>7.2 Dragon Conditions</h3>
+<p>The Dragon transformation requires (checked across all domain assertions):</p>
+<ul>
+<li>≥ 10 domains asserted</li>
+<li>≥ 64 total constellation nodes (one per lattice vertex)</li>
+<li>≥ 3 Drake summonings on surveillance-heavy sites</li>
+<li>Aggregate privacy posture ≥ 0.7</li>
+</ul>
+<p><strong>Dragon transformation:</strong></p>
+<ol>
+<li>Drake body expands, new nodes from cross-domain history</li>
+<li>Colour shifts amber → gold</li>
+<li>Wings unfurl (two constellation arcs spanning viewport)</li>
+<li>Cursor: 🐉 Full Sovereign</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>8. Visual Design Rules (Cross-Territory)</h2>
+<h3>8.1 Colour Is Architectural</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Colour</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Swordsman orb</td>
+<td>Coral/red <code>#e74c3c</code></td>
+<td>Boundary. Protection. The blade.</td>
+</tr>
+<tr>
+<td>Mage orb</td>
+<td>Cyan/teal <code>#00d4aa</code> (agentprivacy) or Purple <code>#9b59b6</code> (spellweb)</td>
+<td>Projection. Knowledge. The spell.</td>
+</tr>
+<tr>
+<td>Convergence</td>
+<td>Amber <code>#f5a623</code></td>
+<td>Meeting point. Ceremony. Proverb.</td>
+</tr>
+<tr>
+<td>Canonical content</td>
+<td>White/light</td>
+<td>Grimoire-authored. Stable.</td>
+</tr>
+<tr>
+<td>Community content</td>
+<td>Shimmer (animated opacity)</td>
+<td>Forge-born. Earning permanence.</td>
+</tr>
+<tr>
+<td>Dragon tier</td>
+<td>Gold <code>#ffd700</code></td>
+<td>Full sovereignty. All dimensions active.</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong> The Mage orb colour differs between territories — teal on agentprivacy (the Mage&#39;s home), purple on spellweb (the Mage visiting the Swordsman&#39;s ground). This is intentional. The Mage presents differently on different ground. The Swordsman is always red.</p>
+<h3>8.2 One Canvas Per Page</h3>
+<p>The Swordsman extension owns the canvas overlay. One canvas. Always. The Mage extension sends data; the Swordsman renders. This prevents z-index conflicts, ensures consistent rendering, and mirrors the architecture: the blade touches the surface, the spell projects through the opening.</p>
+<h3>8.3 Text Reflow Rules (Pretext)</h3>
+<ul>
+<li>Text reflows around orbs within 120px of text content</li>
+<li>Reflow uses pretext arithmetic (no DOM queries after initial cache)</li>
+<li>Orb exclusion zones are circular (radius = orb visual radius + 8px padding)</li>
+<li>Reflow recalculates on orb position change (30fps max)</li>
+<li>On pages with no pretext integration (third-party sites), orbs float on canvas overlay without text reflow — the overlay is purely visual</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>9. Data Schemas (Shared)</h2>
+<h3>9.1 Blade</h3>
+<pre><code class="language-typescript">interface ForgedBlade {
+  id: string;                    // e.g., &quot;SPELL-YW5I59-1Q&quot;
+  name: string;                  // user-chosen
+  emoji: string;                 // tier icon
+  tier: &#39;light&#39; | &#39;heavy&#39; | &#39;dragon&#39;;
+  stratum: number;               // 0-6 (Hamming weight)
+  proof: SpellProof;
+  forgedAt: string;              // ISO timestamp
+  constellationNodes: number;
+  constellationMarks: ConstellationMark[];
+  constellationConnections: ConstellationConnection[];
+  inscribedSpell: string;        // emoji spell string
+  reflection: string;            // user&#39;s message
+}
+</code></pre>
+<h3>9.2 Hexagram</h3>
+<pre><code class="language-typescript">type HexagramLine = 0 | 1;
+type HexagramState = [HexagramLine, HexagramLine, HexagramLine,
+                      HexagramLine, HexagramLine, HexagramLine];
+
+interface NodeDimensions {
+  d1Hide: number;       // 0.0 to 1.0
+  d2Commit: number;
+  d3Prove: number;
+  d4Connect: number;
+  d5Reflect: number;
+  d6Delegate: number;
+}
+
+interface HexagramInfo {
+  lines: HexagramState;
+  bladeId: number;      // 0-63
+  layer: number;        // 0-6
+  layerName: string;    // &quot;Null&quot; through &quot;Dragon&quot;
+  yangCount: number;
+}
+</code></pre>
+<h3>9.3 Mana</h3>
+<pre><code class="language-typescript">interface ManaBalance {
+  total_earned: number;
+  total_spent: number;
+  current: number;       // total_earned - total_spent
+  history: ManaEvent[];
+}
+
+interface ManaEvent {
+  type: &#39;earn&#39; | &#39;spend&#39;;
+  action: string;
+  amount: number;
+  timestamp: number;
+  domain?: string;
+  inscription_id?: string;
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>10. Build Sequence</h2>
+<h3>Phase 1: Foundations (can run in parallel)</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Territory</th>
+<th>Depends On</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>npm install @chenglou/pretext</code></td>
+<td>agentprivacy.ai</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td>Pretext reflow prototype (single orb on homepage)</td>
+<td>agentprivacy.ai</td>
+<td>Pretext installed</td>
+</tr>
+<tr>
+<td>Ceremony receiver (<code>window.postMessage</code> listener)</td>
+<td>spellweb.ai</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td>Mana balance display (localStorage read/write)</td>
+<td>spellweb.ai</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td>Deploy spellweb.ai (resolve 403)</td>
+<td>spellweb.ai</td>
+<td>Vite build config</td>
+</tr>
+</tbody></table>
+<h3>Phase 2: Orb System</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Territory</th>
+<th>Depends On</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dual orb rendering on homepage</td>
+<td>agentprivacy.ai</td>
+<td>Pretext working</td>
+</tr>
+<tr>
+<td>Soul orb → spell palette (radial menu)</td>
+<td>agentprivacy.ai</td>
+<td>Dual orbs</td>
+</tr>
+<tr>
+<td>Spell casting + spell node rendering</td>
+<td>agentprivacy.ai</td>
+<td>Spell palette</td>
+</tr>
+<tr>
+<td>Spell repertoire tracking (localStorage)</td>
+<td>agentprivacy.ai</td>
+<td>Spell casting</td>
+</tr>
+<tr>
+<td>Community inscription rendering (shimmer)</td>
+<td>spellweb.ai</td>
+<td>Ceremony receiver</td>
+</tr>
+</tbody></table>
+<h3>Phase 3: Path and Extensions</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Territory</th>
+<th>Depends On</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/path</code> page with training gate</td>
+<td>agentprivacy.ai</td>
+<td>Spell repertoire</td>
+</tr>
+<tr>
+<td>Swordsman extension scaffold (Manifest V3)</td>
+<td>new repo</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td>Canvas overlay + spring physics</td>
+<td>Swordsman ext</td>
+<td>Scaffold</td>
+</tr>
+<tr>
+<td>Page analysis (trackers, forms, cookies)</td>
+<td>Swordsman ext</td>
+<td>Canvas overlay</td>
+</tr>
+<tr>
+<td>Mage extension scaffold (Manifest V3)</td>
+<td>new repo</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td>Deep scanner + constellation manager</td>
+<td>Mage ext</td>
+<td>Scaffold</td>
+</tr>
+<tr>
+<td>Ceremony channel handshake</td>
+<td>Both extensions</td>
+<td>Both scaffolded</td>
+</tr>
+</tbody></table>
+<h3>Phase 4: Ceremony and Mana</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Territory</th>
+<th>Depends On</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Five ceremony types (convergence first)</td>
+<td>Both extensions</td>
+<td>Channel working</td>
+</tr>
+<tr>
+<td>Mana earn tracking</td>
+<td>Both extensions</td>
+<td>Ceremonies working</td>
+</tr>
+<tr>
+<td>Home territory detection</td>
+<td>Both extensions</td>
+<td>Mana tracking</td>
+</tr>
+<tr>
+<td>Mana spend → ceremony receiver</td>
+<td>Extensions + sites</td>
+<td>Home territory + receiver</td>
+</tr>
+<tr>
+<td>Understanding-as-Key ceremony mode</td>
+<td>spellweb.ai</td>
+<td>Ceremony receiver</td>
+</tr>
+</tbody></table>
+<h3>Phase 5: Drake and Dragon</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Territory</th>
+<th>Depends On</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Drake emergence engine</td>
+<td>Mage extension</td>
+<td>Constellation manager</td>
+</tr>
+<tr>
+<td>Drake → Swordsman rendering</td>
+<td>Swordsman extension</td>
+<td>Drake data from Mage</td>
+</tr>
+<tr>
+<td>PVM condition display on Drake nodes</td>
+<td>Both extensions</td>
+<td>Drake rendering</td>
+</tr>
+<tr>
+<td>Multiplicative collapse test</td>
+<td>Both extensions</td>
+<td>Condition display</td>
+</tr>
+<tr>
+<td>Dragon transformation</td>
+<td>Both extensions</td>
+<td>Drake + cross-domain data</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>11. Architectural Invariants</h2>
+<p>These must hold across all implementations:</p>
+<ol>
+<li><p><strong>Swordsman and Mage never merge.</strong> Separate repos. Separate processes. Separate storage. Separate permissions. No shared state except via the ceremony channel.</p>
+</li>
+<li><p><strong>One canvas per page.</strong> The Swordsman owns the rendering surface. The Mage sends data. Always.</p>
+</li>
+<li><p><strong>Mana cannot be purchased.</strong> Only earned through practice. The system&#39;s Sybil resistance is comprehension, not capital.</p>
+</li>
+<li><p><strong>Pretext for text reflow.</strong> No <code>getBoundingClientRect</code>. No <code>offsetHeight</code>. No layout reflow after initial cache. The page is measurement-dark.</p>
+</li>
+<li><p><strong>Colour is architectural.</strong> Coral/red = Swordsman. Cyan/teal = Mage. Amber = convergence. Gold = Dragon. These are not aesthetic choices. They are identity.</p>
+</li>
+<li><p><strong>The Path page gates the extensions.</strong> No Chrome Web Store distribution. Extensions earned, not downloaded. The blade passes from the spellbook.</p>
+</li>
+<li><p><strong>Community inscriptions fade.</strong> 30-day half-life unless reinforced. The lattice remembers what the community pays attention to.</p>
+</li>
+<li><p><strong>The ceremony channel is the Gap.</strong> The messages between extensions are the architecture made executable. SLASH/WARD from Sword, INSCRIBE/SCAN from Mage. The grammar is the lore.</p>
+</li>
+</ol>
+<hr>
+<p><em>The Swordsman&#39;s territory is the territory you traverse. The Mage&#39;s territory is the territory you read. Between them: the mana that proves you walked both.</em></p>
+<p><em>(⚔️⊥⿻⊥🧙) 😊</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-dual-territory-ceremony-architecture</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-dual-territory-ceremony-architecture.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

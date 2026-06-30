@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crypto ZKP · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Crypto ZKP</span></div>
+  <article><div class="md"><h1>Crypto ZKP</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 4.0</p>
+<p><strong>Equation term</strong> <code>C, h(τ), R(d)</code></p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 Formal Specification (Travers, Feb 2026)<br><strong>Target context:</strong> Zcash, NEAR, Privacy Pools, ZKP toolchains, hackathon evaluators<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>Problem statement</h2>
+<p>Privacy-preserving infrastructure lacks an economic model. Builders optimise for proof efficiency and protocol security but cannot quantify the value their systems create versus surveillance alternatives. PVM-V4 provides that pricing function.</p>
+<h2>Relevance to ZKP systems</h2>
+<p>The model depends on zero-knowledge proofs at three layers:</p>
+<p><strong>Layer 1 — Credential verifiability (C).</strong> The C term requires that claims about data can be independently verified without revealing underlying information. This is precisely what ZKPs do. Systems with higher-quality proof generation (faster verification, smaller proofs, composable circuits) score higher on C, directly multiplying total value.</p>
+<p><strong>Layer 2 — Derivation chain integrity h(τ).</strong> The temporal memory term A(τ) = α · ln(1+|τ|) · h(τ) only accumulates value when state transitions carry valid ZK proofs. The integrity fraction h(τ) is the proportion of verified transitions in the chain. An agent with 1,000 transitions but only 10% ZK-attested gets the same memory score as one with 100 fully-attested transitions. This creates direct demand for lightweight, composable proof generation at every state change.</p>
+<p><strong>Layer 3 — Reconstruction resistance R(d).</strong> The proven bound R_max = (C_S + C_M)/H(X) &lt; 1 requires that the two agents (Swordsman and Mage) maintain conditional independence. In practice, this means their communication must be mediated through ZK channels where neither learns the other&#39;s full state. The channel leakage C_S and C_M must sum to less than the entropy of the private state H(X). V6: the ceiling is time-dependent, R(t) with shelf life t* (C82); the static result is Proven in the conditional regime.</p>
+<h2>Specific ZKP integration points</h2>
+<p><strong>Zcash.</strong> Private transactions serve as the settlement layer for sovereignty transitions. The edge value term T(π) measures movement through a 64-vertex sovereignty lattice — each transition can be recorded as a shielded transaction encoding the configuration change. Zcash&#39;s memo field can carry compressed proof-of-understanding attestations. The model&#39;s proof-of-understanding mechanism (Relationship Proverb Protocol) maps to Zcash&#39;s existing infrastructure for selective disclosure.</p>
+<p><strong>NEAR / TEEs.</strong> Trusted execution environments provide the isolation boundary for dual-agent separation. The Swordsman agent runs in one TEE; the Mage in another. The separation matrix Σ quantifies the quality of this isolation. NEAR&#39;s chain signatures enable cross-chain sovereignty transitions without exposing the agent&#39;s full configuration.</p>
+<p><strong>Privacy Pools.</strong> The stratum-weighted network effect term directly models Privacy Pool dynamics. Agents at different sovereignty strata (0–6 active dimensions) contribute differently to pool value. The binomial weighting (1, 6, 15, 20, 15, 6, 1 across strata) means pools with agents concentrated at the combinatorial midpoint (stratum 3) generate maximum network value. This provides a formal basis for pool composition optimisation.</p>
+<h2>Conjectured ZKP efficiency gain</h2>
+<p>The 64-vertex lattice constrains the proof space. Rather than proving arbitrary statements, sovereignty-class proofs only need to attest to transitions between adjacent vertices in {0,1}⁶. This structural constraint is conjectured to yield ~3,000× proof size reduction compared to general-purpose circuits. <strong>This is unproven</strong> — it requires formal circuit analysis comparing constrained lattice proofs to equivalent general statements.</p>
+<h2>The sovereignty gap in crypto terms</h2>
+<p>Surveillance architectures produce 17×–12,000× less value than sovereign architectures under PVM-V4 parameterisation. In protocol terms: a system that extracts user data to function is structurally unable to access the value manifold available to privacy-preserving systems. This is not a moral argument — it is a topological constraint. Activating protection breaks extraction pipelines; the gap is the ratio of accessible manifold volume between architectural classes.</p>
+<h2>Hackathon-relevant building surfaces</h2>
+<ul>
+<li>Implement h(τ) as a composable ZK attestation chain using Nova/PLONK incrementally verifiable computation</li>
+<li>Build stratum-weighted Privacy Pool composition scoring</li>
+<li>Create Zcash-settled sovereignty transition logging with memo-field proof-of-understanding</li>
+<li>Demonstrate the reconstruction ceiling R &lt; 1 empirically with a dual-agent prototype on NEAR TEEs</li>
+<li>Calibrate edge weight function f(e) using real agent transition data</li>
+</ul>
+<h2>Open problems for ZKP researchers</h2>
+<ol>
+<li>Can sovereignty-class lattice constraints actually reduce proof size by ~3,000×? What is the real circuit complexity?</li>
+<li>What is the minimum ZKP throughput needed for h(τ) to remain above 0.9 in real-time agent operation?</li>
+<li>Can the separation matrix Σ be verified on-chain without revealing the individual σ_ij values?</li>
+<li>Does the UOR toroidal structure map cleanly to recursive SNARK composition? (96 vs. 64 edge discrepancy)</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-crypto-zkp</code>, v4.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-crypto-zkp</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-crypto-zkp.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

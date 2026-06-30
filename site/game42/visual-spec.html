@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VISUAL-SPEC · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="game42">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site on" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/game42/welcome-visitors.html">Game of 42</a> / <span>VISUAL-SPEC</span></div>
+  <article><div class="md"><h1>VISUAL-SPEC</h1>
+</div>
+<div class="md"><h2>palette, per-state rendering, animation</h2>
+<p>Aligns to the soulbis / soulbae canon palette. A coding agent should apply the project&#39;s frontend-design tokens on top of this; these are the domain-specific choices.</p>
+<hr>
+</div>
+<div class="md"><h2>1. Palette</h2>
+<p><strong>Canonical agent colours.</strong></p>
+<pre><code>Soulbis (Swordsman, protection) : amber-gold  #E0A526
+Soulbae (Mage, delegation)      : sapphire     #2563EB
+</code></pre>
+<p><strong>Axis accent colours</strong> (also in <code>data/game-of-42.json</code>):</p>
+<pre><code>compute     #7C5CFF   violet
+connection  #14B8A6   teal
+delegation  #2563EB   sapphire   (mage)
+protection  #E0A526   amber-gold (sword)
+memory      #E0568A   rose
+value       #2FB67C   emerald
+</code></pre>
+<p><strong>Persona-class colours.</strong></p>
+<pre><code>vision_fish    #38BDF8   lens cyan
+mouse          #C9A227   warm node gold
+privacy_guide  #F5F0E1   white-gold core, sapphire ring #2563EB
+</code></pre>
+<p><strong>Ground.</strong> Deep neutral, near-black with a faint blue cast (#0B0E14), so the gold and sapphire read as light. The floating star is semi-transparent over this.</p>
+<hr>
+</div>
+<div class="md"><h2>2. Per-state rendering of a slot</h2>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Look</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>empty</td>
+<td>thin dashed outline in the axis colour at low alpha; barely there</td>
+</tr>
+<tr>
+<td>proposed</td>
+<td>a vesica path gleams in from the root; slot ring brightens</td>
+</tr>
+<tr>
+<td>in_progress</td>
+<td>slow pulse of the persona-class colour; a working glyph</td>
+</tr>
+<tr>
+<td>verified</td>
+<td>filled in the axis colour; kappa-label shown as a short hash chip on hover</td>
+</tr>
+<tr>
+<td>sealed</td>
+<td>full fill, gold rim, small lock; the flap it belongs to begins to lift</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>3. The three personas, visually</h2>
+<ul>
+<li><strong>Vision fish.</strong> A vesica piscis lens travelling along the root-to-slot path. Lens cyan. When its slot seals, the fish thins to a faint permanent edge.</li>
+<li><strong>Mouse.</strong> A solid node dot at the station position, warm node gold. Fills the hands-class and heart-class slots.</li>
+<li><strong>Privacy guide.</strong> The centre of each heptad. White-gold core with a sapphire ring. When sealed, it glows and emits a faint inward spiral (the fractal seed, hinting at a child game without opening one).</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>4. The latent state, visually (default before play)</h2>
+<p>The first thing a visitor sees. It must promise the destination without spending it. See GEOMETRY.md section 5 for the geometry.</p>
+<ul>
+<li>The latent star: the completed star drawn faint, a translucent volume with a brighter wireframe edge, around 0.15 opacity, in white-gold with sapphire edges. It drifts slowly, like the live star but dimmer.</li>
+<li>The empty lattice nested inside: forty-two faint slot points, each in its axis colour at low alpha, with the heptad triangles barely traced. The shape of the whole board is legible but clearly unfilled.</li>
+<li>The seed at centre: a slow pulse with six faint light threads reaching toward the six root positions. This reads as latent ignition.</li>
+<li>The breath: the lattice gently lifts and settles on a six second cycle, just enough to show it is foldable and alive.</li>
+<li>One call to act: a single ignitable root glows a touch warmer, inviting the first move. Optional copy, lowercase, in your voice, for example &quot;map the first star&quot;.</li>
+<li>Intro flourish on first load: one full fold to the star and back, then settle. Plays once per session.</li>
+<li>Reduced motion: static latent star plus empty lattice, no breath, no intro, minimal or no drift.</li>
+</ul>
+<p>When the first root ignites, the latent star dims to its in-game ghost level, the breath stops, and the live board takes over. Nothing jumps, the star was always the target.</p>
+<hr>
+</div>
+<div class="md"><h2>5. The fold, visually</h2>
+<p>Driven by <code>p</code> from GAME-FLOW.md.</p>
+<ul>
+<li>Heptad flaps lift on their hinge as their slots seal (per-heptad local fold can preview before the whole board seals).</li>
+<li>The whole board applies the golden twist as global <code>p</code> rises.</li>
+<li>The floating star sits above, semi-transparent, rotating slowly and independently. As <code>p</code> approaches 1, the flaps converge toward the star and the star brightens.</li>
+<li>At <code>p = 1</code> (board seal): a single bright pulse, the group-seal hash chip appears, the star locks rotation briefly then resumes a slow drift.</li>
+</ul>
+<p>Easing: smoothstep on every fold parameter. Nothing snaps. The fold should read as crystallising, not assembling.</p>
+<hr>
+</div>
+<div class="md"><h2>6. Motion and feel</h2>
+<ul>
+<li>Vesica gleams: 600 to 900 ms travel, ease-in-out.</li>
+<li>Slot pulse (in_progress): 1.6 s loop, low amplitude.</li>
+<li>Star drift: 3 to 6 deg per second.</li>
+<li>Board bob at p near 1: tiny sinusoidal z, amplitude under 2 percent of R_board.</li>
+<li>Respect reduced-motion: replace pulses and drift with static states, keep the fold as a single eased transition.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>7. Shareable seal card</h2>
+<p>When a game seals, render a share artifact: the folded star in plan view, the six axis colours around it, the short group-seal hash, and the lowercase proverbs minted in the forty-two ceremonies arranged as a ring. This is the group identity shape made portable.</p>
+<blockquote>
+<p>gold for the blade, blue for the staff, and the light between them is the proof</p>
+</blockquote>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+</div>
+<div class="md"><hr>
+<p><a class="wlink" href="welcome.html">Welcome</a> · the Game of 42 — six axes × seven stations = 42</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">11 revisions</div>
+    <a class="json-link" href="visual-spec.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

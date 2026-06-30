@@ -1,0 +1,617 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PVM v6 — Companion Guide (Mage reading) · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>PVM v6 — Companion Guide (Mage reading)</span></div>
+  <article><div class="md"><h1>PVM v6 — Companion Guide (Mage reading)</h1>
+</div>
+<div class="md"><h1>Privacy Value Model V6: Companion Guide</h1>
+</div>
+<div class="md"><h2>How to Read These Documents</h2>
+<p>Three documents carry V6, one model. The <strong>formal specification</strong> (<code>privacy_value_v6.md</code>) is the authority: it mirrors the V5.4 skeleton section for section, marks every section CARRIED, REVISED, or NEW, and cites every conjecture from the unified register. The <strong>compressed specification</strong> (<code>pvm_v6_compressed.md</code>) is the Swordsman reading: equations only, five pages, for agents and reviewers who need the shape before the proofs. This guide is the Mage reading: what the mathematics means, where it came from, and what it asks of you. Under the unified-V6 labeling decision, the research paper and the whitepaper carry the same V6 label; this guide tells you when to reach for each.</p>
+</div>
+<div class="md"><h2>1. The Two Strands of V6</h2>
+<p>V6 was planned before it was discovered, and the plan came first.</p>
+<p><strong>The gathering turn.</strong> From the earliest V6 research notes, V6 was identified as the version that opens the model outward. V5 answered WHAT the architecture is: two agents, a boundary, a gate, a lattice. V6 asks WHO. It shifts the document&#39;s address into the second person, opens the registers to the City of Mages and to kindred builders, and turns the equation from a specification into an invitation, so that its terms can be filled with data instead of estimates. The betweenness centrality of the gap got a computable formula; the trust edges got an economy; the City got keys. That was the plan, and it stands as V6&#39;s first strand.</p>
+<p><strong>The moving ceiling.</strong> The second strand was not planned. Between April and June 2026, in the act of gathering, the research moved: the reconstruction ceiling proved to be a function of time. The story of V6&#39;s mathematics is the story of taking one letter seriously, the t that was always in V(π, t), and following it through every term that had quietly been treated as static.</p>
+</div>
+<div class="md"><h2>2. The Ceiling Moves: What R(t) Means</h2>
+<p>The V5.4 ceiling said: the two agents&#39; channels, summed, cannot carry enough information to reconstruct you. True, and proven, under two conditions that V6 now states aloud: the agents must not collude (and nothing may carry their residue), and the adversary must be the adversary you measured. The second condition is where time enters. Your archives do not change after emission. The decoders reading them do. A model released tomorrow extracts more from yesterday&#39;s data than anything could when the data was emitted, so the ceiling drifts upward while you sleep, and every static guarantee has a shelf life, written t*.</p>
+<p>Two public events made this concrete within nine days of this document. A four-year-old flaw in Zcash&#39;s Orchard circuit was found one day after a frontier model&#39;s release, and weaponized the same day. A withheld quantum optimization, attested only by a zero-knowledge proof of its existence, was independently rediscovered in roughly two months. In both cases the protected object sat still and the capability term moved. The model calls this the Moving Ceiling (C82), and it is V6&#39;s headline.</p>
+</div>
+<div class="md"><h2>3. The Sum Leaks More Than Its Parts: Why Amnesia Wins</h2>
+<p>In 2025 and 2026 the multi-agent privacy field proved something that looks, at first glance, like an attack on this model: when agents pass outputs to one another, leakage compounds, up to (2^N − 1)ε for N agents, and measurement studies found multi-agent systems leaking 68.9% of sensitive content overall, mostly through the unmonitored channels between agents.</p>
+<p>Read carefully, this is the model&#39;s own thesis in the adversary&#39;s units. The compounding happens through the inter-agent channel. The Amnesia Protocol&#39;s entire purpose is to delete that channel. Policy separation asks the channel to behave and compounds exponentially; amnesia separation removes the channel and leaks linearly. The gap between asking and removing is, at five agents, the gap between 31ε and 5ε (C83). The field measured the corridor this architecture bricks up.</p>
+</div>
+<div class="md"><h2>4. The Proof That Whispered: Existence-Leak</h2>
+<p>Google proved it had found a faster attack and published only the proof of existence, hiding the method perfectly. Two months later the method was rediscovered anyway, because the proof itself was a map with one landmark: it said the thing exists and is findable, and every searcher stopped digging anywhere else. V6 names this the Existence-Leak law (C81, 70%): a proof of feasibility leaks an upper bound on difficulty, and there is a theorem (leakage-resilient ZK with λ &lt; 1 is impossible) saying the leak can never be zero. The planning corollary (C84): every public feasibility attestation shortens your migration deadline, whether or not the attack ever comes. Important fence: this indicts capability attestation, not the model&#39;s own zero-knowledge usage, which proves instances (a transaction, an attribute), not capabilities.</p>
+</div>
+<div class="md"><h2>5. The Bridge and the Forgetting</h2>
+<p>Two old debts were paid in Part IV of the spec. First, the lattice and the axes finally meet: the bridge conjecture (C85) maps the six lattice dimensions pairwise onto the three sovereignty axes and proposes that the recursion&#39;s base case β, the thing the two agents are allowed to share, is exactly the First Person, which is why the separation bound conditions on FP. The gap is β. Second, forgetting got its mathematics: structural amnesia is conjectured to be a non-vanishing obstruction to gluing the agents&#39; views back into a witness (C86). Hidden things wait for keys; forgotten things have no door. If that holds, amnesia is the only term in the equation whose security does not erode with time, which makes it the architectural answer to the moving ceiling of section 2.</p>
+</div>
+<div class="md"><h2>6. Promise Theory: The Semantic Foundation</h2>
+<h3>6.1 Why Promises Matter</h3>
+<p><strong>Formal Spec reference:</strong> §22</p>
+<p>Promise Theory (Bergstra &amp; Burgess, 2019) provides the semantic foundation. A promise is voluntary, unilateral, and observable. Traditional architectures assume control: &quot;The server WILL do X.&quot; Promise architectures assume autonomy: &quot;The server PROMISES to do X, and here&#39;s how you verify.&quot;</p>
+<p>The autonomy axiom, <em>an agent can only make promises about its own behaviour</em>, formally explains why single agents fail at the privacy-delegation paradox. Attempting to promise both protection and delegation exceeds autonomous capability.</p>
+<h3>6.2 How Promises Map to the Spec</h3>
+<table>
+<thead>
+<tr>
+<th>Spec Term</th>
+<th>Promise Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P (Privacy Strength)</td>
+<td>Quality of the promise that data won&#39;t leak</td>
+</tr>
+<tr>
+<td>C (Credential Verifiability)</td>
+<td>Ability to verify a promise was kept without seeing content</td>
+</tr>
+<tr>
+<td>Φ_agent</td>
+<td>Separation of protection promises from delegation promises</td>
+</tr>
+<tr>
+<td>Φ_data</td>
+<td>No single provider can break the data promise alone</td>
+</tr>
+<tr>
+<td>Φ_inference</td>
+<td>Reasoning promises kept separate from execution promises</td>
+</tr>
+<tr>
+<td>VRC</td>
+<td>Bilateral promise bundle between two First Persons</td>
+</tr>
+<tr>
+<td>T_∫(π)</td>
+<td>Accumulated value of promises kept along a path</td>
+</tr>
+<tr>
+<td>R(d, c, ρ)</td>
+<td>How hard it is to break the promise retrospectively</td>
+</tr>
+<tr>
+<td>The Gap (⿻)</td>
+<td>Irreducible promise of the superagent, owned by neither agent</td>
+</tr>
+</tbody></table>
+<p>V6 sharpens the last row: C78 identifies the specification-intent gap, the distance between what an agent was told and what was meant, with the irreducible promise of the superagent.</p>
+<p><strong>Deep dive:</strong> <code>promise_theory_reference_v1_4.md</code></p>
+</div>
+<div class="md"><h2>7. Economic Architecture: VRCs and Guilds</h2>
+<h3>7.1 Verifiable Relationship Credentials (VRCs)</h3>
+<p><strong>Formal Spec reference:</strong> §19 (Three Identity Layers)</p>
+<p>A VRC is a bilateral commitment between two First Persons, cryptographically verifiable without revealing relationship content, relationship-scoped (dies when the relationship ends).</p>
+<table>
+<thead>
+<tr>
+<th>Old Model</th>
+<th>VRC Model</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Platform owns the social graph</td>
+<td>First Persons own their edges</td>
+</tr>
+<tr>
+<td>Relationships are platform assets</td>
+<td>Relationships are bilateral property</td>
+</tr>
+<tr>
+<td>Exit means losing connections</td>
+<td>Exit means taking your edges with you</td>
+</tr>
+</tbody></table>
+<p>No platform can hold relationships hostage. Switching costs collapse to zero. Network effects accrue to people, not platforms.</p>
+<p><strong>Economic parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ceremony</td>
+<td>1 ZEC (~$500)</td>
+<td>One-time genesis of agent pair</td>
+</tr>
+<tr>
+<td>Signal</td>
+<td>0.01 ZEC (~$5)</td>
+<td>Ongoing proof of comprehension</td>
+</tr>
+<tr>
+<td>Fee split</td>
+<td>61.8% transparent / 38.2% shielded</td>
+<td>φ-derived constant</td>
+</tr>
+</tbody></table>
+<p>V6 attaches the clock here too: trust edges decay with a half-life measured from inscription (C30 to C33), so a VRC is not a permanent asset but a maintained one, and the signal cadence is the maintenance. And the presence knot 🪢 carries its regime-1 declaration: it is non-transferable, non-attesting local color, earned by walking; if it is ever asked to attest, witnesses co-sign first.</p>
+<p><strong>Deep dive:</strong> <code>vrc_promise_protocol_v3_3.md</code></p>
+<h3>7.2 Guild Efficiency</h3>
+<p><strong>Formal Spec reference:</strong> §6</p>
+<p>A guild is a group of agents sharing a reasoning library (shared-parent pattern). Members coordinate at O(1) cost instead of O(N²). The spec&#39;s G(guilds) captures the multiplier.</p>
+<p><strong>Trust Tier Progression:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Signals</th>
+<th>Capabilities</th>
+<th>Trust Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Blade 🗡️</td>
+<td>0–50</td>
+<td>Basic participation, learning</td>
+<td>0.0–0.2</td>
+</tr>
+<tr>
+<td>Light 🛡️</td>
+<td>50–150</td>
+<td>Multi-site coordination</td>
+<td>0.2–0.5</td>
+</tr>
+<tr>
+<td>Heavy ⚔️</td>
+<td>150–500</td>
+<td>Template creation, governance</td>
+<td>0.5–0.8</td>
+</tr>
+<tr>
+<td>Dragon 🐉</td>
+<td>500+</td>
+<td>Guardian eligibility, unlimited VRCs</td>
+<td>0.8–1.0</td>
+</tr>
+</tbody></table>
+<p><strong>Deep dive:</strong> <code>vrc_promise_protocol_v3_3.md</code> (§3)</p>
+</div>
+<div class="md"><h2>8. The Key, the Knot, and the Star</h2>
+<p>The City Key arc entered the formal lineage. The trust recursion the City shipped in May (walk the domains, charge the trace, carry the deepened key back) is structurally a folding scheme: the Key is an accumulator of proofs, and the conjecture (C87) is that a real incrementally-verifiable realization exists, with lattice-based folding as the post-quantum hedge. The presence knot 🪢 received its honest regime: it is local color, earned by walking, attesting nothing; if it is ever asked to attest, witnesses co-sign first. And the eight-pointed star gave back its borrowed gold: there is no golden ratio in that solid, and saying so cost one paragraph and bought the geometry two genuinely new conjectures (the parity cube, C88, and the octahedral gap, C89: the chamber at the star&#39;s heart that neither agent owns).</p>
+</div>
+<div class="md"><h2>9. The Ceremonies</h2>
+<h3>9.1 What Ceremonies Are</h3>
+<p><strong>Formal Spec reference:</strong> §13 (operational cycle), §15 (ceremony implementation)</p>
+<p>Privacy isn&#39;t just computed; it&#39;s performed. A ceremony is a structured interaction that produces a verifiable outcome. The Celestial Ceremony maps the operational cycle (§13) to two people:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Symbol</th>
+<th>Spec Operation</th>
+<th>Human Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sun</td>
+<td>☀️</td>
+<td>id(x)</td>
+<td>Disclosure · you speak your poem</td>
+</tr>
+<tr>
+<td>Gap</td>
+<td>⊥</td>
+<td>neg(x)</td>
+<td>Silence · boundary negotiation</td>
+</tr>
+<tr>
+<td>Moon</td>
+<td>🌑</td>
+<td>bnot(neg(x))</td>
+<td>Reflection · shared understanding</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>↻</td>
+<td>succ(x)</td>
+<td>Recursion · carry forward or close</td>
+</tr>
+</tbody></table>
+<p>Cryptography provides guarantees. Ceremony provides meaning.</p>
+<h3>9.2 The Blade Forge</h3>
+<p><strong>Formal Spec reference:</strong> §15 (forge cryptography, moon phases, tier classification)</p>
+<p>Forging a blade:</p>
+<ol>
+<li>Select a constellation (six sovereignty dimensions → spectrum)</li>
+<li>Walk the nodes (traverse the lattice → accumulate laps)</li>
+<li>Create the hash (SHA-256 commitment → content addressing)</li>
+<li>Sign with your key (Ed25519 binding → identity)</li>
+</ol>
+<p>The spec&#39;s behavioural density ρ (§5) captures why two blades with identical constellations but different lap counts have qualitatively different reconstruction resistance. The Universe Blade (62 laps, 2,170s) vs Hitchhiker&#39;s Blade (13 laps, 433s): same hash position, different proof depth.</p>
+<p>The City Key trust recursion (C87) is the newest ceremony-grade loop: walk the domains, charge the trace, carry the deepened Key back, each Charge a folding step in the accumulator.</p>
+<p><strong>Deep dive:</strong> <code>zk_swordsman_blade_forge_v3_0.md</code></p>
+</div>
+<div class="md"><h2>10. Standards and the Landscape</h2>
+<p>IEEE 7012-2025 (MyTerms) published in January 2026; the implementation effort began June 1. The EU AI Act&#39;s Annex III high-risk obligations stand for 2026-08-02 (hedged: the Digital Omnibus would defer to 2027-12-02 but is not adopted). The model&#39;s position is unchanged and now better armed: architecture is not against regulation, it is what makes regulated rights enforceable. The fellow travelers (Kwaai, the First Person Project, GliaNet, Archon, the UOR Foundation) and the multi-agent privacy literature are cited as plurality: many teams arriving at separation-of-duties independently, none enforcing it architecturally, which is the model&#39;s distinctive claim and the measurements&#39; implicit confirmation.</p>
+</div>
+<div class="md"><h2>11. Conjectures in Context</h2>
+<p>The register (<code>research/CONJECTURE_REGISTER_V6.md</code>) is now the single numbering authority, born from a real failure: the corpus forked its own numbers twice, and the V6 path&#39;s first act was to consolidate, namespace, and promise never to renumber again. Highlights of the V6 additions: C81 Existence-Leak (70%, held there until a second instance), C82 the Moving Ceiling (65%), C83 the exponential-to-linear gap (55%), C85 the bridge (40%), C86 obstruction amnesia (30%), C87 the Key accumulates (50%). The honest-limits discipline is unchanged: λ is unmeasured, C83&#39;s amnesia side is an engineering claim, C86 is a framing priced at 30%, and the model says so in its own honest-limits section.</p>
+</div>
+<div class="md"><h2>12. Reading Paths by Role</h2>
+<p><strong>Reviewer or academic:</strong> formal spec §10, §11, §5 (the conditional relabel and R(t)), then §26 (the compounding absorption), then the register. <strong>Builder:</strong> compressed spec, then §14 and §15 (amnesia and the Key), then the regime statement before touching 🪢. <strong>Economist or policy reader:</strong> this guide, then spec §27 and §30, then the canonical figures. <strong>City reader:</strong> the five acts bound at the Myth Gate, then §28, then back to Tome VIII Act 3 with the honesty paragraph in hand. <strong>New reader:</strong> what-agentprivacy-is, then this guide top to bottom, then the compressed spec.</p>
+</div>
+<div class="md"><h2>13. The Equation, Decoded</h2>
+<p>Nothing in the equation&#39;s form changed at V6: the gate still multiplies, the terms still sum, the path still integrates. What changed is the clock attached to it. Read every term twice: once at t₀, where V5.4 proved what it proved, and once at t, where capacities drift, trust decays from inscription, attestations discount horizons, trajectories diverge, and exactly one term, the forgetting, holds still. The equation was always V(π, t). V6 is the version that read the second argument.</p>
+<p>For those who want plain English alongside the math:</p>
+<p>$$V(\pi, t) = P^{1.5} \cdot C \cdot Q \cdot S \cdot e^{-\lambda t} \cdot (1 + A_h(\tau)) \cdot \left(1 + \sum_i w_i \frac{n_i}{N_0}\right)^k \cdot G \cdot R \cdot M \cdot \Phi_a \cdot \Phi_d \cdot \Phi_i \cdot T_\int(\pi)$$</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Plain English</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>P^1.5</strong></td>
+<td>How strong is the cryptographic protection? (superlinear · privacy compounds)</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>Can claims be verified without revealing secrets?</td>
+</tr>
+<tr>
+<td><strong>Q</strong></td>
+<td>Is the data accurate and fresh?</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td>How sensitive is this data domain?</td>
+</tr>
+<tr>
+<td><strong>e^(−λt)</strong></td>
+<td>How old is the data? (decays without maintenance)</td>
+</tr>
+<tr>
+<td><strong>(1 + A_h(τ))</strong></td>
+<td>Has this data proven itself over time? (verified history adds value)</td>
+</tr>
+<tr>
+<td><strong>Network term</strong></td>
+<td>How connected is the sovereignty network?</td>
+</tr>
+<tr>
+<td><strong>G</strong></td>
+<td>Are agents organised into efficient guilds?</td>
+</tr>
+<tr>
+<td><strong>R(d, c, ρ)</strong></td>
+<td>How hard is it for adversaries to reconstruct? (time-indexed as R(t) at V6)</td>
+</tr>
+<tr>
+<td><strong>M</strong></td>
+<td>How mature is the market for privacy?</td>
+</tr>
+<tr>
+<td><strong>Φ_agent</strong></td>
+<td>Are protection and delegation properly separated? (Swordsman ⊥ Mage)</td>
+</tr>
+<tr>
+<td><strong>Φ_data</strong></td>
+<td>Is data distributed across providers?</td>
+</tr>
+<tr>
+<td><strong>Φ_inference</strong></td>
+<td>Are reasoning and execution properly separated? (Generator ⊥ Solver)</td>
+</tr>
+<tr>
+<td><strong>T_∫(π)</strong></td>
+<td>What value accumulated along the path? (the dance, not the stance)</td>
+</tr>
+</tbody></table>
+<p><strong>The multiplicative insight:</strong> Any term at zero kills the whole thing. You can&#39;t compensate for broken separation with better cryptography. All axes must work.</p>
+</div>
+<div class="md"><h2>14. Quick Reference: Spec Section to Full Context</h2>
+<p>The V6 formal spec mirrors the V5.4 skeleton in §1 to §24, then continues with the V6 material.</p>
+<table>
+<thead>
+<tr>
+<th>Spec Section</th>
+<th>Topic</th>
+<th>Full Context</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>§1</td>
+<td>The equation</td>
+<td>this guide §13 · <code>privacy_is_value_v5.md</code></td>
+</tr>
+<tr>
+<td>§4</td>
+<td>Three-axis separation</td>
+<td><code>VISUAL_ARCHITECTURE_GUIDE_v2_0.md</code></td>
+</tr>
+<tr>
+<td>§5</td>
+<td>Reconstruction difficulty · R(t) and t*</td>
+<td>this guide §2 · <code>dualprivacy_researchpaper_v4_0.md</code></td>
+</tr>
+<tr>
+<td>§6</td>
+<td>Guild efficiency</td>
+<td>this guide §7 · <code>vrc_promise_protocol_v3_3.md</code> §3</td>
+</tr>
+<tr>
+<td>§7</td>
+<td>Path integral T_∫</td>
+<td>V5.2 + V5.3 Research Notes</td>
+</tr>
+<tr>
+<td>§8</td>
+<td>Holographic bound</td>
+<td><code>uor_tetrahedra_zk_mapping_v2_0.md</code></td>
+</tr>
+<tr>
+<td>§10</td>
+<td>Separation bound · preconditions</td>
+<td>this guide §2 · <code>dualprivacy_researchpaper_v4_0.md</code> §5</td>
+</tr>
+<tr>
+<td>§11</td>
+<td>Reconstruction ceiling · conditional regime</td>
+<td>this guide §2, §3</td>
+</tr>
+<tr>
+<td>§12</td>
+<td>Z/(2⁶)Z algebra</td>
+<td><code>SYSTEMS_HEXAGRAM_PHYSICS.md</code></td>
+</tr>
+<tr>
+<td>§13</td>
+<td>Operational cycle</td>
+<td>this guide §9 · V5.3 Research Note</td>
+</tr>
+<tr>
+<td>§14</td>
+<td>Amnesia Protocol · obstruction upgrade</td>
+<td>this guide §3, §5</td>
+</tr>
+<tr>
+<td>§15</td>
+<td>Ceremony + Forge · the Key as accumulator</td>
+<td>this guide §8, §9 · <code>ceremonies/</code> directory</td>
+</tr>
+<tr>
+<td>§19</td>
+<td>Identity layers</td>
+<td><code>swordsman_mage_whitepaper_v6_0.md</code> §7</td>
+</tr>
+<tr>
+<td>§20</td>
+<td>Cosmological quaternion</td>
+<td>Grimoire v10.0.0, Act XXXI</td>
+</tr>
+<tr>
+<td>§22</td>
+<td>Promise Theory</td>
+<td>this guide §6 · <code>promise_theory_reference_v1_4.md</code></td>
+</tr>
+<tr>
+<td>§25</td>
+<td>The two worked instances (Orchard · Schrottenloher)</td>
+<td>this guide §2</td>
+</tr>
+<tr>
+<td>§26</td>
+<td>Compounding bound · exponential-to-linear gap</td>
+<td>this guide §3</td>
+</tr>
+<tr>
+<td>§27</td>
+<td>The temporal thread</td>
+<td>this guide §2, §4</td>
+</tr>
+<tr>
+<td>§28</td>
+<td>The geometry of the gap</td>
+<td>this guide §8</td>
+</tr>
+<tr>
+<td>§29</td>
+<td>Narrative corpus</td>
+<td><code>tomes/</code> · the bound collection</td>
+</tr>
+<tr>
+<td>§30</td>
+<td>Canonical figures</td>
+<td>this guide §12 (economist path)</td>
+</tr>
+<tr>
+<td>§31</td>
+<td>External landscape</td>
+<td>this guide §10</td>
+</tr>
+<tr>
+<td>§32</td>
+<td>Honest limits</td>
+<td>this guide §11</td>
+</tr>
+<tr>
+<td>§33</td>
+<td>References</td>
+<td><code>privacy_value_v6.md</code> §33</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>15. Glossary Bridge</h2>
+<p>Key terms that appear in the spec without full definition:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Spec Usage</th>
+<th>Full Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>First Person</strong></td>
+<td>Implied throughout</td>
+<td>The human whose behavioural capital is at stake. Not &quot;user&quot;; users are used.</td>
+</tr>
+<tr>
+<td><strong>Sovereignty</strong></td>
+<td>&quot;sovereignty lattice&quot;</td>
+<td>Self-determination over one&#39;s own boundaries, delegations, and data</td>
+</tr>
+<tr>
+<td><strong>Blade</strong></td>
+<td>§12, §15</td>
+<td>A forged commitment, six dimensions, cryptographically bound</td>
+</tr>
+<tr>
+<td><strong>Constellation</strong></td>
+<td>§15</td>
+<td>The selection of dimensions before forging</td>
+</tr>
+<tr>
+<td><strong>Stratum</strong></td>
+<td>§12, §15</td>
+<td>Hamming weight: how many sovereignty dimensions are active</td>
+</tr>
+<tr>
+<td><strong>Spectrum</strong></td>
+<td>§12</td>
+<td>Six-bit decomposition: which specific dimensions</td>
+</tr>
+<tr>
+<td><strong>Datum</strong></td>
+<td>§12</td>
+<td>Raw blade value (0–63)</td>
+</tr>
+<tr>
+<td><strong>The Gap</strong> (⿻)</td>
+<td>§10</td>
+<td>The irreducible space where sovereignty lives, not a void but a guarantee</td>
+</tr>
+</tbody></table>
+<p>V6 terms:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Spec Usage</th>
+<th>Full Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Moving ceiling</strong></td>
+<td>§5, C82</td>
+<td>R(t) is non-decreasing under capability growth; the ceiling drifts while the archives sit still</td>
+</tr>
+<tr>
+<td><strong>Shelf life t</strong>*</td>
+<td>§5</td>
+<td>sup{t : R(t) &lt; 1}: the last moment a static guarantee still holds</td>
+</tr>
+<tr>
+<td><strong>Existence-leak</strong></td>
+<td>§27, C81</td>
+<td>A public proof of feasibility leaks an upper bound on difficulty; the leak can never be zero</td>
+</tr>
+<tr>
+<td><strong>Ages progressively</strong></td>
+<td>§27, C47</td>
+<td>Taxonomy class for guarantees that weaken continuously as decoders improve, rather than failing at one event</td>
+</tr>
+<tr>
+<td><strong>Obstruction amnesia</strong></td>
+<td>§14, C86</td>
+<td>Grade-2 forgetting as a non-vanishing obstruction class to gluing the agents&#39; local views into a global witness</td>
+</tr>
+<tr>
+<td><strong>Terminal obstruction</strong></td>
+<td>§14, C73</td>
+<td>Structural loss of β, the recursion&#39;s base case; no successor state exists</td>
+</tr>
+<tr>
+<td><strong>Parity cube</strong></td>
+<td>§28, C88</td>
+<td>The stella octangula&#39;s two tetrahedra as the even/odd parity classes of {0,1}³</td>
+</tr>
+<tr>
+<td><strong>Octahedral gap</strong></td>
+<td>§28, C89</td>
+<td>The intersection core as the locus of the conditional-independence bound; the chamber neither agent owns</td>
+</tr>
+<tr>
+<td><strong>The Key accumulates</strong></td>
+<td>§15, C87</td>
+<td>The City Key trust recursion as incrementally verifiable computation; each Charge is a folding step</td>
+</tr>
+<tr>
+<td><strong>Regime 1</strong></td>
+<td>§15</td>
+<td>The presence knot&#39;s declared status: non-transferable, non-attesting local color, earned by walking</td>
+</tr>
+<tr>
+<td><strong>The register</strong></td>
+<td>throughout</td>
+<td><code>CONJECTURE_REGISTER_V6.md</code>, the single numbering authority, head C89</td>
+</tr>
+</tbody></table>
+<p><strong>Full glossary:</strong> <code>GLOSSARY_MASTER_v4_0.md</code> (160+ entries)</p>
+</div>
+<div class="md"><h2>Document Metadata</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Version</td>
+<td>6.0 (unified V6 labeling across all canon papers, G3 decision 2026-06-10)</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Fully standalone: V5.4 companion material (Promise Theory, economics, ceremonies, quick reference, glossary) carried in full and updated to V6</td>
+</tr>
+<tr>
+<td>Authority</td>
+<td>privacy_value_v6.md · CONJECTURE_REGISTER_V6.md (head C89)</td>
+</tr>
+<tr>
+<td>Siblings</td>
+<td>pvm_v6_compressed.md (Swordsman) · research paper V6 edition · whitepaper V6 edition</td>
+</tr>
+<tr>
+<td>Working record</td>
+<td>research/privacy_value_v6_draft.md (Parts I to V, full honest limits)</td>
+</tr>
+<tr>
+<td>License</td>
+<td>CC BY-SA 4.0</td>
+</tr>
+</tbody></table>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 pvm-v6-companion-guide-mage-reading</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-pvm-papers.html">The PVM Papers</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="pvm-v6-companion-guide-mage-reading.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

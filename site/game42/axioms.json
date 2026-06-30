@@ -1,0 +1,210 @@
+{
+  "title": "AXIOMS — the canon game42 conforms to",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "019f0bd0c47e5a40",
+      "text": "# AXIOMS — the canon game42 conforms to\n\nThese are load-bearing rules, not suggestions. The soulbis **sovereignty lattice** is\nthe shared coordinate system across `soulbis website/`, `star/`, and `game42/`. When\ngame42 disagrees with it, **game42 is wrong and must be corrected** — the lattice is\nMODEL-locked (2026-06-12, PVM §12.6) and carries the production κ conformance vector\nand the named anchors. An agent asked to \"correct game42 to canon\" checks every axiom\nbelow and fixes any drift.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd0e36df878",
+      "text": "## A1 · The six dimensions and their bits (d₁ is the HIGH bit)\n\nThe lattice is ℒ = ℤ/64ℤ = {0,1}⁶. A vertex is a 6-bit address. The bit order is fixed\nby soulbis `lattice/index.html` (`DIMS`, line ~220). **Protection is the high bit (32);\nValue is the low bit (1).**\n\n| dim | name | emoji | bit | vertex value |\n|---|---|---|---|---|\n| d₁ | Protection  | 🛡️ | 5 (HIGH) | **32** |\n| d₂ | Delegation  | 🤝 | 4 | **16** |\n| d₃ | Memory      | 📜 | 3 | **8** |\n| d₄ | Connection  | 🔗 | 2 | **4** |\n| d₅ | Computation | ⚡ | 1 | **2** |\n| d₆ | Value       | 💎 | 0 (LOW) | **1** |\n\ngame42's axis ids map straight onto these: `protection→32, delegation→16, memory→8,\nconnection→4, compute→2, value→1`.\n\n**Check:** every slot in `game-of-42.json` has `latticeAxisVertex` equal to the value\nabove for its `axisId`; each entry in `axisSpace.axes` carries the same `latticeAxisVertex`.\nAny projection code (e.g. `src/citykey.js` `AXIS_VERTEX`) uses this exact map — **never\n`1 << axisIndex`** (that wrongly assigns protection→8).\n\n**Anchor test (must hold):** V38 = `100110` = 🛡️🔗⚡ (Protection·Connection·Computation,\n\"Aletheia\"); V25 = `011001` = 🤝📜💎 (Delegation·Memory·Value, \"Lethe\");\nV41 = `101001` = 🛡️📜💎 (\"Memora\"). Read the 6-bit string left→right as d₁…d₆.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd1025c96af",
+      "text": "## A2 · The operators\n\nOver ℤ/64ℤ, with `neg`/`bnot`/`succ` as the only operators:\n- `neg(x)  = (64 - x) % 64` — ⚔️ Swordsman · Protect · reflection (fixed points 0, 32)\n- `bnot(x) = 63 - x`        — 🧙 Mage · Project · antipode (no fixed point)\n- `succ(x) = (x + 1) % 64`  — the wheel; `succ = neg ∘ bnot`\n\nSwordsman and Mage are the two reflections whose composition is sovereignty; the model\n**starts from two**. In game42 they are bound to two of the six roots: **protection =\nSwordsman ⚔️**, **delegation = Mage 🧙**. Their separation is the Gap ⿻ (the `⊥` in the\nseal `(⚔️⊥⿻⊥🧙)😊`).\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd1214b34e7",
+      "text": "## A3 · κ — the identity hash (two parameterizations, one algorithm)\n\nκ = `SHA-256` over a **canonical form**: object keys sorted recursively, no whitespace,\nUTF-8. **Numbers must be stringified upstream** before hashing (Python `1.0` ≠ JS `1`);\nnever feed a raw float into a hash.\n\nTwo parameterizations exist on purpose — keep them distinct:\n\n| use | excludes | label format | where |\n|---|---|---|---|\n| game42 VRC / seal | `{kappa, seal, vrcId, gameId}` | **bare hex** | `src/hash.js` |\n| soulbis City Key (incl. our projection) | **`kappa` only** | **`sha256:`**`<hex>` | `src/citykey.js`, soulbis `/skye /star /lattice /sigil` |\n\n**Check:** a City Key projection's `kappa` re-derives byte-identically in soulbis `/skye`\n(`kappaLabel`, exclude-only-`kappa`, `sha256:` prefix). The soulbis default-key\nconformance vector is `sha256:0b4916babe5eb17104b342ab06030f2071a818024b345bf6d2e4115617c3c527`.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd1403ad31e",
+      "text": "## A4 · What is hashed (so corrections don't cause false alarms)\n\n- The **group seal** hashes the 42 VRC κ-labels (sorted) + the geometry snapshot at p=1\n  (positions `toFixed(3)` as strings). It does **not** hash `latticeAxisVertex`,\n  `barycentric`, `position2D`, palette, or preset.\n- A **VRC κ** hashes the VRC fields only.\n\nTherefore: correcting `latticeAxisVertex` (A1), changing palette (A6), or relabeling a\npreset does **not** invalidate any existing seal or κ. The only thing the lattice-vertex\nmap affects is the **projection** — which vertices light and the `axisBitmask` — i.e.\nwhether two systems agree on which point \"protection\" means. That agreement is the whole\npoint of A1.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd15f297156",
+      "text": "## A5 · The stable seam (what may cross between games and rooms)\n\nCross-system overlap binds to **only** these four fields of a sealed game:\n`{ seal, kappa, axisBitmask, packets }`. Everything interior — the 42-slot layout, the\nfold geometry, the preset vocabularies, the fractal seam — stays game-side and may\nchange freely. **No integration may read a game's interior.** (See `src/citykey.js`.)\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd17e180f8d",
+      "text": "## A6 · Palette (carrier vs forge)\n\n- **Carrier palette (canon)** — soulbis: `cool #141a3d · warm #f0eee8 · sword #e8523a\n  (coral) · mage #4dd9e8 (cyan)`. Used whenever a key is projected for soulbis to render\n  or charge.\n- **Forge theme (game42's own)** — `sword/protection #E0A526 (amber) · mage/delegation\n  #2563EB (sapphire)`. Permitted as a *theme preset only*; it rides as descriptive\n  metadata, never as canon and never inside an identity hash.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd19d07adc4",
+      "text": "## A7 · The PNG carrier\n\nJSON embedded base64 in a PNG `tEXt` chunk, CRC-32 valid, byte-exact round-trip. Keywords:\n`game42` (event log), `cityKey` (single City Key / projection), `citySky` (a whole sky).\nOne PNG may carry several chunks; each reader greps its own keyword and ignores the rest.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd1bbf64bfc",
+      "text": "## A8 · Multiplicative collapse (any axis at zero zeros the whole)\n\nThe board seals only when all six heptads lock; one incomplete heptad keeps it open — there\nis no partial seal. This is Φ_v5 = Φ_agent · Φ_data · Φ_inference made into a gate\n(GAME-FLOW §3, MODEL-SYNC §1). **Check:** `flow.js boardPhase()` returns `sealed` only when\nevery axis' `heptadPhase` is `locked`.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd1dae5ea33",
+      "text": "## A9 · p is derived, never set\n\nThe fold scalar `p = (slots sealed) / 42`. Geometry reads it; nothing writes game state from\nit. The fold is a readout of honest completion, not a control (the manual `p` slider is a dev\nwhat-if only). **Check:** no path mutates slot/heptad/board state from `p`.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd1f9d4886b",
+      "text": "## A10 · The event log is the canonical artifact\n\nA game is a fold over an ordered event log: the same log yields the same state and the same\nseal, every time (GAME-FLOW §6). Persist the log; derive everything else. **Check:** loading a\nsaved game replays its log and re-seals byte-identically; the PNG carries the log, not a\nsnapshot of derived state.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd218c326a2",
+      "text": "## A11 · Generator ⊥ Solver (the head/hands split)\n\nIn every heptad the head-class stations (vision fish) are the Generator and the hands/heart\nstations (mice) are the Solver; the keystone guide (head+heart+hands) integrates. This ⊥ is\nΦ_inference and is carried by the fill order (fish before mice before guide) and the gates.\n**Check:** each heptad stays 3 vision-fish (head-containing, non-centre) / 3 mice / 1 guide\n(the centre), guide sealing last.\n\n---\n\n### How to use this file\nAn agent asked to bring game42 to canon should, in order: verify A1 against\n`game-of-42.json` and every vertex-map in `src/`; verify A3/A4 against `src/hash.js` and\n`src/citykey.js`; verify A6 palettes; and report (not silently \"fix\") any place where the\ninterior leaks across the A5 seam. Cross-references: `MODEL-SYNC.md` (the model mapping),\nsoulbis `lattice/index.html` (the bit order source of truth), and\n`soulbis website/PLAN_INTEGRATION_VIZ_KEY_GAME42_2026-06-27.md` (the integration)."
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bd237b2c4da",
+      "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "AXIOMS — the canon game42 conforms to",
+        "story": []
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd0c47e5a40",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd0c47e5a40",
+        "text": "# AXIOMS — the canon game42 conforms to\n\nThese are load-bearing rules, not suggestions. The soulbis **sovereignty lattice** is\nthe shared coordinate system across `soulbis website/`, `star/`, and `game42/`. When\ngame42 disagrees with it, **game42 is wrong and must be corrected** — the lattice is\nMODEL-locked (2026-06-12, PVM §12.6) and carries the production κ conformance vector\nand the named anchors. An agent asked to \"correct game42 to canon\" checks every axiom\nbelow and fixes any drift.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd0e36df878",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd0e36df878",
+        "text": "## A1 · The six dimensions and their bits (d₁ is the HIGH bit)\n\nThe lattice is ℒ = ℤ/64ℤ = {0,1}⁶. A vertex is a 6-bit address. The bit order is fixed\nby soulbis `lattice/index.html` (`DIMS`, line ~220). **Protection is the high bit (32);\nValue is the low bit (1).**\n\n| dim | name | emoji | bit | vertex value |\n|---|---|---|---|---|\n| d₁ | Protection  | 🛡️ | 5 (HIGH) | **32** |\n| d₂ | Delegation  | 🤝 | 4 | **16** |\n| d₃ | Memory      | 📜 | 3 | **8** |\n| d₄ | Connection  | 🔗 | 2 | **4** |\n| d₅ | Computation | ⚡ | 1 | **2** |\n| d₆ | Value       | 💎 | 0 (LOW) | **1** |\n\ngame42's axis ids map straight onto these: `protection→32, delegation→16, memory→8,\nconnection→4, compute→2, value→1`.\n\n**Check:** every slot in `game-of-42.json` has `latticeAxisVertex` equal to the value\nabove for its `axisId`; each entry in `axisSpace.axes` carries the same `latticeAxisVertex`.\nAny projection code (e.g. `src/citykey.js` `AXIS_VERTEX`) uses this exact map — **never\n`1 << axisIndex`** (that wrongly assigns protection→8).\n\n**Anchor test (must hold):** V38 = `100110` = 🛡️🔗⚡ (Protection·Connection·Computation,\n\"Aletheia\"); V25 = `011001` = 🤝📜💎 (Delegation·Memory·Value, \"Lethe\");\nV41 = `101001` = 🛡️📜💎 (\"Memora\"). Read the 6-bit string left→right as d₁…d₆.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd1025c96af",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd1025c96af",
+        "text": "## A2 · The operators\n\nOver ℤ/64ℤ, with `neg`/`bnot`/`succ` as the only operators:\n- `neg(x)  = (64 - x) % 64` — ⚔️ Swordsman · Protect · reflection (fixed points 0, 32)\n- `bnot(x) = 63 - x`        — 🧙 Mage · Project · antipode (no fixed point)\n- `succ(x) = (x + 1) % 64`  — the wheel; `succ = neg ∘ bnot`\n\nSwordsman and Mage are the two reflections whose composition is sovereignty; the model\n**starts from two**. In game42 they are bound to two of the six roots: **protection =\nSwordsman ⚔️**, **delegation = Mage 🧙**. Their separation is the Gap ⿻ (the `⊥` in the\nseal `(⚔️⊥⿻⊥🧙)😊`).\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd1214b34e7",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd1214b34e7",
+        "text": "## A3 · κ — the identity hash (two parameterizations, one algorithm)\n\nκ = `SHA-256` over a **canonical form**: object keys sorted recursively, no whitespace,\nUTF-8. **Numbers must be stringified upstream** before hashing (Python `1.0` ≠ JS `1`);\nnever feed a raw float into a hash.\n\nTwo parameterizations exist on purpose — keep them distinct:\n\n| use | excludes | label format | where |\n|---|---|---|---|\n| game42 VRC / seal | `{kappa, seal, vrcId, gameId}` | **bare hex** | `src/hash.js` |\n| soulbis City Key (incl. our projection) | **`kappa` only** | **`sha256:`**`<hex>` | `src/citykey.js`, soulbis `/skye /star /lattice /sigil` |\n\n**Check:** a City Key projection's `kappa` re-derives byte-identically in soulbis `/skye`\n(`kappaLabel`, exclude-only-`kappa`, `sha256:` prefix). The soulbis default-key\nconformance vector is `sha256:0b4916babe5eb17104b342ab06030f2071a818024b345bf6d2e4115617c3c527`.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd1403ad31e",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd1403ad31e",
+        "text": "## A4 · What is hashed (so corrections don't cause false alarms)\n\n- The **group seal** hashes the 42 VRC κ-labels (sorted) + the geometry snapshot at p=1\n  (positions `toFixed(3)` as strings). It does **not** hash `latticeAxisVertex`,\n  `barycentric`, `position2D`, palette, or preset.\n- A **VRC κ** hashes the VRC fields only.\n\nTherefore: correcting `latticeAxisVertex` (A1), changing palette (A6), or relabeling a\npreset does **not** invalidate any existing seal or κ. The only thing the lattice-vertex\nmap affects is the **projection** — which vertices light and the `axisBitmask` — i.e.\nwhether two systems agree on which point \"protection\" means. That agreement is the whole\npoint of A1.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd15f297156",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd15f297156",
+        "text": "## A5 · The stable seam (what may cross between games and rooms)\n\nCross-system overlap binds to **only** these four fields of a sealed game:\n`{ seal, kappa, axisBitmask, packets }`. Everything interior — the 42-slot layout, the\nfold geometry, the preset vocabularies, the fractal seam — stays game-side and may\nchange freely. **No integration may read a game's interior.** (See `src/citykey.js`.)\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd17e180f8d",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd17e180f8d",
+        "text": "## A6 · Palette (carrier vs forge)\n\n- **Carrier palette (canon)** — soulbis: `cool #141a3d · warm #f0eee8 · sword #e8523a\n  (coral) · mage #4dd9e8 (cyan)`. Used whenever a key is projected for soulbis to render\n  or charge.\n- **Forge theme (game42's own)** — `sword/protection #E0A526 (amber) · mage/delegation\n  #2563EB (sapphire)`. Permitted as a *theme preset only*; it rides as descriptive\n  metadata, never as canon and never inside an identity hash.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd19d07adc4",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd19d07adc4",
+        "text": "## A7 · The PNG carrier\n\nJSON embedded base64 in a PNG `tEXt` chunk, CRC-32 valid, byte-exact round-trip. Keywords:\n`game42` (event log), `cityKey` (single City Key / projection), `citySky` (a whole sky).\nOne PNG may carry several chunks; each reader greps its own keyword and ignores the rest.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd1bbf64bfc",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd1bbf64bfc",
+        "text": "## A8 · Multiplicative collapse (any axis at zero zeros the whole)\n\nThe board seals only when all six heptads lock; one incomplete heptad keeps it open — there\nis no partial seal. This is Φ_v5 = Φ_agent · Φ_data · Φ_inference made into a gate\n(GAME-FLOW §3, MODEL-SYNC §1). **Check:** `flow.js boardPhase()` returns `sealed` only when\nevery axis' `heptadPhase` is `locked`.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd1dae5ea33",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd1dae5ea33",
+        "text": "## A9 · p is derived, never set\n\nThe fold scalar `p = (slots sealed) / 42`. Geometry reads it; nothing writes game state from\nit. The fold is a readout of honest completion, not a control (the manual `p` slider is a dev\nwhat-if only). **Check:** no path mutates slot/heptad/board state from `p`.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd1f9d4886b",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd1f9d4886b",
+        "text": "## A10 · The event log is the canonical artifact\n\nA game is a fold over an ordered event log: the same log yields the same state and the same\nseal, every time (GAME-FLOW §6). Persist the log; derive everything else. **Check:** loading a\nsaved game replays its log and re-seals byte-identically; the PNG carries the log, not a\nsnapshot of derived state.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd218c326a2",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd218c326a2",
+        "text": "## A11 · Generator ⊥ Solver (the head/hands split)\n\nIn every heptad the head-class stations (vision fish) are the Generator and the hands/heart\nstations (mice) are the Solver; the keystone guide (head+heart+hands) integrates. This ⊥ is\nΦ_inference and is carried by the fill order (fish before mice before guide) and the gates.\n**Check:** each heptad stays 3 vision-fish (head-containing, non-centre) / 3 mice / 1 guide\n(the centre), guide sealing last.\n\n---\n\n### How to use this file\nAn agent asked to bring game42 to canon should, in order: verify A1 against\n`game-of-42.json` and every vertex-map in `src/`; verify A3/A4 against `src/hash.js` and\n`src/citykey.js`; verify A6 palettes; and report (not silently \"fix\") any place where the\ninterior leaks across the A5 seam. Cross-references: `MODEL-SYNC.md` (the model mapping),\nsoulbis `lattice/index.html` (the bit order source of truth), and\n`soulbis website/PLAN_INTEGRATION_VIZ_KEY_GAME42_2026-06-27.md` (the integration)."
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bd237b2c4da",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bd237b2c4da",
+        "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
+      },
+      "date": 1782609073000
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "title": "Guide — Implementation Roadmap",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "593031560776a42d",
+      "text": "# Implementation Roadmap"
+    },
+    {
+      "type": "markdown",
+      "id": "c897a7f9c2a485a5",
+      "text": "**Integration checklist and progress tracking**\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "35dea4089e064920",
+      "text": "## Overview\n\nThis roadmap tracks your progress through building the Proverb Revelation Protocol. Mark items as you complete them to maintain clear visibility of what's done and what's next.\n\n**Estimated Timeline**: 3-4 weeks from setup to production\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "7e4b066492993617",
+      "text": "## Phase 0: Prerequisites (1-2 days)\n\n### System Setup\n- [ ] Ubuntu 20.04+ installed (or WSL2)\n- [ ] Build essentials installed\n- [ ] Git installed and configured\n- [ ] 50GB+ storage available\n\n### Tool Installation\n- [ ] Rust installed (v1.70+)\n- [ ] Node.js 20 installed\n- [ ] Python 3.8+ installed\n- [ ] PostgreSQL 12+ installed\n\n### Account Creation\n- [ ] Nillion Discord account\n- [ ] Nillion API key requested\n- [ ] NEAR Cloud AI account created\n- [ ] NEAR Cloud AI API key generated\n- [ ] Pinata account created\n- [ ] Pinata JWT obtained\n\n### Project Structure\n- [ ] Main directory created: `~/proverb-protocol`\n- [ ] Subdirectories created: `oracle-swordsman`, `mage-agent`, `scripts`, `logs`, `spellbook`\n- [ ] Git repository initialized\n- [ ] `.gitignore` configured\n- [ ] `.env` file created\n\n### Verification\n- [ ] `rustc --version` shows 1.70+\n- [ ] `node --version` shows v20.x\n- [ ] `psql --version` shows 12+\n- [ ] All API keys saved in `.env`\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "a19d91637d2c9bd2",
+      "text": "## Phase 1: Foundation (Week 1)\n\n### Database Setup\n- [ ] PostgreSQL service running\n- [ ] Database user created: `proverb_user`\n- [ ] Database created: `proverb_protocol`\n- [ ] Schema applied successfully\n- [ ] Test connection successful\n- [ ] All tables created:\n  - [ ] `submissions`\n  - [ ] `verifications`\n  - [ ] `inscriptions`\n  - [ ] `spellbook_acts`\n  - [ ] `oracle_status`\n- [ ] Views created:\n  - [ ] `submission_pipeline`\n  - [ ] `proverb_stats`\n- [ ] Indexes created\n\n### Zcash Setup\n- [ ] `zecwallet-cli` installed\n- [ ] Wallet directory created\n- [ ] Light client synced (testnet)\n- [ ] Transparent address generated\n- [ ] Shielded address generated\n- [ ] Testnet ZEC received from faucet\n- [ ] Balance confirmed\n\n### Spellbook Creation\n- [ ] `spellbook-acts.json` created\n- [ ] Spellbook uploaded to Pinata\n- [ ] IPFS CID obtained\n- [ ] CID added to `.env`\n- [ ] Spellbook accessible via gateway\n- [ ] Content validated\n\n### Oracle Swordsman Project\n- [ ] TypeScript project initialized\n- [ ] Dependencies installed:\n  - [ ] `@nillion/client-web`\n  - [ ] `axios`\n  - [ ] `pg`\n  - [ ] `dotenv`\n  - [ ] `winston`\n- [ ] `tsconfig.json` configured\n- [ ] `package.json` scripts added\n- [ ] `src/` directory structure created\n\n### Core Modules Created\n- [ ] `src/config.ts` - Configuration management\n- [ ] `src/database.ts` - Database operations\n- [ ] `src/zcash-client.ts` - Zcash wrapper\n- [ ] `src/logger.ts` - Winston logger\n\n### Foundation Testing\n- [ ] Configuration loads correctly\n- [ ] Database connection works\n- [ ] Zcash client connects\n- [ ] Can create test submission\n- [ ] Can query database\n- [ ] Logs are being written\n\n**Week 1 Deliverables**:\n- ✅ All tools installed and configured\n- ✅ Database operational\n- ✅ Zcash wallet synced with testnet ZEC\n- ✅ Basic project structure in place\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "d47644280c21f9b4",
+      "text": "## Phase 2: Backend Integration (Week 2)\n\n### IPFS Integration\n- [ ] `src/ipfs-client.ts` created\n- [ ] Can fetch spellbook from IPFS\n- [ ] Caching implemented\n- [ ] Error handling added\n- [ ] Test: Fetch spellbook successfully\n- [ ] Test: Cache working\n\n### NEAR Cloud AI Integration\n- [ ] `src/near-verifier.ts` created\n- [ ] Can call verification API\n- [ ] Response parsing works\n- [ ] Fallback verification implemented\n- [ ] Retry logic added\n- [ ] Test: Verify sample proverb\n- [ ] Test: Fallback triggers on error\n\n### Nillion Integration\n- [ ] `src/nillion-signer.ts` created\n- [ ] Nillion SDK installed\n- [ ] Client initialized\n- [ ] Test: Can connect to Nillion\n- [ ] SecretSigner: Key stored\n- [ ] SecretSigner: Can sign test message\n- [ ] Attestation retrieved\n- [ ] Attestation verified\n\n### Main Oracle Loop\n- [ ] `src/index.ts` created\n- [ ] Transaction monitoring implemented\n- [ ] Memo parsing working\n- [ ] Submission creation functional\n- [ ] IPFS fetching integrated\n- [ ] AI verification integrated\n- [ ] Database updates working\n- [ ] Error handling comprehensive\n- [ ] Logging comprehensive\n\n### Transaction Processing\n- [ ] Can detect new Zcash transactions\n- [ ] Extracts tracking code from memo\n- [ ] Extracts proverb from memo\n- [ ] Creates submission record\n- [ ] Fetches spellbook from IPFS\n- [ ] Calls NEAR Cloud AI for verification\n- [ ] Records verification result\n- [ ] Updates submission status\n\n### Transaction Signing\n- [ ] Public inscription transaction created\n- [ ] Private shielded transaction created\n- [ ] 61.8/38.2 golden ratio split calculated correctly\n- [ ] Network fee included\n- [ ] Both transactions signed\n- [ ] Both transactions broadcast\n- [ ] Confirmation monitoring working\n\n### End-to-End Test\n- [ ] Send test transaction with memo\n- [ ] Oracle detects transaction\n- [ ] Proverb extracted correctly\n- [ ] Verification completes\n- [ ] Inscription transactions created\n- [ ] Both transactions confirmed\n- [ ] Database records complete\n\n**Week 2 Deliverables**:\n- ✅ Complete backend working\n- ✅ TEE integration functional\n- ✅ AI verification operational\n- ✅ End-to-end test passing\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "52cde216c3bd4233",
+      "text": "## Phase 3: Frontend Development (Week 3)\n\n### Mage Agent Setup\n- [ ] Next.js project initialized\n- [ ] TypeScript configured\n- [ ] Tailwind CSS installed\n- [ ] Dependencies installed:\n  - [ ] `axios`\n  - [ ] `qrcode.react`\n- [ ] Project structure created\n\n### API Routes\n- [ ] `/api/submit` endpoint created\n- [ ] `/api/status/:code` endpoint created\n- [ ] `/api/stats` endpoint created\n- [ ] Database connection in API routes\n- [ ] Error handling in place\n- [ ] CORS configured\n\n### Main Page\n- [ ] `app/page.tsx` created\n- [ ] Proverb submission form\n- [ ] Character counter\n- [ ] Validation (min/max length)\n- [ ] Submit button functionality\n\n### Payment Display\n- [ ] Payment address shown\n- [ ] Amount displayed (0.01 ZEC)\n- [ ] Memo text displayed\n- [ ] QR code generated\n- [ ] Copy buttons for address/memo\n- [ ] Mobile responsive\n\n### Status Tracking\n- [ ] Status polling implemented\n- [ ] Status display (pending/verified/inscribed)\n- [ ] Quality score display\n- [ ] Matched act display\n- [ ] Reasoning text display\n- [ ] Blockchain link (when inscribed)\n- [ ] Auto-refresh until complete\n\n### AI Writing Assistance (Optional)\n- [ ] \"Get AI Help\" button\n- [ ] AI suggestion modal\n- [ ] Calls NEAR Cloud AI for suggestions\n- [ ] User can accept/edit suggestions\n- [ ] Loading states\n\n### Styling & UX\n- [ ] Mobile responsive design\n- [ ] Loading spinners\n- [ ] Error messages\n- [ ] Success notifications\n- [ ] Smooth transitions\n- [ ] Accessibility (ARIA labels)\n\n### Testing\n- [ ] Can submit proverb\n- [ ] Payment info displays\n- [ ] QR code renders\n- [ ] Status updates correctly\n- [ ] Quality score shows\n- [ ] Links work\n- [ ] Mobile view works\n\n**Week 3 Deliverables**:\n- ✅ Complete user interface\n- ✅ Payment flow working\n- ✅ Status tracking functional\n- ✅ Mobile responsive\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "44a33ff6ea3896e5",
+      "text": "## Phase 4: Production Deployment (Week 4)\n\n### Pre-Deployment Testing\n- [ ] End-to-end test on testnet\n- [ ] Multiple proverbs processed\n- [ ] All inscriptions confirmed\n- [ ] 61.8/38.2 golden ratio split verified\n- [ ] Quality scores accurate\n- [ ] No errors in logs\n- [ ] Performance acceptable\n\n### Security Hardening\n- [ ] Environment variables secured\n- [ ] API keys not in code\n- [ ] Database credentials encrypted\n- [ ] HTTPS configured\n- [ ] CORS properly restricted\n- [ ] Input validation comprehensive\n- [ ] SQL injection prevented\n- [ ] Rate limiting implemented\n\n### Production Configuration\n- [ ] Mainnet Zcash addresses generated\n- [ ] Mainnet wallet synced\n- [ ] Production database created\n- [ ] Production schema applied\n- [ ] Production `.env` configured\n- [ ] Nillion production API key\n- [ ] NEAR Cloud AI production tier\n\n### Oracle Deployment\n- [ ] Production build created\n- [ ] Systemd service file created\n- [ ] Service installed\n- [ ] Service started\n- [ ] Service auto-starts on boot\n- [ ] Logs rotating properly\n\n### Frontend Deployment\n- [ ] Production build created\n- [ ] Nginx configured\n- [ ] SSL certificate installed\n- [ ] Domain name configured\n- [ ] Deployed and accessible\n- [ ] Performance optimized\n\n### Monitoring Setup\n- [ ] Logging configured\n- [ ] Error tracking\n- [ ] Uptime monitoring\n- [ ] Zcash balance alerts\n- [ ] Database space monitoring\n- [ ] API response time tracking\n\n### Backup Strategy\n- [ ] Database backup script\n- [ ] Automated daily backups\n- [ ] Wallet backup secured\n- [ ] Recovery procedure documented\n- [ ] Test restore successful\n\n### Documentation\n- [ ] Deployment guide written\n- [ ] Troubleshooting guide written\n- [ ] Maintenance procedures documented\n- [ ] API documentation complete\n- [ ] User guide created\n\n### Launch Checklist\n- [ ] All tests passing\n- [ ] Security audit complete\n- [ ] Backups configured\n- [ ] Monitoring active\n- [ ] Team trained\n- [ ] Support channels ready\n\n### Post-Launch\n- [ ] First 10 proverbs processed\n- [ ] No critical errors\n- [ ] Performance metrics good\n- [ ] User feedback positive\n- [ ] Monitoring showing green\n- [ ] Ready for scale\n\n**Week 4 Deliverables**:\n- ✅ Production system live\n- ✅ All monitoring active\n- ✅ Documentation complete\n- ✅ Successfully processing proverbs\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "d901883c99fcbf0c",
+      "text": "## Integration Status Matrix\n\n### Core Components\n\n| Component | Setup | Development | Testing | Integration | Production |\n|-----------|-------|-------------|---------|-------------|------------|\n| **PostgreSQL** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Zcash Light Client** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Nillion TEE** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **NEAR Cloud AI** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **IPFS/Pinata** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Oracle Backend** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Mage Frontend** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n\n**Legend**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "b51156a0adebbd1d",
+      "text": "## Data Flow Verification\n\n### Complete Transaction Path\n\n1. **User Submission** ⬜\n   - User writes proverb\n   - Generates tracking code\n   - Sends 0.01 ZEC with memo\n   \n2. **Transaction Detection** ⬜\n   - Oracle monitors Zcash\n   - Detects incoming transaction\n   - Extracts memo data\n   \n3. **Submission Creation** ⬜\n   - Parses tracking code\n   - Parses proverb text\n   - Creates database record\n   \n4. **Knowledge Fetch** ⬜\n   - Fetches spellbook from IPFS\n   - Caches locally\n   - Validates structure\n   \n5. **AI Verification** ⬜\n   - Calls NEAR Cloud AI API\n   - Receives quality score\n   - Records reasoning\n   \n6. **Verification Storage** ⬜\n   - Saves to database\n   - Updates submission status\n   - Logs result\n   \n7. **Transaction Preparation** ⬜\n   - Calculates 61.8/38.2 golden ratio split\n   - Creates inscription memo\n   - Prepares both transactions\n   \n8. **Signing** ⬜\n   - Requests Nillion signature\n   - Both transactions signed\n   - Signatures validated\n   \n9. **Broadcasting** ⬜\n   - Broadcasts public transaction\n   - Broadcasts private transaction\n   - Records TXIDs\n   \n10. **Confirmation** ⬜\n    - Monitors for confirmations\n    - Updates inscription record\n    - Notifies user\n\n**All 10 Steps Working**: ⬜ Yes | ⬜ No\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "8fd801fdbb6c29a4",
+      "text": "## Cost Tracking\n\n### Monthly Costs (Production)\n\n| Item | Estimated | Actual | Notes |\n|------|-----------|--------|-------|\n| **VPS** | $24/month | | DigitalOcean/AWS |\n| **Nillion** | $50/month | | TEE compute |\n| **NEAR Cloud AI** | $0.03/proverb | | Variable |\n| **Pinata** | $20/month | | IPFS pinning |\n| **Domain** | $1/month | | Optional |\n| **SSL** | $0 | | Let's Encrypt |\n| **Monitoring** | $0 | | Self-hosted |\n| **Total Fixed** | $95/month | | |\n| **Total Variable** | $0.03/proverb | | |\n\n**At 100 proverbs/month**: ~$98 total\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "1b74cb790c36c28a",
+      "text": "## Performance Metrics\n\n### Target Metrics\n\n| Metric | Target | Current | Status |\n|--------|--------|---------|--------|\n| **Submission → Inscription** | <3 minutes | | ⬜ |\n| **AI Verification** | <5 seconds | | ⬜ |\n| **IPFS Fetch** | <2 seconds | | ⬜ |\n| **Database Query** | <100ms | | ⬜ |\n| **Uptime** | >99% | | ⬜ |\n| **Error Rate** | <1% | | ⬜ |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "a0b8594fb06cf2c1",
+      "text": "## Known Issues\n\n### Open Issues\n- [ ] Issue 1: [Description]\n- [ ] Issue 2: [Description]\n- [ ] Issue 3: [Description]\n\n### Resolved Issues\n- [x] Issue: [Description] - Resolved: [Date] - Solution: [Description]\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "925d0d22cc7f1a54",
+      "text": "## Future Enhancements\n\n### Phase 5: Advanced Features (Post-Launch)\n\n- [ ] Multi-language support\n- [ ] Proverb archive browser\n- [ ] Search by quality score\n- [ ] Leaderboard (top proverbs)\n- [ ] Social sharing\n- [ ] Email notifications\n- [ ] Webhook support\n- [ ] Analytics dashboard\n\n### Phase 6: Scaling (Month 2+)\n\n- [ ] Multiple Oracle instances\n- [ ] Load balancing\n- [ ] CDN for frontend\n- [ ] Database read replicas\n- [ ] Caching layer (Redis)\n- [ ] Batch processing optimization\n\n### Phase 7: New Features (Month 3+)\n\n- [ ] NFT minting option\n- [ ] Community voting\n- [ ] Proverb challenges\n- [ ] AI training on best proverbs\n- [ ] API for third parties\n- [ ] Mobile app\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "6eec659415cf3768",
+      "text": "## Weekly Progress Tracker\n\n### Week 1: Foundation\n**Goal**: Database + Zcash operational\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n### Week 2: Backend\n**Goal**: Complete Oracle with TEE + AI\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n### Week 3: Frontend\n**Goal**: User interface complete\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n### Week 4: Production\n**Goal**: Live system processing proverbs\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c65a875918948ad3",
+      "text": "## Success Criteria\n\n### MVP Success (First 10 Proverbs)\n- [ ] All 10 submitted successfully\n- [ ] All 10 verified by AI\n- [ ] All 10 inscribed on blockchain\n- [ ] Perfect 61.8/38.2 golden ratio split maintained\n- [ ] Average quality score >0.7\n- [ ] Zero critical errors\n- [ ] <3 minute processing time\n\n### Production Success (First 100 Proverbs)\n- [ ] 100 submissions processed\n- [ ] >95% inscription success rate\n- [ ] Average quality score >0.8\n- [ ] <1% error rate\n- [ ] 99%+ uptime\n- [ ] Positive user feedback\n- [ ] System stable and scalable\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "7c1f061a97bfd4e8",
+      "text": "## Deployment Timeline\n\n```\nWeek 1 (Foundation)\n├─ Day 1-2: Setup & Installation\n├─ Day 3-4: Database + Zcash\n├─ Day 5-6: Core modules\n└─ Day 7: Testing & validation\n\nWeek 2 (Backend)\n├─ Day 8-9: IPFS + NEAR Cloud AI\n├─ Day 10-11: Nillion integration\n├─ Day 12-13: Main oracle loop\n└─ Day 14: End-to-end testing\n\nWeek 3 (Frontend)\n├─ Day 15-16: Next.js setup + API routes\n├─ Day 17-18: Submission UI\n├─ Day 19-20: Status tracking\n└─ Day 21: Testing + refinement\n\nWeek 4 (Production)\n├─ Day 22-23: Security hardening\n├─ Day 24-25: Deployment\n├─ Day 26-27: Monitoring + docs\n└─ Day 28: Launch! ðŸš€\n```\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "1d73547a58d7bd6f",
+      "text": "## Daily Standup Template\n\n**Date**: [YYYY-MM-DD]\n\n**Yesterday**:\n- [What did you complete?]\n\n**Today**:\n- [What will you work on?]\n\n**Blockers**:\n- [Any issues preventing progress?]\n\n**Notes**:\n- [Additional context]\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "5ce93c8919602d73",
+      "text": "## Emergency Contacts\n\n### Services\n- **Nillion Support**: Discord #developers\n- **NEAR Cloud AI Support**: https://cloud.near.ai\n- **Pinata Support**: team@pinata.cloud\n- **Zcash Community**: Discord/Forum\n\n### Critical Procedures\n- **Oracle Down**: Check logs, restart service\n- **Database Full**: Expand storage, archive old data\n- **Zcash Sync Issue**: Restart light client, check server\n- **API Rate Limit**: Wait for reset, upgrade tier\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "f85fe5faadca93e9",
+      "text": "## Completion Certificate\n\n**Project**: Proverb Revelation Protocol\n**Version**: 4.0\n**Status**: ⬜ Complete\n\n**Sign-off**:\n- [ ] All phases complete\n- [ ] All tests passing\n- [ ] Production deployed\n- [ ] Documentation complete\n- [ ] Successfully processing proverbs\n\n**Completed by**: [Your Name]\n**Date**: [YYYY-MM-DD]\n\n**Congratulations on building a privacy-first protocol!** 🗡️🪄🤖\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "cb54a83b308e834d",
+      "text": "## Quick Status Overview\n\n**Phase 0 (Prerequisites)**: ⬜ Complete (__ / __ items)\n**Phase 1 (Foundation)**: ⬜ Complete (__ / __ items)\n**Phase 2 (Backend)**: ⬜ Complete (__ / __ items)\n**Phase 3 (Frontend)**: ⬜ Complete (__ / __ items)\n**Phase 4 (Production)**: ⬜ Complete (__ / __ items)\n\n**Overall Progress**: __% complete\n\n**Estimated Completion**: [Date]\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "ba6643497fce782a",
+      "text": "## Notes Section\n\nUse this space for implementation notes, decisions, and discoveries:\n\n```\n[Add your notes here as you build]\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "a1f2ed02ca48b6e9",
+      "text": "---\n← [[Welcome Visitors]] · [[The Architecture Guides]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Guide — Implementation Roadmap",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "593031560776a42d",
+            "text": "# Implementation Roadmap"
+          },
+          {
+            "type": "markdown",
+            "id": "c897a7f9c2a485a5",
+            "text": "**Integration checklist and progress tracking**\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "35dea4089e064920",
+            "text": "## Overview\n\nThis roadmap tracks your progress through building the Proverb Revelation Protocol. Mark items as you complete them to maintain clear visibility of what's done and what's next.\n\n**Estimated Timeline**: 3-4 weeks from setup to production\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "7e4b066492993617",
+            "text": "## Phase 0: Prerequisites (1-2 days)\n\n### System Setup\n- [ ] Ubuntu 20.04+ installed (or WSL2)\n- [ ] Build essentials installed\n- [ ] Git installed and configured\n- [ ] 50GB+ storage available\n\n### Tool Installation\n- [ ] Rust installed (v1.70+)\n- [ ] Node.js 20 installed\n- [ ] Python 3.8+ installed\n- [ ] PostgreSQL 12+ installed\n\n### Account Creation\n- [ ] Nillion Discord account\n- [ ] Nillion API key requested\n- [ ] NEAR Cloud AI account created\n- [ ] NEAR Cloud AI API key generated\n- [ ] Pinata account created\n- [ ] Pinata JWT obtained\n\n### Project Structure\n- [ ] Main directory created: `~/proverb-protocol`\n- [ ] Subdirectories created: `oracle-swordsman`, `mage-agent`, `scripts`, `logs`, `spellbook`\n- [ ] Git repository initialized\n- [ ] `.gitignore` configured\n- [ ] `.env` file created\n\n### Verification\n- [ ] `rustc --version` shows 1.70+\n- [ ] `node --version` shows v20.x\n- [ ] `psql --version` shows 12+\n- [ ] All API keys saved in `.env`\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "a19d91637d2c9bd2",
+            "text": "## Phase 1: Foundation (Week 1)\n\n### Database Setup\n- [ ] PostgreSQL service running\n- [ ] Database user created: `proverb_user`\n- [ ] Database created: `proverb_protocol`\n- [ ] Schema applied successfully\n- [ ] Test connection successful\n- [ ] All tables created:\n  - [ ] `submissions`\n  - [ ] `verifications`\n  - [ ] `inscriptions`\n  - [ ] `spellbook_acts`\n  - [ ] `oracle_status`\n- [ ] Views created:\n  - [ ] `submission_pipeline`\n  - [ ] `proverb_stats`\n- [ ] Indexes created\n\n### Zcash Setup\n- [ ] `zecwallet-cli` installed\n- [ ] Wallet directory created\n- [ ] Light client synced (testnet)\n- [ ] Transparent address generated\n- [ ] Shielded address generated\n- [ ] Testnet ZEC received from faucet\n- [ ] Balance confirmed\n\n### Spellbook Creation\n- [ ] `spellbook-acts.json` created\n- [ ] Spellbook uploaded to Pinata\n- [ ] IPFS CID obtained\n- [ ] CID added to `.env`\n- [ ] Spellbook accessible via gateway\n- [ ] Content validated\n\n### Oracle Swordsman Project\n- [ ] TypeScript project initialized\n- [ ] Dependencies installed:\n  - [ ] `@nillion/client-web`\n  - [ ] `axios`\n  - [ ] `pg`\n  - [ ] `dotenv`\n  - [ ] `winston`\n- [ ] `tsconfig.json` configured\n- [ ] `package.json` scripts added\n- [ ] `src/` directory structure created\n\n### Core Modules Created\n- [ ] `src/config.ts` - Configuration management\n- [ ] `src/database.ts` - Database operations\n- [ ] `src/zcash-client.ts` - Zcash wrapper\n- [ ] `src/logger.ts` - Winston logger\n\n### Foundation Testing\n- [ ] Configuration loads correctly\n- [ ] Database connection works\n- [ ] Zcash client connects\n- [ ] Can create test submission\n- [ ] Can query database\n- [ ] Logs are being written\n\n**Week 1 Deliverables**:\n- ✅ All tools installed and configured\n- ✅ Database operational\n- ✅ Zcash wallet synced with testnet ZEC\n- ✅ Basic project structure in place\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "d47644280c21f9b4",
+            "text": "## Phase 2: Backend Integration (Week 2)\n\n### IPFS Integration\n- [ ] `src/ipfs-client.ts` created\n- [ ] Can fetch spellbook from IPFS\n- [ ] Caching implemented\n- [ ] Error handling added\n- [ ] Test: Fetch spellbook successfully\n- [ ] Test: Cache working\n\n### NEAR Cloud AI Integration\n- [ ] `src/near-verifier.ts` created\n- [ ] Can call verification API\n- [ ] Response parsing works\n- [ ] Fallback verification implemented\n- [ ] Retry logic added\n- [ ] Test: Verify sample proverb\n- [ ] Test: Fallback triggers on error\n\n### Nillion Integration\n- [ ] `src/nillion-signer.ts` created\n- [ ] Nillion SDK installed\n- [ ] Client initialized\n- [ ] Test: Can connect to Nillion\n- [ ] SecretSigner: Key stored\n- [ ] SecretSigner: Can sign test message\n- [ ] Attestation retrieved\n- [ ] Attestation verified\n\n### Main Oracle Loop\n- [ ] `src/index.ts` created\n- [ ] Transaction monitoring implemented\n- [ ] Memo parsing working\n- [ ] Submission creation functional\n- [ ] IPFS fetching integrated\n- [ ] AI verification integrated\n- [ ] Database updates working\n- [ ] Error handling comprehensive\n- [ ] Logging comprehensive\n\n### Transaction Processing\n- [ ] Can detect new Zcash transactions\n- [ ] Extracts tracking code from memo\n- [ ] Extracts proverb from memo\n- [ ] Creates submission record\n- [ ] Fetches spellbook from IPFS\n- [ ] Calls NEAR Cloud AI for verification\n- [ ] Records verification result\n- [ ] Updates submission status\n\n### Transaction Signing\n- [ ] Public inscription transaction created\n- [ ] Private shielded transaction created\n- [ ] 61.8/38.2 golden ratio split calculated correctly\n- [ ] Network fee included\n- [ ] Both transactions signed\n- [ ] Both transactions broadcast\n- [ ] Confirmation monitoring working\n\n### End-to-End Test\n- [ ] Send test transaction with memo\n- [ ] Oracle detects transaction\n- [ ] Proverb extracted correctly\n- [ ] Verification completes\n- [ ] Inscription transactions created\n- [ ] Both transactions confirmed\n- [ ] Database records complete\n\n**Week 2 Deliverables**:\n- ✅ Complete backend working\n- ✅ TEE integration functional\n- ✅ AI verification operational\n- ✅ End-to-end test passing\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "52cde216c3bd4233",
+            "text": "## Phase 3: Frontend Development (Week 3)\n\n### Mage Agent Setup\n- [ ] Next.js project initialized\n- [ ] TypeScript configured\n- [ ] Tailwind CSS installed\n- [ ] Dependencies installed:\n  - [ ] `axios`\n  - [ ] `qrcode.react`\n- [ ] Project structure created\n\n### API Routes\n- [ ] `/api/submit` endpoint created\n- [ ] `/api/status/:code` endpoint created\n- [ ] `/api/stats` endpoint created\n- [ ] Database connection in API routes\n- [ ] Error handling in place\n- [ ] CORS configured\n\n### Main Page\n- [ ] `app/page.tsx` created\n- [ ] Proverb submission form\n- [ ] Character counter\n- [ ] Validation (min/max length)\n- [ ] Submit button functionality\n\n### Payment Display\n- [ ] Payment address shown\n- [ ] Amount displayed (0.01 ZEC)\n- [ ] Memo text displayed\n- [ ] QR code generated\n- [ ] Copy buttons for address/memo\n- [ ] Mobile responsive\n\n### Status Tracking\n- [ ] Status polling implemented\n- [ ] Status display (pending/verified/inscribed)\n- [ ] Quality score display\n- [ ] Matched act display\n- [ ] Reasoning text display\n- [ ] Blockchain link (when inscribed)\n- [ ] Auto-refresh until complete\n\n### AI Writing Assistance (Optional)\n- [ ] \"Get AI Help\" button\n- [ ] AI suggestion modal\n- [ ] Calls NEAR Cloud AI for suggestions\n- [ ] User can accept/edit suggestions\n- [ ] Loading states\n\n### Styling & UX\n- [ ] Mobile responsive design\n- [ ] Loading spinners\n- [ ] Error messages\n- [ ] Success notifications\n- [ ] Smooth transitions\n- [ ] Accessibility (ARIA labels)\n\n### Testing\n- [ ] Can submit proverb\n- [ ] Payment info displays\n- [ ] QR code renders\n- [ ] Status updates correctly\n- [ ] Quality score shows\n- [ ] Links work\n- [ ] Mobile view works\n\n**Week 3 Deliverables**:\n- ✅ Complete user interface\n- ✅ Payment flow working\n- ✅ Status tracking functional\n- ✅ Mobile responsive\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "44a33ff6ea3896e5",
+            "text": "## Phase 4: Production Deployment (Week 4)\n\n### Pre-Deployment Testing\n- [ ] End-to-end test on testnet\n- [ ] Multiple proverbs processed\n- [ ] All inscriptions confirmed\n- [ ] 61.8/38.2 golden ratio split verified\n- [ ] Quality scores accurate\n- [ ] No errors in logs\n- [ ] Performance acceptable\n\n### Security Hardening\n- [ ] Environment variables secured\n- [ ] API keys not in code\n- [ ] Database credentials encrypted\n- [ ] HTTPS configured\n- [ ] CORS properly restricted\n- [ ] Input validation comprehensive\n- [ ] SQL injection prevented\n- [ ] Rate limiting implemented\n\n### Production Configuration\n- [ ] Mainnet Zcash addresses generated\n- [ ] Mainnet wallet synced\n- [ ] Production database created\n- [ ] Production schema applied\n- [ ] Production `.env` configured\n- [ ] Nillion production API key\n- [ ] NEAR Cloud AI production tier\n\n### Oracle Deployment\n- [ ] Production build created\n- [ ] Systemd service file created\n- [ ] Service installed\n- [ ] Service started\n- [ ] Service auto-starts on boot\n- [ ] Logs rotating properly\n\n### Frontend Deployment\n- [ ] Production build created\n- [ ] Nginx configured\n- [ ] SSL certificate installed\n- [ ] Domain name configured\n- [ ] Deployed and accessible\n- [ ] Performance optimized\n\n### Monitoring Setup\n- [ ] Logging configured\n- [ ] Error tracking\n- [ ] Uptime monitoring\n- [ ] Zcash balance alerts\n- [ ] Database space monitoring\n- [ ] API response time tracking\n\n### Backup Strategy\n- [ ] Database backup script\n- [ ] Automated daily backups\n- [ ] Wallet backup secured\n- [ ] Recovery procedure documented\n- [ ] Test restore successful\n\n### Documentation\n- [ ] Deployment guide written\n- [ ] Troubleshooting guide written\n- [ ] Maintenance procedures documented\n- [ ] API documentation complete\n- [ ] User guide created\n\n### Launch Checklist\n- [ ] All tests passing\n- [ ] Security audit complete\n- [ ] Backups configured\n- [ ] Monitoring active\n- [ ] Team trained\n- [ ] Support channels ready\n\n### Post-Launch\n- [ ] First 10 proverbs processed\n- [ ] No critical errors\n- [ ] Performance metrics good\n- [ ] User feedback positive\n- [ ] Monitoring showing green\n- [ ] Ready for scale\n\n**Week 4 Deliverables**:\n- ✅ Production system live\n- ✅ All monitoring active\n- ✅ Documentation complete\n- ✅ Successfully processing proverbs\n\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "d901883c99fcbf0c",
+            "text": "## Integration Status Matrix\n\n### Core Components\n\n| Component | Setup | Development | Testing | Integration | Production |\n|-----------|-------|-------------|---------|-------------|------------|\n| **PostgreSQL** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Zcash Light Client** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Nillion TEE** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **NEAR Cloud AI** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **IPFS/Pinata** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Oracle Backend** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| **Mage Frontend** | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n\n**Legend**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "b51156a0adebbd1d",
+            "text": "## Data Flow Verification\n\n### Complete Transaction Path\n\n1. **User Submission** ⬜\n   - User writes proverb\n   - Generates tracking code\n   - Sends 0.01 ZEC with memo\n   \n2. **Transaction Detection** ⬜\n   - Oracle monitors Zcash\n   - Detects incoming transaction\n   - Extracts memo data\n   \n3. **Submission Creation** ⬜\n   - Parses tracking code\n   - Parses proverb text\n   - Creates database record\n   \n4. **Knowledge Fetch** ⬜\n   - Fetches spellbook from IPFS\n   - Caches locally\n   - Validates structure\n   \n5. **AI Verification** ⬜\n   - Calls NEAR Cloud AI API\n   - Receives quality score\n   - Records reasoning\n   \n6. **Verification Storage** ⬜\n   - Saves to database\n   - Updates submission status\n   - Logs result\n   \n7. **Transaction Preparation** ⬜\n   - Calculates 61.8/38.2 golden ratio split\n   - Creates inscription memo\n   - Prepares both transactions\n   \n8. **Signing** ⬜\n   - Requests Nillion signature\n   - Both transactions signed\n   - Signatures validated\n   \n9. **Broadcasting** ⬜\n   - Broadcasts public transaction\n   - Broadcasts private transaction\n   - Records TXIDs\n   \n10. **Confirmation** ⬜\n    - Monitors for confirmations\n    - Updates inscription record\n    - Notifies user\n\n**All 10 Steps Working**: ⬜ Yes | ⬜ No\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "8fd801fdbb6c29a4",
+            "text": "## Cost Tracking\n\n### Monthly Costs (Production)\n\n| Item | Estimated | Actual | Notes |\n|------|-----------|--------|-------|\n| **VPS** | $24/month | | DigitalOcean/AWS |\n| **Nillion** | $50/month | | TEE compute |\n| **NEAR Cloud AI** | $0.03/proverb | | Variable |\n| **Pinata** | $20/month | | IPFS pinning |\n| **Domain** | $1/month | | Optional |\n| **SSL** | $0 | | Let's Encrypt |\n| **Monitoring** | $0 | | Self-hosted |\n| **Total Fixed** | $95/month | | |\n| **Total Variable** | $0.03/proverb | | |\n\n**At 100 proverbs/month**: ~$98 total\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "1b74cb790c36c28a",
+            "text": "## Performance Metrics\n\n### Target Metrics\n\n| Metric | Target | Current | Status |\n|--------|--------|---------|--------|\n| **Submission → Inscription** | <3 minutes | | ⬜ |\n| **AI Verification** | <5 seconds | | ⬜ |\n| **IPFS Fetch** | <2 seconds | | ⬜ |\n| **Database Query** | <100ms | | ⬜ |\n| **Uptime** | >99% | | ⬜ |\n| **Error Rate** | <1% | | ⬜ |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "a0b8594fb06cf2c1",
+            "text": "## Known Issues\n\n### Open Issues\n- [ ] Issue 1: [Description]\n- [ ] Issue 2: [Description]\n- [ ] Issue 3: [Description]\n\n### Resolved Issues\n- [x] Issue: [Description] - Resolved: [Date] - Solution: [Description]\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "925d0d22cc7f1a54",
+            "text": "## Future Enhancements\n\n### Phase 5: Advanced Features (Post-Launch)\n\n- [ ] Multi-language support\n- [ ] Proverb archive browser\n- [ ] Search by quality score\n- [ ] Leaderboard (top proverbs)\n- [ ] Social sharing\n- [ ] Email notifications\n- [ ] Webhook support\n- [ ] Analytics dashboard\n\n### Phase 6: Scaling (Month 2+)\n\n- [ ] Multiple Oracle instances\n- [ ] Load balancing\n- [ ] CDN for frontend\n- [ ] Database read replicas\n- [ ] Caching layer (Redis)\n- [ ] Batch processing optimization\n\n### Phase 7: New Features (Month 3+)\n\n- [ ] NFT minting option\n- [ ] Community voting\n- [ ] Proverb challenges\n- [ ] AI training on best proverbs\n- [ ] API for third parties\n- [ ] Mobile app\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "6eec659415cf3768",
+            "text": "## Weekly Progress Tracker\n\n### Week 1: Foundation\n**Goal**: Database + Zcash operational\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n### Week 2: Backend\n**Goal**: Complete Oracle with TEE + AI\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n### Week 3: Frontend\n**Goal**: User interface complete\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n### Week 4: Production\n**Goal**: Live system processing proverbs\n**Status**: ⬜ Not Started | 🔄 In Progress | ✅ Complete\n**Blockers**: [None]\n**Notes**: [Add notes here]\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c65a875918948ad3",
+            "text": "## Success Criteria\n\n### MVP Success (First 10 Proverbs)\n- [ ] All 10 submitted successfully\n- [ ] All 10 verified by AI\n- [ ] All 10 inscribed on blockchain\n- [ ] Perfect 61.8/38.2 golden ratio split maintained\n- [ ] Average quality score >0.7\n- [ ] Zero critical errors\n- [ ] <3 minute processing time\n\n### Production Success (First 100 Proverbs)\n- [ ] 100 submissions processed\n- [ ] >95% inscription success rate\n- [ ] Average quality score >0.8\n- [ ] <1% error rate\n- [ ] 99%+ uptime\n- [ ] Positive user feedback\n- [ ] System stable and scalable\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "7c1f061a97bfd4e8",
+            "text": "## Deployment Timeline\n\n```\nWeek 1 (Foundation)\n├─ Day 1-2: Setup & Installation\n├─ Day 3-4: Database + Zcash\n├─ Day 5-6: Core modules\n└─ Day 7: Testing & validation\n\nWeek 2 (Backend)\n├─ Day 8-9: IPFS + NEAR Cloud AI\n├─ Day 10-11: Nillion integration\n├─ Day 12-13: Main oracle loop\n└─ Day 14: End-to-end testing\n\nWeek 3 (Frontend)\n├─ Day 15-16: Next.js setup + API routes\n├─ Day 17-18: Submission UI\n├─ Day 19-20: Status tracking\n└─ Day 21: Testing + refinement\n\nWeek 4 (Production)\n├─ Day 22-23: Security hardening\n├─ Day 24-25: Deployment\n├─ Day 26-27: Monitoring + docs\n└─ Day 28: Launch! ðŸš€\n```\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "1d73547a58d7bd6f",
+            "text": "## Daily Standup Template\n\n**Date**: [YYYY-MM-DD]\n\n**Yesterday**:\n- [What did you complete?]\n\n**Today**:\n- [What will you work on?]\n\n**Blockers**:\n- [Any issues preventing progress?]\n\n**Notes**:\n- [Additional context]\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "5ce93c8919602d73",
+            "text": "## Emergency Contacts\n\n### Services\n- **Nillion Support**: Discord #developers\n- **NEAR Cloud AI Support**: https://cloud.near.ai\n- **Pinata Support**: team@pinata.cloud\n- **Zcash Community**: Discord/Forum\n\n### Critical Procedures\n- **Oracle Down**: Check logs, restart service\n- **Database Full**: Expand storage, archive old data\n- **Zcash Sync Issue**: Restart light client, check server\n- **API Rate Limit**: Wait for reset, upgrade tier\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "f85fe5faadca93e9",
+            "text": "## Completion Certificate\n\n**Project**: Proverb Revelation Protocol\n**Version**: 4.0\n**Status**: ⬜ Complete\n\n**Sign-off**:\n- [ ] All phases complete\n- [ ] All tests passing\n- [ ] Production deployed\n- [ ] Documentation complete\n- [ ] Successfully processing proverbs\n\n**Completed by**: [Your Name]\n**Date**: [YYYY-MM-DD]\n\n**Congratulations on building a privacy-first protocol!** 🗡️🪄🤖\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "cb54a83b308e834d",
+            "text": "## Quick Status Overview\n\n**Phase 0 (Prerequisites)**: ⬜ Complete (__ / __ items)\n**Phase 1 (Foundation)**: ⬜ Complete (__ / __ items)\n**Phase 2 (Backend)**: ⬜ Complete (__ / __ items)\n**Phase 3 (Frontend)**: ⬜ Complete (__ / __ items)\n**Phase 4 (Production)**: ⬜ Complete (__ / __ items)\n\n**Overall Progress**: __% complete\n\n**Estimated Completion**: [Date]\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "ba6643497fce782a",
+            "text": "## Notes Section\n\nUse this space for implementation notes, decisions, and discoveries:\n\n```\n[Add your notes here as you build]\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "a1f2ed02ca48b6e9",
+            "text": "---\n← [[Welcome Visitors]] · [[The Architecture Guides]]"
+          }
+        ]
+      },
+      "date": 1782603700691
+    }
+  ]
+}

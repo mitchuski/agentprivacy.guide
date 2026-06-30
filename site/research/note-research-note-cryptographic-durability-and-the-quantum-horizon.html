@@ -1,0 +1,97 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — Research Note — Cryptographic Durability and the Quantum Horizon · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — Research Note — Cryptographic Durability and the Quantum Horizon</span></div>
+  <article><div class="md"><h1>Research Note — Cryptographic Durability and the Quantum Horizon</h1>
+</div>
+<div class="md"><p><em>Extends the quantum-durability corpus (Schrottenloher ECDLP · Bakhta Half-Life · the V6 horizon) with<br>the ecdsa.fail trust mechanism and its City-of-Mages expression (the Horizon District). 2026-06-09.</em></p>
+<p><strong>Stage:</strong> 1 (worked synthesis · pre-peer-review)<br><strong>Lineage anchors (PVM-native):</strong> C13 (bilateral witness as quantum-resistant primitive) · C30–C33<br>(Behavioural Mosca / Half-Life of Trust) · C40 (existence-leak in ZK disclosure) · C18–C21 (V6 horizon<br>dynamics).<br><strong>Extends:</strong> <code>research/schrottenloher-ecdlp-v6-note.md</code> · <code>research/pvm-v6-1-bakhta-half-life.md</code> ·<br><code>privacy_value_v6_horizon_note.md</code> · <code>blog/blog-part3-the-dragon-wakes.md</code> (Act XXIX, three storms).<br><strong>Honest framing:</strong> resource estimation is a durability signal, not an attack; nothing here claims ECDSA<br>is practically broken or that any system is fully post-quantum safe.<br><strong>Erratum 2026-06-10 (Run 0 register lock):</strong> this note&#39;s C67–C71 are CONFIRMED at those numbers in <code>CONJECTURE_REGISTER_V6.md</code> (pinned grimoire v1.8.0 carries them). One stale anchor: &quot;C40 (existence-leak in ZK disclosure)&quot; above now reads <strong>C81</strong>; C40 is Zcash dual-ledger.</p>
+<hr>
+</div>
+<div class="md"><h2>1. The object: ecdsa.fail as a trust-gated self-improvement loop</h2>
+<p>ecdsa.fail (Eigen Labs) scores the cheapest reversible circuit for one secp256k1 point-addition by<br><code>Toffoli × peak-qubits</code>. The <code>schrottenloher-ecdlp-v6-note</code> already records the circuit frontier (the<br>Schrottenloher arXiv:2606.02235 line; ~1.5M Toffoli / 1309 qubits territory). This note records the<br><strong>discipline</strong> rather than the circuits: read alongside the RCI (Tony et al.) and SkillOpt papers, the<br>benchmark is a <strong>trust-gated self-improvement loop</strong> — a bounded change is worth nothing until it<br>survives an adversarial <strong>held-out gate</strong> (Fiat-Shamir over 9024 test points) it cannot tune. The<br>failure mode it exists to reject is the <strong>nonce-island mirage</strong>: a change that passes a self-chosen<br>probe and dies on the full set.</p>
+<p>This is the same shape as the architecture&#39;s bilateral-witness primitive (C13): an attestation is only<br>as good as the witnesses the attester did not choose.</p>
+</div>
+<div class="md"><h2>2. Cryptographic Mosca (new) extends Behavioural Mosca (C30–C33 / C61)</h2>
+<p>The Bakhta Half-Life note operationalises <strong>Mosca&#39;s inequality</strong> at behavioural-data scale (X_b / Y_b /<br>Z_b). This note extends it to the <strong>cryptographic substrate itself</strong>: a value-bearing primitive&#39;s<br>durability is bounded by</p>
+<blockquote>
+<p><strong>X + Y &gt; Z ⟹ already lost</strong> — secret-shelf-life (X) + migration-time (Y) vs time-to-quantum (Z).</p>
+</blockquote>
+<p>The harvest-now-decrypt-later threat (C60 / Reconstruct-Later) is the X-side made concrete. The<br>distinction between <strong>fast-clock</strong> (in-flight / on-spend secrets) and <strong>slow-clock</strong> (at-rest exposed<br>keys) machines sets which mitigation applies. Crypto-agility (the path, not the wall) is the property<br>that keeps <code>Z ≥ X + Y</code> achievable: durability is set by the ability to re-key to a PQC successor before<br>the inequality flips, not by the current primitive&#39;s strength.</p>
+</div>
+<div class="md"><h2>3. The resource-estimate as durability signal (not attack)</h2>
+<p>A sharper resource estimate shortens the <em>estimate&#39;s</em> uncertainty, not the system&#39;s security. In the<br>V(π,t) frame this gives the <code>e^(−λt)</code> decay term a <strong>quantum-horizon reading</strong> for cryptographic π:<br>durability is the time-constant of the decay, and the resource estimate is its measurement. This is<br>additive — <strong>no change to the PVM v5.4 equation.</strong> The existence-leak (C40) is the reason the estimate<br>matters at all: <em>proving a thing is feasible compresses the timeline for everyone who reads the proof</em><br>(the line <em>The Last Premine</em> makes narrative). The asset was never the method; it was the fact of<br>feasibility.</p>
+</div>
+<div class="md"><h2>4. Conjecture cross-map (PVM-native ↔ Tome-V / suite-facing)</h2>
+<p>The suite carries two conjecture-numbering registers (this docs corpus uses PVM-native ids; the City of<br>Mages / <code>/model</code> page uses the Tome-V numbering). The new district conjectures are registered at <strong>C67–C71</strong><br>in the Tome-V register; their PVM-native lineage:</p>
+<table>
+<thead>
+<tr>
+<th>Tome-V (suite)</th>
+<th>claim</th>
+<th>PVM-native lineage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C67</strong></td>
+<td>Cryptographic Mosca for the Substrate</td>
+<td>extends C30–C33 (Behavioural Mosca) + C61; C60 is the X-side</td>
+</tr>
+<tr>
+<td><strong>C68</strong></td>
+<td>Resource-estimate as durability signal (not attack)</td>
+<td><code>e^(−λt)</code> reading; C40 existence-leak</td>
+</tr>
+<tr>
+<td><strong>C69</strong></td>
+<td>Held-out gate rejects the tuned claim (nonce-island)</td>
+<td>C13 bilateral witness at the validation layer</td>
+</tr>
+<tr>
+<td><strong>C70</strong></td>
+<td>Crypto-agility as migration readiness</td>
+<td>C30–C33 migration-window Y</td>
+</tr>
+<tr>
+<td><strong>C71</strong></td>
+<td>The Horizon Vertex (V35)</td>
+<td>geometric (Protection ∧ Computation ∧ Value)</td>
+</tr>
+</tbody></table>
+<p>Keeping the two registers explicitly cross-mapped prevents the divergence that, on the lattice itself,<br>produced the persona-misassignment corrected in v1.8.0 (see the lattice-encoding anchor chronicle).</p>
+</div>
+<div class="md"><h2>5. The City-of-Mages expression</h2>
+<p>The trust mechanism is given a place: the <strong>Horizon District</strong> (V35), opened in Tome IX — <em>The Horizon</em><br>(grimoire v1.8.0). <strong>Eos 🌅</strong> measures the dawn (Mosca&#39;s reckoning); <strong>Dokimé 🪨</strong> assays the claim (the<br>Ceremony of the 9024 Witnesses; Spec 12 — the Validation Protocol); <strong>Poros 🛤️</strong> keeps the path crossable<br>(crypto-agility). The dormant <strong>Salvage Yard</strong> will host quantum-salvage bounties settling through<br>Dokimé&#39;s assay. Skills: <code>cryptographic-durability</code> (the frame) and <code>horizon-gate</code> (the discipline).</p>
+</div>
+<div class="md"><h2>6. Open questions</h2>
+<ul>
+<li>Tighten C67&#39;s confidence with a worked horizon estimate from the current ecdsa.fail frontier (what Z does<br>the best public estimate imply, with error bars, for secp256k1?).</li>
+<li>Formalise the <code>e^(−λt)</code> quantum-horizon reading (C68): is λ for cryptographic π derivable from the<br>resource estimate, or only bounded by it?</li>
+<li>The held-out gate (C69) as a general acceptance primitive beyond circuits — does the Fiat-Shamir<br>un-tuneability transfer to other self-improvement loops (skill optimisation, proof search)?</li>
+</ul>
+<hr>
+<p><em>Stage-1 note · 2026-06-09. Authored from shor_mage/ (ecdsa.fail) and The Last Premine. Durability is a<br>value the model already counts; the dawn is a time you can measure.</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 note-research-note-cryptographic-durability-and-the-quantum-horizon</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-research-note-cryptographic-durability-and-the-quantum-horizon.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

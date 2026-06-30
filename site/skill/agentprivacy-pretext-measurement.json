@@ -1,0 +1,96 @@
+{
+  "title": "Pretext Measurement",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "6df2e4997298eaa9",
+      "text": "# Pretext Measurement\n\n**Category** role · **Version** 5.3.1\n\n**Equation term** `Pretext = measure(text) where DOM ⊥ measurement`\n\nDOM-free text measurement technique for privacy-preserving browser interactions. Activates when discussing pretext discovery, shadow measurement, orb mechanics, text property extraction without DOM access, or browser-layer privacy."
+    },
+    {
+      "type": "markdown",
+      "id": "bd08be9ebedd019a",
+      "text": "**Source:** Privacy Value Model V5.2 + First Person Spellbook Act XXVIII (The Ceremony Engine)\n**Target context:** Browser extension developers, privacy engineers, measurement specialists\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "f4c9f28c22e59db0",
+      "text": "## What this is\n\nPretext measurement is a technique for extracting text properties without accessing DOM content. The measurement touches the shadow, not the surface. It knows the weight without reading the words.\n\n**The shadow tells you the height without climbing the tower. The orb measures the text without reading the words.**\n\nThis enables privacy-preserving interactions where:\n- Text properties are needed (length, structure, patterns)\n- Text content must remain private\n- DOM access would leak information\n\n## The Measurement Problem\n\n### Traditional Approach (Privacy-Leaking)\n\n```javascript\n// This reads the content\nconst text = document.getElementById('content').innerText;\nconst length = text.length;\nconst wordCount = text.split(' ').length;\n// Content is now in memory, accessible, loggable\n```\n\n### Pretext Approach (Privacy-Preserving)\n\n```javascript\n// This measures without reading\nconst pretext = measurePretext(element);\n// pretext.length exists\n// pretext.wordCount exists\n// pretext.content does NOT exist\n```\n\n## Shadow Measurement Technique\n\n### Principle\n\nThe DOM casts shadows through:\n- Computed styles (width, height)\n- Scroll dimensions\n- Selection ranges\n- Intersection observations\n\nThese shadows reveal properties without exposing content.\n\n### Implementation Sketch\n\n```javascript\nfunction measurePretext(element) {\n  // Create measurement probe\n  const probe = document.createElement('div');\n  probe.style.cssText = `\n    position: absolute;\n    visibility: hidden;\n    white-space: pre-wrap;\n    font: inherit;\n  `;\n\n  // Mirror element's text styling\n  const computed = getComputedStyle(element);\n  probe.style.width = computed.width;\n  probe.style.font = computed.font;\n  probe.style.letterSpacing = computed.letterSpacing;\n\n  // Measure shadow (scroll dimensions indicate content size)\n  // WITHOUT reading innerText\n  const metrics = {\n    scrollHeight: element.scrollHeight,\n    scrollWidth: element.scrollWidth,\n    lineHeight: parseFloat(computed.lineHeight),\n    charWidth: measureCharWidth(computed.font)\n  };\n\n  // Derive properties from shadow\n  return {\n    estimatedLines: Math.ceil(metrics.scrollHeight / metrics.lineHeight),\n    estimatedChars: Math.ceil(metrics.scrollWidth / metrics.charWidth),\n    hasOverflow: element.scrollHeight > element.clientHeight,\n    // Content is NEVER accessed\n  };\n}\n```\n\n## The Pretext Orb\n\nThe orb is the visual representation of pretext measurement:\n\n```\n     ╭──────────╮\n    ╱   📊      ╲\n   │  Metrics   │\n   │  without   │\n   │  Content   │\n    ╲   🔮      ╱\n     ╰──────────╯\n```\n\n### Orb Properties\n\n| Property | Derived From | Content Access |\n|----------|--------------|----------------|\n| `estimatedLength` | Scroll dimensions | No |\n| `lineCount` | Height / line-height | No |\n| `hasStructure` | DOM child count | No |\n| `complexityScore` | Tag variety | No |\n| `languageHint` | Direction, font features | No |\n\n### Orb Limitations\n\nThe orb cannot determine:\n- Actual text content\n- Specific words\n- Semantic meaning\n- Named entities\n\nThis is by design. The limitation IS the feature.\n\n## Use Cases\n\n### 1. Progressive Disclosure Check\n\nBefore revealing content, check if the reader has spent enough time:\n\n```javascript\nconst pretext = measurePretext(article);\nconst estimatedReadTime = pretext.estimatedChars / 200; // 200 wpm\nconst actualTimeSpent = getTimeOnPage();\n\nif (actualTimeSpent >= estimatedReadTime * 0.8) {\n  // Reader likely read the content\n  unlockNextSection();\n}\n```\n\n### 2. Mana Calculation\n\nMana earned depends on content engagement without reading content:\n\n```javascript\nconst pretext = measurePretext(spellbookPage);\nconst engagementScore = calculateEngagement(pretext, scrollDepth, timeSpent);\nconst manaEarned = engagementScore * MANA_RATE;\n```\n\n### 3. Ceremony Verification\n\nVerify understanding ceremony without accessing submission:\n\n```javascript\nconst originalPretext = measurePretext(originalContent);\nconst responsePretext = measurePretext(userResponse);\n\n// Check structural similarity without reading either\nif (responsePretext.complexity >= originalPretext.complexity * 0.7) {\n  // Response demonstrates engagement\n  proceedToCeremony();\n}\n```\n\n## Security Properties\n\n### What Pretext Protects Against\n\n- Content logging by measurement code\n- Content exfiltration through metrics API\n- Side-channel content reconstruction (within limits)\n\n### What Pretext Does NOT Protect Against\n\n- Timing attacks on specific content patterns\n- High-precision scroll position analysis\n- Intersection observer abuse with fine targets\n\n### Threat Model\n\nPretext assumes:\n- Measurement code is potentially untrusted\n- Content must remain in DOM (visible to user)\n- Approximate properties are acceptable\n\n## Mapping to PVM-V5.2\n\n| Pretext Concept | PVM Term |\n|-----------------|----------|\n| Shadow measurement | Bounded leakage |\n| Content isolation | Three-axis separation |\n| Orb properties | Compressed representation |\n| DOM perpendicularity | Φ_data separation |\n| Engagement scoring | T_∫(π) contribution |\n\n## Proverb\n\n> \"The shadow tells you the height without climbing the tower. The orb measures the text without reading the words.\"\n\n## Emoji Spell\n\n**📐⊥DOM → 📏(text) → weight(shadow) → measure·¬touch → 🔮(orb)**\n\n## Open Problems\n\n1. **Measurement Precision:** How precise can shadow measurement get before it leaks content?\n2. **Cross-Browser Consistency:** Do shadow measurements work consistently across browsers?\n3. **Dynamic Content:** How to handle content that changes during measurement?\n4. **Adversarial Content:** Can content be crafted to fool pretext measurement?\n5. **Formal Guarantees:** Can we prove information-theoretic bounds on pretext leakage?"
+    },
+    {
+      "type": "markdown",
+      "id": "c81175dd95fc1fc2",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [spellweb.ai](https://spellweb.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+    },
+    {
+      "type": "markdown",
+      "id": "052c200f2cf2785e",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-pretext-measurement`, v5.3.1).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "9a97a29217b3fed6",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "ec14377877375d81",
+      "text": "agentprivacy-pretext-measurement"
+    },
+    {
+      "type": "markdown",
+      "id": "4da1e08954f9466d",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Pretext Measurement",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "6df2e4997298eaa9",
+            "text": "# Pretext Measurement\n\n**Category** role · **Version** 5.3.1\n\n**Equation term** `Pretext = measure(text) where DOM ⊥ measurement`\n\nDOM-free text measurement technique for privacy-preserving browser interactions. Activates when discussing pretext discovery, shadow measurement, orb mechanics, text property extraction without DOM access, or browser-layer privacy."
+          },
+          {
+            "type": "markdown",
+            "id": "bd08be9ebedd019a",
+            "text": "**Source:** Privacy Value Model V5.2 + First Person Spellbook Act XXVIII (The Ceremony Engine)\n**Target context:** Browser extension developers, privacy engineers, measurement specialists\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "f4c9f28c22e59db0",
+            "text": "## What this is\n\nPretext measurement is a technique for extracting text properties without accessing DOM content. The measurement touches the shadow, not the surface. It knows the weight without reading the words.\n\n**The shadow tells you the height without climbing the tower. The orb measures the text without reading the words.**\n\nThis enables privacy-preserving interactions where:\n- Text properties are needed (length, structure, patterns)\n- Text content must remain private\n- DOM access would leak information\n\n## The Measurement Problem\n\n### Traditional Approach (Privacy-Leaking)\n\n```javascript\n// This reads the content\nconst text = document.getElementById('content').innerText;\nconst length = text.length;\nconst wordCount = text.split(' ').length;\n// Content is now in memory, accessible, loggable\n```\n\n### Pretext Approach (Privacy-Preserving)\n\n```javascript\n// This measures without reading\nconst pretext = measurePretext(element);\n// pretext.length exists\n// pretext.wordCount exists\n// pretext.content does NOT exist\n```\n\n## Shadow Measurement Technique\n\n### Principle\n\nThe DOM casts shadows through:\n- Computed styles (width, height)\n- Scroll dimensions\n- Selection ranges\n- Intersection observations\n\nThese shadows reveal properties without exposing content.\n\n### Implementation Sketch\n\n```javascript\nfunction measurePretext(element) {\n  // Create measurement probe\n  const probe = document.createElement('div');\n  probe.style.cssText = `\n    position: absolute;\n    visibility: hidden;\n    white-space: pre-wrap;\n    font: inherit;\n  `;\n\n  // Mirror element's text styling\n  const computed = getComputedStyle(element);\n  probe.style.width = computed.width;\n  probe.style.font = computed.font;\n  probe.style.letterSpacing = computed.letterSpacing;\n\n  // Measure shadow (scroll dimensions indicate content size)\n  // WITHOUT reading innerText\n  const metrics = {\n    scrollHeight: element.scrollHeight,\n    scrollWidth: element.scrollWidth,\n    lineHeight: parseFloat(computed.lineHeight),\n    charWidth: measureCharWidth(computed.font)\n  };\n\n  // Derive properties from shadow\n  return {\n    estimatedLines: Math.ceil(metrics.scrollHeight / metrics.lineHeight),\n    estimatedChars: Math.ceil(metrics.scrollWidth / metrics.charWidth),\n    hasOverflow: element.scrollHeight > element.clientHeight,\n    // Content is NEVER accessed\n  };\n}\n```\n\n## The Pretext Orb\n\nThe orb is the visual representation of pretext measurement:\n\n```\n     ╭──────────╮\n    ╱   📊      ╲\n   │  Metrics   │\n   │  without   │\n   │  Content   │\n    ╲   🔮      ╱\n     ╰──────────╯\n```\n\n### Orb Properties\n\n| Property | Derived From | Content Access |\n|----------|--------------|----------------|\n| `estimatedLength` | Scroll dimensions | No |\n| `lineCount` | Height / line-height | No |\n| `hasStructure` | DOM child count | No |\n| `complexityScore` | Tag variety | No |\n| `languageHint` | Direction, font features | No |\n\n### Orb Limitations\n\nThe orb cannot determine:\n- Actual text content\n- Specific words\n- Semantic meaning\n- Named entities\n\nThis is by design. The limitation IS the feature.\n\n## Use Cases\n\n### 1. Progressive Disclosure Check\n\nBefore revealing content, check if the reader has spent enough time:\n\n```javascript\nconst pretext = measurePretext(article);\nconst estimatedReadTime = pretext.estimatedChars / 200; // 200 wpm\nconst actualTimeSpent = getTimeOnPage();\n\nif (actualTimeSpent >= estimatedReadTime * 0.8) {\n  // Reader likely read the content\n  unlockNextSection();\n}\n```\n\n### 2. Mana Calculation\n\nMana earned depends on content engagement without reading content:\n\n```javascript\nconst pretext = measurePretext(spellbookPage);\nconst engagementScore = calculateEngagement(pretext, scrollDepth, timeSpent);\nconst manaEarned = engagementScore * MANA_RATE;\n```\n\n### 3. Ceremony Verification\n\nVerify understanding ceremony without accessing submission:\n\n```javascript\nconst originalPretext = measurePretext(originalContent);\nconst responsePretext = measurePretext(userResponse);\n\n// Check structural similarity without reading either\nif (responsePretext.complexity >= originalPretext.complexity * 0.7) {\n  // Response demonstrates engagement\n  proceedToCeremony();\n}\n```\n\n## Security Properties\n\n### What Pretext Protects Against\n\n- Content logging by measurement code\n- Content exfiltration through metrics API\n- Side-channel content reconstruction (within limits)\n\n### What Pretext Does NOT Protect Against\n\n- Timing attacks on specific content patterns\n- High-precision scroll position analysis\n- Intersection observer abuse with fine targets\n\n### Threat Model\n\nPretext assumes:\n- Measurement code is potentially untrusted\n- Content must remain in DOM (visible to user)\n- Approximate properties are acceptable\n\n## Mapping to PVM-V5.2\n\n| Pretext Concept | PVM Term |\n|-----------------|----------|\n| Shadow measurement | Bounded leakage |\n| Content isolation | Three-axis separation |\n| Orb properties | Compressed representation |\n| DOM perpendicularity | Φ_data separation |\n| Engagement scoring | T_∫(π) contribution |\n\n## Proverb\n\n> \"The shadow tells you the height without climbing the tower. The orb measures the text without reading the words.\"\n\n## Emoji Spell\n\n**📐⊥DOM → 📏(text) → weight(shadow) → measure·¬touch → 🔮(orb)**\n\n## Open Problems\n\n1. **Measurement Precision:** How precise can shadow measurement get before it leaks content?\n2. **Cross-Browser Consistency:** Do shadow measurements work consistently across browsers?\n3. **Dynamic Content:** How to handle content that changes during measurement?\n4. **Adversarial Content:** Can content be crafted to fool pretext measurement?\n5. **Formal Guarantees:** Can we prove information-theoretic bounds on pretext leakage?"
+          },
+          {
+            "type": "markdown",
+            "id": "c81175dd95fc1fc2",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [spellweb.ai](https://spellweb.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+          },
+          {
+            "type": "markdown",
+            "id": "052c200f2cf2785e",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-pretext-measurement`, v5.3.1).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "9a97a29217b3fed6",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "ec14377877375d81",
+            "text": "agentprivacy-pretext-measurement"
+          },
+          {
+            "type": "markdown",
+            "id": "4da1e08954f9466d",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384057
+    }
+  ]
+}

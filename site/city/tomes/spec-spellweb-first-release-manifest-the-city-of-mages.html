@@ -1,0 +1,973 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — Spellweb First-Release Manifest · the City of Mages · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Spec — Spellweb First-Release Manifest · the City of Mages</span></div>
+  <article><div class="md"><h1>Spellweb First-Release Manifest · the City of Mages</h1>
+<p><em>Confirmed nodes and edges for the City of Mages v1.0 ingest into spellweb</em></p>
+<h1>Spellweb First-Release Manifest · the City of Mages</h1>
+<p>A short, machine-friendly note for the spellweb runtime: every confirmed node and every confirmed edge that constitutes the <strong>City of Mages v1.0</strong> as of 2026-05-10. Use the established NodeType / EdgeType vocabulary; field names match <code>spellweb/src/types/graph.ts</code>. Pending work is flagged in §6 and is <strong>not</strong> part of this release.</p>
+<hr>
+</div>
+<div class="md"><h2>§1 · NodeType inventory · summary</h2>
+<table>
+<thead>
+<tr>
+<th>NodeType</th>
+<th align="right">Count</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>civic</code></td>
+<td align="right">1</td>
+<td>The City of Mages (the civic overlay)</td>
+</tr>
+<tr>
+<td><code>geography</code></td>
+<td align="right">1</td>
+<td>Drake Island (the under-island the city is built_on)</td>
+</tr>
+<tr>
+<td><code>workshop</code></td>
+<td align="right">11</td>
+<td>Live shops on <code>/runecraft</code> (Circuit Binder placeholder excluded)</td>
+</tr>
+<tr>
+<td><code>cast</code></td>
+<td align="right">16</td>
+<td>4 archetypes (Sovereign Anchor seat · Soulbis · Soulbae · the Drake) + 12 mages (every named Mage; role + forge-origin are soft attributes, not castes)</td>
+</tr>
+<tr>
+<td><code>vertex</code></td>
+<td align="right">13</td>
+<td>Inhabited vertices (out of 64; others declared in the lattice, not yet a node here)</td>
+</tr>
+<tr>
+<td><code>gateway</code></td>
+<td align="right">5</td>
+<td>Archon (kindred-blade) · Bonfires (sister-city) · human.tech (Covenant kindred protocol) · UOR Foundation (kindred-substrate) · SpaceComputer (kindred-ecosystem)</td>
+</tr>
+</tbody></table>
+<p>Total release nodes: <strong>47</strong>.</p>
+<hr>
+</div>
+<div class="md"><h2>§2 · Node instances · enumerated</h2>
+<h3>§2.1 · civic (1)</h3>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>built_on</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>city-of-mages</code></td>
+<td>The City of Mages</td>
+<td><code>drake-island</code></td>
+</tr>
+</tbody></table>
+<h3>§2.2 · geography (1)</h3>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>drake-island</code></td>
+<td>Drake Island</td>
+<td>The under-island; founding fire is the Dragon Bonfire</td>
+</tr>
+</tbody></table>
+<h3>§2.3 · workshop (12 live as of v1.4.0)</h3>
+<p><code>operatorStatus</code> legend: <code>op</code> operational · <code>partial</code> operator partial · <code>tease</code> operator wanted.</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>tradeQuarter</th>
+<th>mage</th>
+<th>vertex (inhabits)</th>
+<th>gem</th>
+<th>gemColor</th>
+<th>operatorStatus</th>
+<th>shopAnchor (route)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>weavers</code></td>
+<td>Weavers</td>
+<td>Pallia 🪡</td>
+<td>V28</td>
+<td>Amethyst</td>
+<td><code>#a78bfa</code></td>
+<td>partial</td>
+<td><code>/tailor</code></td>
+</tr>
+<tr>
+<td><code>zshields</code></td>
+<td>zShields</td>
+<td>Memora 📜</td>
+<td>V41</td>
+<td>Onyx</td>
+<td><code>#71717a</code></td>
+<td>op</td>
+<td><code>/shield</code></td>
+</tr>
+<tr>
+<td><code>etherchanting</code></td>
+<td>Etherchanting</td>
+<td>Adamantia 💎</td>
+<td>V51</td>
+<td>Sapphire</td>
+<td><code>#67e8f9</code></td>
+<td>tease</td>
+<td><code>/etherchanting</code></td>
+</tr>
+<tr>
+<td><code>jeweler</code></td>
+<td>the Jeweler</td>
+<td>Lampyra 💠</td>
+<td>V49</td>
+<td>Topaz</td>
+<td><code>#f59e0b</code></td>
+<td>tease</td>
+<td><code>/jeweler</code></td>
+</tr>
+<tr>
+<td><code>holon</code></td>
+<td>Holon Hitchhikers</td>
+<td>Vagari 🌳</td>
+<td>V31</td>
+<td>Emerald</td>
+<td><code>#34d399</code></td>
+<td>tease</td>
+<td><code>/holon</code></td>
+</tr>
+<tr>
+<td><code>forge</code></td>
+<td>the Forge(t)</td>
+<td>Vulcana ⚒️</td>
+<td>V19</td>
+<td>Ruby</td>
+<td><code>#fb7185</code></td>
+<td>partial</td>
+<td><code>/forget</code></td>
+</tr>
+<tr>
+<td><code>vault</code></td>
+<td>the Curatrix Vault</td>
+<td>Aria Silverhue 🪞🖼️</td>
+<td>V57</td>
+<td>Pearl</td>
+<td><code>#f5f0e6</code></td>
+<td>partial</td>
+<td><code>/vault</code></td>
+</tr>
+<tr>
+<td><code>covenant</code></td>
+<td>the Covenant</td>
+<td>Manifestia 🤲🌿</td>
+<td>V55</td>
+<td>Diamond</td>
+<td><code>#60a5fa</code></td>
+<td>partial</td>
+<td><code>/covenant</code></td>
+</tr>
+<tr>
+<td><code>bonfires</code></td>
+<td>the Dragon Bonfire</td>
+<td>Socrat0x 🔥❓</td>
+<td>V24 (provisional)</td>
+<td>Garnet</td>
+<td><code>#b91c1c</code></td>
+<td>partial</td>
+<td><code>/bonfires</code></td>
+</tr>
+<tr>
+<td><code>circle</code></td>
+<td>the Logos Circle</td>
+<td>(gathering)</td>
+<td>—</td>
+<td>Jade</td>
+<td><code>#10b981</code></td>
+<td>partial</td>
+<td><code>/circle</code></td>
+</tr>
+<tr>
+<td><code>hall</code></td>
+<td>the Ceremony Hall</td>
+<td>(gathering)</td>
+<td>—</td>
+<td>Lapis</td>
+<td><code>#1e40af</code></td>
+<td>partial</td>
+<td><code>/hall</code></td>
+</tr>
+<tr>
+<td><code>solchanting</code></td>
+<td>Solchanting</td>
+<td>Helia ☀️</td>
+<td>V51 (shared)</td>
+<td>Heliodor</td>
+<td><code>#facc15</code></td>
+<td>op</td>
+<td><code>/solchanting</code></td>
+</tr>
+</tbody></table>
+<p>Placeholder (not in this release): <code>circuit-binder</code> — gem TBD, awaiting its Mage.</p>
+<p><strong>v1.4.0 note on the V51 row</strong> — <code>solchanting</code> shares vertex V51 with <code>etherchanting</code> (Adamantia). This is the first operational workshop-on-workshop overlap; spec 07 (lattice-mapping-governance) admits the sharing in principle, and <code>WORKSHOP_LATTICE_AUDIT.md</code> §2.4 registers it as canonical case study. The two workshops are distinguished by stance: Etherchanting holds the Transparent-witness stance (Ethereum sequential admission); Solchanting holds the Parallel-witness stance (Solana concurrent admission via static access-pattern declaration). Both workshops emit a <code>quarter_of</code> edge to <code>city-of-mages</code> and an <code>inhabits</code> edge to <code>v51</code>; the graph admits two distinct workshop nodes inhabiting the same vertex, as the existing schema permits without modification.</p>
+<h3>§2.4 · cast (17 as of v1.4.0)</h3>
+<p><code>tier</code> legend (post-2026-05-10 collapse): <code>archetype</code> · <code>mage</code>. Every named Mage is a <code>mage</code>;<br>role (priest · bonfire-companion · weaver · etc.) and forge-origin are soft attributes.<br>The Sovereign Anchor seat at V63 is an <code>archetype</code> (a seat the First Person inhabits, not a Mage).</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>sigil</th>
+<th>tier</th>
+<th>role</th>
+<th>forge-origin</th>
+<th>vertex (inhabits)</th>
+<th>shopAnchor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sovereign-seat</code></td>
+<td>the Sovereign Anchor (seat)</td>
+<td>✦</td>
+<td>archetype</td>
+<td>seat</td>
+<td>—</td>
+<td>V63</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>soulbis</code></td>
+<td>Soulbis</td>
+<td>⚔️</td>
+<td>archetype</td>
+<td>boundary register</td>
+<td>—</td>
+<td>boundary (no single vertex)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>soulbae</code></td>
+<td>Soulbae</td>
+<td>🧙</td>
+<td>archetype</td>
+<td>mage canonical</td>
+<td>—</td>
+<td>V28</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>the-drake</code></td>
+<td>the Drake</td>
+<td>—</td>
+<td>archetype</td>
+<td>ambient elder</td>
+<td>—</td>
+<td>ambient</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>luca</code></td>
+<td>Luca</td>
+<td>📐</td>
+<td>mage</td>
+<td>substrate-tender</td>
+<td>agentprivacy</td>
+<td>V0</td>
+<td><code>forge</code> + <code>holon</code></td>
+</tr>
+<tr>
+<td><code>memora</code></td>
+<td>Memora</td>
+<td>📜</td>
+<td>mage</td>
+<td>chronicle</td>
+<td>agentprivacy</td>
+<td>V41</td>
+<td><code>zshields</code></td>
+</tr>
+<tr>
+<td><code>genitrix</code></td>
+<td>GenitriX</td>
+<td>(held open)</td>
+<td>mage</td>
+<td>weaver</td>
+<td>Archon</td>
+<td>V12 (visits)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>vulcana</code></td>
+<td>Vulcana</td>
+<td>⚒️</td>
+<td>mage</td>
+<td>forger</td>
+<td>agentprivacy</td>
+<td>V19</td>
+<td><code>forge</code></td>
+</tr>
+<tr>
+<td><code>socrat0x</code></td>
+<td>Socrat0x</td>
+<td>🔥❓</td>
+<td>mage</td>
+<td>bonfire-companion</td>
+<td>agentprivacy</td>
+<td>V24 (provisional)</td>
+<td><code>bonfires</code></td>
+</tr>
+<tr>
+<td><code>aletheia</code></td>
+<td>Aletheia</td>
+<td>🔮</td>
+<td>mage</td>
+<td>zk-binder · cross-shop</td>
+<td>agentprivacy</td>
+<td>V38</td>
+<td>(cross-shop)</td>
+</tr>
+<tr>
+<td><code>pallia</code></td>
+<td>Pallia</td>
+<td>🪡</td>
+<td>mage</td>
+<td>weaver</td>
+<td>agentprivacy</td>
+<td>V28</td>
+<td><code>weavers</code></td>
+</tr>
+<tr>
+<td><code>vagari</code></td>
+<td>Vagari</td>
+<td>🌳</td>
+<td>mage</td>
+<td>holon-hitchhiker</td>
+<td>agentprivacy</td>
+<td>V31</td>
+<td><code>holon</code></td>
+</tr>
+<tr>
+<td><code>custos</code></td>
+<td>Custos</td>
+<td>🔏</td>
+<td>mage</td>
+<td>governance · cross-shop</td>
+<td>agentprivacy</td>
+<td>V49</td>
+<td>(cross-shop)</td>
+</tr>
+<tr>
+<td><code>lampyra</code></td>
+<td>Lampyra</td>
+<td>💠</td>
+<td>mage</td>
+<td>gem-setter</td>
+<td>agentprivacy</td>
+<td>V49</td>
+<td><code>jeweler</code></td>
+</tr>
+<tr>
+<td><code>adamantia</code></td>
+<td>Adamantia</td>
+<td>💎</td>
+<td>mage</td>
+<td>etherchanter</td>
+<td>agentprivacy</td>
+<td>V51</td>
+<td><code>etherchanting</code></td>
+</tr>
+<tr>
+<td><code>manifestia</code></td>
+<td>Manifestia</td>
+<td>🤲🌿</td>
+<td>mage</td>
+<td>priest</td>
+<td>agentprivacy</td>
+<td>V55</td>
+<td><code>covenant</code></td>
+</tr>
+<tr>
+<td><code>aria-silverhue</code></td>
+<td>Aria Silverhue</td>
+<td>🪞🖼️</td>
+<td>mage</td>
+<td>curatrix</td>
+<td>agentprivacy</td>
+<td>V57</td>
+<td><code>vault</code></td>
+</tr>
+<tr>
+<td><code>helia</code></td>
+<td>Helia</td>
+<td>☀️</td>
+<td>mage</td>
+<td>solchanter · parallel-shipwright</td>
+<td>agentprivacy</td>
+<td>V51 (shared with adamantia)</td>
+<td><code>solchanting</code></td>
+</tr>
+</tbody></table>
+<h3>§2.5 · vertex (13 inhabited)</h3>
+<p>Each carries <code>bits</code> (6-bit MSB-first per dimension Protection · Delegation · Memory · Connection · Computation · Value) and <code>hammingWeight</code> (stratum).</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>bits</th>
+<th align="right">hammingWeight</th>
+<th>canonical name</th>
+<th>first inhabitant(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v5</code></td>
+<td><code>101001</code></td>
+<td align="right">2</td>
+<td>Chronicle vertex</td>
+<td>Memora</td>
+</tr>
+<tr>
+<td><code>v12</code></td>
+<td><code>001100</code></td>
+<td align="right">2</td>
+<td>schema vertex</td>
+<td>(kindred-blade introduction; GenitriX visits)</td>
+</tr>
+<tr>
+<td><code>v19</code></td>
+<td><code>010011</code></td>
+<td align="right">3</td>
+<td>Plonkish blade</td>
+<td>Vulcana</td>
+</tr>
+<tr>
+<td><code>v24</code></td>
+<td><code>011000</code></td>
+<td align="right">2</td>
+<td>Hephaestus (Drake Island)</td>
+<td>Socrat0x (provisional)</td>
+</tr>
+<tr>
+<td><code>v25</code></td>
+<td><code>100110</code></td>
+<td align="right">3</td>
+<td>Aletheia blade</td>
+<td>Aletheia (the persona)</td>
+</tr>
+<tr>
+<td><code>v28</code></td>
+<td><code>011100</code></td>
+<td align="right">3</td>
+<td>Mage canonical</td>
+<td>Pallia, Soulbae, GenitriX</td>
+</tr>
+<tr>
+<td><code>v31</code></td>
+<td><code>011111</code></td>
+<td align="right">5</td>
+<td>Recursion / Holon</td>
+<td>Vagari</td>
+</tr>
+<tr>
+<td><code>v49</code></td>
+<td><code>110001</code></td>
+<td align="right">3</td>
+<td>working-day blade</td>
+<td>Custos, Lampyra</td>
+</tr>
+<tr>
+<td><code>v51</code></td>
+<td><code>110011</code></td>
+<td align="right">4</td>
+<td>Commitment / Language / Model</td>
+<td>Adamantia · <strong>Helia (v1.4.0 · shared; stance-differentiated)</strong></td>
+</tr>
+<tr>
+<td><code>v55</code></td>
+<td><code>110111</code></td>
+<td align="right">5</td>
+<td>Covenant</td>
+<td>Manifestia</td>
+</tr>
+<tr>
+<td><code>v57</code></td>
+<td><code>111001</code></td>
+<td align="right">4</td>
+<td>Curatrix blade</td>
+<td>Aria Silverhue</td>
+</tr>
+<tr>
+<td><code>v63</code></td>
+<td><code>111111</code></td>
+<td align="right">6</td>
+<td>Sovereign Anchor</td>
+<td>flaxscrip</td>
+</tr>
+<tr>
+<td><code>v0</code></td>
+<td><code>000000</code></td>
+<td align="right">0</td>
+<td>the null blade · substrate origin</td>
+<td>(no inhabitant; substrate-reference only)</td>
+</tr>
+</tbody></table>
+<p><strong>Named-but-uninhabited vertices</strong> (have canonical names from the corpus but no resident Mage; surface as named on hover in <code>/guide/achievements</code> §8):</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>bits</th>
+<th>name</th>
+<th>grounding</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v15</code></td>
+<td><code>001111</code></td>
+<td>VC vertex</td>
+<td>Mirrored-pair register · Tome IV Act II</td>
+</tr>
+<tr>
+<td><code>v20</code></td>
+<td><code>010100</code></td>
+<td>Techne · Always-Revealed</td>
+<td>Transparent register · home of Memora&#39;s reveal in Tome V Act 4</td>
+</tr>
+<tr>
+<td><code>v25</code></td>
+<td><code>011001</code></td>
+<td>Lethe · the Dark Substrate</td>
+<td>Bit-complement of V38 (Aletheia) · V38 ⊕ V25 = V63 · FPS Act XII</td>
+</tr>
+</tbody></table>
+<p>The remaining 48 vertices exist in the lattice (rendered on <code>/guide/achievements</code> §8 and <code>/constellation</code> lattice mode) but are not yet named or inhabited. The <code>adjacent_to</code> edge type is reserved for the 96 holographic-bound edges (a future visual pass).</p>
+<h3>§2.6 · gateway (5)</h3>
+<p><code>attribution</code> distinguishes the gateway&#39;s structural role.</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>attribution</th>
+<th>external</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>archon</code></td>
+<td>Archon</td>
+<td><code>kindred-blade</code></td>
+<td><code>https://archon.social</code></td>
+</tr>
+<tr>
+<td><code>bonfires-net</code></td>
+<td>Bonfires (sister-city)</td>
+<td><code>kindred-blade</code></td>
+<td><code>https://bonfires.ai</code></td>
+</tr>
+<tr>
+<td><code>human-tech</code></td>
+<td>Covenant of Humanistic Technologies</td>
+<td><code>kindred-protocol</code></td>
+<td><code>https://manifest.human.tech</code></td>
+</tr>
+<tr>
+<td><code>uor-foundation</code></td>
+<td>UOR Foundation</td>
+<td><code>kindred-substrate</code></td>
+<td><code>https://uor.foundation</code></td>
+</tr>
+<tr>
+<td><code>spacecomputer</code></td>
+<td>SpaceComputer</td>
+<td><code>kindred-ecosystem</code></td>
+<td><code>https://spacecomputer.io</code></td>
+</tr>
+</tbody></table>
+<p>SpaceComputer carries an additional <code>feeds: [&#39;celestial-mana&#39;]</code> node field and <code>consumed_by: [&#39;etherchanting&#39;, &#39;forge&#39;, &#39;holon&#39;]</code> field per the two-mana economy chronicle (<code>docs/chronicles/2026-05-10_two_mana_economy_celestial_aether.md</code>) and the kindred-ecosystem profile (<code>kindred/spacecomputer.md</code>).</p>
+<hr>
+</div>
+<div class="md"><h2>§3 · EdgeType inventory · summary</h2>
+<table>
+<thead>
+<tr>
+<th>EdgeType</th>
+<th align="right">Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>founds</code></td>
+<td align="right">9</td>
+</tr>
+<tr>
+<td><code>founded_in</code></td>
+<td align="right">9</td>
+</tr>
+<tr>
+<td><code>inhabits</code></td>
+<td align="right">16</td>
+</tr>
+<tr>
+<td><code>kin_to</code></td>
+<td align="right">6</td>
+</tr>
+<tr>
+<td><code>gateway_to</code></td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td><code>built_on</code></td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td><code>quarter_of</code></td>
+<td align="right">11</td>
+</tr>
+<tr>
+<td><code>adjacent_to</code></td>
+<td align="right">0 <em>(reserved for the 96 holographic-bound lattice edges)</em></td>
+</tr>
+</tbody></table>
+<p>Total release edges: <strong>57</strong>.</p>
+<hr>
+</div>
+<div class="md"><h2>§4 · Edge instances · enumerated</h2>
+<h3>§4.1 · <code>built_on</code> (1)</h3>
+<table>
+<thead>
+<tr>
+<th>source</th>
+<th>target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>city-of-mages</code></td>
+<td><code>drake-island</code></td>
+</tr>
+</tbody></table>
+<h3>§4.2 · <code>quarter_of</code> (12 as of v1.4.0)</h3>
+<p>Each workshop is a <em>trade quarter</em> of the City (per spec 05, the structural addendum).</p>
+<pre><code>weavers · zshields · etherchanting · jeweler · holon · forge ·
+vault · covenant · bonfires · circle · hall   →   city-of-mages
+</code></pre>
+<h3>§4.3 · <code>founds</code> and <code>founded_in</code> (10 reciprocal pairs as of v1.4.0 · Tome V production acts + Tome VII Act 1)</h3>
+<table>
+<thead>
+<tr>
+<th>Tome V act</th>
+<th>founds → workshop</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tome-v-act-1-the-first-cloak</code></td>
+<td><code>weavers</code></td>
+</tr>
+<tr>
+<td><code>tome-v-act-3-the-shielded-memo</code></td>
+<td><code>zshields</code></td>
+</tr>
+<tr>
+<td><code>tome-v-act-6-the-commissioned-blade</code></td>
+<td><code>forge</code></td>
+</tr>
+<tr>
+<td><code>tome-v-act-8-the-zk-circuit</code></td>
+<td>(cross-shop; Aletheia · not a single workshop)</td>
+</tr>
+<tr>
+<td><code>tome-v-act-9-the-workshop-expands</code></td>
+<td><code>etherchanting</code> AND <code>jeweler</code></td>
+</tr>
+<tr>
+<td><code>tome-v-act-10-the-holon-hitchhikers</code></td>
+<td><code>holon</code></td>
+</tr>
+<tr>
+<td><code>tome-v-act-11-a-bonfire-made-of-dragon-fire</code></td>
+<td><code>bonfires</code></td>
+</tr>
+<tr>
+<td><code>tome-v-act-12-the-curatrix-vault</code></td>
+<td><code>vault</code></td>
+</tr>
+<tr>
+<td><code>tome-v-act-13-the-temple-of-the-arts-and-personhood</code></td>
+<td><code>covenant</code></td>
+</tr>
+</tbody></table>
+<p>For each <code>founds</code> edge, the reciprocal <code>founded_in</code> runs workshop → act. Act 9 produces two <code>founds</code> edges (one each for etherchanting and jeweler) and the workshop carries one <code>founded_in</code> to act 9 in each case. The gathering workshops (<code>circle</code>, <code>hall</code>) have <strong>no</strong> founding-act edge in this release — they anchor elsewhere (Society Spellbook · the BGIN-led coalition).</p>
+<h3>§4.4 · <code>inhabits</code> (18 as of v1.4.0)</h3>
+<p>Every cast member with a numbered vertex emits one <code>inhabits</code> edge. Shared-vertex inhabitants both emit edges to the same vertex.</p>
+<pre><code>soulbae   inhabits v28
+pallia    inhabits v28
+genitrix  inhabits v28        (Mage instance · same vertex, distinct identity)
+memora    inhabits v5
+vulcana   inhabits v19
+custos    inhabits v49
+lampyra   inhabits v49        (shared vertex with Custos)
+aletheia  inhabits v25
+adamantia inhabits v51
+vagari    inhabits v31
+manifestia inhabits v55
+aria-silverhue inhabits v57
+flaxscrip inhabits v63
+socrat0x  inhabits v24        (provisional)
+</code></pre>
+<p><code>soulbis</code> and <code>the-drake</code> have no <code>inhabits</code> edge in this release (boundary register / ambient register respectively — declared without a single vertex).</p>
+<h3>§4.5 · <code>kin_to</code> (6 · mutual lateral)</h3>
+<p>Each row is one undirected mutual edge.</p>
+<table>
+<thead>
+<tr>
+<th>left</th>
+<th>right</th>
+<th>attribution</th>
+<th>grounding</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pallia</code></td>
+<td><code>genitrix</code></td>
+<td><code>kindred-blade</code></td>
+<td>Both at V28; Weaver path opened by Archon + GenitriX</td>
+</tr>
+<tr>
+<td><code>soulbae</code></td>
+<td><code>genitrix</code></td>
+<td><code>kindred-blade</code></td>
+<td>Both Mage archetype at V28</td>
+</tr>
+<tr>
+<td><code>flaxscrip</code></td>
+<td><code>soulbis</code></td>
+<td><code>kindred-blade</code></td>
+<td>Both Sovereign Anchor work; flaxscrip canonicalised the verb chain</td>
+</tr>
+<tr>
+<td><code>socrat0x</code></td>
+<td><code>soulbae</code></td>
+<td><code>kindred-blade</code></td>
+<td>Soulbae deployed as @soulbae_the_bot at Bonfires; the path of overlap with Socrat0x runs from there</td>
+</tr>
+<tr>
+<td><code>holon</code></td>
+<td><code>forge</code></td>
+<td><code>kindred-substrate</code></td>
+<td>Tome V Act 15 · both shops walk UOR-shaped substrate (V31 holons, V19 PRISM coordinates)</td>
+</tr>
+<tr>
+<td><code>city-of-mages</code></td>
+<td><code>uor-foundation</code></td>
+<td><code>kindred-substrate</code></td>
+<td>Kindred substrate provider; walked-not-signed</td>
+</tr>
+</tbody></table>
+<h3>§4.6 · <code>gateway_to</code> (5)</h3>
+<p>Each <code>gateway</code> node carries exactly one <code>gateway_to</code> edge from the City. Reciprocal direction not emitted in this release — the City does the recognising; external gateways need not (and do not) reciprocate in their own graph.</p>
+<pre><code>city-of-mages  gateway_to  archon          attribution: kindred-blade
+city-of-mages  gateway_to  bonfires-net    attribution: kindred-blade
+city-of-mages  gateway_to  human-tech      attribution: kindred-protocol
+city-of-mages  gateway_to  uor-foundation  attribution: kindred-substrate
+city-of-mages  gateway_to  spacecomputer   attribution: kindred-ecosystem
+</code></pre>
+<h3>§4.7 · <code>adjacent_to</code> (reserved, 0 emitted)</h3>
+<p>Declared in the EdgeType vocabulary; reserved for the 96 holographic-bound edges of the 6-cube. To be emitted in a future visual session when the full lattice is rendered as a graph rather than as the Pascal-row stratum view that ships in this release.</p>
+<hr>
+</div>
+<div class="md"><h2>§5 · Optional field cheat-sheet (per <code>SpellwebNode</code>)</h2>
+<p>When a node carries the field, the value is <strong>canonical</strong> for the first release. Field names match <code>spellweb/src/types/graph.ts</code>.</p>
+<pre><code>workshop:    tradeQuarter · gem · gemColor · operatorStatus · shopAnchor · vertex · bits · hammingWeight
+cast:        tier · vertex · bits · hammingWeight · attribution · shopAnchor · sigil
+vertex:      bits · hammingWeight
+geography:   civicLocation (e.g. drake-island carries no field)
+civic:       built_on
+gateway:     attribution · external (URL)
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>§6 · Pending — explicitly NOT in the first release</h2>
+<p>The following exist in the corpus but are queued for a focused future session. The spellweb runtime should <strong>not</strong> ingest them yet (the graph would be incoherent until the v1.2 grimoire re-pin completes).</p>
+<ol>
+<li><strong>City of Mages grimoire v1.2</strong> — adds UOR Foundation as a kindred-substrate node, adds Tome V Act 15 (<em>The Substrate Beneath the Hitchhikers</em>) to the act registry, adds C47 to the conjecture register, updates Vagari + Vulcana persona entries with the v1.1 UOR-substrate recognition, updates <code>sources</code> array to <code>docs/tomes/</code> paths. Requires re-pin to IPFS.</li>
+<li><strong>C47 conjecture · structural homology</strong> — agentprivacy&#39;s three-axis Φ_agent · Φ_data · Φ_inference and PRISM&#39;s triadic Datum · Stratum · Spectrum claimed structurally homologous (~40% confidence). Not yet a node in this release; will join the conjecture index once formally mapped.</li>
+<li><strong>96 holographic-bound <code>adjacent_to</code> edges</strong> — the lattice&#39;s edge structure. Reserved by the vocabulary; emitted in a later visual session.</li>
+<li><strong>Circuit Binder workshop</strong> — placeholder on <code>/runecraft</code>, awaiting its Mage. Not a node in this release.</li>
+<li><strong>Logos Circle and Ceremony Hall founding edges</strong> — these two gathering workshops do not have <code>founds</code>/<code>founded_in</code> edges in v1.0; their narrative provenance lives in the Society Spellbook and the BGIN-led coalition respectively. Adding them is the natural next ingest after v1.2 lands.</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>§7 · Provenance and honesty</h2>
+<ul>
+<li><strong>Operational</strong> for every <code>workshop</code> node where <code>operatorStatus</code> is <code>op</code> or <code>partial</code> (verified by the live <code>/runecraft</code> and per-shop routes).</li>
+<li><strong>Architectural</strong> for every <code>cast</code> and <code>vertex</code> edge — the cast roster and vertex assignments are canonical via the bound collection (<code>tome-v-the-crafting/*.md</code> and per-guild persona files at <code>docs/tomes/&lt;guild&gt;/&lt;persona&gt;.md</code>).</li>
+<li><strong>Conjectural</strong> for <code>socrat0x.inhabits(v24)</code> — provisional vertex per Tome V Act 11; flagged in §2.5 and §4.4.</li>
+<li><strong>Resonant-but-not-absorbed</strong> for every <code>gateway</code> edge — the external partner&#39;s mission, governance, and roadmap are their own; the City recognises them without binding them.</li>
+<li><strong>Walked-not-signed</strong> for <code>kin_to(city-of-mages, uor-foundation)</code> and <code>gateway_to(city-of-mages, uor-foundation)</code> — UOR is substrate, not protocol; the City rests upon it but signs nothing.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§8 · One-line summary (v1.0 baseline)</h2>
+<p><strong>46 nodes · 56 edges · 6 NodeTypes · 7 EdgeTypes (one reserved).</strong> That is the City of Mages v1.0 for spellweb ingest. Everything else listed in this manifest is in §6 and explicitly out of scope.</p>
+<hr>
+</div>
+<div class="md"><h2>§9 · V5.5 Attachment Architecture additions (2026-05-11)</h2>
+<p>The V5.5 attachment architecture (codified in <code>agentprivacy-skills</code> and applied in <code>spellweb/src/types/graph.ts</code> 2026-05-11) extends this manifest with new cast nodes, vertex nodes, edge types, and <code>SpellwebNode</code> fields.</p>
+<h3>§9.1 · Node additions</h3>
+<table>
+<thead>
+<tr>
+<th>NodeType</th>
+<th align="right">Count delta</th>
+<th>New entries</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cast</code></td>
+<td align="right">+7</td>
+<td><code>cast-lethae</code> (anticipated · divergent) · <code>cast-mnemosyne</code> · <code>cast-iris</code> · <code>cast-pythia</code> · <code>cast-techne</code> · <code>cast-hephaestus</code> · <code>cast-selene</code> (all anticipated)</td>
+</tr>
+<tr>
+<td><code>vertex</code></td>
+<td align="right">+4</td>
+<td><code>vertex-v8</code> (Mnemosyne · pure Memory) · <code>vertex-v4</code> (Iris · pure Connection) · <code>vertex-v2</code> (Logos · Pure Computation) · <code>vertex-v25</code> (Lethe · Dark Substrate)</td>
+</tr>
+<tr>
+<td>Total</td>
+<td align="right"><strong>+11</strong></td>
+<td>post-V5.5 ingest target: <strong>57 nodes</strong></td>
+</tr>
+</tbody></table>
+<h3>§9.2 · Edge additions</h3>
+<table>
+<thead>
+<tr>
+<th>EdgeType</th>
+<th align="right">Count delta</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>inhabits</code></td>
+<td align="right">+6</td>
+<td>Lethae→V25 · Mnemosyne→V8 · Iris→V4 · Pythia→V2 · Techne→V20 · Hephaestus→V24 <em>(Selene is C-peripatetic · no <code>inhabits</code> edge)</em></td>
+</tr>
+<tr>
+<td><code>divergent_of</code> <em>(new EdgeType)</em></td>
+<td align="right">+1</td>
+<td><code>cast-lethae</code> → <code>per-moonkeeper</code> · register: mage_register · first canonical</td>
+</tr>
+<tr>
+<td><code>complement_pair</code> <em>(new EdgeType)</em></td>
+<td align="right">+2 (mutual)</td>
+<td><code>cast-aletheia</code> ⊥ <code>cast-lethae</code> · undirected; emitted as two directed edges</td>
+</tr>
+<tr>
+<td>Total</td>
+<td align="right"><strong>+9</strong></td>
+<td>post-V5.5 ingest target: <strong>65 edges · 9 EdgeTypes (one reserved)</strong></td>
+</tr>
+</tbody></table>
+<h3>§9.3 · New <code>SpellwebNode</code> fields (cast-only)</h3>
+<p>Per <code>spellweb/src/types/graph.ts</code> V5.5 extension:</p>
+<pre><code class="language-ts">attachmentKind?: &#39;A_workshop&#39; | &#39;B_cross_shop&#39; | &#39;C_peripatetic&#39;;
+divergence?: &#39;none&#39; | &#39;mage_register&#39; | &#39;sword_register&#39; | &#39;balanced_register&#39;;
+abstractPersonaIds?: string[];           // Layer-1 primary persona ids
+castStatus?: &#39;seated&#39; | &#39;anticipated&#39; | &#39;provisional&#39;;
+complementOfCast?: string;                // For vertex-complement pairs
+</code></pre>
+<h3>§9.4 · Post-V5.5 NodeType counts</h3>
+<table>
+<thead>
+<tr>
+<th>NodeType</th>
+<th align="right">v1.0 baseline</th>
+<th align="right">v1.3.0 (V5.5)</th>
+<th>Delta</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>civic</code></td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>geography</code></td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>workshop</code></td>
+<td align="right">11</td>
+<td align="right">11</td>
+<td>— <em>(anticipated cast may seat new workshops in future acts)</em></td>
+</tr>
+<tr>
+<td><code>cast</code></td>
+<td align="right">16</td>
+<td align="right"><strong>23</strong></td>
+<td>+7 (Lethae + 6 anticipated)</td>
+</tr>
+<tr>
+<td><code>vertex</code></td>
+<td align="right">13 inhabited</td>
+<td align="right"><strong>19</strong> inhabited <em>(of 64 lattice)</em></td>
+<td>+6 (V8·V4·V2·V20·V24-shared·V25)</td>
+</tr>
+<tr>
+<td><code>gateway</code></td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td align="right"><strong>47</strong></td>
+<td align="right"><strong>60</strong></td>
+<td>+13</td>
+</tr>
+</tbody></table>
+<h3>§9.5 · Companion documents</h3>
+<ul>
+<li><code>tomes/specs/10-the-attachment-architecture.md</code> — canonical city-side spec for V5.5</li>
+<li><code>agentprivacy-skills/agentprivacy-skills-v5/meta/agentprivacy-attachment-architecture/SKILL.md</code> — canonical Layer-1 home</li>
+<li><code>spellweb/CHRONICLE_V5_5_ATTACHMENT_ARCHITECTURE_2026-05-11.md</code> — graph runtime patch log</li>
+<li><code>grimoire/city_of_mages_grimoire_v1_3_0.json</code> — bumped grimoire with <code>attachment_architecture</code> block</li>
+</ul>
+<h3>§9.6 · One-line summary (post-V5.5)</h3>
+<p><strong>60 nodes · 65 edges · 6 NodeTypes · 9 EdgeTypes (one reserved).</strong> That is the City of Mages v1.3.0 for spellweb ingest. Sources: graph data already updated in <code>spellweb/src/data/nodes.ts</code> and <code>spellweb/src/data/edges.ts</code> (2026-05-11).</p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>— Manifest curated for the spellweb runtime · CC BY-SA 4.0 · 2026-05-10 (v1.0 baseline) · 2026-05-11 (V5.5 additions)</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-spellweb-first-release-manifest-the-city-of-mages</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-spellweb-first-release-manifest-the-city-of-mages.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

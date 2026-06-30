@@ -1,0 +1,146 @@
+{
+  "title": "Five Strikes",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "3d99ee4e81c78e7c",
+      "text": "# Five Strikes\n\n**Category** role · **Version** 5.2\n\n**Equation term** `Lattice transformations underlying T_∫(π)`\n\nThe five UOR operations as lattice transformations. Activates when discussing neg, bnot, xor, and, or as blade transformations, hammer strikes in the forge, lattice movements, or the algebraic mechanics of sovereignty configuration changes."
+    },
+    {
+      "type": "markdown",
+      "id": "107a53110a47c5c6",
+      "text": "**Source:** UOR Framework + Privacy Value Model V5.2 + First Person Spellbook Act XXVII\n**Target context:** Forge operators, blade architects, transformation designers\n**Architecture:** [spellweb.ai](https://spellweb.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "f9cc6a96047626b3",
+      "text": "## What this is\n\nThe Five Strikes are the primitive operations that transform blades within the sovereignty lattice. Every configuration change, every sovereignty adjustment, every lattice movement is composed from these five hammer strikes.\n\n**The smith who masters five strikes can forge any blade. The algebra is complete.**\n\n## The Five Operations\n\n### Strike 1: neg(x) — The Inversion\n\n**Operation:** Arithmetic negation\n**Formula:** neg(x) = (64 - x) mod 64\n**Lattice effect:** Inverts the value while preserving structural position\n\n```\nneg(0)  = 0   (fixed point)\nneg(1)  = 63\nneg(32) = 32  (fixed point)\nneg(63) = 1\n```\n\n**Privacy meaning:** Reverse the polarity of a configuration without changing its fundamental character. Same sovereignty posture, opposite orientation.\n\n**When to use:** Complement a blade configuration while staying in the same equivalence class."
+    },
+    {
+      "type": "markdown",
+      "id": "199b58e2df0fb467",
+      "text": "### Strike 2: bnot(x) — The Antipode\n\n**Operation:** Bitwise complement\n**Formula:** bnot(x) = x XOR 111111₂ = x XOR 63\n**Lattice effect:** Jump to the opposite vertex in the hypercube\n\n```\nbnot(000000) = 111111  (Vertex 0 → Vertex 63)\nbnot(110000) = 001111  (Any vertex → antipode)\nbnot(bnot(x)) = x      (Involution)\n```\n\n**Privacy meaning:** Maximum transformation—flip every sovereignty dimension simultaneously. What was hidden becomes exposed; what was exposed becomes hidden.\n\n**When to use:** Complete sovereignty reversal. Emergency mode toggle. Test extreme configurations."
+    },
+    {
+      "type": "markdown",
+      "id": "730f38c2bffb536d",
+      "text": "### Strike 3: xor(x, y) — The Toggle\n\n**Operation:** Bitwise XOR (symmetric difference)\n**Formula:** xor(x, y) = x ⊕ y\n**Lattice effect:** Move along edges corresponding to differing bits\n\n```\nxor(110000, 000011) = 110011  (Toggle specific dimensions)\nxor(x, x) = 0                  (Self-cancellation)\nxor(x, 0) = x                  (Identity element)\n```\n\n**Privacy meaning:** Selectively toggle specific sovereignty dimensions. Add or remove specific capabilities.\n\n**When to use:** Fine-grained configuration adjustment. Targeted capability changes. Ceremony state transitions."
+    },
+    {
+      "type": "markdown",
+      "id": "5a53d3dab5805ad5",
+      "text": "### Strike 4: and(x, y) — The Constraint\n\n**Operation:** Bitwise AND (intersection)\n**Formula:** and(x, y) = x ∧ y\n**Lattice effect:** Move toward vertex 0, keeping only shared bits\n\n```\nand(110011, 101010) = 100010  (Keep only common bits)\nand(x, 0) = 0                  (Zero annihilates)\nand(x, 63) = x                 (63 is identity)\n```\n\n**Privacy meaning:** Reduce to capabilities that both configurations share. Find common ground. Constrain to minimum.\n\n**When to use:** Compute shared sovereignty between two blades. Find intersection of capabilities. Reduce to minimal common posture."
+    },
+    {
+      "type": "markdown",
+      "id": "55d6c2bc30c74495",
+      "text": "### Strike 5: or(x, y) — The Expansion\n\n**Operation:** Bitwise OR (union)\n**Formula:** or(x, y) = x ∨ y\n**Lattice effect:** Move toward vertex 63, adding all bits from both\n\n```\nor(110000, 000011) = 110011   (Combine all bits)\nor(x, 63) = 63                 (63 absorbs)\nor(x, 0) = x                   (0 is identity)\n```\n\n**Privacy meaning:** Combine capabilities from both configurations. Expand sovereignty. Unite postures.\n\n**When to use:** Merge two blade configurations. Combine capabilities. Expand toward full sovereignty."
+    },
+    {
+      "type": "markdown",
+      "id": "f939d2dda9500879",
+      "text": "## The Critical Composition\n\nThe five strikes combine to generate all lattice movements:\n\n```\nneg(bnot(x)) = succ(x)\n```\n\nThis composite strike advances through the entire ring:\n\n```\nStart at any vertex x\nApply neg∘bnot repeatedly\nVisit all 64 vertices\nReturn to x\n```\n\n**Every blade is reachable from every other blade through the five strikes.**\n\n## Strike Patterns\n\n### The Dimension Toggle Pattern\n\nTo toggle dimension d (where d ∈ {0,1,2,3,4,5}):\n\n```javascript\nfunction toggleDimension(blade, d) {\n  const mask = 1 << d  // Single bit at position d\n  return xor(blade, mask)\n}\n```\n\n### The Capability Check Pattern\n\nTo check if blade has capability c:\n\n```javascript\nfunction hasCapability(blade, c) {\n  return and(blade, c) === c\n}\n```\n\n### The Merge Pattern\n\nTo combine two blades' capabilities:\n\n```javascript\nfunction mergeCapabilities(blade1, blade2) {\n  return or(blade1, blade2)\n}\n```\n\n### The Common Ground Pattern\n\nTo find shared capabilities:\n\n```javascript\nfunction findCommon(blade1, blade2) {\n  return and(blade1, blade2)\n}\n```\n\n## Algebraic Laws\n\nThe five strikes obey algebraic laws:\n\n### De Morgan's Laws\n```\nbnot(and(x, y)) = or(bnot(x), bnot(y))\nbnot(or(x, y)) = and(bnot(x), bnot(y))\n```\n\n### Involution\n```\nbnot(bnot(x)) = x\nneg(neg(x)) = x\n```\n\n### Commutativity\n```\nxor(x, y) = xor(y, x)\nand(x, y) = and(y, x)\nor(x, y) = or(y, x)\n```\n\n### Associativity\n```\nxor(x, xor(y, z)) = xor(xor(x, y), z)\nand(x, and(y, z)) = and(and(x, y), z)\nor(x, or(y, z)) = or(or(x, y), z)\n```\n\n## Mapping to Privacy Architecture\n\n| Strike | Privacy Operation | Ceremony Use |\n|--------|------------------|--------------|\n| neg | Polarity reversal | Mode switching |\n| bnot | Complete flip | Emergency toggle |\n| xor | Selective toggle | Capability adjustment |\n| and | Find intersection | Common ground ceremony |\n| or | Merge capabilities | Alliance formation |\n\n## Proverb\n\n> \"Five strikes shape all blades. The smith who knows neg and bnot commands the successor. The smith who knows xor commands the toggle. The smith who knows and and or commands the bounds. Master all five, and no configuration escapes your forge.\"\n\n## Emoji Spell\n\n**🔨₅ → neg(invert) · bnot(flip) · xor(toggle) · and(constrain) · or(expand) · neg∘bnot=succ · ∀blade:reachable**\n\n## Open Problems\n\n1. **Optimal Paths:** Given blades A and B, what is the shortest sequence of strikes from A to B?\n2. **Preservation:** Which strikes preserve stratum? Which preserve parity?\n3. **Ceremony Sequences:** What strike sequences correspond to meaningful ceremonies?\n4. **Circuit Costs:** What are the ZK circuit costs of each strike?\n5. **Composition Rules:** Are there useful higher-order compositions beyond neg∘bnot?"
+    },
+    {
+      "type": "markdown",
+      "id": "7efa947fb7505595",
+      "text": "**Verify:** [spellweb.ai](https://spellweb.ai) · [agentprivacy.ai](https://agentprivacy.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+    },
+    {
+      "type": "markdown",
+      "id": "8175367c909e4603",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-five-strikes`, v5.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "ed6e8c6ead2ee9e7",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "030c4018155418f9",
+      "text": "agentprivacy-five-strikes"
+    },
+    {
+      "type": "markdown",
+      "id": "c8055794e639d840",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Five Strikes",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "3d99ee4e81c78e7c",
+            "text": "# Five Strikes\n\n**Category** role · **Version** 5.2\n\n**Equation term** `Lattice transformations underlying T_∫(π)`\n\nThe five UOR operations as lattice transformations. Activates when discussing neg, bnot, xor, and, or as blade transformations, hammer strikes in the forge, lattice movements, or the algebraic mechanics of sovereignty configuration changes."
+          },
+          {
+            "type": "markdown",
+            "id": "107a53110a47c5c6",
+            "text": "**Source:** UOR Framework + Privacy Value Model V5.2 + First Person Spellbook Act XXVII\n**Target context:** Forge operators, blade architects, transformation designers\n**Architecture:** [spellweb.ai](https://spellweb.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "f9cc6a96047626b3",
+            "text": "## What this is\n\nThe Five Strikes are the primitive operations that transform blades within the sovereignty lattice. Every configuration change, every sovereignty adjustment, every lattice movement is composed from these five hammer strikes.\n\n**The smith who masters five strikes can forge any blade. The algebra is complete.**\n\n## The Five Operations\n\n### Strike 1: neg(x) — The Inversion\n\n**Operation:** Arithmetic negation\n**Formula:** neg(x) = (64 - x) mod 64\n**Lattice effect:** Inverts the value while preserving structural position\n\n```\nneg(0)  = 0   (fixed point)\nneg(1)  = 63\nneg(32) = 32  (fixed point)\nneg(63) = 1\n```\n\n**Privacy meaning:** Reverse the polarity of a configuration without changing its fundamental character. Same sovereignty posture, opposite orientation.\n\n**When to use:** Complement a blade configuration while staying in the same equivalence class."
+          },
+          {
+            "type": "markdown",
+            "id": "199b58e2df0fb467",
+            "text": "### Strike 2: bnot(x) — The Antipode\n\n**Operation:** Bitwise complement\n**Formula:** bnot(x) = x XOR 111111₂ = x XOR 63\n**Lattice effect:** Jump to the opposite vertex in the hypercube\n\n```\nbnot(000000) = 111111  (Vertex 0 → Vertex 63)\nbnot(110000) = 001111  (Any vertex → antipode)\nbnot(bnot(x)) = x      (Involution)\n```\n\n**Privacy meaning:** Maximum transformation—flip every sovereignty dimension simultaneously. What was hidden becomes exposed; what was exposed becomes hidden.\n\n**When to use:** Complete sovereignty reversal. Emergency mode toggle. Test extreme configurations."
+          },
+          {
+            "type": "markdown",
+            "id": "730f38c2bffb536d",
+            "text": "### Strike 3: xor(x, y) — The Toggle\n\n**Operation:** Bitwise XOR (symmetric difference)\n**Formula:** xor(x, y) = x ⊕ y\n**Lattice effect:** Move along edges corresponding to differing bits\n\n```\nxor(110000, 000011) = 110011  (Toggle specific dimensions)\nxor(x, x) = 0                  (Self-cancellation)\nxor(x, 0) = x                  (Identity element)\n```\n\n**Privacy meaning:** Selectively toggle specific sovereignty dimensions. Add or remove specific capabilities.\n\n**When to use:** Fine-grained configuration adjustment. Targeted capability changes. Ceremony state transitions."
+          },
+          {
+            "type": "markdown",
+            "id": "5a53d3dab5805ad5",
+            "text": "### Strike 4: and(x, y) — The Constraint\n\n**Operation:** Bitwise AND (intersection)\n**Formula:** and(x, y) = x ∧ y\n**Lattice effect:** Move toward vertex 0, keeping only shared bits\n\n```\nand(110011, 101010) = 100010  (Keep only common bits)\nand(x, 0) = 0                  (Zero annihilates)\nand(x, 63) = x                 (63 is identity)\n```\n\n**Privacy meaning:** Reduce to capabilities that both configurations share. Find common ground. Constrain to minimum.\n\n**When to use:** Compute shared sovereignty between two blades. Find intersection of capabilities. Reduce to minimal common posture."
+          },
+          {
+            "type": "markdown",
+            "id": "55d6c2bc30c74495",
+            "text": "### Strike 5: or(x, y) — The Expansion\n\n**Operation:** Bitwise OR (union)\n**Formula:** or(x, y) = x ∨ y\n**Lattice effect:** Move toward vertex 63, adding all bits from both\n\n```\nor(110000, 000011) = 110011   (Combine all bits)\nor(x, 63) = 63                 (63 absorbs)\nor(x, 0) = x                   (0 is identity)\n```\n\n**Privacy meaning:** Combine capabilities from both configurations. Expand sovereignty. Unite postures.\n\n**When to use:** Merge two blade configurations. Combine capabilities. Expand toward full sovereignty."
+          },
+          {
+            "type": "markdown",
+            "id": "f939d2dda9500879",
+            "text": "## The Critical Composition\n\nThe five strikes combine to generate all lattice movements:\n\n```\nneg(bnot(x)) = succ(x)\n```\n\nThis composite strike advances through the entire ring:\n\n```\nStart at any vertex x\nApply neg∘bnot repeatedly\nVisit all 64 vertices\nReturn to x\n```\n\n**Every blade is reachable from every other blade through the five strikes.**\n\n## Strike Patterns\n\n### The Dimension Toggle Pattern\n\nTo toggle dimension d (where d ∈ {0,1,2,3,4,5}):\n\n```javascript\nfunction toggleDimension(blade, d) {\n  const mask = 1 << d  // Single bit at position d\n  return xor(blade, mask)\n}\n```\n\n### The Capability Check Pattern\n\nTo check if blade has capability c:\n\n```javascript\nfunction hasCapability(blade, c) {\n  return and(blade, c) === c\n}\n```\n\n### The Merge Pattern\n\nTo combine two blades' capabilities:\n\n```javascript\nfunction mergeCapabilities(blade1, blade2) {\n  return or(blade1, blade2)\n}\n```\n\n### The Common Ground Pattern\n\nTo find shared capabilities:\n\n```javascript\nfunction findCommon(blade1, blade2) {\n  return and(blade1, blade2)\n}\n```\n\n## Algebraic Laws\n\nThe five strikes obey algebraic laws:\n\n### De Morgan's Laws\n```\nbnot(and(x, y)) = or(bnot(x), bnot(y))\nbnot(or(x, y)) = and(bnot(x), bnot(y))\n```\n\n### Involution\n```\nbnot(bnot(x)) = x\nneg(neg(x)) = x\n```\n\n### Commutativity\n```\nxor(x, y) = xor(y, x)\nand(x, y) = and(y, x)\nor(x, y) = or(y, x)\n```\n\n### Associativity\n```\nxor(x, xor(y, z)) = xor(xor(x, y), z)\nand(x, and(y, z)) = and(and(x, y), z)\nor(x, or(y, z)) = or(or(x, y), z)\n```\n\n## Mapping to Privacy Architecture\n\n| Strike | Privacy Operation | Ceremony Use |\n|--------|------------------|--------------|\n| neg | Polarity reversal | Mode switching |\n| bnot | Complete flip | Emergency toggle |\n| xor | Selective toggle | Capability adjustment |\n| and | Find intersection | Common ground ceremony |\n| or | Merge capabilities | Alliance formation |\n\n## Proverb\n\n> \"Five strikes shape all blades. The smith who knows neg and bnot commands the successor. The smith who knows xor commands the toggle. The smith who knows and and or commands the bounds. Master all five, and no configuration escapes your forge.\"\n\n## Emoji Spell\n\n**🔨₅ → neg(invert) · bnot(flip) · xor(toggle) · and(constrain) · or(expand) · neg∘bnot=succ · ∀blade:reachable**\n\n## Open Problems\n\n1. **Optimal Paths:** Given blades A and B, what is the shortest sequence of strikes from A to B?\n2. **Preservation:** Which strikes preserve stratum? Which preserve parity?\n3. **Ceremony Sequences:** What strike sequences correspond to meaningful ceremonies?\n4. **Circuit Costs:** What are the ZK circuit costs of each strike?\n5. **Composition Rules:** Are there useful higher-order compositions beyond neg∘bnot?"
+          },
+          {
+            "type": "markdown",
+            "id": "7efa947fb7505595",
+            "text": "**Verify:** [spellweb.ai](https://spellweb.ai) · [agentprivacy.ai](https://agentprivacy.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+          },
+          {
+            "type": "markdown",
+            "id": "8175367c909e4603",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-five-strikes`, v5.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "ed6e8c6ead2ee9e7",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "030c4018155418f9",
+            "text": "agentprivacy-five-strikes"
+          },
+          {
+            "type": "markdown",
+            "id": "c8055794e639d840",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384029
+    }
+  ]
+}

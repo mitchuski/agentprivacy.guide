@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VRC Identity · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>VRC Identity</span></div>
+  <article><div class="md"><h1>VRC Identity</h1>
+<p><strong>Category</strong> privacy_layer · <strong>Version</strong> 4.0</p>
+<p><strong>Equation term</strong> <code>A(τ) — temporal memory; h(τ) — integrity fraction</code></p>
+<p>Verifiable Relationship Credential (VRC) identity system for 0xagentprivacy. Activates when discussing A(τ) bilateral trust, VRC issuance/verification/revocation, Relationship Proverb Protocol (RPP), trust flow mechanics, ceremony-to-credential pipeline, or how identity is expressed through relationships rather than attributes. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + 0xagentprivacy VRC Protocol<br><strong>Target context:</strong> Decentralised identity builders, KERI/DID implementers, IIW community, verifiable credential toolchains, trust framework architects<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Verifiable Relationship Credentials are the temporal memory term A(τ) made concrete. They are cryptographic proofs of bilateral trust — not identity documents but relationship documents. A VRC does not say &quot;Alice is trustworthy.&quot; It says &quot;Alice and Bob have a demonstrated relationship of this quality, attested by both parties, verifiable by anyone, forgeable by neither.&quot;</p>
+<p>The VRC is the integrity fraction h(τ) in the equation. Without it, temporal memory contributes nothing — unverified claims produce A(τ) = 0 regardless of history length. With it, every sovereignty transition accumulates value that compounds logarithmically.</p>
+<h2>How VRCs work</h2>
+<p><strong>Creation (Promise Bundle).</strong> Two First Persons create a VRC together. Neither can forge alone. Both must sign. The credential encodes: Alice&#39;s commitment, Bob&#39;s commitment, a bilateral proverb derived from shared context, and the cost signal (0.01 ZEC each — a ceremony, not a transaction). This maps directly to Promise Theory: the VRC is a bundle of mutual promises that can be verified but not forged.</p>
+<p><strong>The bilateral proverb.</strong> Each VRC contains a compressed cipher derived from the relationship context. This proverb is meaningless outside the relationship — it requires the shared decoder that only the two parties possess. The proverb serves as both a trust signal (proof that the relationship has enough depth to generate shared meaning) and a recovery mechanism (proof-of-personhood through demonstrated understanding rather than biometrics or personal questions).</p>
+<p><strong>Progressive accumulation.</strong> VRCs are not binary (trusted/untrusted). They accumulate through sustained interaction. The temporal memory function A(τ) = α · ln(1+|τ|) · h(τ) means early VRCs contribute the most marginal value (logarithmic growth), creating strong incentives for establishing trust early. Later VRCs add value but at diminishing rates — the thousandth VRC matters less than the tenth.</p>
+<p><strong>Recovery.</strong> If Alice loses her keys, Bob can help verify Alice&#39;s identity using their bilateral proverb. Alice claims identity. Bob asks for the proverb. Alice derives the correct proverb from relationship context. Bob verifies. Recovery proceeds (with multiple VRCs providing redundancy). No biometrics. No personal questions. Just bilateral promise verification — the Relationship Proverb Protocol (RPP) as both security mechanism and proof-of-personhood.</p>
+<h2>VRC properties as equation terms</h2>
+<p><strong>Bilateral (Σ matrix).</strong> VRCs require two parties maintaining separation. Alice&#39;s Swordsman and Bob&#39;s Swordsman each attest to their respective boundary conditions. Alice&#39;s Mage and Bob&#39;s Mage each attest to their delegation conditions. The cross-attestation creates entries in the separation matrix Σ — the quality of the VRC depends on the conditional independence of the attesting agents.</p>
+<p><strong>Context-specific (edge value).</strong> Each VRC maps to a specific sovereignty transition. The proverb maps to shared context. This means VRCs are not fungible — they carry the specific trajectory T(π) of the relationship, not a generic trust score. An agent&#39;s VRC portfolio is a graph of demonstrated sovereignty transitions, not a number.</p>
+<p><strong>Scoped (reconstruction resistance).</strong> A VRC reveals only what the relationship requires. The proverb is meaningless outside the bilateral context. The underlying data that generated the proverb remains private. This enforces the reconstruction ceiling R &lt; 1 at the credential level — no single VRC, and no collection of VRCs from different relationships, allows full behavioural reconstruction. V6: the ceiling is time-dependent, R(t) with shelf life t* (C82); the static result is Proven in the conditional regime.</p>
+<p><strong>Recoverable (temporal memory).</strong> If forgotten, the proverb can be re-derived because it is based on relationship context rather than arbitrary secrets. This is the temporal memory&#39;s deepest property: verified history is not a brittle key but a robust pattern that can be regenerated from sufficient shared context.</p>
+<h2>Trust flow architecture</h2>
+<p>The trust chain for any First Person entering the 0xagentprivacy network:</p>
+<p>First Person Network (personhood credential — stored on-device, never uploaded) → agentprivacy (first VRC — you&#39;re in the network) → Swordsman (agent-specific VRC — you wield the blade) → site-specific VRCs (relationship credentials with each MyTerms counterparty).</p>
+<p>No traditional blockchain wallet required at any step. The first personhood credential sits locally and spawns the agent hierarchy through delegation, not key derivation.</p>
+<h2>Integration with existing identity standards</h2>
+<p><strong>DIDs.</strong> Each First Person has a DID. Each Swordsman and Mage has a derived DID. VRCs are verifiable credentials in the W3C sense but with the bilateral constraint — they require two DID signatures, not one issuer and one holder.</p>
+<p><strong>KERI (Key Event Receipt Infrastructure).</strong> VRC key rotation and recovery map to KERI&#39;s event-driven key management. The bilateral proverb serves as the semantic layer over KERI&#39;s cryptographic layer — human-meaningful recovery over machine-verifiable key events.</p>
+<p><strong>Trust Over IP.</strong> VRCs operate at ToIP Layer 3 (credential exchange) and Layer 4 (governance). The progressive trust tiers (Traveler → Contributor → Author → Mentor → Fellow) map to the armor progression, with each tier requiring demonstrated VRC depth.</p>
+<h2>Open problems for identity builders</h2>
+<ol>
+<li>What is the minimum VRC density needed for robust key recovery across a First Person&#39;s relationship network?</li>
+<li>How do VRC proverbs scale — does proverb quality degrade when a person maintains hundreds of bilateral relationships?</li>
+<li>Can VRCs interoperate across different personhood verification systems (First Person Network, Gitcoin Passport, WorldCoin)?</li>
+<li>What happens to VRCs when one party&#39;s agent is compromised — how does revocation propagate without revealing the relationship graph?</li>
+<li>Can the bilateral proverb mechanism be formalised as a zero-knowledge proof of shared context?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-vrc-identity</code>, v4.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-vrc-identity</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-vrc-identity.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

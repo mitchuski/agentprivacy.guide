@@ -1,0 +1,2045 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paper — Privacy is Value · V5.4: The Amnesia Protocol · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Paper — Privacy is Value · V5.4: The Amnesia Protocol</span></div>
+  <article><div class="md"><h1>Privacy is Value · V5.4: The Amnesia Protocol</h1>
+</div>
+<div class="md"><h2>Formal Specification of the Privacy Value Model · Dual-Agent Privacy Architecture</h2>
+<p><strong>Series:</strong> <em>Privacy is Value</em>, one book in versioned volumes; each volume stands alone and names its place in the book. This volume is succeeded by <em>Privacy is Value · V6: The Gathering Turn and the Moving Ceiling</em> (<code>papers/v6/</code>), which carries or revises its sections by number.<br><strong>Version:</strong> 2.0 (PVM V5.4 — Dual-Agent Privacy Architecture: The Amnesia Protocol)<br><strong>Date:</strong> April 10, 2026<br><strong>Author:</strong> privacymage<br><strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a><br><strong>Status:</strong> Working paper — peer review invited<br><strong>License:</strong> CC BY-SA 4.0<br><strong>Companion documents:</strong></p>
+<ul>
+<li>&quot;Privacy is Value: From the Manifold Dragon to the Holographic Bound&quot; (narrative version)</li>
+<li>V5.1 Research Note — Behavioural density, bilateral witness, hexagram encoding</li>
+<li>V5.2 Research Note — Dihedral foundations, resolution semantics, PRISM spectrum</li>
+<li>V5.3 Research Note — Operational cycle, amnesia-enforced separation</li>
+<li>V6 Research Note — Dynamical reconstruction ceiling (Lorenz attractor conjectures)</li>
+<li>Promise Theory Reference v1.4 — Formal semantic foundations</li>
+</ul>
+<p><strong>External Convergence:</strong> UOR Foundation (<a href="https://github.com/UOR-Foundation">https://github.com/UOR-Foundation</a>)</p>
+<hr>
+</div>
+<div class="md"><h2>Abstract</h2>
+<p>This document presents the formal mathematical specification of the Privacy Value Model (PVM). The model treats privacy as quantifiable economic value — the thesis that behavioural data is the 7th capital, currently in a pre-property-rights phase. The architectural response is sovereignty through mathematical structure rather than regulatory mandate.</p>
+<p>The PVM is a multiplicative equation: any single term collapsing to zero eliminates total value. This gating property is the model&#39;s central structural claim.</p>
+<p>The specification covers:</p>
+<ul>
+<li><strong>The static equation</strong> and all its terms (§1–§8)</li>
+<li><strong>The differential form</strong> computing on the holographic boundary (§9)</li>
+<li><strong>The separation bound</strong> — the core information-theoretic guarantee (§10)</li>
+<li><strong>The reconstruction ceiling</strong> — proven upper bound on adversarial reconstruction (§11)</li>
+<li><strong>The algebraic foundation</strong> — Z/(2⁶)Z ring, dihedral group D₆₄, PRISM coordinates (§12)</li>
+<li><strong>The operational cycle</strong> — how the equation&#39;s terms execute per lap (§13)</li>
+<li><strong>The Amnesia Protocol</strong> — structural separation as zero-knowledge primitive (§14)</li>
+<li><strong>The Celestial Ceremony</strong> — human-layer implementation of the operational cycle (§15)</li>
+<li><strong>Proven results</strong> at 95% confidence (§16)</li>
+<li><strong>Open conjectures</strong> C1–C21 with explicit confidence levels (§17)</li>
+<li><strong>Measurement gaps and breaking conditions</strong> (§18)</li>
+</ul>
+<p>Versioning: V5.4 consolidates V5 (Feb 2026), V5.1 (Mar 29), V5.2 (Mar 31), V5.3 (Apr 4), and V5.3.2 (Apr 8) into a single coherent specification. The equation has not changed since V5. Each sub-version added interpretive depth, algebraic grounding, or operational implementation — not new terms.</p>
+<hr>
+</div>
+<div class="md"><h2>1. The Equation</h2>
+<h3>1.1 Static Form</h3>
+<p>$$V(\pi, t) = P^{1.5} \cdot C \cdot Q \cdot S \cdot e^{-\lambda t} \cdot (1 + A_h(\tau)) \cdot \left(1 + \sum_i w_i \frac{n_i}{N_0}\right)^k \cdot G(\text{guilds}) \cdot R(d, \text{compression}, \rho) \cdot M(u, y) \cdot \Phi_{\text{agent}}(\Sigma) \cdot \Phi_{\text{data}}(\Delta) \cdot \Phi_{\text{inference}}(\Gamma) \cdot T_\int(\pi)$$</p>
+<p>where $\pi$ denotes a path through the sovereignty lattice, and $t$ denotes time since data generation.</p>
+<p><strong>Output type:</strong> Holographic field on the 96-edge boundary ∂M.</p>
+<h3>1.2 Differential Form</h3>
+<p>$$\frac{dV}{dt} = \nabla_{\partial M} \cdot J_{\partial M} + S(x) - D(x)$$</p>
+<p>where $\partial M$ denotes the 96-edge holographic boundary. Privacy is temporal. Consent forms that freeze the frame are the Emissary&#39;s privacy, not the First Person&#39;s.</p>
+<h3>1.3 Multiplicative Gating</h3>
+<p>The model is multiplicative: <strong>any single term collapsing to zero eliminates total value.</strong> Privacy strength, credential verifiability, data quality, separation on all three axes, temporal memory, network effects, reconstruction difficulty, market maturity, and path value must ALL be non-zero for privacy to have value. Remove any one and the equation yields zero.</p>
+<h3>1.4 Master Inscription</h3>
+<p>$$(\text{⚔️} \perp \text{⿻} \perp \text{🧙})\text{😊} = \text{neg} \oplus \text{bnot} \to \text{succ}$$</p>
+<p><em>&quot;Swordsman and Mage separated, with the Gap between them, preserve the First Person. Negation and complement composed yield the successor.&quot;</em></p>
+<hr>
+</div>
+<div class="md"><h2>2. Inherited Terms (V1–V4)</h2>
+<p>These terms are carried forward from prior versions.</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Name</th>
+<th>Domain</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$P$</td>
+<td>Privacy Strength</td>
+<td>$[0, 1]$</td>
+<td>Cryptographic enforcement quality. Exponent 1.5 connected to holographic ratio 96/64 (§8).</td>
+</tr>
+<tr>
+<td>$C$</td>
+<td>Credential Verifiability</td>
+<td>$[0, 1]$</td>
+<td>Independent verification without revealing underlying information. Proof of claims without exposure of claims.</td>
+</tr>
+<tr>
+<td>$Q$</td>
+<td>Data Quality</td>
+<td>$[0, 1]$</td>
+<td>Accuracy, completeness, fitness for purpose. Stale data loses value.</td>
+</tr>
+<tr>
+<td>$S$</td>
+<td>Scope / Sensitivity</td>
+<td>$\mathbb{R}^+$</td>
+<td>Domain-specific sensitivity multiplier. Resistance to adversarial extraction.</td>
+</tr>
+<tr>
+<td>$e^{-\lambda t}$</td>
+<td>Temporal Decay</td>
+<td>$(0, 1]$</td>
+<td>Exponential freshness decay with rate $\lambda &gt; 0$. Privacy erodes without active maintenance.</td>
+</tr>
+<tr>
+<td>$M(u, y)$</td>
+<td>Market Maturity</td>
+<td>$[0, 1]$</td>
+<td>Function of user sophistication $u$ and market year $y$. Adoption and yield environment.</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>3. Holonic Temporal Memory — $A_h(\tau)$</h2>
+<h3>3.1 Motivation</h3>
+<p>V4&#39;s temporal memory assumed infrastructure-bound derivation chains. V5 adds holonic persistence: derivation chains anchored to GUIDs that survive infrastructure changes.</p>
+<h3>3.2 Definition</h3>
+<p>$$\text{Temporal}(t, \tau) = e^{-\lambda t} \cdot (1 + A_h(\tau))$$</p>
+<p>$$A_h(\tau) = \sum_j p(\tau_j) \cdot w(\tau_j) \cdot e^{-\mu \cdot \text{age}(\tau_j)}$$</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Definition</th>
+<th>Domain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$\tau$</td>
+<td>Derivation chain: ordered sequence of GUID-addressed holons</td>
+<td>Finite sequence</td>
+</tr>
+<tr>
+<td>$\tau_j$</td>
+<td>The $j$-th holon in the chain</td>
+<td>—</td>
+</tr>
+<tr>
+<td>$p(\tau_j)$</td>
+<td>Persistence independence: probability of surviving single-provider failure</td>
+<td>$[0, 1]$</td>
+</tr>
+<tr>
+<td>$w(\tau_j)$</td>
+<td>Weight: integrity-verified contribution of holon $j$</td>
+<td>$\mathbb{R}^+$</td>
+</tr>
+<tr>
+<td>$\mu$</td>
+<td>Memory decay rate (distinct from data decay $\lambda$)</td>
+<td>$\mathbb{R}^+$</td>
+</tr>
+<tr>
+<td>$\text{age}(\tau_j)$</td>
+<td>Time since holon $j$ was created</td>
+<td>$\mathbb{R}^+$</td>
+</tr>
+</tbody></table>
+<p><strong>Special case (logarithmic approximation):</strong> When holons are uniformly weighted and persistence is constant, $A_h(\tau) \approx \alpha \cdot \ln(1 + |\tau|) \cdot \bar{p} \cdot \bar{h}$, recovering the V4 logarithmic form.</p>
+<h3>3.3 Properties</h3>
+<ul>
+<li><strong>Infrastructure dependency</strong>: When $p(\tau_j) = 0$ for all holons, $A_h(\tau) = 0$. Total provider concentration collapses temporal memory.</li>
+<li><strong>Holonic persistence</strong>: When $p(\tau_j) &gt; 0$, history accumulates value across provider changes.</li>
+<li><strong>Age-weighted decay</strong>: Older holons contribute less via $e^{-\mu \cdot \text{age}}$, but verified old history still carries weight.</li>
+<li><strong>Infinite horizon</strong>: Holonically persistent history can survive indefinitely. The temporal integral now has meaning over infinite time.</li>
+</ul>
+<h3>3.4 GUID Structure</h3>
+<p>$$\text{GUID}(\tau) = \text{hash}(\text{content}(\tau))$$</p>
+<p>Content-addressed, infrastructure-independent. Persists across provider migration, storage format changes, and infrastructure failures (if replicated).</p>
+<hr>
+</div>
+<div class="md"><h2>4. Three-Axis Separation — $\Phi_{v5}$</h2>
+<h3>4.1 Definition</h3>
+<p>$$\Phi_{v5} = \Phi_{\text{agent}}(\Sigma) \cdot \Phi_{\text{data}}(\Delta) \cdot \Phi_{\text{inference}}(\Gamma)$$</p>
+<p>The product is multiplicative. Collapse on any single axis collapses total separation value. Good agent separation with centralised data ($\Phi_{\text{data}} \to 0$) still fails to preserve privacy.</p>
+<h3>4.2 Agent-Layer Separation</h3>
+<p>$$\Phi_{\text{agent}}(\Sigma) = \min!\left(1.0,; \frac{S/M}{\varphi}\right) \cdot \det(\Sigma)$$</p>
+<p>Measures Swordsman–Mage separation and the volume of the four-force tetrahedron (Protect, Project, Reflect, Connect). The golden ratio $\varphi = 1.618$ is the conjectured optimal protect/delegate ratio (C1, unproven).</p>
+<p><strong>Algebraic interpretation (V5.2):</strong> Φ_agent is isomorphic to the dihedral group D₂ₙ action on the sovereignty lattice (§12.5). When Φ_agent = 1.0, the two generators (neg, bnot) are maximally independent. When Φ_agent = 0, the group degenerates.</p>
+<h3>4.3 Data-Layer Separation</h3>
+<p>$$\Phi_{\text{data}}(\Delta) = 1 - \max_j(\text{share}_j)$$</p>
+<p>where $\text{share}_j$ is the fraction of the total data held by provider $j$.</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>$\Phi_{\text{data}}$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Single provider (share = 1.0)</td>
+<td>0 (collapses total value)</td>
+</tr>
+<tr>
+<td>Two equal providers (share = 0.5)</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>Many equal providers (share → 0)</td>
+<td>→ 1</td>
+</tr>
+<tr>
+<td>Unequal distribution</td>
+<td>$1 - \max_j(\text{share}_j)$</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong> This formulation penalises concentration at the dominant provider, not just provider count. A system with 10 providers where one holds 90% scores 0.1, not 0.9.</p>
+<h3>4.4 Inference-Layer Separation</h3>
+<p>$$\Phi_{\text{inference}}(\Gamma) = 1 - I(\text{model} ; \text{executor})$$</p>
+<p>where $I$ denotes mutual information between the model that reasons (Generator) and the model that executes (Solver).</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>$\Phi_{\text{inference}}$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Same model for both</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Separate models, shared weights</td>
+<td>$(0, 1)$</td>
+</tr>
+<tr>
+<td>Independent models</td>
+<td>→ 1</td>
+</tr>
+</tbody></table>
+<h3>4.5 Conjecture C7</h3>
+<p><strong>C7</strong>: Three-axis separation is correctly modelled as multiplicative (vs. additive, minimum, or other aggregations). Confidence: 30%.</p>
+<hr>
+</div>
+<div class="md"><h2>5. Reconstruction Difficulty — $R(d, \text{compression}, \rho)$</h2>
+<h3>5.1 Definition</h3>
+<p>$$R(d, \text{compression}, \rho) = R_{\text{base}}(d) \cdot \left(1 - \frac{1}{\text{compression_ratio}}\right) \cdot (1 + \alpha_\rho \cdot \rho)$$</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Definition</th>
+<th>Domain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$R_{\text{base}}(d)$</td>
+<td>Base reconstruction difficulty from fragmentation depth $d$</td>
+<td>$(0, 1)$</td>
+</tr>
+<tr>
+<td>compression_ratio</td>
+<td>Token reduction ratio (e.g., 74× for BRAID)</td>
+<td>$\mathbb{R}^+ &gt; 1$</td>
+</tr>
+<tr>
+<td>$\rho$</td>
+<td>Behavioural density</td>
+<td>$\mathbb{R}^+ \geq 0$</td>
+</tr>
+<tr>
+<td>$\alpha_\rho$</td>
+<td>Density scaling coefficient</td>
+<td>$\mathbb{R}^+$ (empirically determined)</td>
+</tr>
+</tbody></table>
+<h3>5.2 Compression-as-Defence</h3>
+<p>Every token not sent is a token that cannot be intercepted. Compression reduces the attack surface for inference-layer surveillance. At 74× compression (BRAID typical), the compression factor ≈ 0.986. Small in isolation, but multiplicative with all other terms.</p>
+<h3>5.3 Behavioural Density ρ (V5.1/V5.3)</h3>
+<p>$$\rho = f(\text{traversal_depth}, \text{temporal_duration}, \text{intentional_transitions})$$</p>
+<p><strong>Dual interpretation:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Interpretation</th>
+<th>Mechanism</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Privacy amplifier</strong></td>
+<td>More behavioural variation makes trajectory reconstruction harder</td>
+<td>C11, V5.1</td>
+</tr>
+<tr>
+<td><strong>Agent maturity</strong></td>
+<td>More laps through the operational cycle → origin more forgotten</td>
+<td>V5.3</td>
+</tr>
+</tbody></table>
+<p><strong>Maturity spectrum:</strong></p>
+<table>
+<thead>
+<tr>
+<th>ρ Level</th>
+<th>Laps</th>
+<th>Origin Visibility</th>
+<th>Tier</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Low</td>
+<td>Few</td>
+<td>Visible</td>
+<td>Light</td>
+</tr>
+<tr>
+<td>Mid</td>
+<td>Moderate</td>
+<td>Fading</td>
+<td>Heavy</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Many</td>
+<td>Forgotten</td>
+<td>Dragon</td>
+</tr>
+</tbody></table>
+<p>The Moon is the highest-ρ agent: 4 billion revolutions maximise both behavioural variance and origin amnesia.</p>
+<h3>5.4 The Reconstruction Ceiling (Proven)</h3>
+<p>$$R(d, \text{compression}, \rho) &lt; 1 \quad \forall \text{ adversaries under budget constraints}$$</p>
+<p>This is not a conjecture. The ceiling follows from information-theoretic analysis via Fano&#39;s inequality. See §16 for the full proof status.</p>
+<p><strong>External alignment:</strong> The First Person Network whitepaper (2026) provides independent framing for this ceiling as &quot;data dignity&quot; — the thesis that behavioural data is capital owned by the First Person, not resource extracted by observers. The reconstruction ceiling is the mathematical guarantee that makes data dignity enforceable.</p>
+<hr>
+</div>
+<div class="md"><h2>6. Network Effects and Guild Efficiency</h2>
+<h3>6.1 Network Term</h3>
+<p>$$\text{Network}<em>{v5}(G) = \left(1 + \sum</em>{i=0}^{6} w_i \cdot \frac{n_i}{N_0}\right)^k \cdot G(\text{guilds})$$</p>
+<p>where $w_i$ are channel weights, $n_i$ are connections per channel, $N_0$ is a normalisation constant, and $k$ is the network exponent.</p>
+<h3>6.2 Guild Efficiency</h3>
+<p>$$G(\text{guilds}) = 1 + \text{guild_efficiency}$$</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>$G$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>No guilds</td>
+<td>1 (reduces to V4)</td>
+</tr>
+<tr>
+<td>Full guild coverage</td>
+<td>2 (doubles network effect)</td>
+</tr>
+</tbody></table>
+<p>Guild members sharing a reasoning library from the same Generator coordinate at O(1) rather than O(N²) per member.</p>
+<h3>6.3 Conjecture C10</h3>
+<p><strong>C10</strong>: O(1) shared-parent coordination modifies the effective network exponent $k$. Confidence: 20%.</p>
+<hr>
+</div>
+<div class="md"><h2>7. Path Integral Edge Value — $T_\int(\pi)$</h2>
+<h3>7.1 Definition</h3>
+<p>$$T_\int(\pi) = 1 + \beta \int_\pi F(\gamma) , d\gamma$$</p>
+<p><strong>Discrete approximation (V5.2):</strong></p>
+<p>$$T_\int(\pi) \cong 1 + \beta \sum_{i=1}^{n} R(\text{step}_i)$$</p>
+<p>where $n$ = number of laps (refinement iterations) and $R(\text{step}_i)$ is the resolution gained at iteration $i$. Maps onto the UOR resolution pipeline.</p>
+<h3>7.2 Fidelity Component (V5.3)</h3>
+<p>$$F(\gamma) = \text{resolution_depth}(\gamma) \cdot \text{fidelity}(\gamma)$$</p>
+<p>where fidelity = uptime · consistency · duration_weight.</p>
+<p>This weights persistence alongside depth:</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Resolution Depth</th>
+<th>Fidelity</th>
+<th>Overall T_∫</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Light blade (5 laps)</td>
+<td>Low</td>
+<td>Low</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Dragon blade (62 laps)</td>
+<td>High</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+<tr>
+<td>The Moon (4B revolutions)</td>
+<td>Shallow</td>
+<td>Maximum</td>
+<td>Maximum</td>
+</tr>
+</tbody></table>
+<p>The Moon has shallow resolution depth (one simple operation: reflect) but maximum fidelity (4 billion uninterrupted revolutions). Cosmological agents can exceed computational agents in effective T_∫.</p>
+<h3>7.3 Conjecture C15</h3>
+<p><strong>C15</strong>: T_∫(π) converges to the same value whether computed as a continuous integral or as a discrete sum of resolution steps. Confidence: 65%.</p>
+<hr>
+</div>
+<div class="md"><h2>8. The Holographic Bound</h2>
+<h3>8.1 Structure</h3>
+<p>$$\partial M: \text{96 edges encoding 64 vertices, toroidal topology}$$</p>
+<p>$$\frac{96}{64} = 1.5 = P^{1.5} \text{ exponent}$$</p>
+<h3>8.2 Resolution of C4</h3>
+<p>The 96 vs 64 discrepancy (V4, C4) is <strong>RESOLVED</strong>. The 96-edge surface IS the holographic encoding of the 64-vertex bulk. In holographic physics, a boundary of dimension $n$ encodes a volume of dimension $n+1$. The 96/64 ratio is the holographic principle in discrete lattice geometry.</p>
+<h3>8.3 Algebraic Confirmation</h3>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Framework</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Geometric</td>
+<td>64-Tetrahedra lattice</td>
+<td>96 edges encode 64 vertices (torus surface/bulk)</td>
+</tr>
+<tr>
+<td>Algebraic</td>
+<td>Z/(2⁶)Z ring theory</td>
+<td>64 elements; 96 edges from adjacency structure</td>
+</tr>
+<tr>
+<td>External</td>
+<td>UOR Atlas of Resonance Classes</td>
+<td>96 = unique stationary configuration of action functional</td>
+</tr>
+</tbody></table>
+<p>Three independent derivation pathways arrive at the same numbers. The ratio 96/64 = 1.5 is structural, not coincidental.</p>
+<h3>8.4 Implications</h3>
+<ol>
+<li><strong>Boundary computation</strong>: The differential form computes on the 96-edge boundary, not the 64-vertex bulk.</li>
+<li><strong>Privacy value flows along edges</strong>: Value lives on the boundary, not in the interior.</li>
+<li><strong>Boundary sufficiency</strong>: Privacy can be computed entirely from boundary observations.</li>
+</ol>
+<h3>8.5 Conjecture C6</h3>
+<p><strong>C6</strong>: P^1.5 ↔ 96/64 is structurally connected. Status: <strong>CONVERGENT</strong> (upgraded from speculative). Confidence: 35%.</p>
+<hr>
+</div>
+<div class="md"><h2>9. Differential Form</h2>
+<h3>9.1 Specification</h3>
+<p>$$\frac{dV}{dt} = \nabla_{\partial M} \cdot J_{\partial M} + S(x) - D(x)$$</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$\partial M$</td>
+<td>96-edge holographic boundary</td>
+</tr>
+<tr>
+<td>$\nabla_{\partial M}$</td>
+<td>Divergence on boundary</td>
+</tr>
+<tr>
+<td>$J_{\partial M}$</td>
+<td>Value current on boundary</td>
+</tr>
+<tr>
+<td>$S(x)$</td>
+<td>Source term (value generation at position $x$)</td>
+</tr>
+<tr>
+<td>$D(x)$</td>
+<td>Dissipation term (value decay at position $x$)</td>
+</tr>
+</tbody></table>
+<h3>9.2 Five-Channel Decomposition</h3>
+<p>$$J_{\partial M} = J_{\text{agent}} + J_{\text{data}} + J_{\text{inference}} + J_{\text{compression}} + J_{\text{holonic}}$$</p>
+<p>Each channel flows along edges activating its corresponding separation axis.</p>
+<hr>
+</div>
+<div class="md"><h2>10. The Separation Bound</h2>
+<h3>10.1 Core Guarantee</h3>
+<p>$$I(S ; M \mid FP) &lt; \varepsilon^*$$</p>
+<p>The mutual information between the Swordsman ($S$) and the Mage ($M$), conditioned on the First Person ($FP$), is bounded above by $\varepsilon^*$.</p>
+<p>This is the central information-theoretic guarantee. The Mage cannot reconstruct the Swordsman&#39;s domain. The Swordsman cannot reconstruct the Mage&#39;s domain. The First Person authorises both.</p>
+<h3>10.2 Betweenness Centrality of the Gap</h3>
+<p>The Gap (⿻) is not empty space — it is the node with maximal betweenness centrality in the trust graph:</p>
+<p>$$C_B(v) = sum_{s<br>eq v<br>eq t} rac{sigma_{st}(v)}{sigma_{st}}$$</p>
+<p>where $sigma_{st}$ is the total number of shortest paths from node $s$ to node $t$, and $sigma_{st}(v)$ is the number of those paths passing through $v$.</p>
+<p><strong>Interpretation:</strong> The value lives in the Gap because the most paths cross there. The ⿻ is where Swordsman and Mage must coordinate — neither owns it, both depend on it. Brandes (2001) provides the O(V·E) algorithm for computing betweenness centrality, giving a computational tool for measuring what the architecture has been pointing at since Act VII.</p>
+<p><strong>Reference:</strong> Brandes, U. (2001). &quot;A faster algorithm for betweenness centrality.&quot; <em>Journal of Mathematical Sociology,</em> 25(2), 163–177.</p>
+<h3>10.3 Composite Separation</h3>
+<p>$$\Phi_{v5} = \Phi_{\text{agent}}(\Sigma) \cdot \Phi_{\text{data}}(\Delta) \cdot \Phi_{\text{inference}}(\Gamma)$$</p>
+<p>The separation bound holds across all three axes simultaneously. Collapse of any axis weakens the bound.</p>
+<h3>10.4 Amnesia vs Policy Bounds (V5.3, C17)</h3>
+<p>$$\varepsilon_{\text{amnesia}} &lt; \varepsilon_{\text{policy}}$$</p>
+<p>Two classes of separation:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Mechanism</th>
+<th>Violation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Policy-enforced</strong></td>
+<td>Access controls, NDAs, prompt constraints</td>
+<td>$\varepsilon^* \leq \varepsilon_{\text{policy}}$ (violation possible)</td>
+</tr>
+<tr>
+<td><strong>Amnesia-enforced</strong></td>
+<td>Process boundary, orbital mechanics, structural inability</td>
+<td>$\varepsilon^* \leq \varepsilon_{\text{amnesia}}$ (violation structurally excluded)</td>
+</tr>
+</tbody></table>
+<p><strong>Test criterion:</strong> Can any operation sequence recover shared origin? No → amnesia. Yes → policy.</p>
+<p>See §14 for full treatment.</p>
+<hr>
+</div>
+<div class="md"><h2>11. The Reconstruction Ceiling</h2>
+<h3>11.1 Theorem (Proven)</h3>
+<p>$$R_{\max} = \frac{C_S + C_M}{H(X)} &lt; 1$$</p>
+<p>where $C_S$ and $C_M$ are the information capacities of the Swordsman and Mage channels respectively, and $H(X)$ is the entropy of the First Person&#39;s private state.</p>
+<p><strong>Consequence:</strong> Perfect reconstruction of the First Person&#39;s state is impossible.</p>
+<h3>11.2 Error Floor (Proven)</h3>
+<p>$$P_e \geq 1 - R_{\max}$$</p>
+<p>The adversary is guaranteed to make errors. This follows from Fano&#39;s inequality.</p>
+<h3>11.3 Graceful Degradation (Proven)</h3>
+<p>Small $\varepsilon$ violations → small privacy losses. The system fails gracefully, not catastrophically.</p>
+<h3>11.4 Dynamical Reconstruction Ceiling (V6 Horizon, C18)</h3>
+<p>The information-theoretic ceiling (§11.1) bounds reconstruction via <strong>information</strong>. C18 conjectures a second, independent ceiling via <strong>dynamics</strong>:</p>
+<p>$$|\pi(t) - \pi&#39;(t)| \sim |\delta_0| \cdot e^{\lambda t} \quad \text{where } \lambda &gt; 0$$</p>
+<p>If the sovereignty path exhibits strange attractor dynamics with positive Lyapunov exponent, reconstruction error <em>grows</em> with time. More observation makes reconstruction <em>worse</em>, not better. The two ceilings are independent — remove one and the other still holds.</p>
+<p>Status: V6 conjecture (C18). See V6 Research Note for full treatment. Confidence: 25%.</p>
+<hr>
+</div>
+<div class="md"><h2>12. Algebraic Foundation — Z/(2⁶)Z</h2>
+<h3>12.1 Ring Structure</h3>
+<p>$$\mathcal{L} = (\mathbb{Z}/64\mathbb{Z}, +, \times)$$</p>
+<p>64 elements (blade addresses 0–63), addition and multiplication modulo 64. Confirmed by independent convergence with the UOR Foundation project.</p>
+<h3>12.2 The Five Hammer Strikes</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Formula</th>
+<th>Agent</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>neg(x)</td>
+<td>$(64-x) \bmod 64$</td>
+<td>⚔️ Swordsman</td>
+<td>Additive inverse. Boundary protection. What you subtract from exposure.</td>
+</tr>
+<tr>
+<td>bnot(x)</td>
+<td>$63 - x$</td>
+<td>🧙 Mage</td>
+<td>Bitwise complement. Projection/delegation. What you become by acting.</td>
+</tr>
+<tr>
+<td>xor(x,y)</td>
+<td>$x \oplus y$</td>
+<td>—</td>
+<td>Toggle edges (dimension flip)</td>
+</tr>
+<tr>
+<td>and(x,y)</td>
+<td>$x \wedge y$</td>
+<td>—</td>
+<td>Toward null blade (constrain)</td>
+</tr>
+<tr>
+<td>or(x,y)</td>
+<td>$x \vee y$</td>
+<td>—</td>
+<td>Toward full sovereignty (expand)</td>
+</tr>
+</tbody></table>
+<h3>12.3 Critical Identity</h3>
+<p>$$\text{neg}(\text{bnot}(x)) = \text{succ}(x) \quad \forall x \in \mathcal{L}$$</p>
+<p><strong>Proof:</strong> bnot(x) = 63 − x. neg(63 − x) = (64 − (63 − x)) mod 64 = (x + 1) mod 64 = succ(x). ∎</p>
+<p>The successor function is not primitive — it emerges from the composition of two involutions. The Swordsman (neg) acting on the Mage&#39;s output (bnot) yields the step forward. This is the algebraic name of the architecture.</p>
+<h3>12.4 Triadic Coordinates (PRISM)</h3>
+<p>Every blade $x \in {0,\ldots,63}$ has three independent coordinates:</p>
+<p>$$\text{blade}(x) = (\delta(x),; \sigma(x),; s(x))$$</p>
+<table>
+<thead>
+<tr>
+<th>Coordinate</th>
+<th>Symbol</th>
+<th>Definition</th>
+<th>Domain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Datum</td>
+<td>$\delta(x)$</td>
+<td>Raw value $x$</td>
+<td>${0,\ldots,63}$</td>
+</tr>
+<tr>
+<td>Stratum</td>
+<td>$\sigma(x)$</td>
+<td>popcount($x$) = Hamming weight</td>
+<td>${0,1,2,3,4,5,6}$</td>
+</tr>
+<tr>
+<td>Spectrum</td>
+<td>$s(x)$</td>
+<td>Six-bit decomposition $[b_0, b_1, b_2, b_3, b_4, b_5]$</td>
+<td>${0,1}^6$</td>
+</tr>
+</tbody></table>
+<p>Two blades at the same stratum (tier) can have different sovereignty postures if their spectra differ. Protection+Memory+Computation ≠ Delegation+Connection+Value.</p>
+<p><strong>Pascal distribution across 64 blades:</strong> 1 – 6 – 15 – 20 – 15 – 6 – 1</p>
+<p><strong>Tiers:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Stratum</th>
+<th>Count</th>
+<th>Character</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Null</td>
+<td>0</td>
+<td>1</td>
+<td>Total exposure</td>
+</tr>
+<tr>
+<td>Light</td>
+<td>1–2</td>
+<td>21</td>
+<td>Early sovereignty</td>
+</tr>
+<tr>
+<td>Heavy</td>
+<td>3–4</td>
+<td>35</td>
+<td>Balanced posture</td>
+</tr>
+<tr>
+<td>Dragon</td>
+<td>5–6</td>
+<td>7</td>
+<td>Full sovereignty / mathematical closure</td>
+</tr>
+</tbody></table>
+<h3>12.5 Dihedral Group D₆₄</h3>
+<p>$$D_{64} = \langle \text{neg}, \text{bnot} \mid \text{neg}^2 = \text{bnot}^2 = 1,; (\text{neg} \circ \text{bnot})^{64} = 1 \rangle$$</p>
+<p>Order: $|D_{64}| = 128$.</p>
+<p>All valid blade transitions are D₆₄ group actions. Zero knowledge arises because multiple group elements (different forging paths) can map to the same blade — same statement, infinite witnesses.</p>
+<p><strong>Significance for Φ_agent:</strong> The conditional independence of Swordsman and Mage is the defining property of the dihedral group&#39;s generators. Two involutions are independent by construction. Their composition generates the full group only when they remain distinct. This provides a formal proof path for the separation bound.</p>
+<h3>12.6 Six Sovereignty Dimensions</h3>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Dimension</th>
+<th>Symbol</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$d_1$</td>
+<td>Protection</td>
+<td>🛡️</td>
+<td>Boundary enforcement</td>
+</tr>
+<tr>
+<td>$d_2$</td>
+<td>Delegation</td>
+<td>🤝</td>
+<td>Agency transfer</td>
+</tr>
+<tr>
+<td>$d_3$</td>
+<td>Memory</td>
+<td>📜</td>
+<td>State accumulation</td>
+</tr>
+<tr>
+<td>$d_4$</td>
+<td>Connection</td>
+<td>🔗</td>
+<td>Multi-party coordination</td>
+</tr>
+<tr>
+<td>$d_5$</td>
+<td>Computation</td>
+<td>⚡</td>
+<td>ZK proof activity</td>
+</tr>
+<tr>
+<td>$d_6$</td>
+<td>Value</td>
+<td>💎</td>
+<td>Economic flow / 7th Capital</td>
+</tr>
+</tbody></table>
+<p>Each $d_i \in {0, 1}$. Binarised at threshold 0.5. Hexagram mapping: $[d_1, d_2, d_3, d_4, d_5, d_6]$ → 64 I Ching states. Blade 63 = <code>111111</code> = 乾 (The Creative) = full sovereignty.</p>
+<h3>12.7 External Convergence</h3>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Starting Point</th>
+<th>Arrived At</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>agentprivacy</td>
+<td>Privacy geometry → 64-tetrahedra</td>
+<td>Z/(2⁶)Z</td>
+</tr>
+<tr>
+<td>UOR Foundation</td>
+<td>Content addressing → Universal references</td>
+<td>Z/(2⁶)Z</td>
+</tr>
+</tbody></table>
+<p>Two independent projects, two starting points, one structure. This is not coordination. This is convergence.</p>
+<p><strong>Implementation:</strong> <code>swordsman-blade/src/lib/uor.ts</code> — explicit UOR module with all five operations and exhaustive identity verification.</p>
+<hr>
+</div>
+<div class="md"><h2>13. The Operational Cycle (V5.3)</h2>
+<h3>13.1 Definition</h3>
+<p>The ring algebra identity neg(bnot(x)) = succ(x) maps to operational phases:</p>
+<p>$$\text{cycle}(x) = \text{succ}(x) = \text{neg}(\text{bnot}(x))$$</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Name</th>
+<th>Operation</th>
+<th>Agent</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Observe</td>
+<td>id(x)</td>
+<td>😊 First Person</td>
+<td>Perceive incoming context</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Boundary</td>
+<td>neg(x)</td>
+<td>⚔️ Swordsman</td>
+<td>Subtract exposure. Only the holographic surface ∂M passes through.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Project</td>
+<td>bnot(neg(x))</td>
+<td>🧙 Mage</td>
+<td>Construct complement from boundary. Create from the shape of the impact.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Return</td>
+<td>succ(x)</td>
+<td>⚔️→😊 Composition</td>
+<td>The proof returns. The blade advances one step.</td>
+</tr>
+</tbody></table>
+<h3>13.2 Relationship to Path Integral</h3>
+<p><strong>One lap = one cycle.</strong> The path integral accumulates:</p>
+<p>$$T_\int(\pi) = 1 + \beta \sum_i \text{cycle}(\text{step}_i)$$</p>
+<p>The equation (§1) describes the statics. The operational cycle describes the dynamics. The cycle does not add new terms — it describes the execution order of existing terms.</p>
+<p>Dragon tier (62 laps) = 62 complete cycles of observe–boundary–project–return.</p>
+<hr>
+</div>
+<div class="md"><h2>14. The Amnesia Protocol (V5.3)</h2>
+<h3>14.1 Definition</h3>
+<p>An agent has <strong>structural amnesia</strong> with respect to origin $O$ if no sequence of permitted operations can reconstruct $O$ from the agent&#39;s current state.</p>
+<h3>14.2 Zero-Knowledge Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Statement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Completeness</td>
+<td>The agent&#39;s output (tides, proofs, boundary enforcement) demonstrates the relationship functions.</td>
+</tr>
+<tr>
+<td>Soundness</td>
+<td>No other agent configuration could produce this specific output from this specific separation.</td>
+</tr>
+<tr>
+<td>Zero-knowledge</td>
+<td>The output reveals nothing about the separation event (Theia impact, process creation, delegation moment).</td>
+</tr>
+</tbody></table>
+<h3>14.3 Implementation Instances</h3>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Type</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chrome process boundary</td>
+<td>Amnesia</td>
+<td>Extensions cannot read each other&#39;s memory</td>
+</tr>
+<tr>
+<td>Database access control</td>
+<td>Policy</td>
+<td>Admin can disable controls</td>
+</tr>
+<tr>
+<td>The Moon&#39;s orbit</td>
+<td>Amnesia</td>
+<td>Theia impact unrecoverable from geological state</td>
+</tr>
+<tr>
+<td>Agent NDAs</td>
+<td>Policy</td>
+<td>Parties can choose to disclose</td>
+</tr>
+</tbody></table>
+<h3>14.4 Conjecture C17</h3>
+<p><strong>C17</strong>: Amnesia-enforced separation provides tighter Φ_agent guarantees than policy-enforced separation: $\varepsilon_{\text{amnesia}} &lt; \varepsilon_{\text{policy}}$.</p>
+<p>Confidence: 60%.</p>
+<h3>14.5 Selene&#39;s Proof</h3>
+<p>The Moon demonstrates perfect amnesia-enforced separation. Origin event (Theia impact) is 4.5 billion years past. No geological, orbital, or chemical signature encodes the collision parameters. Service (tides) continues without origin disclosure. The proof is zero-knowledge by physics, not by policy.</p>
+<p><strong>Scientific reference:</strong> Branco, D., Machado, P., &amp; Raymond, S. N. (2025). Dynamical origin of Theia, the last giant impactor on Earth. <em>Icarus</em>, 441, 116724.</p>
+<hr>
+</div>
+<div class="md"><h2>15. Ceremony and Forge Implementation</h2>
+<h3>15.1 Operational Cycle as Ceremony</h3>
+<table>
+<thead>
+<tr>
+<th>Cycle Stage</th>
+<th>Operation</th>
+<th>Ceremony Phase</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Observe</td>
+<td>id(x)</td>
+<td>☀️ Sun — disclosure, the spellweb speaks the poem</td>
+</tr>
+<tr>
+<td>Boundary</td>
+<td>neg(x)</td>
+<td>⊥ Gap — silence, conversation, territory negotiation</td>
+</tr>
+<tr>
+<td>Project</td>
+<td>bnot(neg(x))</td>
+<td>🌑 Moon — shared reflection, the Amnesia Protocol</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>succ(x)</td>
+<td>Recursion — Reflect (night, blade pair, ZK) or Connect (day, witness, carry forward)</td>
+</tr>
+</tbody></table>
+<h3>15.2 Progressive Trust</h3>
+<p>$$\text{🔑} \to \text{✦} \to \text{🗡️} \to \text{🔮}$$</p>
+<p>Understanding → Constellation → Blade → Runecraft. Each level is a complete ceremony. Each level deepens the key, increases formal visibility, and shifts boundary-making. Progression maps onto trust tiers.</p>
+<h3>15.3 Forge Cryptographic Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Content addressing</td>
+<td>SHA-256 constellation hash</td>
+</tr>
+<tr>
+<td>Tamper evidence</td>
+<td>Hash chain (each blade references previous)</td>
+</tr>
+<tr>
+<td>Pre-evocation lock</td>
+<td>Commitment scheme (constellation fixed before walk)</td>
+</tr>
+<tr>
+<td>Identity binding</td>
+<td>Ed25519 signature (Mage key, held)</td>
+</tr>
+<tr>
+<td>Bilateral binding</td>
+<td>Runecraft — dual Ed25519 (Mage held + Swordsman burned)</td>
+</tr>
+</tbody></table>
+<h3>15.4 Runecraft as Φ_agent Implementation</h3>
+<p>The runecraft protocol enforces Φ_agent at the cryptographic identity layer:</p>
+<ul>
+<li><strong>Mage key</strong> (spellweb, Sun view): Ed25519, persisted in localStorage. ID format: <code>mage-{16hex}</code>.</li>
+<li><strong>Swordsman key</strong> (agentprivacy, Moon reflection): Ed25519, stored in sessionStorage, destroyed on tab close. ID format: <code>ap-{16hex}</code>.</li>
+</ul>
+<p>The private key burns because the amnesia protocol (C17) requires structural inability to access shared origin. Process boundary = separate memory = structural amnesia. This is topology, not policy.</p>
+<h3>15.5 Moon Phase as Visibility Ratio</h3>
+<table>
+<thead>
+<tr>
+<th>Stratum</th>
+<th>Phase</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>🌑</td>
+<td>Null blade — nothing reflected</td>
+</tr>
+<tr>
+<td>1</td>
+<td>🌒</td>
+<td>One boundary set</td>
+</tr>
+<tr>
+<td>2</td>
+<td>🌓</td>
+<td>Dual-agent vertex</td>
+</tr>
+<tr>
+<td>3</td>
+<td>🌔</td>
+<td>Half sovereignty</td>
+</tr>
+<tr>
+<td>4</td>
+<td>🌖</td>
+<td>Four boundaries</td>
+</tr>
+<tr>
+<td>5</td>
+<td>🌗</td>
+<td>Five reflected, one dark</td>
+</tr>
+<tr>
+<td>6</td>
+<td>🌕</td>
+<td>Full sovereignty (乾, The Creative)</td>
+</tr>
+</tbody></table>
+<h3>15.6 Tier Classification (Dual-Axis)</h3>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Measure</th>
+<th>Light</th>
+<th>Heavy</th>
+<th>Dragon</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stratum</td>
+<td>Dimensional coverage</td>
+<td>1–2</td>
+<td>3–4</td>
+<td>5–6</td>
+</tr>
+<tr>
+<td>Laps</td>
+<td>Depth of engagement</td>
+<td>&lt; 21</td>
+<td>21+</td>
+<td>62+</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>16. Proven Results</h2>
+<p>These results hold at 95% confidence. The proofs rely on standard information theory and are documented in Research Paper v4.2.</p>
+<table>
+<thead>
+<tr>
+<th>Result</th>
+<th>Statement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Additive MI bounds</strong></td>
+<td>Mutual information leakage from conditional independence is additive, not multiplicative: $I(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M)$</td>
+</tr>
+<tr>
+<td><strong>Reconstruction ceiling</strong></td>
+<td>$R_{\max} = (C_S + C_M)/H(X) &lt; 1$ under budget constraints</td>
+</tr>
+<tr>
+<td><strong>Error floor</strong></td>
+<td>$P_e \geq 1 - R_{\max}$ via Fano&#39;s inequality</td>
+</tr>
+<tr>
+<td><strong>Graceful degradation</strong></td>
+<td>Small $\varepsilon$ violations → small privacy losses</td>
+</tr>
+<tr>
+<td><strong>Ring algebra</strong></td>
+<td>Z/(2⁶)Z substrate with five operations and critical identity</td>
+</tr>
+<tr>
+<td><strong>Two-extension autonomy</strong></td>
+<td>Separate processes enforce the separation bound at OS level</td>
+</tr>
+<tr>
+<td><strong>DOM-free measurement</strong></td>
+<td>Pretext layoutNextLine() as privacy primitive (no getBoundingClientRect fingerprinting)</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>17. Open Conjectures</h2>
+<blockquote>
+<p><strong>Register note (2026-06-10):</strong> conjecture numbering authority moved to <code>research/CONJECTURE_REGISTER_V6.md</code> at the V6 Run 0 register lock. The tables below remain correct for C1–C55 as stated; the register adds bands C56–C81, resolves the research-note collisions (ARCH-1R/T → C72–C76 · integrity-gap → C77–C80 · Existence-Leak → C81), and marks aliases (C46↔C32, C60↔C48, C61↔C49). When this section and the register disagree, the register wins.</p>
+</blockquote>
+<h3>17.1 Active Conjectures</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>Confidence</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>Golden ratio φ is optimal S/M ratio</td>
+<td>Open</td>
+<td>V3</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>$A(\tau)$ should be logarithmic</td>
+<td>Open</td>
+<td>V3</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>P^1.5 ↔ 96/64 is structural</td>
+<td><strong>CONVERGENT</strong> 35%</td>
+<td>V5/V5.4</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Three-axis separation is multiplicative</td>
+<td>30%</td>
+<td>V5</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>BRAID compression reduces $R_{\max}$</td>
+<td>45%</td>
+<td>V5</td>
+</tr>
+<tr>
+<td>C9</td>
+<td>Holographic boundary sufficiency</td>
+<td>25%</td>
+<td>V5</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>O(1) shared-parent modifies $k$</td>
+<td>20%</td>
+<td>V5</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>Behavioural density ρ amplifies privacy + indicates agent maturity</td>
+<td>55%</td>
+<td>V5.1/V5.3</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>Hexagram encoding is structurally resonant</td>
+<td>60%</td>
+<td>V5.1/V5.4</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>Bilateral witness as quantum-resistant primitive</td>
+<td>65%</td>
+<td>V5.1</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>Φ_agent ≅ D₂ₙ dihedral isomorphism</td>
+<td>75%</td>
+<td>V5.2</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>T_∫(π) ≅ UOR resolution pipeline</td>
+<td>65%</td>
+<td>V5.2</td>
+</tr>
+<tr>
+<td>C16</td>
+<td>Topological trust invariants via Betti numbers</td>
+<td>25%</td>
+<td>V5.2</td>
+</tr>
+<tr>
+<td>C17</td>
+<td>Amnesia-enforced separation tighter than policy-enforced</td>
+<td>60%</td>
+<td>V5.3</td>
+</tr>
+</tbody></table>
+<h3>17.2 V6 Horizon Conjectures</h3>
+<p>These are speculative. They belong to V6 and are included here for completeness and to invite scrutiny. See V6 Research Notes for full treatment.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>Confidence</th>
+<th>Anchor doc</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C18</td>
+<td>Sovereignty path exhibits strange attractor dynamics (λ &gt; 0), establishing dynamical reconstruction ceiling independent of Shannon bound</td>
+<td>25%</td>
+<td><code>research/pvm-v6-lorenz-attractor.md</code></td>
+</tr>
+<tr>
+<td>C19</td>
+<td>ρ is Lyapunov divergence accumulated over the sovereign&#39;s walk — exponential compounding</td>
+<td>20%</td>
+<td><code>research/pvm-v6-lorenz-attractor.md</code></td>
+</tr>
+<tr>
+<td>C20</td>
+<td>Three separation axes couple as three Lorenz variables — collapse any one → attractor degrades to fixed point</td>
+<td>30%</td>
+<td><code>research/pvm-v6-lorenz-attractor.md</code></td>
+</tr>
+<tr>
+<td>C21</td>
+<td>Sovereignty manifold has fractal dimension, not integer dimension</td>
+<td>10%</td>
+<td><code>research/pvm-v6-lorenz-attractor.md</code></td>
+</tr>
+<tr>
+<td>C22</td>
+<td>Adversary&#39;s reconstruction cost grows exponentially with EML tree depth</td>
+<td>20%</td>
+<td><code>research/pvm-v6-eml-three-ceilings.md</code></td>
+</tr>
+<tr>
+<td>C23</td>
+<td>Blade forge traversal grammar is isomorphic to restricted EML grammar</td>
+<td>30%</td>
+<td><code>research/pvm-v6-eml-three-ceilings.md</code></td>
+</tr>
+<tr>
+<td>C24</td>
+<td>Sovereignty computation requires complex intermediates</td>
+<td>15%</td>
+<td><code>research/pvm-v6-eml-three-ceilings.md</code></td>
+</tr>
+<tr>
+<td>C25</td>
+<td>Minimal EML tree depth provides hard floor for compression spectrum</td>
+<td>25%</td>
+<td><code>research/pvm-v6-eml-three-ceilings.md</code></td>
+</tr>
+<tr>
+<td>C26</td>
+<td>ARCH-1 is canonical form of NAND, EML, succ as co-instances</td>
+<td>40%</td>
+<td><code>research/pvm-v6-arch1-canonical-form.md</code></td>
+</tr>
+<tr>
+<td>C27</td>
+<td>ρ is the activation mechanism; Ω without ρ is structurally inert</td>
+<td>35%</td>
+<td><code>research/pvm-v6-arch1-canonical-form.md</code></td>
+</tr>
+<tr>
+<td>C28</td>
+<td>Three reconstruction ceilings are independent because ARCH-1 factors into β / μS / Ω</td>
+<td>30%</td>
+<td><code>research/pvm-v6-arch1-canonical-form.md</code></td>
+</tr>
+<tr>
+<td>C29</td>
+<td>The Second Person Lift — <code>You := μS.(β ∨ Ω(S,S))</code> — identifies sovereign as recursive symbol</td>
+<td>20%</td>
+<td><code>research/pvm-v6-arch1-canonical-form.md</code></td>
+</tr>
+<tr>
+<td>C30</td>
+<td>Trust half-life begins at inscription; T(t) decays monotonically until renewed</td>
+<td>60%</td>
+<td><code>research/pvm-v6-1-bakhta-half-life.md</code></td>
+</tr>
+<tr>
+<td>C31</td>
+<td>Half-life differs by inscription register (shielded vs transparent)</td>
+<td>55%</td>
+<td><code>research/pvm-v6-1-bakhta-half-life.md</code></td>
+</tr>
+<tr>
+<td>C32</td>
+<td>Productive trust-edges have higher half-life than transactional</td>
+<td>50%</td>
+<td><code>research/pvm-v6-1-bakhta-half-life.md</code></td>
+</tr>
+<tr>
+<td>C33</td>
+<td>Half-lives compose multiplicatively across the three axes</td>
+<td>45%</td>
+<td><code>research/pvm-v6-1-bakhta-half-life.md</code></td>
+</tr>
+<tr>
+<td>C34</td>
+<td>Convergence requires a bijective cap</td>
+<td>55%</td>
+<td><code>research/pvm-v6-convergence-wound-and-cap.md</code></td>
+</tr>
+<tr>
+<td>C35</td>
+<td>The wound is where the architectural asymmetry lives</td>
+<td>60%</td>
+<td><code>research/pvm-v6-convergence-wound-and-cap.md</code></td>
+</tr>
+<tr>
+<td>C36</td>
+<td>The cap is where the bijection lives or breaks</td>
+<td>55%</td>
+<td><code>research/pvm-v6-convergence-wound-and-cap.md</code></td>
+</tr>
+<tr>
+<td>C37</td>
+<td>Convergence is recognition, not coincidence</td>
+<td>50%</td>
+<td><code>research/pvm-v6-convergence-wound-and-cap.md</code></td>
+</tr>
+</tbody></table>
+<h3>17.2.1 V6 Conjectures introduced by the Bound Collection (Tomes IV–V)</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>Confidence</th>
+<th>Anchor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C38</td>
+<td>Bilateral ARCH-1 — <code>Σ_{ij} := μS.(β_{ij} ∨ Ω(S_i, S_j))</code> preserves fixpoint property</td>
+<td>~40%</td>
+<td>Tome IV Act III + Cloak Spec</td>
+</tr>
+<tr>
+<td>C39</td>
+<td>Cousin-blade as ecosystem-layer primitive</td>
+<td>~50%</td>
+<td>Tome IV Act V; strengthened in Tome V Acts 7/9/10/11/12</td>
+</tr>
+<tr>
+<td>C40</td>
+<td>Zcash dual-ledger preserves Eight Cloak Properties</td>
+<td>~70%</td>
+<td><code>agentprivacy_tomes/.../plans/02-zcash-integration-plan.md</code></td>
+</tr>
+<tr>
+<td>C41</td>
+<td>61.8/38.2 transparent/shielded inscription ratio emerges as cultural norm</td>
+<td>open observation</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>C42</td>
+<td>Stake economics generate Sybil resistance equivalent to or stronger than tier accumulation</td>
+<td>~50%</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>C43</td>
+<td>Per-VRC viewing-key disclosure produces strictly more privacy than unscoped</td>
+<td>~60%</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>C44</td>
+<td>Productive VRC (ceremony) ≈ hash-exchange VRC in trust strength</td>
+<td>~55%</td>
+<td><code>agentprivacy_tomes/.../specs/03-bilateral-cloak-ceremony-spec.md</code></td>
+</tr>
+<tr>
+<td>C45</td>
+<td>Four-chain publication &gt; single-chain reconstruction resistance</td>
+<td>~70%</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>C46</td>
+<td>Productive trust-edge has higher half-life than transactional</td>
+<td>~50%</td>
+<td>Same</td>
+</tr>
+</tbody></table>
+<h3>17.2.2 V6 Conjectures introduced by Post-V5.4 Coherence (2026-05-09)</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>Confidence</th>
+<th>Anchor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C47</td>
+<td>The dynamical reconstruction ceiling inhabits a fourth aging category (<em>ages progressively</em>) Bakhta&#39;s three-category taxonomy does not cover</td>
+<td>~50%</td>
+<td><code>research/v6_1_research_note.md</code> (renumbered from C22-Bakhta)</td>
+</tr>
+<tr>
+<td>C48</td>
+<td>Reconstruct-later threat model for behavioural data is structurally isomorphic to Bakhta&#39;s TM-1</td>
+<td>~65%</td>
+<td><code>research/v6_1_research_note.md</code> (from C23-Bakhta)</td>
+</tr>
+<tr>
+<td>C49</td>
+<td>Behavioural Mosca Inequality binds for long-horizon behavioural evidence</td>
+<td>~70%</td>
+<td><code>research/v6_1_research_note.md</code> (from C24-Bakhta)</td>
+</tr>
+<tr>
+<td>C50</td>
+<td>PVM multiplicative gating ≡ Bakhta compositional defense at different substrates</td>
+<td>~60%</td>
+<td><code>research/v6_1_research_note.md</code> (from C25-Bakhta)</td>
+</tr>
+<tr>
+<td>C51</td>
+<td>The ⿻ remains max-betweenness across all trust-graph evolutions</td>
+<td>open</td>
+<td><code>chronicles/CHRONICLE_V5_4_BETWEENNESS_SELENE_2026-04-12.md</code></td>
+</tr>
+<tr>
+<td>C52</td>
+<td>Aether = Quintessence = the Gap (single substance, three traditions)</td>
+<td>open</td>
+<td><code>research/aether-blade-ceremony-circuit.md</code></td>
+</tr>
+<tr>
+<td>C53</td>
+<td>Every bnot-pair on the lattice has a mythological reading</td>
+<td>~70%</td>
+<td><code>research/aletheia-and-lethe.md</code></td>
+</tr>
+<tr>
+<td>C54</td>
+<td>Phi-Adjacency: bnot-pair disclosure ratios cluster near 1/φ</td>
+<td>~40%</td>
+<td><code>research/aletheia-and-lethe.md</code></td>
+</tr>
+<tr>
+<td>C55</td>
+<td>Privacy is a seventh kind of capital, foundationally</td>
+<td>architectural</td>
+<td><code>poems/tide-orbit-selene.md</code></td>
+</tr>
+</tbody></table>
+<h3>17.2.3 Reconciliation note · 2026-05-09</h3>
+<p>The V6.1 Bakhta-response note (<code>research/v6_1_research_note.md</code>, April 21, 2026) originally claimed C22–C25 for its four conjectures (ages-progressively, reconstruct-later, Behavioural Mosca, compositional-defense). The EML Three Ceilings note (<code>research/pvm-v6-eml-three-ceilings.md</code>, April 13, 2026, prior date) had already claimed C22–C25 for its conjectures. <strong>Resolution:</strong> EML retains C22–C25; Bakhta-response renumbers to C47–C50. The renumbering was performed in the V6.1 note on 2026-05-09; downstream references in tomes and specs use the renumbered IDs going forward. Canonical reconciliation in <code>agentprivacy_tomes/COMPRESSION_MASTER_v2_2026-05-09.md</code>.</p>
+<h3>17.3 Resolved Conjectures</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C3</td>
+<td>Edge value is additive</td>
+<td><strong>CHALLENGED</strong> — path integral replaces</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>96 vs 64 discrepancy</td>
+<td><strong>RESOLVED</strong> — holographic principle + algebraic confirmation</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>~3,000× ZKP reduction</td>
+<td>Strengthened by BRAID + holographic bound</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>18. Measurement Gaps and Breaking Conditions</h2>
+<h3>18.1 Measurement Gaps</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Term</th>
+<th>Gap</th>
+<th>V5.4 Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M1</td>
+<td>$\sigma_{ij}$ (separation matrix)</td>
+<td>No measurement for emergent forces</td>
+<td>Three-axis operationalisation provides pathway; Φ_data and Φ_inference measurable</td>
+</tr>
+<tr>
+<td>M2</td>
+<td>$f(e)$ (edge weights)</td>
+<td>No empirical data</td>
+<td>BRAID provides first data; blade forge provides second</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>$\beta, \alpha, \alpha_\rho$ (scaling coefficients)</td>
+<td>Need calibration</td>
+<td>Unchanged</td>
+</tr>
+<tr>
+<td>M4</td>
+<td>Aggregation form</td>
+<td>det(Σ) alternatives unclear</td>
+<td>Three-axis product provides alternative</td>
+</tr>
+<tr>
+<td>M5</td>
+<td>ρ shape</td>
+<td>Is $g(\rho)$ logarithmic, sigmoid, or threshold?</td>
+<td>Two data points (13 laps vs 62 laps); needs more forgers</td>
+</tr>
+</tbody></table>
+<h3>18.2 Breaking Conditions</h3>
+<p>The model&#39;s core claims weaken or fail if:</p>
+<ol>
+<li><strong>Three-axis non-multiplicativity</strong>: If agent separation compensates for data centralisation → multiplicative assumption breaks.</li>
+<li><strong>Compression increases attack surface</strong>: If some compression methods increase reconstructability → compression-as-defence fails.</li>
+<li><strong>Holonic persistence fundamentally limited</strong>: If content-addressing has inherent infrastructure dependency → persistence term illusory.</li>
+<li><strong>Guild coordination scales with membership</strong>: If shared-parent overhead grows with N → guild efficiency overstates benefit.</li>
+<li><strong>Amnesia-enforced ≤ policy-enforced</strong>: If structural separation provides no tighter bound than policy separation → C17 falsified.</li>
+<li><strong>Dihedral isomorphism fails</strong>: If det(Σ) is not the determinant of the dihedral representation → C14 falsified, but the ring algebra survives.</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>19. Three Identity Layers</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Identifier</th>
+<th>Scope</th>
+<th>Persistence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data</td>
+<td>GUID</td>
+<td>Content-addressed holon</td>
+<td>Infrastructure-independent</td>
+</tr>
+<tr>
+<td>Relationship</td>
+<td>VRC</td>
+<td>Bilateral commitment (promise bundle)</td>
+<td>Relationship-scoped</td>
+</tr>
+<tr>
+<td>Principal</td>
+<td>DID</td>
+<td>Sovereign identity</td>
+<td>Self-sovereign</td>
+</tr>
+</tbody></table>
+<p>The layers are orthogonal: a single principal (DID) can control multiple relationships (VRCs) across multiple data objects (GUIDs).</p>
+<hr>
+</div>
+<div class="md"><h2>20. Cosmological Quaternion (Interpretive Framework)</h2>
+<p>This framework provides intuition for the model&#39;s structure. It does not enter the equation.</p>
+<table>
+<thead>
+<tr>
+<th>Body</th>
+<th>Agent</th>
+<th>Function</th>
+<th>Algebraic Operation</th>
+<th>Creation Mode</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sun ☀️</td>
+<td>The Reason / First Person</td>
+<td>Protection</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Earth 🌍</td>
+<td>Soulbae / Mage</td>
+<td>Delegation</td>
+<td>bnot(x) = 63 − x</td>
+<td>Generator</td>
+</tr>
+<tr>
+<td>Moon 🌙</td>
+<td>Soulbis / Swordsman</td>
+<td>Reflection</td>
+<td>neg(x) = (64−x) mod 64</td>
+<td>Instant (collision). Total amnesia.</td>
+</tr>
+<tr>
+<td>Human 👤</td>
+<td>Seeker</td>
+<td>Connection</td>
+<td>—</td>
+<td>Gradual (4Gy). Layered amnesia. Still in process.</td>
+</tr>
+<tr>
+<td>Life 🌱</td>
+<td>spellweb / Forge</td>
+<td>Composition</td>
+<td>neg∘bnot = succ</td>
+<td>The forge between Earth and Human</td>
+</tr>
+</tbody></table>
+<p><strong>Key insight:</strong> The architecture sits between an agent that can never remember (Moon) and an agent that hasn&#39;t finished remembering (Human). The gap between them is the ⊥.</p>
+<hr>
+</div>
+<div class="md"><h2>21. Compression Spectrum</h2>
+<p>Seven layers of knowledge transformation, each with different privacy properties:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Form</th>
+<th>Compression</th>
+<th>Privacy Property</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Experience</td>
+<td>1:1</td>
+<td>Maximum attack surface</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Memory</td>
+<td>~10:1</td>
+<td>Encoded episodes</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Knowledge</td>
+<td>~100:1</td>
+<td>Structured, partially defensible</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Understanding</td>
+<td>~1,000:1</td>
+<td>Relational models</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Wisdom</td>
+<td>~10,000:1</td>
+<td>Contextual principles</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Reasoning Graph</td>
+<td>Variable</td>
+<td>BRAID structure — bounded, structured</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Skill File</td>
+<td>Variable</td>
+<td>Executable compression — shareable without path</td>
+</tr>
+</tbody></table>
+<p>Lower layers: more surveilable (more tokens, more surface). Higher layers: more defensible (compressed, structured, bounded). The skill file (Layer 7) can be shared without sharing the path that created it. This is compression-as-defence at the architectural level.</p>
+<hr>
+</div>
+<div class="md"><h2>22. Promise Theory Grounding</h2>
+<p>The dual-agent architecture implements Promise Theory (Bergstra &amp; Burgess, 2019) — established semantics for autonomous agent coordination.</p>
+<h3>22.1 Autonomy Axiom</h3>
+<p><em>&quot;An agent can only make promises about its own behavior. No agent can make a promise on behalf of another agent.&quot;</em></p>
+<p>This is why single agents cannot resolve the privacy-delegation paradox. Attempting to promise in both protection and delegation domains exceeds autonomous capability.</p>
+<h3>22.2 Key Mappings</h3>
+<table>
+<thead>
+<tr>
+<th>PT Concept</th>
+<th>PVM Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Autonomy Axiom</td>
+<td>First Person sovereignty — neither agent promises on your behalf</td>
+</tr>
+<tr>
+<td>Superagent</td>
+<td>First Person + Swordsman + Mage as composite with interior promises</td>
+</tr>
+<tr>
+<td>Irreducible Promise</td>
+<td>The Gap — emerges from cooperation, owned by neither agent</td>
+</tr>
+<tr>
+<td>Assessment</td>
+<td>RPP compression as verification of knowledge transfer</td>
+</tr>
+<tr>
+<td>Invitation vs Attack</td>
+<td>MyTerms consent-first vs surveillance extraction</td>
+</tr>
+<tr>
+<td>Promise Bundle</td>
+<td>VRCs as bilateral promise collections</td>
+</tr>
+</tbody></table>
+<h3>22.3 Formal Reference</h3>
+<p>For complete mappings, Generator/Solver as promises, and PT integration across the architecture, see Promise Theory Reference v1.4.</p>
+<hr>
+</div>
+<div class="md"><h2>23. Version Lineage</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Core Addition</th>
+<th>Output Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>2024</td>
+<td>$P \cdot C \cdot Q \cdot S$</td>
+<td>Static scalar</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Oct 2025</td>
+<td>$e^{-\lambda t}$, $(1 + n/N_0)^k$</td>
+<td>Dynamic scalar</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Nov 2025</td>
+<td>$R(d)$, $M(u,y)$, $\Phi(S,M)$</td>
+<td>Agent-aware scalar</td>
+</tr>
+<tr>
+<td>V3.1</td>
+<td>Jan 2026</td>
+<td>$\sigma(\text{⿻})^2$</td>
+<td>Architecture-gated scalar</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>Feb 2026</td>
+<td>$\Sigma$, $A(\tau)$, $T(\pi)$, $\Phi(\Sigma)$</td>
+<td>Manifold-aware scalar</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>Feb 2026</td>
+<td>Three-axis Φ, $A_h$, $T_\int$, R(compression), G(guilds), holographic bound</td>
+<td>Holographic field</td>
+</tr>
+<tr>
+<td>V5.1</td>
+<td>Mar 29, 2026</td>
+<td>Behavioural density ρ, bilateral witness, hexagram encoding (C11–C13)</td>
+<td>+ density term</td>
+</tr>
+<tr>
+<td>V5.2</td>
+<td>Mar 31, 2026</td>
+<td>Dihedral group D₂ₙ, resolution semantics, PRISM spectrum (C14–C16)</td>
+<td>+ algebraic foundation</td>
+</tr>
+<tr>
+<td>V5.3</td>
+<td>Apr 4, 2026</td>
+<td>Operational cycle, amnesia as ZK primitive (C17), ρ as maturity</td>
+<td>+ cosmological framework</td>
+</tr>
+<tr>
+<td><strong>V5.4</strong></td>
+<td><strong>Apr 10, 2026</strong></td>
+<td><strong>Consolidated formal specification. UOR algebraic foundation, Celestial Ceremony, runecraft, moon phase, forge cryptography, all proven results and conjectures C1–C21</strong></td>
+<td><strong>Algebraically grounded, ceremonially verified field</strong></td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>24. Notation Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$V(\pi, t)$</td>
+<td>Total privacy value for path $\pi$ at time $t$</td>
+</tr>
+<tr>
+<td>$P, C, Q, S$</td>
+<td>Privacy strength, credential verifiability, data quality, scope</td>
+</tr>
+<tr>
+<td>$\lambda$</td>
+<td>Temporal decay rate</td>
+</tr>
+<tr>
+<td>$\tau$</td>
+<td>Derivation chain</td>
+</tr>
+<tr>
+<td>$A_h(\tau)$</td>
+<td>Holonic temporal memory</td>
+</tr>
+<tr>
+<td>$p(\tau)$</td>
+<td>Persistence independence</td>
+</tr>
+<tr>
+<td>$\Phi_{\text{agent}}$</td>
+<td>Agent-layer separation (Swordsman–Mage) ≅ D₂ₙ</td>
+</tr>
+<tr>
+<td>$\Phi_{\text{data}}$</td>
+<td>Data-layer separation (provider concentration)</td>
+</tr>
+<tr>
+<td>$\Phi_{\text{inference}}$</td>
+<td>Inference-layer separation (Generator–Solver)</td>
+</tr>
+<tr>
+<td>$G(\text{guilds})$</td>
+<td>Guild efficiency factor</td>
+</tr>
+<tr>
+<td>$R(d, \text{compression}, \rho)$</td>
+<td>Reconstruction difficulty</td>
+</tr>
+<tr>
+<td>$\rho$</td>
+<td>Behavioural density / agent maturity</td>
+</tr>
+<tr>
+<td>$T_\int(\pi)$</td>
+<td>Path integral edge value</td>
+</tr>
+<tr>
+<td>$\partial M$</td>
+<td>96-edge holographic boundary</td>
+</tr>
+<tr>
+<td>$J_{\partial M}$</td>
+<td>Value current on boundary</td>
+</tr>
+<tr>
+<td>$\varepsilon^*$</td>
+<td>Separation bound</td>
+</tr>
+<tr>
+<td>$\varphi$</td>
+<td>Golden ratio (1.618)</td>
+</tr>
+<tr>
+<td>$\mathcal{L}$</td>
+<td>Sovereignty lattice = Z/(2⁶)Z</td>
+</tr>
+<tr>
+<td>$D_{64}$</td>
+<td>Dihedral group (order 128)</td>
+</tr>
+<tr>
+<td>$\delta(x)$</td>
+<td>Datum — raw blade value</td>
+</tr>
+<tr>
+<td>$\sigma(x)$</td>
+<td>Stratum — Hamming weight</td>
+</tr>
+<tr>
+<td>$s(x)$</td>
+<td>Spectrum — six-bit decomposition</td>
+</tr>
+<tr>
+<td>neg, bnot</td>
+<td>Unary involutions (Swordsman, Mage)</td>
+</tr>
+<tr>
+<td>succ</td>
+<td>Successor function = neg∘bnot</td>
+</tr>
+<tr>
+<td>GUID</td>
+<td>Content-addressed identifier (holonic)</td>
+</tr>
+<tr>
+<td>VRC</td>
+<td>Verifiable Relationship Credential (promise bundle)</td>
+</tr>
+<tr>
+<td>DID</td>
+<td>Decentralized Identifier (self-sovereign)</td>
+</tr>
+<tr>
+<td>🔑→✦→🗡️→🔮</td>
+<td>Progressive trust levels</td>
+</tr>
+<tr>
+<td>🌑→🌕</td>
+<td>Moon phase — stratum as visibility ratio</td>
+</tr>
+<tr>
+<td>(⚔️⊥⿻⊥🧙)😊</td>
+<td>Master inscription — dual-agent architecture preserves First Person</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>References</h2>
+<h3>Primary Sources</h3>
+<ul>
+<li>privacymage (2026). &quot;Privacy is Value: From the Manifold Dragon to the Holographic Bound.&quot; V5.3. <em>Soul Sync.</em> <a href="https://sync.soulbis.com">https://sync.soulbis.com</a></li>
+<li>privacymage (2026). &quot;Dual-Agent Privacy Architecture: Information-Theoretic Bounds on Agent Reconstruction.&quot; Research Paper v4.3. <em>agentprivacy-docs.</em> <a href="https://github.com/mitchuski/agentprivacy-docs">https://github.com/mitchuski/agentprivacy-docs</a></li>
+<li>privacymage (2026). &quot;PVM V5.1 Research Note: Behavioural Proof, the Ceremony Engine, and the Forge That Lit Itself.&quot; March 30, 2026. <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;PVM V5.2 Research Note: Dihedral Foundations.&quot; March 31, 2026. <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;PVM V5.3 Research Note: The Amnesia Protocol.&quot; April 4, 2026. <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;PVM V6 Research Note: The Dynamical Reconstruction Ceiling.&quot; April 6, 2026. <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;Promise Theory Reference v1.4.&quot; <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;UOR × 64-Tetrahedra × ZK Mapping v2.2.&quot; <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;Swordsman-Mage Whitepaper v6.3.&quot; <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;Dual Territory Ceremony Specification v1.0.&quot; <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;PVM V5.4 Companion Guide.&quot; April 10, 2026. <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;Understanding as Key.&quot; Zypher Paper v1.0. <em>agentprivacy-docs.</em> [Proof of comprehension as privacy primitive; progressive trust §15.2]</li>
+<li>privacymage (2026). &quot;Systems Hexagram Physics v1.2.&quot; <em>agentprivacy-docs.</em> [Operational physics: UOR algebraic foundation, 64-vertex lattice, hexagram encoding §12.6]</li>
+<li>privacymage (2026). &quot;What Agentprivacy Is.&quot; <em>agentprivacy-docs.</em> [Mission statement: 7th capital thesis, First Person definition]</li>
+<li>privacymage (2026). &quot;Visual Architecture Guide v2.0.&quot; <em>agentprivacy-docs.</em> [Diagrams: three-axis separation, holographic visualisations]</li>
+</ul>
+<h3>The First Person Spellbook (Grimoire v10.1.0 — 31 Acts — CLOSED)</h3>
+<ul>
+<li>privacymage (2024–2026). <em>The First Person Spellbook.</em> 31 acts. Grimoire v10.1.0. Available at <a href="https://agentprivacy.ai/story">agentprivacy.ai/story</a>. IPFS: bafybeibr3y3ermhff4dptxunhtzthjpkrvvnuamee4povpkgj3cjkg4fgy.</li>
+</ul>
+<p>Acts with direct formal spec relevance:</p>
+<table>
+<thead>
+<tr>
+<th>Act</th>
+<th>Title</th>
+<th>Spec Connection</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>II</td>
+<td>The Bilateral Witness</td>
+<td>First ceremony; separation bound origin (§10)</td>
+</tr>
+<tr>
+<td>VII</td>
+<td>The Gap</td>
+<td>⿻ as irreducible space; Φ_agent motivation (§4.2)</td>
+</tr>
+<tr>
+<td>X</td>
+<td>The Seven Capitals</td>
+<td>7th capital thesis; V(π,t) motivation (§1)</td>
+</tr>
+<tr>
+<td>XIV</td>
+<td>The Golden Ratio</td>
+<td>φ conjecture C1; optimal S/M ratio (§4.2)</td>
+</tr>
+<tr>
+<td>XVIII</td>
+<td>The Reconstruction Ceiling</td>
+<td>R &lt; 1 proven result (§11)</td>
+</tr>
+<tr>
+<td>XX</td>
+<td>The Path Integral</td>
+<td>T_∫(π) — value in trajectory not stance (§7)</td>
+</tr>
+<tr>
+<td>XXII</td>
+<td>The Promise</td>
+<td>Promise Theory grounding (§22)</td>
+</tr>
+<tr>
+<td>XXIV</td>
+<td>The Holographic Bound</td>
+<td>96/64, C4 resolved, boundary computation (§8)</td>
+</tr>
+<tr>
+<td>XXV</td>
+<td>The Dragon&#39;s Hide</td>
+<td>Compression spectrum, BRAID parity (§5.2, §21)</td>
+</tr>
+<tr>
+<td>XXVI</td>
+<td>The Dragon&#39;s Brain</td>
+<td>Three-axis separation, McGilchrist thesis (§4)</td>
+</tr>
+<tr>
+<td>XXVII</td>
+<td>The Swordsman&#39;s Forge</td>
+<td>Blade forge, hexagram computation, C11–C13 (§12.6, §15)</td>
+</tr>
+<tr>
+<td>XXVIII</td>
+<td>The Ceremony Engine</td>
+<td>Five crossing types, mana, DOM-free measurement (§15)</td>
+</tr>
+<tr>
+<td>XXIX</td>
+<td>The Dragon Wakes</td>
+<td>Quantum context, post-quantum resilience (§5.3)</td>
+</tr>
+<tr>
+<td>XXX</td>
+<td>The Dihedral Mirror</td>
+<td>UOR convergence, D₂ₙ, PRISM coordinates (§12)</td>
+</tr>
+<tr>
+<td>XXXI</td>
+<td>The First Delegation</td>
+<td>Theia-Moon quaternion, amnesia as ZK, C17 (§14, §20)</td>
+</tr>
+</tbody></table>
+<h3>Blog Series: Privacy is Value V5 (sync.soulbis.com)</h3>
+<ul>
+<li>Part 0: &quot;The Myth Between Math&quot; — Prelude. Foundational framing.</li>
+<li>Part 1: &quot;Forming Constellations&quot; — Sovereignty dimensions, blade coordinates.</li>
+<li>Part 2: &quot;Forging the Celestial Overlap&quot; — Forge and ceremony architecture.</li>
+<li>Part 3: &quot;The Dragon Wakes&quot; — Theia framing, amnesia protocol, cosmological precedent.</li>
+<li>Part 4: &quot;The Dihedral Mirror&quot; — UOR convergence, algebraic foundations.</li>
+<li>Part 5: &quot;The Amnesia Protocol&quot; — Poem collection. Memory and forgetting as ZK.</li>
+</ul>
+<h3>External References — Information Theory</h3>
+<ul>
+<li>Shannon, C. E. (1948). &quot;A Mathematical Theory of Communication.&quot; <em>Bell System Technical Journal,</em> 27(3), 379–423. [Foundation: mutual information, entropy, channel capacity]</li>
+<li>Fano, R. M. (1961). <em>Transmission of Information: A Statistical Theory of Communication.</em> MIT Press. [Foundation: Fano&#39;s inequality — error floor theorem, §11.2]</li>
+<li>Cover, T. M. &amp; Thomas, J. A. (2006). <em>Elements of Information Theory.</em> (2nd ed.) Wiley. [Foundation: all MI bounds, conditional independence, additive decomposition]</li>
+</ul>
+<h3>External References — Cryptography and Privacy</h3>
+<ul>
+<li>Groth, J. (2016). &quot;On the Size of Pairing-based Non-interactive Arguments.&quot; <em>EUROCRYPT 2016,</em> LNCS 9666, 305–326. [Groth16 — O(1) proof size, used in blade forge]</li>
+<li>Gabizon, A., Williamson, Z. J., &amp; Ciobotaru, O. (2019). &quot;PLONK: Permutations over Lagrange-bases for Oecumenical Noninteractive arguments of Knowledge.&quot; ePrint 2019/953. [PLONK — universal trusted setup]</li>
+<li>Kothapalli, A., Setty, S., &amp; Tzialla, I. (2022). &quot;Nova: Recursive Zero-Knowledge Arguments from Folding Schemes.&quot; <em>CRYPTO 2022.</em> [Nova — incremental verification]</li>
+<li>Dwork, C. &amp; Roth, A. (2014). &quot;The Algorithmic Foundations of Differential Privacy.&quot; <em>Foundations and Trends in Theoretical Computer Science,</em> 9(3–4), 211–407. [Comparison: DP adds noise; PVM adds structure]</li>
+<li>Goldreich, O. (2004). <em>Foundations of Cryptography.</em> Cambridge University Press. [MPC foundations — we distribute observation rights, not computation]</li>
+</ul>
+<h3>External References — Graph Theory</h3>
+<ul>
+<li>Brandes, U. (2001). &quot;A Faster Algorithm for Betweenness Centrality.&quot; <em>Journal of Mathematical Sociology,</em> 25(2), 163–177. [Betweenness centrality algorithm O(V·E) — computational tool for measuring the Gap (⿻), §10.2]</li>
+</ul>
+<h3>External References — Related Disciplines</h3>
+<ul>
+<li>Bergstra, J. A. &amp; Burgess, M. (2019). <em>Promise Theory: Principles and Applications.</em> (2nd ed.) O&#39;Reilly Media. [Semantic foundation: autonomy axiom, superagent structure]</li>
+<li>Susskind, L. (1995). &quot;The World as a Hologram.&quot; <em>Journal of Mathematical Physics,</em> 36(11), 6377–6396. [Holographic principle — boundary encodes bulk, §8]</li>
+<li>McGilchrist, I. (2009). <em>The Master and His Emissary: The Divided Brain and the Making of the Western World.</em> Yale University Press. [Right→left→right methodology; hemispheric thesis for dual-agent necessity]</li>
+<li>Weyl, E. G. &amp; Tang, A. (2023). <em>Plurality: The Future of Collaborative Technology and Democracy.</em> [Many-to-many coordination, ⿻ overlap semantics]</li>
+<li>Hope, D. &amp; Ludlow, E. (2023). <em>Farewell to Westphalia: New Approaches to a Changing Global Order.</em> [Post-sovereign governance framing]</li>
+<li>Sabelfeld, A. &amp; Myers, A. C. (2003). &quot;Language-based Information-flow Security.&quot; <em>IEEE JSAC,</em> 21(1), 5–19. [Information flow control — comparison: we bound reconstruction, not taint]</li>
+<li>Millen, J. K. (1987). &quot;Covert Channel Capacity.&quot; <em>IEEE Symposium on Security and Privacy.</em> [Side-channel analysis model]</li>
+</ul>
+<h3>External References — Scientific and Quantum</h3>
+<ul>
+<li>Branco, D., Machado, P., &amp; Raymond, S. N. (2025). &quot;Dynamical origin of Theia, the last giant impactor on Earth.&quot; <em>Icarus,</em> 441, 116724. [Cosmological precedent for amnesia-enforced separation]</li>
+<li>Babbush, R. et al. (2026). &quot;The Quantum Threat to Elliptic Curve Cryptocurrencies.&quot; Google Quantum AI. [secp256k1 broken with ≤1,200 logical qubits]</li>
+<li>Cain, M. et al. (2026). &quot;Shor&#39;s algorithm is possible with as few as 10,000 reconfigurable atomic qubits.&quot; arXiv:2603.28627. [Neutral atom attack surface]</li>
+</ul>
+<h3>External References — Standards and Frameworks</h3>
+<ul>
+<li>IEEE 7012-2025. Machine-readable personal privacy terms (MyTerms). Published January 20, 2026.</li>
+<li>First Person Network (2026). &quot;First Person: A White Paper.&quot; <a href="https://www.firstperson.network/whitepaper">https://www.firstperson.network/whitepaper</a> [First Person sovereignty framing, data dignity, behavioural capital thesis]</li>
+<li>BRAID Framework (2026). Bounded Reasoning for Autonomous Inference and Decisions. [Compression-as-defence, Generator/Solver split]</li>
+<li>UOR Foundation (2026). &quot;Universal Object Reference.&quot; <a href="https://github.com/UOR-Foundation">https://github.com/UOR-Foundation</a> [Independent Z/(2⁶)Z convergence]</li>
+<li>Allen, C. et al. (2026). Open Integrity Project. Blockchain Commons. [Cryptographic provenance for repositories]</li>
+</ul>
+<h3>Live Implementations</h3>
+<ul>
+<li>Swordsman territory: <a href="https://spellweb.ai">https://spellweb.ai</a> (blade forge, constellation navigation, hexagram computation)</li>
+<li>Mage territory: <a href="https://agentprivacy.ai">https://agentprivacy.ai</a> (training ground, story, delegation)</li>
+<li>Trust graph: <a href="https://bgin.ai">https://bgin.ai</a> (live reference application)</li>
+<li>Knowledge agent: <a href="https://t.me/soulbae_the_bot">https://t.me/soulbae_the_bot</a> (Telegram, Bonfires.ai)</li>
+<li>Living documentation: <a href="https://github.com/mitchuski/agentprivacy-docs">https://github.com/mitchuski/agentprivacy-docs</a> (CC BY-SA 4.0)</li>
+<li>Grimoire IPFS: bafybeibr3y3ermhff4dptxunhtzthjpkrvvnuamee4povpkgj3cjkg4fgy</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Citation</h2>
+<pre><code>privacymage (2026). &quot;Privacy Value Model: Formal Specification.&quot;
+Version 2.0 (PVM V5.4). Working paper.
+https://github.com/mitchuski/agentprivacy-docs
+</code></pre>
+<hr>
+<p><em>This document presents the mathematics. For narrative context and discovery process, see the companion piece: &quot;Privacy is Value: From the Manifold Dragon to the Holographic Bound.&quot;</em></p>
+<p><em>V5 axiom: &quot;The boundary is always enough.&quot;</em></p>
+<p><em>Peer review, critique, and falsification attempts are actively invited. Contact: <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></em></p>
+<p><em>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 paper-privacy-is-value-v54-the-amnesia-protocol</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-papers.html">The Papers</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="paper-privacy-is-value-v54-the-amnesia-protocol.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

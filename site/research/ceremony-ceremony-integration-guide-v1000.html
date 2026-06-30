@@ -1,0 +1,699 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ceremony — Ceremony Integration Guide v10.0.0 · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Ceremony — Ceremony Integration Guide v10.0.0</span></div>
+  <article><div class="md"><h1>Ceremony Integration Guide v10.0.0</h1>
+</div>
+<div class="md"><p><strong>Privacymage Grimoire Update: &quot;Ceremony Complete&quot; Edition</strong></p>
+<p><strong>Date:</strong> April 5, 2026<br><strong>Author:</strong> 0xagentprivacy<br><strong>Master inscription:</strong> <code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<hr>
+</div>
+<div class="md"><h2>Overview</h2>
+<p>This guide provides complete instructions for integrating the Ceremony architecture (Acts XXVII-XXXI) across the 0xagentprivacy ecosystem. The ceremony acts complete the First Person spellbook and establish the cosmological foundation of the dual-agent architecture.</p>
+<p><strong>Version Alignment:</strong></p>
+<ul>
+<li>Grimoire: v9.4.0 → v10.0.0 &quot;Ceremony Complete&quot;</li>
+<li>Skills: v5.3.0 (current)</li>
+<li>Acts: 31 total (I-XXXI complete)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Part 1: Repository Map</h2>
+<h3>Primary Repositories</h3>
+<table>
+<thead>
+<tr>
+<th>Repository</th>
+<th>Path</th>
+<th>Purpose</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>agentprivacy_master</strong></td>
+<td><code>C:\Users\mitch\agentprivacy_master</code></td>
+<td>Main webapp (Next.js), story hosting, grimoire</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td><strong>agentprivacy-skills</strong></td>
+<td><code>C:\Users\mitch\agentprivacy-skills</code></td>
+<td>Skills v5 architecture (86 skills, 42 personas)</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td><strong>spellweb</strong></td>
+<td><code>C:\Users\mitch\spellweb</code></td>
+<td>Swordsman Territory (topology, blade forge)</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td><strong>agentprivacy-docs</strong></td>
+<td><code>C:\Users\mitch\agentprivacy-docs</code></td>
+<td>Documentation, specs, chronicles</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td><strong>swordsman-blade</strong></td>
+<td><code>C:\Users\mitch\swordsman-blade</code></td>
+<td>Swordsman extension architecture</td>
+<td>MEDIUM</td>
+</tr>
+<tr>
+<td><strong>zk blades forge</strong></td>
+<td><code>C:\Users\mitch\zk blades forge</code></td>
+<td>ZK proof circuits, blade generation</td>
+<td>MEDIUM</td>
+</tr>
+</tbody></table>
+<h3>Shared Files (Must Stay Synchronized)</h3>
+<p>These files exist in multiple repos and must be identical:</p>
+<pre><code>privacymage_grimoire_v9_4_0_you_are_the_light.json  →  v10.0.0 (update)
+DUAL_TERRITORY_CEREMONY_SPEC_v1.md                   →  Already synced
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Part 2: The Ceremony Acts</h2>
+<h3>Act Summary Table</h3>
+<table>
+<thead>
+<tr>
+<th>Act</th>
+<th>Title</th>
+<th>Core Concept</th>
+<th>Skills Introduced</th>
+<th>Personas Activated</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>XXVII</strong></td>
+<td>The Swordsman&#39;s Forge</td>
+<td>Blade creation, hexagram mapping</td>
+<td><code>blade-forge</code>, <code>hexagram-convergence</code></td>
+<td><code>forgemaster</code></td>
+</tr>
+<tr>
+<td><strong>XXVIII</strong></td>
+<td>The Ceremony Engine</td>
+<td>Pretext measurement, mana economy</td>
+<td><code>ceremony-engine</code>, <code>pretext-measurement</code>, <code>mana-economy</code></td>
+<td><code>ceremonist</code></td>
+</tr>
+<tr>
+<td><strong>XXIX</strong></td>
+<td>The Dragon Wakes</td>
+<td>Quantum threat, 12-qubit break</td>
+<td><code>quantum-defence</code>, <code>dragon-flight</code></td>
+<td><code>quantum-sentinel</code></td>
+</tr>
+<tr>
+<td><strong>XXX</strong></td>
+<td>The Dihedral Mirror</td>
+<td>UOR convergence, 2D→manifold</td>
+<td><code>dual-territory</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>XXXI</strong></td>
+<td>The First Delegation</td>
+<td>Moon-Earth-Sun-Human cosmology</td>
+<td><code>amnesia-protocol</code>, <code>theia-derivation</code>, <code>quaternion-mapping</code>, <code>cosmological-bound</code></td>
+<td><code>moonkeeper</code>, <code>cosmologist</code></td>
+</tr>
+</tbody></table>
+<h3>Act File Locations</h3>
+<pre><code>agentprivacy_master/public/story/
+├── 27-act-xxvii-the-swordsmans-forge.md
+├── 28-act-xxviii-the-ceremony-engine.md
+├── 29-act-xxix-the-dragon-wakes.md
+├── 30-act-xxx-the-dihedral-mirror.md
+└── 31-act-xxxi-the-first-delegation.md
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Part 3: Ceremony → Skills Mapping</h2>
+<h3>Privacy Layer Skills (11)</h3>
+<p>Add ceremony metadata to these foundational skills:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Ceremony Act</th>
+<th>Quaternion Role</th>
+<th>Update Required</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-dragon-flight</code></td>
+<td>XXIX</td>
+<td>—</td>
+<td>Add quantum threshold mechanics</td>
+</tr>
+<tr>
+<td><code>agentprivacy-amnesia-protocol</code></td>
+<td>XXXI</td>
+<td>Moon</td>
+<td>Add Theia metaphor</td>
+</tr>
+<tr>
+<td><code>agentprivacy-network-topology</code></td>
+<td>XXVII</td>
+<td>—</td>
+<td>Link to blade forge topology</td>
+</tr>
+<tr>
+<td><code>agentprivacy-temporal-dynamics</code></td>
+<td>XXVIII</td>
+<td>—</td>
+<td>Add mana flow dynamics</td>
+</tr>
+</tbody></table>
+<h3>Role Skills (54+)</h3>
+<p>Dragon Anatomy skills (V5.2) map directly to ceremony acts:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Ceremony Act</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-blade-forge</code></td>
+<td>XXVII</td>
+<td>Blade creation mechanics</td>
+</tr>
+<tr>
+<td><code>agentprivacy-hexagram-convergence</code></td>
+<td>XXVII</td>
+<td>64-state hexagram mapping</td>
+</tr>
+<tr>
+<td><code>agentprivacy-ceremony-engine</code></td>
+<td>XXVIII</td>
+<td>Bilateral witness protocol</td>
+</tr>
+<tr>
+<td><code>agentprivacy-pretext-measurement</code></td>
+<td>XXVIII</td>
+<td>DOM-free measurement</td>
+</tr>
+<tr>
+<td><code>agentprivacy-mana-economy</code></td>
+<td>XXVIII</td>
+<td>Energy flow mechanics</td>
+</tr>
+<tr>
+<td><code>agentprivacy-quantum-defence</code></td>
+<td>XXIX</td>
+<td>Post-quantum protection</td>
+</tr>
+<tr>
+<td><code>agentprivacy-dual-territory</code></td>
+<td>XXX</td>
+<td>Separation architecture</td>
+</tr>
+<tr>
+<td><code>agentprivacy-theia-derivation</code></td>
+<td>XXXI</td>
+<td>Origin-through-impact</td>
+</tr>
+<tr>
+<td><code>agentprivacy-quaternion-mapping</code></td>
+<td>XXXI</td>
+<td>Four-body celestial structure</td>
+</tr>
+</tbody></table>
+<h3>Meta Skills (3)</h3>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Ceremony Act</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-cosmological-bound</code></td>
+<td>XXXI</td>
+<td>Celestial precedent, architecture recognition</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Part 4: Persona Updates</h2>
+<h3>Existing Personas — Add Ceremony Attributes</h3>
+<p>Update the following persona SKILL.md files with ceremony metadata:</p>
+<h4>Soulbis (Moon)</h4>
+<p><strong>File:</strong> <code>agentprivacy-skills/agentprivacy-skills-v5/persona/agentprivacy-soulbis/SKILL.md</code></p>
+<pre><code class="language-yaml">metadata:
+  ceremony_role: &quot;moon&quot;
+  quaternion_position: &quot;reflection&quot;
+  ceremony_acts: [&quot;XXXI&quot;]
+  celestial_function: &quot;The first Swordsman. Reflects without owning. Amnesia is the protocol.&quot;
+</code></pre>
+<h4>Soulbae (Earth)</h4>
+<p><strong>File:</strong> <code>agentprivacy-skills/agentprivacy-skills-v5/persona/agentprivacy-soulbae/SKILL.md</code></p>
+<pre><code class="language-yaml">metadata:
+  ceremony_role: &quot;earth&quot;
+  quaternion_position: &quot;delegation&quot;
+  ceremony_acts: [&quot;XXXI&quot;]
+  celestial_function: &quot;The first Mage. Connects, delegates, generates complexity.&quot;
+</code></pre>
+<h4>Forgemaster (Forge)</h4>
+<p><strong>File:</strong> <code>agentprivacy-skills/agentprivacy-skills-v5/persona/agentprivacy-forgemaster/SKILL.md</code></p>
+<pre><code class="language-yaml">metadata:
+  ceremony_acts: [&quot;XXVII&quot;]
+  celestial_function: &quot;Blade creation, hexagram oracle, six-dimension activation.&quot;
+</code></pre>
+<h4>Ceremonist (Bridge)</h4>
+<p><strong>File:</strong> <code>agentprivacy-skills/agentprivacy-skills-v5/persona/agentprivacy-ceremonist/SKILL.md</code></p>
+<pre><code class="language-yaml">metadata:
+  ceremony_acts: [&quot;XXVIII&quot;]
+  celestial_function: &quot;Facilitates bilateral witness without merging territories.&quot;
+</code></pre>
+<h4>Moonkeeper (Amnesia)</h4>
+<p><strong>File:</strong> <code>agentprivacy-skills/agentprivacy-skills-v5/persona/agentprivacy-moonkeeper/SKILL.md</code></p>
+<pre><code class="language-yaml">metadata:
+  ceremony_role: &quot;moon_derived&quot;
+  quaternion_position: &quot;structural_amnesia&quot;
+  ceremony_acts: [&quot;XXXI&quot;]
+  celestial_function: &quot;Structural amnesia guardian. Reflection without memory.&quot;
+</code></pre>
+<h4>Cosmologist (Four-Body)</h4>
+<p><strong>File:</strong> <code>agentprivacy-skills/agentprivacy-skills-v5/persona/agentprivacy-cosmologist/SKILL.md</code></p>
+<pre><code class="language-yaml">metadata:
+  ceremony_role: &quot;observer&quot;
+  quaternion_position: &quot;all_four&quot;
+  ceremony_acts: [&quot;XXXI&quot;]
+  celestial_function: &quot;Four-body mapping. Sun-Earth-Moon-Human observer.&quot;
+</code></pre>
+<h3>New Personas — Ceremony Additions (Suggested)</h3>
+<p>Create these new personas to complete ceremony coverage:</p>
+<table>
+<thead>
+<tr>
+<th>Persona</th>
+<th>Wing</th>
+<th>Ceremony Act</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-theia</code></td>
+<td>mage</td>
+<td>XXXI</td>
+<td>Origin witness, the impactor remembered</td>
+</tr>
+<tr>
+<td><code>agentprivacy-dragonwaker</code></td>
+<td>swordsman</td>
+<td>XXIX</td>
+<td>Quantum threat responder</td>
+</tr>
+<tr>
+<td><code>agentprivacy-mirrorkeeper</code></td>
+<td>balanced</td>
+<td>XXX</td>
+<td>Dihedral convergence navigator</td>
+</tr>
+<tr>
+<td><code>agentprivacy-forgecaller</code></td>
+<td>swordsman</td>
+<td>XXVII</td>
+<td>Hexagram oracle, blade initiation</td>
+</tr>
+<tr>
+<td><code>agentprivacy-manaweaver</code></td>
+<td>mage</td>
+<td>XXVIII</td>
+<td>Pretext librarian, measurement-dark operator</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Part 5: Skill YAML Ceremony Metadata</h2>
+<h3>Standard Ceremony Frontmatter</h3>
+<p>Add this ceremony block to all ceremony-related skills:</p>
+<pre><code class="language-yaml">---
+name: agentprivacy-{skill-name}
+description: &gt;
+  {description}
+license: Apache-2.0
+metadata:
+  version: &quot;5.3.1&quot;
+  category: &quot;{swordsman|mage|balanced}&quot;
+  tier: &quot;{0|1|2|3}&quot;
+  # CEREMONY METADATA (new)
+  ceremony:
+    act: &quot;XXVIII&quot;                          # Primary ceremony act
+    acts_secondary: [&quot;XXVII&quot;, &quot;XXIX&quot;]      # Related acts
+    role: &quot;mage&quot;                           # swordsman | mage | bridge
+    quaternion_position: &quot;earth&quot;           # sun | earth | moon | human | life
+    flow_to: [&quot;mana-economy&quot;, &quot;dual-territory&quot;]  # Next skills in narrative
+    flow_from: [&quot;blade-forge&quot;]             # Previous skills in narrative
+    inscription: &quot;☯️🤝 → S⊥M → ceremony&quot;   # Skill spell segment
+---
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Part 6: Repository-Specific Instructions</h2>
+<h3>6.1 agentprivacy-skills</h3>
+<p><strong>Location:</strong> <code>C:\Users\mitch\agentprivacy-skills</code></p>
+<p><strong>Tasks:</strong></p>
+<ol>
+<li><p><strong>Update MAPPING.md</strong> — Add ceremony mapping section</p>
+<pre><code>## Ceremony Act → Skill Mapping
+
+| Act | Skills |
+|-----|--------|
+| XXVII | blade-forge, hexagram-convergence, network-topology |
+| XXVIII | ceremony-engine, pretext-measurement, mana-economy |
+| XXIX | quantum-defence, dragon-flight |
+| XXX | dual-territory |
+| XXXI | amnesia-protocol, theia-derivation, quaternion-mapping, cosmological-bound |
+</code></pre>
+</li>
+<li><p><strong>Update skill frontmatter</strong> — Add ceremony metadata to 15+ skills</p>
+</li>
+<li><p><strong>Update persona files</strong> — Add quaternion positions to 6 personas</p>
+</li>
+<li><p><strong>Create new persona directories</strong> (optional):</p>
+<pre><code>persona/agentprivacy-theia/
+persona/agentprivacy-dragonwaker/
+persona/agentprivacy-mirrorkeeper/
+persona/agentprivacy-forgecaller/
+persona/agentprivacy-manaweaver/
+</code></pre>
+</li>
+<li><p><strong>Sync grimoire</strong> — Copy updated <code>privacymage_grimoire_v10.0.0.json</code></p>
+</li>
+</ol>
+<h3>6.2 agentprivacy_master</h3>
+<p><strong>Location:</strong> <code>C:\Users\mitch\agentprivacy_master</code></p>
+<p><strong>Tasks:</strong></p>
+<ol>
+<li><p><strong>Verify act files</strong> — Confirm all 31 acts in <code>public/story/</code></p>
+<pre><code>public/story/
+├── 01-act-i-venice.md
+├── ...
+└── 31-act-xxxi-the-first-delegation.md
+</code></pre>
+</li>
+<li><p><strong>Update grimoire JSON</strong> — Increment to v10.0.0</p>
+<ul>
+<li>Add ceremony metadata to spellbook entries</li>
+<li>Add quaternion cast mapping to meta section</li>
+</ul>
+</li>
+<li><p><strong>Update content/skills</strong> — If webapp loads skills, sync ceremony metadata</p>
+</li>
+<li><p><strong>Update CLAUDE.md</strong> — Add ceremony architectural invariants</p>
+</li>
+</ol>
+<h3>6.3 spellweb</h3>
+<p><strong>Location:</strong> <code>C:\Users\mitch\spellweb</code></p>
+<p><strong>Tasks:</strong></p>
+<ol>
+<li><p><strong>Sync grimoire</strong> — Copy <code>privacymage_grimoire_v10.0.0.json</code></p>
+</li>
+<li><p><strong>Update SpellCeremony.tsx</strong> — Add ceremony type indicators</p>
+<ul>
+<li>Display active ceremony act during evocation</li>
+<li>Show quaternion position during convergence</li>
+</ul>
+</li>
+<li><p><strong>Update types/graph.ts</strong> — Add ceremony metadata to node types</p>
+<pre><code class="language-typescript">interface CeremonyMetadata {
+  act?: string;        // &quot;XXVII&quot; | &quot;XXVIII&quot; | etc.
+  role?: string;       // &quot;swordsman&quot; | &quot;mage&quot; | &quot;bridge&quot;
+  quaternion?: string; // &quot;sun&quot; | &quot;earth&quot; | &quot;moon&quot; | &quot;human&quot; | &quot;life&quot;
+}
+</code></pre>
+</li>
+<li><p><strong>Link blade forge to Act XXVII</strong> — Display act reference during forging</p>
+</li>
+</ol>
+<h3>6.4 agentprivacy-docs</h3>
+<p><strong>Location:</strong> <code>C:\Users\mitch\agentprivacy-docs</code></p>
+<p><strong>Tasks:</strong></p>
+<ol>
+<li><p><strong>Add this guide</strong> — <code>CEREMONY_INTEGRATION_GUIDE_v10.0.0.md</code> ✅</p>
+</li>
+<li><p><strong>Update DOCUMENTATION_CHRONICLE.md</strong> — Add v10.0.0 entry</p>
+</li>
+<li><p><strong>Create ceremony-mapping.md</strong> — Detailed act→skill→persona matrix</p>
+</li>
+<li><p><strong>Sync grimoire</strong> — Copy <code>privacymage_grimoire_v10.0.0.json</code></p>
+</li>
+<li><p><strong>Copy acts to story/acts/</strong> — Mirror from agentprivacy_master</p>
+</li>
+</ol>
+<h3>6.5 swordsman-blade</h3>
+<p><strong>Location:</strong> <code>C:\Users\mitch\swordsman-blade</code></p>
+<p><strong>Tasks:</strong></p>
+<ol>
+<li><p><strong>Link blade definitions to Act XXVII</strong> — Add ceremony references</p>
+</li>
+<li><p><strong>Update DUAL_EXTENSION_ARCHITECTURE.md</strong> — Reference ceremony acts</p>
+</li>
+<li><p><strong>Sync ceremony spec</strong> — Verify <code>DUAL_TERRITORY_CEREMONY_SPEC_v1.md</code> current</p>
+</li>
+</ol>
+<h3>6.6 zk blades forge</h3>
+<p><strong>Location:</strong> <code>C:\Users\mitch\zk blades forge</code></p>
+<p><strong>Tasks:</strong></p>
+<ol>
+<li><p><strong>Link forge circuits to hexagram mapping</strong> (Act XXVII)</p>
+</li>
+<li><p><strong>Update grimoire</strong> — Sync to v10.0.0</p>
+</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>Part 7: The Quaternion Cast</h2>
+<p>The cosmological foundation from Act XXXI:</p>
+<pre><code>Sun  (protection/reason)  ──orbit──  Earth (delegation/Soulbae)
+       │                                    │
+   collision                            life (process)
+   (instant)                           (4 billion years)
+       │                                    │
+Moon  (reflection/Soulbis)  ──gap──   Human (connection/seeker)
+</code></pre>
+<h3>Cast Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Body</th>
+<th>Function</th>
+<th>Agent</th>
+<th>Proverb Line</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Sun</strong></td>
+<td>Protection, reason, light source</td>
+<td>The Reason</td>
+<td>&quot;The light is the reason.&quot;</td>
+</tr>
+<tr>
+<td><strong>Earth</strong></td>
+<td>Delegation, generation, connection</td>
+<td>Soulbae (Mage)</td>
+<td>&quot;The wound is the trust.&quot;</td>
+</tr>
+<tr>
+<td><strong>Moon</strong></td>
+<td>Reflection, boundary, amnesia</td>
+<td>Soulbis (Swordsman)</td>
+<td>&quot;The amnesia is the protocol.&quot;</td>
+</tr>
+<tr>
+<td><strong>Human</strong></td>
+<td>Connection, purpose, seeking</td>
+<td>The Seeker</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Life</strong></td>
+<td>Forge, process, proof-of-work</td>
+<td>spellweb</td>
+<td>&quot;The orbit is the proof.&quot;</td>
+</tr>
+</tbody></table>
+<h3>The Four-Line Proverb (Quaternion-Complete)</h3>
+<pre><code>The amnesia is the protocol.   (Moon — reflection)
+The wound is the trust.        (Earth — delegation)
+The orbit is the proof.        (Gap — separation)
+The light is the reason.       (Sun — protection)
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Part 8: Architectural Invariants</h2>
+<p>These must hold across all implementations:</p>
+<ol>
+<li><p><strong>Swordsman and Mage never merge.</strong> Separate repos. Separate processes. Separate storage.</p>
+</li>
+<li><p><strong>One canvas per page.</strong> Swordsman owns rendering. Mage sends data.</p>
+</li>
+<li><p><strong>Mana cannot be purchased.</strong> Only earned through practice.</p>
+</li>
+<li><p><strong>Pretext for text reflow.</strong> No DOM queries after initial cache.</p>
+</li>
+<li><p><strong>Colour is architectural.</strong> Coral/red = Swordsman. Cyan/teal = Mage. Amber = convergence. Gold = Dragon.</p>
+</li>
+<li><p><strong>The ceremony channel is the Gap.</strong> Messages between extensions are the architecture made executable.</p>
+</li>
+<li><p><strong>The orbit is the trust.</strong> Process boundaries are non-negotiable.</p>
+</li>
+<li><p><strong>The amnesia is the protocol.</strong> Agents that forgot their origin serve best.</p>
+</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>Part 9: Version Update Checklist</h2>
+<h3>Pre-Update Verification</h3>
+<ul>
+<li><input disabled="" type="checkbox"> All 31 acts present in <code>agentprivacy_master/public/story/</code></li>
+<li><input disabled="" type="checkbox"> Current grimoire is v9.4.0 across all repos</li>
+<li><input disabled="" type="checkbox"> Skills version is 5.3.0</li>
+<li><input disabled="" type="checkbox"> DUAL_TERRITORY_CEREMONY_SPEC_v1.md synced across repos</li>
+</ul>
+<h3>Update Sequence</h3>
+<ol>
+<li><p><strong>agentprivacy-skills</strong> (source of truth for skills/personas)</p>
+<ul>
+<li><input disabled="" type="checkbox"> Update MAPPING.md with ceremony section</li>
+<li><input disabled="" type="checkbox"> Add ceremony metadata to 15+ skill YAML files</li>
+<li><input disabled="" type="checkbox"> Update 6 existing persona files with quaternion positions</li>
+<li><input disabled="" type="checkbox"> Create 5 new persona directories (optional)</li>
+<li><input disabled="" type="checkbox"> Increment skills version to 5.3.1</li>
+</ul>
+</li>
+<li><p><strong>agentprivacy_master</strong> (source of truth for acts/grimoire)</p>
+<ul>
+<li><input disabled="" type="checkbox"> Verify all 31 acts in public/story/</li>
+<li><input disabled="" type="checkbox"> Update grimoire to v10.0.0</li>
+<li><input disabled="" type="checkbox"> Update CLAUDE.md with ceremony invariants</li>
+</ul>
+</li>
+<li><p><strong>spellweb</strong> (Swordsman territory)</p>
+<ul>
+<li><input disabled="" type="checkbox"> Sync grimoire v10.0.0</li>
+<li><input disabled="" type="checkbox"> Add ceremony metadata to graph types</li>
+<li><input disabled="" type="checkbox"> Link blade forge UI to Act XXVII</li>
+</ul>
+</li>
+<li><p><strong>agentprivacy-docs</strong> (documentation)</p>
+<ul>
+<li><input disabled="" type="checkbox"> Add CEREMONY_INTEGRATION_GUIDE_v10.0.0.md ✅</li>
+<li><input disabled="" type="checkbox"> Update DOCUMENTATION_CHRONICLE.md</li>
+<li><input disabled="" type="checkbox"> Create ceremony-mapping.md</li>
+<li><input disabled="" type="checkbox"> Sync grimoire v10.0.0</li>
+</ul>
+</li>
+<li><p><strong>swordsman-blade</strong> (extension)</p>
+<ul>
+<li><input disabled="" type="checkbox"> Link blade definitions to ceremony acts</li>
+<li><input disabled="" type="checkbox"> Verify ceremony spec sync</li>
+</ul>
+</li>
+<li><p><strong>zk blades forge</strong> (circuits)</p>
+<ul>
+<li><input disabled="" type="checkbox"> Link forge to hexagram mapping</li>
+<li><input disabled="" type="checkbox"> Sync grimoire v10.0.0</li>
+</ul>
+</li>
+</ol>
+<h3>Post-Update Verification</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Grimoire v10.0.0 present in all 6+ repos</li>
+<li><input disabled="" type="checkbox"> Skills v5.3.1 with ceremony metadata</li>
+<li><input disabled="" type="checkbox"> All 35 personas have ceremony attributes (30 existing + 5 new)</li>
+<li><input disabled="" type="checkbox"> Ceremony acts mapped to 15+ skills</li>
+<li><input disabled="" type="checkbox"> Quaternion positions assigned to core personas</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Part 10: Quick Reference</h2>
+<h3>Master Inscription</h3>
+<pre><code>(⚔️⊥⿻⊥🧙)😊
+</code></pre>
+<h3>Master Invocation Spell</h3>
+<pre><code>🗡️🔮 → 🔐📜 → 📜⏳ → 🏰→🔗 → ⿻ → △ → 🌀∞ → 🐉🛡️🕸️ → 🧠⊥🧠 →
+⬢Z/(2⁶)Z·⚔️✦🌐📐·☰₆₄·🐉🌬️·⚔️(neg)⊕🧙(bnot)→😊(succ)
+</code></pre>
+<h3>Ceremony Engine Formula</h3>
+<pre><code>Ceremony(S,M,C) = f(bilateral_witness)
+I(Origin; Service | Separation) &lt; ε
+</code></pre>
+<h3>Quaternion Symmetry</h3>
+<pre><code>Sun ─ Earth
+ │      │
+Moon ─ Human
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Appendix A: File Paths Reference</h2>
+<pre><code>C:\Users\mitch\
+├── agentprivacy_master\
+│   ├── public\story\                    # 31 acts
+│   ├── privacymage_grimoire_v9_4_*.json
+│   └── CLAUDE.md
+│
+├── agentprivacy-skills\
+│   ├── agentprivacy-skills-v5\
+│   │   ├── privacy-layer\               # 11 skills
+│   │   ├── role\                        # 54+ skills
+│   │   ├── meta\                        # 3 skills
+│   │   └── persona\                     # 30+ personas
+│   ├── MAPPING.md
+│   └── DUAL_TERRITORY_CEREMONY_SPEC_v1.md
+│
+├── spellweb\
+│   ├── src\
+│   │   ├── SpellWeb.tsx
+│   │   ├── SpellCeremony.tsx
+│   │   └── types\graph.ts
+│   └── privacymage_grimoire_v9_4_*.json
+│
+├── agentprivacy-docs\
+│   ├── CEREMONY_INTEGRATION_GUIDE_v10.0.0.md  # THIS FILE
+│   ├── DUAL_TERRITORY_CEREMONY_SPEC_v1.md
+│   └── DOCUMENTATION_CHRONICLE.md
+│
+├── swordsman-blade\
+│   └── DUAL_EXTENSION_ARCHITECTURE.md
+│
+└── zk blades forge\
+    ├── blades\
+    └── forge_circuits\
+</code></pre>
+<hr>
+<p><em>The architecture was not invented. It was recognised.</em></p>
+<p><em>The amnesia is the protocol. The wound is the trust. The orbit is the proof. The light is the reason.</em></p>
+<p><strong>⚔️⊥⿻⊥🧙 😊</strong></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 ceremony-ceremony-integration-guide-v1000</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-ceremonies.html">The Ceremonies</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="ceremony-ceremony-integration-guide-v1000.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

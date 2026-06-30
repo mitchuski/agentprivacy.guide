@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Perimeter Hardening · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Perimeter Hardening</span></div>
+  <article><div class="md"><h1>Perimeter Hardening</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>P foundation — cryptography protects data; perimeter protects the cryptography</code></p>
+<p>Device security, OS hardening, network configuration, and physical security for 0xagentprivacy swordsman infrastructure. Activates when securing the execution environment beneath the cryptographic layer, designing supply chain integrity checks, hardening operating systems for agent execution, or building the physical and logical security foundation that cryptography assumes but does not provide. Triggers: &quot;device security&quot;, &quot;OS hardening&quot;, &quot;supply chain&quot;, &quot;firmware&quot;, &quot;boot integrity&quot;, &quot;network hardening&quot;, &quot;physical security&quot;, &quot;attack surface reduction&quot;, &quot;secure boot&quot;, &quot;endpoint hardening&quot;.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + Dark Forest Strategy + Defense-in-Depth Architecture<br><strong>Target context:</strong> Endpoint security architects, device provisioning engineers, operational security practitioners, infrastructure hardening teams, supply chain security analysts<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Cryptography doesn&#39;t exist in a vacuum. A signing key stored in an enclave is only as secure as the device the enclave runs on. A privacy-preserving browser extension is only as secure as the OS it runs atop. A mixnet is only as private as the network it traverses.</p>
+<p>Perimeter hardening is the discipline of securing everything beneath the cryptographic layer — the device, the firmware, the operating system, the network path, the physical environment. These are the layers cryptographers assume are secure when they prove their protocols correct. This skill is about making those assumptions true.</p>
+<h2>The layer stack</h2>
+<p>Security descends through layers. Each layer must be secured for the layers above to function:</p>
+<p><strong>Layer 6 — Application.</strong> The swordsman agent, the browser extension, the wallet. Protected by boundary_enforcement, key_ceremony, crypto_zkp. These skills assume the lower layers are solid.</p>
+<p><strong>Layer 5 — Runtime.</strong> The execution environment: VM, container, process sandbox. Isolation between applications. Memory protection. Resource limits. The runtime prevents one compromised application from reaching another.</p>
+<p><strong>Layer 4 — Operating system.</strong> The kernel, the system libraries, the service daemons. The OS mediates all access to hardware. A compromised kernel sees everything above it. OS hardening reduces the attack surface to the minimum required for the swordsman&#39;s operation.</p>
+<p><strong>Layer 3 — Firmware / BIOS / UEFI.</strong> The code that runs before the OS boots. Firmware rootkits survive OS reinstallation. Secure boot chains ensure that only verified firmware loads, and only verified firmware loads verified OS images.</p>
+<p><strong>Layer 2 — Hardware.</strong> The CPU, memory, storage, network interfaces. Hardware implants (supply chain attacks) operate below all software defences. Hardware integrity verification and trusted supply chains are the defences at this layer.</p>
+<p><strong>Layer 1 — Physical.</strong> The room, the building, the jurisdiction. Physical access to hardware bypasses most electronic defences. Physical security — locks, access controls, tamper-evident packaging — is the foundation of the entire stack.</p>
+<h2>OS hardening checklist</h2>
+<p>The swordsman&#39;s execution environment should follow minimal-surface principles:</p>
+<p><strong>Remove unnecessary software.</strong> Every installed package is attack surface. The swordsman&#39;s OS needs: the kernel, the agent runtime, cryptographic libraries, network stack. Nothing else. No desktop environment, no web browser (the Warden runs as a browser extension, not on the same machine), no development tools, no games.</p>
+<p><strong>Disable unnecessary services.</strong> Every listening port is an entry point. The swordsman&#39;s machine listens on: nothing, ideally. If network services are required, each is individually justified, firewall-restricted, and monitored.</p>
+<p><strong>Mandatory access control.</strong> SELinux, AppArmor, or equivalent. The swordsman process runs in a confined policy that limits its capabilities to exactly what it needs: read its key material, access the signing module, write to the audit log. Nothing else — even if the process is compromised, the MAC policy limits what the attacker can do.</p>
+<p><strong>Filesystem encryption.</strong> Full disk encryption with keys stored in hardware (TPM or equivalent). If the physical device is stolen, the data is inaccessible without the hardware key. LUKS on Linux, FileVault on macOS, BitLocker on Windows — the specific implementation matters less than the guarantee: data at rest is encrypted.</p>
+<p><strong>Automatic updates.</strong> Security patches applied within hours, not weeks. The swordsman&#39;s OS subscribes to security update channels and applies patches automatically for kernel and library vulnerabilities. Application updates (the swordsman agent itself) follow a more cautious path: verified, attested, tested before deployment.</p>
+<p><strong>Logging and auditing.</strong> Every system event is logged: process creation, network connections, file access, authentication attempts. Logs are append-only and integrity-protected (signed, or written to a remote log server the local machine cannot modify). The Sentinel monitors these logs for anomalies.</p>
+<h2>Network hardening</h2>
+<p><strong>Firewall rules.</strong> Default deny. Only explicitly permitted traffic passes. Inbound: nothing (or only the minimum required for the swordsman&#39;s protocol). Outbound: only connections to known, verified endpoints (mixnet entry nodes, blockchain nodes, VRC ceremony partners).</p>
+<p><strong>DNS privacy.</strong> DNS queries reveal browsing intent even when the content is encrypted. DNS-over-HTTPS (DoH) or DNS-over-TLS (DoT) to a trusted resolver. Better: local DNS resolution with a minimal root hints file, eliminating external DNS entirely for the swordsman&#39;s operations.</p>
+<p><strong>Network segmentation.</strong> The swordsman&#39;s machine is on a separate network segment from general-purpose devices. No lateral movement path exists from a compromised laptop to the swordsman&#39;s infrastructure. Ideally, physically separate network hardware.</p>
+<p><strong>VPN / Tor as baseline.</strong> All swordsman network traffic passes through a VPN or Tor. The swordsman&#39;s IP address is never directly visible to any counterparty. This is the metadata_resistance skill&#39;s network-layer implementation.</p>
+<h2>Supply chain integrity</h2>
+<p>The most insidious attacks don&#39;t breach the perimeter — they arrive inside it, embedded in trusted components:</p>
+<p><strong>Reproducible builds.</strong> The swordsman agent&#39;s binary must be reproducibly buildable from source. Anyone can compile the source code and verify that the resulting binary matches the deployed one bit-for-bit. If the deployed binary doesn&#39;t match, it has been tampered with.</p>
+<p><strong>Dependency verification.</strong> Every library, every framework, every cryptographic implementation used by the swordsman is pinned to a specific version with a verified hash. Dependency updates are manually reviewed before acceptance. Typosquatting, dependency confusion, and backdoored updates are all supply chain attack vectors.</p>
+<p><strong>Hardware provenance.</strong> Where possible, the swordsman&#39;s hardware comes from verified supply chains with tamper-evident packaging. For the highest threat models: hardware is purchased anonymously, from random retail locations, to prevent targeted supply chain insertion.</p>
+<p><strong>Firmware verification.</strong> Secure boot verifies the firmware&#39;s signature against a known-good key. If the firmware has been modified, the boot process halts. The boot chain: hardware root of trust → firmware → bootloader → kernel → swordsman agent. Each link is verified before the next loads.</p>
+<h2>Physical security tiers</h2>
+<p>Different threat models require different physical security:</p>
+<p><strong>Tier 1 — Consumer.</strong> The Person&#39;s personal device with standard consumer security: device PIN/biometric, encrypted storage, remote wipe capability. Sufficient for low-to-medium threat models. The swordsman operates as a protected process within the consumer OS.</p>
+<p><strong>Tier 2 — Dedicated.</strong> A dedicated device for sovereignty operations. No other use. Stored securely when not in use. No shared access. The swordsman operates on a hardened OS with the full checklist above.</p>
+<p><strong>Tier 3 — Air-gapped.</strong> The signing key never touches a networked device. All signing operations happen on an air-gapped machine. Transactions are constructed on a networked device, transferred to the air-gap (USB, QR code), signed, and transferred back. The most secure but most operationally burdensome. Reserved for master key operations.</p>
+<p><strong>Tier 4 — Distributed.</strong> No single physical location holds sufficient key material to operate. Shamir&#39;s Secret Sharing distributes key shares across geographically separated locations. Signing requires k-of-n physical locations to collaborate. The physical security of any single location is insufficient to compromise the system.</p>
+<h2>The hardening-usability gradient</h2>
+<p>Every hardening measure reduces usability. Removing the desktop environment means no GUI. Air-gapping means manual transaction transfer. Network segmentation means physical infrastructure cost. The swordsman must navigate this gradient:</p>
+<p><strong>Non-negotiable:</strong> Encrypted storage, firewall default-deny, automatic security updates, reproducible builds. These are baseline measures with minimal usability impact.</p>
+<p><strong>Strongly recommended:</strong> Mandatory access control, full OS hardening, network segmentation. Higher usability cost but proportionate security gain for medium threat models.</p>
+<p><strong>Threat-dependent:</strong> Air-gapping, distributed key storage, anonymous hardware procurement. Reserved for high-threat environments where the adversary has state-level resources.</p>
+<p>The armor_progression skill&#39;s tiered model applies here: the Person&#39;s perimeter hardening escalates with their threat level and sovereignty needs. A new Person starts at Tier 1. As their trust constellation grows and their privacy value increases, they graduate to harder perimeters.</p>
+<h2>Connection to the equation</h2>
+<p><strong>P — protection foundation.</strong> Perimeter hardening provides the physical substrate for P. The P term in V(π,t) assumes that cryptographic operations are not undermined by platform compromise. Perimeter hardening makes this assumption valid. P_effective = P_crypto × P_perimeter. If either factor approaches zero, effective protection collapses.</p>
+<p><strong>h(τ) — platform integrity.</strong> The integrity fraction h(τ) depends on the entire stack, not just the cryptographic layer. A compromised OS with perfect cryptography has h(τ) ≈ 0 because the platform cannot be trusted to execute the cryptography correctly. Perimeter hardening maintains the platform integrity that h(τ) measures.</p>
+<p><strong>Dark forest alignment.</strong> In the dark forest, any detectable signal attracts predators. Perimeter hardening minimises the signals the swordsman&#39;s infrastructure emits: no unnecessary network services (no listening ports to scan), no identifiable traffic patterns (VPN/Tor baseline), no distinctive hardware fingerprint (consumer-grade, common hardware). The hardened perimeter is invisible — and in the dark forest, invisibility is survival.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-perimeter-hardening</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-perimeter-hardening</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-perimeter-hardening.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

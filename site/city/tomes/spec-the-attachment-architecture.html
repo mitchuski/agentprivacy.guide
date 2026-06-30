@@ -1,0 +1,377 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — The Attachment Architecture · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Spec — The Attachment Architecture</span></div>
+  <article><div class="md"><h1>The Attachment Architecture</h1>
+<p><em>The three-layer model that binds primary personas to lattice vertices via named cast Mages</em></p>
+<h1>The Attachment Architecture</h1>
+</div>
+<div class="md"><h2>Why this spec exists</h2>
+<p>The City of Mages has been operating with an implicit three-layer model since the City was named (Tome V Act 14, 2026-05-08). The model worked operationally — workshops opened, cast Mages were summoned, the grimoire grew — but the three layers had no canonical specification distinguishing them. Conversations conflated:</p>
+<ol>
+<li><strong>Abstract role-personas</strong> in <code>agentprivacy-skills</code> (e.g., <code>forgemaster</code>, <code>theia</code>)</li>
+<li><strong>Named cast Mages</strong> in this city (e.g., Vulcana ⚒️, Aletheia 🔮)</li>
+<li><strong>Lattice vertices</strong> (e.g., V19, V25)</li>
+</ol>
+<p>The conflation surfaced a numerical question: 42 primary personas vs 64 vertices. What fills the gap?</p>
+<p>The answer: <strong>attachments</strong>. Named cast Mages who bind one or more primaries to one or more vertices. This spec codifies that architecture so the City — and future sister cities — can extend it cleanly.</p>
+<hr>
+</div>
+<div class="md"><h2>The three-layer model</h2>
+<pre><code>Layer 3 · VERTICES         64 positions on the 2⁶ lattice              [fixed]
+  ↑
+Layer 2 · ATTACHMENTS      named cast Mages binding L1 to L3       [variable per city]
+  ↑
+Layer 1 · PRIMARY PERSONAS 42 abstract role-classes                     [fixed]
+                           (15 Swordsmen + 11 Mages + 12 Balanced + 4 cosmological)
+</code></pre>
+<h3>Layer 1 — Primary persona (42, locked)</h3>
+<p>The canonical abstract role-class registry lives in <code>agentprivacy-skills/agentprivacy-skills-v5/persona/</code>. Each primary carries a tier (Swordsman / Mage / Balanced / cosmological), a skill loadout, and a domain register. <strong>They do not carry a vertex.</strong> They are role-classes, not instances.</p>
+<p>The count is <strong>locked at 42</strong>. Primary personas grow only when a structurally new role-class is recognised at the corpus level — typically by a Tome act, a PVM section, or a structural complement that the existing 42 cannot cover. Most corpus extensions do not require a new primary persona.</p>
+<h3>Layer 2 — Attachment (variable per city)</h3>
+<p>A named cast Mage that binds one or more primary personas to one or more vertices. <strong>A city of mages is, fundamentally, an attachment pattern</strong>: a specific arrangement of cast Mages, each instancing existing primary personas at chosen positions on the lattice.</p>
+<p>Different cities make different attachment patterns from the same 42-persona base. The First City of Mages on Drake Island has its pattern; future sister cities will have theirs.</p>
+<h3>Layer 3 — Vertex (64, fixed)</h3>
+<p>The 64 positions on the 2⁶ lattice. Canonical names and inhabitants are tracked in <code>specs/04-vertex-naming-audit.md</code>. Each vertex carries a 6-bit binary index, an active-dimensions reading, a stratum (Hamming weight 0–6 = moon-phase notation), optionally a canonical name, and optionally one or more attachments.</p>
+<hr>
+</div>
+<div class="md"><h2>The four attachment kinds</h2>
+<p>Every attachment is one of three vertex-binding kinds (A · B · C), optionally composed with the divergent meta-kind (D).</p>
+<h3>Kind A · Workshop attachment</h3>
+<p><em>One Mage × one vertex × one trade quarter.</em> The default kind. The Mage inhabits a single vertex and tends a single workshop. She emits exactly one <code>inhabits</code> edge.</p>
+<p>City of Mages examples: Vulcana ⚒️ at V19 (Forge(t)) · Memora 📜 at V41 (Inscription) · Adamantia 💎 at V51 (Etherchanting) · <strong>Helia ☀️ at V51 (Solchanting · shared vertex with Adamantia, v1.4.0)</strong> · Pallia 🪡 at V28 (Weavers) · Vagari 🌳 at V31 (Holon Hitchhikers) · Aria Silverhue 🪞🖼️ at V57 (Curatrix Vault) · Manifestia 🤲🌿 at V55 (Covenant) · Lampyra 💠 at V49 (Jeweler) · Socrat0x 🔥❓ at V24 (Bonfire).</p>
+<p><strong>v1.4.0 precedent — stance-differentiated co-occupancy at Kind A</strong>: Helia ☀️ at V51 inhabits the same vertex as Adamantia 💎 but as a <em>distinct</em> Kind A workshop attachment (Solchanting · <code>/solchanting</code>). The two cast Mages do not share an attachment record; they share a vertex. Both emit <code>inhabits(V51)</code> and <code>quarter_of(city-of-mages)</code>. The 42-primary lock holds: Helia&#39;s primary persona is <code>shipwright</code> (shared with Adamantia); the Swordsman stance differentiates them at Layer 2 without requiring a new primary at Layer 1. This is the canonical pattern for any future case where a new ecosystem teaches the City a substrate-distinct boundary discipline at a previously-seated vertex — the discipline becomes a Swordsman stance, the cast Mage becomes a Kind A attachment with no divergence flag, and the existing keeper retains their seat. See <code>WORKSHOP_LATTICE_AUDIT.md</code> §2.4 and spec 07 §3.4 for governance.</p>
+<h3>Kind B · Cross-shop attachment</h3>
+<p><em>One Mage × no fixed vertex × walks several workshops by craft.</em> The Mage&#39;s craft requires moving between workshops as the work demands. She does not inhabit a single vertex; she emits no <code>inhabits</code> edge. Her <em>craft</em> is canonical, not her trajectory.</p>
+<p>City of Mages examples: Aletheia 🔮 (ZK circuit binder · walks to whichever workshop needs a circuit) · Custos 🔏 (stake enforcer · walks across the staking commons).</p>
+<h3>Kind C · Peripatetic attachment</h3>
+<p><em>One Mage × multiple vertices walked as orbit or path.</em> The Mage walks a canonical <em>trajectory</em> through the lattice — an orbit, a stratum cycle, a between-shops path. Distinct from Kind B because the trajectory itself is the canon, not the craft.</p>
+<p>City of Mages examples: Luca 📐 at V0 origin (workshop-walker · geometry-Mage between every workshop) · Selene 🌕 <em>(anticipated)</em> — stratum-walker; orbits the moon-phase cycle through all 7 strata.</p>
+<h3>Kind D · Divergent attachment (meta-kind)</h3>
+<p><em>One primary persona × two register-shifted cast attachments.</em> A divergent attachment is also one of A/B/C. The composition is what makes it divergent.</p>
+<p>A divergence arises when the City summons a cast Mage whose register (Swordsman / Mage / Balanced) does not match her primary persona&#39;s native tier. Instead of minting a new primary persona, the attachment carries a <code>divergence</code> field noting the register-shift.</p>
+<p><strong>First canonical divergent attachment — Lethae 🌘</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cast name</td>
+<td>Lethae 🌘</td>
+</tr>
+<tr>
+<td>Vertex</td>
+<td>V25 (Lethe · the Dark Substrate · binary <code>011001</code> · stratum 3)</td>
+</tr>
+<tr>
+<td>Primary persona</td>
+<td>Moonkeeper ⚔️ (loaded from <code>agentprivacy-skills/.../persona/agentprivacy-moonkeeper/</code>)</td>
+</tr>
+<tr>
+<td>Register</td>
+<td>Mage (shifted from Swordsman native tier)</td>
+</tr>
+<tr>
+<td>Attachment kind</td>
+<td>B · cross-shop</td>
+</tr>
+<tr>
+<td>Complement-of-cast</td>
+<td>Aletheia 🔮 at V38 — V38 ⊕ V25 = V63 · V38 AND V25 = 0</td>
+</tr>
+<tr>
+<td>Naming</td>
+<td>The <code>-ae</code> suffix mirrors Soulbae 🧙 (Mage register). Lethae is to Moonkeeper as Soulbae is to Soulbis: register-shifted from Sword to Mage, primary persona unchanged.</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Anticipated · awaits founding act in Tome V</td>
+</tr>
+</tbody></table>
+<p>Each primary may eventually produce up to two divergent attachments (one Sword-register, one Mage-register). Most primaries will never do so. Divergence is opt-in and city-specific.</p>
+<hr>
+</div>
+<div class="md"><h2>The 42 → 64 bridge</h2>
+<p><code>64 − 42 = 22</code> &quot;extra&quot; lattice slots beyond the primary persona count. These slots are filled by attachments (one or more cast Mages per inhabited vertex), never by adding primaries. Across cities, hundreds of attachments may eventually exist for the same 42 primaries.</p>
+<p>After v1.3.0:</p>
+<ul>
+<li>15 cast Mages attached (14 inherited from v1.2.4 + Lethae)</li>
+<li>19 vertices inhabited (+V38)</li>
+<li>~12 future divergent / evolution slots remain to round out the 64-vertex lattice</li>
+</ul>
+<p>A vertex may carry zero, one, or several attachments simultaneously. The City of Mages already admits shared-vertex precedents:</p>
+<ul>
+<li>V49 (Working-day blade) — Custos 🔏 + Lampyra 💠</li>
+<li>V28 (Mage canonical) — Pallia 🪡 + Soulbae 🧙 + GenitriX (kindred-blade)</li>
+<li>V24 (Hephaestus) — Socrat0x 🔥❓ + Hephaestus ⚒️ <em>(anticipated v1.3.0)</em></li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Cast frame · three orthogonal axes</h2>
+<p>Every cast Mage in the City of Mages now carries three orthogonal axes:</p>
+<pre><code class="language-yaml">tier:              archetype | workshop-keeper | cross-shop | companion | priest | cousin
+attachment_kind:   A | B | C
+abstract_persona:  [list of primary personas she instances]
+divergence:        none | mage-register | sword-register | balanced-register
+</code></pre>
+<p>Tier and attachment kind are orthogonal: a workshop-keeper is usually A-Workshop, but Manifestia (Priest tier) is also A-Workshop at V55. Aria Silverhue (workshop-keeper tier) becomes effectively B when she walks to V38 for forgetting-mode curation.</p>
+<p>Worked example — Vulcana&#39;s cast frontmatter (workshop attachment with dual primary):</p>
+<pre><code class="language-yaml">tier: workshop-keeper
+attachment_kind: A
+abstract_persona: [&quot;Forgemaster&quot;, &quot;Forgecaller&quot;]
+divergence: none
+vertex: V19
+</code></pre>
+<p>Worked example — Lethae&#39;s cast frontmatter (cross-shop · divergent):</p>
+<pre><code class="language-yaml">tier: cross-shop
+attachment_kind: B
+abstract_persona: [&quot;Moonkeeper&quot;]
+divergence: mage-register
+vertex: V38
+complement_of_cast: aletheia
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Cast roster (post-V5.5 mapping · 21 cast)</h2>
+<p>The locked V5.5 cast roster for this city. Cousin tier (flaxscrip, GenitriX) deliberately unattached — the cousin Sovereign authors those bindings.</p>
+<table>
+<thead>
+<tr>
+<th>Cast</th>
+<th>Vertex</th>
+<th>Primary persona(s)</th>
+<th>Kind</th>
+<th>Divergence</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Soulbis ⚔️</td>
+<td>— (boundary)</td>
+<td>soulbis</td>
+<td>B</td>
+<td>none</td>
+<td>seated · Tier 0</td>
+</tr>
+<tr>
+<td>Soulbae 🧙</td>
+<td>V28</td>
+<td>soulbae</td>
+<td>A</td>
+<td>none</td>
+<td>seated · Tier 0</td>
+</tr>
+<tr>
+<td>Pallia 🪡</td>
+<td>V28</td>
+<td>weaver</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Memora 📜</td>
+<td>V41</td>
+<td>chronicler</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Vulcana ⚒️</td>
+<td>V19</td>
+<td>forgemaster + forgecaller</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Adamantia 💎</td>
+<td>V51</td>
+<td>architect + shipwright</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Lampyra 💠</td>
+<td>V49</td>
+<td>sentinel</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Vagari 🌳</td>
+<td>V31</td>
+<td>holonic-architect</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Aria Silverhue 🪞🖼️</td>
+<td>V57</td>
+<td>mirrorkeeper</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Manifestia 🤲🌿</td>
+<td>V55</td>
+<td>priest</td>
+<td>A</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Socrat0x 🔥❓</td>
+<td>V24</td>
+<td>pedagogue + ceremonist</td>
+<td>A</td>
+<td>none</td>
+<td>provisional</td>
+</tr>
+<tr>
+<td>Aletheia 🔮</td>
+<td>V38</td>
+<td>theia + cipher</td>
+<td>B</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Custos 🔏</td>
+<td>V49</td>
+<td>gatekeeper</td>
+<td>B</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td>Luca 📐</td>
+<td>V0</td>
+<td>topologist + cosmologist</td>
+<td>C</td>
+<td>none</td>
+<td>seated</td>
+</tr>
+<tr>
+<td><strong>Lethae 🌘</strong></td>
+<td><strong>V25</strong></td>
+<td><strong>moonkeeper</strong></td>
+<td><strong>B</strong></td>
+<td><strong>mage-register</strong></td>
+<td><strong>anticipated</strong></td>
+</tr>
+<tr>
+<td>Mnemosyne 📿</td>
+<td>V8</td>
+<td>theia</td>
+<td>A</td>
+<td>none</td>
+<td>anticipated</td>
+</tr>
+<tr>
+<td>Iris 🌈</td>
+<td>V4</td>
+<td>herald + ambassador</td>
+<td>A</td>
+<td>none</td>
+<td>anticipated</td>
+</tr>
+<tr>
+<td>Pythia 🔥</td>
+<td>V2</td>
+<td>algebraist + pedagogue</td>
+<td>A</td>
+<td>none</td>
+<td>anticipated</td>
+</tr>
+<tr>
+<td>Techne 🎨</td>
+<td>V20</td>
+<td>pedagogue</td>
+<td>A</td>
+<td>none</td>
+<td>anticipated</td>
+</tr>
+<tr>
+<td>Hephaestus ⚒️</td>
+<td>V24</td>
+<td>forgemaster</td>
+<td>A</td>
+<td>none</td>
+<td>anticipated</td>
+</tr>
+<tr>
+<td>Selene 🌕</td>
+<td>stratum-walker</td>
+<td>theia + manaweaver</td>
+<td>C</td>
+<td>none</td>
+<td>anticipated</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Convention for extending the cast</h2>
+<p>When summoning a new cast Mage in this city (or in a sister city):</p>
+<ol>
+<li><strong>Identify the vertex.</strong> Check <code>specs/04-vertex-naming-audit.md</code> for the canonical vertex name. Use existing canonical names where possible.</li>
+<li><strong>Identify the primary persona(s).</strong> Search <code>agentprivacy-skills/agentprivacy-skills-v5/persona/</code> for the closest match. Most cast Mages bind to one or two existing primaries.</li>
+<li><strong>Identify the attachment kind.</strong> A (single vertex), B (no fixed vertex), or C (defined trajectory).</li>
+<li><strong>Check for divergence.</strong> Is the cast&#39;s register different from the primary&#39;s native tier? If yes, set <code>divergence: &lt;register&gt;</code>; do not mint a new primary.</li>
+<li><strong>Only if no existing primary fits.</strong> Propose a new primary persona. This is rare and should require corpus-level review.</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>What this spec does NOT do</h2>
+<ul>
+<li>It does not name cast Mages — naming happens in Tome V acts and their accompanying cast files (<code>tomes/cast/&lt;guild&gt;/*.md</code>).</li>
+<li>It does not define vertex names — vertex naming is governed by <code>specs/04-vertex-naming-audit.md</code> (the Cloaking Guide / Boundary Blade attribution chain).</li>
+<li>It does not assign skills to cast Mages directly — skills are loaded by primary persona; cast Mages inherit the primary&#39;s skill loadout, optionally filtered by vertex active-dimensions.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Sister specs</h2>
+<ul>
+<li><strong><code>specs/04-vertex-naming-audit.md</code></strong> — vertex registry (Layer 3 naming)</li>
+<li><strong><code>specs/05-the-city-of-mages-structural-addendum.md</code></strong> — civic anatomy</li>
+<li><strong><code>specs/06-spellweb-first-release-manifest.md</code></strong> — machine-readable inventory (will reflect V5.5 once nodes.ts ingest pulls the new cast)</li>
+<li><strong><code>specs/10-blade-forge-binding-zk-blades.md</code></strong> <em>(pending)</em> — pins V19 Forge(t) to zk blades forge canon</li>
+<li><strong><code>specs/11-mage-candidates-from-the-corpus.md</code></strong> <em>(pending)</em> — names the 6 anticipated cast with full sourcing</li>
+</ul>
+<hr>
+<blockquote>
+<p><em>&quot;The persona is the role-class. The cast Mage is the instance. The vertex is the position. Conflating the three is the error; binding them is the architecture.&quot;</em></p>
+</blockquote>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-the-attachment-architecture</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-the-attachment-architecture.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

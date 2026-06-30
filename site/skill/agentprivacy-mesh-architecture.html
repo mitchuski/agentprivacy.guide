@@ -1,0 +1,168 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mesh Architecture · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Mesh Architecture</span></div>
+  <article><div class="md"><h1>Mesh Architecture</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 4.0</p>
+<p><strong>Equation term</strong> <code>Control⊥Data as network-layer enforcement of dual-agent separation</code></p>
+<p>Mesh network architecture for 0xagentprivacy. Activates when discussing control plane vs data plane separation, Tailscale/WireGuard mesh networks, the Dragon&#39;s Hide metaphor, NAT traversal, DERP relays, sovereign overlay networks (tailnets), or how network-layer separation enforces privacy without central watchtowers.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + First Person Spellbook Act XXV (The Dragon&#39;s Hide)<br><strong>Target context:</strong> Network architects, mesh network designers, privacy infrastructure builders, sovereign overlay network implementers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Act XXV discovered that the dual-agent separation (Swordsman ⊥ Mage) has a direct analogue at the network layer: <strong>control plane vs data plane separation</strong>. The coordination server holds the ACLs (who may speak), but never touches what is said. The mesh tunnels carry encrypted content that neither the coordinator nor any relay can decrypt.</p>
+<p>This is the Swordsman/Mage architecture implemented in network infrastructure. The &quot;Dragon&#39;s Hide&quot; metaphor: each WireGuard tunnel is a scale, independently hardened, overlapping to form impenetrable protection. The mesh IS the dragon&#39;s armour.</p>
+<h2>The Watchtower Problem</h2>
+<blockquote>
+<p>&quot;The guard who watches all the roads eventually controls who may travel them.&quot;</p>
+</blockquote>
+<p>Traditional network architecture routes all traffic through central points: VPN concentrators, cloud gateways, corporate proxies. Hub-and-spoke. Every message between two nodes passes through a third who can read it. This is surveillance architecture at the packet level.</p>
+<p><strong>Hub-and-spoke is architecturally incompatible with sovereignty.</strong> Not because of policy failures but because the architecture itself requires decryption at the hub. You cannot add privacy to a hub-and-spoke network the way you add curtains to a window. The hub IS the eye.</p>
+<h2>The Mesh Solution</h2>
+<p>A mesh network with control/data separation solves the watchtower problem:</p>
+<p><strong>Control Plane (Centralised)</strong></p>
+<ul>
+<li>Coordination server distributes public keys</li>
+<li>ACLs define who may speak to whom</li>
+<li>Security policy propagated to all nodes</li>
+<li>The Swordsman&#39;s ledger — knows WHO may communicate</li>
+</ul>
+<p><strong>Data Plane (Decentralised)</strong></p>
+<ul>
+<li>WireGuard tunnels between every pair of nodes</li>
+<li>End-to-end encrypted</li>
+<li>Private key never leaves the node</li>
+<li>The Mage&#39;s channels — carries WHAT is communicated</li>
+</ul>
+<p><strong>Critical separation:</strong> The coordination server knows who belongs to the network. It never touches what they say. The control plane cannot see data plane content. The data plane cannot modify control plane policy.</p>
+<h2>The Dragon&#39;s Hide</h2>
+<blockquote>
+<p>&quot;Each scale on the Drake&#39;s body was individually hardened. No single scale protected the whole. But together, overlapping, they formed an impenetrable hide.&quot;</p>
+</blockquote>
+<p>The mesh is the dragon&#39;s hide:</p>
+<ul>
+<li>Each tunnel = one scale</li>
+<li>Each node = independently armoured</li>
+<li>The private key never leaves the node — this is physics, not policy</li>
+<li>One scale can be damaged without compromising others</li>
+<li>The hide heals by growing new scales (key rotation), not repairing as monolith</li>
+</ul>
+<p><strong>Tail-scale:</strong> The tail carries the momentum. The dragon&#39;s head (coordination) chooses direction; the tail (data plane) delivers the strike. The data plane is where sovereignty lives — the part you don&#39;t see until the turn, without which the dragon cannot fly.</p>
+<h2>Tailnet as Sovereign Territory</h2>
+<p>A tailnet is a private sovereign network overlay:</p>
+<p><strong>MagicDNS</strong> — Names that exist only inside the mesh. These names mean nothing outside. They are the language spoken only within sovereign borders.</p>
+<p><strong>NAT Traversal</strong> — Finding paths through hostile network boundaries without exposing the node&#39;s true address. The Mage&#39;s core operation: project through another&#39;s infrastructure without being seen.</p>
+<p><strong>DERP Relays</strong> — When direct paths fail, relays carry encrypted packets that neither the relay nor any intermediary can read. A bridge, not a watchtower. It carries without seeing.</p>
+<p><strong>Identity persistence</strong> — A node connected to a hostile network (cafe wifi, hotel NAT, airport firewall) does not change identity. It carries its territory with it. The dragon does not change shape when it crosses into hostile territory.</p>
+<h2>Mapping to PVM-V4</h2>
+<p>The mesh architecture maps directly to the Privacy Value Model:</p>
+<table>
+<thead>
+<tr>
+<th>Mesh Concept</th>
+<th>PVM-V4 Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Control plane</td>
+<td>Swordsman&#39;s ACL ledger</td>
+</tr>
+<tr>
+<td>Data plane</td>
+<td>Mage&#39;s projection channels</td>
+</tr>
+<tr>
+<td>Coordination server</td>
+<td>Verified signal source</td>
+</tr>
+<tr>
+<td>Mesh tunnels</td>
+<td>Bounded leakage channels</td>
+</tr>
+<tr>
+<td>Private key locality</td>
+<td>P term enforcement</td>
+</tr>
+<tr>
+<td>Control⊥Data</td>
+<td>Dual-agent conditional independence</td>
+</tr>
+<tr>
+<td>NAT traversal</td>
+<td>Project through hostile boundaries</td>
+</tr>
+<tr>
+<td>DERP relay</td>
+<td>Bridge that carries without seeing</td>
+</tr>
+</tbody></table>
+<h2>Aperture: AI Agent Governance</h2>
+<p>In the age of agentic AI, the mesh extends to agent governance:</p>
+<p><strong>Aperture</strong> uses tailnet identities to authenticate AI agents:</p>
+<ul>
+<li>No API key distribution</li>
+<li>No secrets in containers</li>
+<li>Agent identity verified by mesh membership</li>
+<li>Full session logging</li>
+<li>MCP tool call visibility</li>
+<li>Ability to see and stop tool calls before execution</li>
+</ul>
+<blockquote>
+<p>&quot;The agent&#39;s identity is its tailnet membership. My gate verifies identity at the network layer, not the application layer.&quot;</p>
+</blockquote>
+<p>This is dual-agent separation applied to AI infrastructure. The Swordsman controls which agents may communicate. The Mage executes within those boundaries. The gap is enforced by the mesh itself — by physics, not promises.</p>
+<h2>Spellweb Integration</h2>
+<p>The spellweb (knowledge graph) becomes walkable through the mesh:</p>
+<ul>
+<li>Each node in the knowledge graph = reachable endpoint on the tailnet</li>
+<li>Each edge in the promise graph = bilateral encrypted channel</li>
+<li>Each trust relationship = authenticated through mesh identity</li>
+<li>The map becomes walkable because the mesh gives it a nervous system</li>
+</ul>
+<blockquote>
+<p>&quot;The web knew its shape. The mesh gave it breath.&quot;</p>
+</blockquote>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;The web knows its own shape, but only the mesh can carry the message. Control remembers. Data flows. Neither touches what the other holds.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>🕸️🔐🌐 → ⚔️🔑⊥🧙🔑·🤝(mesh) → 📡⊥📦·🪡(NAT) → 🗺️🔮(MagicDNS) → 🐲→🐉🛡️🕸️(tail-scale) → 🕸️⊥☁️(control⊥data) → 🌀∞</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li>Can mesh identity serve as the foundation for verifiable credentials without additional PKI?</li>
+<li>How does stratum weighting apply to mesh networks — do nodes at combinatorial midpoints contribute more to network health?</li>
+<li>Can the control/data separation be formally proven equivalent to dual-agent conditional independence?</li>
+<li>What is the minimum mesh size required for meaningful anonymity set guarantees?</li>
+<li>How do cross-mesh communications maintain sovereignty when federated across multiple tailnets?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-mesh-architecture</code>, v4.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-mesh-architecture</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-mesh-architecture.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

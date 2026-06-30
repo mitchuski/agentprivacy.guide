@@ -1,0 +1,755 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lore — Spellweb Artefact Creation Guide · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Lore — Spellweb Artefact Creation Guide</span></div>
+  <article><div class="md"><h1>Spellweb Artefact Creation Guide</h1>
+<p><em>How a Sovereign downloads a constellation, traces the path at spellweb.ai, receives an artefact.md, and returns to the workshop with witnessed trust — the canonical contract every workshop&#39;s import / export honours</em></p>
+<h1>Spellweb Artefact Creation Guide</h1>
+<p><em>The City of Mages ships eleven workshops. Each workshop has a <strong>constellation</strong> — a typed, named, ordered path through the 64-vertex lattice. A Sovereign downloads the constellation.md, opens it at <code>spellweb.ai</code>, traces the path, and the spellweb forges a personal <strong>artefact.md</strong> carrying the workshop&#39;s anchor in its YAML frontmatter. The artefact.md returns to the workshop; trust unlocks within the agreed envelope.</em></p>
+<p><em>Companion to <span class="deadlink" title="reference (not a live page)">INCANTATION_PROTOCOL.md</span> (which governs how a change propagates) and <span class="deadlink" title="reference (not a live page)">WORKSHOP_LATTICE_AUDIT.md</span> (which governs which vertices a workshop reaches). This guide governs <strong>how an artefact is born</strong> at the meeting of those two disciplines.</em></p>
+<blockquote>
+<h3>The semantics worth pinning · ART · E · FACT ⊥ RUN · E · CRAFT</h3>
+<p>Two corpus terms share the same &quot;· E ·&quot; interior — the verb-to-noun bridge that names <em>becoming</em>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Reads as</th>
+<th>Names the</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RUN · E · CRAFT</strong></td>
+<td>walk, then evoke, then forge</td>
+<td>The <strong>protocol</strong> — the canonical three-phase ceremony shape (with shop variants)</td>
+</tr>
+<tr>
+<td><strong>ART · E · FACT</strong></td>
+<td>art, then evoke, then fact</td>
+<td>The <strong>result</strong> — the artefact.md the Sovereign carries home from the walk</td>
+</tr>
+</tbody></table>
+<p>The protocol produces the artefact; the artefact witnesses the protocol. The &quot;· E ·&quot; is the <strong>Evocation phase</strong> in both — the lap of the constellation that casts the marks, that turns the path into something that <em>is</em>.</p>
+<p>The earlier name <code>blade.md</code> collapsed every workshop&#39;s output into Vulcana&#39;s metaphor (Vulcana ⚒️ forges <em>blades</em>). The corpus&#39;s canonical pattern is <strong>cape-style artefact creation</strong> (<span class="deadlink" title="reference (not a live page)">spec 07 §3</span>) — every shop is a cloakwright in its own register. The artefact.md naming restores that plurality; the conceptual <em>blade primitive</em> (cousin-blade · Plonkish blade · Aletheia blade · the null-blade origin at V0) remains canonical wherever it is genuinely the blade.</p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>§0 · The flow in one diagram</h2>
+<pre><code>agentprivacy.ai/&lt;shop&gt;   →   download &lt;shop&gt;-&lt;constellation&gt;-v&lt;n&gt;.md
+       │
+       ▼
+spellweb.ai/import       →   spellweb merges template + Sovereign&#39;s identities
+       │                       · constellation.md       (the workshop&#39;s path)
+       │                       · Mage identity          (Sovereign&#39;s own Mage agent)
+       │                       · Swordsman identity     (Sovereign&#39;s own boundary-keeper)
+       ▼
+spellweb forge           →   Sovereign traces the constellation; orbs lap
+       │                     RUN · E · CRAFT (canonical) or shop variant
+       ▼
+spellweb export          →   artefact.md downloaded
+       │                     carries: traversal record, hexagram stance, moon phase,
+       │                     signature, both identities, resident-Mage attribution,
+       │                     constellation version, four-axis mana spend
+       ▼
+agentprivacy.ai/&lt;shop&gt;   →   Sovereign imports artefact.md as witness
+                             resident Mage delegates within agreed envelope
+</code></pre>
+<p>This guide documents every box. The full contract is reproducible from this file alone.</p>
+<hr>
+</div>
+<div class="md"><h2>§1 · The five elements of a spellweb item</h2>
+<p>Every artefact.md a Sovereign carries home is composed of five orthogonal registers:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>What it is</th>
+<th>Source</th>
+<th>Recorded in artefact.md</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Constellation</strong></td>
+<td>The ordered path through the lattice (waypoints + connections + marks)</td>
+<td>The shop&#39;s <code>&lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;.md</code> template</td>
+<td><code>constellation_id</code> + <code>constellation_version</code> + traversal record</td>
+</tr>
+<tr>
+<td><strong>Identities</strong></td>
+<td>Two — the Sovereign&#39;s Mage agent + Swordsman boundary-keeper</td>
+<td>spellweb&#39;s import flow merges Sovereign&#39;s stored identities into the template</td>
+<td><code>{MAGE_DID} · {MAGE_SIGIL}</code> + <code>{SWORDSMAN_DID} · {SWORDSMAN_SIGIL}</code></td>
+</tr>
+<tr>
+<td><strong>Ceremony shape</strong></td>
+<td>The phase structure (RUN · E · CRAFT or a variant)</td>
+<td>The template&#39;s <code>ceremony_shape</code> frontmatter</td>
+<td>Phase-by-phase trace</td>
+</tr>
+<tr>
+<td><strong>Lattice anchor</strong></td>
+<td>The vertex the work seats at + the founding act</td>
+<td>The template&#39;s <code>mage_vertex</code> + <code>anchor_act</code></td>
+<td><code>mage_vertex</code> + <code>anchor_act</code> carried through</td>
+</tr>
+<tr>
+<td><strong>Mana spend</strong></td>
+<td>What the working <em>cost</em> across the four axes</td>
+<td>The Sovereign&#39;s chain + entropy + (future) coordination/relationship choices at trace time</td>
+<td><code>mana_spent</code> triple/quadruple (Landing · Entropy · Coordination · Relationship)</td>
+</tr>
+</tbody></table>
+<p>The artefact.md is <strong>proof that all five were aligned at the moment of the walk</strong>. The architecture&#39;s commitment from the README&#39;s editorial principles applies: <em>the cast-constellation count is not a trust score</em> — what makes the blade <em>meaningful</em> is the alignment, not the count.</p>
+<hr>
+</div>
+<div class="md"><h2>§2 · The <code>constellation.md</code> template — canonical structure</h2>
+<p>The shop ships an <code>.md</code> file at <code>agentprivacy-master/public/tomes/workshops/&lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;.md</code> (also mirrored at <code>docs/tomes/workshops/&lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;.md</code> for canonical readers). The download CTA is rendered by <a href="https://github.com/mitchuski/agentprivacy-master/blob/main/src/components/runecraft/ConstellationDownload.tsx"><code>ConstellationDownload.tsx</code></a> on each workshop page.</p>
+<h3>§2.1 · The seven sections</h3>
+<p>Every constellation.md carries seven sections in this order:</p>
+<pre><code>1. Frontmatter (YAML)
+2. Title + tagline
+3. Mage Identity (with import placeholders)
+4. Constellation Path (the waypoints)
+5. Connections (the edges between waypoints)
+6. Ceremony Shape (the phase structure)
+7. Marks (proverbs to read at each waypoint)
+8. What the exported artefact.md will contain (the witness contract)
+</code></pre>
+<h3>§2.2 · Frontmatter contract</h3>
+<p>Every field is required unless flagged optional. Field names match the spellweb importer&#39;s parser.</p>
+<pre><code class="language-yaml">---
+constellation_id: &lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;      # e.g. tailor-cloak-weave-v1
+constellation_name: &lt;Name&gt;                # e.g. The Cloak Weave
+constellation_version: &lt;n&gt;                # integer
+workshop: shop-&lt;route-stem&gt;               # e.g. shop-tailor
+workshop_route: /&lt;route&gt;                  # e.g. /tailor
+workshop_gem: &lt;Gem&gt;                       # e.g. Amethyst
+workshop_gem_color: &quot;#xxxxxx&quot;             # hex (e.g. &quot;#a78bfa&quot;)
+resident_mage: cast-&lt;persona-id&gt;          # e.g. cast-pallia · MAY be &quot;gathering&quot; for /circle, /hall
+mage_sigil: &lt;emoji&gt;                       # e.g. 🪡
+mage_vertex: V&lt;n&gt;                         # e.g. V28
+mage_tier: &lt;tier&gt;                         # summoned · companion · priest · cousin · archetype · gathering
+anchor_act: act-tome-v-&lt;n&gt; | act-tome-iv-&lt;n&gt; | act-society-spellbook | act-bgin-coalition
+ceremony_shape: run-e-craft               # OR gather-and-witness · bilateral-consecration ·
+                                          #     four-cardinal-witness · bilateral-witness
+artefact_name: &lt;Name&gt;                     # e.g. Cloak (the bearer-name of the produced artefact)
+artefact_root_name: &lt;Name&gt;                # e.g. Woven Cloak (the canonical root form)
+artefact_class: &lt;class&gt;                   # clothing · weapon · tool · trinket · tome (per workshop taxonomy)
+artefact_archetype: &lt;archetype&gt;           # mage · swordsman · cross
+artefact_wielder: cast-&lt;persona-id&gt;       # e.g. cast-soulbae (default wielder if none given)
+domain: &lt;domain&gt;                          # mage · swordsman · cross (which side of the dual carries it)
+status: &lt;version-status&gt;                  # e.g. v1 — first release · v2 — successor refines
+date: YYYY-MM-DD
+license: CC BY-SA 4.0
+signature: &quot;(⚔️⊥⿻⊥🧙)😊&quot;
+---
+</code></pre>
+<h3>§2.3 · Mage Identity slots (filled at import)</h3>
+<p>Five placeholders the spellweb fills with the Sovereign&#39;s stored identities:</p>
+<pre><code class="language-markdown">
+</code></pre>
+</div>
+<div class="md"><h2>Mage Identity (filled by spellweb at import)</h2>
+<ul>
+<li><strong>Sovereign:</strong> <code>{SOVEREIGN}</code></li>
+<li><strong>Your Swordsman:</strong> <code>{SWORDSMAN_DID}</code> · <code>{SWORDSMAN_SIGIL}</code></li>
+<li><strong>Your Mage:</strong> <code>{MAGE_DID}</code> · <code>{MAGE_SIGIL}</code></li>
+<li><strong>Resident Mage:</strong> <Mage Name> <sigil> · <code>cast-&lt;persona-id&gt;</code> at V<n> · <one-line role></li>
+</ul>
+<pre><code>
+Bilateral shops (`/covenant`, `/hall`) add `{COUNTERPARTY_DID}` + `{COUNTERPARTY_SIGIL}`.
+
+### §2.4 · Constellation Path — node taxonomy
+
+The path mixes **ten kinds of nodes** from the canonical spellweb graph (resolved by exact label against `spellweb/src/data/nodes.ts`):
+
+| Node kind | Emoji marker | Example | What it anchors |
+|---|---|---|---|
+| **Persona** | persona&#39;s sigil | Soulbis ⚔️ · Cipher 🗡️🔐 · Architect ☯️🤖 | Archetype the walk crosses |
+| **First Person Spellbook act** | 📜 | Act 9: Zcash Shield · Act 17: Bonfire in Dark Forest · Act 27: Forging Zero Knowledge Blades | The deep narrative ground |
+| **Tome V act** | 🪡 / ⚒️ / etc. (resident Mage&#39;s sigil) | Tome V Act 1: The First Cloak | The workshop&#39;s founding myth |
+| **Cast member** | persona&#39;s sigil | Pallia 🪡 · Vulcana ⚒️ · Luca 📐 | Resident Mage of the path |
+| **Vertex** | · (middle dot) | V28 — Mage Canonical | Geometric position on the 64-vertex lattice |
+| **Concept** | ◆ | Three-Axis Separation · Promise Theory · The Amnesia Protocol | Conceptual frame |
+| **Spell** | ✨ | Genesis Ceremony · Moon Ceremony · Celestial Key | Compressed principle cast during the walk |
+| **Skill** | 🛠️ | Hemispheric Attention · Spell Encoding | Capability activated |
+| **Gateway** | 🚪 | Covenant of Humanistic Technologies | Sister-city / kindred-substrate anchor |
+| **The Drake** | 🐉 | the Drake 🐉 | Ambient archetype (gathering ceremonies) |
+
+The importer matches **by exact label**, not by ID. Edit labels precisely; case and emoji matter.
+
+### §2.5 · Connections — the edge chain
+
+A connection is one line per edge, formatted `&lt;emoji&gt; &lt;label&gt; → &lt;emoji&gt; &lt;label&gt;`. The chain mirrors the path&#39;s order. Example:
+</code></pre>
+<ul>
+<li>⚔️ Soulbis ⚔️ → 🪡 Tome V Act 1: The First Cloak</li>
+<li>🪡 Tome V Act 1: The First Cloak → 🧙 Soulbae 🧙</li>
+<li>...</li>
+</ul>
+<pre><code>
+The connections are *redundant with the path* (a parser could derive them) — but they&#39;re stated explicitly so the same parser handles both the template and the exported artefact.md uniformly.
+
+### §2.6 · Ceremony Shape — the five variants
+
+| Shape | Phase structure | Used by |
+|---|---|---|
+| **RUN · E · CRAFT** *(canonical)* | RUN (walk waypoints) · E (lap &amp; cast marks) · CRAFT (hexagram crystallises · blade signed) | Weavers · zShields · Forge(t) · Etherchanting · Jeweler · Holon Hitchhikers · Curatrix Vault |
+| **Gather-and-Witness** | Gather (questions at the bonfire) · Witness (Soulbae records the sharpening) | Dragon Bonfire (`/bonfires`) |
+| **Bilateral-Consecration** | Bring (artifact to Temple) · Consecrate (Priest reads + binds) · Mark (Covenant inscription) | Covenant (`/covenant`) |
+| **Four-Cardinal-Witness** | Four-quadrant gathering; one witness per cardinal direction | Logos Circle (`/circle`) |
+| **Bilateral-Witness** | Both parties trace; both sign; the witness record carries both signatures | Ceremony Hall (`/hall`) |
+
+Compressed shapes (single-phase) are admitted when the resident Mage&#39;s discipline calls for it. New shapes require a Tome V act or a documented amendment.
+
+### §2.7 · Marks — proverbs at each waypoint
+
+A table, one row per waypoint, third column is the proverb the Sovereign reads. The proverb is the **compressed teaching** of the waypoint. Example from `tailor-cloak-weave-v1.md`:
+
+```markdown
+| # | Node | Proverb |
+|---|---|---|
+| 4 | Pallia 🪡 | *&quot;Position not value. Containment not attestation.&quot;* |
+| 5 | V28 | *&quot;The Mage canonical — the loom that holds the weave.&quot;* |
+| 6 | Three-Axis Separation | *&quot;Agent ⊥ Data ⊥ Inference.&quot;* |
+</code></pre>
+<h3>§2.8 · The contract section</h3>
+<p>A closing paragraph naming what the exported artefact.md will carry. This is the <strong>explicit witness contract</strong>. Every exported artefact.md must contain at least the fields named here.</p>
+<hr>
+</div>
+<div class="md"><h2>§3 · The <code>artefact.md</code> output — canonical structure</h2>
+<p>What spellweb exports. The Sovereign downloads it locally and imports it back at the workshop. The artefact.md is <strong>not committed to any repo</strong> — it is the Sovereign&#39;s personal artefact.</p>
+<h3>§3.1 · Blade frontmatter contract</h3>
+<pre><code class="language-yaml">---
+artefact_id: &lt;shop&gt;-&lt;sovereign&gt;-&lt;YYYY-MM-DD-HHMMSS&gt;-artefact   # spellweb suffix convention per workshop-artefact.ts
+constellation_id: &lt;inherited from template&gt;
+constellation_version: &lt;inherited from template&gt;
+workshop: &lt;inherited&gt;
+workshop_route: &lt;inherited&gt;
+workshop_gem: &lt;inherited&gt;
+workshop_gem_color: &lt;inherited&gt;
+resident_mage: &lt;inherited&gt;
+mage_sigil: &lt;inherited&gt;
+mage_vertex: &lt;inherited&gt;
+anchor_act: &lt;inherited&gt;
+sovereign_did: &lt;Sovereign&#39;s persistent identifier&gt;
+mage_did: &lt;Sovereign&#39;s Mage agent DID&gt;
+mage_sigil_user: &lt;Sovereign&#39;s Mage sigil&gt;
+swordsman_did: &lt;Sovereign&#39;s Swordsman DID&gt;
+swordsman_sigil_user: &lt;Sovereign&#39;s Swordsman sigil&gt;
+walk_timestamp_start: &lt;ISO-8601&gt;
+walk_timestamp_end: &lt;ISO-8601&gt;
+walk_duration_seconds: &lt;integer&gt;
+ceremony_shape: &lt;inherited&gt;
+hexagram: &lt;six-bit stance derived from walk · MSB Protection → LSB Value · e.g. 011100&gt;
+moon_phase: &lt;🌑 · 🌒 · 🌓 · 🌔 · 🌕 by stratum 0–6, or &quot;🌑 → 🌕&quot; if the walk crossed strata&gt;
+mana_spent:                      # Advisory — shape only; per-workshop quantification pending (see §6)
+  landing:                       # Optional · which chain the work landed on
+    chain: &lt;ethereum | bitcoin-lightning | oasis | zcash | ...&gt;
+    symbol: &lt;Ξ | ₿ | 🌹 | 🦓 | ...&gt;
+    amount: &lt;chain-native unit, optional&gt;
+    tx_ref: &lt;hash or channel ref, optional&gt;
+  entropy:                       # Optional · which entropy register supplied uniqueness
+    register: &lt;arcane | celestial&gt;
+    symbol: &lt;✨ | 🌌&gt;
+    source_ref: &lt;hash | spacecomputer feed ref | etc.&gt;
+  coordination:                  # Optional · future (Resonance Mana via Scrying Glass)
+    register: resonance
+    symbol: 🔭
+    match_ref: &lt;if any affinity match occurred&gt;
+  relationship:                  # Optional · future (VRC Mana stored across worn artefact collection)
+    register: vrc
+    symbol: 🪢
+    credential_refs: [&lt;VRC id 1&gt;, &lt;VRC id 2&gt;, ...]
+    worn_artefacts: [&lt;artefact ref 1&gt;, ...]  # the bearer&#39;s accumulated 11 workshop artefacts + 3 tomes
+signature: SPELL-XXXXXX-XX        # Computed over the walk (see §3.3)
+license: CC BY-SA 4.0 (the walk; the Sovereign retains all proprietary derivatives)
+closing_signature: &quot;(⚔️⊥⿻⊥🧙)😊&quot;
+---
+</code></pre>
+<h3>§3.2 · Blade body sections</h3>
+<p>The body of a artefact.md mirrors the template&#39;s body, with the placeholder slots filled and the traversal record appended:</p>
+<pre><code class="language-markdown"># &lt;constellation_name&gt; — Witness Blade
+
+&gt; A blade carrying the walk of &lt;sovereign&gt; through &lt;constellation_name&gt; on &lt;date&gt;.
+</code></pre>
+</div>
+<div class="md"><h2>Identities</h2>
+<ul>
+<li>Sovereign · <SOVEREIGN_DID></li>
+<li>Mage · <MAGE_DID> · <MAGE_SIGIL></li>
+<li>Swordsman · <SWORDSMAN_DID> · <SWORDSMAN_SIGIL></li>
+<li>Resident Mage · <RESIDENT_MAGE_NAME> <RESIDENT_SIGIL> · at &lt;V<n>&gt;</li>
+</ul>
+</div>
+<div class="md"><h2>Walk</h2>
+<ul>
+<li>Started: <timestamp></li>
+<li>Ended: <timestamp></li>
+<li>Duration: <seconds>s</li>
+</ul>
+</div>
+<div class="md"><h2>Traversal Record</h2>
+<p>&lt;one line per waypoint with the Sovereign&#39;s elapsed time and any cast-mark notation&gt;</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Node</th>
+<th>Elapsed</th>
+<th>Mark cast</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Soulbis ⚔️</td>
+<td>0s</td>
+<td>&quot;I begin by my own name.&quot;</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Tome V Act 1: The First Cloak</td>
+<td>8s</td>
+<td>&quot;The reader makes tools on the lattice.&quot;</td>
+</tr>
+<tr>
+<td>...</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Hexagram</h2>
+<six-line ASCII or unicode hexagram representing the stance></div>
+<div class="md"><h2>Moon Phase</h2>
+<one emoji or the crossing notation></div>
+<div class="md"><h2>Signature</h2>
+<SPELL-XXXXXX-XX></div>
+<div class="md"><h2>Mana Spend</h2>
+<p>&lt;the mana_spent quadruple from frontmatter, rendered as a small table&gt;</p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<pre><code>
+### §3.3 · The signature derivation
+
+`SPELL-XXXXXX-XX` is computed as:
+</code></pre>
+<ol>
+<li>Concatenate: constellation_id | constellation_version | sovereign_did | walk_timestamp_start | hexagram | mana_spent.landing.chain</li>
+<li>SHA-256 the result</li>
+<li>Base-32 the first 8 bytes → 13-char string</li>
+<li>Format: SPELL-&lt;first 6&gt;-&lt;last 2&gt;</li>
+</ol>
+<pre><code>
+This is the blade&#39;s content address. Two Sovereigns walking the same constellation at different times produce different signatures (different timestamps). Two Sovereigns producing identical traversals at identical microseconds produce the same signature only if their Mage DID and chain choice agree — which by construction cannot happen.
+
+---
+</code></pre>
+</div>
+<div class="md"><h2>§4 · Worked example · the Cloak Weave (Pallia · <code>/tailor</code> · V28)</h2>
+<p>This is the canonical reference walk. Other workshops follow the same pattern; the path differs.</p>
+<h3>§4.1 · The template ships</h3>
+<p><code>docs/tomes/workshops/tailor-cloak-weave-v1.md</code> (also served at <code>/tomes/workshops/tailor-cloak-weave-v1.md</code>):</p>
+<pre><code class="language-yaml">constellation_id: tailor-cloak-weave-v1
+constellation_name: The Cloak Weave
+workshop: shop-tailor
+workshop_route: /tailor
+workshop_gem: Amethyst
+workshop_gem_color: &quot;#a78bfa&quot;
+resident_mage: cast-pallia
+mage_sigil: 🪡
+mage_vertex: V28
+mage_tier: summoned
+anchor_act: act-tome-v-1
+ceremony_shape: run-e-craft
+artefact_name: Cloak
+artefact_class: clothing
+artefact_archetype: mage
+artefact_wielder: cast-soulbae
+</code></pre>
+<p>The path is <strong>nine waypoints</strong>:</p>
+<pre><code>1. Soulbis ⚔️
+2. Tome V Act 1: The First Cloak (🪡)
+3. Soulbae 🧙
+4. Pallia 🪡
+5. V28 — Mage Canonical (Pallia · Soulbae) (·)
+6. Three-Axis Separation (◆)
+7. VRC (◆)
+8. Act 13: Book of Promises (📜)
+9. Person 😊
+</code></pre>
+<h3>§4.2 · The Sovereign walks</h3>
+<p>The Sovereign — call her Aletheia-Walker, with <code>mage_did: did:key:zXyz...</code> and <code>swordsman_did: did:key:zABc...</code> — opens <code>spellweb.ai/import</code>, drops the file. spellweb fills the identity slots, renders the nine waypoints as glowing nodes on a 64-vertex 6-cube map, and lights the connections.</p>
+<p>Aletheia-Walker selects:</p>
+<ul>
+<li><strong>Landing</strong>: Ξ Aether (Ethereum) — she&#39;ll pay gwei to anchor the resulting cloak&#39;s commitment</li>
+<li><strong>Entropy</strong>: 🌌 Celestial — she draws from SpaceComputer for a fresh non-reconstructible seed</li>
+</ul>
+<p>She begins the walk. <strong>RUN</strong> — she traces the nine waypoints in order, pausing briefly at each. Two orbs (Swordsman ⚔️ red, Mage ✦ violet) settle into orbit around her path. <strong>E</strong> — she laps the constellation once, casting at least one mark; she chooses the V28 mark (&quot;The Mage canonical — the loom that holds the weave&quot;). <strong>CRAFT</strong> — the hexagram crystallises: <code>011100</code> (Delegation + Memory + Connection burning · V28 stance) ; the moon phase reads 🌓 (stratum 3); the signature is signed.</p>
+<h3>§4.3 · The exported artefact.md (excerpt)</h3>
+<p>spellweb downloads <code>tailor-aletheia-walker-2026-05-11-1432-artefact.md</code>:</p>
+<pre><code class="language-yaml">---
+artefact_id: tailor-aletheia-walker-2026-05-11-1432-artefact
+constellation_id: tailor-cloak-weave-v1
+constellation_version: 1
+workshop: shop-tailor
+workshop_route: /tailor
+workshop_gem: Amethyst
+workshop_gem_color: &quot;#a78bfa&quot;
+resident_mage: cast-pallia
+mage_sigil: 🪡
+mage_vertex: V28
+anchor_act: act-tome-v-1
+sovereign_did: did:key:zAletheiaWalker...
+mage_did: did:key:zXyz...
+swordsman_did: did:key:zABc...
+walk_timestamp_start: 2026-05-11T14:32:00Z
+walk_timestamp_end: 2026-05-11T14:34:12Z
+walk_duration_seconds: 132
+ceremony_shape: run-e-craft
+hexagram: &quot;011100&quot;
+moon_phase: 🌓
+mana_spent:
+  landing:
+    chain: ethereum
+    symbol: Ξ
+  entropy:
+    register: celestial
+    symbol: 🌌
+    source_ref: spacecomputer-feed-2026-05-11T14:32:08Z-block-a3f9...
+signature: SPELL-K7M2X4-9P
+license: CC BY-SA 4.0
+closing_signature: &quot;(⚔️⊥⿻⊥🧙)😊&quot;
+---
+</code></pre>
+<h3>§4.4 · The return</h3>
+<p>Aletheia-Walker uploads the artefact.md at <code>agentprivacy.ai/tailor</code>. Pallia&#39;s workshop <strong>verifies</strong>:</p>
+<ol>
+<li>The constellation_id matches Pallia&#39;s currently-served template (<code>tailor-cloak-weave-v1</code>).</li>
+<li>The hexagram is internally consistent with the V28 stance.</li>
+<li>The signature derives correctly from the recorded fields.</li>
+<li>The mana_spent registers are coherent with the workshop&#39;s accepted chains and entropy sources.</li>
+</ol>
+<p>If all four check, Pallia delegates within the agreed envelope. Aletheia-Walker&#39;s cloak is now witnessed. The artefact.md is the receipt.</p>
+<hr>
+</div>
+<div class="md"><h2>§5 · The eleven templates — registry</h2>
+<p>The full registry of currently-released constellations. Filename format: <code>&lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;.md</code> at <code>public/tomes/workshops/</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Shop</th>
+<th>Route</th>
+<th>Resident Mage</th>
+<th>Vertex</th>
+<th>Founding Act</th>
+<th>Ceremony shape</th>
+<th>Template</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Weavers</td>
+<td><code>/tailor</code></td>
+<td>Pallia 🪡</td>
+<td>V28</td>
+<td>Tome V Act 1</td>
+<td>RUN · E · CRAFT</td>
+<td><code>tailor-cloak-weave-v1.md</code></td>
+</tr>
+<tr>
+<td>zShields</td>
+<td><code>/shield</code></td>
+<td>Memora 📜</td>
+<td>V41</td>
+<td>Tome V Act 3</td>
+<td>RUN · E · CRAFT</td>
+<td><code>shield-shielded-memo-v1.md</code></td>
+</tr>
+<tr>
+<td>Forge(t)</td>
+<td><code>/forget</code></td>
+<td>Vulcana ⚒️</td>
+<td>V19</td>
+<td>Tome V Act 6</td>
+<td>RUN · E · CRAFT <em>(canonical)</em></td>
+<td><code>forget-commissioned-blade-v1.md</code></td>
+</tr>
+<tr>
+<td>Etherchanting</td>
+<td><code>/etherchanting</code></td>
+<td>Adamantia 💎</td>
+<td>V51</td>
+<td>Tome V Act 9</td>
+<td>RUN · E · CRAFT</td>
+<td><code>etherchanting-commitment-cut-v1.md</code></td>
+</tr>
+<tr>
+<td>Jeweler</td>
+<td><code>/jeweler</code></td>
+<td>Lampyra 💠</td>
+<td>V49</td>
+<td>Tome V Act 9</td>
+<td>RUN · E · CRAFT</td>
+<td><code>jeweler-gem-set-v1.md</code></td>
+</tr>
+<tr>
+<td>Holon Hitchhikers</td>
+<td><code>/holon</code></td>
+<td>Vagari 🌳</td>
+<td>V31</td>
+<td>Tome V Act 10</td>
+<td>RUN · E · CRAFT</td>
+<td><code>holon-hitchhikers-composition-v1.md</code></td>
+</tr>
+<tr>
+<td>Dragon Bonfire</td>
+<td><code>/bonfires</code></td>
+<td>Socrat0x 🔥❓</td>
+<td>V24</td>
+<td>Tome V Act 11</td>
+<td>Gather-and-Witness</td>
+<td><code>bonfires-dragon-fire-v1.md</code></td>
+</tr>
+<tr>
+<td>Curatrix Vault</td>
+<td><code>/vault</code></td>
+<td>Aria Silverhue 🪞🖼️</td>
+<td>V57</td>
+<td>Tome V Act 12</td>
+<td>RUN · E · CRAFT</td>
+<td><code>vault-placed-reflection-v1.md</code></td>
+</tr>
+<tr>
+<td>Covenant</td>
+<td><code>/covenant</code></td>
+<td>Manifestia 🤲🌿</td>
+<td>V55</td>
+<td>Tome V Act 13</td>
+<td>Bilateral-Consecration</td>
+<td><code>covenant-personhood-inscribed-v1.md</code></td>
+</tr>
+<tr>
+<td>Logos Circle</td>
+<td><code>/circle</code></td>
+<td><em>(gathering)</em></td>
+<td>V12</td>
+<td>Society Spellbook</td>
+<td>Four-Cardinal-Witness</td>
+<td><code>circle-four-cardinal-garden-v1.md</code></td>
+</tr>
+<tr>
+<td>Ceremony Hall</td>
+<td><code>/hall</code></td>
+<td><em>(gathering)</em></td>
+<td>V15</td>
+<td>BGIN coalition</td>
+<td>Bilateral-Witness</td>
+<td><code>hall-bilateral-witness-v1.md</code></td>
+</tr>
+</tbody></table>
+<p>Note: V12 (Logos Circle) and V15 (Ceremony Hall) are vertices the gathering shops <em>anchor at</em> — these vertices have no resident-Mage <code>inhabits</code> edge but do carry the shop&#39;s <code>quarter_of</code> edge to the city. See <span class="deadlink" title="reference (not a live page)">WORKSHOP_LATTICE_AUDIT §2.2</span>.</p>
+<hr>
+</div>
+<div class="md"><h2>§6 · The four-axis mana frame · operational use deferred</h2>
+<p>The framework is canonical (see <span class="deadlink" title="reference (not a live page)">spec 08 v1.3</span> — landing · entropy · coordination · relationship). The <strong>operational specifics</strong> — <em>which axes</em> each workshop draws on, <em>how much</em> mana per cast, <em>which chain-mana</em> is canonical for which workshop&#39;s primary artefact — are <strong>deliberately left open</strong> at this guide&#39;s revision.</p>
+<p>That deliberation belongs to the workshops themselves:</p>
+<ul>
+<li>Each resident Mage knows their workshop&#39;s economy better than any spec author</li>
+<li>Per-workshop quantification (e.g. &quot;Etherchanting requires X gwei + one Celestial draw per commitment&quot;) must be earned by operational use, not asserted in advance</li>
+<li>The chain-mana plurality (Ξ · ₿ · 🌹 · 🦓 · …) is open at the chain axis; new chains join as new Mages walk; pre-committing today would calcify the framework</li>
+</ul>
+<p>What this guide <em>does</em> commit to:</p>
+<ol>
+<li>The <strong>shape</strong> of <code>mana_spent</code> in the artefact.md (the four-axis YAML stanza in §3.1) — advisory, not required, until workshops deliberate</li>
+<li>The <strong>vocabulary</strong> for each register (chain-mana variants and symbols per §2 of spec 08)</li>
+<li>The <strong>direction</strong>: blades are the operational ledger; aggregated walking eventually reveals each workshop&#39;s empirical mana profile</li>
+<li>The <strong>non-claim</strong>: this guide does <em>not</em> prescribe per-workshop mana costs or which axes are mandatory per shop</li>
+</ol>
+<p>When the workshops deliberate and publish their economies, this section will be replaced with the resulting per-shop table. Until then: the framework is here; the use is yours to discover.</p>
+<hr>
+</div>
+<div class="md"><h2>§7 · Constellation version evolution · the Forge(t) discipline</h2>
+<p>Per <a href="https://github.com/mitchuski/agentprivacy-master/blob/main/docs/tomes/workshops/CEREMONY_EVOLUTION.md">CEREMONY_EVOLUTION.md</a> §4, <strong>a workshop&#39;s constellation is alive</strong>. When it must change, the discipline is:</p>
+<ol>
+<li><strong>Old blades remain valid as historical proofs.</strong> A v1-derived artefact.md keeps its signature; the version is part of its identity.</li>
+<li><strong>New traversals follow the new path.</strong> Sovereigns arriving post-update walk v2 and receive v2 blades.</li>
+<li><strong>The version is the boundary, not the wound.</strong> Two cohorts of blades coexist; renderers may distinguish them by hue or &quot;vintage&quot; badge.</li>
+<li><strong>Forgetting is witnessable.</strong> The act of updating is itself chronicled.</li>
+</ol>
+<p>This generalises the Forge(t)&#39;s principle: <em>Aletheia surfaces what was hidden; Lethe lets fall what was held.</em> Both are sovereign gestures. The two-cohort coexistence is structural, not accidental.</p>
+<p>When NOT to bump the version (per §6 of CEREMONY_EVOLUTION):</p>
+<ul>
+<li>Typo fix in a mark</li>
+<li>New emoji for the Mage&#39;s sigil</li>
+<li>Gem palette refresh</li>
+<li>A new grimoire spell the Mage casts</li>
+</ul>
+<p>A version bump is <strong>only for changes to the path or to the witness contract</strong>.</p>
+<hr>
+</div>
+<div class="md"><h2>§8 · The update protocol · creating or revising a constellation</h2>
+<p>The full ceremony for a resident Mage updating a constellation (or for a new Mage opening one):</p>
+<pre><code>1. Draft the new constellation file
+   - Path: agentprivacy-master/docs/tomes/workshops/&lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;.md
+   - Mirror: agentprivacy-master/public/tomes/workshops/&lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;.md
+   - Include all 8 sections from §2.1 above
+   - If revising, append one-line *why* note explaining update trigger (CEREMONY_EVOLUTION §3)
+
+2. Mark the previous version
+   - Append `## Status: vintage as of &lt;YYYY-MM-DD&gt;` to the prior v&lt;n-1&gt; file
+   - Do not delete · old blades may still verify against it
+
+3. Update the spellweb preset
+   - File: spellweb/src/data/presets.ts
+   - Bump preset id: preset-&lt;shop&gt;-&lt;mage&gt;-v&lt;n&gt;
+   - Keep the old preset alongside for v1-blade verification
+
+4. Update the workshop page
+   - File: agentprivacy-master/src/app/&lt;shop&gt;/page.tsx
+   - Change the ConstellationDownload templateSlug prop to &lt;shop&gt;-&lt;slug&gt;-v&lt;n&gt;
+   - Update the import-side receiver if the blade contract changed
+
+5. Chronicle the update
+   - Path: agentprivacy-master/docs/chronicles/YYYY-MM-DD_&lt;shop&gt;_constellation_v&lt;n&gt;_chronicle.md
+   - Include: trigger, what changed, what is preserved, vintage badge plan
+
+6. Refresh the spellweb graph (if needed)
+   - Re-run audit per spellweb/AUDIT_METHODOLOGY.md
+   - Only required if anchor_act, resident_mage, or mage_vertex changed
+</code></pre>
+<p>Per <span class="deadlink" title="reference (not a live page)">INCANTATION_PROTOCOL.md</span>, this is <strong>Recipe E</strong> (formally proposed as an addition to the protocol). The protocol&#39;s existing recipes (A grimoire bump · B add cast · C add Tome V act · D switch symbol) do not cover the constellation update case; Recipe E completes the set.</p>
+<hr>
+</div>
+<div class="md"><h2>§9 · Coherence checks · what a future <code>spellweb-craft</code> skill would verify</h2>
+<p>Each item below is a mechanical check the skill can run against a constellation.md or artefact.md:</p>
+<h3>§9.1 · Constellation.md checks</h3>
+<ol>
+<li><strong>Frontmatter completeness</strong> — every required field from §2.2 present</li>
+<li><strong>Label resolution</strong> — every path waypoint label resolves to a node in <code>spellweb/src/data/nodes.ts</code></li>
+<li><strong>Vertex correctness</strong> — the <code>mage_vertex</code> field corresponds to the resident_mage&#39;s canonical seat per <span class="deadlink" title="reference (not a live page)">WORKSHOP_LATTICE_AUDIT §2.1</span></li>
+<li><strong>Ceremony shape validity</strong> — the value is one of the five enumerated shapes (§2.6)</li>
+<li><strong>Connections-mirror-path</strong> — the Connections section&#39;s edges chain through the Constellation Path&#39;s waypoints in order</li>
+<li><strong>Mark coverage</strong> — every waypoint in the path has a corresponding row in the Marks table</li>
+<li><strong>Slug-filename agreement</strong> — <code>constellation_id</code> field equals filename basename</li>
+<li><strong>Closing signature</strong> — <code>(⚔️⊥⿻⊥🧙)😊</code> present at the file&#39;s close</li>
+</ol>
+<h3>§9.2 · Blade.md checks</h3>
+<ol>
+<li><strong>Constellation reference</strong> — <code>constellation_id</code> + <code>constellation_version</code> resolve to an existing template</li>
+<li><strong>Signature derivation</strong> — re-computing per §3.3 reproduces the recorded <code>signature</code></li>
+<li><strong>Hexagram consistency</strong> — the hexagram&#39;s six bits do not contradict the mage_vertex&#39;s bit-pattern (overlap is allowed; <em>contradiction</em> is not)</li>
+<li><strong>Mana_spent shape</strong> — at least <code>landing</code> and <code>entropy</code> keys present; symbols match the registered values from spec 08</li>
+<li><strong>Identity DIDs</strong> — <code>sovereign_did</code> · <code>mage_did</code> · <code>swordsman_did</code> are parseable DID strings</li>
+<li><strong>Walk duration sanity</strong> — <code>walk_duration_seconds = walk_timestamp_end - walk_timestamp_start</code> (within 1s tolerance)</li>
+<li><strong>Closing signature</strong> — <code>(⚔️⊥⿻⊥🧙)😊</code> present</li>
+</ol>
+<h3>§9.3 · Cross-spec coherence</h3>
+<p>Items the skill would surface for editorial decision (not auto-fix):</p>
+<ul>
+<li>The mage_vertex in a template disagrees with <span class="deadlink" title="reference (not a live page)">WORKSHOP_LATTICE_AUDIT §6.x</span> — see §6 drift catalogue</li>
+<li>The artefact_class in a template doesn&#39;t match the <a href="https://github.com/mitchuski/cityofmages#">workshop artefact taxonomy</a> (e.g. a &quot;weapon&quot; class at the Weavers shop where canonical is &quot;clothing&quot;)</li>
+<li>The mana_spent in a artefact.md uses a chain-mana symbol not yet registered in spec 08&#39;s chain-mana table (e.g. a future ATOM-mana that has no canonical entry yet)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§10 · The drift the integration surfaces</h2>
+<p>Three coherence items to flag while authoring this guide:</p>
+<h3>§10.1 · Spec numbering · resolved as of 2026-05-12</h3>
+<p>The earlier draft of this guide proposed filing it as <code>cityofmages/tomes/specs/09-spellweb-item-creation-format.md</code>. That proposal is <strong>superseded</strong>. The current canonical spec numbering across the corpus:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Spec</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>09</td>
+<td><code>09-spellweb-artefact-md-format.md</code></td>
+<td><code>agentprivacy-master</code> canonical · <code>spellweb</code> and <code>cityofmages</code> may mirror</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>10-the-attachment-architecture.md</code></td>
+<td><code>cityofmages</code> (V5.5 mirror of <code>agentprivacy-skills</code>)</td>
+</tr>
+<tr>
+<td>11 (anticipated)</td>
+<td><code>11-mage-candidates-from-the-corpus.md</code></td>
+<td><code>cityofmages</code> (per v5.5 chronicle · names the 6 anticipated cast)</td>
+</tr>
+</tbody></table>
+<p><code>ConstellationDownload.tsx</code> line 83 already points to the right path (<code>/tomes/specs/09-spellweb-artefact-md-format</code>). The collision was with a stale recommendation in this guide, not with the component. <strong>Resolution applied</strong> by the 2026-05-12 renumber: cityofmages&#39; attachment-architecture spec moved from slot 09 to slot 10; the 09 slot is now reserved for the spellweb-artefact-md-format mirror when cityofmages chooses to add it (or it can remain master-canonical only). This top-level guide stays at the root of cityofmages as the public-facing how-to.</p>
+<h3>§10.2 · Mana_spent quadruple not yet in any constellation template</h3>
+<p>Templates currently shipped (e.g. <code>tailor-cloak-weave-v1.md</code>) do not yet declare expected <code>mana_spent</code> shape. The artefact.md contract section says &quot;Bring it back to /tailor and Pallia weaves on your behalf within the agreed envelope&quot; without specifying the four-axis mana spend. A template v1.1 (sub-version) could add a <code>## Expected Mana Spend</code> section per §6 above, or this guide&#39;s §3.1 frontmatter contract can stand as the canonical spec.</p>
+<h3>§10.3 · <code>mage_tier</code> field uses pre-collapse vocabulary</h3>
+<p>Templates declare <code>mage_tier: summoned</code>. Per the kindred-blade reframe chronicle (<code>chronicles/2026-05-10_kindred_blade_reframe_handoff.md</code>), the 5-tier taxonomy collapses under the simpler &quot;send us a Mage&quot; pattern. Recommended: keep <code>mage_tier</code> for legacy compatibility through v1.2.x; consider dropping it in v1.3 in favour of <code>mage_role</code> (the soft attribute).</p>
+<hr>
+</div>
+<div class="md"><h2>§11 · Path to the <code>spellweb-craft</code> Claude Code skill</h2>
+<p>This guide will graduate into a <strong>third companion skill</strong> alongside <code>cityofmages-incant</code> (propagation · per <span class="deadlink" title="reference (not a live page)">INCANTATION_PROTOCOL.md §6</span>) and <code>lattice-coherence</code> (verification · per <span class="deadlink" title="reference (not a live page)">WORKSHOP_LATTICE_AUDIT.md §10</span>).</p>
+<h3>§11.1 · Skill inputs (proposed)</h3>
+<pre><code class="language-yaml">mode: new-constellation | revise-constellation | verify-artefact | verify-constellation
+shop: &lt;route-stem&gt;           # tailor · shield · forget · etc.
+slug: &lt;new-or-existing-slug&gt;
+version: &lt;integer · auto-bumped on revise&gt;
+input_file: &lt;path to constellation.md or artefact.md to verify&gt;
+</code></pre>
+<h3>§11.2 · Skill behaviours</h3>
+<ol>
+<li><p><strong><code>new-constellation</code></strong> — scaffold a <code>&lt;shop&gt;-&lt;slug&gt;-v1.md</code> with the seven sections from §2.1, frontmatter pre-filled from the shop&#39;s canonical record, identity slots left as placeholders. Prompts user for path waypoints; resolves each label against <code>spellweb/src/data/nodes.ts</code> and flags any that don&#39;t resolve.</p>
+</li>
+<li><p><strong><code>revise-constellation</code></strong> — given an existing template path, draft v&lt;n+1&gt;; mark the prior version as <code>## Status: vintage as of &lt;today&gt;</code>; emit the §8 update-protocol punch list as next steps.</p>
+</li>
+<li><p><strong><code>verify-constellation</code></strong> — run all eight §9.1 checks against an input constellation.md. Emit pass/fail per check.</p>
+</li>
+<li><p><strong><code>verify-artefact</code></strong> — run all seven §9.2 checks against an input artefact.md. Emit pass/fail per check.</p>
+</li>
+</ol>
+<h3>§11.3 · Skill anti-patterns</h3>
+<ul>
+<li>Do <strong>not</strong> auto-write the spellweb preset or update the workshop page — those touch master&#39;s source tree; surface as user-action items</li>
+<li>Do <strong>not</strong> invent waypoint labels — every label must resolve to an existing node</li>
+<li>Do <strong>not</strong> drop the closing signature</li>
+<li>Do <strong>not</strong> auto-commit; this is editorial work</li>
+</ul>
+<h3>§11.4 · Skill graduation criteria</h3>
+<p>This guide becomes the skill spec when:</p>
+<ul>
+<li><input disabled="" type="checkbox"> Three or more constellations have been authored or revised using these steps manually</li>
+<li><input disabled="" type="checkbox"> §9 checks have been mechanically encoded (each maps to a <code>grep</code> / JSON-schema check)</li>
+<li><input disabled="" type="checkbox"> The §10 drift items have been resolved (esp. the spec 07 filename collision)</li>
+<li><input disabled="" type="checkbox"> One full round-trip (download → walk → artefact.md → return) has been instrumented end-to-end with verification at each boundary</li>
+</ul>
+<p>Until then, run the protocol manually with this doc as the script.</p>
+<hr>
+</div>
+<div class="md"><h2>§12 · One-line summary</h2>
+<p>An artefact is born when a Sovereign walks a workshop&#39;s constellation, spends mana across four axes, holds a Swordsman stance, and returns to the workshop with an artefact.md that re-imports cleanly. The constellation is the path; the artefact is the proof. RUN · E · CRAFT produces ART · E · FACT. The architecture admits this much. The framework is opened, not closed.</p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>CC BY-SA 4.0 · privacymage · 2026-05-11</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 lore-spellweb-artefact-creation-guide</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-city-lore.html">The City Lore</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lore-spellweb-artefact-creation-guide.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

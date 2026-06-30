@@ -1,0 +1,86 @@
+{
+  "title": "Wiki New Domain",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "f7e70860dce717e2",
+      "text": "# Wiki New Domain\n\n**Category** wikis · **Version** 5.5\n\nCreate a new federated-wiki domain — either a local/private wiki (served on localhost) or a public Nextcloud-synced wiki. Activates when standing up a new wiki site/domain. Merges the new-wiki-skill variant. Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "22e524a7b324edd0",
+      "text": "> **Note:** the upstream page `fedwiki-new-wiki-skill` (and its earlier variant `new-wiki-skill`) was unreachable (HTTP 404) when this skill was materialized on 2026-06-21. This body is reconstructed from the sitemap synopsis and the cross-references in sibling skills (reindex, welcome, nextcloud-push). Refresh it with `agentprivacy-wiki-to-skill` once the upstream page resolves.\n\nThe `fedwiki-new-wiki` skill creates a new federated wiki **domain** — a fresh site with its own `pages/` and `status/` folders. A domain is either *local/private* (served on localhost, never synced off-machine) or *public* (synced to a remote server via Nextcloud).\n\n## Two Kinds of Wiki\n\n**Local / private** — lives under:\n```\n~/Music/Guides/Private/{domain}/\n```\nServed by the local wiki farm on port 3000. Never leaves the machine. Use for drafts, private notes, and skill development.\n\n**Public** — lives under:\n```\n~/Nextcloud/fedwiki/{domain}/\n```\nSynced to the remote Nextcloud/wiki server, so the site is reachable on the public web. Use for anything meant to be browsed or federated.\n\n## What \"Creating a Domain\" Means\n\nA wiki domain is a directory with this minimal shape:\n\n```\n{domain}/\n  pages/          # one JSON file per page (no extension)\n  status/         # server-maintained sitemap.json + site-index.json (built on demand)\n```\n\nTo create a new domain:\n\n1. **Choose the kind** (private vs public) — this picks the parent folder above.\n2. **Choose the domain name** — the site's host-style identifier (e.g. `skill.fedwiki.club`, `mynotes.guide.agentprivacy.ai`).\n3. **Create the folder** with an empty `pages/` directory.\n4. **Add a landing page** — use `agentprivacy-wiki-welcome` to write the `welcome-visitors` page (the site has no landing page until you do).\n5. **Reindex (private)** — run `agentprivacy-wiki-reindex` so the local server builds the sitemap/search index. (Public wikis index on the remote after sync.)\n6. **Push (public, if sync stalls)** — if the Nextcloud desktop client doesn't upload the new folder, use `agentprivacy-wiki-nextcloud-push` to WebDAV-`PUT` the pages and `MKCOL` the new directories.\n\n## Checklist\n\n- [ ] Picked private (`~/Music/Guides/Private/`) vs public (`~/Nextcloud/fedwiki/`)\n- [ ] Created `{domain}/pages/`\n- [ ] Wrote a `welcome-visitors` landing page\n- [ ] Reindexed (private) or confirmed remote sync (public)\n- [ ] First page resolves in the browser\n\n## Related Skills\n\n- `agentprivacy-wiki-welcome` — create the landing page for the new domain\n- `agentprivacy-wiki-reindex` — build the local index after creating pages\n- `agentprivacy-wiki-page` — the page JSON format\n- `agentprivacy-wiki-nextcloud-push` — force-upload a public wiki when sync stalls"
+    },
+    {
+      "type": "markdown",
+      "id": "45097fdbff6adce3",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer) · **reconstructed body — refresh from upstream when reachable**\n**Upstream:** [skill.fedwiki.club/fedwiki-new-wiki-skill](https://skill.fedwiki.club/fedwiki-new-wiki-skill) (+ new-wiki-skill, merged) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "d57b658880a0441d",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-new-domain`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "acda5e7816906628",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "334bf9f88b981227",
+      "text": "agentprivacy-wiki-new-domain"
+    },
+    {
+      "type": "markdown",
+      "id": "ec46f80a30f01a39",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki New Domain",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "f7e70860dce717e2",
+            "text": "# Wiki New Domain\n\n**Category** wikis · **Version** 5.5\n\nCreate a new federated-wiki domain — either a local/private wiki (served on localhost) or a public Nextcloud-synced wiki. Activates when standing up a new wiki site/domain. Merges the new-wiki-skill variant. Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "22e524a7b324edd0",
+            "text": "> **Note:** the upstream page `fedwiki-new-wiki-skill` (and its earlier variant `new-wiki-skill`) was unreachable (HTTP 404) when this skill was materialized on 2026-06-21. This body is reconstructed from the sitemap synopsis and the cross-references in sibling skills (reindex, welcome, nextcloud-push). Refresh it with `agentprivacy-wiki-to-skill` once the upstream page resolves.\n\nThe `fedwiki-new-wiki` skill creates a new federated wiki **domain** — a fresh site with its own `pages/` and `status/` folders. A domain is either *local/private* (served on localhost, never synced off-machine) or *public* (synced to a remote server via Nextcloud).\n\n## Two Kinds of Wiki\n\n**Local / private** — lives under:\n```\n~/Music/Guides/Private/{domain}/\n```\nServed by the local wiki farm on port 3000. Never leaves the machine. Use for drafts, private notes, and skill development.\n\n**Public** — lives under:\n```\n~/Nextcloud/fedwiki/{domain}/\n```\nSynced to the remote Nextcloud/wiki server, so the site is reachable on the public web. Use for anything meant to be browsed or federated.\n\n## What \"Creating a Domain\" Means\n\nA wiki domain is a directory with this minimal shape:\n\n```\n{domain}/\n  pages/          # one JSON file per page (no extension)\n  status/         # server-maintained sitemap.json + site-index.json (built on demand)\n```\n\nTo create a new domain:\n\n1. **Choose the kind** (private vs public) — this picks the parent folder above.\n2. **Choose the domain name** — the site's host-style identifier (e.g. `skill.fedwiki.club`, `mynotes.guide.agentprivacy.ai`).\n3. **Create the folder** with an empty `pages/` directory.\n4. **Add a landing page** — use `agentprivacy-wiki-welcome` to write the `welcome-visitors` page (the site has no landing page until you do).\n5. **Reindex (private)** — run `agentprivacy-wiki-reindex` so the local server builds the sitemap/search index. (Public wikis index on the remote after sync.)\n6. **Push (public, if sync stalls)** — if the Nextcloud desktop client doesn't upload the new folder, use `agentprivacy-wiki-nextcloud-push` to WebDAV-`PUT` the pages and `MKCOL` the new directories.\n\n## Checklist\n\n- [ ] Picked private (`~/Music/Guides/Private/`) vs public (`~/Nextcloud/fedwiki/`)\n- [ ] Created `{domain}/pages/`\n- [ ] Wrote a `welcome-visitors` landing page\n- [ ] Reindexed (private) or confirmed remote sync (public)\n- [ ] First page resolves in the browser\n\n## Related Skills\n\n- `agentprivacy-wiki-welcome` — create the landing page for the new domain\n- `agentprivacy-wiki-reindex` — build the local index after creating pages\n- `agentprivacy-wiki-page` — the page JSON format\n- `agentprivacy-wiki-nextcloud-push` — force-upload a public wiki when sync stalls"
+          },
+          {
+            "type": "markdown",
+            "id": "45097fdbff6adce3",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer) · **reconstructed body — refresh from upstream when reachable**\n**Upstream:** [skill.fedwiki.club/fedwiki-new-wiki-skill](https://skill.fedwiki.club/fedwiki-new-wiki-skill) (+ new-wiki-skill, merged) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "d57b658880a0441d",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-new-domain`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "acda5e7816906628",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "334bf9f88b981227",
+            "text": "agentprivacy-wiki-new-domain"
+          },
+          {
+            "type": "markdown",
+            "id": "ec46f80a30f01a39",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384133
+    }
+  ]
+}

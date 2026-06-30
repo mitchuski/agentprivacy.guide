@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Merge",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "180497d10294b65f",
+      "text": "# Wiki Merge\n\n**Category** wikis · **Version** 5.5\n\nAnalyze and clean up a superseded federated-wiki domain — categorize its pages (boilerplate / duplicate / minimal / unique), move unique content to the successor, trash the rest to a recycler, reindex, and delete the old domain. Activates when consolidating or retiring a wiki site. Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "4db360c55bb0ecb6",
+      "text": "The `fedwiki-merge` skill analyses and cleans up a federated wiki that has been superseded by a newer domain. When a site is replaced (e.g. `david.ide.earth` → `david.vision.ide.earth`), the old site is a mix of pages already copied to the new site, standard boilerplate, and unique content worth keeping. The skill separates these and handles each appropriately, ending with a full delete of the old domain.\n\n## Step 1 — Analyse\n\nDry run — prints a categorised report, no files touched:\n\n```bash\nfedwiki-merge-analyse david.ide.earth david.vision.ide.earth\n```\n\nPages are placed into categories:\n\n| Category | Meaning | Action |\n|---|---|---|\n| `BOILERPLATE` | Standard tool pages (changes-to-this-site, welcome-visitors, tools…) — checked first, regardless of date | Trash |\n| `DUPLICATE_OLDER` | Same slug in new site; old version is older | Trash |\n| `MINIMAL` | ≤ 1 item AND < 100 chars | Trash |\n| `DUPLICATE_NEWER` | Same slug in new site; old version is newer | Review |\n| `UNIQUE_CONTENT` | Only in old site, has real content | Move |\n\n## Step 2 — Move Unique Pages\n\nMoves all `UNIQUE_CONTENT` pages from the old site into the new site's `pages/` folder, pushes each to Nextcloud, and deletes each from the old site's remote. Pages already present in the new site are never overwritten.\n\n```bash\nfedwiki-merge-move david.ide.earth david.vision.ide.earth\n# or a specific page:\nfedwiki-merge-move david.ide.earth david.vision.ide.earth my-page\n```\n\n## Step 3 — Trash Safe Pages\n\nMoves `BOILERPLATE`, `DUPLICATE_OLDER`, and `MINIMAL` pages to `{old-domain}/recycler/` and deletes them from the remote. The recycler is a local safety net — pages can be manually recovered from there.\n\n```bash\nfedwiki-merge-trash david.ide.earth david.vision.ide.earth\n```\n\n## Step 4 — Reindex\n\nRebuilds the sitemap and search index on both sites after the moves and deletions:\n\n```bash\nnextcloud-reindex david.vision.ide.earth\nnextcloud-reindex david.ide.earth\n```\n\n## Step 5 — Delete the Old Site\n\nOnce the old site's `pages/` folder is empty, delete the whole domain:\n\n```bash\nfedwiki-delete-site david.ide.earth\n# force even if pages remain:\nfedwiki-delete-site david.ide.earth --force\n```\n\n## Scripts\n\n- `~/bin/fedwiki-merge-analyse` — categorised report, dry run\n- `~/bin/fedwiki-merge-move` — move unique content to new site\n- `~/bin/fedwiki-merge-trash` — move safe pages to recycler\n- `~/bin/fedwiki-delete-site` — delete entire domain locally and remotely\n\nAll scripts read credentials from `NC_USER` and `NC_PASSWORD` in the environment.\n\n## Related Skills\n\n- `agentprivacy-wiki-delete-site` — the final delete step\n- `agentprivacy-wiki-reindex` — reindexing after bulk page changes\n- `agentprivacy-wiki-nextcloud-push` — the WebDAV push used by merge-move\n- `agentprivacy-wiki-journal` — strip accumulated journal history before merging"
+    },
+    {
+      "type": "markdown",
+      "id": "c82a528eafc70ab9",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-merge-skill](https://skill.fedwiki.club/fedwiki-merge-skill) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "0787d40024e1280a",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-merge`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "c5e152b5ee4e33fd",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "3b160cde265bb71c",
+      "text": "agentprivacy-wiki-merge"
+    },
+    {
+      "type": "markdown",
+      "id": "1f0c440acac7d21b",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Merge",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "180497d10294b65f",
+            "text": "# Wiki Merge\n\n**Category** wikis · **Version** 5.5\n\nAnalyze and clean up a superseded federated-wiki domain — categorize its pages (boilerplate / duplicate / minimal / unique), move unique content to the successor, trash the rest to a recycler, reindex, and delete the old domain. Activates when consolidating or retiring a wiki site. Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "4db360c55bb0ecb6",
+            "text": "The `fedwiki-merge` skill analyses and cleans up a federated wiki that has been superseded by a newer domain. When a site is replaced (e.g. `david.ide.earth` → `david.vision.ide.earth`), the old site is a mix of pages already copied to the new site, standard boilerplate, and unique content worth keeping. The skill separates these and handles each appropriately, ending with a full delete of the old domain.\n\n## Step 1 — Analyse\n\nDry run — prints a categorised report, no files touched:\n\n```bash\nfedwiki-merge-analyse david.ide.earth david.vision.ide.earth\n```\n\nPages are placed into categories:\n\n| Category | Meaning | Action |\n|---|---|---|\n| `BOILERPLATE` | Standard tool pages (changes-to-this-site, welcome-visitors, tools…) — checked first, regardless of date | Trash |\n| `DUPLICATE_OLDER` | Same slug in new site; old version is older | Trash |\n| `MINIMAL` | ≤ 1 item AND < 100 chars | Trash |\n| `DUPLICATE_NEWER` | Same slug in new site; old version is newer | Review |\n| `UNIQUE_CONTENT` | Only in old site, has real content | Move |\n\n## Step 2 — Move Unique Pages\n\nMoves all `UNIQUE_CONTENT` pages from the old site into the new site's `pages/` folder, pushes each to Nextcloud, and deletes each from the old site's remote. Pages already present in the new site are never overwritten.\n\n```bash\nfedwiki-merge-move david.ide.earth david.vision.ide.earth\n# or a specific page:\nfedwiki-merge-move david.ide.earth david.vision.ide.earth my-page\n```\n\n## Step 3 — Trash Safe Pages\n\nMoves `BOILERPLATE`, `DUPLICATE_OLDER`, and `MINIMAL` pages to `{old-domain}/recycler/` and deletes them from the remote. The recycler is a local safety net — pages can be manually recovered from there.\n\n```bash\nfedwiki-merge-trash david.ide.earth david.vision.ide.earth\n```\n\n## Step 4 — Reindex\n\nRebuilds the sitemap and search index on both sites after the moves and deletions:\n\n```bash\nnextcloud-reindex david.vision.ide.earth\nnextcloud-reindex david.ide.earth\n```\n\n## Step 5 — Delete the Old Site\n\nOnce the old site's `pages/` folder is empty, delete the whole domain:\n\n```bash\nfedwiki-delete-site david.ide.earth\n# force even if pages remain:\nfedwiki-delete-site david.ide.earth --force\n```\n\n## Scripts\n\n- `~/bin/fedwiki-merge-analyse` — categorised report, dry run\n- `~/bin/fedwiki-merge-move` — move unique content to new site\n- `~/bin/fedwiki-merge-trash` — move safe pages to recycler\n- `~/bin/fedwiki-delete-site` — delete entire domain locally and remotely\n\nAll scripts read credentials from `NC_USER` and `NC_PASSWORD` in the environment.\n\n## Related Skills\n\n- `agentprivacy-wiki-delete-site` — the final delete step\n- `agentprivacy-wiki-reindex` — reindexing after bulk page changes\n- `agentprivacy-wiki-nextcloud-push` — the WebDAV push used by merge-move\n- `agentprivacy-wiki-journal` — strip accumulated journal history before merging"
+          },
+          {
+            "type": "markdown",
+            "id": "c82a528eafc70ab9",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-merge-skill](https://skill.fedwiki.club/fedwiki-merge-skill) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "0787d40024e1280a",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-merge`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "c5e152b5ee4e33fd",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "3b160cde265bb71c",
+            "text": "agentprivacy-wiki-merge"
+          },
+          {
+            "type": "markdown",
+            "id": "1f0c440acac7d21b",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384132
+    }
+  ]
+}

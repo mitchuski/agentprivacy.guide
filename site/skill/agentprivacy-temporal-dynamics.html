@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Temporal Dynamics · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Temporal Dynamics</span></div>
+  <article><div class="md"><h1>Temporal Dynamics</h1>
+<p><strong>Category</strong> privacy_layer · <strong>Version</strong> 4.0</p>
+<p><strong>Equation term</strong> <code>e^{-λt} · (1 + A(τ))</code></p>
+<p>Temporal dynamics and memory accumulation for 0xagentprivacy. Activates when discussing e^{-λt}·(1+A(τ)), decay rates, memory scaling (α·ln(1+|τ|)·h(τ)), the h(τ) integrity gate, crossover time calculations, or how privacy value compounds over time. Use for temporal modelling of sovereignty value.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4<br><strong>Target context:</strong> All agents, protocol designers, tokenomics engineers, temporal reasoning systems<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The temporal engine inside PVM-V4. Two forces in permanent tension: exponential decay that destroys value over time, and verified history that accumulates it. Neither dominates permanently — decay always wins asymptotically, but the window between accumulation and decay is where all sovereignty value is created and captured.</p>
+<p>This is the equation&#39;s clock. Every other term is a snapshot; this term is the film.</p>
+<h2>The decay function: e^{-λt}</h2>
+<p>Exponential decay with rate parameter λ. Without active maintenance, every privacy configuration loses value over time. This is not metaphorical — cryptographic primitives weaken (quantum threats, implementation bugs discovered), regulatory environments shift, adversary capabilities grow, network topologies evolve.</p>
+<p>λ is context-dependent. A Zcash shielded pool has a different decay rate than a browser cookie consent. High-sensitivity configurations (large S) may have faster decay because threat landscapes evolve faster against high-value targets.</p>
+<p><strong>Key property:</strong> Decay is continuous and memoryless. The system does not care how long value has existed — it decays at the same proportional rate regardless. This means stale configurations are catastrophically undervalued even if they were excellent when created.</p>
+<p><strong>Design implication:</strong> Any system that &quot;sets and forgets&quot; privacy configurations is structurally doomed. The decay term demands continuous engagement.</p>
+<h2>The memory function: A(τ) = α · ln(1 + |τ|) · h(τ)</h2>
+<p>Three components working together:</p>
+<p><strong>α (scaling constant).</strong> Calibrates how much verified history contributes relative to other terms. Currently uncalibrated — one of the key empirical gaps in PVM-V4.</p>
+<p><strong>ln(1 + |τ|) (logarithmic growth).</strong> Verified history accumulates value at a diminishing rate. The first VRC is worth more than the hundredth. The first year of demonstrated sovereignty contributes more marginal value than the tenth year. This is conjectured to be logarithmic — could be sublogarithmic or superlogarithmic in practice.</p>
+<p><strong>h(τ) (integrity fraction).</strong> The binary gate. h(τ) = proportion of state transitions in history τ that carry valid cryptographic attestation (typically ZK proofs). If h(τ) = 0, then A(τ) = 0 regardless of how long the history is. Unverified history contributes nothing.</p>
+<p>This is the deepest design constraint: you cannot build temporal memory through claims. Only through proofs. An agent that has operated for ten years but never generated a verifiable attestation has A(τ) = 0. An agent that has operated for one month with 100% ZKP-attested transitions has A(τ) &gt; 0.</p>
+<h2>The combined temporal term: e^{-λt} · (1 + A(τ))</h2>
+<p>The (1 + A(τ)) structure means temporal memory is additive, not replacement. Even with a perfect history, the decay still applies. Memory slows the decline; it does not reverse it.</p>
+<p><strong>The race:</strong> At time t with accumulated history τ, the temporal contribution is e^{-λt} · (1 + α · ln(1 + |τ|) · h(τ)). The exponential decay eventually dominates the logarithmic growth. There exists a crossover time t* beyond which total temporal value decreases despite continued accumulation. This crossover time depends on λ, α, and the rate at which new verified history is generated.</p>
+<p><strong>The window:</strong> Between t = 0 and t = t*, the system is in its value-creation phase. After t*, it is in its value-preservation phase (slowing the decline). After a much longer period, it enters terminal decline. The strategic question for any sovereignty architecture: how long is the window, and what happens when it closes?</p>
+<p><strong>Implications for agent lifecycle:</strong> Agents are not permanent. They have a natural lifecycle governed by the temporal term. Young agents with rapid attestation growth are in their value-creation phase. Mature agents with established histories are in preservation. The architectural response to terminal decline is migration — creating a new agent configuration with the accumulated A(τ) carried forward via VRC chain, resetting the decay clock.</p>
+<h2>The h(τ) gate in detail</h2>
+<p>h(τ) is the most consequential design decision in the temporal term. It creates a binary quality threshold: either a transition is ZKP-attested (contributes to history) or it is not (contributes nothing).</p>
+<p><strong>No partial credit.</strong> A transition with a probabilistic attestation, a reputation score, or a social vouching signal contributes h = 0. Only cryptographic verification counts. This is deliberately harsh because the model treats privacy as infrastructure, not preference. Infrastructure either works or it does not.</p>
+<p><strong>Promise Theory correction.</strong> The promise_theory skill notes that h(τ) should perhaps decompose into β(π) (belief about promise-keeping) and ε(π) (evidence of past keeping). The current binary fraction may be too coarse for rapidly changing environments where full ZKP attestation is impractical. This remains an open design tension.</p>
+<p><strong>Composable attestation.</strong> The crypto_zkp skill&#39;s IVC (Incrementally Verifiable Computation) backends — particularly Nova&#39;s folding scheme — offer a path to making h(τ) approach 1 by folding each transition&#39;s proof into a running accumulator. Every state change generates a lightweight fold; the accumulated proof attests to the entire chain.</p>
+<h2>Connection to VRCs</h2>
+<p>The VRC system is A(τ) made concrete. Each VRC is a bilaterally attested state transition. The progressive accumulation — First Person Network → agentprivacy → Swordsman → site-specific — is a temporal chain where each step both extends |τ| and contributes to h(τ).</p>
+<p><strong>Logarithmic diminishing returns applied to VRCs:</strong> The first VRC (proving a relationship exists) is enormously valuable. The fiftieth VRC with the same counterparty adds marginal value. But the first VRC with a new counterparty in a new domain contributes nearly as much as the original first VRC — because |τ| grows across the entire history, not per-relationship.</p>
+<h2>Open problems</h2>
+<ol>
+<li>Empirical calibration of λ for different privacy configurations (browser-level, transaction-level, identity-level).</li>
+<li>Empirical calibration of α — how much does verified history actually offset decay?</li>
+<li>Whether logarithmic growth is the correct functional form for memory accumulation.</li>
+<li>The h(τ) decomposition question from Promise Theory.</li>
+<li>Optimal migration timing — when should an agent reset its decay clock through VRC-chain migration?</li>
+<li>Whether the crossover time t* can be extended by architectural design (reducing λ through stronger primitives) or only through faster accumulation of τ.</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-temporal-dynamics</code>, v4.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-temporal-dynamics</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-temporal-dynamics.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

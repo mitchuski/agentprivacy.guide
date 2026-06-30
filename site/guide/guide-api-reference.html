@@ -1,0 +1,942 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide — API Reference · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Guide — API Reference</span></div>
+  <article><div class="md"><h1>API Reference</h1>
+</div>
+<div class="md"><p><strong>Code templates, patterns, and integration examples</strong></p>
+<hr>
+</div>
+<div class="md"><h2>Quick Reference</h2>
+<h3>External APIs</h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Purpose</th>
+<th>Authentication</th>
+<th>Rate Limit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Nillion</strong></td>
+<td>TEE + SecretSigner</td>
+<td>API Key</td>
+<td>TBD</td>
+</tr>
+<tr>
+<td><strong>NEAR Cloud AI</strong></td>
+<td>AI Verification</td>
+<td>Bearer Token</td>
+<td>100/month free</td>
+</tr>
+<tr>
+<td><strong>Pinata</strong></td>
+<td>IPFS Gateway</td>
+<td>JWT</td>
+<td>100GB free</td>
+</tr>
+<tr>
+<td><strong>Zcash</strong></td>
+<td>Blockchain</td>
+<td>None (public RPC)</td>
+<td>No limit</td>
+</tr>
+</tbody></table>
+<h3>Internal APIs</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/api/submit</code></td>
+<td>POST</td>
+<td>Submit proverb</td>
+</tr>
+<tr>
+<td><code>/api/status/:code</code></td>
+<td>GET</td>
+<td>Check status</td>
+</tr>
+<tr>
+<td><code>/api/stats</code></td>
+<td>GET</td>
+<td>Get statistics</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Nillion Integration</h2>
+<h3>Initialize Client</h3>
+<pre><code class="language-typescript">import { NillionClient } from &#39;@nillion/client-web&#39;;
+
+const client = new NillionClient({
+  network: &#39;testnet&#39;, // or &#39;mainnet&#39;
+  apiKey: process.env.NILLION_API_KEY!,
+});
+</code></pre>
+<h3>SecretSigner: Store Key</h3>
+<pre><code class="language-typescript">import { SecretSigner } from &#39;@nillion/client-web&#39;;
+
+// Store Zcash spending key
+const keyStoreId = await SecretSigner.storeKey({
+  client: client,
+  privateKey: Buffer.from(zcashPrivateKey, &#39;hex&#39;),
+  algorithm: &#39;ECDSA&#39;,
+});
+
+console.log(&#39;Key stored:&#39;, keyStoreId);
+// Save keyStoreId securely
+</code></pre>
+<h3>SecretSigner: Sign Transaction</h3>
+<pre><code class="language-typescript">// Prepare transaction hash
+const txHash = Buffer.from(transactionHash, &#39;hex&#39;);
+
+// Sign with distributed key
+const signature = await SecretSigner.sign({
+  client: client,
+  storeId: keyStoreId,
+  message: txHash,
+  algorithm: &#39;ECDSA&#39;,
+});
+
+console.log(&#39;Signature:&#39;, signature.toString(&#39;hex&#39;));
+</code></pre>
+<h3>Get Attestation</h3>
+<pre><code class="language-typescript">// Get TEE attestation
+const attestation = await client.getAttestation();
+
+console.log(&#39;Attestation:&#39;, attestation);
+
+// Verify attestation
+const valid = await client.verifyAttestation(attestation);
+console.log(&#39;Valid:&#39;, valid); // true if TEE is authentic
+</code></pre>
+<h3>Error Handling</h3>
+<pre><code class="language-typescript">try {
+  const signature = await SecretSigner.sign({
+    client: client,
+    storeId: keyStoreId,
+    message: txHash,
+    algorithm: &#39;ECDSA&#39;,
+  });
+} catch (error: any) {
+  if (error.code === &#39;KEY_NOT_FOUND&#39;) {
+    console.error(&#39;Key not found, reinitialize&#39;);
+  } else if (error.code === &#39;NETWORK_ERROR&#39;) {
+    console.error(&#39;Network error, retry&#39;);
+  } else {
+    console.error(&#39;Unknown error:&#39;, error.message);
+  }
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>NEAR Cloud AI Integration</h2>
+<h3>Verify Proverb</h3>
+<pre><code class="language-typescript">import axios from &#39;axios&#39;;
+
+interface VerificationRequest {
+  model: string;
+  proverb: string;
+  spellbook_acts: Array&lt;{
+    id: string;
+    title: string;
+    description: string;
+    keywords: string[];
+  }&gt;;
+  context: string;
+}
+
+interface VerificationResponse {
+  quality_score: number;
+  matched_act: string;
+  reasoning: string;
+  approved: boolean;
+}
+
+async function verifyProverb(
+  proverb: string,
+  spellbookActs: any[]
+): Promise&lt;VerificationResponse&gt; {
+  const response = await axios.post&lt;VerificationResponse&gt;(
+    &#39;https://cloud.near.ai/v1/verify&#39;,
+    {
+      model: &#39;openai/gpt-oss-120b&#39;,
+      proverb: proverb,
+      spellbook_acts: spellbookActs,
+      context: &#39;privacy_protocol&#39;,
+    },
+    {
+      headers: {
+        &#39;Authorization&#39;: `Bearer ${process.env.NEAR_API_KEY}`,
+        &#39;Content-Type&#39;: &#39;application/json&#39;,
+      },
+      timeout: 30000, // 30 seconds
+    }
+  );
+
+  return response.data;
+}
+</code></pre>
+<h3>With Retry Logic</h3>
+<pre><code class="language-typescript">async function verifyWithRetry(
+  proverb: string,
+  spellbookActs: any[],
+  maxRetries: number = 3
+): Promise&lt;VerificationResponse&gt; {
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt &lt; maxRetries; attempt++) {
+    try {
+      return await verifyProverb(proverb, spellbookActs);
+    } catch (error: any) {
+      lastError = error;
+      console.error(`Attempt ${attempt + 1} failed:`, error.message);
+      
+      // Wait before retry (exponential backoff)
+      if (attempt &lt; maxRetries - 1) {
+        const waitTime = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
+        await new Promise(resolve =&gt; setTimeout(resolve, waitTime));
+      }
+    }
+  }
+
+  throw lastError || new Error(&#39;All retry attempts failed&#39;);
+}
+</code></pre>
+<h3>Fallback Verification</h3>
+<pre><code class="language-typescript">function fallbackVerification(
+  proverb: string,
+  spellbookActs: any[]
+): VerificationResponse {
+  const lowerProverb = proverb.toLowerCase();
+  
+  // Check for key concepts
+  const concepts = [
+    &#39;privacy&#39;, &#39;separation&#39;, &#39;architecture&#39;, &#39;delegation&#39;,
+    &#39;boundary&#39;, &#39;sovereignty&#39;, &#39;protection&#39;, &#39;encryption&#39;,
+  ];
+  
+  const matches = concepts.filter(c =&gt; lowerProverb.includes(c));
+  const score = Math.min(matches.length / concepts.length, 0.7);
+  
+  // Find matching act
+  let matchedAct = spellbookActs[0]?.id || &#39;unknown&#39;;
+  for (const act of spellbookActs) {
+    for (const keyword of act.keywords) {
+      if (lowerProverb.includes(keyword.toLowerCase())) {
+        matchedAct = act.id;
+        break;
+      }
+    }
+  }
+  
+  return {
+    quality_score: score,
+    matched_act: matchedAct,
+    reasoning: &#39;Fallback verification (AI service unavailable)&#39;,
+    approved: score &gt;= 0.5,
+  };
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>IPFS/Pinata Integration</h2>
+<h3>Fetch from Gateway</h3>
+<pre><code class="language-typescript">import axios from &#39;axios&#39;;
+
+interface Spellbook {
+  version: string;
+  created_at: string;
+  description: string;
+  acts: Array&lt;{
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    keywords: string[];
+  }&gt;;
+}
+
+async function fetchSpellbook(cid: string): Promise&lt;Spellbook&gt; {
+  const url = `https://gateway.pinata.cloud/ipfs/${cid}`;
+  
+  const response = await axios.get&lt;Spellbook&gt;(url, {
+    timeout: 10000,
+    headers: {
+      &#39;Accept&#39;: &#39;application/json&#39;,
+    },
+  });
+  
+  return response.data;
+}
+</code></pre>
+<h3>With Caching</h3>
+<pre><code class="language-typescript">class IPFSCache {
+  private cache: Map&lt;string, any&gt; = new Map();
+  private ttl: number = 3600000; // 1 hour in ms
+
+  async fetch(cid: string): Promise&lt;any&gt; {
+    const cached = this.cache.get(cid);
+    if (cached &amp;&amp; Date.now() - cached.timestamp &lt; this.ttl) {
+      return cached.data;
+    }
+
+    const data = await fetchSpellbook(cid);
+    this.cache.set(cid, { data, timestamp: Date.now() });
+    return data;
+  }
+
+  clear() {
+    this.cache.clear();
+  }
+}
+
+const ipfsCache = new IPFSCache();
+</code></pre>
+<h3>Upload to Pinata</h3>
+<pre><code class="language-typescript">import FormData from &#39;form-data&#39;;
+import fs from &#39;fs&#39;;
+import axios from &#39;axios&#39;;
+
+async function uploadToPinata(filePath: string): Promise&lt;string&gt; {
+  const formData = new FormData();
+  formData.append(&#39;file&#39;, fs.createReadStream(filePath));
+
+  const response = await axios.post(
+    &#39;https://api.pinata.cloud/pinning/pinFileToIPFS&#39;,
+    formData,
+    {
+      headers: {
+        &#39;Authorization&#39;: `Bearer ${process.env.PINATA_JWT}`,
+        ...formData.getHeaders(),
+      },
+    }
+  );
+
+  return response.data.IpfsHash; // CID
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Zcash Integration</h2>
+<h3>Light Client Wrapper</h3>
+<pre><code class="language-typescript">import { exec } from &#39;child_process&#39;;
+import { promisify } from &#39;util&#39;;
+
+const execAsync = promisify(exec);
+
+class ZcashLightClient {
+  private cliPath: string = &#39;zecwallet-cli&#39;;
+  private server: string;
+  private dataDir: string;
+
+  constructor(server: string, dataDir: string) {
+    this.server = server;
+    this.dataDir = dataDir;
+  }
+
+  private async execute(command: string): Promise&lt;string&gt; {
+    const cmd = `${this.cliPath} --server ${this.server} --data-dir ${this.dataDir} --command &quot;${command}&quot;`;
+    const { stdout } = await execAsync(cmd);
+    return stdout;
+  }
+
+  async getBalance(): Promise&lt;{ transparent: number; shielded: number }&gt; {
+    const output = await this.execute(&#39;balance&#39;);
+    // Parse output
+    return {
+      transparent: parseFloat(output.match(/transparent: ([\d.]+)/)?.[1] || &#39;0&#39;),
+      shielded: parseFloat(output.match(/shielded: ([\d.]+)/)?.[1] || &#39;0&#39;),
+    };
+  }
+
+  async send(
+    to: string,
+    amount: number,
+    memo?: string
+  ): Promise&lt;string&gt; {
+    const memoArg = memo ? `--memo &quot;${memo}&quot;` : &#39;&#39;;
+    const output = await this.execute(`send ${to} ${amount} ${memoArg}`);
+    
+    // Extract txid
+    const match = output.match(/[a-f0-9]{64}/);
+    return match ? match[0] : &#39;&#39;;
+  }
+
+  async listTransactions(): Promise&lt;Array&lt;{
+    txid: string;
+    amount: number;
+    address: string;
+    memo?: string;
+    confirmations: number;
+  }&gt;&gt; {
+    const output = await this.execute(&#39;list&#39;);
+    // Parse and return transactions
+    return this.parseTransactionList(output);
+  }
+
+  private parseTransactionList(output: string): any[] {
+    // Implementation depends on zecwallet-cli output format
+    return [];
+  }
+}
+</code></pre>
+<h3>Monitor for New Transactions</h3>
+<pre><code class="language-typescript">class TransactionMonitor {
+  private client: ZcashLightClient;
+  private lastHeight: number = 0;
+  private callback: (tx: any) =&gt; Promise&lt;void&gt;;
+
+  constructor(client: ZcashLightClient, callback: (tx: any) =&gt; Promise&lt;void&gt;) {
+    this.client = client;
+    this.callback = callback;
+  }
+
+  async start(intervalMs: number = 30000) {
+    setInterval(async () =&gt; {
+      try {
+        const txs = await this.client.listTransactions();
+        const newTxs = txs.filter(tx =&gt; tx.confirmations &gt; 0);
+        
+        for (const tx of newTxs) {
+          await this.callback(tx);
+        }
+      } catch (error) {
+        console.error(&#39;Monitor error:&#39;, error);
+      }
+    }, intervalMs);
+  }
+}
+
+// Usage
+const monitor = new TransactionMonitor(zcashClient, async (tx) =&gt; {
+  console.log(&#39;New transaction:&#39;, tx.txid);
+  await processTransaction(tx);
+});
+
+monitor.start(30000); // Check every 30 seconds
+</code></pre>
+<h3>Parse Memo Field</h3>
+<pre><code class="language-typescript">interface ProverbMemo {
+  tracking_code: string;
+  proverb: string;
+}
+
+function parseMemo(memo: string): ProverbMemo {
+  // Expected format: &quot;TRACK:ABC123|proverb text here&quot;
+  const match = memo.match(/TRACK:([^|]+)\|(.*)/);
+  
+  if (!match) {
+    throw new Error(&#39;Invalid memo format&#39;);
+  }
+  
+  return {
+    tracking_code: match[1],
+    proverb: match[2],
+  };
+}
+
+// Usage
+try {
+  const { tracking_code, proverb } = parseMemo(transaction.memo);
+  console.log(&#39;Tracking:&#39;, tracking_code);
+  console.log(&#39;Proverb:&#39;, proverb);
+} catch (error) {
+  console.error(&#39;Failed to parse memo:&#39;, error);
+}
+</code></pre>
+<h3>Create Inscription Transaction</h3>
+<pre><code class="language-typescript">async function createInscription(
+  proverb: string,
+  trackingCode: string,
+  amount: number
+): Promise&lt;string&gt; {
+  const memo = `PROVERB:${trackingCode}:${proverb}`;
+  
+  // Truncate if too long (memo limit is ~512 bytes)
+  const truncatedMemo = memo.length &gt; 500 
+    ? memo.substring(0, 497) + &#39;...&#39;
+    : memo;
+  
+  const txid = await zcashClient.send(
+    publicInscriptionAddress,
+    amount,
+    truncatedMemo
+  );
+  
+  return txid;
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>PostgreSQL Patterns</h2>
+<h3>Connection Pool</h3>
+<pre><code class="language-typescript">import { Pool } from &#39;pg&#39;;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+
+// Test connection
+pool.on(&#39;connect&#39;, () =&gt; {
+  console.log(&#39;Database connected&#39;);
+});
+
+pool.on(&#39;error&#39;, (err) =&gt; {
+  console.error(&#39;Database error:&#39;, err);
+});
+
+export default pool;
+</code></pre>
+<h3>Transactions</h3>
+<pre><code class="language-typescript">async function processSubmissionAtomic(data: any) {
+  const client = await pool.connect();
+  
+  try {
+    await client.query(&#39;BEGIN&#39;);
+    
+    // Insert submission
+    const submissionResult = await client.query(
+      &#39;INSERT INTO submissions (...) VALUES (...) RETURNING id&#39;,
+      [...]
+    );
+    const submissionId = submissionResult.rows[0].id;
+    
+    // Insert verification
+    await client.query(
+      &#39;INSERT INTO verifications (...) VALUES (...)&#39;,
+      [submissionId, ...]
+    );
+    
+    // Insert inscription
+    await client.query(
+      &#39;INSERT INTO inscriptions (...) VALUES (...)&#39;,
+      [submissionId, ...]
+    );
+    
+    await client.query(&#39;COMMIT&#39;);
+  } catch (error) {
+    await client.query(&#39;ROLLBACK&#39;);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+</code></pre>
+<h3>Query Helpers</h3>
+<pre><code class="language-typescript">async function query&lt;T = any&gt;(
+  sql: string,
+  params: any[] = []
+): Promise&lt;T[]&gt; {
+  const result = await pool.query(sql, params);
+  return result.rows;
+}
+
+async function queryOne&lt;T = any&gt;(
+  sql: string,
+  params: any[] = []
+): Promise&lt;T | null&gt; {
+  const rows = await query&lt;T&gt;(sql, params);
+  return rows[0] || null;
+}
+
+// Usage
+const submission = await queryOne&lt;Submission&gt;(
+  &#39;SELECT * FROM submissions WHERE tracking_code = $1&#39;,
+  [trackingCode]
+);
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Error Handling Patterns</h2>
+<h3>Retry with Exponential Backoff</h3>
+<pre><code class="language-typescript">async function retryWithBackoff&lt;T&gt;(
+  fn: () =&gt; Promise&lt;T&gt;,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise&lt;T&gt; {
+  for (let attempt = 0; attempt &lt; maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (attempt === maxRetries - 1) {
+        throw error;
+      }
+      
+      const delay = baseDelay * Math.pow(2, attempt);
+      console.log(`Retry attempt ${attempt + 1} in ${delay}ms`);
+      await new Promise(resolve =&gt; setTimeout(resolve, delay));
+    }
+  }
+  
+  throw new Error(&#39;Should not reach here&#39;);
+}
+
+// Usage
+const result = await retryWithBackoff(
+  () =&gt; nearVerifier.verify(proverb, spellbook),
+  3,
+  1000
+);
+</code></pre>
+<h3>Circuit Breaker</h3>
+<pre><code class="language-typescript">class CircuitBreaker {
+  private failures: number = 0;
+  private lastFailTime: number = 0;
+  private threshold: number;
+  private timeout: number;
+  private state: &#39;closed&#39; | &#39;open&#39; | &#39;half-open&#39; = &#39;closed&#39;;
+
+  constructor(threshold: number = 5, timeout: number = 60000) {
+    this.threshold = threshold;
+    this.timeout = timeout;
+  }
+
+  async execute&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;): Promise&lt;T&gt; {
+    if (this.state === &#39;open&#39;) {
+      if (Date.now() - this.lastFailTime &gt; this.timeout) {
+        this.state = &#39;half-open&#39;;
+      } else {
+        throw new Error(&#39;Circuit breaker is OPEN&#39;);
+      }
+    }
+
+    try {
+      const result = await fn();
+      this.onSuccess();
+      return result;
+    } catch (error) {
+      this.onFailure();
+      throw error;
+    }
+  }
+
+  private onSuccess() {
+    this.failures = 0;
+    this.state = &#39;closed&#39;;
+  }
+
+  private onFailure() {
+    this.failures++;
+    this.lastFailTime = Date.now();
+    
+    if (this.failures &gt;= this.threshold) {
+      this.state = &#39;open&#39;;
+      console.error(&#39;Circuit breaker opened&#39;);
+    }
+  }
+}
+
+// Usage
+const breaker = new CircuitBreaker(5, 60000);
+
+try {
+  const result = await breaker.execute(() =&gt;
+    nearVerifier.verify(proverb, spellbook)
+  );
+} catch (error) {
+  // Handle circuit breaker error or actual error
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Logging Patterns</h2>
+<h3>Winston Logger</h3>
+<pre><code class="language-typescript">import winston from &#39;winston&#39;;
+
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || &#39;info&#39;,
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: &#39;logs/error.log&#39;, level: &#39;error&#39; }),
+    new winston.transports.File({ filename: &#39;logs/combined.log&#39; }),
+  ],
+});
+
+if (process.env.NODE_ENV !== &#39;production&#39;) {
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple(),
+  }));
+}
+
+export default logger;
+</code></pre>
+<h3>Usage</h3>
+<pre><code class="language-typescript">import logger from &#39;./logger&#39;;
+
+logger.info(&#39;Processing submission&#39;, {
+  tracking_code: trackingCode,
+  proverb_length: proverb.length,
+});
+
+logger.error(&#39;Verification failed&#39;, {
+  error: error.message,
+  tracking_code: trackingCode,
+  stack: error.stack,
+});
+
+logger.debug(&#39;Raw transaction&#39;, {
+  txid: tx.txid,
+  amount: tx.amount,
+  memo: tx.memo,
+});
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Testing Patterns</h2>
+<h3>Unit Test Example</h3>
+<pre><code class="language-typescript">import { describe, it, expect, beforeEach } from &#39;@jest/globals&#39;;
+import { parseMemo } from &#39;../src/utils&#39;;
+
+describe(&#39;parseMemo&#39;, () =&gt; {
+  it(&#39;should parse valid memo&#39;, () =&gt; {
+    const memo = &#39;TRACK:ABC123|Privacy requires separation&#39;;
+    const result = parseMemo(memo);
+    
+    expect(result.tracking_code).toBe(&#39;ABC123&#39;);
+    expect(result.proverb).toBe(&#39;Privacy requires separation&#39;);
+  });
+
+  it(&#39;should throw on invalid format&#39;, () =&gt; {
+    const memo = &#39;invalid memo&#39;;
+    expect(() =&gt; parseMemo(memo)).toThrow(&#39;Invalid memo format&#39;);
+  });
+});
+</code></pre>
+<h3>Integration Test Example</h3>
+<pre><code class="language-typescript">import { describe, it, expect } from &#39;@jest/globals&#39;;
+import { db } from &#39;../src/database&#39;;
+import { zcashClient } from &#39;../src/zcash-client&#39;;
+
+describe(&#39;End-to-end submission&#39;, () =&gt; {
+  it(&#39;should process complete submission&#39;, async () =&gt; {
+    // Create test submission
+    const submission = await db.createSubmission({
+      tracking_code: &#39;TEST-&#39; + Date.now(),
+      sender_address: &#39;t1test&#39;,
+      proverb_text: &#39;Test proverb&#39;,
+      amount_zec: 0.01,
+      txid: &#39;test_txid&#39;,
+    });
+
+    expect(submission.id).toBeGreaterThan(0);
+    expect(submission.status).toBe(&#39;pending&#39;);
+
+    // Verify can be retrieved
+    const retrieved = await db.getSubmissionByTrackingCode(
+      submission.tracking_code
+    );
+    expect(retrieved).not.toBeNull();
+    expect(retrieved?.id).toBe(submission.id);
+  });
+});
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Environment Variables Template</h2>
+<pre><code class="language-bash"># .env.example
+
+# ===========================================
+# Nillion Configuration
+# ===========================================
+NILLION_API_KEY=your_nillion_api_key_here
+NILLION_NETWORK=testnet
+
+# ===========================================
+# NEAR Cloud AI
+# ===========================================
+NEAR_API_KEY=your_near_api_key_here
+NEAR_MODEL=gpt oss 120b
+
+# ===========================================
+# IPFS/Pinata
+# ===========================================
+PINATA_JWT=your_pinata_jwt_here
+PINATA_GATEWAY=https://gateway.pinata.cloud
+SPELLBOOK_CID=your_spellbook_cid_here
+
+# ===========================================
+# Zcash
+# ===========================================
+ZCASH_NETWORK=testnet
+ZCASH_SERVER=https://zec.rocks:443
+ZCASH_DATA_DIR=/path/to/zcash-wallet
+
+# ===========================================
+# PostgreSQL
+# ===========================================
+DATABASE_URL=postgresql://user:password@localhost:5432/proverb_protocol
+
+# ===========================================
+# Oracle Settings
+# ===========================================
+ORACLE_CHECK_INTERVAL=30
+ORACLE_RETRY_ATTEMPTS=3
+ORACLE_RETRY_DELAY=60
+
+# ===========================================
+# Economics
+# ===========================================
+PROVERB_COST=0.01
+PUBLIC_SPLIT=0.618
+PRIVATE_SPLIT=0.382
+NETWORK_FEE=0.0001
+
+# ===========================================
+# Logging
+# ===========================================
+LOG_LEVEL=info
+LOG_FILE=logs/proverb-protocol.log
+
+# ===========================================
+# Frontend
+# ===========================================
+NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_NETWORK=testnet
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Common Pitfalls</h2>
+<h3>1. Memo Size Limits</h3>
+<pre><code class="language-typescript">// ❌ Wrong: Can exceed Zcash memo limit
+const memo = `PROVERB:${code}:${veryLongProverb}`;
+
+// ✅ Correct: Truncate if needed
+const maxLength = 500;
+const truncated = proverb.length &gt; maxLength
+  ? proverb.substring(0, maxLength - 3) + &#39;...&#39;
+  : proverb;
+const memo = `PROVERB:${code}:${truncated}`;
+</code></pre>
+<h3>2. Async Error Handling</h3>
+<pre><code class="language-typescript">// ❌ Wrong: Unhandled promise rejection
+processSubmission(tx); // Fire and forget
+
+// ✅ Correct: Handle errors
+processSubmission(tx).catch(error =&gt; {
+  logger.error(&#39;Processing failed&#39;, { error, txid: tx.txid });
+});
+</code></pre>
+<h3>3. Database Connections</h3>
+<pre><code class="language-typescript">// ❌ Wrong: Create new pool each time
+function query() {
+  const pool = new Pool(...);
+  return pool.query(...);
+}
+
+// ✅ Correct: Reuse pool
+const pool = new Pool(...);
+function query() {
+  return pool.query(...);
+}
+</code></pre>
+<h3>4. API Rate Limits</h3>
+<pre><code class="language-typescript">// ❌ Wrong: No rate limiting
+for (const proverb of proverbs) {
+  await near.verify(proverb);
+}
+
+// ✅ Correct: Add delays
+for (const proverb of proverbs) {
+  await near.verify(proverb);
+  await sleep(1000); // 1 second between requests
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Performance Tips</h2>
+<h3>1. Batch Database Operations</h3>
+<pre><code class="language-typescript">// ❌ Slow: N queries
+for (const item of items) {
+  await db.query(&#39;INSERT INTO table VALUES ($1)&#39;, [item]);
+}
+
+// ✅ Fast: 1 query
+const values = items.map((item, i) =&gt; `($${i + 1})`).join(&#39;,&#39;);
+await db.query(`INSERT INTO table VALUES ${values}`, items);
+</code></pre>
+<h3>2. Cache IPFS Fetches</h3>
+<pre><code class="language-typescript">// ❌ Slow: Fetch every time
+const spellbook = await ipfs.fetch(cid);
+
+// ✅ Fast: Cache result
+let cachedSpellbook: Spellbook | null = null;
+async function getSpellbook(): Promise&lt;Spellbook&gt; {
+  if (!cachedSpellbook) {
+    cachedSpellbook = await ipfs.fetch(cid);
+  }
+  return cachedSpellbook;
+}
+</code></pre>
+<h3>3. Parallel Processing</h3>
+<pre><code class="language-typescript">// ❌ Slow: Sequential
+for (const tx of transactions) {
+  await process(tx);
+}
+
+// ✅ Fast: Parallel (with limit)
+await Promise.all(
+  transactions.map(tx =&gt; process(tx))
+);
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Security Checklist</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Never log private keys</li>
+<li><input disabled="" type="checkbox"> Never commit .env files</li>
+<li><input disabled="" type="checkbox"> Validate all user inputs</li>
+<li><input disabled="" type="checkbox"> Use parameterized queries</li>
+<li><input disabled="" type="checkbox"> Implement rate limiting</li>
+<li><input disabled="" type="checkbox"> Use HTTPS everywhere</li>
+<li><input disabled="" type="checkbox"> Verify Nillion attestation</li>
+<li><input disabled="" type="checkbox"> Hash sensitive data</li>
+<li><input disabled="" type="checkbox"> Implement CORS properly</li>
+<li><input disabled="" type="checkbox"> Use secure random for tracking codes</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Next Steps</h2>
+<p>✅ <strong>API Reference Complete!</strong></p>
+<p>You now have:</p>
+<ul>
+<li>Complete integration examples</li>
+<li>Error handling patterns</li>
+<li>Testing templates</li>
+<li>Performance tips</li>
+<li>Security checklist</li>
+</ul>
+<p><strong>Next</strong>: Use <code>docs/05-ROADMAP.md</code> to track your implementation progress</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-architecture-guides.html">The Architecture Guides</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="guide-api-reference.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

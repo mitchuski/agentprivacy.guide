@@ -1,0 +1,810 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reference — Persona Authoring Guide · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Reference — Persona Authoring Guide</span></div>
+  <article><div class="md"><h1>Persona Authoring Guide</h1>
+</div>
+<div class="md"><p><strong>How to create personas, assign skills, and path spell constellations</strong></p>
+<hr>
+</div>
+<div class="md"><h2>Overview</h2>
+<p>A persona is a domain-specific instantiation of the dual-agent framework. Each persona:</p>
+<ul>
+<li>Has an <strong>alignment</strong> (swordsman, mage, or balanced)</li>
+<li>Inherits the <strong>privacy layer skills</strong> (6 skills, always loaded)</li>
+<li>Adds <strong>role skills</strong> specific to their domain (2-6 skills)</li>
+<li>Follows a <strong>spell constellation</strong> through the grimoires</li>
+<li>Speaks with a <strong>voice</strong> (tagline, proverbs, aesthetic)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>1. Persona Architecture</h2>
+<h3>The 16-Persona System</h3>
+<pre><code>CANONICAL (2)
+├── Soulbis ⚔️ — The First Swordsman
+└── Soulbae 🧙 — The First Mage
+
+SWORDSMAN (5)
+├── Cipher 🗡️🔐 — ZKP Protocol Engineer
+├── Warden 🗡️🌐 — Browser Privacy Builder
+├── Gatekeeper 🗡️👤 — Proof-of-Personhood Researcher
+├── Ranger 🗡️🌲 — Dark Forest Strategist
+└── Sentinel 🗡️🛡️ — Infrastructure Security Architect
+
+MAGE (5)
+├── Assessor 🧙💰 — Privacy Data Economist
+├── Ambassador 🧙⚖️ — Standards &amp; Governance Architect
+├── Chronicler 🧙📖 — Knowledge Compression Builder
+├── Shipwright 🧙🏴‍☠️ — DAO &amp; Community Architect
+└── Weaver 🧙⿻ — Plural Technology Researcher
+
+BALANCED (4)
+├── Healer ☯️🏥 — Healthcare Privacy Architect
+├── Witness ☯️📰 — Privacy-Preserving Journalist
+├── Architect ☯️🤖 — AI Agent System Designer
+└── Pedagogue ☯️🎓 — Privacy Education Designer
+</code></pre>
+<h3>Alignment Logic</h3>
+<table>
+<thead>
+<tr>
+<th>Alignment</th>
+<th>Primary Force</th>
+<th>Emergent Force</th>
+<th>Skill Bias</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Swordsman</strong></td>
+<td>Protect</td>
+<td>Reflect</td>
+<td><code>crypto_zkp</code>, <code>swordsman_browser</code>, <code>personhood_sybil</code>, <code>dark_forest</code>, <code>academic</code></td>
+</tr>
+<tr>
+<td><strong>Mage</strong></td>
+<td>Project</td>
+<td>Connect</td>
+<td><code>ai_agent</code>, <code>economics</code>, <code>policy_governance</code>, <code>narrative_compression</code>, <code>hitchhiker_governance</code>, <code>plurality_cooperative</code></td>
+</tr>
+<tr>
+<td><strong>Balanced</strong></td>
+<td>Both</td>
+<td>Both</td>
+<td>Cross-cutting combination from both pools</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>2. Persona Template Structure</h2>
+<h3>TypeScript Interface</h3>
+<pre><code class="language-typescript">interface PersonaTemplate {
+  id: string;                           // Unique identifier (lowercase, underscore)
+  name: string;                         // Display name with title
+  emoji: string;                        // 1-2 emoji visual marker
+  tagline: string;                      // First-person identity statement
+  alignment: &#39;swordsman&#39; | &#39;mage&#39; | &#39;balanced&#39;;
+  category: &#39;canonical&#39; | &#39;swordsman&#39; | &#39;mage&#39; | &#39;balanced&#39;;
+  skills_role: string[];                // Role skill IDs (privacy layer implicit)
+}
+</code></pre>
+<h3>Example: The Healer</h3>
+<pre><code class="language-typescript">{
+  id: &#39;healer&#39;,
+  category: &#39;balanced&#39;,
+  name: &#39;The Healer — Healthcare Privacy Architect&#39;,
+  emoji: &#39;☯️🏥&#39;,
+  tagline: &quot;Trust is architectural, not contractual. The patient&#39;s data saves lives only if the patient trusts the system.&quot;,
+  alignment: &#39;balanced&#39;,
+  skills_role: [&#39;crypto_zkp&#39;, &#39;policy_governance&#39;, &#39;ai_agent&#39;, &#39;personhood_sybil&#39;, &#39;economics&#39;]
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>3. Creating a New Persona</h2>
+<h3>Step 1: Define the Domain</h3>
+<p><strong>Questions to answer:</strong></p>
+<ol>
+<li>What real-world role does this persona represent?</li>
+<li>What privacy challenges does this domain face?</li>
+<li>Does this domain lean toward protection (swordsman) or projection (mage)?</li>
+<li>What existing personas might this overlap with?</li>
+</ol>
+<p><strong>Example domains not yet covered:</strong></p>
+<ul>
+<li>Financial auditor (balanced: crypto + economics + policy)</li>
+<li>Whistleblower support (swordsman: dark_forest + crypto + narrative)</li>
+<li>Family privacy coordinator (balanced: swordsman_browser + ai_agent + personhood)</li>
+<li>Research data steward (mage: academic + policy + narrative)</li>
+</ul>
+<h3>Step 2: Choose Alignment</h3>
+<table>
+<thead>
+<tr>
+<th>If the domain...</th>
+<th>Then alignment is...</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Primarily defends boundaries</td>
+<td><strong>swordsman</strong></td>
+</tr>
+<tr>
+<td>Primarily coordinates/delegates</td>
+<td><strong>mage</strong></td>
+</tr>
+<tr>
+<td>Does both equally</td>
+<td><strong>balanced</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Swordsman emoji prefix:</strong> <code>🗡️</code><br><strong>Mage emoji prefix:</strong> <code>🧙</code><br><strong>Balanced emoji prefix:</strong> <code>☯️</code></p>
+<h3>Step 3: Select Role Skills</h3>
+<p><strong>Rule:</strong> 3-6 role skills per persona. More than 6 loses focus; fewer than 3 lacks depth.</p>
+<p><strong>Privacy layer (always included):</strong></p>
+<ul>
+<li><code>dragon</code> — Root equation</li>
+<li><code>vrc_identity</code> — Verifiable Relationship Credentials</li>
+<li><code>promise_theory</code> — Voluntary cooperation</li>
+<li><code>knowledgegraph</code> — Entity-relationship structure</li>
+<li><code>tetrahedral_sovereignty</code> — Four forces model</li>
+<li><code>uor_toroidal</code> — Speculative geometry</li>
+</ul>
+<p><strong>Swordsman role skills:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>When to include</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>crypto_zkp</code></td>
+<td>Building/evaluating proof systems</td>
+</tr>
+<tr>
+<td><code>swordsman_browser</code></td>
+<td>User-facing privacy tools</td>
+</tr>
+<tr>
+<td><code>personhood_sybil</code></td>
+<td>Identity verification matters</td>
+</tr>
+<tr>
+<td><code>dark_forest</code></td>
+<td>Adversarial environments</td>
+</tr>
+<tr>
+<td><code>academic</code></td>
+<td>Publishing/reviewing research</td>
+</tr>
+</tbody></table>
+<p><strong>Mage role skills:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>When to include</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ai_agent</code></td>
+<td>Designing/using AI agents</td>
+</tr>
+<tr>
+<td><code>economics</code></td>
+<td>Valuing privacy, market dynamics</td>
+</tr>
+<tr>
+<td><code>policy_governance</code></td>
+<td>Standards, regulations, institutions</td>
+</tr>
+<tr>
+<td><code>narrative_compression</code></td>
+<td>Teaching, documenting, storytelling</td>
+</tr>
+<tr>
+<td><code>hitchhiker_governance</code></td>
+<td>DAO, community, ship-building</td>
+</tr>
+<tr>
+<td><code>plurality_cooperative</code></td>
+<td>Plural tech, coordination mechanisms</td>
+</tr>
+</tbody></table>
+<h3>Step 4: Write the Tagline</h3>
+<p><strong>Formula:</strong> First-person statement that encodes the persona&#39;s core insight.</p>
+<p><strong>Patterns that work:</strong></p>
+<ul>
+<li><strong>Paradox resolution:</strong> &quot;The hardest problem in X is not Y. It is Z.&quot;</li>
+<li><strong>Architectural claim:</strong> &quot;Trust is architectural, not contractual.&quot;</li>
+<li><strong>Value statement:</strong> &quot;The gap between X and Y is not a number. It is a topology.&quot;</li>
+<li><strong>Negation-affirmation:</strong> &quot;Without X, every Y is Z.&quot;</li>
+</ul>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li>First person (&quot;I&quot; statements are optional but powerful)</li>
+<li>One breath (can be spoken aloud without pausing)</li>
+<li>Domain-native language (use the field&#39;s vocabulary)</li>
+<li>Contains a productive tension</li>
+</ul>
+<h3>Step 5: Choose the Emoji</h3>
+<p><strong>Structure:</strong> <code>[alignment_prefix][domain_symbol]</code></p>
+<table>
+<thead>
+<tr>
+<th>Alignment</th>
+<th>Prefix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Swordsman</td>
+<td><code>🗡️</code></td>
+</tr>
+<tr>
+<td>Mage</td>
+<td><code>🧙</code></td>
+</tr>
+<tr>
+<td>Balanced</td>
+<td><code>☯️</code></td>
+</tr>
+</tbody></table>
+<p><strong>Domain symbols already used:</strong></p>
+<ul>
+<li>🔐 (crypto), 🌐 (browser), 👤 (personhood), 🌲 (dark forest), 🛡️ (security)</li>
+<li>💰 (economics), ⚖️ (governance), 📖 (narrative), 🏴‍☠️ (DAO), ⿻ (plurality)</li>
+<li>🏥 (healthcare), 📰 (journalism), 🤖 (AI), 🎓 (education)</li>
+</ul>
+<p><strong>Available symbols for new personas:</strong></p>
+<ul>
+<li>🔬 (research), 💼 (business), 🏛️ (government), 🌍 (environment)</li>
+<li>👨‍👩‍👧‍👦 (family), 🎨 (creative), 🏦 (finance), 📡 (infrastructure)</li>
+</ul>
+<h3>Step 6: Register the Persona</h3>
+<p>Add to <code>src/lib/persona-index.ts</code>:</p>
+<pre><code class="language-typescript">{
+  id: &#39;new_persona_id&#39;,
+  category: &#39;balanced&#39;,  // or &#39;swordsman&#39; or &#39;mage&#39;
+  name: &#39;The [Title] — [Subtitle]&#39;,
+  emoji: &#39;☯️🔬&#39;,
+  tagline: &#39;Your tagline here.&#39;,
+  alignment: &#39;balanced&#39;,
+  skills_role: [&#39;skill_1&#39;, &#39;skill_2&#39;, &#39;skill_3&#39;]
+}
+</code></pre>
+<p>Add to <code>src/lib/spellbook-templates.ts</code>:</p>
+<pre><code class="language-typescript">{
+  id: &#39;new_persona_id&#39;,
+  name: &#39;The [Title] — [Subtitle]&#39;,
+  emoji: &#39;☯️🔬&#39;,
+  tagline: &#39;Your tagline here.&#39;,
+  alignment: &#39;balanced&#39;,
+  spellIds: NEW_PERSONA_SPELL_IDS,  // Define the constellation
+  skillIds: getSkillIdsForPersona(&#39;new_persona_id&#39;),
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>4. Skill Coverage Matrix</h2>
+<h3>Current Coverage</h3>
+<p>Each skill should appear in 2-5 personas to ensure:</p>
+<ul>
+<li>Multiple entry points for learners</li>
+<li>Cross-domain validation</li>
+<li>No skill is orphaned</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Personas Using It</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>crypto_zkp</code></td>
+<td>Cipher, Warden, Gatekeeper, Sentinel, Ranger, Healer, Witness, Architect</td>
+<td>Heavy (8)</td>
+</tr>
+<tr>
+<td><code>swordsman_browser</code></td>
+<td>Warden, Sentinel, Ranger, Pedagogue</td>
+<td>Medium (4)</td>
+</tr>
+<tr>
+<td><code>personhood_sybil</code></td>
+<td>Cipher, Gatekeeper, Warden, Sentinel, Healer, Architect</td>
+<td>Heavy (6)</td>
+</tr>
+<tr>
+<td><code>dark_forest</code></td>
+<td>Ranger, Sentinel, Witness, Architect</td>
+<td>Medium (4)</td>
+</tr>
+<tr>
+<td><code>academic</code></td>
+<td>Cipher, Gatekeeper</td>
+<td>Low (2)</td>
+</tr>
+<tr>
+<td><code>ai_agent</code></td>
+<td>Assessor, Ambassador, Weaver, Healer, Witness, Architect</td>
+<td>Heavy (6)</td>
+</tr>
+<tr>
+<td><code>economics</code></td>
+<td>Assessor, Ranger, Shipwright, Healer, Pedagogue</td>
+<td>Heavy (5)</td>
+</tr>
+<tr>
+<td><code>policy_governance</code></td>
+<td>Ambassador, Assessor, Healer, Pedagogue, Weaver</td>
+<td>Heavy (5)</td>
+</tr>
+<tr>
+<td><code>narrative_compression</code></td>
+<td>Chronicler, Ambassador, Weaver, Pedagogue, Witness</td>
+<td>Heavy (5)</td>
+</tr>
+<tr>
+<td><code>hitchhiker_governance</code></td>
+<td>Shipwright, Architect, Chronicler</td>
+<td>Medium (3)</td>
+</tr>
+<tr>
+<td><code>plurality_cooperative</code></td>
+<td>Weaver, Shipwright, Chronicler</td>
+<td>Medium (3)</td>
+</tr>
+</tbody></table>
+<h3>Gap Analysis</h3>
+<p><strong>Underused skills (need more personas):</strong></p>
+<ul>
+<li><code>academic</code> — Only 2 personas. Consider: Research Data Steward, Peer Review Specialist</li>
+<li><code>hitchhiker_governance</code> — Only 3 personas. Consider: Community Manager, Open Source Maintainer</li>
+<li><code>plurality_cooperative</code> — Only 3 personas. Consider: Cooperative Economist, Democratic Technologist</li>
+</ul>
+<p><strong>Overused skills (may need splitting):</strong></p>
+<ul>
+<li><code>crypto_zkp</code> at 8 personas is fine (it&#39;s foundational)</li>
+<li><code>ai_agent</code> at 6 is fine (it&#39;s the current frontier)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>5. Spell Constellation Pathing</h2>
+<h3>What is a Constellation?</h3>
+<p>A constellation is the ordered path of spells a persona studies through the grimoires. It defines:</p>
+<ul>
+<li><strong>Entry point</strong> — Where the persona starts learning</li>
+<li><strong>Progression</strong> — The order of concepts</li>
+<li><strong>Emphasis</strong> — Which spellbooks weight more heavily</li>
+<li><strong>Divergence point</strong> — Where swordsman and mage paths split</li>
+</ul>
+<h3>Constellation Structure</h3>
+<pre><code class="language-typescript">interface SpellbookTemplate {
+  id: string;
+  name: string;
+  emoji: string;
+  tagline: string;
+  alignment: &#39;swordsman&#39; | &#39;mage&#39; | &#39;balanced&#39;;
+  spellIds: string[];     // The constellation path
+  skillIds: string[];     // Skills unlocked by this path
+}
+</code></pre>
+<h3>Canonical Paths</h3>
+<p><strong>Soulbis (Swordsman) Path:</strong></p>
+<pre><code>First Person (all 23 acts)
+  → Zero Knowledge (defensive tales: 1-4, 9-14, 26)
+
+Total: 34 spells
+</code></pre>
+<p><strong>Soulbae (Mage) Path:</strong></p>
+<pre><code>First Person (all 23 acts)
+  → Canon (preface, cypherpunk, early, synthesis, missing primitive, open canon)
+  → Parallel Society (Exit, Exile, Access)
+  → Plurality (opening + closing)
+  → Incantations (Triune Graph, Manifold Dragon)
+
+Total: 35 spells
+</code></pre>
+<h3>Path Design Principles</h3>
+<ol>
+<li><strong>All paths start with First Person</strong> — The shared foundation</li>
+<li><strong>Divergence reflects alignment</strong> — Swordsman goes to Zero; Mage goes to Canon</li>
+<li><strong>Depth over breadth</strong> — Better to deeply cover one spellbook than skim all</li>
+<li><strong>Skills map to spells</strong> — Each skill should have 2-4 spells that teach it</li>
+</ol>
+<h3>Creating a New Constellation</h3>
+<p><strong>Step 1: Choose entry spells</strong></p>
+<p>Everyone starts with these (shared understanding):</p>
+<pre><code class="language-typescript">const SHARED_ENTRY = [
+  &#39;act-01-venice&#39;,        // The founding ceremony
+  &#39;act-02-dual-ceremony&#39;, // The separation theorem
+  &#39;act-03-drakes-teaching&#39;, // The equation
+];
+</code></pre>
+<p><strong>Step 2: Add alignment-specific spells</strong></p>
+<p><strong>For Swordsman personas:</strong></p>
+<pre><code class="language-typescript">// Blade formation
+&#39;act-04-blade-alone&#39;,
+&#39;act-05-light-armor&#39;,
+
+// Protection mechanisms
+&#39;act-09-zcash-shield&#39;,
+&#39;act-17-bonfire-dark-forest&#39;,
+
+// Zero Knowledge grimoire
+&#39;zero-tale-1&#39;, &#39;zero-tale-2&#39;, &#39;zero-tale-3&#39;, // Foundations
+&#39;zero-tale-9&#39;, &#39;zero-tale-10&#39;, // Applications
+</code></pre>
+<p><strong>For Mage personas:</strong></p>
+<pre><code class="language-typescript">// Projection mechanisms
+&#39;act-12-forgetting&#39;,
+&#39;act-19-enthusiastic-archivist&#39;,
+
+// Canon grimoire
+&#39;chapter-00-preface&#39;,
+&#39;chapter-01-cypherpunk-whispers&#39;,
+&#39;chapter-03-synthesis&#39;,
+
+// Plurality
+&#39;plurality-opening&#39;,
+&#39;plurality-act-7&#39;, &#39;plurality-act-8&#39;, // Coordination mechanisms
+</code></pre>
+<p><strong>For Balanced personas:</strong></p>
+<pre><code class="language-typescript">// Take from both pools
+const BALANCED_CORE = [
+  &#39;act-01-venice&#39;,
+  &#39;act-03-drakes-teaching&#39;,
+  &#39;act-09-zcash-shield&#39;,    // Swordsman
+  &#39;act-12-forgetting&#39;,       // Mage
+  &#39;chapter-00-preface&#39;,      // Canon entry
+  &#39;chapter-03-synthesis&#39;,    // Unified view
+];
+</code></pre>
+<p><strong>Step 3: Add domain-specific spells</strong></p>
+<p>Map the persona&#39;s skills to relevant spells:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Relevant Spells</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>crypto_zkp</code></td>
+<td>zero-tale-1 through zero-tale-18</td>
+</tr>
+<tr>
+<td><code>swordsman_browser</code></td>
+<td>act-04, act-05, act-08, act-15</td>
+</tr>
+<tr>
+<td><code>personhood_sybil</code></td>
+<td>act-06, act-07, zero-tale-23</td>
+</tr>
+<tr>
+<td><code>dark_forest</code></td>
+<td>act-17, zero-tale-26</td>
+</tr>
+<tr>
+<td><code>academic</code></td>
+<td>act-03, chapter-09 (open canon)</td>
+</tr>
+<tr>
+<td><code>ai_agent</code></td>
+<td>act-02, act-19, act-20</td>
+</tr>
+<tr>
+<td><code>economics</code></td>
+<td>act-10, act-16, chapter-08</td>
+</tr>
+<tr>
+<td><code>policy_governance</code></td>
+<td>chapter-01, chapter-03, parallel-9</td>
+</tr>
+<tr>
+<td><code>narrative_compression</code></td>
+<td>act-12, act-19, chapter-00</td>
+</tr>
+<tr>
+<td><code>hitchhiker_governance</code></td>
+<td>act-21, act-22</td>
+</tr>
+<tr>
+<td><code>plurality_cooperative</code></td>
+<td>plurality-opening through plurality-closing</td>
+</tr>
+</tbody></table>
+<h3>Example: Building the Healer Constellation</h3>
+<p><strong>Persona:</strong> Healer — Healthcare Privacy Architect<br><strong>Alignment:</strong> Balanced<br><strong>Skills:</strong> <code>crypto_zkp</code>, <code>policy_governance</code>, <code>ai_agent</code>, <code>personhood_sybil</code>, <code>economics</code></p>
+<p><strong>Constellation design:</strong></p>
+<pre><code class="language-typescript">const HEALER_SPELL_IDS = [
+  // Shared entry
+  &#39;act-01-venice&#39;,
+  &#39;act-02-dual-ceremony&#39;,
+  &#39;act-03-drakes-teaching&#39;,
+
+  // Personhood (critical for healthcare)
+  &#39;act-06-trust-graph&#39;,
+  &#39;act-07-mirror&#39;,
+
+  // Protection (patient data)
+  &#39;act-09-zcash-shield&#39;,
+
+  // Delegation (clinical AI)
+  &#39;act-19-enthusiastic-archivist&#39;,
+  &#39;act-20-infinite-vault&#39;,
+
+  // Policy (healthcare regulations)
+  &#39;chapter-00-preface&#39;,
+  &#39;chapter-01-cypherpunk-whispers&#39;,
+  &#39;chapter-03-synthesis&#39;,
+
+  // Economics (health data value)
+  &#39;act-16-pools-become-wells&#39;,
+];
+</code></pre>
+<p><strong>Rationale:</strong></p>
+<ul>
+<li>Heavy on personhood (patients must be verified)</li>
+<li>Includes protection (HIPAA, data sovereignty)</li>
+<li>Includes delegation (clinical decision support AI)</li>
+<li>Includes policy (regulatory navigation)</li>
+<li>Includes economics (health data markets)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>6. Ceremony Constellation</h2>
+<h3>What is the Ceremony?</h3>
+<p>The ceremony is the onboarding flow where users create their AgentCard. Each step lets them choose an emoji marker, building their unique &quot;constellation path.&quot;</p>
+<h3>Ceremony Steps</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>ID</th>
+<th>Purpose</th>
+<th>Emoji Options</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>naming</code></td>
+<td>Display name</td>
+<td>🗡️ ⚔️ 🛡️ 🏹 🗿 🌟</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>keygen</code></td>
+<td>Ed25519 keypair</td>
+<td>🔐 🔑 🗝️ 💎 ⚡ 🔮</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>privacy</code></td>
+<td>Attribution level</td>
+<td>🙈 👁️ 🎭 🌑 🔒 🕶️</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>grimoires</code></td>
+<td>Spellbook selection</td>
+<td>📖 📚 📜 🌀 🧙 ✨</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>seal</code></td>
+<td>Sign agent card</td>
+<td>⚔️ 🖋️ 💫 🔥 🌟 👤</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>activation</code></td>
+<td>Enter constellation</td>
+<td>✨ 🌅 🎆 💥 🌟 🚀</td>
+</tr>
+</tbody></table>
+<h3>Constellation Path Format</h3>
+<pre><code>🗡️→🔐→🙈→📖→⚔️→✨
+</code></pre>
+<p>Each arrow (<code>→</code>) connects ceremony steps in order. The path is stored on the AgentCard and displayed in the spellweb visualization.</p>
+<h3>Adding New Ceremony Steps</h3>
+<p>To add a step, update <code>src/lib/ceremony/constellation.ts</code>:</p>
+<pre><code class="language-typescript">{
+  id: &#39;new_step&#39;,
+  title: &#39;Step Title&#39;,
+  description: &#39;What this step does&#39;,
+  emojiOptions: [&#39;emoji1&#39;, &#39;emoji2&#39;, &#39;emoji3&#39;, &#39;emoji4&#39;, &#39;emoji5&#39;, &#39;emoji6&#39;],
+  dataKey: &#39;fieldToPopulate&#39;,
+  requiredForComplete: true,
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>7. Trust Tiers and Progression</h2>
+<h3>Trust Tier System</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Name</th>
+<th>Requirements</th>
+<th>Unlocks</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><code>blade</code></td>
+<td>Complete ceremony</td>
+<td>Basic spellbook access</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>light</code></td>
+<td>Collect 10+ proverbs</td>
+<td>Proverb sharing</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>heavy</code></td>
+<td>Inscribe 1+ proverb on Zcash</td>
+<td>Full spellweb access</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>dragon</code></td>
+<td>TEE attestation + VRC</td>
+<td>Agent-to-agent trust</td>
+</tr>
+</tbody></table>
+<h3>Armor Progression</h3>
+<p>The tier maps to the &quot;armor progression&quot; narrative:</p>
+<ul>
+<li><strong>Blade</strong> — The swordsman exists but is unarmored</li>
+<li><strong>Light Armor</strong> — Basic protection, visible to community</li>
+<li><strong>Heavy Armor</strong> — Full sovereignty, on-chain presence</li>
+<li><strong>Dragon</strong> — TEE-verified, can establish VRCs with other dragons</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>8. Quality Checklist</h2>
+<h3>Persona Checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Unique ID (lowercase, underscores)</li>
+<li><input disabled="" type="checkbox"> Alignment matches skill selection</li>
+<li><input disabled="" type="checkbox"> 3-6 role skills assigned</li>
+<li><input disabled="" type="checkbox"> Tagline is first-person and one-breath</li>
+<li><input disabled="" type="checkbox"> Emoji follows <code>[prefix][domain]</code> pattern</li>
+<li><input disabled="" type="checkbox"> No duplicate emoji with existing personas</li>
+<li><input disabled="" type="checkbox"> Registered in <code>persona-index.ts</code></li>
+<li><input disabled="" type="checkbox"> Registered in <code>spellbook-templates.ts</code></li>
+<li><input disabled="" type="checkbox"> Constellation path designed</li>
+<li><input disabled="" type="checkbox"> Skills map to spells in constellation</li>
+</ul>
+<h3>Constellation Checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Starts with shared entry spells</li>
+<li><input disabled="" type="checkbox"> Includes alignment-divergence point</li>
+<li><input disabled="" type="checkbox"> Each skill has 2-4 supporting spells</li>
+<li><input disabled="" type="checkbox"> Total 15-40 spells (not too broad, not too narrow)</li>
+<li><input disabled="" type="checkbox"> No duplicate spell IDs</li>
+<li><input disabled="" type="checkbox"> Spells exist in grimoire-baked.ts</li>
+</ul>
+<h3>Skill Coverage Checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> No skill appears in fewer than 2 personas</li>
+<li><input disabled="" type="checkbox"> No skill appears in more than 8 personas</li>
+<li><input disabled="" type="checkbox"> Balanced personas draw from both pools</li>
+<li><input disabled="" type="checkbox"> Canonical personas (Soulbis/Soulbae) have maximum coverage</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>9. Persona Writing Examples</h2>
+<h3>Swordsman Persona: The Auditor</h3>
+<pre><code class="language-typescript">{
+  id: &#39;auditor&#39;,
+  category: &#39;swordsman&#39;,
+  name: &#39;The Auditor — Privacy Compliance Verifier&#39;,
+  emoji: &#39;🗡️🔍&#39;,
+  tagline: &#39;Compliance without surveillance is possible. I verify the proof, not the data.&#39;,
+  alignment: &#39;swordsman&#39;,
+  skills_role: [&#39;crypto_zkp&#39;, &#39;policy_governance&#39;, &#39;academic&#39;, &#39;economics&#39;]
+}
+</code></pre>
+<p><strong>Constellation:</strong></p>
+<pre><code class="language-typescript">const AUDITOR_SPELL_IDS = [
+  &#39;act-01-venice&#39;, &#39;act-02-dual-ceremony&#39;, &#39;act-03-drakes-teaching&#39;,
+  &#39;act-09-zcash-shield&#39;, &#39;act-10-topology&#39;,
+  &#39;zero-tale-1&#39;, &#39;zero-tale-2&#39;, &#39;zero-tale-3&#39;, &#39;zero-tale-4&#39;,
+  &#39;zero-tale-15&#39;, &#39;zero-tale-16&#39;, &#39;zero-tale-17&#39;, &#39;zero-tale-18&#39;,
+  &#39;chapter-03-synthesis&#39;, &#39;chapter-08-missing-primitive&#39;,
+];
+</code></pre>
+<h3>Mage Persona: The Curator</h3>
+<pre><code class="language-typescript">{
+  id: &#39;curator&#39;,
+  category: &#39;mage&#39;,
+  name: &#39;The Curator — Knowledge Commons Steward&#39;,
+  emoji: &#39;🧙🏛️&#39;,
+  tagline: &#39;The commons thrives when contributors are protected. I tend the garden without harvesting the gardeners.&#39;,
+  alignment: &#39;mage&#39;,
+  skills_role: [&#39;narrative_compression&#39;, &#39;hitchhiker_governance&#39;, &#39;plurality_cooperative&#39;, &#39;policy_governance&#39;]
+}
+</code></pre>
+<p><strong>Constellation:</strong></p>
+<pre><code class="language-typescript">const CURATOR_SPELL_IDS = [
+  &#39;act-01-venice&#39;, &#39;act-02-dual-ceremony&#39;, &#39;act-03-drakes-teaching&#39;,
+  &#39;act-12-forgetting&#39;, &#39;act-19-enthusiastic-archivist&#39;, &#39;act-20-infinite-vault&#39;,
+  &#39;act-21-hitchhikers-gambit&#39;, &#39;act-22-hoopy-frood&#39;,
+  &#39;chapter-00-preface&#39;, &#39;chapter-01-cypherpunk-whispers&#39;,
+  &#39;plurality-opening&#39;, &#39;plurality-act-7&#39;, &#39;plurality-act-8&#39;, &#39;plurality-closing&#39;,
+];
+</code></pre>
+<h3>Balanced Persona: The Steward</h3>
+<pre><code class="language-typescript">{
+  id: &#39;steward&#39;,
+  category: &#39;balanced&#39;,
+  name: &#39;The Steward — Family Privacy Coordinator&#39;,
+  emoji: &#39;☯️👨‍👩‍👧‍👦&#39;,
+  tagline: &#39;Children deserve sovereignty before they can spell it. I hold the keys until they can hold their own.&#39;,
+  alignment: &#39;balanced&#39;,
+  skills_role: [&#39;swordsman_browser&#39;, &#39;ai_agent&#39;, &#39;personhood_sybil&#39;, &#39;narrative_compression&#39;]
+}
+</code></pre>
+<p><strong>Constellation:</strong></p>
+<pre><code class="language-typescript">const STEWARD_SPELL_IDS = [
+  &#39;act-01-venice&#39;, &#39;act-02-dual-ceremony&#39;, &#39;act-03-drakes-teaching&#39;,
+  &#39;act-04-blade-alone&#39;, &#39;act-05-light-armor&#39;,
+  &#39;act-06-trust-graph&#39;, &#39;act-07-mirror&#39;,
+  &#39;act-12-forgetting&#39;,
+  &#39;act-15-running-in-shackles&#39;,
+  &#39;chapter-00-preface&#39;,
+];
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>10. The Persona Lattice</h2>
+<p>All personas exist on a lattice defined by:</p>
+<ul>
+<li><strong>X-axis:</strong> Protection ↔ Projection (Swordsman ↔ Mage)</li>
+<li><strong>Y-axis:</strong> Foundational ↔ Applied (Theory ↔ Practice)</li>
+</ul>
+<pre><code>              PROJECTION (Mage)
+                    │
+    Weaver ⿻       │       📖 Chronicler
+         ⚖️ Ambassador    🏴‍☠️ Shipwright
+                    │    💰 Assessor
+                    │
+FOUNDATIONAL ───────┼─────── APPLIED
+                    │
+    📜 Gatekeeper   │       🌐 Warden
+    🔐 Cipher       │    🌲 Ranger
+                    │    🛡️ Sentinel
+                    │
+              PROTECTION (Swordsman)
+</code></pre>
+<p>Balanced personas sit at the center, drawing from both axes.</p>
+<hr>
+<p><em>The notation keeps evolving. The architecture has to hold.</em></p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-system-reference.html">The System Reference</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="reference-persona-authoring-guide.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

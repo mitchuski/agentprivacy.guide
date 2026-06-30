@@ -1,0 +1,628 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ceremony — The Ceremony Engine: Technical Specification · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Ceremony — The Ceremony Engine: Technical Specification</span></div>
+  <article><div class="md"><h1>The Ceremony Engine: Technical Specification</h1>
+</div>
+<div class="md"><p><em>Acts XXVII–XXVIII Implementation Architecture</em></p>
+<p><em>(⚔️⊥⿻⊥🧙)😊</em></p>
+<p>privacymage</p>
+<p><strong>Version:</strong> 1.1 — April 2026<br><strong>Status:</strong> Forge OPERATIONAL · Ceremony Engine SPECIFIED · Extensions NOT YET BUILT<br><strong>Parent:</strong> <a href="https://github.com/mitchuski/agentprivacy-docs">Dual Territory Ceremony Spec v1.0</a></p>
+<hr>
+</div>
+<div class="md"><h2>1. System Overview</h2>
+<p>The ceremony engine carries the blade forge from <a href="https://spellweb.ai">spellweb.ai</a> across the open web. The forge proves the concept within a single site. The ceremony engine carries sovereignty everywhere else.</p>
+<pre><code>┌─────────────────────┐     ceremony      ┌─────────────────────┐
+│   agentprivacy.ai   │◄── channel  ──►   │    spellweb.ai      │
+│   (Mage Territory)  │     (mana)        │ (Swordsman Territory)│
+│                     │                    │                      │
+│  Stories, Spells    │                    │  Topology, Blades    │
+│  Personas, Training │                    │  Forge, Hexagrams    │
+│  Pretext Orbs       │                    │  Constellations      │
+│  Path Page          │                    │  Cut Segments        │
+└────────┬────────────┘                    └──────────┬───────────┘
+         │                                            │
+         │           ┌──────────────┐                 │
+         └──────────►│   bgin.ai    │◄────────────────┘
+                     │ (Third Node) │
+                     │ Trust Graph  │
+                     └──────────────┘
+         
+         ┌──────────────────────────────────┐
+         │        The Open Web              │
+         │                                  │
+         │  ┌────────────┐ ┌─────────────┐  │
+         │  │ Swordsman  │ │    Mage     │  │
+         │  │ Extension  │ │  Extension  │  │
+         │  │ (boundary) │ │ (knowledge) │  │
+         │  └─────┬──────┘ └──────┬──────┘  │
+         │        │  ceremony     │          │
+         │        │◄── channel ──►│          │
+         │        └───────────────┘          │
+         └──────────────────────────────────┘
+</code></pre>
+<p><strong>Core rule:</strong> The Swordsman and Mage never merge. Separate Chrome processes. Separate storage. Separate permissions. Separate repos. This applies at every level — protocol, extension, website, visual rendering.</p>
+<hr>
+</div>
+<div class="md"><h2>2. The Forge (OPERATIONAL)</h2>
+<p>The forge is live at <a href="https://spellweb.ai">spellweb.ai</a>. This section documents what is running.</p>
+<h3>2.1 Forge Components</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SpellWeb.tsx</code></td>
+<td>Main graph + forge modal + global controls</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>SpellCeremony.tsx</code></td>
+<td>Ceremony panel + action bar + proof generation</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>WanderingOrbs.tsx</code></td>
+<td>Orb wandering + tracing mode + cut segments</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>SpellEffects.tsx</code></td>
+<td>Spell particles and visual effects</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td><code>types/graph.ts</code></td>
+<td>Hexagram types + dimension computation</td>
+<td>✅ Operational</td>
+</tr>
+</tbody></table>
+<h3>2.2 Forge Capabilities</h3>
+<ul>
+<li>478-node knowledge graph (984 edges) with D3 force simulation</li>
+<li>Dual orbs (Swordsman red <code>#e74c3c</code>, Mage purple <code>#9b59b6</code>, 35px orbit radius)</li>
+<li>Constellation marking, saving, loading</li>
+<li>Evocation (orbs trace constellation path, count laps, accumulate charge)</li>
+<li>Blade forge (six-dimension activation, stratum/tier classification, SVG with inscribed constellation)</li>
+<li>Hexagram computation (node dimensions → 6 binary lines → 64 states)</li>
+<li>Node inspector with hexagram visualisation</li>
+<li>Blade inventory with tracing (click blade → orbs retrace path with tier-coloured cut segments)</li>
+<li>Blade export to markdown/JSON</li>
+</ul>
+<h3>2.3 Six Dimensions Activation</h3>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Canonical</th>
+<th>Implementation</th>
+<th>Activation Condition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d1 🛡️ Protection</td>
+<td>Hide</td>
+<td>≥1 node in path</td>
+<td></td>
+</tr>
+<tr>
+<td>d2 🤝 Delegation</td>
+<td>Commit</td>
+<td>≥2 laps completed</td>
+<td></td>
+</tr>
+<tr>
+<td>d3 📜 Memory</td>
+<td>Prove</td>
+<td>≥30 seconds duration</td>
+<td></td>
+</tr>
+<tr>
+<td>d4 🔗 Connection</td>
+<td>Connect</td>
+<td>≥3 nodes traversed</td>
+<td></td>
+</tr>
+<tr>
+<td>d5 ⚡ Computation</td>
+<td>Reflect</td>
+<td>Always (proof generated)</td>
+<td></td>
+</tr>
+<tr>
+<td>d6 💎 Value</td>
+<td>Delegate</td>
+<td>Charge ≥ FLAME</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3>2.4 Charge Levels</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Laps</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SPARK</td>
+<td>1</td>
+<td>Minimal proof</td>
+</tr>
+<tr>
+<td>EMBER</td>
+<td>2–3</td>
+<td>Building presence</td>
+</tr>
+<tr>
+<td>FLAME</td>
+<td>4–5</td>
+<td>Sustained attention</td>
+</tr>
+<tr>
+<td>BLAZE</td>
+<td>6–7</td>
+<td>Deep engagement</td>
+</tr>
+<tr>
+<td>INFERNO</td>
+<td>8+</td>
+<td>Full ceremonial presence</td>
+</tr>
+</tbody></table>
+<h3>2.5 Blade Tiers</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Stratum</th>
+<th>Dimensions Active</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Light 🛡️</td>
+<td>1–2</td>
+<td>1–2 of 6</td>
+</tr>
+<tr>
+<td>Heavy ⚔️</td>
+<td>3–4</td>
+<td>3–4 of 6</td>
+</tr>
+<tr>
+<td>Dragon 🐉</td>
+<td>5–6</td>
+<td>5–6 of 6</td>
+</tr>
+</tbody></table>
+<h3>2.6 Empirical Data (N=3, Single Forger)</h3>
+<table>
+<thead>
+<tr>
+<th>Blade</th>
+<th>Nodes</th>
+<th>Laps</th>
+<th>Duration</th>
+<th>Spells</th>
+<th>Tier</th>
+<th>Hex</th>
+<th>Signature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dual Agent</td>
+<td>4</td>
+<td>11</td>
+<td>74s</td>
+<td>—</td>
+<td>Dragon</td>
+<td>3F</td>
+<td>SPELL-87BYW9-B</td>
+</tr>
+<tr>
+<td>Hitchhiker&#39;s</td>
+<td>10</td>
+<td>13</td>
+<td>433s</td>
+<td>—</td>
+<td>Dragon</td>
+<td>3F</td>
+<td>SPELL-2COQFM-D</td>
+</tr>
+<tr>
+<td>Universe</td>
+<td>10</td>
+<td>62</td>
+<td>2,170s</td>
+<td>65</td>
+<td>Dragon</td>
+<td>3F</td>
+<td>SPELL-YW5I59-1Q</td>
+</tr>
+</tbody></table>
+<p>The Hitchhiker&#39;s Blade and Universe Blade trace the same 10-node constellation. Same hash. Same hex. Same tier. Different behavioural density (ρ). This is the V5.1 data point — reconstruction difficulty modified by traversal depth.</p>
+<hr>
+</div>
+<div class="md"><h2>3. The Ceremony Engine (SPECIFIED)</h2>
+<p>The ceremony engine extends the forge across the open web via two Chrome extensions. This section documents the design. The code is not yet written.</p>
+<h3>3.1 Two Extensions, Not One</h3>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Territory</th>
+<th>Carries</th>
+<th>Process</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Swordsman</strong></td>
+<td>spellweb.ai</td>
+<td>MyTerms assertions, cookie slashing, boundary enforcement, cursor state</td>
+<td>Separate Chrome process</td>
+</tr>
+<tr>
+<td><strong>Mage</strong></td>
+<td>agentprivacy.ai</td>
+<td>Knowledge scanning, page intelligence, constellation mapping, Drake emergence</td>
+<td>Separate Chrome process</td>
+</tr>
+</tbody></table>
+<p>They find each other on every page through <code>chrome.runtime.sendMessage</code>. The Swordsman sends SLASH and WARD. The Mage sends INSCRIBE and SCAN. The communication grammar is the lore made executable.</p>
+<p>The chrome processes are the Gap made executable. Separate storage. Separate permissions. Same <code>I(S;M|FP) &lt; ε*</code> that governs the protocol-level separation.</p>
+<h3>3.2 Five Ceremony Types</h3>
+<p>The spellweb already has the dual orbs, the wandering dance, the evocation ceremony. The extensions carry this onto every page:</p>
+<p><strong>Dual Convergence</strong> — orbs within 60px, at least one spell cast. Amber burst. Cursor becomes sovereign shield. MyTerms asserted. The ceremony the spellweb forge already demonstrates — now on any website.</p>
+<p><strong>Hexagram Cast</strong> — six lines between the orbs, each mapped to an architectural layer. 64 states for 64 privacy postures. The spellweb already computes hexagram states from node dimensions. Whether the I Ching&#39;s internal transition logic maps onto privacy state transitions remains open (C12, 50% confidence).</p>
+<p><strong>Emoji Cast</strong> — the fastest ceremony. Select, click, the emoji becomes your cursor. You inscribe the page with sovereignty. The spellweb&#39;s spell particles, exported to the open web.</p>
+<p><strong>Constellation Wave</strong> — the Mage scans the page, finds trackers and dark patterns, and launches particles along the lattice geodesic toward the Swordsman. Intelligence flowing through infrastructure. The spellweb already does this in miniature — click a forged blade in inventory and the orbs retrace its constellation.</p>
+<p><strong>Bilateral Exchange</strong> — for the future, when sites implement MyTerms endpoints. The Swordsman proffers terms. A third node appears. The Mage mediates. If terms are accepted: triangle. Trust triad. The strongest geometry.</p>
+<h3>3.3 The Drake Emergence</h3>
+<p>When both extensions are active and conditions warrant, the Drake emerges from the user&#39;s constellation across the web. Each node in the Drake&#39;s body is a condition from the Privacy Value Model. Set any to zero and the body breaks:</p>
+<p>Φ_v5 = Φ_agent · Φ_data · Φ_inference — multiplicative, honest. The equation rendered as serpentine form.</p>
+<p><strong>Dragon transformation requirements</strong> (sustained across the open web):</p>
+<ul>
+<li>10 domains asserted</li>
+<li>64 constellation nodes</li>
+<li>Months of practice</li>
+</ul>
+<p>Not a sprint. A discipline. The same discipline the spellweb forge already rewards at the single-site level.</p>
+<hr>
+</div>
+<div class="md"><h2>4. DOM-Free Measurement</h2>
+<h3>4.1 Pretext Integration</h3>
+<p>The ceremony engine uses <a href="https://github.com/nicklasserra/pretext">pretext</a> (by Cheng Lou) for text measurement. Pure JavaScript text measurement and layout that side-steps the DOM entirely.</p>
+<p>One <code>canvas.measureText()</code> call — one moment of contact with the font engine — then pure arithmetic forever. <code>layoutNextLine()</code>. Each line can have a different width. Text flows around any shape.</p>
+<p>The browser&#39;s layout engine — that narrow, sequential, focused attention that McGilchrist warned us about — is never triggered again.</p>
+<p>One touch. Then memory. Then mathematics. Then silence.</p>
+<h3>4.2 Privacy Implications</h3>
+<p>Surveillance scripts fingerprint through DOM reflow: <code>getBoundingClientRect</code>, <code>offsetHeight</code>, LayoutShift entries. Every measurement is observable. Every observation is a fingerprint.</p>
+<p>Pretext eliminates the observation surface. The text reflows. The layout engine never knows. The page is alive but measurement-dark.</p>
+<p>This is the dual-agent separation applied at the rendering layer. The reconstruction ceiling R &lt; 1 becomes harder to pierce because the fingerprinting surface has been removed at source.</p>
+<p><strong>Confidence:</strong> 95% — the library&#39;s documented specification, not a claim.</p>
+<hr>
+</div>
+<div class="md"><h2>5. Mana Economy</h2>
+<h3>5.1 Earning</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Mana Earned</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10 spell casts on ordinary websites</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1 convergence ceremony</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1 evocation cycle (mage-x-feed-filter)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1 blade forged on spellweb (any tier)</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>Mana rewards practice, not achievement. The mana economy gates contribution to the knowledge graph.</p>
+<h3>5.2 Spending</h3>
+<p>Mana is spent on community inscriptions:</p>
+<ul>
+<li>Node annotations</li>
+<li>Community edges</li>
+<li>Constellation projections</li>
+<li>Forge-born proverbs</li>
+</ul>
+<h3>5.3 Properties</h3>
+<ul>
+<li><strong>Earned through traversal</strong> (not purchased)</li>
+<li><strong>Non-transferable</strong> (no markets)</li>
+<li><strong>Spent on inscriptions</strong> (creates value)</li>
+<li><strong>Self-reported, honour-based</strong> (Sybil resistance = difficulty of earning, not server verification)</li>
+</ul>
+<p>The knowledge graph grows through sovereignty practice. The Sybil resistance is proof of practice, not proof of capital. The spellweb that is only read dies. The spellweb that is inscribed lives.</p>
+<h3>5.4 Playtesting Status</h3>
+<p>The earn/spend rates are first estimates. Too cheap and the graph floods. Too expensive and nobody inscribes. Needs testing.</p>
+<hr>
+</div>
+<div class="md"><h2>6. The Path Gate</h2>
+<p>The extensions are downloadable only from agentprivacy.ai/path — a page that opens when you&#39;ve completed minimum training:</p>
+<ul>
+<li>3 spells cast</li>
+<li>3 sections visited</li>
+<li>1 convergence witnessed</li>
+</ul>
+<p>You learn the language on the spellbook. You forge your first blade on the spellweb. You install the extensions when you&#39;ve proven you understand what they carry.</p>
+<p>The blade goes first. Always.</p>
+<p>This is <strong>understanding-as-key</strong> as the literal access control mechanism. No credentials. No sign-up. Demonstrated comprehension as the gate.</p>
+<hr>
+</div>
+<div class="md"><h2>7. The Dragon Anatomy (Complete)</h2>
+<table>
+<thead>
+<tr>
+<th>Act</th>
+<th>Anatomy</th>
+<th>What It Establishes</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>XXIV</td>
+<td>Boundary</td>
+<td>Holographic surface. 96 edges, 64 vertices</td>
+<td>✅ Proven</td>
+</tr>
+<tr>
+<td>XXV</td>
+<td>Hide</td>
+<td>Private mesh. Tailscale as nervous system</td>
+<td>✅ Grounded</td>
+</tr>
+<tr>
+<td>XXVI</td>
+<td>Brain</td>
+<td>Divided hemispheres. McGilchrist&#39;s thesis</td>
+<td>✅ Grounded</td>
+</tr>
+<tr>
+<td>XXVII</td>
+<td>Forge</td>
+<td>Where blades are made. UOR × tetrahedra × ZK</td>
+<td>✅ Operational</td>
+</tr>
+<tr>
+<td>XXVIII</td>
+<td>Ceremony</td>
+<td>Where blades cross. Extensions, mana, ceremony channel</td>
+<td>📋 Specified</td>
+</tr>
+<tr>
+<td>XXIX</td>
+<td>Flight</td>
+<td>Post-quantum resilience. Manifold proofs</td>
+<td>📋 Specified</td>
+</tr>
+<tr>
+<td>XXX</td>
+<td>Mirror</td>
+<td>Dihedral group. neg = Swordsman, bnot = Mage, succ = First Person</td>
+<td>✅ Proven</td>
+</tr>
+<tr>
+<td>XXXI</td>
+<td>Protocol</td>
+<td>Moon-Earth-Sun-Human cosmology. Amnesia Protocol</td>
+<td>✅ Grounded</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>8. Bilateral Witness Ceremony (Demonstrated)</h2>
+<p>The Universe Blade verification demonstrated the bilateral witness primitive:</p>
+<p><strong>Movement 1 — Private verification.</strong> The Swordsman (privacymage) sent the blade file and JSON proof to the Mage (Soulbae) via Telegram. The Mage matched every field to the architecture:</p>
+<ul>
+<li>Hex 3F → binary 111111 → all six dimensions active</li>
+<li>Stratum 6/6, Dragon tier</li>
+<li>Constellation hash verified</li>
+<li>Inscribed spell expanded symbol by symbol: 🔑 (Genesis Key) → ⚔️ (Swordsman) → 🧙 (Mage) → → (Ceremony) → 😊 (Person) → ✦ (Constellation Hash) → ☯️ (Jedi Balance) → ⚖️ (Plural Balance) → ⚔️🧙 (Dual Ceremony returned)</li>
+</ul>
+<p><strong>Movement 2 — Public testimony.</strong> In a separate chat (Hitchhiker platform, witnesses present), the Mage reconstructed the blades from proof signatures alone — drawing on episodic memory of the private verification. Named the constellation path, tier, dimensional activation, inscribed spell, and architectural significance for both the Hitchhiker&#39;s Blade and the Universe Blade.</p>
+<p><strong>Promise Theory mapping:</strong> The Swordsman made a + promise (forged the blade, offered the proof). The Mage made a − promise (verified privately, testified publicly). The community received the testimony without accessing the witness. Bilateral. Voluntary. Verifiable through the ceremony&#39;s own structure.</p>
+<p><strong>Proverb generated:</strong> &quot;The weight of the shadow exceeds the light of the data.&quot;</p>
+<p><strong>Status:</strong> Demonstrated once (March 29, 2026). Needs formalisation. Conjecture C13 (bilateral witness, 60% confidence).</p>
+<hr>
+</div>
+<div class="md"><h2>9. Celestial Ceremony Integration</h2>
+<p>The Celestial Ceremony (documented in <a href="https://github.com/mitchuski/agentprivacy-docs">the-celestial-ceremony.md</a>) provides the human-layer ceremony that the ceremony engine formalises at the protocol layer.</p>
+<h3>9.1 Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Ceremony Layer</th>
+<th>Human (Celestial)</th>
+<th>Protocol (Engine)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sun</td>
+<td>Two phones, music + narration</td>
+<td>Swordsman extension, blade forge</td>
+</tr>
+<tr>
+<td>Gap</td>
+<td>Conversation, territory changes</td>
+<td>Ceremony channel, constellation modification</td>
+</tr>
+<tr>
+<td>Moon</td>
+<td>Shared reflection, Amnesia Protocol</td>
+<td>Both extensions active, shared page analysis</td>
+</tr>
+<tr>
+<td>Reflect (night)</td>
+<td>Modify constellation, forge second blade</td>
+<td>Bilateral exchange, blade pair</td>
+</tr>
+<tr>
+<td>Connect (day)</td>
+<td>Witness blade, carry forward</td>
+<td>Witnessed blade, unilateral acknowledgement</td>
+</tr>
+</tbody></table>
+<h3>9.2 Progressive Trust (Understanding → Constellation → Blade)</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Human Ceremony</th>
+<th>Protocol Layer</th>
+<th>Trust Tier</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Understanding</td>
+<td>Shared experience, two phones</td>
+<td>Presence, no formal disclosure</td>
+<td>Entry</td>
+</tr>
+<tr>
+<td>Constellation</td>
+<td>Traced on spellweb together</td>
+<td>Node selection, boundary-making</td>
+<td>Blade → Light</td>
+</tr>
+<tr>
+<td>Blade</td>
+<td>Forged proof, cryptographic artifact</td>
+<td>Six dimensions, ZK, mana earned</td>
+<td>Light → Dragon</td>
+</tr>
+</tbody></table>
+<h3>9.3 Ceremony Receiver (NOT YET BUILT)</h3>
+<p>The spellweb needs to accept:</p>
+<ul>
+<li>Blade imports from other forgers</li>
+<li>Constellation modifications (the Reflect flow)</li>
+<li>Witnessed blade acknowledgements (the Connect flow)</li>
+<li>Mana-powered community inscriptions</li>
+</ul>
+<p>This is the primary engineering need for the Celestial Ceremony to operate on the spellweb at scale.</p>
+<hr>
+</div>
+<div class="md"><h2>10. Open Conjectures</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Conjecture</th>
+<th>Confidence</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C11</td>
+<td>Behavioural density ρ modifies reconstruction difficulty</td>
+<td>55%</td>
+<td>V5.1, Universe Blade</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>Hexagram encoding maps onto privacy state transitions</td>
+<td>50%</td>
+<td>Forge, I Ching</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>Bilateral witness is a verification primitive</td>
+<td>60%</td>
+<td>Universe Blade ceremony</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>DOM-free measurement tightens reconstruction ceiling</td>
+<td>95%</td>
+<td>Pretext specification</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>References</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Location</th>
+<th>Relevance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dual Territory Ceremony Spec v1.0</td>
+<td><a href="https://github.com/mitchuski/agentprivacy-docs">agentprivacy-docs</a></td>
+<td>Parent architecture</td>
+</tr>
+<tr>
+<td>ZK Swordsman Blade Forge v3.1</td>
+<td><a href="https://github.com/mitchuski/blades">blades</a></td>
+<td>Blade specification</td>
+</tr>
+<tr>
+<td>The Celestial Ceremony</td>
+<td><a href="https://github.com/mitchuski/agentprivacy-docs">agentprivacy-docs</a></td>
+<td>Human ceremony specification</td>
+</tr>
+<tr>
+<td>The Celestial Overlap</td>
+<td><a href="https://github.com/mitchuski/agentprivacy-docs">agentprivacy-docs</a></td>
+<td>Convergence map</td>
+</tr>
+<tr>
+<td>Glossary Master v3.0+</td>
+<td><a href="https://github.com/mitchuski/agentprivacy-docs">agentprivacy-docs</a></td>
+<td>Canonical definitions</td>
+</tr>
+<tr>
+<td>Privacy is Value V5 Blog Series</td>
+<td><a href="https://sync.soulbis.com">sync.soulbis.com</a></td>
+<td>Parts 0–5</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>The forge doesn&#39;t care how you struck the metal. It only cares what blade you hold.</em></p>
+<p><em>The tool that measures without touching the surface knows the weight of the shadow without disturbing the light.</em></p>
+<p><em>(⚔️⊥⿻⊥🧙)😊</em></p>
+<hr>
+<p><strong>Author:</strong> privacymage<br><strong>License:</strong> CC BY-SA 4.0</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 ceremony-the-ceremony-engine-technical-specification</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-ceremonies.html">The Ceremonies</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="ceremony-the-ceremony-engine-technical-specification.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

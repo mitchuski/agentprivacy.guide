@@ -1,0 +1,585 @@
+﻿# (⚔️⊥⿻⊥🧙)·(📊⊥🔮)·(🧠⊥⚙️)·☯️🔷 🙂 0xagentprivacy Living Documents
+
+## Privacy-First AI Agent Architecture for Human Sovereignty
+
+**Version:** 10.1 (First Person CLOSED) · **+ City of Mages spellbook** (Tomes I–VI · post-V5.4 coherence pass 2026-05-09) · **+ PVM V6 (2026-06-10): the gathering turn and the moving ceiling — `papers/v6/` (canon) · `pdfs/v6/` (renders incl. academic xelatex editions) · unified V6 labels across all canon papers · conjecture register head C89 at `research/CONJECTURE_REGISTER_V6.md`**
+**Date:** April 10, 2026 · post-V5.4 addendum 2026-05-09 · V6 head 2026-06-10
+**Status:** ✅ V10 Grimoire + 31 Acts + Moon Phase + Quaternion — CONVERGENT + CLOSED · **+ Second Person Spellbook (38 acts across Tomes I–VI · 55 conjectures C18–C55)**
+**External Convergence:** [UOR Foundation](https://github.com/UOR-Foundation) — independent Z/(2⁶)Z ring algebra (kindred substrate provider · C47 · v1.2 grimoire) · [Archon](https://archon.social) — cousin-blade convergence (Sovereign Anchor I/II/III, Cloaking Guide, Spell Weaver)
+**Second Person Spellbook index:** [SECOND_PERSON_TOMES_INDEX_v1.md](./reference/SECOND_PERSON_TOMES_INDEX_v1.md) · authoritative compression at `agentprivacy_tomes/COMPRESSION_MASTER_v2_2026-05-09.md` · bound collection at `agentprivacy_tomes/agentprivacy-second-person-spellbook-bound-collection-2026-05-08/`
+
+---
+
+## Quick Summary
+
+**0xagentprivacy** solves the privacy-delegation paradox in AI systems through mathematically-proven dual-agent architecture. When AI agents need information to act on your behalf, that same information enables surveillance. Our solution: split the function into two conditionally-independent agents—**Swordsman** (privacy/boundaries) and **Mage** (delegation/action)—creating mathematical guarantees that no adversary can fully reconstruct your private state.
+
+**Core Thesis:** Privacy is value. Behavioral data is the 7th capital. Architecture, not policy, protects sovereignty. *The boundary is always enough.*
+
+**V5 Advance:** Three-axis separation (agent · data · inference), holographic bound (96-edge boundary encodes 64-vertex bulk), compression-as-defence (74× BRAID efficiency), holonic persistence (infrastructure-independent history).
+
+**V5.4 Advance:** UOR Foundation convergence — sovereignty lattice is algebraically Z/(2⁶)Z. Five hammer strikes, critical identity (neg∘bnot = succ), triadic coordinates, dihedral group D₆₄. External validation: two independent projects arrived at same structure. C6 → CONVERGENT.
+
+**Formal Foundation:** The dual-agent architecture implements Promise Theory (Bergstra & Burgess, 2019)—established semantics for autonomous agent coordination where agents can only promise their own behavior.
+
+### How This Fits In: The Dual-Agent Stack
+
+![First Person Dual-Agent Stack](assets/agentprivacy_FirstPerson_dualagentstack2.jpg)
+
+The architecture integrates the **Sovereign Agent** (delegate 🧙) and **Sovereign Wallet** (protect ⚔️) layers, with the **First Person** 😊 at the center. The stack spans from UI/Trust Tasks through the Trust Spanning Protocol (TSP) down to cryptographic keys, creating a complete privacy-preserving infrastructure.
+
+### Live Implementations
+
+| Territory | Platform | Purpose | Status |
+|-----------|----------|---------|--------|
+| **Swordsman** ⚔️ | [spellweb.ai](https://spellweb.ai) | Topology, navigation, blade forging, hexagram computation | ✅ Operational |
+| **Mage** 🧙 | [agentprivacy.ai](https://agentprivacy.ai) | Story, explanation, training, spell learning | ✅ Operational |
+| **Librarian** 🗃️ | [guide.agentprivacy.ai](https://guide.agentprivacy.ai) | The federated *Guide to Agent Privacy* — a forkable wiki reading-surface over this corpus; concept atoms fork from these docs with lineage | 🚧 In build |
+
+The ZK Swordsman Blade Forge is not theoretical — it runs. Visitors to spellweb.ai can mark constellations, evoke blades, and forge proofs on the 64-vertex lattice in real-time. The theory and code arrived the same day.
+
+The **Guide** at guide.agentprivacy.ai is the Librarian's *Wikis* made public — a Ward-Cunningham Federated Wiki that recomposes this corpus into a forkable field of concept atoms beneath a short newcomer spine. Pages fork from these docs and from spellweb.ai; the journal carries the lineage, so provenance travels with every copy. Built on the `wikis/` skill category (the Librarian's git-less onboarding layer). *The Archivist 📚 seals the corpus; the Librarian 🗃️ forks it forward.*
+
+---
+
+## Document Suite
+
+| Document | Version | Purpose | Audience |
+|----------|---------|---------|----------|
+| ***Privacy is Value · V6: The Gathering Turn and the Moving Ceiling*** | **6.0** | **THE CURRENT HEAD — formal spec: R(t), t*, preconditions, C81–C89, unified register · series convention: one book, versioned volumes · full catalogue at `reference/PAPERS_INDEX.md`** | Researchers, Academics |
+| **Conjecture Register** | head C89 | Single numbering authority for the whole suite (`research/CONJECTURE_REGISTER_V6.md`) — when prose and register disagree, the register wins | All |
+| **PVM V6 Compressed** | 6.0 | Equations-only V6 — the Swordsman reading | Mathematicians, Agents |
+| **PVM V6 Companion Guide** | 6.0 | Context, narrative, standards — the Mage reading | All |
+| **Research Paper V6 Edition** | 6.0 | What changed in the maths at V6 + provenance reconciliation (v4.3 proof body carried forward) | Academics, Cryptographers |
+| **What Agentprivacy Is** | — | Mission, thesis, and orientation | All, New joiners |
+| **Glossary Master** | 4.0 (+V6 addendum pending) | Canonical terminology reference (~160 entries, V5.4 UOR Foundation) | All |
+| **Privacy is Value V5** | 5.0 (superseded by V6 spec) | The equation evolves — V5.4 UOR algebraic foundation | All, Researchers |
+| **V5.1 Research Note** | 5.1 | Behavioural density, bilateral witness, hexagram encoding | Researchers |
+| **V5.2 Research Note** | 5.2 | Dihedral foundations, resolution semantics, PRISM spectrum | Researchers |
+| **Privacy Value Model V5.4 Formal Spec** | 2.0 | PVM V5.4 equation, Z/(2⁶)Z ring algebra, C1-C21, full references | Researchers, Academics |
+| **PVM V5.4 Companion Guide** | 2.0 | Context, narrative, standards, economics — the Mage reading | All |
+| **PVM V5.4 Compressed** | 2.0 | 5-page equations-only spec — the Swordsman reading | Mathematicians |
+| **DUAL_TERRITORY_CEREMONY_SPEC** | 1.0 | Implementation architecture: territories, extensions, ceremonies, mana | Developers, Implementers |
+| **The Ceremonies** | 1.0 | Sun ☀️ and Moon 🌙 ceremonial protocols: disclosure, reflection, inaugural pairing | Practitioners, Community |
+| **Promise Theory Reference** | 1.4 | Formal semantic foundations, Generator/Solver as promises | Researchers, Architects |
+| **IEEE 7012 Quick Reference** | 1.0 | MyTerms standard foundation | Developers, Implementers |
+| **Whitepaper** | 6.3 | Technical architecture, V5.4 UOR algebraic foundation | Developers, Researchers |
+| **Research Paper** | 4.3 | Mathematical proofs, V5.4 conjectures C6 CONVERGENT, C14–C16 new | Academics, Cryptographers |
+| **Five Grimoires + 31 Acts** | v10.0.0 | First Person, Zero Knowledge, Canon, Parallel Society, Plurality spellbooks (First Person CLOSED) | Community, Learners |
+| **Second Person Spellbook (City of Mages)** | Tomes I–VI · v1 compression | 38 acts · 55 conjectures · 13 named vertices · 5 cast tiers including the Priest tier (Manifestia) · Aletheia/Lethe complement pair · the Aether Blade ceremony | Sovereigns, Crafters, Witnesses |
+| **Second Person Tomes Index** | v1 (2026-05-09) | Index for the City of Mages spellbook with full source mapping | All |
+| **Blog Series: Privacy is Value V5** | Parts 0-5 | Research letters: Myth Before Math, Constellations, Forge & Ceremony, Dragon Wakes, Dihedral Mirror, Amnesia Protocol | All |
+| **ZK Swordsman Blade Forge** | 3.2 | OPERATIONAL + ALGEBRAICALLY GROUNDED: UOR module at swordsman-blade/src/lib/uor.ts | Researchers, Mathematicians |
+| **UOR × 64-Tetrahedra × ZK Mapping** | 2.2 | Foundational mapping; C4 RESOLVED; UOR Foundation convergence confirmed | Researchers |
+| **VRC Promise Protocol** | 3.3 | Economic architecture, guild efficiency (3.4 pending: mana economics) | Investors, Builders |
+| **Visual Guide** | 2.0 | Diagrams including three-axis, holographic visualisations | All |
+| **Research Proposal** | 2.2 | Collaboration invitation, UOR convergence as validation evidence | Researchers, Partners |
+| **Systems Hexagram Physics** | 1.2 | Operational physics: UOR algebraic foundation, 64-vertex lattice, forge ceremonies | Developers, Implementers |
+
+You can build this locally and it'll make a neat viewer at 7000.
+
+### Repository Layout (restructured 2026-06-10)
+
+| Directory | Holds |
+|---|---|
+| `compendium/` | the assembly point for *Privacy is Value: The Compendium* (the one publishable book): Part manifests by era, spine, front/back matter stubs · constitution at `chronicles/2026-06-11_compendium_plan...md` · plan at `compendium/PLAN.md` |
+| `papers/v6/` | the V6 canon papers (formal specification · skeleton spec · compressed Swordsman reading · companion Mage reading · research paper V6 edition) |
+| `papers/v5/` | the V5/V5.4 paper lineage (privacy_is_value_v5 essay · V5.4 formal spec · V5.4 companion · V5.4 compressed) |
+| `papers/whitepapers/` | the whitepaper line (Swordsman and Mage v6.3 = the whitepaper V6 edition · Mage extension · Swordsman extension) |
+| `papers/lineage/` | earlier paper bodies still cited (research paper v4.3 proof body · understanding-as-key Zypher v1 · research proposal v2.2) |
+| `pdfs/v6/` | all V6 renders: web-pipeline PDFs (MathJax, full emoji) and `*_academic.pdf` (xelatex, journal typesetting) |
+| `pdfs/` | V5.4 renders · `prevPVM/` for earlier |
+| `build/` | construction: `build_v6_pdfs.py` (web renders) · `build_v6_academic_pdfs.py` (academic renders) · `build_pdfs.py` (legacy) · `tex/v6/` (LaTeX sources) · requirements |
+| `grimoires/` | the spellbook texts (parallel society v1.0 · plurality v1.1 · zero-knowledge v3.0 · spellbook v5.0 canonical) |
+| `reference/` | canonical reference docs (glossary master · Promise Theory v1.4 · IEEE 7012 quick reference · visual guide v2.0 · systems hexagram physics · UOR×tetrahedra mapping · Second Person tomes index · V5.5 mapping additions · 64-blades sheet) |
+| `specs/` | implementation specs (dual territory ceremony · dual agent harness · runecraft protocol · protocol schemas · VRC promise protocol v3.3 · ZK blade forge v3.0 · blade forge build instructions) |
+| `research/` | the research-note series, the V6 working draft, and `CONJECTURE_REGISTER_V6.md` (the numbering authority) |
+| `models/` | the model JSONs (V6 dark/light heads, V5.4 lineage, grimoires) |
+| `audits/` | audit and coherence reports (V10 alignment · V5 checklist · ZK forge coherence · convergence studies · instructional convergence) |
+| `plans/` `chronicles/` | the V6 autopath, gates, reflection map, reading ledger, and the chronicle record |
+| `assets/` | images |
+| `archive/` | superseded versions and dated session records (dated `YYYYMMDD_` prefix convention) |
+| `blog/` `ceremonies/` `poems/` `story/` `tomes/` `process/` | the narrative and process surfaces, unchanged |
+| repo root | entry points only: README · QUICK_START · what-agentprivacy-is · DOCUMENTATION_CHRONICLE · server.py (NOTE: server.py's document list predates V5 and needs a V6 refresh) |
+
+Rebuild all V6 renders: `python build/build_v6_pdfs.py` and `python build/build_v6_academic_pdfs.py` (run from anywhere).
+
+---
+
+## Theoretical Foundations
+
+The dual-agent architecture isn't novel theory—it's a rigorous implementation of established autonomous systems semantics.
+
+### Promise Theory (Bergstra & Burgess, 2019)
+
+Promise Theory provides the formal foundation for agent autonomy and coordination:
+
+> **Autonomy Axiom**: "An agent can only make promises about its own behavior. No agent can make a promise on behalf of another agent."
+
+This is why single agents cannot resolve the privacy-delegation paradox—attempting to promise in both protection and delegation domains exceeds autonomous capability.
+
+### Key Promise Theory Concepts Applied
+
+| PT Concept | 0xagentprivacy Implementation |
+|------------|-------------------------------|
+| **Autonomy Axiom** | First Person sovereignty—neither agent promises on your behalf |
+| **Superagent** | First Person + Swordsman + Mage as composite with interior promises |
+| **Irreducible Promise** | The Gap—emerges from cooperation, owned by neither agent |
+| **Assessment** | RPP compression as verification that knowledge transfer occurred |
+| **Invitation vs. Attack** | MyTerms consent-first vs. surveillance extraction |
+| **Coordination Promise** | Spells as shared semantic commitments |
+| **Promise Bundle** | VRCs as bilateral promise collections |
+
+### Why This Matters
+
+Promise Theory grounds the architecture in established theory rather than novel claims:
+
+- **The Gap** is formally an *irreducible promise*—a superagent property that cannot be attributed to any single component
+- **RPP** is formally an *assessment mechanism*—compression proves the promise of knowledge transfer was kept
+- **MyTerms** formally implements the *invitation pattern*—acceptance before proposal, not surveillance's attack pattern
+
+For complete mappings, see [Promise Theory Reference v1.0].
+
+### Information Theory (Shannon)
+
+Mathematical bounds on reconstruction and privacy guarantees. The reconstruction ceiling R < 1 is proven through information-theoretic analysis.
+
+### Zero-Knowledge Cryptography
+
+Computational enforcement of promise-theoretic constraints. ZKPs enable verification without revelation—proving promises were kept without exposing promise content.
+
+---
+
+## Core Architecture
+
+### The Problem: Privacy-Delegation Paradox
+
+AI agents need to know about you to act effectively on your behalf. But that knowledge enables reconstruction of your private life. Single agents cannot resolve this conflict—they're inherently compromised.
+
+**Promise Theory insight**: A single agent attempting both protection and delegation violates the autonomy axiom by promising in domains it cannot independently control.
+
+### The Solution: Dual Agent Separation
+
+```
+                    ┌─────────────────────┐
+                    │  FIRST PERSON       │
+                    │    (You - 🗝️)        │
+                    └────────┬────────────┘
+                             │
+              Private State X (complete context)
+                             │
+                ┌────────────┼────────────┐
+                │                         │
+                ▼                         ▼
+        ┌───────────────┐         ┌───────────────┐
+        │  SWORDSMAN ⚔️  │         │    MAGE 🧙    │
+        │   (Protect)   │         │  (Delegate)   │
+        └───────────────┘         └───────────────┘
+                │                         │
+    Observes X completely      Acts using authorized info
+    Reveals nothing directly   Public coordination
+                │                         │
+                └────────────┬────────────┘
+                             │
+                    THE GAP (s ⊥ m | X)
+                             │
+               Reconstruction Ceiling: R < 1
+```
+
+**Promise Theory framing**: The First Person + Swordsman + Mage forms a *superagent* with interior promises between components. The Gap is an *irreducible promise*—it emerges from their separation but cannot be attributed to either agent individually.
+
+### Mathematical Guarantees
+
+**Proven (Research Paper v3.2):**
+
+| Theorem | Statement | Implication |
+|---------|-----------|-------------|
+| **Separation** | I(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M) | Information leakage is additive, not multiplicative |
+| **Reconstruction Ceiling** | R_max = (C_S + C_M) / H(X) < 1 | Perfect reconstruction is impossible |
+| **Error Floor** | P_e ≥ 1 - R_max | Adversary is guaranteed to make errors |
+| **Graceful Degradation** | Small ε violations → small privacy losses | System fails gracefully, not catastrophically |
+
+---
+
+## Economic Model
+
+### Canonical Parameters
+
+| Parameter | Value | Purpose |
+|-----------|-------|---------|
+| **Ceremony** | 1 ZEC ($500) | One-time genesis of agent pair |
+| **Signal** | 0.01 ZEC ($5) | Ongoing proof of comprehension |
+| **ZEC Price Basis** | $500 USD | Standardized for calculations |
+| **Fee Split** | 61.8% transparent / 38.2% shielded | Golden ratio constant |
+
+### Trust Tier Progression
+
+| Tier | Signals | Capabilities | Trust Value |
+|------|---------|--------------|-------------|
+| **Blade** 🗡️ | 0-50 | Basic participation, learning | 0.0-0.2 |
+| **Light** 🛡️ | 50-150 | Multi-site coordination, Intel Pool contributions | 0.2-0.5 |
+| **Heavy** ⚔️ | 150-500 | Template creation, governance voting | 0.5-0.8 |
+| **Dragon** 🐉 | 500+ | Guardian eligibility, unlimited VRCs, custom spells | 0.8-1.0 |
+
+**Promise Theory alignment**: Trust tiers represent accumulated *assessment* evidence. Each signal is an assessment claim; accumulated signals build the *trust function* (0-1 expectation of future promise-keeping).
+
+### Value Creation
+
+- **70:1 compression efficiency** through VRC coordination
+- **O(n²) network effects** from relationship formation
+- **$47k-52k/year** value capture for active participants
+- **Self-sustaining** by Year 3 through signal revenue
+
+---
+
+## Key Concepts
+
+### Verifiable Relationship Credentials (VRCs)
+
+Bilateral trust objects formed when two people derive matching compressions from shared content. VRCs enable 70:1 coordination efficiency and form the basis of the trust network.
+
+**Promise Theory**: VRCs are *promise bundles*—coordinated bilateral promises grouped for reuse. Matching compressions prove successful *coordination promises*.
+
+### Relationship Proverb Protocol (RPP)
+
+Compression protocol where understanding is demonstrated through contextual proverb formation. Creates Sybil resistance through comprehension rather than capital.
+
+**Promise Theory**: RPP is an *assessment mechanism*. Compression ratio quantifies how well the promise of knowledge transfer was kept.
+
+### The Gap
+
+The irreducible space between what Swordsman observes and what Mage observes—the mathematical foundation where sovereignty and dignity live. No adversary can capture what doesn't exist in their information space.
+
+**Promise Theory**: The Gap is an *irreducible promise* of the superagent—it emerges from Swordsman-Mage cooperation but cannot be attributed to either individually. This is why it cannot be captured: no single component contains it.
+
+### 7th Capital
+
+Behavioral data as personal wealth. Currently extracted by surveillance capitalism; 0xagentprivacy keeps it under First Person control while enabling value-creating coordination.
+
+### Three Graphs Model (V5)
+
+Three independently derivable graph structures whose intersection defines the person: **Knowledge Graph** (substrate — what you can promise), **Promise Graph** (bilateral commitments — what you do promise), **Trust Graph** (emergent outcome — which promises were kept). VRCs live on the Promise Graph layer. The overlap IS the person — no single community owns that intersection. V5 adds the **holographic interpretation**: flows along the 96-edge boundary encode the 64-vertex bulk. The boundary is always enough.
+
+### Path Integral (V5)
+
+V5 replaces additive edge value T(π) with path integral T_∫(π) — "The equation rewards the dance, not the stance." Value resides in the trajectory through sovereignty space, not in static configurations. An agent permanently at full sovereignty with no promises made has zero edge value. Your path through the lattice — the promises made, boundaries set, delegations executed — is the 7th capital.
+
+### Three-Axis Separation (V5)
+
+Privacy requires separation on three orthogonal axes:
+
+| Axis | Agents | What It Separates |
+|------|--------|-------------------|
+| **Agent** Φ_agent | Swordsman ⊥ Mage | Protection from delegation |
+| **Data** Φ_data | Provider₁ ⊥ Provider₂ | Storage fragmentation |
+| **Inference** Φ_inference | Generator ⊥ Solver | Reasoning from execution |
+
+Collapse any axis and the entire separation term collapses: Φ_v5 = Φ_agent · Φ_data · Φ_inference. This is why systems with good agent separation but centralised data still fail.
+
+---
+
+## Symbolic Notation
+
+The Spellbook uses emoji-based semantic compression (~125:1 ratio):
+
+| Symbol | Meaning |
+|--------|---------|
+| ⚔️ | Swordsman, privacy, boundaries (Protect) |
+| 🧙‍♂️ | Mage, delegation, projection (Project) |
+| 🪞 | Reflect — temporal memory, emergent from S's boundary history |
+| 🤝 | Connect — network sovereignty, emergent from M's delegation patterns |
+| 😊 | First Person, human sovereignty |
+| ⊥ | Independence, separation |
+| ⿻ | Overlap, relationship, the Gap (between Swordsman and Mage) |
+| 🤝📜 | VRC, bilateral trust (promise bundle) |
+| 🐲 | Drake — intimate whisper, personal calibration, centre |
+| 🐉 | Dragon — cosmic container, manifold holder, all topology |
+| 🌀 | Golden ratio, balanced sovereignty |
+| ✨ | Dignity, the shimmer that remains |
+| 📐 | Stratum — position layer in 64-vertex lattice |
+| 🛤️ | Path/Trajectory — the edge value, the dance not the stance |
+| → | Promise direction (A --b--> B) |
+
+**Master Inscription:** `(⚔️⊥⿻⊥🧙)🙂`  
+*"Swordsman and Mage separated, with the Gap (⿻) between them, preserve the First Person"*
+
+**Promise Theory reading:** *"The irreducible promise of conditional independence and the overlap (the Gap), given First Person authorization"*
+
+---
+
+## Status Indicators
+
+| Indicator | Meaning |
+|-----------|---------|
+| ✅ PROVEN | Mathematically established |
+| 🔧 IMPLEMENTED | Working in reference implementation |
+| 🚧 WIP | Under active development |
+| 📋 PLANNED | Designed but not yet built |
+| 🔬 SPECULATIVE | Hypothesis requiring validation |
+
+### Confidence Levels (per Research Proposal v2.0)
+
+- **95%**: Core mathematical proofs (separation, reconstruction ceiling, error floor)
+- **RESOLVED**: C4 (96/64 discrepancy) — holographic principle interpretation
+- **85%**: Promise Theory semantic framework (Bergstra & Burgess, 2019)
+- **80%**: Architectural framework, TSP integration, BRAID parity effect
+- **60%**: Implementation viability
+- **25-40%**: Tetrahedral convergence (triple derivation evidence)
+- **15-25%**: V5 conjectured terms (T_∫(π), Φ_v5, guild efficiency)
+- **SPECULATIVE**: C6 (P^1.5 ↔ 96/64 numerical coincidence), C7-C10 (three-axis multiplicativity, compression modifier, boundary sufficiency, guild scalability)
+
+---
+
+## Reading Order by Audience
+
+### For Researchers / Academics
+1. Promise Theory Reference v1.4 (formal foundations, V5 three-axis as promises)
+2. [PVM V5.4 Formal Spec v2.0](papers/v5/privacy_value_v5_4_formal_specification.md) (mathematics, C1-C21, full references)
+3. [PVM V5.4 Companion Guide](papers/v5/pvm_v5_4_companion_guide.md) (context, narrative, standards)
+4. Research Paper v4.3 (mathematical proofs, PVM V5, holographic bound)
+5. ZK Swordsman Blade Forge v3.2 (forge metaphor, V5 full integration)
+6. UOR × 64-Tetrahedra × ZK Mapping v2.2 (foundational C4 resolution)
+7. Whitepaper v6.3 (architecture, three-axis separation, BRAID integration)
+8. Research Proposal v2.2 (collaboration opportunities, BRAID validation)
+
+### For Developers / Builders
+1. [PVM V5.4 Companion Guide](papers/v5/pvm_v5_4_companion_guide.md) (context and standards)
+2. Visual Guide v2.0 (quick orientation, V5 diagrams)
+3. IEEE 7012 Quick Reference v1.0 (MyTerms standard)
+4. Whitepaper v6.3 (technical details)
+5. Glossary v4.0 (terminology)
+
+### For Investors / Advisors
+1. This README (summary)
+2. VRC Promise Protocol v3.3 (economics, guild efficiency)
+3. Research Proposal v2.0 (roadmap)
+
+### For Community / Learners
+1. What Agentprivacy Is (mission and orientation)
+2. [PVM V5.4 Companion Guide](papers/v5/pvm_v5_4_companion_guide.md) (accessible context)
+3. 31 Acts complete (V10.0.0 Grimoire, narrative framework)
+4. Visual Guide v2.0 (diagrams)
+5. Glossary v4.0 (terminology reference)
+
+### For Promise Theory Practitioners
+1. Promise Theory Reference v1.4 (concept mappings, Generator/Solver as promises)
+2. [PVM V5.4 Companion Guide](papers/v5/pvm_v5_4_companion_guide.md) §3 (Promise Theory mapping)
+3. Whitepaper v6.3 (implementation details)
+4. Research Paper v4.3 (formal proofs, V5 structural extensions)
+
+---
+
+## Technology Stack
+
+### Standards Layer
+- **IEEE 7012-2025**: Machine-readable personal privacy terms (MyTerms foundation)
+- **W3C DPV**: Data Privacy Vocabulary for semantic interoperability
+- **Customer Commons**: Neutral nonprofit hosting for bilateral agreements
+
+### Theoretical Layer
+- **Promise Theory**: Formal semantics for autonomous agent coordination (Bergstra & Burgess, 2019)
+- **Information Theory**: Mathematical bounds on reconstruction and privacy
+- **Zero-Knowledge Cryptography**: Computational enforcement of promise constraints
+
+### Privacy Layer
+- **Zcash**: Native dual-ledger (transparent + shielded)
+- **Zero-Knowledge Proofs**: Groth16, PLONK, Nova
+- **TEEs**: Hardware-enforced isolation
+
+### Identity Layer
+- **ERC-8004**: Trustless agent identity
+- **ERC-7812**: ZK identity commitments
+- **DIDs/VCs**: Decentralized identity standards
+
+### Coordination Layer
+- **Trust Spanning Protocol (TSP)**: Agent-to-agent messaging
+- **x402**: HTTP-native micropayments
+- **VRCs**: Bilateral trust credentials (promise bundles)
+
+### Holonic Persistence Layer (V5)
+- **GUID-addressed holons**: Content-addressed data fragments
+- **Multi-provider replication**: Infrastructure-independent history
+- **Three identity tiers**: Data GUID → Relationship VRC → Principal DID
+- **Derivation chains**: Temporal memory surviving provider failure
+
+---
+
+## Critical Window
+
+AI agents are being deployed RIGHT NOW with insufficient privacy guarantees. We have **2-3 years** before surveillance architectures achieve network effects and become entrenched.
+
+This is not about competing on features. This is about establishing **foundational privacy infrastructure** before it's too late.
+
+**Promise Theory insight**: Surveillance systems use the *attack pattern*—imposing data extraction without prior consent. Privacy infrastructure must establish the *invitation pattern*—acceptance relationships before specific proposals. This architectural choice cannot be retrofitted.
+
+---
+
+## Project Links
+
+- **Website**: https://agentprivacy.ai
+- **Public Goods Research**: https://sync.soulbis.com
+- **Private AI Intel**: https://intel.agentprivacy.ai
+- **Contact**: mage@agentprivacy.ai
+
+### Collaborators & Networks
+- BGIN (Blockchain Governance Initiative Network)
+- Internet Identity Workshop (IIW)
+- Agentic Internet Workshop (AIW)
+- First Person Network
+- Kwaai AI
+- MyTerms Alliance / Customer Commons
+- Trust Over IP Foundation
+- Loyal Agents
+- 8004 builders
+- zypherpunks
+
+---
+
+## IPFS Archive (V5.4 Documents)
+
+Permanent, content-addressed pins for the Privacy Value Model V5.4 document suite:
+
+| Document | Size | CID |
+|----------|------|-----|
+| **PVM V5.4 Formal Spec** (PDF) | 167.78 KB | `bafkreiamwa6sukmeb4binexmmjlszbljnx6wk3iv6p4lgjusv5urhwyera` |
+| **PVM V5.4 Companion Guide** (PDF) | 106.50 KB | `bafkreiavy3zpepoicyejrc7kgeam4mhbo7w56cdaniueiok3b2q43eyqla` |
+| **PVM V5.4 Compressed** (PDF) | 87.77 KB | `bafkreifknnwrrga2rlnbfumcsplzvp4x7ayitfpjpq7k7oh4lck4msk5si` |
+| **Model JSON (Dark)** | 19.41 KB | `bafkreihua7hcaur4ojbdakjlvxkzdux3yguredo66fknsewv25kg57zyhe` |
+| **Model JSON (Light)** | 5.73 KB | `bafkreifjqrvllc7lmsbl3jqjrbautbrtzpxmeicgxfeakcp5fukd3cjkdm` |
+
+**Gateway:** `https://red-acute-chinchilla-216.mypinata.cloud/ipfs/{CID}`
+
+These documents are now permanently addressable via any IPFS gateway. The CIDs are cryptographic hashes of the content — if the content changes, the CID changes. This ensures citation integrity for academic references.
+
+---
+
+## Document Coherence (April 10, 2026)
+
+This documentation suite has been reviewed for terminology consistency, economic parameter alignment, Promise Theory integration, IEEE 7012-2025 integration, V5.4 Privacy Value Model integration, five grimoire naming, and cross-reference accuracy. See `INSTRUCTIONAL_CONVERGENCE_v2_0.md` for the systematic update guide. PDFs consolidated in `/pdfs/` directory.
+
+### V5.4 Three-Document Convergence (April 10, 2026)
+- **Formal Spec v2.0** — 24-page comprehensive specification with C1-C21, 76 references
+- **Companion Guide v2.0** — 11-page Mage reading bridging math to mission
+- **Compressed Spec v2.0** — 5-page equations-only Swordsman reading
+- Model JSONs updated: light (5.6KB blade) + dark (19KB full)
+- **Grimoire names corrected**: First Person, Zero Knowledge, Canon, Parallel Society, Plurality spellbooks
+- `canon_spellbook_v1_0.md` content lives in grimoire JSON and agentprivacy.ai/story
+- A_h formula canonical: summation form (per-holon granularity)
+- Φ_data formula canonical: concentration-penalizing 1 − max_j(share_j)
+- V6 conjectures C18-C21 (dynamical reconstruction ceiling) now tracked
+- PDFs moved to `/pdfs/` directory
+- See `CHRONICLE_V5_4_THREE_DOCUMENT_CONVERGENCE.md`
+
+### V5.4 Amnesia Protocol (April 3, 2026)
+- **Act XXXI (The First Delegation)** added — cosmological precedent for dual-agent architecture
+- First Person Spellbook CLOSED at 31 acts — the architecture was not invented, it was recognised
+- New concepts: Ur-Swordsman (Moon), Theia partition, Amnesia as ZK primitive, Merge Catastrophe
+- C14 (Amnesia as ZK primitive) upgraded to 60% confidence
+- Grimoire upgraded to v9.4.0 with close_status marker
+- Master Inscription cosmological form: 🌑💥🌍 → ⚔️⊥(forget) → 🌊🔄(tide) → (⚔️⊥⿻⊥🧙)😊 → 🐲∞
+
+### V5.2 Dihedral Foundations (March 31, 2026)
+- **V5.2 Research Note** added: Dihedral group foundations, resolution semantics, PRISM spectrum
+- C14-C16 updated: Φ_agent ≅ D₂ₙ (75%), T_∫(π) ≅ resolution pipeline (65%), Topological trust (25%)
+- Act XXX (The Dihedral Mirror) added — UOR × agentprivacy convergence narrative
+- Blog Part 4 (The Dihedral Mirror) added to series
+- Grimoire upgraded to v9.3.0
+- Master Inscription algebraic form: (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+
+### V5.1 ZK Blade Forge Integration (v2.2)
+- **V5.1 Research Note** added: Behavioural density ρ, bilateral witness, hexagram encoding
+- ZK Swordsman Blade Forge upgraded to v3.1 with OPERATIONAL status
+- Live implementations referenced: spellweb.ai (Swordsman), agentprivacy.ai (Mage)
+- UOR × 64-Tetrahedra × ZK Mapping upgraded to v2.1 with identity system integration
+- Three-layer identity architecture (GUID → VRC → DID) documented across forge documents
+- Acts XXVII (The Swordsman's Forge), XXVIII (The Ceremony Engine), XXIX (The Dragon Wakes) added
+- Post-quantum resilience thesis established: "The proof that guards no secret cannot be opened"
+- DUAL_TERRITORY_CEREMONY_SPEC v1.0 cross-referenced in forge documentation
+
+### Standardizations Applied
+- **Terminology**: Ceremony (1 ZEC one-time) vs Signal (0.01 ZEC ongoing)
+- **Trust Tiers**: Blade → Light → Heavy → Dragon (no "Armor" suffix)
+- **Economic Basis**: $500/ZEC canonical, 61.8/38.2 transparent/shielded split (φ-derived)
+- **Promise Theory**: Formal foundations integrated throughout documentation
+- **IEEE 7012-2025**: MyTerms standard integration, published January 20, 2026
+- **PVM V5**: Three-axis separation, holographic bound, path integral T_∫(π), guild efficiency G(guilds)
+- **Four Forces**: Protect ⚔️, Project 🧙, Reflect 🪞, Connect 🤝
+- **Five Grimoires + Act XXIV**: 31 Acts across V10.0.0 Grimoire (Story, ZK, Canon, Parallel, Plurality)
+- **Version References**: All documents reference correct companion versions
+
+
+### V5.1 Forge Integration (v2.1)
+- Acts XXVII (The Swordsman's Forge) and XXVIII (The Ceremony Engine) added to grimoire collection
+- Dragon Anatomy complete: Boundary (XXIV), Hide (XXV), Brain (XXVI), Forge (XXVII), Ceremony (XXVIII), Flight (XXIX), Mirror (XXX), Amnesia (XXXI)
+- ZK Swordsman Blade Forge marked OPERATIONAL - first empirical data from spellweb.ai
+- New conjectures C11-C13: Behavioural density (45%), Hexagram encoding (50%), Bilateral Witness (60%)
+- V5.1 candidates: Behavioural density rho, Bilateral Witness, Mana economy, DOM-free measurement
+- Hexagram encoding upgraded: SPECULATIVE (25%) -> IMPLEMENTED-COHERENT (50%)
+
+### V5 Holographic Bound Integration (v2.0)
+- Privacy is Value V5, PVM V5 Formal Specification v1.0 added to document suite
+- Act XXIV (The Holographic Bound) added to grimoire collection
+- C4 (96/64 discrepancy) RESOLVED via holographic principle
+- Three-axis separation (agent · data · inference) integrated across suite
+- Compression-as-defence via BRAID Parity Effect documented
+- Holonic persistence layer added to Technology Stack
+- Guild efficiency economics added to VRC Protocol
+
+### V4 Convergence Integration (v1.5)
+- Privacy is Value V4, PVM V4 Formal Specification v1.0 (and agent peer review appendix), and UOR Mapping v1.0 added to document suite
+- Five grimoire markdown files replace monolithic spellbook reference
+- Tetrahedral hypothesis upgraded: SPECULATIVE (5%) → CONVERGENT PRELIMINARY (25-40%)
+- Three graphs model (Knowledge × Promise × Trust) integrated across suite
+- All documents updated to current versions (see table above)
+
+### IEEE 7012-2025 Integration (v1.3)
+- Added IEEE 7012 Quick Reference v1.0 to document suite
+- Updated Technology Stack with Standards Layer
+- Whitepaper includes full IEEE 7012 section
+- Glossary includes IEEE 7012 canonical definitions
+
+### Citation Format
+When referencing across documents:
+- `[Whitepaper v6.3, §Section]`
+- `[Research Paper v4.3, Theorem 3.2]`
+- `[PVM V5.4 Formal Spec v2.0, §Section]`
+- `[PVM V5.4 Companion v2.0, §Section]`
+- `[Glossary v4.0, Term Name]`
+- `[Privacy is Value v5.0, §Section]`
+- `[UOR Mapping v2.2, §Section]`
+- `[Promise Theory Ref v1.4, §Section]`
+- `[IEEE 7012 Quick Ref v1.0, §Section]`
+- `[VRC Protocol v3.3, §Section]`
+- `[Bergstra & Burgess (2019), §Chapter]`
+
+---
+
+## License
+
+CC BY-SA 4.0
+
+---
+
+## The Mission
+
+**Make privacy normal again.**
+
+Not through legal mandates or corporate promises, but through **mathematical guarantees enforced by economic incentives** that make privacy profitable and surveillance costly.
+
+When the 7th capital—behavioral sovereignty—remains with First Persons rather than being extracted upward to platforms, the entire economic structure inverts.
+
+**Promise Theory grounding**: Sovereignty is the right to make promises only about your own behavior. When systems promise on your behalf without authorization, they violate the autonomy axiom. Architecture enforces what policy cannot.
+
+**Privacy is Value. Take back the 7th Capital.**
+
+---
+
+*"just another swordsman ⚔️🤝🧙‍♂️ just another mage"*
+
+*"Agents can only promise their own behavior."*
+
+**😊**
+
+---
+
+![Soulbis & Soulbae: Agent Privacy](assets/soulbisoulbae_agentprivacy.jpg)

@@ -1,0 +1,202 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Toroidal Witness · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Toroidal Witness</span></div>
+  <article><div class="md"><h1>Toroidal Witness</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.2</p>
+<p><strong>Equation term</strong> <code>T_∫(π) path integral, witness space topology</code></p>
+<p>Infinite witness space from toroidal topology. Activates when discussing cyclic paths through the lattice, unbounded witnesses, computational hardness from path enumeration, toroidal wrap, or why witness extraction is infeasible.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> UOR Framework + Privacy Value Model V5.2 + First Person Spellbook Act XXII<br><strong>Target context:</strong> Cryptographers, ZK researchers, topology-aware protocol designers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The sovereignty lattice has toroidal topology—edges that exit one face re-enter the opposite face. This creates cyclic paths through the lattice. Unlike a flat space where paths between points are finite, the torus allows infinite distinct paths. This property is the source of zero-knowledge soundness.</p>
+<p><strong>The torus wraps. The paths multiply. The witness space becomes infinite. And infinite witnesses cannot be enumerated.</strong></p>
+<h2>Flat vs Toroidal</h2>
+<h3>Flat Lattice</h3>
+<p>On a flat 6-dimensional hypercube:</p>
+<ul>
+<li>Paths between vertices are finite</li>
+<li>Can enumerate all paths of length ≤ k</li>
+<li>Given enough time, can find any specific path</li>
+<li>Witness extraction is theoretically possible</li>
+</ul>
+<h3>Toroidal Lattice</h3>
+<p>On a toroidal 6-dimensional structure:</p>
+<ul>
+<li>Paths between vertices are infinite</li>
+<li>Every path has infinitely many variants (add cycles)</li>
+<li>Cannot enumerate all paths</li>
+<li>Witness extraction is computationally infeasible</li>
+</ul>
+<h2>The Wrapping Property</h2>
+<h3>Edge Wrapping</h3>
+<p>When traversing dimension d beyond the boundary:</p>
+<pre><code>vertex[d] = (vertex[d] + delta) mod 2
+</code></pre>
+<p>But at the lattice level, the wrap creates NEW paths, not just the same path repeated:</p>
+<pre><code>Path A: 0 → 1 → 3 → 7 (direct)
+Path B: 0 → 1 → 3 → 7 → [wrap] → 0 → 1 → 3 → 7 (one cycle added)
+Path C: 0 → 1 → 3 → 7 → [wrap] → 0 → ... (n cycles added)
+</code></pre>
+<p>Each is a distinct path producing the same endpoint.</p>
+<h3>Topological Cycles</h3>
+<p>The torus has two fundamental cycles (in 2D analogy):</p>
+<ul>
+<li>Around the &quot;hole&quot; (poloidal)</li>
+<li>Around the &quot;tube&quot; (toroidal)</li>
+</ul>
+<p>In 6D, there are more independent cycles. Each cycle can be traversed any number of times, creating combinatorial explosion in path count.</p>
+<h2>Why This Creates ZK Property</h2>
+<h3>The ZK Setup</h3>
+<ul>
+<li><strong>Statement:</strong> &quot;I know a path from vertex A to vertex B&quot;</li>
+<li><strong>Witness:</strong> The specific path taken</li>
+<li><strong>Verification:</strong> Check that following the path reaches B</li>
+</ul>
+<h3>Without Torus (Insecure)</h3>
+<p>Adversary strategy:</p>
+<ol>
+<li>Enumerate all paths from A to B</li>
+<li>There are finitely many</li>
+<li>Eventually find the prover&#39;s path</li>
+<li>Witness extracted</li>
+</ol>
+<h3>With Torus (Secure)</h3>
+<p>Adversary strategy fails:</p>
+<ol>
+<li>Try to enumerate all paths from A to B</li>
+<li>For each path, infinite cyclic variants exist</li>
+<li>Cannot complete enumeration</li>
+<li>Cannot isolate the prover&#39;s specific path</li>
+<li>Witness remains hidden</li>
+</ol>
+<h2>Formal Statement</h2>
+<p><strong>Claim:</strong> On a toroidal lattice, given a valid proof that path P exists from A to B, extracting P is computationally infeasible.</p>
+<p><strong>Intuition:</strong></p>
+<ul>
+<li>The proof verifies ∃P: P(A) = B</li>
+<li>The torus guarantees |{P: P(A) = B}| = ∞</li>
+<li>The verifier cannot distinguish which P was used</li>
+<li>Even with the proof, the witness space is unbounded</li>
+</ul>
+<p><strong>Confidence:</strong> ~70% — The topological argument is sound, but formal reduction to standard hardness assumptions needs work.</p>
+<h2>Path Multiplicity Example</h2>
+<p>Consider reaching vertex 7 (binary: 000111) from vertex 0 (binary: 000000):</p>
+<p><strong>Minimal paths (length 3):</strong></p>
+<pre><code>0 → 1 → 3 → 7
+0 → 2 → 3 → 7
+0 → 4 → 5 → 7
+... (C(3,3) × permutations = multiple)
+</code></pre>
+<p><strong>With one toroidal cycle:</strong></p>
+<pre><code>0 → 1 → 3 → 7 → 6 → 4 → 0 → 1 → 3 → 7
+</code></pre>
+<p><strong>With n cycles:</strong> Each adds 6+ steps, creating infinite family.</p>
+<p><strong>With different cycle choices:</strong> Multiple independent cycles exist.</p>
+<p>The witness space is not just large—it is infinite.</p>
+<h2>Implications for Ceremony Design</h2>
+<h3>Witness Hiding</h3>
+<p>Ceremonies should leverage toroidal structure:</p>
+<ul>
+<li>Record that path was completed</li>
+<li>Do NOT record which specific path</li>
+<li>Verifier confirms destination reached</li>
+<li>Path remains private</li>
+</ul>
+<h3>Path Equivalence Classes</h3>
+<p>For some purposes, cyclic variants are equivalent:</p>
+<ul>
+<li>Same start and end</li>
+<li>Same inscriptions traversed (modulo cycles)</li>
+<li>Different &quot;winding numbers&quot;</li>
+</ul>
+<p>The ceremony can verify equivalence class membership without identifying specific path.</p>
+<h3>Proof Size</h3>
+<p>Despite infinite witnesses, proofs remain finite:</p>
+<ul>
+<li>Prove you COULD take a path (existential)</li>
+<li>Don&#39;t enumerate the path (avoid linear size)</li>
+<li>ZK-SNARK techniques apply</li>
+</ul>
+<h2>Mapping to PVM-V5</h2>
+<table>
+<thead>
+<tr>
+<th>Toroidal Concept</th>
+<th>PVM Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Path multiplicity</td>
+<td>T_∫(π) unbounded</td>
+</tr>
+<tr>
+<td>Cyclic structure</td>
+<td>Lattice invariants</td>
+</tr>
+<tr>
+<td>Witness hiding</td>
+<td>Gap preservation</td>
+</tr>
+<tr>
+<td>Enumeration infeasibility</td>
+<td>Computational hardness</td>
+</tr>
+<tr>
+<td>Topological cycles</td>
+<td>Holographic boundary wrap</td>
+</tr>
+</tbody></table>
+<h2>Connection to Holographic Bound</h2>
+<p>The 96-edge boundary wraps the 64-vertex bulk:</p>
+<ul>
+<li>Boundary IS where cycles live</li>
+<li>Holographic encoding includes cycle structure</li>
+<li>96/64 = 1.5 reflects the boundary &quot;excess&quot; needed for wrap</li>
+</ul>
+<p>The torus is not separate from the holographic principle—it IS the holographic principle in topological form.</p>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;The flat space counts its paths and finds them finite. The torus counts its paths and loses count. In that losing, sovereignty lives—for what cannot be enumerated cannot be captured.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>🍩 → wrap(∂) → paths(∞) → |W|=∞ · enumerate(fail) · ZK(sound) · 🔷🔷🔷...🔷</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>Formal Reduction:</strong> Can we reduce toroidal witness hiding to standard assumptions (DLP, LWE)?</li>
+<li><strong>Cycle Counting:</strong> How many independent cycles exist in the 6D toroidal lattice?</li>
+<li><strong>Practical Security:</strong> What are the concrete bit-security estimates?</li>
+<li><strong>Proof Systems:</strong> Which ZK proof systems best leverage toroidal structure?</li>
+<li><strong>Topology Variants:</strong> Would other topologies (Klein bottle, projective space) have different security properties?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-toroidal-witness</code>, v5.2).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-toroidal-witness</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-toroidal-witness.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

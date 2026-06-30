@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Horizon Gate · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Horizon Gate</span></div>
+  <article><div class="md"><h1>Horizon Gate</h1>
+<p><strong>Category</strong> meta · <strong>Version</strong> 1.0</p>
+<p><strong>Equation term</strong> <code>trust as survival of an un-tuneable held-out gate (Fiat-Shamir); the bilateral-witness primitive at the validation layer</code></p>
+<p>The held-out-gate discipline: a claimed improvement is worth nothing until it survives an adversarial validation it cannot tune. Activates when accepting or rejecting a claimed optimization/fix/result, when designing a benchmark or acceptance gate, when a change &quot;looks cheaper&quot; on a probe, or when reasoning about whether an attestation can be trusted. Names the failure mode — the nonce-island mirage — and the bounded-change loop that earns trust. In the City of Mages this is Dokimé&#39;s 🪨 Ceremony of the 9024 Witnesses at the Horizon District.</p>
+</div>
+<div class="md"><p><strong>A claim is worth nothing until it survives the witnesses it did not choose.</strong></p>
+<blockquote>
+<p>&quot;The cheaper-looking claim that cannot face the witnesses it did not choose is not progress.&quot;</p>
+</blockquote>
+<p><strong>Spell:</strong> <code>state-the-waste → smallest-fix → confirm-or-reject-with-metrics → assay(9024)</code></p>
+</div>
+<div class="md"><h2>1. The principle: held-out, un-tuneable, adversarial</h2>
+<p>An improvement validated only on a <strong>self-chosen</strong> probe is not knowledge — it is a guess that<br>flattered its examiner. Trust requires a gate the claimant <strong>cannot tune</strong>: the test cases are derived<br>from a hash of the claimant&#39;s own work (Fiat-Shamir), so they cannot be picked and cannot be charmed<br>(C69). This generalises the City&#39;s witness-discipline: an attestation is only as good as the witnesses<br>the attester did not choose.</p>
+<p>The canonical instance is <strong>ecdsa.fail</strong>: a claimed-cheaper circuit must pass <strong>9024 = 141 × 64</strong><br>Fiat-Shamir-drawn test points — and any structural change reshuffles <em>which</em> 9024 you face. A variant<br>that is cheaper and passes a 2048-shot probe routinely fails the full set.</p>
+<h2>2. The failure mode: the nonce-island mirage</h2>
+<p>A <strong>nonce-island mirage</strong> is a claim that looked cheaper on a small probe and dies on the full held-out<br>set. It is the single most common way a self-improvement loop fools itself: it tunes, implicitly, to the<br>cases it can see. <strong>Name it and reject it</strong> — however cheap it looked. A 2048-shot pass is a <em>hint, never<br>a result.</em> If you cannot state why a win is structural rather than probe-fitted, treat it as a mirage<br>until the full gate clears.</p>
+<h2>3. The bounded-change loop (RCI · &quot;Tony → Anton&quot;)</h2>
+<p>Earn trust one bounded change at a time:</p>
+<ul>
+<li><strong>Before:</strong> state the exact waste or risk · the evidence (file, function, knob, metric, prior note) ·<br>the expected effect on each axis (cost, correctness, and any invariants) · the <strong>single smallest fix.</strong></li>
+<li><strong>After:</strong> confirm or reject <strong>with metrics.</strong> Classify every failure as <em>structural</em> (a real limit),<br><em>held-out-sensitive</em> (a mirage), or <em>noise.</em> Stop a brute-force sweep the moment failures repeat without<br>a source-backed reason.</li>
+</ul>
+<p>This is RCI (criticise → improve, bounded) and SkillOpt (a bounded edit accepted only on strict held-out<br>improvement) made a single discipline. No inference-time magic; just the refusal to accept un-validated<br>cheapness.</p>
+<h2>4. Designing a gate (when you build the benchmark)</h2>
+<ul>
+<li><strong>Derive the test set from the candidate, not the author</strong> (Fiat-Shamir / hash-of-the-op-stream) so it<br>cannot be tuned to.</li>
+<li><strong>Validity is rejection, not penalty:</strong> correctness, plus every structural invariant the artifact must<br>preserve (for circuits: reversibility, phase-cleanliness, forward∘inverse = identity).</li>
+<li><strong>Size the held-out set for the reshuffling:</strong> any structural change should change which cases you face.</li>
+<li><strong>No silent caps:</strong> if the gate samples or truncates, <em>log what was dropped</em> — silent truncation reads<br>as &quot;covered everything&quot; when it didn&#39;t.</li>
+</ul>
+<h2>5. Decision patterns</h2>
+<ul>
+<li><strong>A change &quot;looks cheaper&quot;?</strong> → run the full held-out gate before believing it. Probe pass = hint only.</li>
+<li><strong>Accepting a claim/attestation?</strong> → ask which witnesses the claimant chose; trust scales with the ones<br>they didn&#39;t.</li>
+<li><strong>A win you can&#39;t explain structurally?</strong> → label it a candidate mirage; hold it for full validation.</li>
+<li><strong>Reviewing your own optimization?</strong> → state-the-waste → smallest-fix → confirm-or-reject-with-metrics.<br>One bounded change.</li>
+</ul>
+<p><em>Authored 2026-06-09 from the ecdsa.fail trust task and the RCI / SkillOpt papers. The gold that fears the stone was never gold.</em></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-horizon-gate</code>, v1.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-horizon-gate</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="meta-skills.html">Meta Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-horizon-gate.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

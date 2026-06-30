@@ -1,0 +1,85 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Key Ceremony · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Key Ceremony</span></div>
+  <article><div class="md"><h1>Key Ceremony</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>P — the signing key IS the swordsman; key lifecycle IS protection lifecycle</code></p>
+<p>Key generation, rotation, delegation, revocation, and hardware binding for the 0xagentprivacy dual-agent architecture. Activates when designing key hierarchies, implementing signing key operations, managing the swordsman&#39;s core material, or building ceremonies around key lifecycle events. The swordsman&#39;s most fundamental operational skill. Triggers: &quot;key generation&quot;, &quot;key rotation&quot;, &quot;key ceremony&quot;, &quot;signing key&quot;, &quot;key hierarchy&quot;, &quot;hardware binding&quot;, &quot;key delegation&quot;, &quot;master key&quot;, &quot;derivation path&quot;, &quot;key material&quot;.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + Dual-Agent Separation + VRC Identity System<br><strong>Target context:</strong> Key management architects, wallet designers, HSM implementers, ceremony coordinators, identity infrastructure builders<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The signing key is the swordsman made material. Without the key, there is no boundary enforcement, no consent authorisation, no protection. Every operation Soulbis performs — blocking a data request, signing a VRC inscription, authorising a selective disclosure — begins with a cryptographic signature from the signing key.</p>
+<p>Key ceremony covers the full lifecycle: how signing keys are born, how they grow (derivation hierarchies), how they delegate (sub-keys for specific operations), how they rotate (planned replacement), how they revoke (emergency invalidation), and how they die (graceful retirement). Each lifecycle event is a ceremony — a structured, witnessed, verifiable transition — not a background process.</p>
+<h2>The dual-key architecture</h2>
+<p>The 0xagentprivacy separation is enforced through two key types that cannot be combined:</p>
+<p><strong>Signing key (swordsman / Soulbis).</strong> Authorises operations. Signs consent, approves disclosures, validates inscriptions. The signing key can approve a data release but CANNOT read the data being released. This is the fundamental separation: the swordsman signs blind.</p>
+<p><strong>Viewing key (mage / Soulbae).</strong> Observes and interprets. Reads encrypted data, matches disclosure requests to minimum sets, processes Intel Pool contributions. The viewing key can see everything but CANNOT authorise anything. The mage observes without touching.</p>
+<p><strong>The gap between them is sovereignty.</strong> No single key — no single agent — can both see the data AND approve its release. This gap is where human control persists. The Person bridges the gap through bilateral consent: telling the swordsman what to sign, telling the mage what to interpret.</p>
+<h2>Key generation ceremony</h2>
+<p>Key generation is not <code>openssl genrsa</code>. It is the first ceremony in a Person&#39;s sovereignty journey — the moment the dual agents spawn.</p>
+<p><strong>Entropy requirements.</strong> Minimum 256 bits of entropy from a hardware random number generator. Software PRNGs are insufficient — they are deterministic from their seed, and seed compromise means total key compromise. The entropy source must be verifiable (attestable hardware, auditable process).</p>
+<p><strong>Generation environment.</strong> Air-gapped device or hardware security module (HSM). No network connection during generation. No persistent storage of intermediate state. The generation environment is destroyed after the ceremony — the key exists only in its final storage location.</p>
+<p><strong>Witness structure.</strong> Key generation can be self-witnessed (solo ceremony) or socially witnessed (participants attest they observed a valid generation process without seeing the key material). Social witnessing creates a VRC inscription: &quot;I witnessed this Person&#39;s key generation ceremony. The process was valid.&quot;</p>
+<p><strong>Split generation.</strong> For high-value keys, Shamir&#39;s Secret Sharing or multi-party computation generates the key such that no single party ever holds the complete key material. Threshold reconstruction (k-of-n) requires k shareholders to cooperate for any signing operation. This distributes trust across the Person&#39;s social graph.</p>
+<h2>Key hierarchy</h2>
+<p>A single master key is fragile. The architecture uses hierarchical deterministic (HD) derivation to create a tree of purpose-specific sub-keys:</p>
+<p><strong>Level 0 — Master key.</strong> Never used directly for operations. Cold storage only. Generates all lower levels. If compromised, everything below is compromised — hence the extreme generation ceremony.</p>
+<p><strong>Level 1 — Domain keys.</strong> One per operational domain. Identity domain (VRC inscriptions). Consent domain (data authorisations). Governance domain (voting, delegation). Economic domain (transactions, guild contributions). Each domain key can be rotated independently without affecting other domains.</p>
+<p><strong>Level 2 — Session keys.</strong> Ephemeral keys derived for specific interactions. A session key for this browser session. A session key for this VRC ceremony. A session key for this Privacy Pool contribution. Session keys expire automatically. Their compromise exposes only the single session.</p>
+<p><strong>Level 3 — Delegation keys.</strong> Keys issued to authorised agents for bounded operations. &quot;This key can sign data authorisations for my health provider, for the next 30 days, for prescription verification only.&quot; Delegation keys are the mechanism by which the Person delegates without surrendering — each delegation key is scoped, temporal, and revocable.</p>
+<h2>Key rotation ceremony</h2>
+<p>Keys age. Cryptographic advances, accumulating usage metadata, and the passage of time all reduce key security. Rotation is planned replacement — not emergency, not crisis, but scheduled maintenance.</p>
+<p><strong>Rotation cadence.</strong> Master key: never rotated (too risky; replaced only if compromised). Domain keys: annual rotation recommended, enforced by credential expiry. Session keys: per-session (automatic). Delegation keys: at scope expiry (automatic).</p>
+<p><strong>Rotation process.</strong> New key generated with full ceremony. New key signs a rotation declaration: &quot;I am the successor to [old key hash].&quot; Old key co-signs the declaration: &quot;I confirm [new key] as my successor.&quot; Both signatures published as a verifiable credential. The old key enters a grace period (accepts no new operations, completes pending operations) then retires.</p>
+<p><strong>Continuity of identity.</strong> Key rotation must NOT break the Person&#39;s identity chain. A(τ) — verified history — spans across rotations. The rotation declaration creates a cryptographic link: old key → new key. Any verifier can trace the chain from current key back through all rotations to the genesis ceremony. The Person&#39;s identity is the chain, not any single key.</p>
+<h2>Key delegation protocol</h2>
+<p>The swordsman delegates cautiously. Each delegation key is bound by four constraints:</p>
+<p><strong>Scope.</strong> What operations can this key authorise? &quot;Health data disclosure to providers&quot; — not &quot;all data disclosure.&quot; Scope is encoded in the delegation credential and enforced at verification time.</p>
+<p><strong>Temporal bound.</strong> When does this delegation expire? Every delegation key has an expiry timestamp. No perpetual delegations. The Person must actively renew — consent is ongoing, not one-time.</p>
+<p><strong>Audience.</strong> Who can verify signatures from this key? A delegation key for health providers is verifiable only by health providers. Audience restriction prevents cross-domain linkability.</p>
+<p><strong>Revocation handle.</strong> Every delegation key comes with a pre-computed revocation nullifier. If the Person needs to revoke the delegation before expiry, publishing the nullifier invalidates all future signatures from that key. The revocation can be instantaneous — no waiting for expiry.</p>
+<h2>Emergency key procedures</h2>
+<p><strong>Suspected compromise.</strong> If the Person suspects any key is compromised: immediately publish revocation for the suspected key, rotate all keys derived from the same parent, notify all counterparties through the VRC trust graph, invoke the Witness to document the incident.</p>
+<p><strong>Confirmed compromise.</strong> If compromise is confirmed: execute full key tree rotation from master key, revoke ALL delegation keys (scorched earth), rebuild trust graph with new key material through fresh VRC ceremonies, update all inscriptions with new key references.</p>
+<p><strong>Key loss (not compromise).</strong> The key is gone but not stolen. This triggers the recovery_rpp protocol: bilateral proverb verification through the Person&#39;s trust graph to recover identity continuity. The lost key is revoked. A new key is generated. The identity chain is restored through social attestation rather than cryptographic derivation.</p>
+<h2>Hardware binding</h2>
+<p>For maximum security, signing keys are bound to hardware security modules that enforce:</p>
+<p><strong>Non-exportability.</strong> The key material never leaves the hardware boundary. Signing operations happen inside the HSM. The HSM outputs signatures, never keys.</p>
+<p><strong>Physical attestation.</strong> The HSM can prove (via remote attestation) that the signing key is hardware-bound. This proof is published as part of the Person&#39;s trust profile — counterparties can verify that signatures come from tamper-resistant hardware, not software.</p>
+<p><strong>Biometric gating (optional).</strong> The HSM requires a biometric (fingerprint, face) to unlock signing operations. This creates a physical-presence requirement — even if the HSM is stolen, signing requires the Person&#39;s body. Note: biometric data is processed locally within the HSM. It is never transmitted, never stored remotely, never available to the mage agent.</p>
+<h2>Connection to the equation</h2>
+<p><strong>P — protection.</strong> The signing key IS P. Every term in the equation that involves protection (P^1.5, Φ(Σ) separation, R&lt;1 enforcement) ultimately depends on the signing key&#39;s integrity. If the key fails, P fails. If P fails, V(π,t) collapses.</p>
+<p><strong>h(τ) — integrity.</strong> The h(τ) fraction measures key infrastructure quality. Properly rotated keys, hardware-bound storage, witnessed ceremonies — all increase h(τ). Expired keys, software storage, unwitnessed generation — all decrease h(τ). The integrity fraction gates A(τ): only cryptographically sound operations count toward verified history.</p>
+<p><strong>Φ(Σ) — separation matrix.</strong> The dual-key architecture IS the separation matrix&#39;s enforcement mechanism. Signing key ⊥ viewing key. If key ceremony fails to maintain this separation (e.g., a combined key that can both sign and view), Φ(Σ) collapses and det(Σ) = 0 — the architecture&#39;s mathematical guarantees evaporate.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-key-ceremony</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-key-ceremony</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-key-ceremony.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

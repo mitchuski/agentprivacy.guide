@@ -1,0 +1,165 @@
+{
+  "title": "TRUST-PROTOCOL",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "019f0bcbd037035e",
+      "text": "# TRUST-PROTOCOL"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcbef26a195",
+      "text": "## VRC, trust task, compression, seals\n\nHow a slot fills, how it compresses, how a game seals, how games compose. Schemas in `data/schemas.json`. Hashing reference in `data/canonical_serialise.py`. Verifiers MUST match the reference or they will produce false negatives.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcc0e153fcd",
+      "text": "## 1. The trust task\n\nA slot does not fill by a click. A candidate completes a trust task: a bilateral ceremony between the candidate and the heptad root, following the Relationship Proverb Protocol (RPP). The ceremony mints a lowercase relationship proverb and establishes polarity (Promise Theory plus or minus). The task evidence is referenced, not embedded.\n\nOutput of a passed task: one Verifiable Relationship Credential (VRC) edge.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcc2d04de04",
+      "text": "## 2. The VRC edge\n\nA VRC is the bilateral edge candidate to root for one slot. Schema: `VerifiableRelationshipCredential` in `schemas.json`. Key fields: `slotId`, `axisId`, `candidate.did`, `root.did`, `polarity`, `proverb`, `trustTaskRef`, `issuedAt`.\n\nOne VRC per slot. Forty-two VRCs in a complete game.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcc4bf37c3c",
+      "text": "## 3. Compression to a kappa-label\n\nThe VRC is compressed to a kappa-label: a content-addressed seal over its canonical serialisation.\n\n```\nkappa = SHA-256( canonical(VRC) )\n```\n\n`canonical` is defined in `canonical_serialise.py`: sorted keys, compact separators `(\",\", \":\")`, the `kappa` and `vrcId` fields excluded from their own input, UTF-8. This rule is canonical 0xagentprivacy serialisation and must be documented to any third-party verifier to prevent false negatives.\n\nFilling a slot is: pass the task, issue the VRC, compute the kappa-label, advance the slot to `verified`.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcc6ae21a73",
+      "text": "## 4. The group seal\n\nWhen all six heptads lock and the board folds, the game seals:\n\n```\ngeometryHash = SHA-256( canonical(folded geometry state at p = 1) )\nseal         = SHA-256( canonical({ kappaLabels sorted by slotId, geometryHash }) )\ngameId       = seal\n```\n\nThe group seal is the group identity shape. Same forty-two members, same fold, same seal. It is the id of the trust-graph node this game becomes. Schema: `GroupSeal`.\n\nThe seal binds both the relationships (the forty-two kappa-labels) and the structure (the folded geometry). Membership alone is not the identity. Membership in the sealed shape is the identity.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcc89d1b8ab",
+      "text": "## 5. Network composition\n\nA sealed game is a node. Games compose two ways.\n\n**Shared root.** Two games that share an axis root connect along that axis. Governance over that axis spans both games. The shared root is the join.\n\n**Fractal seam.** A game's privacy guide (the centre, the seed holder) can become the root context of a child game of 42. The child's `GroupSeal.parentGuideSlot` records the seam. This is how trust graphs gain depth rather than only width. **[Anticipated]** Ship one level first (Decision 3); the seed pointer is real and recorded, the child render is deferred.\n\nA network of sealed games is a network of trust graphs. Identity lives in the pattern of relationships, which is what makes the graph resistant by topology rather than by any single primitive.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcca8c056e2",
+      "text": "## 6. Quorum and governance\n\n**[Anticipated]** A sealed game of 42 is one quorum unit. Quorum is read across its locked heptads. Because the board cannot seal without all six heptads, a sealed game already encodes balanced representation across all six axes. Governance actions reference the `gameId`; cross-game actions traverse shared roots and fractal seams. Exact voting and threshold rules are out of scope for this build and are flagged for a later spec.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bccc7aff519",
+      "text": "## 7. What the coding agent wires, what it does not\n\n- **In scope for the visual build:** slot state, kappa-label computation (use `canonical_serialise.py` ported to the app language), group seal computation, the fold driven by `p`.\n- **Out of scope, external:** the actual RPP ceremony, DID resolution, the VRC issuer, persistence of the event log and seals. The app calls into these as services; it does not implement them.\n\n> i can prove we are bound without revealing what we said when we bound\n\n(⚔️⊥⿻⊥🧙)😊"
+    },
+    {
+      "type": "markdown",
+      "id": "019f0bcce69e9351",
+      "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "TRUST-PROTOCOL",
+        "story": []
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcbd037035e",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcbd037035e",
+        "text": "# TRUST-PROTOCOL"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcbef26a195",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcbef26a195",
+        "text": "## VRC, trust task, compression, seals\n\nHow a slot fills, how it compresses, how a game seals, how games compose. Schemas in `data/schemas.json`. Hashing reference in `data/canonical_serialise.py`. Verifiers MUST match the reference or they will produce false negatives.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcc0e153fcd",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcc0e153fcd",
+        "text": "## 1. The trust task\n\nA slot does not fill by a click. A candidate completes a trust task: a bilateral ceremony between the candidate and the heptad root, following the Relationship Proverb Protocol (RPP). The ceremony mints a lowercase relationship proverb and establishes polarity (Promise Theory plus or minus). The task evidence is referenced, not embedded.\n\nOutput of a passed task: one Verifiable Relationship Credential (VRC) edge.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcc2d04de04",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcc2d04de04",
+        "text": "## 2. The VRC edge\n\nA VRC is the bilateral edge candidate to root for one slot. Schema: `VerifiableRelationshipCredential` in `schemas.json`. Key fields: `slotId`, `axisId`, `candidate.did`, `root.did`, `polarity`, `proverb`, `trustTaskRef`, `issuedAt`.\n\nOne VRC per slot. Forty-two VRCs in a complete game.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcc4bf37c3c",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcc4bf37c3c",
+        "text": "## 3. Compression to a kappa-label\n\nThe VRC is compressed to a kappa-label: a content-addressed seal over its canonical serialisation.\n\n```\nkappa = SHA-256( canonical(VRC) )\n```\n\n`canonical` is defined in `canonical_serialise.py`: sorted keys, compact separators `(\",\", \":\")`, the `kappa` and `vrcId` fields excluded from their own input, UTF-8. This rule is canonical 0xagentprivacy serialisation and must be documented to any third-party verifier to prevent false negatives.\n\nFilling a slot is: pass the task, issue the VRC, compute the kappa-label, advance the slot to `verified`.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcc6ae21a73",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcc6ae21a73",
+        "text": "## 4. The group seal\n\nWhen all six heptads lock and the board folds, the game seals:\n\n```\ngeometryHash = SHA-256( canonical(folded geometry state at p = 1) )\nseal         = SHA-256( canonical({ kappaLabels sorted by slotId, geometryHash }) )\ngameId       = seal\n```\n\nThe group seal is the group identity shape. Same forty-two members, same fold, same seal. It is the id of the trust-graph node this game becomes. Schema: `GroupSeal`.\n\nThe seal binds both the relationships (the forty-two kappa-labels) and the structure (the folded geometry). Membership alone is not the identity. Membership in the sealed shape is the identity.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcc89d1b8ab",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcc89d1b8ab",
+        "text": "## 5. Network composition\n\nA sealed game is a node. Games compose two ways.\n\n**Shared root.** Two games that share an axis root connect along that axis. Governance over that axis spans both games. The shared root is the join.\n\n**Fractal seam.** A game's privacy guide (the centre, the seed holder) can become the root context of a child game of 42. The child's `GroupSeal.parentGuideSlot` records the seam. This is how trust graphs gain depth rather than only width. **[Anticipated]** Ship one level first (Decision 3); the seed pointer is real and recorded, the child render is deferred.\n\nA network of sealed games is a network of trust graphs. Identity lives in the pattern of relationships, which is what makes the graph resistant by topology rather than by any single primitive.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcca8c056e2",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcca8c056e2",
+        "text": "## 6. Quorum and governance\n\n**[Anticipated]** A sealed game of 42 is one quorum unit. Quorum is read across its locked heptads. Because the board cannot seal without all six heptads, a sealed game already encodes balanced representation across all six axes. Governance actions reference the `gameId`; cross-game actions traverse shared roots and fractal seams. Exact voting and threshold rules are out of scope for this build and are flagged for a later spec.\n\n---"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bccc7aff519",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bccc7aff519",
+        "text": "## 7. What the coding agent wires, what it does not\n\n- **In scope for the visual build:** slot state, kappa-label computation (use `canonical_serialise.py` ported to the app language), group seal computation, the fold driven by `p`.\n- **Out of scope, external:** the actual RPP ceremony, DID resolution, the VRC issuer, persistence of the event log and seals. The app calls into these as services; it does not implement them.\n\n> i can prove we are bound without revealing what we said when we bound\n\n(⚔️⊥⿻⊥🧙)😊"
+      },
+      "date": 1782609073000
+    },
+    {
+      "type": "add",
+      "id": "019f0bcce69e9351",
+      "item": {
+        "type": "markdown",
+        "id": "019f0bcce69e9351",
+        "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
+      },
+      "date": 1782609073000
+    }
+  ]
+}

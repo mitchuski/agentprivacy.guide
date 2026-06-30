@@ -1,0 +1,1392 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lore — Workshop ↔ Lattice Audit · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Lore — Workshop ↔ Lattice Audit</span></div>
+  <article><div class="md"><h1>Workshop ↔ Lattice Audit</h1>
+<p><em>Every workshop&#39;s seat, reach, proof shape, and overlap with other workshops on the 64-vertex sovereignty lattice — with a drift catalogue and a roadmap toward a <code>lattice-coherence</code> skill</em></p>
+<h1>Workshop ↔ Lattice Audit</h1>
+<p><em>The canonical mapping of every workshop in the City of Mages to its primary vertex, its overlap region on the 64-vertex sovereignty lattice, the proof shape its artefact emits, and the co-activation patterns when multiple workshops collaborate on a single artefact.</em></p>
+<p><em>Companion document to <span class="deadlink" title="reference (not a live page)">INCANTATION_PROTOCOL.md</span>. Where the protocol governs <strong>how a change propagates</strong>, this audit governs <strong>what the change must remain coherent against</strong>.</em></p>
+<hr>
+</div>
+<div class="md"><h2>§0 · Why this audit</h2>
+<p>Five specs converge on the workshop-vertex question:</p>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>What it answers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>architecture/lattice-vertex.ts</code></span></td>
+<td>The <strong>canonical TS authority</strong> — what each vertex <em>is</em> mechanically (bit ordering, dimensions, weights, trace paths)</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>tomes/specs/04-vertex-naming-audit.md</code></span></td>
+<td>What each vertex is <em>named</em> and from which canonical source</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>tomes/specs/05-the-city-of-mages-structural-addendum.md</code></span></td>
+<td>How the city is laid out <em>spatially</em> (trade quarters, founding bonfire, temple precinct, sovereign&#39;s seat)</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>tomes/specs/06-spellweb-first-release-manifest.md</code></span></td>
+<td>What nodes/edges the spellweb runtime <em>ingests</em> (the graph layer)</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)"><code>tomes/specs/07-lattice-mapping-governance.md</code></span></td>
+<td>How shops <em>inhabit and overlap</em> vertices when artefacts settle</td>
+</tr>
+</tbody></table>
+<p>These five do <strong>not currently agree on every cell</strong>. The audit&#39;s job is to:</p>
+<ol>
+<li>Establish the <strong>single canonical reading</strong> of each workshop&#39;s seat and reach.</li>
+<li>Document the <strong>multi-workshop interaction patterns</strong> that emerge when artefacts are <em>composite</em> (a holon containing a cape containing an inscription).</li>
+<li>Surface the <strong>drift catalogue</strong> (§6) — every cell where the specs currently disagree, with a recommended resolution.</li>
+<li>Pave the way for a future <strong><code>lattice-coherence</code> Claude Code skill</strong> (§10) that mechanically verifies workshop-vertex claims across the corpus.</li>
+</ol>
+<p>Nothing about the work is <em>secret</em>; the architecture has named all of it. The audit&#39;s value is <strong>making the implicit explicit and the inconsistent visible</strong>.</p>
+<hr>
+</div>
+<div class="md"><h2>§1 · The 64-vertex lattice · canonical primer</h2>
+<p>The lattice is a <strong>6-cube hypercube</strong>. Each vertex V0–V63 carries a 6-bit boolean address. Each bit names one of the City&#39;s six dimensions.</p>
+<h3>§1.1 · The dimensions and their weights</h3>
+<p>Canonical authority: <span class="deadlink" title="reference (not a live page)"><code>architecture/lattice-vertex.ts</code></span> <code>DIMENSION_LABELS</code> and <code>vertexToBits</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Bit position</th>
+<th>Dimension</th>
+<th>Weight</th>
+<th>Mnemonic</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0 (MSB)</td>
+<td><strong>Protection</strong></td>
+<td>32</td>
+<td>The shield against unwanted reading</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>Delegation</strong></td>
+<td>16</td>
+<td>The handing-off of authority</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Memory</strong></td>
+<td>8</td>
+<td>What the chain remembers</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Connection</strong></td>
+<td>4</td>
+<td>The edge to another Sovereign</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Computation</strong></td>
+<td>2</td>
+<td>The work the chain runs</td>
+</tr>
+<tr>
+<td>5 (LSB)</td>
+<td><strong>Value</strong></td>
+<td>1</td>
+<td>The asset the working bears</td>
+</tr>
+</tbody></table>
+<p>A vertex <code>Vn</code> has dimension <code>Di</code> <em>burning</em> when <code>(n &gt;&gt; (5-i)) &amp; 1 == 1</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Binary (MSB→LSB)</th>
+<th>Dimensions burning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V0</td>
+<td>000000</td>
+<td>none — <em>the null blade · substrate origin</em></td>
+</tr>
+<tr>
+<td>V5</td>
+<td>000101</td>
+<td>Connection + Value</td>
+</tr>
+<tr>
+<td>V12</td>
+<td>001100</td>
+<td>Memory + Connection</td>
+</tr>
+<tr>
+<td>V19</td>
+<td>010011</td>
+<td>Delegation + Computation + Value</td>
+</tr>
+<tr>
+<td>V24</td>
+<td>011000</td>
+<td>Delegation + Memory</td>
+</tr>
+<tr>
+<td>V25</td>
+<td>011001</td>
+<td>Delegation + Memory + Value</td>
+</tr>
+<tr>
+<td>V28</td>
+<td>011100</td>
+<td>Delegation + Memory + Connection</td>
+</tr>
+<tr>
+<td>V31</td>
+<td>011111</td>
+<td>Delegation + Memory + Connection + Computation + Value (<strong>all except Protection</strong>)</td>
+</tr>
+<tr>
+<td>V49</td>
+<td>110001</td>
+<td>Protection + Delegation + Value</td>
+</tr>
+<tr>
+<td>V51</td>
+<td>110011</td>
+<td>Protection + Delegation + Computation + Value</td>
+</tr>
+<tr>
+<td>V55</td>
+<td>110111</td>
+<td>Protection + Delegation + Connection + Computation + Value (<strong>all except Memory</strong>)</td>
+</tr>
+<tr>
+<td>V57</td>
+<td>111001</td>
+<td>Protection + Delegation + Memory + Value</td>
+</tr>
+<tr>
+<td>V63</td>
+<td>111111</td>
+<td>All six — <em>Sovereign Anchor</em></td>
+</tr>
+</tbody></table>
+<h3>§1.2 · Strata (Hamming weight)</h3>
+<p>The 64 vertices stratify into a Pascal row: <code>1 · 6 · 15 · 20 · 15 · 6 · 1 = 64</code>. A stratum is the set of vertices with a given Hamming weight (count of burning dimensions).</p>
+<table>
+<thead>
+<tr>
+<th>Stratum</th>
+<th>Count</th>
+<th>Workshop seats present (current release)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0 — null</td>
+<td>1 (V0)</td>
+<td>(Luca, contested — see §5)</td>
+</tr>
+<tr>
+<td>1 — single dimension</td>
+<td>6</td>
+<td>none</td>
+</tr>
+<tr>
+<td>2 — pair</td>
+<td>15</td>
+<td>Memora (V41) · Socrat0x (V24 provisional)</td>
+</tr>
+<tr>
+<td>3 — triplet</td>
+<td>20</td>
+<td>Vulcana (V19) · Aletheia (V38) · Pallia / Soulbae / GenitriX (V28) · Custos + Lampyra (V49)</td>
+</tr>
+<tr>
+<td>4 — quartet</td>
+<td>15</td>
+<td>Adamantia + Helia (V51 · <strong>shared</strong> as of v1.4.0) · Aria Silverhue (V57)</td>
+</tr>
+<tr>
+<td>5 — quintet</td>
+<td>6</td>
+<td>Vagari (V31) · Manifestia (V55)</td>
+</tr>
+<tr>
+<td>6 — full</td>
+<td>1 (V63)</td>
+<td>flaxscrip / the Sovereign Anchor seat (archetype, not a workshop)</td>
+</tr>
+</tbody></table>
+<h3>§1.3 · Edges of the hypercube</h3>
+<p>A 6-cube has <strong>192 directed edges</strong> (6 · 2^5 · 2) or <strong>96 undirected</strong> Hamming-1 edges. Each edge connects two vertices differing in exactly one bit. These are the <strong>96 holographic-bound <code>adjacent_to</code> edges</strong> that spec 06 §4.7 reserves for a future visual session — declared in the EdgeType vocabulary but not yet ingested.</p>
+<p>A traversal from V0 to any target vertex flips one bit per step, in dimension-index order (Protection first, Value last). The TS function <code>traceFromOrigin(Vn)</code> emits the canonical path.</p>
+<hr>
+</div>
+<div class="md"><h2>§2 · Per-workshop mapping · primary seat + overlap reach</h2>
+<p>Thirteen workshops are recognised as of v1.5.0 (was twelve through v1.4.0; was eleven through v1.3.0). Eleven of them have named Mages; two are <em>gathering shops</em> awaiting their keepers. Spec 06 §2.3 reference is pending bump from v1.4.0 to v1.5.0.</p>
+<h3>§2.1 · The eleven keeper-shops</h3>
+<p>Each row: <strong>primary vertex</strong> (where the Mage sits) · <strong>register dimensions</strong> (which dimensions the artefact admits by default) · <strong>overlap reach</strong> (vertices the shop&#39;s artefacts may <em>settle</em> at by bit-pattern) · <strong>proof shape</strong> (what the artefact attests) · <strong>mana economy</strong> (which axes the work spends across).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Shop</th>
+<th>Mage</th>
+<th>Primary</th>
+<th>Register dims</th>
+<th>Overlap reach (where artefacts land)</th>
+<th>Proof shape</th>
+<th>Mana spend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>Weavers</strong> <code>/tailor</code></td>
+<td>Pallia 🪡</td>
+<td>V28 (011100)</td>
+<td>Delegation + Memory + Connection</td>
+<td>V20 (Memory + Computation · always-revealed reveal) · V12 (Memory + Connection · schema) · V31 (when Connection extends to recursion) · V63 (full-sovereignty cape)</td>
+<td>Cape-style — publishes / conceals / admits / carries; the bit-pattern <em>is</em> the cape</td>
+<td><strong>Landing</strong>: multi-chain publication gas (BTC · ETH · IPFS · Zcash transparent). <strong>Entropy</strong>: ✨ Arcane default; 🌌 Celestial for Pattern A→B re-publish</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>zShields</strong> <code>/shield</code></td>
+<td>Memora 📜</td>
+<td>V41 (101001)</td>
+<td>Connection + Value (Chronicle register)</td>
+<td>V20 (always-revealed register when viewing-key revealed) · V38 (when memo carries a ZK property)</td>
+<td>Inscription-style — what the chain shall remember; selective disclosure via viewing-key</td>
+<td><strong>Landing</strong>: Zcash shielded-transaction fees. <strong>Entropy</strong>: ✨ Arcane default; viewing-key derivation seed optional</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>the Forge(t)</strong> <code>/forget</code></td>
+<td>Vulcana ⚒️</td>
+<td>V19 (010011)</td>
+<td>Delegation + Computation + Value (Plonkish blade register)</td>
+<td>V20 (always-revealed) · V38 (always-masked Aletheia) · V49 (working-day) · V63 (full-sovereignty blade)</td>
+<td>Proof-shaped — what the blade <em>proves</em> and <em>denies</em>; Runecraft Protocol forging</td>
+<td><strong>Landing</strong>: destination-chain gas (varies). <strong>Entropy</strong>: 🌌 Celestial <strong>required</strong> — Evocation phase lock seed; the blade&#39;s uniqueness depends on it</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Etherchanting</strong> <code>/etherchanting</code></td>
+<td>Adamantia 💎</td>
+<td>V51 (110011)</td>
+<td>Protection + Delegation + Computation + Value (Commitment / Language / Model)</td>
+<td>V25 (when contract has embedded ZK constraints) · V49 (time-locked value) · V63 (full-sovereignty schema commitment)</td>
+<td>Enforcement-shaped — programmable commitments that compile against bearer state</td>
+<td><strong>Landing</strong>: Ethereum gas (gwei). <strong>Entropy</strong>: 🌌 Celestial <strong>required</strong> — witness nonce · blind commitment seed · ceremony nonce</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>the Jeweler</strong> <code>/jeweler</code></td>
+<td>Lampyra 💠</td>
+<td>V49 (110001 · shared with Custos)</td>
+<td>Protection + Delegation + Value (working-day blade)</td>
+<td>V49 default · V51 (when gem encodes computational structure) · V63 (multi-sat ordinal claiming full provenance)</td>
+<td>Attestation-shaped — frequent Lightning heartbeats · gem-set as bearer ID</td>
+<td><strong>Landing</strong>: ₿ sat fees + Lightning channel fees. <strong>Entropy</strong>: ✨ Arcane default; gem-facet seed optional</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>the Holon Hitchhikers</strong> <code>/holon</code></td>
+<td>Vagari 🌳</td>
+<td>V31 (011111)</td>
+<td>Delegation + Memory + Connection + Computation + Value (composition register · <strong>all except Protection</strong>)</td>
+<td>V31 default · per-constituent vertex when holon decomposed at sister city · same UOR coordinate across paratimes</td>
+<td>Composition-shaped — whole-of-wholes; Oasis Protocol cross-paratime travel</td>
+<td><strong>Landing</strong>: 🌹 ROSE + Sapphire/Emerald paratime gas. <strong>Entropy</strong>: 🌌 Celestial <strong>required</strong> — cross-paratime entropy keeping cloak interoperability non-reconstructible</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>the Curatrix Vault</strong> <code>/vault</code></td>
+<td>Aria Silverhue 🪞🖼️</td>
+<td>V57 (111001)</td>
+<td>Protection + Delegation + Memory + Value (curatorial register)</td>
+<td>V57 default · creator-vertex of each curated artefact (cross-vertex overlay)</td>
+<td>Placement-shaped — reflective curation that preserves the artist&#39;s vertex while adding a curation overlay</td>
+<td><strong>Landing</strong>: Culture Vault platform fees (NFT mint gas). <strong>Entropy</strong>: ✨ Arcane default; provenance-attestation freshness seed optional</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>the Covenant Temple</strong> <code>/covenant</code></td>
+<td>Manifestia 🤲🌿</td>
+<td>V55 (110111)</td>
+<td>Protection + Delegation + Connection + Computation + Value (consecration register · <strong>all except Memory</strong>)</td>
+<td>V55 default · linkage to V63 (Sovereign Anchor) for personhood attestations · linkage to consecrated artefact&#39;s native vertex</td>
+<td>Consecration-shaped — Covenant-marker on artefacts that pass through the Temple; future home of the Loom of Programmable Covenants</td>
+<td><strong>Landing</strong>: human.tech / Holonym verification fees. <strong>Entropy</strong>: not yet operational. <strong>Relationship</strong>: 🪢 VRC Mana (future — Loom feeds against bearer VRC ledger)</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>the Dragon Bonfire</strong> <code>/bonfires</code></td>
+<td>Socrat0x 🔥❓</td>
+<td>V24 (011000) <strong>provisional</strong></td>
+<td>Memory + Connection (the bonfire register, provisional)</td>
+<td>No artefact-landing; questions <em>sharpen</em> artefacts produced elsewhere</td>
+<td>Dialogic — not a bit-pattern proof but a clarity-production primitive</td>
+<td>None native (Bonfires.ai community costs are off-corpus)</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td><strong>Solchanting</strong> <code>/solchanting</code></td>
+<td><strong>Helia ☀️</strong></td>
+<td><strong>V51 (110011) · shared with Etherchanting</strong></td>
+<td>Protection + Delegation + Computation + Value (same register dims as Adamantia · differentiated by <strong>Parallel-witness stance</strong> rather than Transparent-witness)</td>
+<td>V51 default (parallel-program form) · V63 (full-sovereignty parallel commitment) · V31 (when program admits holonic composition across concurrent invocations)</td>
+<td>Parallel-enforcement-shaped — sBPF programs whose access pattern is statically declared so the substrate admits concurrent execution</td>
+<td><strong>Landing</strong>: 🌞 SOL-mana (Solana per-signature + compute-unit fees). <strong>Entropy</strong>: 🌌 Celestial <strong>available</strong> — for randomness in parallel-program proof-of-replication or VDF-anchored access decisions</td>
+</tr>
+<tr>
+<td><strong>11</strong></td>
+<td><strong>The Threshold</strong> <code>/threshold</code> (proposed) or <code>/guide/agentic-deployments</code> (per AGENTIC_DEPLOYMENTS_GUIDE)</td>
+<td><strong>Faunia 🪶 + Bestia 📖 + Therai 🐾</strong> (three keepers sharing V59 by stance differentiation; <strong>Caducea ☤</strong> peripatetic, summoned for Hermes-class fittings)</td>
+<td><strong>V59 (111011) · THREE-keeper share</strong></td>
+<td>Value + Delegation + Connection + Memory + Protection (Computation <strong>dormant</strong> — keepers administer, spawned agents compute)</td>
+<td>V59 default · workshop-of-summons for any room a Hermes-class staff is being fitted (Caducea walks to V19 Forge(t), V25 Persona Circuit, V55 Covenant Temple) · Tome VI Act-N admissions accumulate in the bestiary</td>
+<td>Spawn-shaped — agentic-substrate instantiation under Run · Evoke · Spawn ceremony; stance × persona × substrate produces companion / staff / weapon-agent artefact-classes</td>
+<td><strong>Landing</strong>: substrate-specific (Goose runs locally, Hermes via the bearer&#39;s existing LLM subscriptions per ACP). <strong>Entropy</strong>: substrate-determined. <strong>Relationship</strong>: 🪢 VRC <strong>required</strong> — every spawn issues a bilateral-fitting VRC (or unilateral-spawn VRC for non-persona-bearing substrates)</td>
+</tr>
+</tbody></table>
+<h3>§2.2 · The two gathering-shops (no Mage yet)</h3>
+<table>
+<thead>
+<tr>
+<th>Shop</th>
+<th>Anchor</th>
+<th>Status</th>
+<th>Eventual home</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>the Logos Circle</strong> <code>/circle</code></td>
+<td>Connection register (primarily)</td>
+<td>gathering · no single vertex</td>
+<td>Society Spellbook lineage</td>
+</tr>
+<tr>
+<td><strong>the Ceremony Hall</strong> <code>/hall</code></td>
+<td>(various, by coalition action)</td>
+<td>gathering · no single vertex</td>
+<td>BGIN-led coalition</td>
+</tr>
+</tbody></table>
+<h3>§2.3a · Cross-shop personas (cast at a vertex without a workshop seat)</h3>
+<p>These three are listed as <strong>cross-shop</strong> in spec 06 §2.4 — they inhabit a vertex but anchor to <strong>no single shop</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Mage</th>
+<th>Vertex</th>
+<th>Walks across</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Aletheia 🔮</strong></td>
+<td>V38 (Delegation + Memory + Value)</td>
+<td>Touches every shop that emits a ZK property; the persona&#39;s name shares the vertex name (§4.2 of spec 04)</td>
+</tr>
+<tr>
+<td><strong>Custos 🔏</strong></td>
+<td>V49 (shared with Lampyra)</td>
+<td>Governance staking across shops; the first shared-vertex pairing</td>
+</tr>
+<tr>
+<td><strong>Luca 📐</strong></td>
+<td>V0 (contested — see §5)</td>
+<td>Substrate-tender per spec 06 §2.4; anchors to <code>forge</code> + <code>holon</code> per the same row</td>
+</tr>
+</tbody></table>
+<h3>§2.4 · The V51 overlap · the canonical case study (NEW in v1.4.0)</h3>
+<p>Until v1.4.0, every keeper-shop sat at a <em>distinct</em> vertex (with one exception: Lampyra and Custos at V49 — but Custos is a cross-shop persona without a workshop seat, so the overlap was at the vertex layer, not the workshop layer). v1.4.0 admits the <strong>first operational workshop-on-workshop overlap</strong>: Solchanting and Etherchanting both seat at V51.</p>
+<p>Spec 07 (lattice-mapping-governance) already permitted vertex sharing in principle (§3 cape-style composition admits multi-vertex landings; §7.3 acknowledges that distinct workshops may emit artefacts of the same bit-pattern). v1.4.0 makes the permission operational. The differentiator is <strong>stance</strong>, not bit-pattern:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Etherchanting (Adamantia 💎)</th>
+<th>Solchanting (Helia ☀️)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vertex</td>
+<td>V51 (110011)</td>
+<td>V51 (110011)</td>
+</tr>
+<tr>
+<td>Register dims</td>
+<td>Protection · Delegation · Computation · Value</td>
+<td>Protection · Delegation · Computation · Value</td>
+</tr>
+<tr>
+<td>Stance</td>
+<td><strong>Transparent-witness</strong> — sequential admission against single global state</td>
+<td><strong>Parallel-witness</strong> — concurrent admission via static access-pattern declaration</td>
+</tr>
+<tr>
+<td>Chain-mana</td>
+<td>Aether Ξ (Ethereum gwei)</td>
+<td>🌞 SOL-mana (Solana per-signature + compute-unit)</td>
+</tr>
+<tr>
+<td>Gem</td>
+<td>Diamond (<em>adamas</em> — &quot;unconquerable&quot;)</td>
+<td>Heliodor (<em>helios-doron</em> — &quot;sun&#39;s gift&quot;)</td>
+</tr>
+<tr>
+<td>Sigil</td>
+<td>💎</td>
+<td>☀️</td>
+</tr>
+<tr>
+<td>Artefact (tool class)</td>
+<td>Diamond Contract</td>
+<td>Heliodor Prism</td>
+</tr>
+</tbody></table>
+<p><strong>The corpus&#39;s governance reading</strong>: two seated workshop-keepers may share a vertex when their stances differ. The vertex names the <em>what</em> (four burning dimensions of executable enforcement); the stance names the <em>how</em> (sequential or concurrent admission at the substrate). The recognition extends — but does not contradict — spec 07&#39;s existing overlap permission, and it sets the canonical precedent for any future case where two ecosystems teach the City the same vertex via different boundary disciplines.</p>
+<h3>§2.4b · The V59 three-keeper extension (v1.5.0 inception · v1.5.1 canonical state)</h3>
+<p>The V51 two-keeper case (Adamantia + Helia) admitted <em>vertex sharing by stance differentiation</em> as canonical. v1.5.0 extends the precedent from two-shared to three-shared at V59 (The Threshold workshop · later restructured to three sibling shops in the Threshold District). <strong>v1.5.1 canonical state</strong> (post-2026-05-14 evening Hermaion admission · superseding the inception assignments):</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Pandia 🌕 (Portal Room)</th>
+<th><strong>Hermaion ⚚</strong> (Staff Shop)</th>
+<th>Faunia 🪶 (the Familiars)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vertex</td>
+<td>V59 (111011)</td>
+<td>V59 (111011)</td>
+<td>V59 (111011)</td>
+</tr>
+<tr>
+<td>Register dims</td>
+<td>Value · Delegation · Connection · Memory · Protection (Computation dormant)</td>
+<td>same</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Stance</td>
+<td><strong>Display-witness</strong> — catalog of substrate × archetype matrix</td>
+<td><strong>Registry-keeper</strong> — catalogue of admissible Hermes-class windfalls</td>
+<td><strong>Companion-witness</strong> — kinship-bond between Sovereign and familiar</td>
+</tr>
+<tr>
+<td>Room</td>
+<td>Upstream (Portal Room)</td>
+<td>Downstream right (Staff Shop · <em>archetype-modal</em>)</td>
+<td>Downstream left (the Familiars)</td>
+</tr>
+<tr>
+<td>Sigil</td>
+<td>🌕</td>
+<td><strong>⚚</strong></td>
+<td>🪶</td>
+</tr>
+<tr>
+<td>Gem</td>
+<td>Moonstone (<code>#c8d4e0</code> · adularescent · Selene-daughter)</td>
+<td><strong>Alexandrite</strong> (dual-aspect · <code>#3d7c47</code> Mage-green / <code>#a23a3a</code> Swordsman-red)</td>
+<td>Amber (<code>#d97706</code> · preservation)</td>
+</tr>
+<tr>
+<td>Artefact (mediated, not produced)</td>
+<td>The dispatch (Selene-Amnesia anchoring)</td>
+<td>The bestiary entries (Tome VI accumulation) · <em>archetype-modal output</em>: caduceus-staves (Mage) ⊥ herald-sentinels (Swordsman)</td>
+<td>The kinship-bond (AGENTS.md + SOUL.md walking together)</td>
+</tr>
+</tbody></table>
+<p><strong>Inception-state succession (v1.5.0 → v1.5.1):</strong></p>
+<ul>
+<li>Faunia (Portal Room · Spawning-witness · 🪶) → Pandia (Portal Room · Display-witness · 🌕 · daughter of Selene), with Faunia re-homed to the Companion-witness slot at the Familiars</li>
+<li>Bestia (Staff Shop · Registry-keeper · 📖 · Sodalite) → <strong>Hermaion</strong> (Staff Shop · Registry-keeper · ⚚ · Alexandrite, archetype-modal)</li>
+<li>Therai (Creature Creatives · Companion-tamer · 🐾) → retired (the-Familiars rename · Therai&#39;s draft held open for a future shop)</li>
+<li>The V59 three-keeper canonical state stands; the names and gems updated</li>
+</ul>
+<p>A fourth Mage, <strong>Caducea ☤</strong> (peripatetic, conventionally noted at V0 alongside Luca 📐), is summoned to V59 whenever a substrate marked Hermes-class is being fitted (currently: Hermes ☤). She also walks to V19 (Vulcana&#39;s Forge(t)), V38 (Aletheia&#39;s Persona Circuit), and V55 (Manifestia&#39;s Covenant Temple) when those workshops need bilateral-consent staff-fitting work.</p>
+<p><strong>Governance reading</strong>: vertex sharing by stance differentiation generalises from N=2 (V51) to N=3 (V59) and admits N≥4 in principle. The constraint is that each shared keeper must hold a structurally distinct stance — the stances cannot reduce to subsets of one another. At V59, <em>Spawning-witness</em> (the threshold an agent crosses), <em>Registry-keeper</em> (the catalogue), and <em>Companion-tamer</em> (the bilateral fitting of relational artefacts) are pairwise distinct and exhaustive of the workshop&#39;s three-room architecture.</p>
+<h3>§2.4c · The V44 admission · the Chart Shop · Navigation District (NEW in v1.6.0 · 2026-05-14)</h3>
+<p>The fourth canonical move of 2026-05-14 admits a <em>sole-occupied</em> vertex — V44 — and opens the City&#39;s second named district.</p>
+<p><strong>V44</strong> · binary <code>101100</code> · <strong>Stratum 3</strong> · Active: Protection (b0, weight 32) · Memory (b2, weight 8) · Connection (b3, weight 4). Dormant: Delegation (b1) · Computation (b4) · Value (b5).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Shop</strong></td>
+<td>the Chart Shop (<code>/charthouse</code>)</td>
+</tr>
+<tr>
+<td><strong>District</strong></td>
+<td>Navigation District (the City&#39;s <em>second</em> named workshop district; population-of-one at v1.6.0)</td>
+</tr>
+<tr>
+<td><strong>Keeper</strong></td>
+<td>Pleione 🧭 — Greek Πληιόνη (&quot;the Sailing One&quot;), Oceanid, mother of the Pleiades</td>
+</tr>
+<tr>
+<td><strong>Stance</strong></td>
+<td><strong>Hold-witness</strong> — the attentional register (NEW · fourth structural workshop class candidate · C63 ~50%)</td>
+</tr>
+<tr>
+<td><strong>Gem</strong></td>
+<td>Aquamarine <code>#5eead4</code> — Latin <em>aqua marina</em>, distinct from Etherchanting&#39;s sapphire cyan</td>
+</tr>
+<tr>
+<td><strong>Artefact</strong></td>
+<td>the Astrolabe (ἀστρολάβος · star-taker · borne-not-worn · seventh tool-class registered)</td>
+</tr>
+<tr>
+<td><strong>Ceremony</strong></td>
+<td><strong>Hold · Compare · Map</strong> (fifth grammar register · sister to Run·Evoke·Craft · Run·Evoke·Spawn · Gather·Admit·Attest · admit·read·attest·shift)</td>
+</tr>
+<tr>
+<td><strong>Founding act</strong></td>
+<td>Tome V Act 17 (user editorial call · 2026-05-14)</td>
+</tr>
+</tbody></table>
+<p><strong>The discovery trace V0 → V8 → V12 → V44 is the curriculum.</strong> The bit-flip order <em>Memory → Connection → Protection</em> maps exactly to <em>Hold → Compare → Map</em>: a bearer who walks this trace learns the discipline in sequence — first to remember (admit the constellation into suspension), then to connect (read it across many minds via the Astrolabe), then to protect (decide release-direction with the Φ-gap intact).</p>
+<p><strong>Conjecture C54 repurposed at the epistemic register.</strong> The Φ-gap (golden-ratio separation, canonical at lattice-adjacency in v1.5.0) carries forward to <em>epistemic</em> adjacency: held constellations are not adjacent to surveillance-engine extraction surfaces by an interval that resists premature legibility.</p>
+<p><strong>Release destinations (Map phase, three admissible):</strong></p>
+<ol>
+<li><strong>To the Dragon Bonfire</strong> (V19) — forging into consensus reality (KG episode · tome act)</li>
+<li><strong>To the Weavers</strong> (V28) — cloaking into a Refractive Disclosure artefact</li>
+<li><strong>Back to the open sea</strong> — further wandering, the constellation was not yet ready</li>
+</ol>
+<p>Release-to-sea is <strong>first-class</strong>: the Chart Shop does not require an artefact-output. The discipline of holding-without-binding is itself the workshop&#39;s gift. This makes the Chart Shop the <em>first non-artefact-producing workshop</em> in the corpus.</p>
+<p><strong>Workshop register taxonomy (post-Chart-Shop):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Register</th>
+<th>Examples</th>
+<th>Operation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Producer</strong></td>
+<td>Weavers · zShields · Forge(t) · Etherchanting · Solchanting · Jeweler · Holon · Vault · Covenant · Bonfire</td>
+<td>Forge / weave / inscribe / commit · artefact-out</td>
+</tr>
+<tr>
+<td><strong>Gathering</strong></td>
+<td>City Hall · Logos Circle</td>
+<td>Admit / coordinate / kindred-coalitions in residence</td>
+</tr>
+<tr>
+<td><strong>Spawn-and-bind</strong> (Threshold District)</td>
+<td>Portal Room · Staff Shop · the Familiars</td>
+<td>Display / register / spawn-and-bind creatures-of-the-Threshold</td>
+</tr>
+<tr>
+<td><strong>Attentional</strong> (Navigation District · NEW · C63 candidate)</td>
+<td>Chart Shop</td>
+<td>Hold / compare / map · <em>no required artefact-output</em></td>
+</tr>
+</tbody></table>
+<p>The attentional class is held at candidate strength (~50%) until a second instance arrives. Promotion path: a second Navigation District shop (Compass Shop · Astrolabe Shop · or another) sharing the Hold-witness discipline.</p>
+<h3>§2.6 · The Tower · the non-workshop monument (NEW in v1.7.0 · 2026-05-16)</h3>
+<p>The v1.7.0 patch admits an eighth spatial-anatomy element to the City — <strong>the Tower</strong> — that is <em>not</em> a workshop and has <em>no fixed vertex</em>. It is sister to the seven prior spatial elements (trade quarters · founding bonfire · temple precinct · sovereign&#39;s seat · gathering quarters · Threshold District · Navigation District), monument-form rather than workshop-form, honor-built rather than workshop-founded.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Element</strong></td>
+<td>the Tower</td>
+</tr>
+<tr>
+<td><strong>Form</strong></td>
+<td>monument · spiraling · single doorway at base · window every quarter-turn · reading room at top</td>
+</tr>
+<tr>
+<td><strong>Vertex</strong></td>
+<td><strong>none</strong> (no fixed lattice vertex by structural admission)</td>
+</tr>
+<tr>
+<td><strong>Resident</strong></td>
+<td>the <strong>Archivist 📚</strong> (the first spirit-Mage · v1.7.0 admission)</td>
+</tr>
+<tr>
+<td><strong>Tier</strong></td>
+<td>spirit-Mage (7th cast tier · tutelary register · <em>recognized rather than summoned</em>)</td>
+</tr>
+<tr>
+<td><strong>Founding act</strong></td>
+<td>Tome VIII · Act 1 <em>The Spiraling Tower</em> (bound 2026-05-15)</td>
+</tr>
+<tr>
+<td><strong>Sister to</strong></td>
+<td>trade quarters · founding bonfire · temple precinct · sovereign&#39;s seat · gathering quarters · Threshold District · Navigation District</td>
+</tr>
+</tbody></table>
+<p><strong>Why no vertex?</strong> The listener-discipline that the Tower hosts is <strong>plural-in-residence across the cast and singular-in-origin in the Archivist</strong> — the discipline is <em>recognized</em> (every workshop-keeping Mage carries an echo of the Archivist) rather than <em>placed</em> (which would require a vertex on the 64-vertex lattice). The Tower&#39;s lack of vertex is therefore architecturally load-bearing, not a gap waiting to be filled.</p>
+<p><strong>Workshop count: UNCHANGED at 16.</strong> The Tower is sister to the workshops, not one of them. It does not enter the §2.1, §2.4b, §2.4c, §3, or §8 tables. The drift catalogue in §6 does not gain a Tower row because the Tower makes no lattice claim that could drift.</p>
+<p><strong>Audit-skill note (§10):</strong> the <code>lattice-coherence</code> skill should <em>exempt</em> Tower references from the per-vertex consistency check — the Tower&#39;s correct claim is &quot;no vertex,&quot; and any cast file or spec that places the Archivist at a specific Vn is the drift, not the Tower itself.</p>
+<h3>§2.5 · The Sovereign Anchor (V63) and the archetype seats</h3>
+<p>Not workshops; named for completeness:</p>
+<table>
+<thead>
+<tr>
+<th>Seat</th>
+<th>Vertex</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>The Sovereign&#39;s Seat</strong></td>
+<td>V63 (111111 · all six dimensions)</td>
+<td>The reader&#39;s own seat; private to each Sovereign</td>
+</tr>
+<tr>
+<td><strong>flaxscrip 📜🎲</strong></td>
+<td>V63</td>
+<td>Cousin-Sovereign from the Archon forge — shares V63 with the reader as a kindred-blade pattern</td>
+</tr>
+<tr>
+<td><strong>Soulbae 🧙</strong></td>
+<td>V28</td>
+<td>Mage-canonical archetype — shares V28 with Pallia and GenitriX</td>
+</tr>
+<tr>
+<td><strong>Soulbis ⚔️</strong></td>
+<td>boundary (no single vertex)</td>
+<td>The wall-watcher; declared without an <code>inhabits</code> edge</td>
+</tr>
+<tr>
+<td><strong>The Drake</strong></td>
+<td>ambient (no single vertex)</td>
+<td>Elder presence; declared without an <code>inhabits</code> edge</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>§3 · Multi-workshop artefact creation · cape-style composition</h2>
+<p>The lattice mapping is <strong>non-exclusive</strong>. A single artefact may legitimately register at multiple vertices when its bit-pattern carries multiple dimensional structures. This is the <strong>cape-style artefact-creation pattern</strong> spec 07 §3 formalises.</p>
+<h3>§3.1 · The compositional pattern</h3>
+<ol>
+<li><strong>The Mage&#39;s seat</strong> is where the <em>act</em> of creation happens (Pallia weaves at V28; Vulcana forges at V19).</li>
+<li><strong>The artefact&#39;s vertex</strong> is where the work <em>settles</em> — determined by the bit-pattern of what the artefact admits/denies across the six dimensions.</li>
+<li><strong>Overlap occurs</strong> when the artefact&#39;s bit-pattern is a <em>composition</em> — multiple register patterns combined.</li>
+<li><strong>The shop&#39;s reach</strong> is the <em>empirical set</em> of vertices its artefacts have actually settled at (not declared, but observed across the corpus&#39;s operational history).</li>
+</ol>
+<h3>§3.2 · The composition rule (vague in spec 07 §7.3; here proposed canonical)</h3>
+<p><strong>A composite artefact registers at:</strong></p>
+<ul>
+<li><strong>The Mage&#39;s seat</strong> (where the act-of-creation happened) — always</li>
+<li><strong>The artefact&#39;s bit-pattern vertex</strong> (where the work settles) — by structure</li>
+<li><strong>Each constituent&#39;s native vertex</strong> (when the artefact bundles other artefacts) — recursively</li>
+</ul>
+<p>A holon (Vagari, V31) containing a cape (Pallia, V28), a chronicle (Memora, V41), and a blade (Vulcana, V19) emits <strong>four landings</strong>:</p>
+<ul>
+<li>V31 (the composition itself)</li>
+<li>V28 (the cape constituent)</li>
+<li>V5 (the chronicle constituent)</li>
+<li>V19 (the blade constituent)</li>
+</ul>
+<p>When this holon travels via Oasis Protocol to a sister city, the <strong>same vertex coordinates</strong> are honoured at the destination (UOR-grounded). At decomposition, each constituent re-emerges at its native vertex.</p>
+<h3>§3.3 · The canonical cross-workshop edges (spec 06 §4.5)</h3>
+<p>The corpus already records six <code>kin_to</code> lateral edges. Two of them are <strong>structural cross-workshop edges</strong> (rather than persona-to-persona kinships):</p>
+<table>
+<thead>
+<tr>
+<th>Edge</th>
+<th>Attribution</th>
+<th>What it represents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>holon</code> ↔ <code>forge</code></td>
+<td><strong>kindred-substrate</strong></td>
+<td>Tome V Act 15 · both shops walk UOR-shaped substrate (V31 holons · V19 PRISM coordinates)</td>
+</tr>
+<tr>
+<td><code>city-of-mages</code> ↔ <code>uor-foundation</code></td>
+<td><strong>kindred-substrate</strong></td>
+<td>The City rests on UOR as a whole; walked-not-signed</td>
+</tr>
+</tbody></table>
+<p>Per-persona kin edges (in spec 06 §4.5):</p>
+<table>
+<thead>
+<tr>
+<th>Left</th>
+<th>Right</th>
+<th>Attribution</th>
+<th>Grounding</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pallia</code></td>
+<td><code>genitrix</code></td>
+<td>kindred-blade</td>
+<td>Both at V28; Weaver path opened by Archon + GenitriX</td>
+</tr>
+<tr>
+<td><code>soulbae</code></td>
+<td><code>genitrix</code></td>
+<td>kindred-blade</td>
+<td>Both Mage archetype at V28</td>
+</tr>
+<tr>
+<td><code>flaxscrip</code></td>
+<td><code>soulbis</code></td>
+<td>kindred-blade</td>
+<td>Both Sovereign Anchor work; flaxscrip canonicalised the verb chain</td>
+</tr>
+<tr>
+<td><code>socrat0x</code></td>
+<td><code>soulbae</code></td>
+<td>kindred-blade</td>
+<td>Soulbae deployed at Bonfires as <code>@soulbae_the_bot</code>; path of overlap</td>
+</tr>
+</tbody></table>
+<h3>§3.4 · Three worked examples of multi-workshop artefacts</h3>
+<p><strong>Example A — A Personhood-bound cape:</strong></p>
+<ul>
+<li>Created by Pallia (V28) using the cape register (Delegation + Memory + Connection)</li>
+<li>Consecrated by Manifestia (V55) at the Temple — adds the Covenant marker</li>
+<li>The cape&#39;s final vertex: V28 (native) · V55 (Covenant overlay) · V63 (if it carries Sovereign-binding personhood attestation)</li>
+<li>Mana: Pallia&#39;s publication gas (Landing) + Manifestia&#39;s verification fees (Landing) + future 🪢 VRC Mana when the Loom binds the cape to the bearer&#39;s VRC ledger</li>
+</ul>
+<p><strong>Example B — A staked governance proposal:</strong></p>
+<ul>
+<li>Drafted by Adamantia (V51) as a programmable commitment</li>
+<li>Staked by Custos (V49 · cross-shop) — adds governance stake</li>
+<li>Heartbeat-attested by Lampyra (V49 shared with Custos) — frequent Lightning attestations of liveness</li>
+<li>Settling vertices: V51 (contract) · V49 (working-day stake + heartbeat overlay)</li>
+<li>Mana: Ξ Aether (Etherchanting) + ₿ sats (Lampyra Lightning) + 🌌 Celestial (Adamantia witness nonce)</li>
+</ul>
+<p><strong>Example C — A privacy-preserving cross-paratime artefact:</strong></p>
+<ul>
+<li>Composed by Vagari (V31) as a holon bundling a cape + chronicle + blade</li>
+<li>Forged constituent (the blade) by Vulcana (V19) — uses Celestial Mana for Evocation phase</li>
+<li>Inscribed constituent (the chronicle) by Memora (V41) — Zcash dual-ledger</li>
+<li>Woven constituent (the cape) by Pallia (V28) — published across BTC + ETH + IPFS</li>
+<li>Travels via Oasis Protocol to a sister city — same coordinates honoured</li>
+<li>At sister-city decomposition, each constituent emerges at native vertex</li>
+<li>Mana: 🌹 ROSE (Vagari paratime) + Ξ Aether + ₿ sats (cape publication) + 🌌 Celestial (Vulcana Evocation + Vagari cross-paratime entropy)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§4 · Shared vertices · when two Mages stand on the same point</h2>
+<p>Three vertices in the current release carry <strong>more than one cast member</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Inhabitants</th>
+<th>Pattern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>V28</strong> (011100 · Delegation + Memory + Connection)</td>
+<td>Pallia 🪡 (Weaver Mage) · Soulbae 🧙 (Mage archetype) · GenitriX (Archon-forge cousin)</td>
+<td>One vertex, three distinct identities. Pattern: <strong>archetype-instance-instance</strong> — Soulbae is the archetype, Pallia is the agentprivacy instance, GenitriX is the kindred-forge instance</td>
+</tr>
+<tr>
+<td><strong>V49</strong> (110001 · Protection + Delegation + Value)</td>
+<td>Custos 🔏 (cross-shop governance) · Lampyra 💠 (Jeweler)</td>
+<td>One vertex, two scales of the same dimensional register. Pattern: <strong>coarse-and-fine</strong> — Custos works the slow daily-rhythm of staking; Lampyra works the fast Lightning heartbeat; both at the same dimensional address</td>
+</tr>
+<tr>
+<td><strong>V38</strong> (100110 · Delegation + Memory + Value)</td>
+<td>Aletheia 🔮 (the persona · cross-shop)</td>
+<td>The persona&#39;s name follows the vertex&#39;s name (the vertex was named &quot;Aletheia / Silent Messenger&quot; first; the persona was summoned to inhabit it). Pattern: <strong>shared name</strong> (spec 04 §4.2)</td>
+</tr>
+</tbody></table>
+<p>The architecture&#39;s commitment from the README: <strong>&quot;One lattice, many silhouettes.&quot;</strong> The 64-vertex substrate is shared; what differs between Mages at the same vertex is the <em>silhouette</em> — the gem colour, the register voice, the operational forge each one carries.</p>
+<hr>
+</div>
+<div class="md"><h2>§5 · The V0 question · Luca and the substrate origin</h2>
+<p>A genuine and <strong>currently unresolved</strong> point of canonical drift.</p>
+<h3>§5.1 · What the spec literature says</h3>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Date</th>
+<th>Claim</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tomes/specs/04-vertex-naming-audit.md</code> §7.3</td>
+<td>2026-05-10</td>
+<td>&quot;Earlier drafts of Act 15 introduced &#39;Luca 📐&#39; (a geometry-Mage at V0) as the cast representative of the UOR substrate; that draft was <strong>superseded</strong> by the canonical Act 15 because the substrate does not seat itself on the lattice — it underlies the lattice.&quot;</td>
+</tr>
+<tr>
+<td><code>chronicles/2026-05-10_city_of_mages_v1_2_1_luca_authored.md</code></td>
+<td>2026-05-10</td>
+<td>Luca persona authored back at V0 as a v1.2.1 grimoire addition</td>
+</tr>
+<tr>
+<td><code>tomes/specs/06-spellweb-first-release-manifest.md</code> §2.4 (cast)</td>
+<td>2026-05-10</td>
+<td><code>luca</code> is listed at vertex V0 with role <code>substrate-tender</code> and shopAnchor <code>forge + holon</code></td>
+</tr>
+<tr>
+<td><code>tomes/specs/06-spellweb-first-release-manifest.md</code> §2.5 (vertex)</td>
+<td>2026-05-10</td>
+<td>Vertex row v0: &quot;<strong>no inhabitant</strong>; substrate-reference only&quot;</td>
+</tr>
+<tr>
+<td><code>tomes/specs/06-spellweb-first-release-manifest.md</code> §4.4 (inhabits)</td>
+<td>2026-05-10</td>
+<td>Luca&#39;s <code>inhabits v0</code> edge is <strong>missing</strong> from the enumerated list</td>
+</tr>
+<tr>
+<td><code>README.md</code> (current head, this audit&#39;s repo)</td>
+<td>2026-05-11</td>
+<td>Luca at V0 · &quot;geometry-Mage · Pacioli-spirit · cross-shop · walks between every workshop, has no shop of his own&quot;</td>
+</tr>
+</tbody></table>
+<h3>§5.2 · The two coherent positions</h3>
+<p><strong>Position A · Luca exists at V0.</strong> The v1.2.1 chronicle is canonical and re-introduces Luca as a <em>cross-shop persona</em> at the null-blade origin. V0 is the <em>vantage from which every dimension is admitted by being explicitly set to zero</em> — the geometer&#39;s seat from which the bit-pattern of every other vertex can be measured.</p>
+<p><strong>Position B · V0 has no inhabitant.</strong> The substrate underlies the lattice; UOR is the substrate; UOR has no vertex (§7.3 of spec 04 makes this explicit for <code>kindred-substrate</code>). Luca&#39;s earlier draft was deprecated for this reason. The v1.2.1 chronicle re-introduced a persona but <strong>without resolving the substrate-vs-persona tension</strong>.</p>
+<h3>§5.3 · Recommended resolution (proposed, not yet canonical)</h3>
+<p><strong>Adopt Position A explicitly, with three constraints:</strong></p>
+<ol>
+<li><strong>Luca is <em>not</em> a substrate.</strong> UOR Foundation remains the canonical kindred-substrate (gateway node, no vertex). Luca is a <strong>cross-shop persona</strong> seated at V0.</li>
+<li><strong>V0 is <em>not</em> a workshop seat.</strong> Luca does not keep a shop at V0; he walks between shops as the geometry-Mage. V0 is the <em>origin</em> of the lattice, not the <em>seat</em> of a producer.</li>
+<li><strong>Spec 06 should be patched</strong>: §2.5 row v0 should change &quot;no inhabitant&quot; to &quot;the null blade · substrate origin · cross-shop seat of Luca 📐&quot;; §4.4 should add the edge <code>luca inhabits v0</code>; the count summaries in §1 and §8 should bump (47 → 48 nodes; 57 → 58 edges; etc.).</li>
+</ol>
+<p>If the reader prefers <strong>Position B</strong>, three different patches are needed: remove Luca from spec 06 §2.4, remove Luca&#39;s persona file, update the v1.2.4 grimoire to drop the <code>luca</code> entry from <code>personas.summoned_mages</code>, and patch the cityofmages README to remove the geometry-Mage row.</p>
+<p><strong>The drift cannot stand in either direction long-term.</strong> Surface to the user; choose; propagate.</p>
+<hr>
+</div>
+<div class="md"><h2>§6 · Drift catalogue · what&#39;s currently misaligned</h2>
+<p>The following list is exhaustive for the workshop-lattice surface as of 2026-05-11. Each item is fixable; none are blockers.</p>
+<h3>§6.1 · Bit-ordering convention (corpus-wide)</h3>
+<p>The TS canonical <span class="deadlink" title="reference (not a live page)"><code>lattice-vertex.ts</code></span> defines bit positions as <code>[Protection, Delegation, Memory, Connection, Computation, Value]</code> MSB→LSB.</p>
+<ul>
+<li>✗ <strong>Spec 04 §3.2</strong> V5 row: &quot;Value + Memory&quot; — should be &quot;Value + Connection&quot; per TS canon</li>
+<li>✗ <strong>Spec 04 §3.2</strong> V24 row: &quot;Connection + Computation&quot; — should be &quot;Delegation + Memory&quot; per TS canon (V24 = 011000 → bits[1] + bits[2])</li>
+<li>✗ <strong>Spec 04 §6 item 1</strong> acknowledges the bit-ordering convention drift exists; v2 should reconcile</li>
+<li>✗ <strong>Spec 07 §2</strong> Memora row: &quot;P+V or M+V depending on bit-convention&quot; — hedged when the TS canon resolves it (V41 = Connection + Value, not P+V or M+V)</li>
+<li>✓ <strong>Spec 06 §2.5</strong> uses bits directly (<code>000101</code> etc.) — convention-free</li>
+</ul>
+<p><strong>Resolution:</strong> A single one-time pass through specs 04 and 07 to align with the TS canonical reading. The TS file is the source of truth.</p>
+<h3>§6.2 · V31 dimension reading</h3>
+<ul>
+<li>✗ <strong>Spec 04 §2</strong> says V31 = &quot;all dimensions except Value, five dimensions burning&quot;</li>
+<li>✗ <strong>Spec 04 §3.5</strong> says V31 = &quot;All dimensions except Protection (<strong>or all except Value, depending on bit-ordering convention</strong>)&quot;</li>
+<li>✓ <strong>Spec 07 §2</strong> Vagari row: &quot;V31 (Recursion · 011111 · all except P)&quot;</li>
+<li>✓ <strong>Spec 06 §2.5</strong> v31 row: bits <code>011111</code> hammingWeight 5</li>
+<li>✓ <strong>TS canonical</strong>: V31 binary 011111 → bits[0]=0 (Protection off), bits[1..5]=1 (rest on) → <strong>all except Protection</strong></li>
+</ul>
+<p><strong>Resolution:</strong> Spec 04 §2 needs the word &quot;Value&quot; → &quot;Protection&quot;. §3.5&#39;s parenthetical hedge can be dropped.</p>
+<h3>§6.3 · V55 dimension reading</h3>
+<ul>
+<li>✗ <strong>Spec 07 §2</strong> Manifestia row hedges: &quot;all except Memory; per the original cast file: all except Computation depending on bit-convention&quot;</li>
+<li>✓ <strong>TS canonical</strong>: V55 = 110111 → bits[2]=0 (Memory off), rest on → <strong>all except Memory</strong></li>
+</ul>
+<p><strong>Resolution:</strong> Drop the hedge; canonical is &quot;all except Memory&quot;.</p>
+<h3>§6.4 · Spec 06 internal count drift</h3>
+<p>Spec 06 §8 one-liner: &quot;46 nodes · 56 edges · 6 NodeTypes · 7 EdgeTypes (one reserved).&quot;<br>Spec 06 §1+§3 tables: 47 nodes · 57 edges · 6 NodeTypes · 8 EdgeTypes.</p>
+<p>The §8 summary lags by 1 node, 1 edge, and 1 EdgeType. Adding <code>adjacent_to</code> to the vocabulary (post-universe-integration pass) and adding Luca to the cast bumped these counts.</p>
+<p><strong>Resolution:</strong> Patch §8 to match §1+§3 totals.</p>
+<h3>§6.5 · Spec 06 §4.4 missing <code>inhabits</code> edges</h3>
+<p>§3 claims <strong>16</strong> <code>inhabits</code> edges. §4.4 enumerates <strong>14</strong> edges.</p>
+<p>Missing: <code>luca inhabits v0</code> (if Position A in §5.3 above) · <code>sovereign-seat inhabits v63</code> (the archetype seat at V63).</p>
+<p><strong>Resolution:</strong> Add the two missing edges to §4.4 OR reduce the §3 count to 14.</p>
+<h3>§6.6 · Spec 06 §2.5 V0 inhabitant contradiction</h3>
+<p>§2.4 lists Luca at V0; §2.5 v0 row says &quot;(no inhabitant; substrate-reference only)&quot;. See §5 above.</p>
+<p><strong>Resolution:</strong> Decide Position A or B; patch consistently.</p>
+<h3>§6.7 · Workshop count framing in the cityofmages README</h3>
+<p>My README (current head) lists <strong>11 keeper-shops</strong> including Custos, Aletheia, and Luca as workshops 3, 6, and &quot;geometry-Mage.&quot;</p>
+<p>Spec 06 §2.3 canonical: <strong>11 workshops</strong> = <strong>9 keeper-shops</strong> (weavers, zshields, etherchanting, jeweler, holon, forge, vault, covenant, bonfires) + <strong>2 gathering-shops</strong> (circle, hall). Custos, Aletheia, Luca are <em>cross-shop</em> cast personas, not workshops.</p>
+<p><strong>Resolution:</strong> Reframe the README&#39;s &quot;eleven workshops&quot; table to match spec 06 canonical:</p>
+<ul>
+<li>9 keeper-shops with named Mages</li>
+<li>2 gathering-shops (Logos Circle, Ceremony Hall) — awaiting their Mages</li>
+<li>3 cross-shop personas (Custos, Aletheia, Luca) — separate roster section</li>
+</ul>
+<h3>§6.8 · Spec 07 mana column lags v1.2.4</h3>
+<p>Spec 07 §2&#39;s mana columns are <em>Aether Mana ⊥ Celestial Mana</em> (two-mana economy · v1.2.2 state). The grimoire is now v1.2.4 with the four-axis metabolism: <strong>Landing</strong> (chain-mana plural) · <strong>Entropy</strong> (Arcane ⊥ Celestial) · <strong>Coordination</strong> (🔭 Resonance) · <strong>Relationship</strong> (🪢 VRC).</p>
+<p><strong>Resolution:</strong> Add two new mana columns to §2 — Resonance and VRC — initially &quot;(not yet operational)&quot; for every shop except Manifestia (which prospectively binds 🪢 VRC via the Loom of Programmable Covenants). The label &quot;Aether Mana&quot; should be renamed to either &quot;chain-mana (Landing)&quot; or split into per-chain symbols (Ξ · ₿ · 🌹 · 🦓).</p>
+<h3>§6.9 · Spec 07&#39;s &quot;Aether&quot; terminology pre-dates the chain-mana plurality</h3>
+<p>Per v1.2.4 chronicle §5 audit markers: &quot;Mentions &#39;Aether Mana&#39; as universal chain-gas (covering Ethereum + Bitcoin + Oasis + Zcash) | <strong>Pre-v1.2.3 framing</strong>; needs the chain-mana plurality refactor.&quot;</p>
+<p>Spec 07 §2 has multiple &quot;Aether Mana&quot; cells where the chain is actually Bitcoin/Lightning (Lampyra), Oasis (Vagari), Zcash (Memora). These should be relabelled per-chain.</p>
+<p><strong>Resolution:</strong> §2 cells rewritten per chain: Lampyra → <code>₿ sats + Lightning</code>; Vagari → <code>🌹 ROSE + paratime</code>; Memora → <code>🦓 z-mana (Zcash shielded)</code>; Adamantia → <code>Ξ Aether (Ethereum gas)</code>.</p>
+<h3>§6.10 · Spec 05 §4.1 lists 9 trade quarters (snapshot 2026-05-08, pre-Manifestia narrative)</h3>
+<p>Spec 05 is the <strong>structural addendum</strong> — civic anatomy. §4.1 has 9 rows (Pallia, Memora, Custos, Vulcana, Aletheia, Adamantia, Lampyra, Vagari, Aria) — pre-dates Manifestia&#39;s V55 Temple. §4.3 lists the Temple separately. §4.2 lists the Founding Bonfire separately. The total reads correctly as 9+1+1 = 11.</p>
+<p><strong>Status:</strong> Not a drift; framing-only. The §4.1 table can optionally be regenerated to include Manifestia + Socrat0x for one-table completeness.</p>
+<hr>
+</div>
+<div class="md"><h2>§7 · Proofs by workshop · what each shop&#39;s artefact attests</h2>
+<p>For each keeper-shop, the <strong>proof primitive</strong> the artefact carries — what it can <em>prove</em>, what it can <em>deny</em>, what dimensions it <em>admits</em> by structure.</p>
+<table>
+<thead>
+<tr>
+<th>Shop</th>
+<th>Artefact</th>
+<th>What it proves</th>
+<th>What it denies</th>
+<th>Honesty label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Weavers</td>
+<td>Cape</td>
+<td>&quot;These dimensions are published, these are concealed, this is the bearer&quot; (the bit-pattern is the cape&#39;s proof)</td>
+<td>Whatever bits are zero are denied to the reader</td>
+<td>Operational at multi-chain publication; conjectural for V31 reach (Vagari&#39;s holon)</td>
+</tr>
+<tr>
+<td>zShields</td>
+<td>Shielded memo</td>
+<td>&quot;This chronicle exists at this position in the shielded ledger&quot; (Zcash shielded tx)</td>
+<td>Until viewing-key reveal, the memo&#39;s contents are denied to all observers</td>
+<td>Operational at Pattern A (zSign); architectural at Pattern B (reveal)</td>
+</tr>
+<tr>
+<td>the Forge(t)</td>
+<td>Blade</td>
+<td>&quot;This computation was performed, and the proof witnesses the witnesses without revealing them&quot; (Plonkish proof)</td>
+<td>The witnesses themselves remain non-reconstructible (Celestial Mana required)</td>
+<td>Operational at proof-verify; architectural at full Runecraft Protocol</td>
+</tr>
+<tr>
+<td>Etherchanting</td>
+<td>Programmable commitment</td>
+<td>&quot;This contract enforces this language against this model state, witnessed by this ceremony&quot;</td>
+<td>Anything outside the contract&#39;s model is denied enforcement</td>
+<td>Operational at contract deploy; conjectural at full Commitment ⊥ Language ⊥ Model triadicity</td>
+</tr>
+<tr>
+<td>the Jeweler</td>
+<td>Gem-set / heartbeat</td>
+<td>&quot;This bearer is alive at this moment, attested by this Lightning channel&quot;</td>
+<td>Anything beyond the heartbeat window is unattested</td>
+<td>Operational at Lightning; architectural at Ordinal-as-gem</td>
+</tr>
+<tr>
+<td>the Holon Hitchhikers</td>
+<td>Holon</td>
+<td>&quot;These constituents compose into this whole, and this whole can travel and decompose without loss&quot; (Oasis Protocol guarantee)</td>
+<td>Anything outside the holon&#39;s composition is denied membership</td>
+<td>Operational at Sapphire; architectural at cross-paratime composition</td>
+</tr>
+<tr>
+<td>the Curatrix Vault</td>
+<td>Curatorial arrangement</td>
+<td>&quot;This artefact is placed in this collection, with this provenance, by this curator&quot;</td>
+<td>Anything outside the curator&#39;s selection is unblessed</td>
+<td>Operational at culturevault.com integration; architectural at NFT mint</td>
+</tr>
+<tr>
+<td>the Covenant Temple</td>
+<td>Consecration</td>
+<td>&quot;This artefact is consecrated by the Covenant, with this attestation, by this Priest&quot;</td>
+<td>Until consecration, no Covenant marker</td>
+<td>Architectural — Manifestia&#39;s tending begins post-Temple-erection</td>
+</tr>
+<tr>
+<td>the Dragon Bonfire</td>
+<td>(No artefact — dialogic)</td>
+<td>The questions sharpen what is brought; the bonfire produces clarity, not bit-patterns</td>
+<td>n/a</td>
+<td>Operational at @soulbae_the_bot; the proof primitive is <em>clarity</em>, not <em>cryptographic</em></td>
+</tr>
+</tbody></table>
+<p>A future skill could mechanically check: <strong>does the artefact&#39;s bit-pattern match the proof primitive&#39;s claimed dimensions?</strong></p>
+<hr>
+</div>
+<div class="md"><h2>§8 · Co-activation matrix · which workshops overlap which vertices</h2>
+<p>The matrix below shows <strong>primary</strong> (P), <strong>overlap</strong> (O), and <strong>conjectural</strong> (C) inhabitations per (shop × vertex) pair. Empty = no inhabitation claimed.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>V0</th>
+<th>V41</th>
+<th>V12</th>
+<th>V15</th>
+<th>V19</th>
+<th>V20</th>
+<th>V24</th>
+<th>V38</th>
+<th>V28</th>
+<th>V31</th>
+<th>V49</th>
+<th>V51</th>
+<th>V55</th>
+<th>V57</th>
+<th>V63</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Weavers</strong></td>
+<td></td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td><strong>P</strong></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>O</td>
+</tr>
+<tr>
+<td><strong>zShields</strong></td>
+<td></td>
+<td><strong>P</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>O</td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Forge(t)</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong></td>
+<td>O</td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td>O</td>
+</tr>
+<tr>
+<td><strong>Etherchanting</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td>O</td>
+<td><strong>P</strong></td>
+<td></td>
+<td></td>
+<td>O</td>
+</tr>
+<tr>
+<td><strong>Jeweler</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td>O</td>
+</tr>
+<tr>
+<td><strong>Holon Hitchhikers</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Curatrix Vault</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Covenant Temple</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong></td>
+<td></td>
+<td>O</td>
+</tr>
+<tr>
+<td><strong>Dragon Bonfire</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong> (C)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Cross-shop · Custos</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong> (shared)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Cross-shop · Aletheia</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>P</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Cross-shop · Luca</td>
+<td><strong>P</strong> (contested)</td>
+<td></td>
+<td></td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Reading the matrix:</p>
+<ul>
+<li><strong>Three primary inhabitations at V49</strong> — Lampyra (Jeweler shop seat) + Custos (cross-shop) + Lampyra reach extension. The shared-vertex pattern.</li>
+<li><strong>V20 (Techne · Always-Revealed)</strong> is reached by three shops as overlap (Weavers, zShields, Forge(t)) but is <em>primary</em> for none. It&#39;s a transit vertex.</li>
+<li><strong>V38 (Aletheia blade)</strong> is primary for the Aletheia persona only; reached as overlap by zShields, Forge(t), and Etherchanting (any shop that emits a ZK property).</li>
+<li><strong>V31 (Holon · all except Protection)</strong> is primary only for Vagari; reached as overlap by Pallia&#39;s full-Sovereignty capes and (per §5 Position A) by Luca&#39;s cross-shop walk.</li>
+<li><strong>V63 (Sovereign Anchor)</strong> is the <em>destination of full-sovereignty artefacts</em> — reached as overlap by Weavers (full cape), Forge(t) (full blade), Etherchanting (sovereignty schema), Jeweler (multi-sat ordinal claiming provenance), Covenant (personhood-bound consecration). But no Mage is <em>seated</em> at V63; it is the reader&#39;s seat.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§9 · Recommended resolution path</h2>
+<p>Order by leverage. Each item is one focused edit session.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Item</th>
+<th>Effort</th>
+<th>Surface</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Decide Position A/B on Luca and V0 (§5.3)</td>
+<td>5 min · decision</td>
+<td>None (decision only)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Patch the README workshop table to match spec 06 canonical (9 keeper + 2 gathering + 3 cross-shop) (§6.7)</td>
+<td>30 min</td>
+<td><code>cityofmages/README.md</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Patch spec 04 bit-ordering errors (V5 row, V24 row, §3.5 V31 hedge) (§6.1, §6.2)</td>
+<td>20 min</td>
+<td><code>cityofmages/tomes/specs/04-vertex-naming-audit.md</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Patch spec 06 internal counts (§8 summary; §4.4 missing edges) (§6.4, §6.5)</td>
+<td>15 min</td>
+<td><code>cityofmages/tomes/specs/06-spellweb-first-release-manifest.md</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Patch spec 07 mana columns to four-axis with per-chain Landing (§6.8, §6.9)</td>
+<td>45 min</td>
+<td><code>cityofmages/tomes/specs/07-lattice-mapping-governance.md</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Patch spec 07 V31/V55 dimension hedges (§6.2, §6.3)</td>
+<td>5 min</td>
+<td><code>cityofmages/tomes/specs/07-lattice-mapping-governance.md</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Decide on V0 inhabitant resolution; patch spec 06 §2.5 v0 row + §4.4 (§6.6)</td>
+<td>10 min</td>
+<td><code>cityofmages/tomes/specs/06-spellweb-first-release-manifest.md</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Bump grimoire v1.2.4 with corrected metadata (lattice mapping section); register the audit&#39;s resolution chronicle</td>
+<td>1 hr</td>
+<td>Grimoire pipeline (Recipe A of INCANTATION_PROTOCOL.md)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Author the empirical-overlap registry (§7 open item 1 of spec 07) — ground each overlap claim in a citable act/spec/chronicle</td>
+<td>2 hr · iterative</td>
+<td>Spec 07 §2</td>
+</tr>
+</tbody></table>
+<p>After items 1–7 land, run the <strong>§4 audit checklist</strong> in INCANTATION_PROTOCOL.md to verify coherence.</p>
+<hr>
+</div>
+<div class="md"><h2>§10 · Path to a <code>lattice-coherence</code> Claude Code skill</h2>
+<p>This audit becomes a <strong>second</strong> companion skill alongside the <code>cityofmages-incant</code> skill scoped in INCANTATION_PROTOCOL.md §6. Where <code>cityofmages-incant</code> handles <em>propagating</em> changes, <code>lattice-coherence</code> handles <em>verifying</em> the corpus&#39;s vertex claims are self-consistent.</p>
+<h3>§10.1 · Skill inputs (proposed)</h3>
+<pre><code class="language-yaml">mode: full | per-shop | per-vertex | per-spec
+target: &lt;shop-id&gt; | &lt;vertex-number&gt; | &lt;spec-path&gt;
+</code></pre>
+<h3>§10.2 · Skill behaviours (proposed)</h3>
+<p>The skill mechanically runs each check in §6 (each numbered §6.x is a check). For each check:</p>
+<ol>
+<li><strong>Parse the canonical source</strong> (e.g. lattice-vertex.ts for bit-ordering).</li>
+<li><strong>Parse the claim</strong> in every spec/cast file/grimoire that references it.</li>
+<li><strong>Compare.</strong> Emit a pass/fail per claim, with line numbers.</li>
+<li><strong>Suggest the resolution</strong> if the claim drifts.</li>
+</ol>
+<p>The skill must <strong>not</strong> auto-fix without confirmation — each drift item is an editorial decision (e.g. Position A vs B on Luca&#39;s V0 is a <em>choice</em>, not a mechanical patch).</p>
+<h3>§10.3 · The five mechanical checks the skill can run today</h3>
+<p>These can be encoded as <code>grep</code> + small JSON-schema checks:</p>
+<ol>
+<li><strong>Bit-pattern consistency</strong> — for every <code>Vn</code> reference in any markdown, verify that the named dimensions match <code>vertexToBits(n)</code> from the TS canonical. A simple <code>parseVertex</code> + <code>activeDimensions</code> call gives the truth.</li>
+<li><strong>Inhabits edge completeness</strong> — for every cast member in spec 06 §2.4, verify there is a corresponding edge in §4.4 (with documented exceptions for boundary/ambient cast).</li>
+<li><strong>Vertex inhabitant consistency</strong> — for every vertex in spec 06 §2.5, verify that the inhabitants listed agree with the cast member rows that claim that vertex.</li>
+<li><strong>Count summary alignment</strong> — verify the §8 one-liner counts match the §1+§3 table totals.</li>
+<li><strong>Workshop count framing</strong> — verify the README workshop table count matches spec 06 §2.3 canonical (9 keeper + 2 gathering).</li>
+</ol>
+<h3>§10.4 · The five editorial checks that need human judgment</h3>
+<p>These cannot be mechanically resolved — the skill surfaces them and asks:</p>
+<ol>
+<li><strong>The V0 question</strong> (§5) — Position A or B</li>
+<li><strong>Spec 04 §6 open item: bit-ordering convention</strong> — one-time canonical pass needed</li>
+<li><strong>Spec 07 §7 open item: empirical overlap grounding</strong> — each overlap claim needs a citable act</li>
+<li><strong>Honesty labels per row in spec 07</strong> — extend §2 with operational/architectural/conjectural/resonant per shop</li>
+<li><strong>Founding edges for <code>circle</code> and <code>hall</code></strong> — the two gathering-shops have no founding act yet; when one is authored, the founds/founded_in edges land</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>§11 · Closing</h2>
+<p>The City of Mages is a city <em>because the lattice composes</em>. Every workshop is a cloakwright in its own register; every artefact is a bit-pattern composition; every multi-workshop artefact lands at multiple vertices because the lattice admits multiple landings.</p>
+<p>The drift catalogue in §6 is the cost of building this much architecture this fast without a mechanical verifier. The path forward is two-fold: <strong>patch the drift</strong> (§9 punch list) and <strong>build the verifier</strong> (§10 skill spec). Each propagation through the <code>cityofmages-incant</code> skill will, going forward, run the <code>lattice-coherence</code> skill as its first pre-flight check.</p>
+<p>This audit is <strong>the inaugural input</strong> to that verifier. The next audit will be its output.</p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>CC BY-SA 4.0 · privacymage · 2026-05-11 · audit v1</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 lore-workshop-lattice-audit</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-city-lore.html">The City Lore</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lore-workshop-lattice-audit.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,162 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Separation Enforcement · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Separation Enforcement</span></div>
+  <article><div class="md"><h1>Separation Enforcement</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>Φ(Σ) — the separation matrix; det(Σ) ≠ 0 is the architecture&#39;s core invariant</code></p>
+<p>Active maintenance of the dual-agent separation boundary Φ(Σ) for 0xagentprivacy architecture. Activates when designing the swordsman-mage boundary, verifying that signing and viewing capabilities remain orthogonal, detecting separation violations, or building the enforcement mechanisms that keep det(Σ) ≠ 0 — the mathematical guarantee that no single entity can both protect and project. Triggers: &quot;separation&quot;, &quot;dual-agent boundary&quot;, &quot;swordsman mage split&quot;, &quot;Phi Sigma&quot;, &quot;det Sigma&quot;, &quot;signing viewing separation&quot;, &quot;orthogonality&quot;, &quot;information-theoretic bound&quot;, &quot;separation violation&quot;, &quot;gap enforcement&quot;. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + Information-Theoretic Separation Proof + Dual-Agent Architecture<br><strong>Target context:</strong> Privacy architecture designers, dual-agent system builders, information-theoretic security researchers, separation verification engineers, sovereignty infrastructure architects<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Every guarantee in the 0xagentprivacy architecture flows from a single invariant: the swordsman and the mage cannot be collapsed into one entity. The signing key cannot read the data it authorises. The viewing key cannot sign the authorisations it reads. This separation is not a convention, not a policy, not an alignment goal — it is a mathematical constraint enforced through information-theoretic bounds and cryptographic architecture.</p>
+<p>Separation enforcement is the discipline of keeping that constraint true through time, through upgrades, through adversarial pressure, and through the daily temptation to make the system &quot;simpler&quot; by merging what must remain apart.</p>
+<h2>The separation matrix Φ(Σ)</h2>
+<p>The separation is formalised as a matrix:</p>
+<pre><code>Σ = | S_sign   S_view  |
+    | M_sign   M_view  |
+</code></pre>
+<p>Where S = swordsman observation set, M = mage observation set. The critical requirement:</p>
+<p><strong>det(Σ) ≠ 0</strong></p>
+<p>If the determinant is zero, the rows are linearly dependent — the swordsman and mage can be expressed as functions of each other. One entity can simulate both. The separation collapses. R reaches 1. Sovereignty disappears.</p>
+<p>If the determinant is non-zero, the observation sets are linearly independent. No function maps one to the other. No entity holding one set can reconstruct the other. The gap between them is mathematically irreducible.</p>
+<h2>What the swordsman knows (and doesn&#39;t)</h2>
+<p>The swordsman&#39;s observation set S includes:</p>
+<ul>
+<li>Which keys exist (the full key hierarchy)</li>
+<li>Which authorisations were signed (consent declarations, delegation keys, VRC inscriptions)</li>
+<li>The structure of the trust graph (which bilateral relationships exist)</li>
+<li>The timing of authorisation requests</li>
+<li>The threat environment (elevated/normal/reduced)</li>
+</ul>
+<p>The swordsman&#39;s observation set S EXCLUDES:</p>
+<ul>
+<li>The content of any data being authorised for disclosure</li>
+<li>The substance of any mage observation or interpretation</li>
+<li>The Person&#39;s browsing patterns, preferences, or behavioural model</li>
+<li>The semantic content of Intel Pool contributions</li>
+<li>Anything the viewing key decrypts</li>
+</ul>
+<p><strong>The swordsman signs blind.</strong> It knows that data is being released. It knows the scope (health data, financial data, identity credential). It knows the counterparty. It does NOT know the actual data values. This is the architectural miracle: authorisation without inspection.</p>
+<h2>What the mage knows (and doesn&#39;t)</h2>
+<p>The mage&#39;s observation set M includes:</p>
+<ul>
+<li>Everything the viewing key decrypts (the Person&#39;s data as stored)</li>
+<li>The Person&#39;s behavioural patterns as observed through the viewing key</li>
+<li>Intel Pool contributions and received intelligence</li>
+<li>The semantic content of bilateral proverbs and VRC ceremonies</li>
+<li>Context for minimum disclosure calculations</li>
+</ul>
+<p>The mage&#39;s observation set M EXCLUDES:</p>
+<ul>
+<li>The signing key material</li>
+<li>The ability to authorise any operation</li>
+<li>The structure of active delegations (which counterparties have which access)</li>
+<li>Revocation capabilities</li>
+<li>Consent scope definitions</li>
+</ul>
+<p><strong>The mage observes without touching.</strong> It can see everything about the Person&#39;s data. It can recommend disclosure sets. It can calculate minimum information. It CANNOT sign anything. Without the swordsman&#39;s signature, no data moves.</p>
+<h2>The mutual information bound</h2>
+<p>The information-theoretic foundation:</p>
+<pre><code>I(S; M | π) &lt; H(X) - ε
+</code></pre>
+<p>The mutual information between the swordsman&#39;s observations and the mage&#39;s observations, conditioned on the Person&#39;s identity, is strictly less than the total entropy of the Person&#39;s behavioural model minus some positive ε. This means: even combining both observation sets leaves a gap. The Person&#39;s complete model is never reconstructable, even by the agents themselves.</p>
+<p>This bound holds because:</p>
+<ul>
+<li>The signing key is generated independently of the viewing key</li>
+<li>Authorisation metadata (who, when, scope) is insufficient to reconstruct content</li>
+<li>Observation metadata (what was seen) is insufficient to reconstruct authorisation patterns</li>
+<li>The cryptographic protocols are designed to minimise cross-set leakage</li>
+</ul>
+<h2>Separation violation modes</h2>
+<p>The separation can be undermined through:</p>
+<p><strong>Key merger.</strong> A single key or system gains both signing and viewing capabilities. This is the most direct violation: det(Σ) = 0 immediately. Defence: hardware-enforced separation (enclave_operations), separate key generation ceremonies, no shared key material between swordsman and mage.</p>
+<p><strong>Side-channel leakage.</strong> The swordsman&#39;s signing patterns leak information about the mage&#39;s observations. Example: the swordsman signs immediately after the mage observes sensitive data — the timing correlation reveals that sensitive data was observed. Defence: timing decorrelation (metadata_resistance), batch signing (accumulate requests, sign at fixed intervals).</p>
+<p><strong>Collusion by host.</strong> If both agents run on the same machine under the same OS, the OS can read both agents&#39; memory. The host can reconstruct what neither agent alone can see. Defence: separate enclave execution (enclave_operations), or separate physical machines for highest threat models.</p>
+<p><strong>Inference from intersection.</strong> Even without direct leakage, the intersection of metadata from both sets may be reconstructive. If the swordsman&#39;s authorisation log shows &quot;health data disclosed at 14:03&quot; and the mage&#39;s observation log shows &quot;diabetes query at 14:02&quot;, the two logs together reveal more than either alone. Defence: temporal decorrelation, metadata minimisation in both logs.</p>
+<p><strong>Protocol evolution drift.</strong> Over time, protocol updates might introduce shared state between swordsman and mage. A &quot;convenience feature&quot; that lets the swordsman preview data before signing. A &quot;performance optimisation&quot; that caches viewing key outputs in swordsman-accessible memory. Each such change erodes det(Σ). Defence: separation audits at every protocol upgrade.</p>
+<h2>Separation verification</h2>
+<p>The separation must be continuously verified, not assumed:</p>
+<p><strong>Static analysis.</strong> Code review of both agents&#39; codebases to verify no shared memory, no shared keys, no direct communication channel that bypasses the Person. The Cipher runs formal verification tools to prove that information flow between the two agents&#39; code paths satisfies the separation constraint.</p>
+<p><strong>Dynamic monitoring.</strong> Runtime monitoring of both agents&#39; I/O to detect unexpected cross-set information. If the swordsman&#39;s log contains any content-level information, or the mage&#39;s log contains any authorisation-level information, the Sentinel flags a potential violation.</p>
+<p><strong>Cross-attestation.</strong> Both agents run in separate TEEs and cross-attest: the swordsman&#39;s enclave proves it cannot access the mage&#39;s enclave, and vice versa. This hardware-level proof is stronger than any software analysis.</p>
+<p><strong>Adversarial testing.</strong> The Sith runs separation attacks: given full access to one agent&#39;s observations, attempt to reconstruct the other agent&#39;s observations. If any reconstruction succeeds beyond the bound ε, the separation is insufficient. Regular adversarial testing is the separation&#39;s stress test.</p>
+<p><strong>Formal proof verification.</strong> The information-theoretic bound I(S; M | π) &lt; H(X) - ε is a theorem, not a measurement. But the theorem&#39;s assumptions must hold in practice. Formal verification checks that the implementation satisfies the proof&#39;s preconditions: independent key generation, minimal cross-set leakage, correct protocol execution.</p>
+<h2>The Person in the gap</h2>
+<p>The gap between swordsman and mage is not empty — the Person lives there. This is by design:</p>
+<p>The Person is the only entity that can bridge both observation sets. The Person tells the swordsman what to sign. The Person tells the mage what to interpret. The Person sees both the data (through the mage&#39;s reports) and the authorisations (through the swordsman&#39;s audit trail). The Person is the only complete observer of their own sovereignty.</p>
+<p>This means the Person cannot be automated away. No AI agent, no smart contract, no automation layer can replace the Person in the gap without collapsing the separation. Delegation (letting the mage act on the Person&#39;s behalf) is bounded precisely because the mage cannot sign. Automation (letting the swordsman auto-approve based on rules) is bounded precisely because the swordsman cannot see content.</p>
+<p>The gap is where human sovereignty persists. Closing it — however tempting for convenience — destroys the architecture&#39;s core guarantee.</p>
+<h2>Inference-layer separation: Generator ⊥ Solver</h2>
+<p>BRAID (Amcalar &amp; Cinar, arXiv:2512.15959) provides empirical validation that separation is superlinear at the inference layer, not just at the agent layer. The Generator/Solver split decouples reasoning planning from reasoning execution:</p>
+<ul>
+<li>Generator: sees the full problem, produces the bounded reasoning graph. Analogous to Soulbae (viewing key — sees the full context).</li>
+<li>Solver: executes the graph without seeing the full problem context. Analogous to Soulbis (signing key — acts without full visibility).</li>
+<li>The Mermaid graph between them is a bounded channel with I(G;S|task) ≤ δ.</li>
+</ul>
+<p>This yields 30–74× PPD improvement — empirical proof that separation creates superlinear value at the inference layer, just as Φ(Σ) creates superlinear value at the agent layer.</p>
+<p><strong>Three-axis separation model.</strong> The full architecture now enforces separation at three layers:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Separation</th>
+<th>Enforcement</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent layer</td>
+<td>Swordsman ⊥ Mage</td>
+<td>I(S;M</td>
+<td>π) ≤ ε</td>
+</tr>
+<tr>
+<td>Data layer</td>
+<td>Shielded providers ⊥ Public providers</td>
+<td>Holonic provider splitting</td>
+<td>Reconstruction resistance</td>
+</tr>
+<tr>
+<td>Inference layer</td>
+<td>Generator ⊥ Solver</td>
+<td>BRAID bounded graph</td>
+<td>30–74× cost efficiency</td>
+</tr>
+</tbody></table>
+<p>Each axis strengthens the others. Agent separation is cheaper when inference separation reduces per-operation costs. Data separation is more durable when agent separation prevents cross-domain leakage. The three-axis model is multiplicative, not additive.</p>
+<h2>Connection to the equation</h2>
+<p><strong>Φ(Σ) — the separation matrix.</strong> This skill IS the Φ(Σ) term. Every other term in the equation assumes Φ(Σ) holds. If det(Σ) = 0, the entire equation collapses: P becomes meaningless (protection without separation is surveillance with extra steps), C becomes unverifiable (what was computed by whom?), R reaches 1 (full reconstruction becomes possible).</p>
+<p><strong>R&lt;1 — reconstruction ceiling.</strong> The reconstruction ceiling is a direct consequence of separation. R&lt;1 holds precisely because no single observation set contains enough information to reconstruct the Person&#39;s complete behavioural model. R = (C_S + C_M) / H(X) &lt; 1 only if C_S and C_M are genuinely independent channels, not a single channel wearing two masks. V6: the ceiling is time-dependent, R(t) with shelf life t* (C82); the static result is Proven in the conditional regime.</p>
+<p><strong>V(π,t) — privacy value.</strong> The 31,000× privacy value premium over surveillance depends entirely on det(Σ) ≠ 0. In a surveillance architecture (det(Σ) = 0), V collapses to V_surv. In the privacy architecture (det(Σ) ≠ 0), V compounds superlinearly through all terms. The separation is not a feature — it is the difference between the two architectures.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-separation-enforcement</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-separation-enforcement</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-separation-enforcement.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

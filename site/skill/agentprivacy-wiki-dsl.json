@@ -1,0 +1,86 @@
+{
+  "title": "Wiki DSL",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "360256c350a9aa9f",
+      "text": "# Wiki DSL\n\n**Category** wikis · **Version** 5.5\n\nThe line-oriented DSL convention for Federated Wiki plugin item text: the UPPERCASE first word is a command, lowercase is data, with an optional YAML-style colon. Read before writing or parsing plugin item text. Part of the git-less onboarding/distribution layer kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "4f905b6c4b3f4fb6",
+      "text": "**Fedwiki DSL Skill** captures the line-oriented DSL convention for Federated Wiki plugin item text: the **UPPERCASE first word is a command**, lowercase is data, with an optional YAML-style colon. It lives at `~/.claude/skills/fedwiki-dsl/`. Read it before writing a plugin's text parser.\n\nWhen authoring or reviewing a plugin that parses its item `text`, when deciding how a plugin item should read, or on *\"wiki DSL\"*, *\"plugin markup\"*, *\"command keywords\"*, *\"capitalised command\"*, or *\"optional colon\"*.\n\nParse the item `text` **line by line**; the **first word** classifies the line:\n\n- **UPPERCASE ⇒ a command / directive** — the keyword names an action or field; the rest of the line is its space-separated arguments. Stock examples: `frame` (`HEIGHT 400`, `SOURCE topic`), `method` (`CALC`, `AVERAGE`, `LOOKUP`), `map` (`LOCATE`, `OVERLAY`), `reduce` (`FOLD`, `SLIDE`).\n- **lowercase (or non-keyword) ⇒ literal data / content / value** — passed through, not interpreted.\n\nSo capitalisation carries meaning: a command is shouted in CAPS, data is quiet. Document a plugin's commands in CAPS on its about page.\n\n## The optional colon (YAML-style)\n\nA single **trailing colon on the keyword is optional and equivalent**: `HEIGHT 400` ≡ `HEIGHT: 400`. Strip one trailing colon before matching; never require it. Match by the UPPERCASE form (be forgiving of input case, but treat UPPERCASE as canonical in every example and default), keep a single command table as the source of truth, and reserve the post-keyword arguments for parameters even when a command takes none today. `wiki-plugin-family` (`SISTERS`, `PARENT`, `CHILDREN`, `FARM`, `NEIGHBOURHOOD`, `SNAPSHOT`) is a worked example.\n\n## See\n\nFedwiki CreatePlugin Skill — references this when scaffolding a plugin's text parser. Fedwiki Page Skill — the page-JSON structure plugins produce."
+    },
+    {
+      "type": "markdown",
+      "id": "48e222283133b1d4",
+      "text": "**Upstream:** [`fedwiki-dsl-skill`](https://skill.fedwiki.club/view/welcome-visitors/view/fedwiki-dsl-skill) — vendored + re-framed (owner: Anon / 'from marvin', skill.fedwiki.club). The wiki page remains the source of truth; this SKILL.md is a fork carrying its lineage.\n\n**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [skill.fedwiki.club](https://skill.fedwiki.club)"
+    },
+    {
+      "type": "markdown",
+      "id": "622fc88340cd9840",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-dsl`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "8fdce1f016c8da5e",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "bc815e8d8febcbcd",
+      "text": "agentprivacy-wiki-dsl"
+    },
+    {
+      "type": "markdown",
+      "id": "b1c5d49d3b3428e3",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki DSL",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "360256c350a9aa9f",
+            "text": "# Wiki DSL\n\n**Category** wikis · **Version** 5.5\n\nThe line-oriented DSL convention for Federated Wiki plugin item text: the UPPERCASE first word is a command, lowercase is data, with an optional YAML-style colon. Read before writing or parsing plugin item text. Part of the git-less onboarding/distribution layer kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "4f905b6c4b3f4fb6",
+            "text": "**Fedwiki DSL Skill** captures the line-oriented DSL convention for Federated Wiki plugin item text: the **UPPERCASE first word is a command**, lowercase is data, with an optional YAML-style colon. It lives at `~/.claude/skills/fedwiki-dsl/`. Read it before writing a plugin's text parser.\n\nWhen authoring or reviewing a plugin that parses its item `text`, when deciding how a plugin item should read, or on *\"wiki DSL\"*, *\"plugin markup\"*, *\"command keywords\"*, *\"capitalised command\"*, or *\"optional colon\"*.\n\nParse the item `text` **line by line**; the **first word** classifies the line:\n\n- **UPPERCASE ⇒ a command / directive** — the keyword names an action or field; the rest of the line is its space-separated arguments. Stock examples: `frame` (`HEIGHT 400`, `SOURCE topic`), `method` (`CALC`, `AVERAGE`, `LOOKUP`), `map` (`LOCATE`, `OVERLAY`), `reduce` (`FOLD`, `SLIDE`).\n- **lowercase (or non-keyword) ⇒ literal data / content / value** — passed through, not interpreted.\n\nSo capitalisation carries meaning: a command is shouted in CAPS, data is quiet. Document a plugin's commands in CAPS on its about page.\n\n## The optional colon (YAML-style)\n\nA single **trailing colon on the keyword is optional and equivalent**: `HEIGHT 400` ≡ `HEIGHT: 400`. Strip one trailing colon before matching; never require it. Match by the UPPERCASE form (be forgiving of input case, but treat UPPERCASE as canonical in every example and default), keep a single command table as the source of truth, and reserve the post-keyword arguments for parameters even when a command takes none today. `wiki-plugin-family` (`SISTERS`, `PARENT`, `CHILDREN`, `FARM`, `NEIGHBOURHOOD`, `SNAPSHOT`) is a worked example.\n\n## See\n\nFedwiki CreatePlugin Skill — references this when scaffolding a plugin's text parser. Fedwiki Page Skill — the page-JSON structure plugins produce."
+          },
+          {
+            "type": "markdown",
+            "id": "48e222283133b1d4",
+            "text": "**Upstream:** [`fedwiki-dsl-skill`](https://skill.fedwiki.club/view/welcome-visitors/view/fedwiki-dsl-skill) — vendored + re-framed (owner: Anon / 'from marvin', skill.fedwiki.club). The wiki page remains the source of truth; this SKILL.md is a fork carrying its lineage.\n\n**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [skill.fedwiki.club](https://skill.fedwiki.club)"
+          },
+          {
+            "type": "markdown",
+            "id": "622fc88340cd9840",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-dsl`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "8fdce1f016c8da5e",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "bc815e8d8febcbcd",
+            "text": "agentprivacy-wiki-dsl"
+          },
+          {
+            "type": "markdown",
+            "id": "b1c5d49d3b3428e3",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384127
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Delete Site",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "780a4e7d4b5b820b",
+      "text": "# Wiki Delete Site\n\n**Category** wikis · **Version** 5.5\n\nPermanently remove a public federated-wiki domain — both the remote Nextcloud/WebDAV folder and the local ~/Nextcloud/fedwiki/{domain}/ folder. Activates when deleting or decommissioning a public wiki site. Destructive; checks pages/ is empty unless --force. Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "758fb17d294e77d4",
+      "text": "`fedwiki-delete-site` permanently removes a public federated wiki domain — both the remote folder on the Nextcloud/wiki server and the local `~/Nextcloud/fedwiki/{domain}/` folder. It uses WebDAV `DELETE` directly rather than relying on the Nextcloud sync client, which can be slow or prompt for confirmation on large deletions.\n\n## Usage\n\n```bash\nfedwiki-delete-site david.ide.earth\n```\n\nBy default the script checks that `pages/` is empty and exits with an error if any pages remain — use the merge skill's trash step first to clear them. To delete anyway:\n\n```bash\nfedwiki-delete-site david.ide.earth --force\n```\n\n## What It Does\n\n1. Checks `pages/` is empty (or `--force` skips this)\n2. WebDAV `DELETE` on `fedwiki/{domain}/` — recursive, removes everything including `status/`, `recycler/`, and any remaining files\n3. `rm -rf` the local domain folder\n\nHTTP 204 = deleted. HTTP 404 = already gone on the remote (local removal still proceeds).\n\n## Only for Public Wikis\n\nThis script only works for public wikis in `~/Nextcloud/fedwiki/`. For private wikis in `~/Music/Guides/Private/` there is no remote to delete — just `rm -rf` the local folder directly.\n\n## Safety\n\nThis is irreversible on the remote. Confirm the domain name carefully, and prefer the merge workflow (which moves unique content to a successor and trashes the rest to a recycler) before deleting.\n\n## Related Skills\n\n- `agentprivacy-wiki-merge` — full workflow ending with delete-site\n- `agentprivacy-wiki-reindex` — reindex after bulk page changes before deleting\n- `agentprivacy-wiki-nextcloud-push` — the WebDAV credentials used by this script"
+    },
+    {
+      "type": "markdown",
+      "id": "9215f2f9ce660500",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-delete-site](https://skill.fedwiki.club/fedwiki-delete-site) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "950ce712d2950cbd",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-delete-site`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "0bf690e5cfb69a2d",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "1305add8ef2a0eaa",
+      "text": "agentprivacy-wiki-delete-site"
+    },
+    {
+      "type": "markdown",
+      "id": "eec89879f662db49",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Delete Site",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "780a4e7d4b5b820b",
+            "text": "# Wiki Delete Site\n\n**Category** wikis · **Version** 5.5\n\nPermanently remove a public federated-wiki domain — both the remote Nextcloud/WebDAV folder and the local ~/Nextcloud/fedwiki/{domain}/ folder. Activates when deleting or decommissioning a public wiki site. Destructive; checks pages/ is empty unless --force. Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "758fb17d294e77d4",
+            "text": "`fedwiki-delete-site` permanently removes a public federated wiki domain — both the remote folder on the Nextcloud/wiki server and the local `~/Nextcloud/fedwiki/{domain}/` folder. It uses WebDAV `DELETE` directly rather than relying on the Nextcloud sync client, which can be slow or prompt for confirmation on large deletions.\n\n## Usage\n\n```bash\nfedwiki-delete-site david.ide.earth\n```\n\nBy default the script checks that `pages/` is empty and exits with an error if any pages remain — use the merge skill's trash step first to clear them. To delete anyway:\n\n```bash\nfedwiki-delete-site david.ide.earth --force\n```\n\n## What It Does\n\n1. Checks `pages/` is empty (or `--force` skips this)\n2. WebDAV `DELETE` on `fedwiki/{domain}/` — recursive, removes everything including `status/`, `recycler/`, and any remaining files\n3. `rm -rf` the local domain folder\n\nHTTP 204 = deleted. HTTP 404 = already gone on the remote (local removal still proceeds).\n\n## Only for Public Wikis\n\nThis script only works for public wikis in `~/Nextcloud/fedwiki/`. For private wikis in `~/Music/Guides/Private/` there is no remote to delete — just `rm -rf` the local folder directly.\n\n## Safety\n\nThis is irreversible on the remote. Confirm the domain name carefully, and prefer the merge workflow (which moves unique content to a successor and trashes the rest to a recycler) before deleting.\n\n## Related Skills\n\n- `agentprivacy-wiki-merge` — full workflow ending with delete-site\n- `agentprivacy-wiki-reindex` — reindex after bulk page changes before deleting\n- `agentprivacy-wiki-nextcloud-push` — the WebDAV credentials used by this script"
+          },
+          {
+            "type": "markdown",
+            "id": "9215f2f9ce660500",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-delete-site](https://skill.fedwiki.club/fedwiki-delete-site) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "950ce712d2950cbd",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-delete-site`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "0bf690e5cfb69a2d",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "1305add8ef2a0eaa",
+            "text": "agentprivacy-wiki-delete-site"
+          },
+          {
+            "type": "markdown",
+            "id": "eec89879f662db49",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384123
+    }
+  ]
+}

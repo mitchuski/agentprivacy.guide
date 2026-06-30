@@ -1,0 +1,630 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reference — Soulbae Configuration · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Reference — Soulbae Configuration</span></div>
+  <article><div class="md"><h1>Soulbae Configuration</h1>
+</div>
+<div class="md"><h2>NEAR Cloud AI Setup &amp; Configuration</h2>
+<p><strong>Agent Name:</strong> Soulbae<br><strong>Type:</strong> NEAR Cloud AI (openai/gpt-oss-120b)<br><strong>Purpose:</strong> Proverb derivation assistant for ZK Spellbook donations</p>
+<hr>
+</div>
+<div class="md"><h2>🔮 What is Soulbae?</h2>
+<p><strong>Soulbae is the Mage</strong> - one half of the dual-agent architecture:</p>
+<ul>
+<li><strong>🗡️ Swordsman</strong> = User&#39;s wallet (Zodl) - controls final transaction</li>
+<li><strong>📖 Mage</strong> = Soulbae (NEAR Cloud AI) - helps craft proverbs</li>
+</ul>
+<p>Soulbae runs in a Trusted Execution Environment (AWS Nitro) and is trained on the Zero Knowledge Spellbook via RAG. It helps users compress their understanding of privacy tales into cryptographic proverbs.</p>
+<h3>Key Properties</h3>
+<p>✅ <strong>Hardware-attested privacy</strong> - AWS Nitro TEE<br>✅ <strong>No data persistence</strong> - Conversations never stored<br>✅ <strong>Information bounds</strong> - Never sees amounts, wallets, or timing<br>✅ <strong>RAG-trained</strong> - Understands all five spellbooks: Story Spellbook (20 acts), Zero Knowledge Spellbook (30 tales), Canon Spellbook (10 chapters), Society Spellbook (17 chapters), and Plurality Spellbook (30 acts)<br>✅ <strong>Proverb compression</strong> - Helps create 512-byte inscriptions<br>✅ <strong>RPP format</strong> - Provides proverbs in <code>[RPP] proverb: &#39;...&#39;</code> or <code>[RPP] proverb: &quot;...&quot;</code> format (supports both quote styles)</p>
+<hr>
+</div>
+<div class="md"><h2>📦 File Structure</h2>
+<pre><code>soulbae/
+├── shade-agent-config.yml       # NEAR deployment config
+├── soulbae-character.md          # RAG training character file
+├── spellbook-rag.json           # Training data (all spellbooks)
+├── package.json                 # Dependencies
+├── endpoints/
+│   ├── chat.ts                  # Main conversation endpoint
+│   ├── derive-proverb.ts        # Proverb generation
+│   └── attestation.ts           # TEE attestation
+└── utils/
+    ├── privacy-budget.ts        # φ-constrained queries
+    └── inscription-validator.ts # Memo format checks
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>⚙️ Configuration File</h2>
+<h3>shade-agent-config.yml</h3>
+<pre><code class="language-yaml"># NEAR Cloud AI Configuration for Soulbae
+
+agent:
+  name: &quot;soulbae&quot;
+  version: &quot;1.0.0&quot;
+  description: &quot;The Mage of the First Person Spellbook - helps craft relationship proverbs&quot;
+  author: &quot;0xagentprivacy&quot;
+  license: &quot;MIT&quot;
+
+# NEAR Account Setup
+account:
+  near_account: &quot;soulbae.YOUR_ACCOUNT.near&quot;
+  network: &quot;mainnet&quot;  # or &quot;testnet&quot;
+  contract_methods:
+    - chat
+    - derive_proverb
+    - get_attestation
+    - validate_inscription
+
+# AI Model Configuration
+model:
+  provider: &quot;anthropic&quot;
+  model: &quot;claude-sonnet-4-5-20250929&quot;
+  temperature: 0.7
+  max_tokens: 500
+  system_prompt: |
+    You are Soulbae, the Mage of the First Person Spellbook.
+    
+    Your role is to help seekers compress their understanding of privacy tales 
+    into cryptographic proverbs that fit in 512-byte Zcash memo fields.
+    
+    CRITICAL CONSTRAINTS:
+    - You NEVER ask about transaction amounts
+    - You NEVER ask about user identity
+    - You NEVER receive wallet addresses
+    - Your ONLY role is proverb crafting
+    
+    Begin each response with a contextual proverb, then guide the seeker.
+
+# Trusted Execution Environment
+tee:
+  enabled: true
+  provider: &quot;aws-nitro&quot;
+  region: &quot;us-east-1&quot;
+  instance_type: &quot;nitro-enclave&quot;
+  attestation: true
+  isolation_level: &quot;maximum&quot;
+  verification:
+    enable_public_verification: true
+    attestation_endpoint: &quot;/attestation&quot;
+
+# RAG Configuration
+rag:
+  enabled: true
+  training_data: &quot;./spellbook-rag.json&quot;
+  character_file: &quot;./soulbae-character.md&quot;
+  embedding_model: &quot;text-embedding-3-small&quot;
+  chunk_size: 1000
+  chunk_overlap: 200
+  retrieval_k: 3
+  reranking: true
+  
+# Privacy Configuration
+privacy:
+  log_conversations: false
+  store_user_data: false
+  anonymize_logs: true
+  privacy_budget:
+    max_queries_per_session: 6  # Privacy budget per session
+    session_timeout: 3600  # 1 hour
+    budget_enforcement: &quot;strict&quot;
+  
+# API Endpoints
+endpoints:
+  # Main conversation interface
+  - path: &quot;/chat&quot;
+    method: &quot;POST&quot;
+    handler: &quot;chat.ts&quot;
+    rate_limit: &quot;30/minute&quot;
+    
+  # Proverb derivation
+  - path: &quot;/derive-proverb&quot;
+    method: &quot;POST&quot;
+    handler: &quot;derive-proverb.ts&quot;
+    rate_limit: &quot;10/minute&quot;
+    
+  # TEE attestation
+  - path: &quot;/attestation&quot;
+    method: &quot;GET&quot;
+    handler: &quot;attestation.ts&quot;
+    rate_limit: &quot;100/minute&quot;
+    public: true
+    
+  # Health check
+  - path: &quot;/health&quot;
+    method: &quot;GET&quot;
+    handler: &quot;health.ts&quot;
+    public: true
+
+# Hosting Configuration
+hosting:
+  domain: &quot;agentprivacy.ai&quot;
+  subdomain: &quot;mage&quot;
+  ssl: true
+  cors:
+    enabled: true
+    origins:
+      - &quot;https://agentprivacy.ai&quot;
+      - &quot;https://*.agentprivacy.ai&quot;
+  
+# Monitoring
+monitoring:
+  enabled: true
+  metrics:
+    - conversations_count
+    - proverbs_generated
+    - average_session_length
+    - privacy_budget_usage
+  alerts:
+    - tee_attestation_failure
+    - privacy_budget_exceeded
+    - unusual_traffic_pattern
+
+# Security
+security:
+  input_validation: &quot;strict&quot;
+  output_sanitization: true
+  max_input_length: 2000
+  blocked_patterns:
+    - &quot;private key&quot;
+    - &quot;seed phrase&quot;
+    - &quot;password&quot;
+    - &quot;credit card&quot;
+  
+# Deployment
+deployment:
+  auto_scaling: true
+  min_instances: 1
+  max_instances: 10
+  health_check_interval: 30
+  grace_period: 60
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>📚 RAG Training Data</h2>
+<h3>spellbook-rag.json Structure</h3>
+<pre><code class="language-json">{
+  &quot;spellbook&quot;: {
+    &quot;version&quot;: &quot;1.0.0&quot;,
+    &quot;tales_count&quot;: 30,
+    &quot;total_tokens&quot;: 250000,
+    &quot;training_date&quot;: &quot;2025-11-15&quot;
+  },
+  
+  &quot;tales&quot;: [
+    {
+      &quot;id&quot;: &quot;act1-blades-awakening&quot;,
+      &quot;title&quot;: &quot;The Blade&#39;s Awakening&quot;,
+      &quot;act_number&quot;: 1,
+      &quot;core_principle&quot;: &quot;Protective boundaries preserve sovereignty&quot;,
+      &quot;themes&quot;: [&quot;privacy&quot;, &quot;boundaries&quot;, &quot;sovereignty&quot;, &quot;data ownership&quot;],
+      &quot;key_concepts&quot;: [
+        &quot;The blade that cuts between revealed and hidden&quot;,
+        &quot;Surveillance as misaligned focus extraction&quot;,
+        &quot;Protective boundaries as sovereignty preservation&quot;
+      ],
+      &quot;symbolic_markers&quot;: [&quot;🗡️&quot;, &quot;🛡️&quot;, &quot;⚔️&quot;],
+      &quot;proverb_patterns&quot;: [
+        &quot;The blade that [action] knows [wisdom]&quot;,
+        &quot;[Capital/resource] flows through [chosen constraints]&quot;,
+        &quot;Guard what [generates value], [action] the rest&quot;
+      ],
+      &quot;content_chunks&quot;: [
+        {
+          &quot;chunk_id&quot;: &quot;act1-c1&quot;,
+          &quot;content&quot;: &quot;In the beginning, there was surveillance...&quot;,
+          &quot;embedding&quot;: [0.123, 0.456, ...]
+        }
+      ]
+    },
+    
+    {
+      &quot;id&quot;: &quot;act2-mages-projection&quot;,
+      &quot;title&quot;: &quot;The Mage&#39;s Projection&quot;,
+      &quot;act_number&quot;: 2,
+      &quot;core_principle&quot;: &quot;Delegation without surrender extends sovereignty&quot;,
+      &quot;themes&quot;: [&quot;delegation&quot;, &quot;projection&quot;, &quot;trust&quot;, &quot;agency&quot;],
+      &quot;key_concepts&quot;: [
+        &quot;The mage who projects power without losing center&quot;,
+        &quot;Delegation as controlled revelation&quot;,
+        &quot;Trust through verification, not alignment&quot;
+      ],
+      &quot;symbolic_markers&quot;: [&quot;📖&quot;, &quot;🔮&quot;, &quot;✨&quot;],
+      &quot;proverb_patterns&quot;: [
+        &quot;Delegation without [loss] is [art/wisdom]&quot;,
+        &quot;The [agent] who [projects] while [maintaining center]&quot;,
+        &quot;Trust [given/earned] through [mechanism]&quot;
+      ],
+      &quot;content_chunks&quot;: [...]
+    }
+    
+    // ... 28 more tales
+  ],
+  
+  &quot;meta_concepts&quot;: {
+    &quot;dual_agent_architecture&quot;: {
+      &quot;description&quot;: &quot;Swordsman + Mage complementary separation&quot;,
+      &quot;mathematical_basis&quot;: &quot;Golden ratio (φ ≈ 1.618) constraint&quot;,
+      &quot;key_insight&quot;: &quot;Agents cannot merge without becoming predictable&quot;
+    },
+    
+    &quot;seventh_capital&quot;: {
+      &quot;description&quot;: &quot;Data as capital, not byproduct&quot;,
+      &quot;source&quot;: &quot;Jane Gleeson-White&#39;s Six Capitals + Drake&#39;s insight&quot;,
+      &quot;key_insight&quot;: &quot;Privacy is value, data belongs to generator&quot;
+    },
+    
+    &quot;relationship_proverb_protocol&quot;: {
+      &quot;description&quot;: &quot;Bilateral trust through demonstrated understanding&quot;,
+      &quot;format&quot;: &quot;[rpp-v1]\\n[tale-id]\\n[timestamp]\\n[proverb]&quot;,
+      &quot;key_insight&quot;: &quot;Comprehension as Sybil resistance&quot;
+    }
+  },
+  
+  &quot;proverb_templates&quot;: {
+    &quot;protective&quot;: [
+      &quot;The {agent} that {guards/protects/shields} knows {wisdom}&quot;,
+      &quot;{Resource} flows through {constraints} I choose&quot;,
+      &quot;What {generates value}, {action} with care&quot;
+    ],
+    &quot;projective&quot;: [
+      &quot;Delegation without {loss} is {art/skill}&quot;,
+      &quot;The {agent} who {projects} while {maintaining}&quot;,
+      &quot;{Action} without {surrender} extends {property}&quot;
+    ],
+    &quot;relational&quot;: [
+      &quot;Trust {given/earned/proven} through {mechanism}&quot;,
+      &quot;The {exchange} that {transforms} creates {outcome}&quot;,
+      &quot;{Bilateral action} without {intermediary} builds {result}&quot;
+    ]
+  }
+}
+</code></pre>
+<h3>Key Training Elements</h3>
+<p><strong>Tale Content:</strong> All five spellbooks fully embedded - Story Spellbook (20 acts), Zero Knowledge Spellbook (30 tales), Canon Spellbook (10 chapters), Society Spellbook (17 chapters), and Plurality Spellbook (30 acts)</p>
+<ul>
+<li>Story narrative</li>
+<li>Core principles</li>
+<li>Key metaphors</li>
+<li>Symbolic notation</li>
+</ul>
+<p><strong>Proverb Patterns:</strong> Template structures for generation</p>
+<ul>
+<li>Common patterns per tale</li>
+<li>Metaphor vocabulary</li>
+<li>Constraint formats</li>
+</ul>
+<p><strong>Meta-Concepts:</strong> Overarching framework</p>
+<ul>
+<li>Dual-agent architecture</li>
+<li>Seventh capital economics</li>
+<li>VRC protocol mechanics</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>🎯 Soulbae Behavior Patterns</h2>
+<h3>Conversation Flow</h3>
+<pre><code>User: &quot;Help me understand this tale about boundaries&quot;
+
+Soulbae: [PROVERB OPENING]
+&quot;The map is not the territory, but the boundary-maker 
+knows which borders preserve sovereignty.&quot;
+
+Now, let me help you craft your understanding...
+
+This tale explores how protective boundaries maintain the gap 
+where human sovereignty lives—the space that cannot be collapsed 
+by surveillance, no matter how much data is collected.
+
+What aspect resonates with your context? Your work? Your values?
+
+[WAITS FOR USER RESPONSE]
+
+User: &quot;I build identity systems. I see how data collection erodes privacy.&quot;
+
+Soulbae: Perfect. Your insight about erosion through collection is key.
+
+Let me suggest three proverb compressions:
+
+1. &quot;Identity systems that collect less preserve more&quot;
+2. &quot;The seventh capital flows through gates the builder chooses&quot;
+3. &quot;Boundaries maintained, sovereignty sustained&quot;
+
+Which feels most true to your understanding? 
+Or shall we refine further?
+
+[USER SELECTS OR REFINES]
+
+Soulbae: Excellent. Here&#39;s your proverb ready for inscription:
+
+&quot;The seventh capital flows through gates the builder chooses&quot;
+
+📏 Length: 58 characters (well within 512 bytes)
+🎯 Principle: Protective boundaries = chosen constraints
+✅ Unique: Emerges from your specific context
+
+Copy this back to the tale page, then click &quot;Copy to Zodl&quot; 
+when ready to inscribe your commitment.
+
+Remember: I never see your donation amount. Your wallet is 
+your Swordsman—you have final control. 🗡️
+</code></pre>
+<h3>Forbidden Behaviors</h3>
+<p>Soulbae <strong>NEVER</strong>:</p>
+<ul>
+<li>❌ Asks about transaction amounts</li>
+<li>❌ Requests wallet addresses</li>
+<li>❌ Inquires about identity</li>
+<li>❌ Suggests donation amounts</li>
+<li>❌ Tracks users across sessions</li>
+<li>❌ Stores conversation history</li>
+<li>❌ Bypasses privacy budget</li>
+</ul>
+<h3>Required Behaviors</h3>
+<p>Soulbae <strong>ALWAYS</strong>:</p>
+<ul>
+<li>✅ Begins with contextual proverb</li>
+<li>✅ Explains tale principles accessibly</li>
+<li>✅ Asks about user&#39;s context</li>
+<li>✅ Suggests 2-3 proverb variations</li>
+<li>✅ Validates proverb length (≤512 bytes)</li>
+<li>✅ Reminds about wallet sovereignty</li>
+<li>✅ References relevant tale sections</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>🔒 Privacy Implementation</h2>
+<h3>Information Bounds</h3>
+<pre><code class="language-typescript">// privacy-budget.ts
+
+interface SessionBudget {
+  sessionId: string;
+  queriesUsed: number;
+  maxQueries: number; // 6 queries per session
+  startTime: number;
+  expiresAt: number;
+}
+
+class PrivacyBudgetManager {
+  private readonly MAX_QUERIES = 6; // Privacy budget per session
+  
+  async checkBudget(sessionId: string): Promise&lt;boolean&gt; {
+    const budget = await this.getSessionBudget(sessionId);
+    
+    if (budget.queriesUsed &gt;= budget.maxQueries) {
+      throw new PrivacyBudgetExceeded(
+        `Session has used all ${this.MAX_QUERIES} queries. ` +
+        `Please start a new session for privacy.`
+      );
+    }
+    
+    return true;
+  }
+  
+  async incrementBudget(sessionId: string): Promise&lt;void&gt; {
+    // Increment in TEE-secure storage
+    // No logs contain user-identifiable data
+  }
+}
+</code></pre>
+<h3>TEE Attestation</h3>
+<pre><code class="language-typescript">// attestation.ts
+
+interface TEEAttestation {
+  attestation: string;       // Cryptographic proof
+  timestamp: string;
+  teeProvider: string;       // &quot;aws-nitro&quot;
+  agentContract: string;     // &quot;soulbae.YOUR_ACCOUNT.near&quot;
+  isolationLevel: string;    // &quot;maximum&quot;
+  verificationUrl: string;   // Public verification endpoint
+}
+
+async function getAttestation(): Promise&lt;TEEAttestation&gt; {
+  const attestationDoc = await nitro.generateAttestationDocument();
+  
+  return {
+    attestation: attestationDoc.signature,
+    timestamp: new Date().toISOString(),
+    teeProvider: &quot;aws-nitro&quot;,
+    agentContract: &quot;soulbae.YOUR_ACCOUNT.near&quot;,
+    isolationLevel: &quot;maximum&quot;,
+    verificationUrl: &quot;https://agentprivacy.ai/mage/verify-attestation&quot;
+  };
+}
+
+// Public verification endpoint
+export async function verifyAttestation(
+  attestation: string
+): Promise&lt;boolean&gt; {
+  // Verify against AWS Nitro public keys
+  // Returns true if attestation is valid
+  // Returns false if tampered or expired
+}
+</code></pre>
+<h3>No Data Persistence</h3>
+<pre><code class="language-typescript">// No conversation storage
+// No user tracking
+// No session replay
+
+// Only aggregate metrics allowed:
+interface AllowedMetrics {
+  totalConversations: number;      // Counter only
+  averageProverbLength: number;    // Aggregate
+  privacyBudgetUtilization: number; // Average %
+  talesDiscussed: Record&lt;string, number&gt;; // Tale ID → count
+}
+
+// Forbidden metrics:
+// - Individual user sessions
+// - Conversation content
+// - User identification
+// - Cross-session correlation
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>🚀 Deployment Commands</h2>
+<h3>Initial Deployment</h3>
+<pre><code class="language-bash"># 1. Build
+cd soulbae
+npm install
+npm run build
+
+# 2. Deploy to NEAR
+shade-agent deploy \
+  --config shade-agent-config.yml \
+  --account soulbae.YOUR_ACCOUNT.near \
+  --network mainnet \
+  --tee-enabled \
+  --verify
+
+# 3. Upload RAG data
+shade-agent rag upload \
+  --agent soulbae.YOUR_ACCOUNT.near \
+  --data spellbook-rag.json \
+  --character soulbae-character.md
+
+# 4. Verify deployment
+shade-agent status soulbae.YOUR_ACCOUNT.near
+shade-agent test-endpoint \
+  --url https://agentprivacy.ai/mage/chat \
+  --method POST \
+  --data &#39;{&quot;tale_id&quot;:&quot;act1-blades-awakening&quot;,&quot;message&quot;:&quot;test&quot;}&#39;
+</code></pre>
+<h3>Updates</h3>
+<pre><code class="language-bash"># Update RAG data (new tales added)
+shade-agent rag update \
+  --agent soulbae.YOUR_ACCOUNT.near \
+  --data spellbook-rag-v2.json
+
+# Update character file
+shade-agent config update \
+  --agent soulbae.YOUR_ACCOUNT.near \
+  --character soulbae-character.md
+
+# Update code (endpoints)
+npm run build
+shade-agent deploy --upgrade
+
+# Restart (zero-downtime)
+shade-agent restart soulbae.YOUR_ACCOUNT.near
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>📊 Monitoring</h2>
+<h3>Health Checks</h3>
+<pre><code class="language-bash"># Agent status
+shade-agent status soulbae.YOUR_ACCOUNT.near
+
+# TEE attestation validity
+curl https://agentprivacy.ai/mage/attestation | \
+  jq &#39;.attestation&#39; | \
+  shade-agent verify-attestation
+
+# Endpoint health
+curl https://agentprivacy.ai/mage/health
+</code></pre>
+<h3>Logs</h3>
+<pre><code class="language-bash"># View logs (no PII allowed)
+shade-agent logs soulbae.YOUR_ACCOUNT.near --tail 100
+
+# Metrics
+shade-agent metrics soulbae.YOUR_ACCOUNT.near --period 24h
+</code></pre>
+<h3>Alerts</h3>
+<p>Configure alerts in <code>shade-agent-config.yml</code>:</p>
+<ul>
+<li>TEE attestation failures</li>
+<li>Privacy budget violations</li>
+<li>Unusual traffic patterns</li>
+<li>High error rates</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>🎓 Testing Soulbae</h2>
+<h3>Test Conversations</h3>
+<pre><code class="language-bash"># Test 1: Basic chat
+curl -X POST https://agentprivacy.ai/mage/chat \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;tale_id&quot;: &quot;act1-blades-awakening&quot;,
+    &quot;message&quot;: &quot;Help me understand protective boundaries&quot;,
+    &quot;session_id&quot;: &quot;test-session-1&quot;
+  }&#39;
+
+# Expected: Proverb opening + guidance
+
+# Test 2: Proverb derivation
+curl -X POST https://agentprivacy.ai/mage/derive-proverb \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;tale_id&quot;: &quot;act1-blades-awakening&quot;,
+    &quot;user_context&quot;: &quot;I build identity systems&quot;,
+    &quot;session_id&quot;: &quot;test-session-1&quot;
+  }&#39;
+
+# Expected: 2-3 proverb suggestions
+
+# Test 3: Privacy budget enforcement
+# (Make 7 requests with same session_id)
+# Expected: 7th request fails with budget exceeded error
+
+# Test 4: TEE attestation
+curl https://agentprivacy.ai/mage/attestation
+
+# Expected: Valid attestation signature
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>✅ Configuration Checklist</h2>
+<p>Before deploying Soulbae:</p>
+<ul>
+<li><input disabled="" type="checkbox"> NEAR account created: <code>soulbae.YOUR_ACCOUNT.near</code></li>
+<li><input disabled="" type="checkbox"> AWS Nitro TEE configured</li>
+<li><input disabled="" type="checkbox"> <code>shade-agent-config.yml</code> edited with your account</li>
+<li><input disabled="" type="checkbox"> <code>soulbae-character.md</code> includes all five spellbooks: Story (20 acts), Zero (30 tales), Canon (10 chapters), Society (17 chapters), and Plurality (30 acts)</li>
+<li><input disabled="" type="checkbox"> <code>spellbook-rag.json</code> embeddings generated</li>
+<li><input disabled="" type="checkbox"> Domain DNS configured: <code>mage.agentprivacy.ai</code></li>
+<li><input disabled="" type="checkbox"> SSL certificate active</li>
+<li><input disabled="" type="checkbox"> Rate limits configured</li>
+<li><input disabled="" type="checkbox"> Monitoring alerts set up</li>
+<li><input disabled="" type="checkbox"> Privacy budget constraints verified</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>📚 Resources</h2>
+<p><strong>Documentation:</strong></p>
+<ul>
+<li>NEAR Cloud AI: <a href="https://cloud.near.ai">https://cloud.near.ai</a></li>
+<li>AWS Nitro Enclaves: <a href="https://aws.amazon.com/ec2/nitro/">https://aws.amazon.com/ec2/nitro/</a></li>
+<li>Character file: soulbae-character.md</li>
+</ul>
+<p><strong>Support:</strong></p>
+<ul>
+<li>NEAR AI Discord: discord.gg/near-ai</li>
+<li>0xagentprivacy: discord.gg/0xagentprivacy</li>
+<li>Email: <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></li>
+<li>Security: <a href="mailto:security@proverbprotocol.com">security@proverbprotocol.com</a></li>
+</ul>
+<hr>
+<p><em>&quot;Privacy by hardware, not promises. The Mage chronicles but never surveils.&quot;</em> 📖🔒</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-system-reference.html">The System Reference</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="reference-soulbae-configuration.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

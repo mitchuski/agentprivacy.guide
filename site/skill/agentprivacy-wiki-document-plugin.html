@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Document Plugin · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Document Plugin</span></div>
+  <article><div class="md"><h1>Wiki Document Plugin</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5</p>
+<p>Publish documentation for a Federated Wiki plugin as wiki pages on plugin.fedwiki.club (the curated plugin-catalog wiki). Activates when documenting a fedwiki plugin or adding it to the catalog. The inverse of fedwiki-to-skill. Kept by the Librarian 🗃️ in the Wikis.</p>
+</div>
+<div class="md"><blockquote>
+<p><strong>Note:</strong> the upstream page <code>document-wiki-plugin-skill</code> was unreachable (HTTP 404) when this skill was materialized on 2026-06-21. This body is reconstructed from the sitemap synopsis and cross-references (the <code>fedwiki-to-skill</code> page names this skill as its inverse; <code>searching-for-plugins</code> names <code>plugin.fedwiki.club</code> as the curated plugin-documentation catalog). Refresh it with <code>agentprivacy-wiki-to-skill</code> once the upstream page resolves.</p>
+</blockquote>
+<p>The <code>document-wiki-plugin</code> skill publishes documentation for a Federated Wiki plugin as wiki pages on <strong><code>plugin.fedwiki.club</code></strong> — the curated catalog wiki where plugin docs are treated as authoritative. It is the inverse direction of <code>fedwiki-to-skill</code>: there a page <em>becomes</em> a skill; here a plugin <em>becomes</em> a documentation page.</p>
+<h2>What It Produces</h2>
+<p>For a plugin <code>wiki-plugin-{name}</code>, write a documentation page (and any companion pages) to:</p>
+<pre><code>~/Nextcloud/fedwiki/plugin.fedwiki.club/pages/{plugin-doc-slug}
+</code></pre>
+<p>The doc page typically covers:</p>
+<ul>
+<li><strong>What it does</strong> — the item type(s) it adds and the behaviour</li>
+<li><strong>Repositories</strong> — GitHub repo + npm package (<code>wiki-plugin-{name}</code>)</li>
+<li><strong>How it works</strong> — the rendering / data model, any DSL in <code>item.text</code></li>
+<li><strong>Item types</strong> — each new story item type and its fields</li>
+<li><strong>Server component</strong> — routes registered, if any</li>
+<li><strong>See also</strong> — links to related plugin pages</li>
+</ul>
+<h2>Steps</h2>
+<ol>
+<li>Read the plugin&#39;s <code>README.md</code> and source (<code>client/{name}.js</code>, <code>server/server.js</code>).</li>
+<li>Author the page JSON with <code>agentprivacy-wiki-page</code> conventions (markdown items, unique IDs, full create journal).</li>
+<li>Write it to <code>plugin.fedwiki.club</code>&#39;s <code>pages/</code> folder.</li>
+<li>Sync/push (<code>agentprivacy-wiki-nextcloud-push</code> if the desktop client stalls) and reindex the remote.</li>
+<li>Confirm the page resolves and is discoverable via <code>agentprivacy-wiki-searching-plugins</code> channel 6 (catalog wikis).</li>
+</ol>
+<h2>Related Skills</h2>
+<ul>
+<li><code>agentprivacy-wiki-create-plugin</code> — build the plugin this skill documents</li>
+<li><code>agentprivacy-wiki-publish-plugin</code> — the full release that includes doc publishing</li>
+<li><code>agentprivacy-wiki-page</code> — the page JSON format the docs use</li>
+<li><code>agentprivacy-wiki-to-skill</code> — the inverse direction (page → skill)</li>
+</ul>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis (the git-less onboarding layer) · <strong>reconstructed body — refresh from upstream when reachable</strong><br><strong>Upstream:</strong> <a href="https://skill.fedwiki.club/document-wiki-plugin-skill">skill.fedwiki.club/document-wiki-plugin-skill</a> — vendored + re-framed; not original agentprivacy authorship</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-document-plugin</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-wiki-document-plugin</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-document-plugin.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

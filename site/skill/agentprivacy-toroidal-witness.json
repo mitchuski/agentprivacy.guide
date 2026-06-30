@@ -1,0 +1,96 @@
+{
+  "title": "Toroidal Witness",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "afaa791740a2ac0d",
+      "text": "# Toroidal Witness\n\n**Category** role · **Version** 5.2\n\n**Equation term** `T_∫(π) path integral, witness space topology`\n\nInfinite witness space from toroidal topology. Activates when discussing cyclic paths through the lattice, unbounded witnesses, computational hardness from path enumeration, toroidal wrap, or why witness extraction is infeasible."
+    },
+    {
+      "type": "markdown",
+      "id": "3fa61b3afe99817b",
+      "text": "**Source:** UOR Framework + Privacy Value Model V5.2 + First Person Spellbook Act XXII\n**Target context:** Cryptographers, ZK researchers, topology-aware protocol designers\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "db8c1f7797ca585c",
+      "text": "## What this is\n\nThe sovereignty lattice has toroidal topology—edges that exit one face re-enter the opposite face. This creates cyclic paths through the lattice. Unlike a flat space where paths between points are finite, the torus allows infinite distinct paths. This property is the source of zero-knowledge soundness.\n\n**The torus wraps. The paths multiply. The witness space becomes infinite. And infinite witnesses cannot be enumerated.**\n\n## Flat vs Toroidal\n\n### Flat Lattice\n\nOn a flat 6-dimensional hypercube:\n- Paths between vertices are finite\n- Can enumerate all paths of length ≤ k\n- Given enough time, can find any specific path\n- Witness extraction is theoretically possible\n\n### Toroidal Lattice\n\nOn a toroidal 6-dimensional structure:\n- Paths between vertices are infinite\n- Every path has infinitely many variants (add cycles)\n- Cannot enumerate all paths\n- Witness extraction is computationally infeasible\n\n## The Wrapping Property\n\n### Edge Wrapping\n\nWhen traversing dimension d beyond the boundary:\n\n```\nvertex[d] = (vertex[d] + delta) mod 2\n```\n\nBut at the lattice level, the wrap creates NEW paths, not just the same path repeated:\n\n```\nPath A: 0 → 1 → 3 → 7 (direct)\nPath B: 0 → 1 → 3 → 7 → [wrap] → 0 → 1 → 3 → 7 (one cycle added)\nPath C: 0 → 1 → 3 → 7 → [wrap] → 0 → ... (n cycles added)\n```\n\nEach is a distinct path producing the same endpoint.\n\n### Topological Cycles\n\nThe torus has two fundamental cycles (in 2D analogy):\n- Around the \"hole\" (poloidal)\n- Around the \"tube\" (toroidal)\n\nIn 6D, there are more independent cycles. Each cycle can be traversed any number of times, creating combinatorial explosion in path count.\n\n## Why This Creates ZK Property\n\n### The ZK Setup\n\n- **Statement:** \"I know a path from vertex A to vertex B\"\n- **Witness:** The specific path taken\n- **Verification:** Check that following the path reaches B\n\n### Without Torus (Insecure)\n\nAdversary strategy:\n1. Enumerate all paths from A to B\n2. There are finitely many\n3. Eventually find the prover's path\n4. Witness extracted\n\n### With Torus (Secure)\n\nAdversary strategy fails:\n1. Try to enumerate all paths from A to B\n2. For each path, infinite cyclic variants exist\n3. Cannot complete enumeration\n4. Cannot isolate the prover's specific path\n5. Witness remains hidden\n\n## Formal Statement\n\n**Claim:** On a toroidal lattice, given a valid proof that path P exists from A to B, extracting P is computationally infeasible.\n\n**Intuition:**\n- The proof verifies ∃P: P(A) = B\n- The torus guarantees |{P: P(A) = B}| = ∞\n- The verifier cannot distinguish which P was used\n- Even with the proof, the witness space is unbounded\n\n**Confidence:** ~70% — The topological argument is sound, but formal reduction to standard hardness assumptions needs work.\n\n## Path Multiplicity Example\n\nConsider reaching vertex 7 (binary: 000111) from vertex 0 (binary: 000000):\n\n**Minimal paths (length 3):**\n```\n0 → 1 → 3 → 7\n0 → 2 → 3 → 7\n0 → 4 → 5 → 7\n... (C(3,3) × permutations = multiple)\n```\n\n**With one toroidal cycle:**\n```\n0 → 1 → 3 → 7 → 6 → 4 → 0 → 1 → 3 → 7\n```\n\n**With n cycles:** Each adds 6+ steps, creating infinite family.\n\n**With different cycle choices:** Multiple independent cycles exist.\n\nThe witness space is not just large—it is infinite.\n\n## Implications for Ceremony Design\n\n### Witness Hiding\n\nCeremonies should leverage toroidal structure:\n- Record that path was completed\n- Do NOT record which specific path\n- Verifier confirms destination reached\n- Path remains private\n\n### Path Equivalence Classes\n\nFor some purposes, cyclic variants are equivalent:\n- Same start and end\n- Same inscriptions traversed (modulo cycles)\n- Different \"winding numbers\"\n\nThe ceremony can verify equivalence class membership without identifying specific path.\n\n### Proof Size\n\nDespite infinite witnesses, proofs remain finite:\n- Prove you COULD take a path (existential)\n- Don't enumerate the path (avoid linear size)\n- ZK-SNARK techniques apply\n\n## Mapping to PVM-V5\n\n| Toroidal Concept | PVM Term |\n|------------------|----------|\n| Path multiplicity | T_∫(π) unbounded |\n| Cyclic structure | Lattice invariants |\n| Witness hiding | Gap preservation |\n| Enumeration infeasibility | Computational hardness |\n| Topological cycles | Holographic boundary wrap |\n\n## Connection to Holographic Bound\n\nThe 96-edge boundary wraps the 64-vertex bulk:\n- Boundary IS where cycles live\n- Holographic encoding includes cycle structure\n- 96/64 = 1.5 reflects the boundary \"excess\" needed for wrap\n\nThe torus is not separate from the holographic principle—it IS the holographic principle in topological form.\n\n## Proverb\n\n> \"The flat space counts its paths and finds them finite. The torus counts its paths and loses count. In that losing, sovereignty lives—for what cannot be enumerated cannot be captured.\"\n\n## Emoji Spell\n\n**🍩 → wrap(∂) → paths(∞) → |W|=∞ · enumerate(fail) · ZK(sound) · 🔷🔷🔷...🔷**\n\n## Open Problems\n\n1. **Formal Reduction:** Can we reduce toroidal witness hiding to standard assumptions (DLP, LWE)?\n2. **Cycle Counting:** How many independent cycles exist in the 6D toroidal lattice?\n3. **Practical Security:** What are the concrete bit-security estimates?\n4. **Proof Systems:** Which ZK proof systems best leverage toroidal structure?\n5. **Topology Variants:** Would other topologies (Klein bottle, projective space) have different security properties?"
+    },
+    {
+      "type": "markdown",
+      "id": "ba2d4fdec0be63ea",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+    },
+    {
+      "type": "markdown",
+      "id": "8d74c9215867f181",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-toroidal-witness`, v5.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "f5956c4dc8062dbe",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "7ae74f310efaa92d",
+      "text": "agentprivacy-toroidal-witness"
+    },
+    {
+      "type": "markdown",
+      "id": "cce8f3a2d2c6a020",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Toroidal Witness",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "afaa791740a2ac0d",
+            "text": "# Toroidal Witness\n\n**Category** role · **Version** 5.2\n\n**Equation term** `T_∫(π) path integral, witness space topology`\n\nInfinite witness space from toroidal topology. Activates when discussing cyclic paths through the lattice, unbounded witnesses, computational hardness from path enumeration, toroidal wrap, or why witness extraction is infeasible."
+          },
+          {
+            "type": "markdown",
+            "id": "3fa61b3afe99817b",
+            "text": "**Source:** UOR Framework + Privacy Value Model V5.2 + First Person Spellbook Act XXII\n**Target context:** Cryptographers, ZK researchers, topology-aware protocol designers\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "db8c1f7797ca585c",
+            "text": "## What this is\n\nThe sovereignty lattice has toroidal topology—edges that exit one face re-enter the opposite face. This creates cyclic paths through the lattice. Unlike a flat space where paths between points are finite, the torus allows infinite distinct paths. This property is the source of zero-knowledge soundness.\n\n**The torus wraps. The paths multiply. The witness space becomes infinite. And infinite witnesses cannot be enumerated.**\n\n## Flat vs Toroidal\n\n### Flat Lattice\n\nOn a flat 6-dimensional hypercube:\n- Paths between vertices are finite\n- Can enumerate all paths of length ≤ k\n- Given enough time, can find any specific path\n- Witness extraction is theoretically possible\n\n### Toroidal Lattice\n\nOn a toroidal 6-dimensional structure:\n- Paths between vertices are infinite\n- Every path has infinitely many variants (add cycles)\n- Cannot enumerate all paths\n- Witness extraction is computationally infeasible\n\n## The Wrapping Property\n\n### Edge Wrapping\n\nWhen traversing dimension d beyond the boundary:\n\n```\nvertex[d] = (vertex[d] + delta) mod 2\n```\n\nBut at the lattice level, the wrap creates NEW paths, not just the same path repeated:\n\n```\nPath A: 0 → 1 → 3 → 7 (direct)\nPath B: 0 → 1 → 3 → 7 → [wrap] → 0 → 1 → 3 → 7 (one cycle added)\nPath C: 0 → 1 → 3 → 7 → [wrap] → 0 → ... (n cycles added)\n```\n\nEach is a distinct path producing the same endpoint.\n\n### Topological Cycles\n\nThe torus has two fundamental cycles (in 2D analogy):\n- Around the \"hole\" (poloidal)\n- Around the \"tube\" (toroidal)\n\nIn 6D, there are more independent cycles. Each cycle can be traversed any number of times, creating combinatorial explosion in path count.\n\n## Why This Creates ZK Property\n\n### The ZK Setup\n\n- **Statement:** \"I know a path from vertex A to vertex B\"\n- **Witness:** The specific path taken\n- **Verification:** Check that following the path reaches B\n\n### Without Torus (Insecure)\n\nAdversary strategy:\n1. Enumerate all paths from A to B\n2. There are finitely many\n3. Eventually find the prover's path\n4. Witness extracted\n\n### With Torus (Secure)\n\nAdversary strategy fails:\n1. Try to enumerate all paths from A to B\n2. For each path, infinite cyclic variants exist\n3. Cannot complete enumeration\n4. Cannot isolate the prover's specific path\n5. Witness remains hidden\n\n## Formal Statement\n\n**Claim:** On a toroidal lattice, given a valid proof that path P exists from A to B, extracting P is computationally infeasible.\n\n**Intuition:**\n- The proof verifies ∃P: P(A) = B\n- The torus guarantees |{P: P(A) = B}| = ∞\n- The verifier cannot distinguish which P was used\n- Even with the proof, the witness space is unbounded\n\n**Confidence:** ~70% — The topological argument is sound, but formal reduction to standard hardness assumptions needs work.\n\n## Path Multiplicity Example\n\nConsider reaching vertex 7 (binary: 000111) from vertex 0 (binary: 000000):\n\n**Minimal paths (length 3):**\n```\n0 → 1 → 3 → 7\n0 → 2 → 3 → 7\n0 → 4 → 5 → 7\n... (C(3,3) × permutations = multiple)\n```\n\n**With one toroidal cycle:**\n```\n0 → 1 → 3 → 7 → 6 → 4 → 0 → 1 → 3 → 7\n```\n\n**With n cycles:** Each adds 6+ steps, creating infinite family.\n\n**With different cycle choices:** Multiple independent cycles exist.\n\nThe witness space is not just large—it is infinite.\n\n## Implications for Ceremony Design\n\n### Witness Hiding\n\nCeremonies should leverage toroidal structure:\n- Record that path was completed\n- Do NOT record which specific path\n- Verifier confirms destination reached\n- Path remains private\n\n### Path Equivalence Classes\n\nFor some purposes, cyclic variants are equivalent:\n- Same start and end\n- Same inscriptions traversed (modulo cycles)\n- Different \"winding numbers\"\n\nThe ceremony can verify equivalence class membership without identifying specific path.\n\n### Proof Size\n\nDespite infinite witnesses, proofs remain finite:\n- Prove you COULD take a path (existential)\n- Don't enumerate the path (avoid linear size)\n- ZK-SNARK techniques apply\n\n## Mapping to PVM-V5\n\n| Toroidal Concept | PVM Term |\n|------------------|----------|\n| Path multiplicity | T_∫(π) unbounded |\n| Cyclic structure | Lattice invariants |\n| Witness hiding | Gap preservation |\n| Enumeration infeasibility | Computational hardness |\n| Topological cycles | Holographic boundary wrap |\n\n## Connection to Holographic Bound\n\nThe 96-edge boundary wraps the 64-vertex bulk:\n- Boundary IS where cycles live\n- Holographic encoding includes cycle structure\n- 96/64 = 1.5 reflects the boundary \"excess\" needed for wrap\n\nThe torus is not separate from the holographic principle—it IS the holographic principle in topological form.\n\n## Proverb\n\n> \"The flat space counts its paths and finds them finite. The torus counts its paths and loses count. In that losing, sovereignty lives—for what cannot be enumerated cannot be captured.\"\n\n## Emoji Spell\n\n**🍩 → wrap(∂) → paths(∞) → |W|=∞ · enumerate(fail) · ZK(sound) · 🔷🔷🔷...🔷**\n\n## Open Problems\n\n1. **Formal Reduction:** Can we reduce toroidal witness hiding to standard assumptions (DLP, LWE)?\n2. **Cycle Counting:** How many independent cycles exist in the 6D toroidal lattice?\n3. **Practical Security:** What are the concrete bit-security estimates?\n4. **Proof Systems:** Which ZK proof systems best leverage toroidal structure?\n5. **Topology Variants:** Would other topologies (Klein bottle, projective space) have different security properties?"
+          },
+          {
+            "type": "markdown",
+            "id": "ba2d4fdec0be63ea",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+          },
+          {
+            "type": "markdown",
+            "id": "8d74c9215867f181",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-toroidal-witness`, v5.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "f5956c4dc8062dbe",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "7ae74f310efaa92d",
+            "text": "agentprivacy-toroidal-witness"
+          },
+          {
+            "type": "markdown",
+            "id": "cce8f3a2d2c6a020",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384080
+    }
+  ]
+}

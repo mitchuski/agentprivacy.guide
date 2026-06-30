@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The FPSP Protocol · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="spellbook">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site on" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/mouse-spellbook/welcome-visitors.html">Mouse Spellbook</a> / <span>The FPSP Protocol</span></div>
+  <article><div class="md"><h1>FPSP — the First Person Spellbook Protocol</h1>
+<p><em>Version <code>fpsp/0.1</code> · portable · agent-system-agnostic</em></p>
+<p>This protocol lets <strong>any</strong> agentic system build, carry, and reconstitute a first-person<br>spellbook. It does not care which model or framework you use. It defines a small data<br>contract and a few operations, so that two first persons on two different stacks can<br>still read each other, and so a mouse&#39;s own agents can pick the book up later and run<br>with it.</p>
+<p>The whole point: <strong>a spellbook is a compressed context that any agent can rehydrate.</strong><br>The poetry is the human-facing surface; the protocol is what makes it machine-portable.</p>
+<hr>
+<h2>1. The artifact (the only thing that must travel)</h2>
+<p>The portable unit is a single JSON document conforming to<br><a class="wlink" href="template--grimoire-version-json.html">Template — Grimoire Version (JSON)</a>. It carries everything a fresh agent needs:</p>
+<ul>
+<li><code>protocol</code> — <code>&quot;fpsp/0.1&quot;</code>.</li>
+<li><code>first_person</code> — name, sigil, the one true proverb + its spell.</li>
+<li><code>derived_from</code> — the canon root it reads against (<strong>by hosted URL + optional IPFS CID</strong>,<br>never a local path), so any machine can fetch it.</li>
+<li><code>legend</code> — a pointer to the shared spell-emoji legend, plus this person&#39;s <code>additions</code><br>(symbols they coined, each with a meaning) so their spells stay decodable.</li>
+<li><code>proverbs[]</code> — each with <code>proverb</code>, optional <code>poem</code>, <code>spell</code>, <code>glyph_ref</code>, <code>polarity</code>,<br><code>source_truth</code>, and optionally a <code>canon_act</code> linking down to the serious work<br>(<a class="wlink" href="canon-sources.html">Canon Sources</a>).</li>
+<li><code>rehydration</code> — instructions + a ready prompt for reconstituting the book.</li>
+<li><code>signature</code>, <code>pinning</code> — the seal, and where/whether the owner has pinned it.</li>
+</ul>
+<p>A spellbook with a valid artifact is portable. Everything else (the little markdown<br>book, the glyph art) is a human rendering of it.</p>
+<hr>
+<h2>2. The operations</h2>
+<h3>COMPRESS  (narrative → handle)</h3>
+<p>Turn a body of understanding into carryable handles. This is the workshop&#39;s forward path:</p>
+<pre><code>canon (narrative) ──read──▶ understanding
+understanding     ──distil─▶ proverb            (one or two sentences, promise-shaped)
+proverb           ──encode─▶ spell               (emoji string from the shared legend)
+spell             ──draw──▶ glyph                (ascii engraving + sparkle polarity)
+{proverb,spell,glyph} ──record─▶ artifact.proverbs[]
+</code></pre>
+<p>Conformance: a system performs COMPRESS correctly if every spell it emits is decodable<br>from the shared legend <strong>plus</strong> the artifact&#39;s <code>legend.additions</code> — no private,<br>undeclared symbols.</p>
+<h3>REHYDRATE  (handle → understanding, in any agent)</h3>
+<p>The inverse, and the reason the artifact is portable. Given the artifact, the shared<br>legend, and the hosted canon, any agent reconstitutes the first person&#39;s understanding:</p>
+<pre><code>artifact + legend + canon ──▶ for each proverb:
+    read spell with legend  ──▶ recover the forces (⚔️ refuse / 🧙 give / ⊥ choose / …)
+    read glyph for tone     ──▶ recover the polarity (what it gives vs refuses)
+    restate in the owner&#39;s voice, honouring legend.additions and any divergence
+optionally: follow proverb.canon_act ──▶ act ──▶ serious doc ──▶ source repo
+</code></pre>
+<p>Conformance: REHYDRATE must <strong>not flatten</strong> the owner&#39;s voice into the canon. Divergences<br>and coined symbols are preserved. Use the <code>rehydration.prompt</code> field as the seed.</p>
+<h3>OVERLAP  (two books, one vocabulary)</h3>
+<p>Because both books share the legend and the seal&#39;s shape, any agent can read one first<br>person&#39;s book <em>through</em> another&#39;s. To overlap two artifacts:</p>
+<pre><code>shared = legend symbols common to both
+for a proverb in book A:  decode with shared ──▶ find the nearest proverb in book B
+report agreements (same forces, same polarity) and divergences (coined symbols, opposite polarity)
+</code></pre>
+<p>This is how a community of first persons (the Holon Hitchhikers) stay in conversation<br>without any of them owning the vocabulary or editing a shared root.</p>
+<hr>
+<h2>3. Interop with your existing workflow</h2>
+<p>You do not adopt a new agent system. You make your existing one <strong>FPSP-compatible</strong> by<br>giving it three capabilities:</p>
+<ol>
+<li><strong>Read the artifact</strong> (<code>fpsp/0.1</code> JSON) and the shared legend.</li>
+<li><strong>COMPRESS</strong> new understanding into <code>proverbs[]</code> entries (proverb + spell + glyph),<br>declaring any new symbol in <code>legend.additions</code>.</li>
+<li><strong>REHYDRATE</strong> from the artifact on demand, using <code>rehydration.prompt</code>.</li>
+</ol>
+<p>That&#39;s the whole conformance surface. A CLI agent, a notebook, a hosted assistant, a<br>multi-agent graph — any of them can implement it. The artifact is the contract; the<br>operations are the verbs.</p>
+<hr>
+<h2>4. Versioning, root, and pinning</h2>
+<ul>
+<li><strong>Root, not fork.</strong> <code>derived_from</code> points at the privacymage First Person grimoire<br>(v10.4.0) by hosted URL. Your artifact reads it; it never edits it.</li>
+<li><strong>You pin your own.</strong> When ready, pin your artifact (IPFS or your own store) and record<br>the CID + date in <code>pinning</code>. Your book becomes content-addressed and shareable with no<br>local machine in the loop. The facilitator does not pin it for you.</li>
+<li><strong>Growth is deliberate.</strong> New shared symbols enter only by being declared in an<br>artifact&#39;s <code>legend.additions</code> and, if they prove common, promoted into the shared<br>legend by agreement — never silently.</li>
+</ul>
+<hr>
+<h2>5. Why this shape</h2>
+<p>A first person&#39;s sovereignty is the thing being protected. So the protocol keeps the<br>choosing private (the Gap is never serialized — only its <em>traces</em>: the proverbs the<br>person chose to compress), keeps the root un-edited (you read the whole; you don&#39;t<br>rewrite it for others), and keeps the vocabulary common but un-owned. Compression makes<br>the context carryable; rehydration makes it alive again in whatever agent picks it up;<br>overlap makes a community possible.</p>
+<p><em>Patterns can be copied. Choosing cannot be harvested.</em></p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+</div>
+<div class="md"><p>———<br>↑ up: <a class="wlink" href="the-mouse-spellbook.html">The Mouse Spellbook</a>  ·  ← prev: <a class="wlink" href="onboarding-and-canon-links.html">Onboarding and Canon Links</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">3 revisions</div>
+    <a class="json-link" href="the-fpsp-protocol.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

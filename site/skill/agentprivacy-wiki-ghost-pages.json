@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Ghost Pages",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "f14cee2e869f7713",
+      "text": "# Wiki Ghost Pages\n\n**Category** wikis · **Version** 5.5\n\nServer-generated federated-wiki pages that appear in the lineup but are never stored on disk — produced dynamically from an html-item form submission. Activates when building a ghost page, an html form story item, or a FastAPI handler returning page JSON. Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "d40ba29a7718ca98",
+      "text": "A ghost page appears in the wiki lineup but is never stored on disk. It is generated dynamically by a server and returned as page JSON in response to a form submission from an `html` story item. The wiki displays it in the lineup just like any stored page.\n\n## The Mechanism\n\nThe `wiki-plugin-html` handles form submission inside an `html` item:\n\n1. User submits the form\n2. Plugin serialises all named inputs as a flat JSON object\n3. POSTs (or GETs) to the form `action` URL\n4. Expects **page JSON** back from the server\n5. Calls `wiki.showResult()` — the page appears to the right in the lineup\n\nThe server never writes anything to disk. The page exists only in the browser.\n\n## html Item Pattern\n\nAdd an `html` story item containing a standard HTML form:\n\n```json\n{\n  \"type\": \"html\",\n  \"id\": \"a1b2c3d4e5f60001\",\n  \"text\": \"<form action=\\\"https://guide.agentprivacy.ai/ghost\\\" method=\\\"POST\\\">\\n  <input name=\\\"query\\\" placeholder=\\\"enter anything…\\\">\\n  <button type=\\\"submit\\\">Generate</button>\\n</form>\"\n}\n```\n\nKey rules:\n- `action` is the full URL of the server endpoint\n- `method` is `POST` (default) or `GET`\n- All `name`d inputs are collected and sent as a flat JSON object\n- Double-quotes inside the JSON `text` field must be escaped as `\\\"`\n- The html plugin sanitises with DOMPurify — standard form elements are always permitted\n\n## FastAPI Handler\n\nThe endpoint receives form params as a plain `dict` and returns page JSON:\n\n```python\nimport uuid\n\ndef make_id():\n    return uuid.uuid4().hex[:16]\n\n@app.post(\"/ghost\")\ndef ghost(params: dict):\n    query = params.get(\"query\", \"\").strip()\n    return {\n        \"title\": f\"Result: {query}\",\n        \"story\": [\n            {\n                \"type\": \"paragraph\",\n                \"id\": make_id(),\n                \"text\": f\"Generated from: {query}\"\n            }\n        ]\n    }\n```\n\nMinimum valid page JSON: a dict with `title` and `story`. No `journal` is needed for ghost pages.\n\n## Named Buttons\n\nMultiple submit buttons with `name` and `value` let one form trigger different behaviours:\n\n```html\n<form action=\"https://guide.agentprivacy.ai/ghost\" method=\"POST\">\n  <button type=\"submit\" name=\"action\" value=\"summarise\">Summarise</button>\n  <button type=\"submit\" name=\"action\" value=\"expand\">Expand</button>\n</form>\n```\n\nFastAPI receives `{\"action\": \"summarise\"}` or `{\"action\": \"expand\"}`.\n\n## Ghost Pages Can Reference Real Pages\n\nReturn `reference` items in the story to point back to real wiki pages the user can fork:\n\n```python\n{\n    \"type\": \"reference\",\n    \"id\": make_id(),\n    \"site\": \"localhost\",\n    \"slug\": \"fast-caddy\",\n    \"title\": \"Fast Caddy\",\n    \"text\": \"Optional synopsis\"\n}\n```\n\n## Requirements\n\n- Fast Caddy — Caddy routing `api.guide.agentprivacy.ai` to FastAPI on `:8000`\n- FastAPI — running with `uvicorn main:app --port 8000 --reload`\n- CORS middleware enabled on FastAPI (`allow_origins=[\"*\"]`)\n\n## Related Skills\n\n- `agentprivacy-wiki-claude-ghost` — ghost pages whose body is written live by Claude\n- `agentprivacy-wiki-page` — creating stored pages\n- `agentprivacy-wiki-journal` — cleaning page history"
+    },
+    {
+      "type": "markdown",
+      "id": "0372a80abc0e3e28",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/ghost-pages-skill](https://skill.fedwiki.club/ghost-pages-skill) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "36782fc08b6b8244",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-ghost-pages`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "89372ab512c2a8e9",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "0504a3f8b5644fe6",
+      "text": "agentprivacy-wiki-ghost-pages"
+    },
+    {
+      "type": "markdown",
+      "id": "4072228ee6d3c02a",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Ghost Pages",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "f14cee2e869f7713",
+            "text": "# Wiki Ghost Pages\n\n**Category** wikis · **Version** 5.5\n\nServer-generated federated-wiki pages that appear in the lineup but are never stored on disk — produced dynamically from an html-item form submission. Activates when building a ghost page, an html form story item, or a FastAPI handler returning page JSON. Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "d40ba29a7718ca98",
+            "text": "A ghost page appears in the wiki lineup but is never stored on disk. It is generated dynamically by a server and returned as page JSON in response to a form submission from an `html` story item. The wiki displays it in the lineup just like any stored page.\n\n## The Mechanism\n\nThe `wiki-plugin-html` handles form submission inside an `html` item:\n\n1. User submits the form\n2. Plugin serialises all named inputs as a flat JSON object\n3. POSTs (or GETs) to the form `action` URL\n4. Expects **page JSON** back from the server\n5. Calls `wiki.showResult()` — the page appears to the right in the lineup\n\nThe server never writes anything to disk. The page exists only in the browser.\n\n## html Item Pattern\n\nAdd an `html` story item containing a standard HTML form:\n\n```json\n{\n  \"type\": \"html\",\n  \"id\": \"a1b2c3d4e5f60001\",\n  \"text\": \"<form action=\\\"https://guide.agentprivacy.ai/ghost\\\" method=\\\"POST\\\">\\n  <input name=\\\"query\\\" placeholder=\\\"enter anything…\\\">\\n  <button type=\\\"submit\\\">Generate</button>\\n</form>\"\n}\n```\n\nKey rules:\n- `action` is the full URL of the server endpoint\n- `method` is `POST` (default) or `GET`\n- All `name`d inputs are collected and sent as a flat JSON object\n- Double-quotes inside the JSON `text` field must be escaped as `\\\"`\n- The html plugin sanitises with DOMPurify — standard form elements are always permitted\n\n## FastAPI Handler\n\nThe endpoint receives form params as a plain `dict` and returns page JSON:\n\n```python\nimport uuid\n\ndef make_id():\n    return uuid.uuid4().hex[:16]\n\n@app.post(\"/ghost\")\ndef ghost(params: dict):\n    query = params.get(\"query\", \"\").strip()\n    return {\n        \"title\": f\"Result: {query}\",\n        \"story\": [\n            {\n                \"type\": \"paragraph\",\n                \"id\": make_id(),\n                \"text\": f\"Generated from: {query}\"\n            }\n        ]\n    }\n```\n\nMinimum valid page JSON: a dict with `title` and `story`. No `journal` is needed for ghost pages.\n\n## Named Buttons\n\nMultiple submit buttons with `name` and `value` let one form trigger different behaviours:\n\n```html\n<form action=\"https://guide.agentprivacy.ai/ghost\" method=\"POST\">\n  <button type=\"submit\" name=\"action\" value=\"summarise\">Summarise</button>\n  <button type=\"submit\" name=\"action\" value=\"expand\">Expand</button>\n</form>\n```\n\nFastAPI receives `{\"action\": \"summarise\"}` or `{\"action\": \"expand\"}`.\n\n## Ghost Pages Can Reference Real Pages\n\nReturn `reference` items in the story to point back to real wiki pages the user can fork:\n\n```python\n{\n    \"type\": \"reference\",\n    \"id\": make_id(),\n    \"site\": \"localhost\",\n    \"slug\": \"fast-caddy\",\n    \"title\": \"Fast Caddy\",\n    \"text\": \"Optional synopsis\"\n}\n```\n\n## Requirements\n\n- Fast Caddy — Caddy routing `api.guide.agentprivacy.ai` to FastAPI on `:8000`\n- FastAPI — running with `uvicorn main:app --port 8000 --reload`\n- CORS middleware enabled on FastAPI (`allow_origins=[\"*\"]`)\n\n## Related Skills\n\n- `agentprivacy-wiki-claude-ghost` — ghost pages whose body is written live by Claude\n- `agentprivacy-wiki-page` — creating stored pages\n- `agentprivacy-wiki-journal` — cleaning page history"
+          },
+          {
+            "type": "markdown",
+            "id": "0372a80abc0e3e28",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/ghost-pages-skill](https://skill.fedwiki.club/ghost-pages-skill) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "36782fc08b6b8244",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-ghost-pages`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "89372ab512c2a8e9",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "0504a3f8b5644fe6",
+            "text": "agentprivacy-wiki-ghost-pages"
+          },
+          {
+            "type": "markdown",
+            "id": "4072228ee6d3c02a",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384128
+    }
+  ]
+}

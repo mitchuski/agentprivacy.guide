@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — V6 Research Note — The Existence-Leak and the Falling Z · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — V6 Research Note — The Existence-Leak and the Falling Z</span></div>
+  <article><div class="md"><h1>V6 Research Note — The Existence-Leak and the Falling Z</h1>
+</div>
+<div class="md"><p><strong>Date:</strong> 2 June 2026<br><strong>Object:</strong> Schrottenloher, <em>Optimized Point Addition Circuits for Elliptic Curve Discrete Logarithms</em>, arXiv:2606.02235v1 (1 June 2026)<br><strong>Lineage anchor:</strong> C30–C33 (Bakhta / <em>Half-Life of Trust</em> / Behavioral Mosca Inequality)<br><strong>Candidate seed:</strong> one new conjecture proposed below, numbering deferred<br><strong>Status:</strong> Stage 1, pre-peer-review, worked empirical example<br><strong>Erratum 2026-06-10 (Run 0 register lock):</strong> the candidate proposed below as &quot;C40&quot; is registered as <strong>C81</strong> in <code>CONJECTURE_REGISTER_V6.md</code>; C40 was already occupied by Zcash dual-ledger (formal spec §17.2.1). Read every &quot;C40 (Existence-Leak)&quot; in this note as C81.</p>
+<blockquote>
+<p>i can prove i broke you without showing you how</p>
+</blockquote>
+<p>the inverse of Selene&#39;s Proof, and the reason this note exists.</p>
+</div>
+<div class="md"><h2>Verdict</h2>
+<p>A reproducible, open-source quantum attack on secp256k1 lands as a clean downward revision of the Z trajectory in the Behavioral Mosca Inequality, not as a new attack class. It touches nothing in the PQ stack: ML-KEM and ML-DSA are lattice schemes outside Shor&#39;s discrete-log reach, and the isogeny line died by a different cause. The value of the object is twofold. First, it is the most concrete decrement to date of the time-to-feasibility term for the curve that secures the behavioral-capital ledgers. Second, the manner of its arrival exposes a leakage channel in zero-knowledge disclosure control that the architecture has not yet named, and which contrasts sharply with the amnesia primitive at the base of the Zero Spellbook.</p>
+</div>
+<div class="md"><h2>The object</h2>
+<p>Schrottenloher (Inria Rennes) reconstructs, in the open and with runnable code, the elliptic-curve discrete-log circuits that Babbush et al. announced roughly three months earlier (arXiv:2603.28846) but declined to publish. Babbush&#39;s group improved the logical circuits by a factor of two to three over Litinski&#39;s 2023 benchmark and then withheld the circuits, attesting their gate and qubit counts by a zero-knowledge proof rather than by disclosure, on stated concern over medium-term attack feasibility. Schrottenloher reproduces comparable numbers from first principles: about 1.5% more qubits and 6.5 to 10% fewer Toffoli gates on the point-addition circuit.</p>
+<p>The engine is a two-pass split of the extended Euclidean algorithm. A plain Euclidean stage records its branch choices as a packed garbage bit-vector; a separate Bézout reconstruction replays those bits. Separating the input side from the coefficient side folds modular inversion and an in-place multiplication into one structure, and the space cost collapses onto that reconstruction step at roughly 4.36n qubits. A second, instance-specific gain comes from secp256k1&#39;s prime being pseudo-Mersenne, 2^256 minus (2^32 plus 977), so reduction stops being subtraction of a 256-bit constant and becomes erase-the-top-bit, add-a-small-f. The curve is faster to attack because it was chosen to be fast to use.</p>
+<p>The trajectory, full Shor on secp256k1, space-optimized:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Logical qubits</th>
+<th>Toffoli gates</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Litinski 2023</td>
+<td>~2x (≈2,400)</td>
+<td>2^27.57</td>
+</tr>
+<tr>
+<td>Babbush et al. 2026</td>
+<td>1,191</td>
+<td>2^26.27</td>
+</tr>
+<tr>
+<td>Schrottenloher 2026</td>
+<td>1,208</td>
+<td>2^26.11</td>
+</tr>
+</tbody></table>
+<p>Honest framing for the lineage: these are logical counts. Fault-tolerant execution still demands error correction and therefore millions of physical qubits. Z is decremented, not collapsed.</p>
+</div>
+<div class="md"><h2>Where it slots: C30–C33</h2>
+<p>The Behavioral Mosca Inequality holds that exposure begins when X_b plus Y_b exceeds Z_b, where X_b is the required confidentiality lifetime of behavioral capital, Y_b is the migration time for behavioral-data infrastructure to post-quantum primitives, and Z_b is the time until the attack is operationally feasible. This paper is a measured reduction in the resource-cost component of the Z_b trajectory for the one curve that signs on-chain identity, reputation, and credential rails. In the temporal-dynamics term e^{-lambda t} (1 + A(tau)), a fall in Z_b registers as a rise in the effective decay rate lambda for every configuration secured by secp256k1: the threat landscape against that primitive is now moving faster, by a published and reproducible margin, which is precisely the condition under which the decay function says stale configurations are catastrophically undervalued.</p>
+<p>This is a worked example feeding C30–C33. It is not a new conjecture in that cluster, and it does not change any proven bound. It does what <em>Half-Life of Trust</em> predicts a primitive&#39;s aging should do: it ages progressively, and now there is a number attached to the slope.</p>
+</div>
+<div class="md"><h2>The disclosure fork: a candidate conjecture</h2>
+<p>The interesting structure is not the circuit. It is that a zero-knowledge proof intended as a disclosure control leaked the only quantity whose secrecy would have mattered. A proof that an attack is feasible at cost kappa is an upper bound on the difficulty of building that attack, and an upper bound on difficulty is a search-space compression for any third party. Babbush&#39;s proof hid the method and broadcast the feasibility; the feasibility was sufficient for independent reconstruction within a quarter.</p>
+<p>State it for the record.</p>
+<p><strong>Candidate conjecture (Existence-Leak). Confidence ~60%, Stage 1, n = 1.</strong> For an adversarial capability C, a zero-knowledge proof that C is feasible at resource cost kappa communicates a non-trivial upper bound on the difficulty of independently constructing C, and that bound measurably reduces third-party reconstruction time. Equivalently, I(feasibility ; method) is greater than zero even under perfect method-hiding, because feasibility is a projection of method onto the existence axis, and a ZK proof cannot hide a coordinate it is constructed to certify.</p>
+<p>The corollary is the part that belongs to us. ZK-as-disclosure-control behaves differently for capability claims than for service claims. Selene&#39;s Proof hides the witness because the witness is genuinely gone: zero-memory is stronger than zero-knowledge precisely because there is nothing left to reconstruct. The Babbush proof hid a witness that still existed, the circuit, and a witness that exists under a published existence-claim is a witness that comes back. The Gap is constitutive here too. Sovereignty lives in the irreducible separation; leakage lives in the reducible one. A feasibility claim is reducible to its method by anyone with the existence-claim as a seed, which is why this is an information channel and not merely an etiquette failure.</p>
+<p>Numbering deferred. C38–C39 are reserved for <em>The 0.16 Question</em> and <em>The Anna Karenina Bind</em>; this wants its own slot, candidate C40, your call. It is a single worked instance and should carry that humility until a second arrives.</p>
+</div>
+<div class="md"><h2>Convergence framing</h2>
+<p>Two groups arrived at near-identical circuits from opposite disclosure postures, three months apart. Reading this as priority dispute misses it. The proof-without-method posture and the full-reproducibility posture are both internally coherent, and neither party is owed a dunk. What the pair demonstrates is noospheric: the primitive was reconstructible from its existence-claim, which is plurality in adversarial cryptanalysis rather than in architecture. The same shape we keep finding in the friendly case, independent builders landing on the same primitive from different starts, holds in the hostile case, where the leak is the convergence mechanism.</p>
+</div>
+<div class="md"><h2>What it does not change</h2>
+<p>The PQ migration narrative stands and is validated by the urgency, not threatened by it. ML-KEM and ML-DSA are untouched. The isogeny line remains a classical casualty, a separate memorial. No proven bound in the lineage moves. The story scaffolding that rests on Kyber and Dilithium as the answer to exactly this threat is reinforced, because this paper is the threat that the answer answers.</p>
+<hr>
+<p><em>Privacy is value. The boundary is constitutive.</em></p>
+<p>License: CC BY-SA 4.0<br>Attribution: privacymage / 0xagentprivacy / BGIN / First Person Network</p>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 note-v6-research-note-the-existence-leak-and-the-falling-z</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-v6-research-note-the-existence-leak-and-the-falling-z.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

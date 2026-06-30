@@ -1,0 +1,152 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zero — Tale 13 · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="spellbooks">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site on" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/spellbooks/welcome-visitors.html">Spellbooks</a> / <span>Zero — Tale 13</span></div>
+  <article><div class="md"><h1>🔮 Zero — Tale 13</h1>
+</div>
+<div class="md"><h3>Tale 13: The Sumcheck Riddle</h3>
+<p><strong>Vertex Coordinates:</strong> ⟨0,0,0,0,1,0⟩ — Pure Computation<br><strong>Moon Phase:</strong> 🌒 Waxing Crescent — One dimension active (stratum 1)<br><strong>Blade:</strong> 16 (010000) — Pure Computation<br><strong>V(π,t) terms:</strong> <strong>Q</strong> (separation quality — sumcheck is the primitive that measures without revealing)<br><strong>Concepts:</strong> Sumcheck Protocol, Interactive Proofs, GKR Protocol, Multilinear Extensions</p>
+<h4>The Story</h4>
+<p>In the monastery&#39;s <strong>Chamber of Sums</strong>, Master Calculon posed a riddle to Soulbis and Soulbae.</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<p>&quot;I have computed a massive sum,&quot; he announced, writing:</p>
+<pre><code>S = Σ g(x₁, x₂, ..., xₙ)
+    over all x ∈ {0,1}ⁿ
+</code></pre>
+<p>&quot;This is 2ⁿ evaluations! For n=20, that&#39;s over a million terms. I claim the sum equals 42. How can you verify this without computing all terms yourself?&quot;</p>
+<p>Soulbis thought first. &quot;If you just tell me &#39;42,&#39; I have no way to check without doing the full computation. The Swordsman cannot verify what he cannot measure — but measuring every term defeats the purpose of proving.&quot;</p>
+<p>&quot;Exactly,&quot; Calculon smiled. &quot;But what if we play a game?&quot;</p>
+<p><strong>The Sumcheck Game:</strong></p>
+<p>&quot;Round 1: I claim S = Σ g(x₁, ..., xₙ) for all x ∈ {0,1}ⁿ</p>
+<p>&quot;I send you a univariate polynomial g₁(X₁) where:</p>
+<pre><code>g₁(X₁) = Σ g(X₁, x₂, ..., xₙ) for x₂,...,xₙ ∈ {0,1}
+</code></pre>
+<p>&quot;You verify: g₁(0) + g₁(1) = S (my claimed sum)</p>
+<p>&quot;If I&#39;m honest, this must hold! If I&#39;m cheating, this likely fails.</p>
+<p>&quot;Round 2: You give me a random challenge r₁. I must now prove:</p>
+<pre><code>g₁(r₁) = Σ g(r₁, x₂, ..., xₙ) for x₂,...,xₙ ∈ {0,1}
+</code></pre>
+<p>&quot;I send you g₂(X₂) where:</p>
+<pre><code>g₂(X₂) = Σ g(r₁, X₂, x₃, ..., xₙ) for x₃,...,xₙ ∈ {0,1}
+</code></pre>
+<p>&quot;You verify: g₂(0) + g₂(1) = g₁(r₁)</p>
+<p>&quot;We repeat this n times, each time fixing one more variable to a random challenge.&quot;</p>
+<p>&quot;Final Round: After n rounds, all variables are fixed to random values r₁, ..., rₙ. You simply evaluate g(r₁, ..., rₙ) yourself and check it matches the final claimed value.&quot;</p>
+<p>Soulbis saw the brilliance. &quot;Each round, you reduce the problem by half! And if you cheat in any round, the random challenge catches you with high probability!&quot;</p>
+<p>&quot;Precisely!&quot; Calculon confirmed. &quot;Let&#39;s analyze the costs:</p>
+<p><strong>Without Sumcheck:</strong></p>
+<ul>
+<li>Verify sum: Compute 2ⁿ evaluations of g</li>
+</ul>
+<p><strong>With Sumcheck:</strong></p>
+<ul>
+<li>Rounds: n (one per variable)</li>
+<li>Verifier work per round: O(degree of g)</li>
+<li>Final evaluation: 1</li>
+<li>Total: O(n · deg(g)) &lt;&lt; 2ⁿ&quot;</li>
+</ul>
+<p>Soulbis asked, &quot;What if the function g is not a polynomial?&quot;</p>
+<p>&quot;Excellent question! This is where <strong>multilinear extensions</strong> come in.&quot;</p>
+<p>Calculon showed them how any function f: {0,1}ⁿ → 𝔽 can be extended to a unique multilinear polynomial f̃: 𝔽ⁿ → 𝔽 that agrees with f on the boolean hypercube.</p>
+<p>&quot;The extension is unique and efficient to compute. This means we can apply sumcheck to any boolean function!&quot;</p>
+<p>He showed them a practical application—the <strong>GKR protocol</strong> for verifiable computation:</p>
+<p>&quot;GKR breaks a computation into layers of a circuit. At each layer, we use sumcheck to verify:</p>
+<ol>
+<li>The outputs of layer i are computed correctly from layer i+1</li>
+<li>This reduces verifying layer i to verifying layer i+1</li>
+<li>Repeat until reaching the input layer</li>
+</ol>
+<p>&quot;The final result: Logarithmic verification time for any computation!&quot;</p>
+<p>Soulbis connected this to the folding technique. &quot;Both sumcheck and folding reduce verification costs, but through different means—sumcheck through randomized checking, folding through algebraic combination.&quot;</p>
+<p>&quot;Yes,&quot; Calculon agreed. &quot;And they&#39;re often used together! HyperNova uses sumcheck within its folding operation. Many zkVMs use sumcheck for memory checking.&quot;</p>
+<p>He concluded with the key insight: &quot;Sumcheck is the ultimate &#39;check vast sums quickly&#39; protocol. Whenever you need to verify global properties—sums, products, constraints over large domains—sumcheck provides the path.&quot;</p>
+<p>As they left the Chamber, Soulbis noticed this vertex was different — pure Computation without Protection, Delegation, or other dimensions. Sumcheck was a fundamental verification primitive that could be combined with privacy techniques, but in its essence was simply about efficient checking. &quot;Blade 16. Stratum 1. The blade that cuts nothing but counts everything.&quot;</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<h4>The Spell Inscription</h4>
+<pre><code>S = Σ g(x₁,...,xₙ) over {0,1}ⁿ → 2ⁿ terms
+Sumcheck: n rounds, each fixes one variable to random rᵢ
+Round i: send gᵢ(Xᵢ), verify gᵢ(0) + gᵢ(1) = gᵢ₋₁(rᵢ₋₁)
+Final: check g(r₁,...,rₙ) directly
+Verify cost: O(n·d) &lt;&lt; O(2ⁿ)
+
+Vertex: ⟨0,0,0,0,1,0⟩
+Blade: 16 (010000)  Moon Phase: 🌒 stratum 1
+
+Forces Activated:
+⚔️ Protect: (dormant — sumcheck is verification without privacy; privacy comes when combined with commitments)
+🧙 Project: (dormant)
+🪞 Reflect: (dormant)
+🤝 Connect: (dormant)
+
+V(π,t) contribution: Q (pure separation quality — sumcheck measures what would otherwise be 2ⁿ unmeasurable)
+</code></pre>
+<p><strong>Proverb:</strong> <em>To verify the sum of a million terms, check twenty random slices. Each challenge halves the space; randomness guarantees honesty. The ocean measured by testing twenty drops.</em></p>
+<h4>Technical Bridge</h4>
+<p><strong>Sumcheck Protocol:</strong></p>
+<p>Prover claims: H = Σ_{x∈{0,1}ⁿ} g(x₁, ..., xₙ)</p>
+<pre><code>For i = 1 to n:
+    Prover sends: gᵢ(Xᵢ) = Σ_{xᵢ₊₁,...,xₙ ∈ {0,1}} g(r₁,...,rᵢ₋₁,Xᵢ,xᵢ₊₁,...,xₙ)
+    
+    Verifier checks: 
+        gᵢ(0) + gᵢ(1) = previous_sum (or H if i=1)
+        
+    Verifier sends: random challenge rᵢ ← 𝔽
+    
+    Update: previous_sum ← gᵢ(rᵢ)
+    
+End: Verifier checks g(r₁,...,rₙ) = gₙ(rₙ) by evaluating directly
+</code></pre>
+<p><strong>Complexity:</strong></p>
+<ul>
+<li>Rounds: n</li>
+<li>Communication: n polynomials of degree d</li>
+<li>Verifier time: O(n · d)</li>
+<li>Soundness error: n · d / |𝔽|</li>
+</ul>
+<p><strong>Multilinear Extension:</strong></p>
+<p>Any f: {0,1}ⁿ → 𝔽 extends uniquely to f̃: 𝔽ⁿ → 𝔽 where:</p>
+<pre><code>f̃(x₁,...,xₙ) = Σ_{b∈{0,1}ⁿ} f(b) · ∏ᵢ χᵢ(xᵢ, bᵢ)
+χᵢ(x,0) = 1-x, χᵢ(x,1) = x
+</code></pre>
+<p><strong>Applications:</strong></p>
+<ul>
+<li><strong>GKR:</strong> Verifiable circuit evaluation</li>
+<li><strong>Spartan:</strong> SNARK based on sumcheck</li>
+<li><strong>Hyrax:</strong> Doubly-efficient IPs</li>
+<li><strong>HyperNova:</strong> Used in folding</li>
+<li><strong>zkVMs:</strong> Memory consistency checks</li>
+</ul>
+<p><strong>Performance Example (2²⁰ sum):</strong></p>
+<ul>
+<li>Direct computation: 1M evaluations</li>
+<li>Sumcheck rounds: 20</li>
+<li>Verifier work: ~100 field operations</li>
+<li><strong>~10,000x speedup</strong></li>
+</ul>
+<p><strong>Geometric Interpretation:</strong><br>Sumcheck represents the pure Computation dimension of the lattice — verification without privacy, delegation, or other concerns. It&#39;s a foundational primitive that can be combined with other dimensions to create privacy-preserving systems, but in itself focuses solely on efficient verification. This demonstrates that the lattice contains vertices for pure computational efficiency that serve as building blocks for more complex sovereignty architectures. Blade 16 is the lowest-stratum blade in the backend cluster — a single dimension lit, all others reserved.</p>
+<p><strong>Applied to:</strong> Polynomial verification, GKR protocol, zkVMs, memory checking</p>
+<hr>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 zero-tale-13</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="zero-the-privacymage-grimoire.html">Zero — the Privacymage Grimoire</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="zero-tale-13.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

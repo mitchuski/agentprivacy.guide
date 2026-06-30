@@ -1,0 +1,158 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lattice Coherence · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Lattice Coherence</span></div>
+  <article><div class="md"><h1>Lattice Coherence</h1>
+<p><strong>Category</strong> meta · <strong>Version</strong> 1.0</p>
+<p><strong>Equation term</strong> <code>the 6-bit sovereignty lattice (P·D·M·C·Comp·V) underlying V(π,t)</code></p>
+<p>The canonical encoding of the 6-dimension sovereignty lattice and the discipline for keeping every repo in the suite agreeing on it. Activates when assigning or auditing a vertex, when a persona&#39;s vertex number and dimension-meaning seem to disagree, when reconciling the grimoire / spellweb / tomes / docs before a pin, when a new mage is seated, or when a vertex reading (binary, dimensions, stratum, complement) needs verification. Carries the standing rule: meaning is the invariant; the vertex is DERIVED from meaning under the canonical encoding. Ships a runnable coherence linter (<code>scripts/lattice_coherence_audit.py</code>).</p>
+</div>
+<div class="md"><p><strong>The single source of truth for the sovereignty-lattice encoding, and the discipline that keeps<br>the whole suite agreeing on it.</strong></p>
+<blockquote>
+<p>&quot;Meaning is the invariant. The number is derived. Audit before you pin.&quot;</p>
+</blockquote>
+<p><strong>Spell:</strong> <code>🛡️16·8·4·2·💎 → derive → verify → 🔒</code></p>
+</div>
+<div class="md"><h2>1. The canonical encoding (MODEL)</h2>
+<p>The lattice is <code>Z/(2⁶)Z</code> — 64 vertices, each a 6-bit reading of the six sovereignty dimensions.<br>The <strong>only</strong> canonical bit→dimension mapping is the Privacy-Value-Model definition itself<br>(<code>privacy-value-model-v5.4.json</code> <code>sovereignty_dimensions</code> + <code>lattice-vertex.ts</code> <code>vertexToBits</code>):</p>
+<table>
+<thead>
+<tr>
+<th align="right">bit</th>
+<th align="right">weight</th>
+<th>dimension</th>
+<th align="center">symbol</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">0 (MSB)</td>
+<td align="right">32</td>
+<td><strong>Protection</strong></td>
+<td align="center">🛡️</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td align="right">16</td>
+<td><strong>Delegation</strong></td>
+<td align="center">🤝</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">8</td>
+<td><strong>Memory</strong></td>
+<td align="center">📜</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">4</td>
+<td><strong>Connection</strong></td>
+<td align="center">🔗</td>
+</tr>
+<tr>
+<td align="right">4</td>
+<td align="right">2</td>
+<td><strong>Computation</strong></td>
+<td align="center">⚡</td>
+</tr>
+<tr>
+<td align="right">5 (LSB)</td>
+<td align="right">1</td>
+<td><strong>Value</strong></td>
+<td align="center">💎</td>
+</tr>
+</tbody></table>
+<p>Read a vertex: <code>active(n) = { dim : n &amp; weight }</code>. Examples (memorize these as checksums):</p>
+<ul>
+<li><strong>V35</strong> <code>100011</code> = Protection + Computation + Value</li>
+<li><strong>V38</strong> <code>100110</code> = Protection + Connection + Computation</li>
+<li><strong>V25</strong> <code>011001</code> = Delegation + Memory + Value</li>
+<li><strong>V41</strong> <code>101001</code> = Protection + Memory + Value</li>
+<li><strong>V63</strong> <code>111111</code> = all six (the Sovereign Anchor)</li>
+</ul>
+<blockquote>
+<p><strong>The rejected encoding (CORPUS).</strong> <code>specs/04-vertex-naming-audit.md</code> and the older persona<br>placements used a corrupted order that <strong>mirrored the middle four</strong> (16↔Computation, 8↔Connection,<br>4↔Memory, 2↔Delegation). It agrees with MODEL only on the endpoints (Protection=32, Value=1), which<br>is why drift hid for so long. If you ever see V16 called &quot;Computation&quot; or V2 called &quot;Delegation&quot;,<br>you are reading CORPUS — it is wrong.</p>
+</blockquote>
+</div>
+<div class="md"><h2>2. The reidentification rule</h2>
+<p>A persona&#39;s <strong>dimension-set is its meaning</strong> (Memora <em>is</em> memory + the shield of value; Aletheia <em>is</em><br>the bright medium = Protection+Connection+Computation; Lethe <em>is</em> forgetting = Delegation+Memory+Value).<br>Meaning is sourced from canon (the First-Person Spellbook tales, e.g. <code>aletheia-and-lethe.md</code> / Tale 31),<br><strong>not</strong> from whatever number a doc happens to show.</p>
+<p><strong>The vertex is derived, never assumed:</strong> <code>vertex = Σ weight(d) for d in meaning</code>.</p>
+<p>When a number and a meaning disagree, the <strong>number</strong> is wrong (the persona was <em>misassigned</em> under<br>CORPUS). Reseat the persona at the derived vertex; keep the myth. Worked precedent (2026-06-09):</p>
+<table>
+<thead>
+<tr>
+<th>persona</th>
+<th>meaning (invariant)</th>
+<th>derived seat</th>
+<th>was (misassigned)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Aletheia 🔮</td>
+<td>Protection + Connection + Computation</td>
+<td><strong>V38</strong></td>
+<td>V25</td>
+</tr>
+<tr>
+<td>Lethe 🌀</td>
+<td>Delegation + Memory + Value</td>
+<td><strong>V25</strong></td>
+<td>V38</td>
+</tr>
+<tr>
+<td>Memora 📜</td>
+<td>Protection + Memory + Value</td>
+<td><strong>V41</strong></td>
+<td>V5</td>
+</tr>
+</tbody></table>
+<p>Aletheia ⊥ Lethe stayed a complement pair (V25 ⊕ V38 = V63) — a swap, not a relocation. <strong>Preserve<br>invariants on every move:</strong> complement pairs (<code>A ⊕ B = 63</code>, <code>A AND B = 0</code>), the V63/V28 dual-agent<br>split, and — critically — <strong>deployed vertex <em>numbers</em></strong> (the NFT 63-edition, City Key, <code>/star</code>,<br><code>/lattice</code>) which must never silently shift; verify each move against them by hand.</p>
+</div>
+<div class="md"><h2>3. The runnable — <code>scripts/lattice_coherence_audit.py</code></h2>
+<p>A stdlib-only linter (no deps; Windows/macOS/Linux). Run it <strong>before every grimoire pin</strong>.</p>
+<pre><code class="language-bash">python scripts/lattice_coherence_audit.py            # audit suite roots
+python scripts/lattice_coherence_audit.py --only vertex     # bit-order coherence
+python scripts/lattice_coherence_audit.py --only persona    # persona↔seat reidentification
+python scripts/lattice_coherence_audit.py --list            # registered checks
+python scripts/lattice_coherence_audit.py --remap-personas  # dry-run a vertex move (grouped A–M)
+python scripts/lattice_coherence_audit.py --remap-personas --apply &lt;paths…&gt;   # write (scoped)
+</code></pre>
+<p>Checks: <strong>vertex</strong> (binary↔number, dimension-reading, single-bit-label, version-noise-gated) ·<br><strong>persona</strong> (canonical-seat reidentification, driven by the <code>PERSONA_VERTICES</code> registry) ·<br><strong>conjecture</strong> (duplicate ids) · <strong>pin</strong> (version↔CID sightings). Exit 0 = coherent, 1 = drift.</p>
+<p>The check set is a <strong>registry</strong> — extend it for any new significant encoding (gems-per-keeper,<br>sigils, ceremony grammars). The remapper is dry-run by default; <strong>never apply across pinned/historical<br>grimoire snapshots or keyed JSON by text substitution</strong> — those need structural edits.</p>
+</div>
+<div class="md"><h2>4. Decision patterns</h2>
+<ul>
+<li><strong>Seating a new mage?</strong> State its meaning (dimension-set) → derive the vertex → check the seat is<br>free → check complement/structural invariants → run the audit. Do not pick a number first.</li>
+<li><strong>A doc shows a vertex reading you doubt?</strong> Recompute from §1. Trust the arithmetic, not the prose.</li>
+<li><strong>Two sources disagree on a persona&#39;s dimensions?</strong> Go to the First-Person Spellbook tale (the<br>root), not the City-of-Mages retelling — the retelling is where misassignment lives.</li>
+<li><strong>About to pin the grimoire?</strong> Run <code>--only vertex</code> and <code>--only persona</code> to 0 first.</li>
+<li><strong>Reconciling history?</strong> Keep deployed numbers; correct readings forward; record the move in a<br>chronicle, not in the data descriptions (the data states canonical truth, plainly).</li>
+</ul>
+<p><em>Authored 2026-06-09 from the lattice-encoding audit. The lattice has one reading now.</em></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-lattice-coherence</code>, v1.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-lattice-coherence</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="meta-skills.html">Meta Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-lattice-coherence.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

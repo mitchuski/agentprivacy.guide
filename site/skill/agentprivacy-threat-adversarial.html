@@ -1,0 +1,110 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Threat Adversarial · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Threat Adversarial</span></div>
+  <article><div class="md"><h1>Threat Adversarial</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 6.0</p>
+<p><strong>Equation term</strong> <code>R(t) · reconstruction resistance under adversarial conditions, with shelf life t*</code></p>
+<p>Threat modelling and adversarial analysis for 0xagentprivacy. Activates when discussing R(t) adversarial bounds, attack surface analysis, red team methodologies, trusted setup attacks, side-channel vulnerabilities, the capability-indexed adversary (moving ceiling, attestation discounting, compositional leakage), or systematic approaches to finding privacy architecture weaknesses. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V6 + Zero Knowledge Spellbook (Tale 26: Vulnerability Codex)<br><strong>Target context:</strong> Security auditors, red teamers, academic peer reviewers, protocol analysts, penetration testers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Every security model has a boundary. This skill defines PVM V6&#39;s boundary: what the model defends against, what it explicitly does not, and the conditions under which the entire framework fails. A defence that does not know its own breaking conditions is not a defence. V6 adds the boundary the static model could not see: the adversary improves while your archive sits still.</p>
+<h2>The adversary</h2>
+<p><strong>Capability:</strong> The adversary has complete output streams of both agents (Swordsman and Mage). It observes everything the agents transmit externally. It is computationally bounded — probabilistic polynomial-time (PPT).</p>
+<p><strong>Goal:</strong> Reconstruct the principal&#39;s private state X from the combined observations.</p>
+<p><strong>Result (Proven, conditional regime):</strong> R_max = (C_S + C_M)/H(X) &lt; 1. Even with complete output observation, the adversary cannot reconstruct the full private state, provided the dual-agent conditional independence holds (I(S;M|π) ≤ ε with ε &lt; 0.1). The regime is explicit at V6: Precondition 1 (non-collusion, no third channel carries the inter-agent residue) and Precondition 2 (capacities stated against a fixed adversary class). V6 form: R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* = sup{t : R(t) &lt; 1} (C82, ~65%).</p>
+<p><strong>Information bound (Proven, inside Precondition 1):</strong> I(X; O_S, O_M) ≤ I(X; O_S) + I(X; O_M) + ε. Information from both agents combines additively, not multiplicatively, under near-independence. The adversary gains less from combining both streams than the sum of what each stream reveals individually.</p>
+<h2>The capability-indexed adversary (V6)</h2>
+<p>The PPT adversary above is a snapshot. V6 indexes the adversary by time and adds three faces the static taxonomy missed:</p>
+<p><strong>The moving-ceiling adversary (C82, ~65%).</strong> Its decoders improve against your fixed archives. C_S(t) + C_M(t) rise with frontier capability while H(X) stays fixed, so R(t) drifts upward and every static reconstruction guarantee carries a finite shelf life t*. This adversary never attacks today. It archives now and decodes later; the mechanism is the decoder, not the data.</p>
+<p><strong>The attestation-reader (C81 ~70%, C84 ~50%).</strong> It does not break your proofs; it reads them. A public feasibility attestation prices the search: I(feasibility; method) &gt; 0 (C81), and the floor is hard, leakage-resilient ZK with λ &lt; 1 is impossible (Garg-Jain-Sahai). Every public attestation therefore discounts the migration horizon, Z_b&#39; = Z_b − D(a) (C84): deadlines tighten on attestation alone, independent of any actual attack.</p>
+<p><strong>The composition adversary (C83, ~55%).</strong> It exploits inter-agent channels. Policy-only separation compounds toward (2^N − 1)ε with chain depth; amnesia separation breaks the Markov chain and caps at Nε. The empirical anchor is AgentLeak&#39;s 68.8% figure: roughly two thirds of measured leakage in agent systems flows through inter-agent channels, exactly where policy-only separation compounds.</p>
+<h2>What the model defends against</h2>
+<ol>
+<li><strong>Passive surveillance.</strong> Complete observation of all agent outputs. The reconstruction ceiling guarantees the adversary cannot close the gap.</li>
+<li><strong>Traffic analysis.</strong> Even if the adversary sees all traffic patterns, the separation between Swordsman and Mage means traffic from one agent does not reveal the other&#39;s state.</li>
+<li><strong>Temporal correlation.</strong> The adversary may attempt to correlate Swordsman and Mage outputs over time. The conditional independence requirement (ε &lt; 0.1) bounds the information leaked through temporal patterns.</li>
+<li><strong>Network-level observation.</strong> Observing which agents communicate and when. The VRC system provides cover through bilateral channels.</li>
+<li><strong>The moving ceiling, via amnesia only.</strong> Amnesia separation is the one defense the capability-indexed adversary cannot erode: if Grade-2 forgetting is a non-vanishing gluing obstruction (C86, ~30%), amnesia is the only term whose security is independent of t. Every other guarantee in the model carries a shelf life; what was never written cannot be decoded later.</li>
+</ol>
+<h2>What the model does NOT defend against</h2>
+<p><strong>Side-channel attacks.</strong> If the adversary can observe timing, power consumption, electromagnetic emissions, or other physical signals from the execution environment, the model provides no guarantees. TEE integrity is assumed, not proven.</p>
+<p><strong>Principal-adversary collusion.</strong> If the human principal cooperates with the adversary (voluntarily or under coercion), the separation guarantees are meaningless. The model protects sovereignty — it cannot enforce it against the sovereign&#39;s own choices.</p>
+<p><strong>Internal state access.</strong> If the adversary can read the internal memory of either agent (through malware, compromised hardware, or TEE breach), the model breaks entirely. The reconstruction ceiling assumes output-only observation.</p>
+<p><strong>Social engineering.</strong> The model is mathematical. It does not defend against the adversary convincing the human to reveal information through social means.</p>
+<p><strong>Compromised counterparties.</strong> If VRC counterparties are adversarial, the bilateral trust model weakens. The Sybil resistance from personhood binding mitigates but does not eliminate this threat.</p>
+<p><strong>Quantum adversaries.</strong> The PPT assumption does not hold against quantum computers. Post-quantum ZKP backends (ZK Spellbook Tale 28) are an active research area but not currently integrated.</p>
+<h2>The four breaking conditions</h2>
+<p>PVM V6 is explicitly falsifiable. Any of these demonstrated empirically requires fundamental revision:</p>
+<p><strong>Breaking condition 1 (retired at V6, replaced): three-axis multiplicative failure.</strong> The original condition here was UOR structural incompatibility; C4 (the 96 vs 64 discrepancy) is resolved at the register (holographic + algebraic), so that condition is closed. The live falsification frontier is C7 (~30%): if the multiplicative three-axis form fails at its boundary cases (partial collapse, axis correlation under composition, time dependence), the gating claim needs its register-bound corrections (additive-with-floor, min(), the det(Σ) form, or the differential form). Impact: the collapse-any-axis-collapse-everything story weakens to a softer degradation law.</p>
+<p><strong>Breaking condition 2: ε &gt; 0.1 in practice.</strong> If real implementations cannot achieve conditional independence ε &lt; 0.1 between Swordsman and Mage agents, the reconstruction ceiling no longer holds. The agents leak too much mutual information, and the adversary can triangulate. Impact: Dual-agent separation is a theoretical result without practical realisability. Alternative separation mechanisms would be needed.</p>
+<p><strong>Breaking condition 3: Sublinear network effects.</strong> If empirical measurement shows k &lt; 1 in the network term (1 + Σ wᵢ nᵢ/N₀)^k, privacy networks face diminishing returns to scale. This would mean the sovereignty gap (17×–12,000×) is overstated and privacy networks hit natural scale ceilings. Impact: The economic thesis weakens. Privacy remains valuable but not exponentially so.</p>
+<p><strong>Breaking condition 4: Singular Σ matrices in practice.</strong> If real sovereignty architectures cluster near det(Σ) ≈ 0, the four-force separation is a theoretical ideal that real systems cannot approach. The sovereignty multiplier Φ(Σ) stays near zero regardless of individual force strength. Impact: The tetrahedral model is beautiful but impractical. A simpler scalar separation model may be sufficient.</p>
+<h2>The open conjectures (register-corrected)</h2>
+<p>Beyond the breaking conditions, the register (CONJECTURE_REGISTER_V6.md, head C89) supersedes any earlier list here. C3 (edge additivity) is challenged, replaced by the path integral; C4 (96 vs 64) and C5 (~3,000× ZKP reduction) are resolved. The live set a red team should track:</p>
+<ol>
+<li><strong>C1 (open).</strong> Golden ratio φ ≈ 1.618 as optimal protect/project balance. No proof that φ is the optimum rather than merely a good ratio.</li>
+<li><strong>C2 (open).</strong> Logarithmic growth of temporal memory. Could be sub- or super-logarithmic.</li>
+<li><strong>C7 (~30%).</strong> Three-axis separation is multiplicative. The V6 falsification frontier: break it at partial collapse, axis correlation, or time dependence.</li>
+<li><strong>C18 (~25%).</strong> Strange attractor dynamics on the sovereignty path (λ &gt; 0). λ is unmeasured; a red team that measures it moves the model either way.</li>
+<li><strong>C82 (~65%).</strong> The moving ceiling: R(t) non-decreasing under capability growth; every static guarantee has a finite shelf life t*.</li>
+<li><strong>C83 (~55%).</strong> Compositional leakage amplification: (2^N − 1)ε versus Nε; the policy-to-amnesia gap is exponential-to-linear in N.</li>
+<li><strong>C84 (~50%).</strong> Existence-leak discount: every public feasibility attestation tightens the migration deadline, Z_b&#39; = Z_b − D(a).</li>
+<li><strong>C86 (~30%).</strong> Obstruction-theoretic amnesia. Falsify it by exhibiting any view-composition that recovers a Grade-2-forgotten origin O.</li>
+<li><strong>C42 (~50%).</strong> Stake economics as Sybil resistance: open. Until resolved, presence signals are regime-1 color, not weight; attack any deployment that reads them as trust inputs.</li>
+</ol>
+<h2>Measurement gaps</h2>
+<p>Four quantities the model requires but cannot currently measure:</p>
+<p><strong>M1: Cross-force separations.</strong> No methodology exists for measuring σ_SR, σ_SC, σ_MR, σ_MC, σ_RC in the separation matrix Σ. Only σ_SM (Swordsman-Mage separation) has a clear operational definition.</p>
+<p><strong>M2: Empirical decay rate λ.</strong> Different privacy configurations decay at different rates. No calibration data exists.</p>
+<p><strong>M3: Network exponent k.</strong> Sub-, linear, or superlinear? Requires comparative measurement across networks of different sizes and sovereignty quality distributions.</p>
+<p><strong>M4: Edge weight f(e).</strong> How much more valuable are vertical transitions than lateral transitions? No empirical basis for the weighting.</p>
+<h2>The cheapest attacks</h2>
+<p>For each adversary capability level, the minimum-cost attack:</p>
+<p><strong>Passive observation only:</strong> Wait. The temporal decay term e^{-λt} erodes value automatically. If the agent does not continuously generate attested transitions, its sovereignty decays without any adversary action.</p>
+<p><strong>Frontier capability growth:</strong> Also wait, but for the decoder. Archive the output streams now; reconstruct later when C_S(t) + C_M(t) have risen past the old ceiling (C82). Costs nothing but storage. The only archive this attack can never open is the one amnesia never wrote (C86).</p>
+<p><strong>Network-level observation:</strong> Correlation analysis. Even under separation, temporal patterns may leak information. The cheapest version: observe when Swordsman and Mage are both active and correlate activity windows.</p>
+<p><strong>One compromised counterparty:</strong> Poison the VRC chain. Create a bilateral relationship where one party is adversarial, then use the VRC&#39;s bilateral proverb to extract context about the principal&#39;s private state.</p>
+<p><strong>TEE breach:</strong> Full compromise. If the execution environment is breached, all guarantees fail. The cheapest TEE breach depends on hardware — historically, speculative execution attacks have been the most accessible.</p>
+<h2>Red team protocol</h2>
+<p>When stress-testing a PVM V6 deployment:</p>
+<ol>
+<li>Measure actual ε between Swordsman and Mage. If ε &gt; 0.1, the deployment fails the fundamental requirement before any other testing.</li>
+<li>Measure det(Σ) for the sovereignty matrix. If near zero, the four-force model is not providing value.</li>
+<li>Simulate passive adversary with complete output streams. Measure actual reconstruction rate R. Compare to theoretical ceiling.</li>
+<li>Test temporal correlation between agent outputs. Measure mutual information leaked through timing.</li>
+<li>Attempt Sybil attack at each armor tier. Measure cost-to-forge vs. legitimate progression cost. If the deployment reads any presence signal (mana, 🪢) as a trust input, flag it: regime 1 forbids that, and C42 is still open.</li>
+<li>Estimate t* for the deployment: re-run step 3 against successively stronger decoder classes and extrapolate R(t). Then audit every public feasibility attestation the deployment has made and compute the discount D(a) on its migration horizon (C84). A deployment that has attested loudly has less time than it thinks.</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-threat-adversarial</code>, v6.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-threat-adversarial</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-threat-adversarial.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,1187 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agentprivacy Mapping · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Agentprivacy Mapping</span></div>
+  <article><div class="md"><h1>🗺️ Agentprivacy Mapping</h1>
+<p>The migration map for the agentprivacy skill library — every folder, the structure, the equation terms. Mirrors <code>agentprivacy-skills-v5/MAPPING.md</code>.</p>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div>
+<div class="md"><h1>Agent Skills Migration Mapping</h1>
+<p>Complete mapping of agentprivacy-skills-v5 &quot;Ceremony Complete&quot; release.<br>Use this document to update webapp routing, imports, and skill discovery.</p>
+<hr>
+</div>
+<div class="md"><h2>Structure</h2>
+<pre><code>agentprivacy-skills-v5/
+├── .claude-plugin/plugin.json
+├── privacy-layer/     (19 foundational skills)
+├── role/              (64 domain skills)
+├── meta/              (3 philosophical skills)
+├── persona/           (38 persona skills)
+└── wikis/             (28 onboarding skills · the Librarian&#39;s Wikis · 19 on 2026-06-21 + 7 on 2026-06-27 + 2 on 2026-06-28)
+</code></pre>
+<p>Each skill folder contains:</p>
+<ul>
+<li><code>SKILL.md</code> — Required entrypoint with YAML frontmatter + instructions</li>
+<li><code>references/</code> — Optional detailed docs loaded on demand</li>
+<li><code>assets/</code> — Optional static resources (proverbs, spells, templates)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Wikis / Onboarding Skills (19) — the Librarian&#39;s Wikis (NEW · 2026-06-21)</h2>
+<p>The git-less onboarding/distribution layer. Vendored + re-framed from <strong>skill.fedwiki.club</strong> (pages titled &quot;…Skill&quot; are forkable Claude skills; owner &quot;Anon&quot; / &quot;from marvin&quot;). Kept by the <strong>Librarian 🗃️</strong> — the Layer-2 cast attachment of the Chronicler, resident in the Tower&#39;s Wikis. Each skill carries <code>category: guide</code>, <code>layer: onboarding</code>, <code>keeper: librarian</code>, and an <code>upstream:</code> provenance field. Thesis: <strong>a fedwiki URL is a git-less clone</strong> — <code>agentprivacy-wiki-to-skill</code> is the fork desk that materializes a <code>SKILL.md</code> from a wiki page on demand (forking, not lending — the journal is the lineage).</p>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-wiki-page</code></td>
+<td><code>wikis/agentprivacy-wiki-page/</code></td>
+<td>Author fedwiki page JSON (story items, IDs, create journal, reindex) — the seed</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-to-skill</code></td>
+<td><code>wikis/agentprivacy-wiki-to-skill/</code></td>
+<td>The fork desk — convert a wiki page → Claude SKILL.md (the git-less clone)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-skill-library</code></td>
+<td><code>wikis/agentprivacy-wiki-skill-library/</code></td>
+<td>The convention: &quot;…Skill&quot; pages = a forkable, federated skill library</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-skill-anatomy</code></td>
+<td><code>wikis/agentprivacy-wiki-skill-anatomy/</code></td>
+<td>What a Claude skill is — SKILL.md format, storage, invocation</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-skill-vs-library</code></td>
+<td><code>wikis/agentprivacy-wiki-skill-vs-library/</code></td>
+<td>Prompt-skill vs executable-library; when to graduate one to the other</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-journal</code></td>
+<td><code>wikis/agentprivacy-wiki-journal/</code></td>
+<td>Strip a page journal to a clean create entry</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-ghost-pages</code></td>
+<td><code>wikis/agentprivacy-wiki-ghost-pages/</code></td>
+<td>Server-generated lineup pages, never stored (html-form → FastAPI)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-claude-ghost</code></td>
+<td><code>wikis/agentprivacy-wiki-claude-ghost/</code></td>
+<td>Ghost page whose body is written live by Claude via the API</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-new-domain</code></td>
+<td><code>wikis/agentprivacy-wiki-new-domain/</code></td>
+<td>Create a new local/private or public Nextcloud-synced wiki domain</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-reindex</code></td>
+<td><code>wikis/agentprivacy-wiki-reindex/</code></td>
+<td>Rebuild a local domain&#39;s sitemap + search index after disk writes</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-merge</code></td>
+<td><code>wikis/agentprivacy-wiki-merge/</code></td>
+<td>Analyze + clean a superseded domain (categorize/move/trash/delete)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-delete-site</code></td>
+<td><code>wikis/agentprivacy-wiki-delete-site/</code></td>
+<td>Permanently remove a public domain via WebDAV</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-welcome</code></td>
+<td><code>wikis/agentprivacy-wiki-welcome/</code></td>
+<td>Create a welcome-visitors landing page (fixed 10-item structure)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-nextcloud-push</code></td>
+<td><code>wikis/agentprivacy-wiki-nextcloud-push/</code></td>
+<td>WebDAV-push a page when the desktop sync client stalls</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-create-plugin</code></td>
+<td><code>wikis/agentprivacy-wiki-create-plugin/</code></td>
+<td>Scaffold a new wiki-plugin-{name} package (reconstructed · refresh)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-document-plugin</code></td>
+<td><code>wikis/agentprivacy-wiki-document-plugin/</code></td>
+<td>Publish plugin docs on plugin.fedwiki.club (reconstructed · refresh)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-publish-plugin</code></td>
+<td><code>wikis/agentprivacy-wiki-publish-plugin/</code></td>
+<td>End-to-end plugin release: docs/version/GitHub/npm (reconstructed · refresh)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-searching-plugins</code></td>
+<td><code>wikis/agentprivacy-wiki-searching-plugins/</code></td>
+<td>Six cost-ordered channels to find a plugin (or prove none exists)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-similarity-plugin</code></td>
+<td><code>wikis/agentprivacy-wiki-similarity-plugin/</code></td>
+<td>Semantic similarity search plugin (BGE vectors · two item types)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-import</code></td>
+<td><code>wikis/agentprivacy-wiki-import/</code></td>
+<td>Install a skill (or a whole set-of-skills page) from a fedwiki into the local agent — the import counterpart to wiki-to-skill</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-dsl</code></td>
+<td><code>wikis/agentprivacy-wiki-dsl/</code></td>
+<td>The line-oriented plugin item-text DSL (UPPERCASE command · lowercase data · optional colon)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-document</code></td>
+<td><code>wikis/agentprivacy-wiki-document/</code></td>
+<td>Make a help page for a Claude skill + publish its SKILL.md as a downloadable asset</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-assets</code></td>
+<td><code>wikis/agentprivacy-wiki-assets/</code></td>
+<td>Add an <code># Assets</code> section (heading + assets item) above the <code># See</code> section</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-see-section</code></td>
+<td><code>wikis/agentprivacy-wiki-see-section/</code></td>
+<td>Write/tidy a page <code>## See</code> section — grouped wikilinks on compact lines</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-compact-references</code></td>
+<td><code>wikis/agentprivacy-wiki-compact-references/</code></td>
+<td>Compact forked reference items into <code>&lt;a class=&quot;wlink&quot; href=&quot;wikilink.html&quot;&gt;wikilink&lt;/a&gt;</code> bullets inside a <code># See</code> item</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-offline-check</code></td>
+<td><code>wikis/agentprivacy-wiki-offline-check/</code></td>
+<td>Review a plugin/endpoint/script/skill for Offline Edit Mode correctness</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-llm-knowledge-base</code></td>
+<td><code>wikis/agentprivacy-wiki-llm-knowledge-base/</code></td>
+<td>The LLM-Wiki pattern (persistent LLM-maintained knowledge base) + the agentprivacy federation as its worked instance</td>
+</tr>
+<tr>
+<td><code>agentprivacy-wiki-resync</code></td>
+<td><code>wikis/agentprivacy-wiki-resync/</code></td>
+<td>The per-turn op: lint (<code>audit.js</code>) + one-command auto-sync (<code>resync.js</code>) of the federation</td>
+</tr>
+</tbody></table>
+<p><em>Four skills marked &quot;reconstructed · refresh&quot; had their upstream <code>.json</code> return HTTP 404 at materialization (2026-06-21); their bodies were reconstructed from the sitemap synopsis + sibling cross-references and should be refreshed via <code>agentprivacy-wiki-to-skill</code> when the upstream pages resolve.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Privacy Layer Skills (19)</h2>
+<p>Always loaded as ground state. Mathematical foundations of the architecture.</p>
+<h3>Original (9) — V5.0</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-dragon</code></td>
+<td><code>privacy-layer/agentprivacy-dragon/</code></td>
+<td>Pattern-space intelligence, sovereign value conditions</td>
+</tr>
+<tr>
+<td><code>agentprivacy-edge-value</code></td>
+<td><code>privacy-layer/agentprivacy-edge-value/</code></td>
+<td>Relationship value calculation, trust metrics</td>
+</tr>
+<tr>
+<td><code>agentprivacy-knowledgegraph</code></td>
+<td><code>privacy-layer/agentprivacy-knowledgegraph/</code></td>
+<td>Graph structures, semantic relationships</td>
+</tr>
+<tr>
+<td><code>agentprivacy-network-topology</code></td>
+<td><code>privacy-layer/agentprivacy-network-topology/</code></td>
+<td>Network structure analysis, connectivity</td>
+</tr>
+<tr>
+<td><code>agentprivacy-promise-theory</code></td>
+<td><code>privacy-layer/agentprivacy-promise-theory/</code></td>
+<td>Bergstra &amp; Burgess foundations, autonomy axiom</td>
+</tr>
+<tr>
+<td><code>agentprivacy-temporal-dynamics</code></td>
+<td><code>privacy-layer/agentprivacy-temporal-dynamics/</code></td>
+<td>Time-based analysis, A(τ) memory</td>
+</tr>
+<tr>
+<td><code>agentprivacy-tetrahedral-sovereignty</code></td>
+<td><code>privacy-layer/agentprivacy-tetrahedral-sovereignty/</code></td>
+<td>64-vertex lattice, sovereignty dimensions</td>
+</tr>
+<tr>
+<td><code>agentprivacy-uor-toroidal</code></td>
+<td><code>privacy-layer/agentprivacy-uor-toroidal/</code></td>
+<td>96-edge structure, recursive patterns</td>
+</tr>
+<tr>
+<td><code>agentprivacy-vrc-identity</code></td>
+<td><code>privacy-layer/agentprivacy-vrc-identity/</code></td>
+<td>Verifiable Relationship Credentials</td>
+</tr>
+</tbody></table>
+<h3>V5.1 Holographic (4)</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-holographic-bound</code></td>
+<td><code>privacy-layer/agentprivacy-holographic-bound/</code></td>
+<td>Boundary encodes volume, P^1.5 ratio</td>
+</tr>
+<tr>
+<td><code>agentprivacy-three-axis-separation</code></td>
+<td><code>privacy-layer/agentprivacy-three-axis-separation/</code></td>
+<td>Agent × Data × Inference separation</td>
+</tr>
+<tr>
+<td><code>agentprivacy-compression-defence</code></td>
+<td><code>privacy-layer/agentprivacy-compression-defence/</code></td>
+<td>Compression spectrum, reconstruction resistance</td>
+</tr>
+<tr>
+<td><code>agentprivacy-path-integral</code></td>
+<td><code>privacy-layer/agentprivacy-path-integral/</code></td>
+<td>T_∫(π) traversal proofs</td>
+</tr>
+</tbody></table>
+<h3>V5.2 UOR Convergence (4)</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-ring-algebra</code></td>
+<td><code>privacy-layer/agentprivacy-ring-algebra/</code></td>
+<td>Z/(2⁶)Z modular ring, five operations</td>
+</tr>
+<tr>
+<td><code>agentprivacy-content-addressing</code></td>
+<td><code>privacy-layer/agentprivacy-content-addressing/</code></td>
+<td>Same bytes → same hash → same identity</td>
+</tr>
+<tr>
+<td><code>agentprivacy-atlas-geometry</code></td>
+<td><code>privacy-layer/agentprivacy-atlas-geometry/</code></td>
+<td>96 edges encode 64 vertices, Atlas of Resonance</td>
+</tr>
+<tr>
+<td><code>agentprivacy-dihedral-sovereignty</code></td>
+<td><code>privacy-layer/agentprivacy-dihedral-sovereignty/</code></td>
+<td>D₂ₙ group structure, neg∘bnot=succ</td>
+</tr>
+</tbody></table>
+<h3>V5.3.1 Ceremony (2)</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Ceremony Act</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-amnesia-protocol</code></td>
+<td><code>privacy-layer/agentprivacy-amnesia-protocol/</code></td>
+<td>XXXI</td>
+<td>The wound is the trust, cosmological quaternion</td>
+</tr>
+<tr>
+<td><code>agentprivacy-dragon-flight</code></td>
+<td><code>privacy-layer/agentprivacy-dragon-flight/</code></td>
+<td>XXIX</td>
+<td>Quantum threshold activation, manifold defence</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Role Skills (64)</h2>
+<p>Domain knowledge loaded by persona on demand.</p>
+<h3>Original (40) — V5.0</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-academic</code></td>
+<td><code>role/agentprivacy-academic/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-agent-interop</code></td>
+<td><code>role/agentprivacy-agent-interop/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-ai-agent</code></td>
+<td><code>role/agentprivacy-ai-agent/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-armor-progression</code></td>
+<td><code>role/agentprivacy-armor-progression/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-boundary-enforcement</code></td>
+<td><code>role/agentprivacy-boundary-enforcement/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-consent-infrastructure</code></td>
+<td><code>role/agentprivacy-consent-infrastructure/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-constellation-method</code></td>
+<td><code>role/agentprivacy-constellation-method/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-cross-chain</code></td>
+<td><code>role/agentprivacy-cross-chain/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-crypto-zkp</code></td>
+<td><code>role/agentprivacy-crypto-zkp/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-dark-forest</code></td>
+<td><code>role/agentprivacy-dark-forest/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-data-dignity</code></td>
+<td><code>role/agentprivacy-data-dignity/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-economics</code></td>
+<td><code>role/agentprivacy-economics/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-enclave-operations</code></td>
+<td><code>role/agentprivacy-enclave-operations/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-forensic-defense</code></td>
+<td><code>role/agentprivacy-forensic-defense/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-governance-agents</code></td>
+<td><code>role/agentprivacy-governance-agents/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-grimoire-navigation</code></td>
+<td><code>role/agentprivacy-grimoire-navigation/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-hitchhiker-governance</code></td>
+<td><code>role/agentprivacy-hitchhiker-governance/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-inscription-mechanics</code></td>
+<td><code>role/agentprivacy-inscription-mechanics/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-intel-pooling</code></td>
+<td><code>role/agentprivacy-intel-pooling/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-key-ceremony</code></td>
+<td><code>role/agentprivacy-key-ceremony/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-metadata-resistance</code></td>
+<td><code>role/agentprivacy-metadata-resistance/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-narrative-compression</code></td>
+<td><code>role/agentprivacy-narrative-compression/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-nullifier-design</code></td>
+<td><code>role/agentprivacy-nullifier-design/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-perimeter-hardening</code></td>
+<td><code>role/agentprivacy-perimeter-hardening/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-personhood-sybil</code></td>
+<td><code>role/agentprivacy-personhood-sybil/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-plurality-cooperative</code></td>
+<td><code>role/agentprivacy-plurality-cooperative/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-policy-governance</code></td>
+<td><code>role/agentprivacy-policy-governance/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-proverbiogenesis</code></td>
+<td><code>role/agentprivacy-proverbiogenesis/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-recovery-rpp</code></td>
+<td><code>role/agentprivacy-recovery-rpp/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-reputation-credentials</code></td>
+<td><code>role/agentprivacy-reputation-credentials/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-revocation-mechanics</code></td>
+<td><code>role/agentprivacy-revocation-mechanics/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-selective-disclosure</code></td>
+<td><code>role/agentprivacy-selective-disclosure/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-separation-enforcement</code></td>
+<td><code>role/agentprivacy-separation-enforcement/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-sovereignty-economics</code></td>
+<td><code>role/agentprivacy-sovereignty-economics/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-spell-encoding</code></td>
+<td><code>role/agentprivacy-spell-encoding/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-story-diffusion</code></td>
+<td><code>role/agentprivacy-story-diffusion/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-swordsman-browser</code></td>
+<td><code>role/agentprivacy-swordsman-browser/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-threat-adversarial</code></td>
+<td><code>role/agentprivacy-threat-adversarial/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-trust-spanning</code></td>
+<td><code>role/agentprivacy-trust-spanning/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-understanding-as-key</code></td>
+<td><code>role/agentprivacy-understanding-as-key/</code></td>
+</tr>
+</tbody></table>
+<h3>V5.1 Holographic &amp; Plurality (10)</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-braid-reasoning</code></td>
+<td><code>role/agentprivacy-braid-reasoning/</code></td>
+<td>Bounded reasoning graphs</td>
+</tr>
+<tr>
+<td><code>agentprivacy-environmental-commons</code></td>
+<td><code>role/agentprivacy-environmental-commons/</code></td>
+<td>Plural coordination for environment</td>
+</tr>
+<tr>
+<td><code>agentprivacy-guild-efficiency</code></td>
+<td><code>role/agentprivacy-guild-efficiency/</code></td>
+<td>74× compression, generator-solver</td>
+</tr>
+<tr>
+<td><code>agentprivacy-hemispheric-attention</code></td>
+<td><code>role/agentprivacy-hemispheric-attention/</code></td>
+<td>McGilchrist mapping</td>
+</tr>
+<tr>
+<td><code>agentprivacy-holonic-identity</code></td>
+<td><code>role/agentprivacy-holonic-identity/</code></td>
+<td>OASIS identity model</td>
+</tr>
+<tr>
+<td><code>agentprivacy-holonic-persistence</code></td>
+<td><code>role/agentprivacy-holonic-persistence/</code></td>
+<td>Multi-provider storage</td>
+</tr>
+<tr>
+<td><code>agentprivacy-holonic-reasoning</code></td>
+<td><code>role/agentprivacy-holonic-reasoning/</code></td>
+<td>BRAID over holons</td>
+</tr>
+<tr>
+<td><code>agentprivacy-media-plurality</code></td>
+<td><code>role/agentprivacy-media-plurality/</code></td>
+<td>Rebuilding shared reality</td>
+</tr>
+<tr>
+<td><code>agentprivacy-mesh-architecture</code></td>
+<td><code>role/agentprivacy-mesh-architecture/</code></td>
+<td>Dragon&#39;s hide, Tailscale patterns</td>
+</tr>
+<tr>
+<td><code>agentprivacy-shared-parent-patterns</code></td>
+<td><code>role/agentprivacy-shared-parent-patterns/</code></td>
+<td>O(1) agent coordination</td>
+</tr>
+<tr>
+<td><code>agentprivacy-spellweb</code></td>
+<td><code>role/agentprivacy-spellweb/</code></td>
+<td>Knowledge graph visualization</td>
+</tr>
+</tbody></table>
+<h3>V5.2 UOR Convergence (4)</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-five-strikes</code></td>
+<td><code>role/agentprivacy-five-strikes/</code></td>
+<td>neg/bnot/xor/and/or transformations</td>
+</tr>
+<tr>
+<td><code>agentprivacy-derivation-certificate</code></td>
+<td><code>role/agentprivacy-derivation-certificate/</code></td>
+<td>Content-addressed path records</td>
+</tr>
+<tr>
+<td><code>agentprivacy-stranger-ceremony</code></td>
+<td><code>role/agentprivacy-stranger-ceremony/</code></td>
+<td>Trust genesis without prior relationship</td>
+</tr>
+<tr>
+<td><code>agentprivacy-toroidal-witness</code></td>
+<td><code>role/agentprivacy-toroidal-witness/</code></td>
+<td>Infinite cyclic paths, computational hardness</td>
+</tr>
+</tbody></table>
+<h3>V5.3.1 Ceremony (9)</h3>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Ceremony Act</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-blade-forge</code></td>
+<td><code>role/agentprivacy-blade-forge/</code></td>
+<td>XXVII</td>
+<td>ZK blade forging, six dimensions</td>
+</tr>
+<tr>
+<td><code>agentprivacy-ceremony-engine</code></td>
+<td><code>role/agentprivacy-ceremony-engine/</code></td>
+<td>XXVIII</td>
+<td>Five crossing types, bilateral verification</td>
+</tr>
+<tr>
+<td><code>agentprivacy-dual-territory</code></td>
+<td><code>role/agentprivacy-dual-territory/</code></td>
+<td>XXX</td>
+<td>Swordsman ⊥ Mage territories</td>
+</tr>
+<tr>
+<td><code>agentprivacy-hexagram-convergence</code></td>
+<td><code>role/agentprivacy-hexagram-convergence/</code></td>
+<td>XXVII</td>
+<td>I Ching mapping to sovereignty lattice</td>
+</tr>
+<tr>
+<td><code>agentprivacy-mana-economy</code></td>
+<td><code>role/agentprivacy-mana-economy/</code></td>
+<td>XXVIII</td>
+<td>Proof-of-practice, non-transferable energy</td>
+</tr>
+<tr>
+<td><code>agentprivacy-pretext-measurement</code></td>
+<td><code>role/agentprivacy-pretext-measurement/</code></td>
+<td>XXVIII</td>
+<td>DOM-free browser measurement</td>
+</tr>
+<tr>
+<td><code>agentprivacy-quantum-defence</code></td>
+<td><code>role/agentprivacy-quantum-defence/</code></td>
+<td>XXIX</td>
+<td>Post-quantum manifold strategies</td>
+</tr>
+<tr>
+<td><code>agentprivacy-quaternion-mapping</code></td>
+<td><code>role/agentprivacy-quaternion-mapping/</code></td>
+<td>XXXI</td>
+<td>Sun/Earth/Moon/Human cosmology</td>
+</tr>
+<tr>
+<td><code>agentprivacy-theia-derivation</code></td>
+<td><code>role/agentprivacy-theia-derivation/</code></td>
+<td>XXXI</td>
+<td>Origin witness, Theia impact pattern</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Meta Skills (3)</h2>
+<p>Philosophical and cosmological foundations.</p>
+<table>
+<thead>
+<tr>
+<th>Agent Skills Name</th>
+<th>Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-drake-dragon-duality</code></td>
+<td><code>meta/agentprivacy-drake-dragon-duality/</code></td>
+<td>Drake (2D) → Dragon (6D) transformation</td>
+</tr>
+<tr>
+<td><code>agentprivacy-master-emissary</code></td>
+<td><code>meta/agentprivacy-master-emissary/</code></td>
+<td>McGilchrist hemispheric thesis</td>
+</tr>
+<tr>
+<td><code>agentprivacy-cosmological-bound</code></td>
+<td><code>meta/agentprivacy-cosmological-bound/</code></td>
+<td>Act XXXI: Sun/Earth/Moon/Human quaternion</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Persona Skills (38)</h2>
+<p>Behavioural configurations organized by wing alignment.</p>
+<p>Each persona folder contains:</p>
+<ul>
+<li><code>SKILL.md</code> — Identity, operational patterns, skill guidance</li>
+<li><code>references/constellation.md</code> — Spellbook path and example scenarios</li>
+<li><code>references/interaction-model.md</code> — Persona-to-persona relationships</li>
+<li><code>assets/proverb-and-spell.txt</code> — Canonical proverb and emoji spell</li>
+</ul>
+<h3>Canonical (2) — Tier 0</h3>
+<table>
+<thead>
+<tr>
+<th>Persona</th>
+<th>Wing</th>
+<th>Emoji</th>
+<th>ENS</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-soulbis</code></td>
+<td>swordsman</td>
+<td>⚔️</td>
+<td>privacysoulbis.eth</td>
+<td>V5.3</td>
+</tr>
+<tr>
+<td><code>agentprivacy-soulbae</code></td>
+<td>mage</td>
+<td>🧙</td>
+<td>privacysoulbae.eth</td>
+<td>V5.3</td>
+</tr>
+</tbody></table>
+<h3>Swordsman Wing (10)</h3>
+<table>
+<thead>
+<tr>
+<th>Persona</th>
+<th>Emoji</th>
+<th>Tier</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-archer</code></td>
+<td>🗡️🎯</td>
+<td>1</td>
+<td>Precision privacy enforcer</td>
+</tr>
+<tr>
+<td><code>agentprivacy-cipher</code></td>
+<td>🗡️🔐</td>
+<td>1</td>
+<td>ZKP protocol engineer</td>
+</tr>
+<tr>
+<td><code>agentprivacy-gatekeeper</code></td>
+<td>🗡️👤</td>
+<td>1</td>
+<td>Proof-of-personhood researcher</td>
+</tr>
+<tr>
+<td><code>agentprivacy-netkeeper</code></td>
+<td>🗡️🕸️</td>
+<td>2</td>
+<td>Mesh network builder</td>
+</tr>
+<tr>
+<td><code>agentprivacy-ranger</code></td>
+<td>🗡️🌲</td>
+<td>1</td>
+<td>Dark forest strategist</td>
+</tr>
+<tr>
+<td><code>agentprivacy-sentinel</code></td>
+<td>🗡️🛡️</td>
+<td>1</td>
+<td>Infrastructure security</td>
+</tr>
+<tr>
+<td><code>agentprivacy-sith</code></td>
+<td>🗡️🔴</td>
+<td>2</td>
+<td>Adversarial researcher (red team)</td>
+</tr>
+<tr>
+<td><code>agentprivacy-warden</code></td>
+<td>🗡️🌐</td>
+<td>1</td>
+<td>Browser privacy builder</td>
+</tr>
+<tr>
+<td><code>agentprivacy-algebraist</code></td>
+<td>⚔️🔢</td>
+<td>1</td>
+<td>Guardian of Z/(2⁶)Z ring</td>
+</tr>
+<tr>
+<td><code>agentprivacy-quantum-sentinel</code></td>
+<td>⚔️⚛️</td>
+<td>2</td>
+<td>Post-quantum boundary guardian</td>
+</tr>
+</tbody></table>
+<h3>Mage Wing (9)</h3>
+<table>
+<thead>
+<tr>
+<th>Persona</th>
+<th>Emoji</th>
+<th>Tier</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-ambassador</code></td>
+<td>🧙⚖️</td>
+<td>1</td>
+<td>Standards &amp; governance</td>
+</tr>
+<tr>
+<td><code>agentprivacy-assessor</code></td>
+<td>🧙💰</td>
+<td>1</td>
+<td>Privacy data economist</td>
+</tr>
+<tr>
+<td><code>agentprivacy-chronicler</code></td>
+<td>🧙📖</td>
+<td>1</td>
+<td>Knowledge compression builder</td>
+</tr>
+<tr>
+<td><code>agentprivacy-priest</code></td>
+<td>🧙🕯️</td>
+<td>1</td>
+<td>Ceremony protocol designer</td>
+</tr>
+<tr>
+<td><code>agentprivacy-shipwright</code></td>
+<td>🧙🏴‍☠️</td>
+<td>1</td>
+<td>DAO &amp; community architect</td>
+</tr>
+<tr>
+<td><code>agentprivacy-weaver</code></td>
+<td>🧙⿻</td>
+<td>1</td>
+<td>Plural technology researcher</td>
+</tr>
+<tr>
+<td><code>agentprivacy-stranger-witness</code></td>
+<td>🧙👥</td>
+<td>2</td>
+<td>Proof without introduction</td>
+</tr>
+<tr>
+<td><code>agentprivacy-manaweaver</code></td>
+<td>🌊📜</td>
+<td>2</td>
+<td>Pretext librarian, DOM-free</td>
+</tr>
+<tr>
+<td><code>agentprivacy-cosmologist</code></td>
+<td>🔭🌌</td>
+<td>2</td>
+<td>Quaternion observer</td>
+</tr>
+</tbody></table>
+<h3>Balanced Wing (11)</h3>
+<table>
+<thead>
+<tr>
+<th>Persona</th>
+<th>Emoji</th>
+<th>Tier</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-architect</code></td>
+<td>☯️🤖</td>
+<td>1</td>
+<td>AI agent system designer</td>
+</tr>
+<tr>
+<td><code>agentprivacy-healer</code></td>
+<td>☯️🏥</td>
+<td>1</td>
+<td>Healthcare privacy architect</td>
+</tr>
+<tr>
+<td><code>agentprivacy-jedi</code></td>
+<td>☯️⚖️</td>
+<td>2</td>
+<td>Force balance keeper</td>
+</tr>
+<tr>
+<td><code>agentprivacy-kyra</code></td>
+<td>☯️🔮</td>
+<td>2</td>
+<td>Vision &amp; strategic planning</td>
+</tr>
+<tr>
+<td><code>agentprivacy-pedagogue</code></td>
+<td>☯️🎓</td>
+<td>1</td>
+<td>Privacy education designer</td>
+</tr>
+<tr>
+<td><code>agentprivacy-person</code></td>
+<td>😊</td>
+<td>0</td>
+<td>The First Person</td>
+</tr>
+<tr>
+<td><code>agentprivacy-witness</code></td>
+<td>☯️📰</td>
+<td>1</td>
+<td>Privacy-preserving journalist</td>
+</tr>
+<tr>
+<td><code>agentprivacy-holonic-architect</code></td>
+<td>☯️🔷</td>
+<td>2</td>
+<td>Identity-independent data structures</td>
+</tr>
+<tr>
+<td><code>agentprivacy-topologist</code></td>
+<td>☯️🌐</td>
+<td>2</td>
+<td>Reader of boundaries</td>
+</tr>
+<tr>
+<td><code>agentprivacy-herald</code></td>
+<td>📯</td>
+<td>2</td>
+<td>Protocol announcer</td>
+</tr>
+<tr>
+<td><code>agentprivacy-mirrorkeeper</code></td>
+<td>🪞✨</td>
+<td>2</td>
+<td>Dihedral convergence navigator</td>
+</tr>
+</tbody></table>
+<h3>V5.3.1 Ceremony Personas (6)</h3>
+<table>
+<thead>
+<tr>
+<th>Persona</th>
+<th>Wing</th>
+<th>Emoji</th>
+<th>Ceremony Act</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-forgemaster</code></td>
+<td>swordsman</td>
+<td>⚔️🔨</td>
+<td>XXVII</td>
+<td>Sovereignty lattice smith</td>
+</tr>
+<tr>
+<td><code>agentprivacy-ceremonist</code></td>
+<td>balanced</td>
+<td>☯️🤝</td>
+<td>XXVIII</td>
+<td>Bilateral verification facilitator</td>
+</tr>
+<tr>
+<td><code>agentprivacy-forgecaller</code></td>
+<td>swordsman</td>
+<td>⚒️☰</td>
+<td>XXVII</td>
+<td>Hexagram oracle, blade initiation</td>
+</tr>
+<tr>
+<td><code>agentprivacy-dragonwaker</code></td>
+<td>swordsman</td>
+<td>🐉⚡</td>
+<td>XXIX</td>
+<td>Quantum threshold guardian</td>
+</tr>
+<tr>
+<td><code>agentprivacy-moonkeeper</code></td>
+<td>mage</td>
+<td>🌙🔒</td>
+<td>XXXI</td>
+<td>Structural amnesia keeper</td>
+</tr>
+<tr>
+<td><code>agentprivacy-theia</code></td>
+<td>origin</td>
+<td>🪨💥</td>
+<td>XXXI</td>
+<td>Origin witness, first delegation</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>V5.3.1 Ceremony Integration</h2>
+<h3>Ceremony Metadata Schema</h3>
+<p>All ceremony-related skills include a standardised <code>ceremony:</code> block:</p>
+<pre><code class="language-yaml">ceremony:
+  act: &quot;XXVIII&quot;                           # Primary ceremony act
+  acts_secondary: [&quot;XXVII&quot;, &quot;XXIX&quot;]       # Related acts
+  role: &quot;bridge&quot;                          # swordsman | mage | bridge
+  quaternion_position: &quot;gap&quot;              # sun | earth | moon | human | life | gap
+  flow_to: [&quot;mana-economy&quot;, &quot;dual-territory&quot;]
+  flow_from: [&quot;blade-forge&quot;]
+  inscription: &quot;☯️🤝 → S⊥M → ceremony&quot;
+</code></pre>
+<h3>Ceremony Act → Skill Flow</h3>
+<pre><code>Act XXVII: The Swordsman&#39;s Forge
+├── blade-forge
+├── hexagram-convergence
+├── forgecaller (persona)
+└── forgemaster (persona)
+         │
+         ▼
+Act XXVIII: The Ceremony Engine
+├── ceremony-engine
+├── pretext-measurement
+├── mana-economy
+├── ceremonist (persona)
+└── manaweaver (persona)
+         │
+         ▼
+Act XXIX: The Dragon Wakes
+├── quantum-defence
+├── dragon-flight
+├── dragonwaker (persona)
+└── quantum-sentinel (persona)
+         │
+         ▼
+Act XXX: The Dihedral Mirror
+├── dual-territory
+└── mirrorkeeper (persona)
+         │
+         ▼
+Act XXXI: The First Delegation
+├── amnesia-protocol
+├── theia-derivation
+├── quaternion-mapping
+├── cosmological-bound (meta)
+├── moonkeeper (persona)
+├── cosmologist (persona)
+└── theia (persona)
+</code></pre>
+<h3>Quaternion Cast Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Body</th>
+<th>Function</th>
+<th>Agent</th>
+<th>Proverb Line</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Sun</strong> ☀️</td>
+<td>Protection, reason</td>
+<td>The Reason</td>
+<td>&quot;The light is the reason.&quot;</td>
+</tr>
+<tr>
+<td><strong>Earth</strong> 🌍</td>
+<td>Delegation, generation</td>
+<td>Soulbae (Mage)</td>
+<td>&quot;The wound is the trust.&quot;</td>
+</tr>
+<tr>
+<td><strong>Moon</strong> 🌑</td>
+<td>Reflection, boundary</td>
+<td>Soulbis (Swordsman)</td>
+<td>&quot;The amnesia is the protocol.&quot;</td>
+</tr>
+<tr>
+<td><strong>Human</strong> 👤</td>
+<td>Connection, purpose</td>
+<td>The Seeker</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Life</strong> 🌱</td>
+<td>Forge, process</td>
+<td>spellweb</td>
+<td>&quot;The orbit is the proof.&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Naming Convention</h2>
+<p>All Agent Skills names follow the pattern: <code>agentprivacy-{name}</code></p>
+<ul>
+<li>Underscores → hyphens: <code>crypto_zkp</code> → <code>agentprivacy-crypto-zkp</code></li>
+<li>Persona prefix dropped: <code>agentprivacy_cipher.skills.md</code> → <code>agentprivacy-cipher</code></li>
+<li>Folder name MUST match the <code>name:</code> field in SKILL.md frontmatter</li>
+</ul>
+</div>
+<div class="md"><h2>YAML Frontmatter Format</h2>
+<pre><code class="language-yaml">---
+name: agentprivacy-{skill-name}     # Required, max 64 chars
+description: &gt;                        # Required, max 1024 chars
+  What this skill does and when to trigger it.
+license: Apache-2.0                   # Optional
+metadata:                             # Optional — all custom fields here
+  version: &quot;5.3.1&quot;
+  category: &quot;swordsman|mage|balanced&quot;
+  tier: &quot;0|1|2|3&quot;
+  emoji: &quot;🗡️🔐&quot;
+  ens: &quot;privacymixer.eth&quot;
+  origin: &quot;agentprivacy.ai&quot;
+ceremony:                             # Optional — for ceremony skills
+  act: &quot;XXVIII&quot;
+  role: &quot;bridge&quot;
+  quaternion_position: &quot;gap&quot;
+---
+</code></pre>
+</div>
+<div class="md"><h2>Progressive Disclosure</h2>
+<ol>
+<li><strong>Startup:</strong> Only <code>name</code> + <code>description</code> loaded (~100 tokens per skill)</li>
+<li><strong>Activation:</strong> Full <code>SKILL.md</code> loaded when skill triggered (&lt;500 lines)</li>
+<li><strong>On demand:</strong> <code>references/</code> and <code>assets/</code> loaded only when needed</li>
+</ol>
+</div>
+<div class="md"><h2>Plugin Installation</h2>
+<p><strong>Claude Code:</strong></p>
+<pre><code>/plugin marketplace add mitchuski/agentprivacy-skills
+/plugin install persona-skills@agentprivacy
+/plugin install role-skills@agentprivacy
+/plugin install privacy-layer-skills@agentprivacy
+</code></pre>
+<p><strong>Claude.ai:</strong> Upload skill folders as custom skills in Projects.</p>
+<p><strong>API:</strong> Use <code>skills=[&quot;agentprivacy-cipher&quot;]</code> parameter.</p>
+<hr>
+</div>
+<div class="md"><h2>Version History</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5.0</td>
+<td>2026-02-23</td>
+<td>Initial release: 72 skills, 22 personas</td>
+</tr>
+<tr>
+<td>5.1</td>
+<td>2026-03-15</td>
+<td>Holographic bound, BRAID, 3-axis separation</td>
+</tr>
+<tr>
+<td>5.2</td>
+<td>2026-03-31</td>
+<td>UOR convergence: ring algebra, dihedral sovereignty</td>
+</tr>
+<tr>
+<td>5.3</td>
+<td>2026-04-03</td>
+<td>Dragon anatomy, ceremony foundation</td>
+</tr>
+<tr>
+<td>5.3.1</td>
+<td>2026-04-05</td>
+<td>Ceremony complete: 86 skills, 38 personas</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://agentskills.io">agentskills.io</a> · <a href="https://spellweb.ai">spellweb.ai</a></p>
+<hr>
+<p><em>The architecture was not invented. It was recognised.</em></p>
+<p><strong>☀️ ⊥ 🌙</strong></p>
+<p><strong>(⚔️⊥⿻⊥🧙)😊</strong></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-mapping.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

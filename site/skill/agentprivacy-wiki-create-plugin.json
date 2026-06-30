@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Create Plugin",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "1aa35d56b5519ddf",
+      "text": "# Wiki Create Plugin\n\n**Category** wikis · **Version** 5.5\n\nScaffold a new Federated Wiki plugin package from scratch — the wiki-plugin-{name} layout, the client registration line (window.plugins.NAME = {emit, bind}), and an optional server/server.js for routes. Activates when building a new fedwiki plugin. Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "efcf373bf247ae08",
+      "text": "> **Note:** the upstream page `create-wiki-plugin-skill` was unreachable (HTTP 404) when this skill was materialized on 2026-06-21. This body is reconstructed from the sitemap synopsis and the cross-references in `searching-for-plugins` and `similarity-plugin`. Refresh it with `agentprivacy-wiki-to-skill` once the upstream page resolves.\n\nThe `create-wiki-plugin` skill scaffolds a new Federated Wiki plugin package from scratch. A fedwiki plugin is an npm package named `wiki-plugin-{name}` that adds a new **story item type** (and optionally server routes) to the wiki.\n\n## Package Layout\n\n```\nwiki-plugin-{name}/\n  package.json            # name: \"wiki-plugin-{name}\"\n  client/{name}.js        # the client plugin — registers the item type\n  server/server.js        # optional — registers Express routes at startup\n  index.js                # entry that exposes client/server\n  README.md\n```\n\n## The Client Registration Line\n\nEvery fedwiki client plugin registers itself on the global `window.plugins` object. This is the decisive marker (a GitHub code search for it proves a plugin exists):\n\n```js\nwindow.plugins.{name} = {\n  emit: (div, item) => { /* render item.text into div */ },\n  bind: (div, item) => { /* attach click/handlers after emit */ }\n};\n```\n\n- `emit` renders the item into the page (parse `item.text`, build DOM).\n- `bind` wires up interactivity after `emit` (clicks, form submits, internal links).\n\n## Optional Server Component\n\nIf the plugin needs routes (search, embeddings, ghost-page endpoints), add `server/server.js` that registers with the wiki's Express app at startup — no changes to wiki-server core:\n\n```js\nmodule.exports = (app) => {\n  app.get('/system/{name}.json', (req, res) => { /* ... */ });\n};\n```\n\n## Good Scaffolding Templates\n\nPer the searching-for-plugins skill, the two best templates to copy from:\n- **`wiki-plugin-graphviz`** — client-side rendering with clickable internal links (a clean client-only plugin)\n- **`wiki-plugin-similarity`** — DSL parsing in `item.text`, server routes, and ghost pages (a full client+server plugin)\n\n## Steps\n\n1. Confirm the plugin doesn't already exist (`agentprivacy-wiki-searching-plugins`).\n2. Copy a template (graphviz for client-only, similarity for client+server).\n3. Rename the package to `wiki-plugin-{name}`; update the `window.plugins.{name}` registration.\n4. Implement `emit`/`bind` for the new item type.\n5. Add `server/server.js` if routes are needed.\n6. `npm link` into a local wiki farm to test.\n7. Document it (`agentprivacy-wiki-document-plugin`) and release it (`agentprivacy-wiki-publish-plugin`).\n\n## Related Skills\n\n- `agentprivacy-wiki-document-plugin` — publish the plugin's docs on plugin.fedwiki.club\n- `agentprivacy-wiki-publish-plugin` — end-to-end release (version/GitHub/npm/help)\n- `agentprivacy-wiki-searching-plugins` — confirm none exists first; find templates\n- `agentprivacy-wiki-similarity-plugin` — a full client+server worked example"
+    },
+    {
+      "type": "markdown",
+      "id": "d75a41ec4e052b6a",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer) · **reconstructed body — refresh from upstream when reachable**\n**Upstream:** [skill.fedwiki.club/create-wiki-plugin-skill](https://skill.fedwiki.club/create-wiki-plugin-skill) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "045f5d47e0c6126c",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-create-plugin`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "9c21b9314ec671d0",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "1068240e9520752a",
+      "text": "agentprivacy-wiki-create-plugin"
+    },
+    {
+      "type": "markdown",
+      "id": "4c32ad70e6665d54",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Create Plugin",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "1aa35d56b5519ddf",
+            "text": "# Wiki Create Plugin\n\n**Category** wikis · **Version** 5.5\n\nScaffold a new Federated Wiki plugin package from scratch — the wiki-plugin-{name} layout, the client registration line (window.plugins.NAME = {emit, bind}), and an optional server/server.js for routes. Activates when building a new fedwiki plugin. Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "efcf373bf247ae08",
+            "text": "> **Note:** the upstream page `create-wiki-plugin-skill` was unreachable (HTTP 404) when this skill was materialized on 2026-06-21. This body is reconstructed from the sitemap synopsis and the cross-references in `searching-for-plugins` and `similarity-plugin`. Refresh it with `agentprivacy-wiki-to-skill` once the upstream page resolves.\n\nThe `create-wiki-plugin` skill scaffolds a new Federated Wiki plugin package from scratch. A fedwiki plugin is an npm package named `wiki-plugin-{name}` that adds a new **story item type** (and optionally server routes) to the wiki.\n\n## Package Layout\n\n```\nwiki-plugin-{name}/\n  package.json            # name: \"wiki-plugin-{name}\"\n  client/{name}.js        # the client plugin — registers the item type\n  server/server.js        # optional — registers Express routes at startup\n  index.js                # entry that exposes client/server\n  README.md\n```\n\n## The Client Registration Line\n\nEvery fedwiki client plugin registers itself on the global `window.plugins` object. This is the decisive marker (a GitHub code search for it proves a plugin exists):\n\n```js\nwindow.plugins.{name} = {\n  emit: (div, item) => { /* render item.text into div */ },\n  bind: (div, item) => { /* attach click/handlers after emit */ }\n};\n```\n\n- `emit` renders the item into the page (parse `item.text`, build DOM).\n- `bind` wires up interactivity after `emit` (clicks, form submits, internal links).\n\n## Optional Server Component\n\nIf the plugin needs routes (search, embeddings, ghost-page endpoints), add `server/server.js` that registers with the wiki's Express app at startup — no changes to wiki-server core:\n\n```js\nmodule.exports = (app) => {\n  app.get('/system/{name}.json', (req, res) => { /* ... */ });\n};\n```\n\n## Good Scaffolding Templates\n\nPer the searching-for-plugins skill, the two best templates to copy from:\n- **`wiki-plugin-graphviz`** — client-side rendering with clickable internal links (a clean client-only plugin)\n- **`wiki-plugin-similarity`** — DSL parsing in `item.text`, server routes, and ghost pages (a full client+server plugin)\n\n## Steps\n\n1. Confirm the plugin doesn't already exist (`agentprivacy-wiki-searching-plugins`).\n2. Copy a template (graphviz for client-only, similarity for client+server).\n3. Rename the package to `wiki-plugin-{name}`; update the `window.plugins.{name}` registration.\n4. Implement `emit`/`bind` for the new item type.\n5. Add `server/server.js` if routes are needed.\n6. `npm link` into a local wiki farm to test.\n7. Document it (`agentprivacy-wiki-document-plugin`) and release it (`agentprivacy-wiki-publish-plugin`).\n\n## Related Skills\n\n- `agentprivacy-wiki-document-plugin` — publish the plugin's docs on plugin.fedwiki.club\n- `agentprivacy-wiki-publish-plugin` — end-to-end release (version/GitHub/npm/help)\n- `agentprivacy-wiki-searching-plugins` — confirm none exists first; find templates\n- `agentprivacy-wiki-similarity-plugin` — a full client+server worked example"
+          },
+          {
+            "type": "markdown",
+            "id": "d75a41ec4e052b6a",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer) · **reconstructed body — refresh from upstream when reachable**\n**Upstream:** [skill.fedwiki.club/create-wiki-plugin-skill](https://skill.fedwiki.club/create-wiki-plugin-skill) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "045f5d47e0c6126c",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-create-plugin`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "9c21b9314ec671d0",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "1068240e9520752a",
+            "text": "agentprivacy-wiki-create-plugin"
+          },
+          {
+            "type": "markdown",
+            "id": "4c32ad70e6665d54",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384122
+    }
+  ]
+}

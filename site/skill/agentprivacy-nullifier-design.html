@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nullifier Design · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Nullifier Design</span></div>
+  <article><div class="md"><h1>Nullifier Design</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>P × C — nullifiers enforce single-use without revealing identity</code></p>
+<p>Nullifier construction, deployment, and verification for 0xagentprivacy privacy-preserving invalidation. Activates when designing double-spend prevention, privacy-preserving revocation, unlinkable credential usage, or any operation where an action must be provably performed exactly once without revealing the actor&#39;s identity. Triggers: &quot;nullifier&quot;, &quot;double-spend&quot;, &quot;single-use proof&quot;, &quot;privacy-preserving revocation&quot;, &quot;unlinkability&quot;, &quot;nullifier set&quot;, &quot;nullifier tree&quot;, &quot;spent set&quot;, &quot;serial number&quot;. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + Zero Knowledge Spellbook (Tales 5-7) + Zcash Nullifier Architecture<br><strong>Target context:</strong> ZKP circuit designers, privacy protocol engineers, credential system architects, voting system builders, token system designers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>A nullifier is a deterministic, unique value derived from a secret that, when published, marks a specific action as &quot;done&quot; without revealing who did it or what it was done to. It is the cryptographic answer to a fundamental tension: how do you prevent someone from doing something twice (double-spending, double-voting, double-claiming) while preserving their anonymity?</p>
+<p>Without nullifiers, privacy systems face a dilemma: either track who did what (destroying privacy) or allow repeated actions (destroying integrity). Nullifiers resolve the dilemma by tracking THAT something was done without tracking WHO did it.</p>
+<h2>The nullifier construction</h2>
+<p>A nullifier is computed as:</p>
+<pre><code>nullifier = H(secret || action_context)
+</code></pre>
+<p>Where <code>H</code> is a collision-resistant hash function, <code>secret</code> is known only to the actor, and <code>action_context</code> identifies the specific action being nullified (a transaction, a vote, a credential usage, a revocation).</p>
+<p><strong>Properties:</strong></p>
+<ul>
+<li><strong>Deterministic.</strong> The same secret + context always produces the same nullifier. This prevents double-action: trying to act twice produces the same nullifier, which the system detects as already published.</li>
+<li><strong>Unlinkable.</strong> Different action contexts produce different nullifiers from the same secret. Observing two nullifiers reveals nothing about whether they came from the same actor.</li>
+<li><strong>Irreversible.</strong> The nullifier cannot be traced back to the secret (hash preimage resistance). Publishing the nullifier does not expose the actor.</li>
+<li><strong>Verifiable.</strong> A zero-knowledge proof accompanies the nullifier, proving it was correctly derived from a valid secret and a legitimate action context, without revealing either.</li>
+</ul>
+<h2>Nullifier applications across the architecture</h2>
+<h3>Transaction nullifiers (Zcash model)</h3>
+<p>Each shielded note has a commitment (published when created) and a nullifier (published when spent). The nullifier set is a public record of all spent notes. To verify a transaction: check that the nullifier is not in the spent set (no double-spend) and verify the ZKP (valid derivation from a real note).</p>
+<p><strong>In the architecture.</strong> Privacy Pool contributions use transaction nullifiers to prevent the same observation from being counted twice while keeping the contributor anonymous.</p>
+<h3>Credential nullifiers (single-use proofs)</h3>
+<p>A credential can be used exactly once per context. The nullifier is derived from the credential secret and the usage context (e.g., &quot;vote in election 2026-Q1&quot;). Using the credential in the same context twice produces the same nullifier — detected and rejected.</p>
+<p><strong>In the architecture.</strong> VRC ceremonies generate bilateral credentials. Each credential&#39;s nullifier ensures it is verified exactly once per verification context. A health provider verifying insurance eligibility gets one verification — not a tracking stream.</p>
+<h3>Revocation nullifiers (privacy-preserving cancellation)</h3>
+<p>Pre-computed at key/credential creation time. Publishing the revocation nullifier invalidates the key/credential without revealing which key/credential was revoked (when the nullifier set is large enough to provide anonymity).</p>
+<p><strong>In the architecture.</strong> Every delegation key created through key_ceremony comes with a pre-computed revocation nullifier. If the Person needs emergency revocation, publishing the nullifier is instantaneous — no need to identify the key publicly.</p>
+<h3>Governance nullifiers (anonymous voting)</h3>
+<p>One person, one vote, zero linkage. The nullifier is derived from the voter&#39;s identity secret and the election identifier. Voting twice in the same election produces a duplicate nullifier. But the voter&#39;s identity is never connected to their vote.</p>
+<p><strong>In the architecture.</strong> Guild governance uses nullifier-based voting to ensure fair participation without surveillance of voting patterns. The Assessor can verify quorum and outcome without knowing how any individual voted.</p>
+<h2>Nullifier set management</h2>
+<p>The nullifier set (the record of all published nullifiers) is the system&#39;s memory of what has been done. Managing it is a critical infrastructure concern:</p>
+<p><strong>Storage.</strong> The nullifier set grows monotonically — nullifiers are added, never removed. For high-volume systems (millions of transactions), the set becomes large. Efficient data structures (Merkle trees, sparse Merkle trees, accumulator-based sets) keep lookup time logarithmic.</p>
+<p><strong>Availability.</strong> Every verifier must access the current nullifier set to check for duplicates. If the set is unavailable, verification stalls. Decentralised storage (blockchain state) provides availability guarantees but at cost. Centralised registries are faster but introduce trust assumptions.</p>
+<p><strong>Privacy of the set itself.</strong> The nullifier set is public by necessity (everyone needs to check it). But the set&#39;s growth pattern can leak information: a burst of nullifiers suggests a burst of activity. Constant-rate nullifier publication (dummy nullifiers filling quiet periods) mitigates timing analysis.</p>
+<h2>Nullifier circuit design</h2>
+<p>The zero-knowledge circuit that accompanies a nullifier must prove:</p>
+<ol>
+<li><strong>Knowledge of secret.</strong> The prover knows the secret from which the nullifier was derived (without revealing the secret).</li>
+<li><strong>Correct derivation.</strong> The nullifier was computed as H(secret || context) — not arbitrarily chosen.</li>
+<li><strong>Membership.</strong> The secret corresponds to a valid commitment in the system (the prover actually has the credential/note/key they&#39;re nullifying).</li>
+<li><strong>Freshness.</strong> The action context is current (prevents replaying old proofs in new contexts).</li>
+</ol>
+<p><strong>Circuit complexity.</strong> Nullifier circuits are relatively simple compared to general ZKP circuits. The core operation is a hash function inside a SNARK/STARK. The main design choice is the hash function: Pedersen (efficient in SNARKs), Poseidon (designed for arithmetic circuits), MiMC (minimal constraints). Each has different performance profiles inside different proof systems.</p>
+<p><strong>Composability.</strong> Nullifier proofs compose with other proofs. A transaction proof that includes a nullifier also proves the transaction&#39;s validity (correct amounts, valid sender). A voting proof that includes a nullifier also proves eligibility (registered voter, correct election). The nullifier is one component of a larger proof — not a standalone operation.</p>
+<h2>Nullifier anti-patterns</h2>
+<p><strong>Predictable nullifiers.</strong> If an adversary can predict a nullifier before it&#39;s published, they can pre-emptively publish it (denial of service). Mitigation: include sufficient entropy in the secret component.</p>
+<p><strong>Correlated nullifiers.</strong> If nullifiers from the same actor are correlated (e.g., sequential in some space), publishing multiple nullifiers deanonymises the actor. Mitigation: use independent randomness per action context, not sequential derivation.</p>
+<p><strong>Nullifier reuse across contexts.</strong> Using the same nullifier scheme across different applications can create cross-application linkability. If the same secret produces nullifiers in both a voting system and a payment system, and the nullifier sets are publicly compared, cross-context linking becomes possible. Mitigation: domain separation — include a unique application identifier in the action context.</p>
+<p><strong>Insufficient set size.</strong> A nullifier set with 3 entries provides no meaningful anonymity — an adversary can enumerate. Minimum set sizes depend on the threat model, but k-anonymity principles apply: the set should be large enough that any individual nullifier is indistinguishable from at least k-1 others.</p>
+<h2>Connection to the equation</h2>
+<p><strong>P — protection.</strong> Nullifiers enable protection without surveillance. The system enforces rules (no double-spend, no double-vote) without knowing who is acting. This is P in its purest form: the rule is enforced, the actor is invisible.</p>
+<p><strong>C — verifiability.</strong> Every nullifier is accompanied by a zero-knowledge proof. The verifier can check correctness without learning anything beyond the fact of correct derivation. This is C: verifiable computation that reveals nothing unnecessary.</p>
+<p><strong>R(d) — reconstruction.</strong> Nullifiers are designed to be unlinkable. Two nullifiers from the same actor reveal nothing about their shared origin. This directly maintains R&lt;1 for the actions protected by nullifiers — even an adversary with the complete nullifier set cannot reconstruct which actor produced which subset. V6: the ceiling is time-dependent, R(t) with shelf life t* (C82); the static result is Proven in the conditional regime.</p>
+<p><strong>h(τ) — integrity.</strong> The nullifier set IS the integrity record. A correctly maintained set (no duplicates accepted, no valid nullifiers rejected) means h(τ) = 1 for nullifier-protected operations. Corruption of the set (accepting duplicates, censoring valid submissions) directly reduces h(τ).</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-nullifier-design</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-nullifier-design</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-nullifier-design.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

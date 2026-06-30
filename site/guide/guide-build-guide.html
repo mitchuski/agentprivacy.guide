@@ -1,0 +1,1304 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide — Build Guide · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Guide — Build Guide</span></div>
+  <article><div class="md"><h1>Build Guide</h1>
+</div>
+<div class="md"><p><strong>Step-by-step implementation from zero to production</strong></p>
+<hr>
+</div>
+<div class="md"><h2>Overview</h2>
+<p>This guide walks through building the complete Proverb Revelation Protocol in 4 phases:</p>
+<ol>
+<li><strong>Foundation</strong> (Week 1): Zcash + Database</li>
+<li><strong>Backend</strong> (Week 2): TEE + AI Integration</li>
+<li><strong>Frontend</strong> (Week 3): User Interface</li>
+<li><strong>Production</strong> (Week 4): Testing + Deployment</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>Phase 1: Foundation (Week 1)</h2>
+<h3>Goals</h3>
+<ul>
+<li>Zcash light client syncing</li>
+<li>PostgreSQL operational</li>
+<li>Basic monitoring working</li>
+<li>Memo parsing functional</li>
+</ul>
+<h3>Step 1.1: Initialize Oracle Swordsman Project</h3>
+<pre><code class="language-bash">cd ~/proverb-protocol/oracle-swordsman
+
+# For TypeScript
+npm init -y
+npm install --save \
+    axios \
+    pg \
+    dotenv \
+    winston \
+    express
+
+# Note: Nillion SDK is optional (use --omit=optional if needed)
+# npm install --save @nillion/client-web
+
+npm install --save-dev \
+    @types/node \
+    @types/pg \
+    typescript \
+    ts-node \
+    nodemon
+
+# Create tsconfig.json
+cat &gt; tsconfig.json &lt;&lt; &#39;EOF&#39;
+{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2020&quot;,
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;lib&quot;: [&quot;ES2020&quot;],
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;rootDir&quot;: &quot;./src&quot;,
+    &quot;strict&quot;: true,
+    &quot;esModuleInterop&quot;: true,
+    &quot;skipLibCheck&quot;: true,
+    &quot;forceConsistentCasingInFileNames&quot;: true,
+    &quot;resolveJsonModule&quot;: true
+  },
+  &quot;include&quot;: [&quot;src/**/*&quot;],
+  &quot;exclude&quot;: [&quot;node_modules&quot;, &quot;dist&quot;]
+}
+EOF
+
+# Create package.json scripts
+cat &gt; package.json &lt;&lt; &#39;EOF&#39;
+{
+  &quot;name&quot;: &quot;oracle-swordsman&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;scripts&quot;: {
+    &quot;dev&quot;: &quot;nodemon src/index.ts&quot;,
+    &quot;build&quot;: &quot;tsc&quot;,
+    &quot;start&quot;: &quot;node dist/index.js&quot;,
+    &quot;test&quot;: &quot;ts-node src/test.ts&quot;
+  }
+}
+EOF
+</code></pre>
+<h3>Step 1.2: Create Configuration Module</h3>
+<pre><code class="language-typescript">// src/config.ts
+import dotenv from &#39;dotenv&#39;;
+dotenv.config();
+
+export const config = {
+  // Nillion
+  nillion: {
+    apiKey: process.env.NILLION_API_KEY!,
+    network: process.env.NILLION_NETWORK || &#39;testnet&#39;,
+  },
+  
+  // NEAR Cloud AI
+  near: {
+    apiKey: process.env.NEAR_API_KEY!,
+    model: process.env.NEAR_MODEL || &#39;gpt oss 120b&#39;,
+    endpoint: &#39;https://cloud.near.ai/v1/verify&#39;,
+  },
+  
+  // IPFS
+  ipfs: {
+    jwt: process.env.PINATA_JWT!,
+    gateway: process.env.PINATA_GATEWAY || &#39;https://gateway.pinata.cloud&#39;,
+    spellbookCid: process.env.SPELLBOOK_CID!,
+  },
+  
+  // Zcash
+  zcash: {
+    network: process.env.ZCASH_NETWORK || &#39;testnet&#39;,
+    server: process.env.ZCASH_SERVER || &#39;https://zec.rocks:443&#39;,
+    dataDir: process.env.ZCASH_DATA_DIR!,
+  },
+  
+  // Database
+  database: {
+    url: process.env.DATABASE_URL!,
+  },
+  
+  // Oracle settings
+  oracle: {
+    checkInterval: parseInt(process.env.ORACLE_CHECK_INTERVAL || &#39;30&#39;) * 1000,
+    retryAttempts: parseInt(process.env.ORACLE_RETRY_ATTEMPTS || &#39;3&#39;),
+    retryDelay: parseInt(process.env.ORACLE_RETRY_DELAY || &#39;60&#39;) * 1000,
+  },
+  
+  // Economic model
+  economics: {
+    proverb_cost: 0.01,
+    public_split: 0.618,
+    private_split: 0.382,
+    network_fee: 0.0001,
+  },
+};
+
+// Validate required env vars
+const required = [
+  &#39;NILLION_API_KEY&#39;,
+  &#39;NEAR_API_KEY&#39;,
+  &#39;PINATA_JWT&#39;,
+  &#39;SPELLBOOK_CID&#39;,
+  &#39;ZCASH_DATA_DIR&#39;,
+  &#39;DATABASE_URL&#39;,
+];
+
+for (const key of required) {
+  if (!process.env[key]) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+}
+</code></pre>
+<h3>Step 1.3: Create Database Module</h3>
+<pre><code class="language-typescript">// src/database.ts
+import { Pool, QueryResult } from &#39;pg&#39;;
+import { config } from &#39;./config&#39;;
+
+const pool = new Pool({
+  connectionString: config.database.url,
+});
+
+export interface Submission {
+  id: number;
+  tracking_code: string;
+  sender_address: string;
+  proverb_text: string;
+  amount_zec: number;
+  txid: string;
+  status: string;
+  created_at: Date;
+}
+
+export interface Verification {
+  id: number;
+  submission_id: number;
+  ai_provider: string;
+  quality_score: number;
+  matched_act: string;
+  reasoning: string;
+  verified_at: Date;
+}
+
+export interface Inscription {
+  id: number;
+  submission_id: number;
+  public_txid: string;
+  private_txid: string;
+  public_amount: number;
+  private_amount: number;
+  inscribed_at: Date;
+}
+
+export const db = {
+  // Test connection
+  async testConnection(): Promise&lt;boolean&gt; {
+    try {
+      await pool.query(&#39;SELECT 1&#39;);
+      return true;
+    } catch (error) {
+      console.error(&#39;Database connection failed:&#39;, error);
+      return false;
+    }
+  },
+
+  // Create submission
+  async createSubmission(data: {
+    tracking_code: string;
+    sender_address: string;
+    proverb_text: string;
+    amount_zec: number;
+    txid: string;
+    memo_text?: string;
+  }): Promise&lt;Submission&gt; {
+    const result = await pool.query(
+      `INSERT INTO submissions 
+       (tracking_code, sender_address, proverb_text, amount_zec, txid, memo_text, status)
+       VALUES ($1, $2, $3, $4, $5, $6, &#39;pending&#39;)
+       RETURNING *`,
+      [
+        data.tracking_code,
+        data.sender_address,
+        data.proverb_text,
+        data.amount_zec,
+        data.txid,
+        data.memo_text,
+      ]
+    );
+    return result.rows[0];
+  },
+
+  // Get pending submissions
+  async getPendingSubmissions(): Promise&lt;Submission[]&gt; {
+    const result = await pool.query(
+      `SELECT * FROM submissions WHERE status = &#39;pending&#39; ORDER BY created_at ASC`
+    );
+    return result.rows;
+  },
+
+  // Update submission status
+  async updateSubmissionStatus(id: number, status: string): Promise&lt;void&gt; {
+    await pool.query(
+      `UPDATE submissions SET status = $1 WHERE id = $2`,
+      [status, id]
+    );
+  },
+
+  // Create verification
+  async createVerification(data: {
+    submission_id: number;
+    ai_provider: string;
+    quality_score: number;
+    matched_act: string;
+    reasoning: string;
+  }): Promise&lt;Verification&gt; {
+    const result = await pool.query(
+      `INSERT INTO verifications 
+       (submission_id, ai_provider, quality_score, matched_act, reasoning)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [
+        data.submission_id,
+        data.ai_provider,
+        data.quality_score,
+        data.matched_act,
+        data.reasoning,
+      ]
+    );
+    return result.rows[0];
+  },
+
+  // Create inscription
+  async createInscription(data: {
+    submission_id: number;
+    public_txid: string;
+    private_txid: string;
+    public_amount: number;
+    private_amount: number;
+    network_fee: number;
+  }): Promise&lt;Inscription&gt; {
+    const result = await pool.query(
+      `INSERT INTO inscriptions 
+       (submission_id, public_txid, private_txid, public_amount, private_amount, network_fee)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [
+        data.submission_id,
+        data.public_txid,
+        data.private_txid,
+        data.public_amount,
+        data.private_amount,
+        data.network_fee,
+      ]
+    );
+    return result.rows[0];
+  },
+
+  // Get submission by tracking code
+  async getSubmissionByTrackingCode(code: string): Promise&lt;Submission | null&gt; {
+    const result = await pool.query(
+      `SELECT * FROM submissions WHERE tracking_code = $1`,
+      [code]
+    );
+    return result.rows[0] || null;
+  },
+
+  // Get verification for submission
+  async getVerification(submissionId: number): Promise&lt;Verification | null&gt; {
+    const result = await pool.query(
+      `SELECT * FROM verifications WHERE submission_id = $1`,
+      [submissionId]
+    );
+    return result.rows[0] || null;
+  },
+
+  // Get stats
+  async getStats(): Promise&lt;any&gt; {
+    const result = await pool.query(`SELECT * FROM proverb_stats`);
+    return result.rows[0];
+  },
+
+  // Close pool
+  async close(): Promise&lt;void&gt; {
+    await pool.end();
+  },
+};
+</code></pre>
+<h3>Step 1.4: Create Zcash Client Module</h3>
+<pre><code class="language-typescript">// src/zcash-client.ts
+import { exec } from &#39;child_process&#39;;
+import { promisify } from &#39;util&#39;;
+import { config } from &#39;./config&#39;;
+
+const execAsync = promisify(exec);
+
+export interface ZcashTransaction {
+  txid: string;
+  amount: number;
+  address: string;
+  memo?: string;
+  confirmations: number;
+  blockHeight?: number;
+}
+
+export class ZcashClient {
+  private cliPath = &#39;zecwallet-cli&#39;;
+  
+  // Execute zecwallet-cli command
+  private async execute(command: string): Promise&lt;string&gt; {
+    const fullCommand = `${this.cliPath} --server ${config.zcash.server} --data-dir ${config.zcash.dataDir} --command &quot;${command}&quot;`;
+    
+    try {
+      const { stdout, stderr } = await execAsync(fullCommand);
+      if (stderr) {
+        console.error(&#39;Zcash CLI error:&#39;, stderr);
+      }
+      return stdout;
+    } catch (error: any) {
+      throw new Error(`Zcash CLI failed: ${error.message}`);
+    }
+  }
+
+  // Get list of transactions
+  async listTransactions(): Promise&lt;ZcashTransaction[]&gt; {
+    const output = await this.execute(&#39;list&#39;);
+    // Parse output (format depends on zecwallet-cli version)
+    return this.parseTransactionList(output);
+  }
+
+  // Get new transactions since last check
+  async getNewTransactions(lastHeight: number): Promise&lt;ZcashTransaction[]&gt; {
+    const allTxs = await this.listTransactions();
+    return allTxs.filter(tx =&gt; 
+      tx.blockHeight &amp;&amp; tx.blockHeight &gt; lastHeight &amp;&amp; tx.confirmations &gt; 0
+    );
+  }
+
+  // Send transaction
+  async sendTransaction(
+    to: string,
+    amount: number,
+    memo?: string
+  ): Promise&lt;string&gt; {
+    const memoArg = memo ? `--memo &quot;${memo}&quot;` : &#39;&#39;;
+    const command = `send ${to} ${amount} ${memoArg}`;
+    const output = await this.execute(command);
+    return this.parseTxid(output);
+  }
+
+  // Get balance
+  async getBalance(): Promise&lt;{ transparent: number; shielded: number }&gt; {
+    const output = await this.execute(&#39;balance&#39;);
+    return this.parseBalance(output);
+  }
+
+  // Sync blockchain
+  async sync(): Promise&lt;void&gt; {
+    await this.execute(&#39;sync&#39;);
+  }
+
+  // Get current block height
+  async getBlockHeight(): Promise&lt;number&gt; {
+    const output = await this.execute(&#39;height&#39;);
+    return parseInt(output.trim());
+  }
+
+  // Parse transaction list (customize based on actual output)
+  private parseTransactionList(output: string): ZcashTransaction[] {
+    // Implementation depends on zecwallet-cli output format
+    // This is a placeholder
+    const transactions: ZcashTransaction[] = [];
+    const lines = output.split(&#39;\n&#39;).filter(l =&gt; l.trim());
+    
+    for (const line of lines) {
+      // Parse each line based on actual format
+      // Example format: &quot;txid | amount | address | memo | confirmations&quot;
+      transactions.push({
+        txid: &#39;&#39;, // parse from line
+        amount: 0, // parse from line
+        address: &#39;&#39;, // parse from line
+        memo: undefined, // parse from line
+        confirmations: 0, // parse from line
+      });
+    }
+    
+    return transactions;
+  }
+
+  // Parse balance output
+  private parseBalance(output: string): { transparent: number; shielded: number } {
+    // Parse balance from output
+    return {
+      transparent: 0, // parse from output
+      shielded: 0, // parse from output
+    };
+  }
+
+  // Parse transaction ID from send output
+  private parseTxid(output: string): string {
+    // Extract txid from output
+    const match = output.match(/[a-f0-9]{64}/);
+    return match ? match[0] : &#39;&#39;;
+  }
+}
+
+export const zcashClient = new ZcashClient();
+</code></pre>
+<h3>Step 1.5: Test Foundation</h3>
+<pre><code class="language-typescript">// src/test-foundation.ts
+import { db } from &#39;./database&#39;;
+import { zcashClient } from &#39;./zcash-client&#39;;
+import { config } from &#39;./config&#39;;
+
+async function testFoundation() {
+  console.log(&#39;Testing Foundation...\n&#39;);
+
+  // Test 1: Configuration
+  console.log(&#39;1. Configuration:&#39;);
+  console.log(&#39;   Nillion API Key:&#39;, config.nillion.apiKey.substring(0, 10) + &#39;...&#39;);
+  console.log(&#39;   NEAR Cloud AI API Key:&#39;, config.near.apiKey.substring(0, 10) + &#39;...&#39;);
+  console.log(&#39;   Spellbook CID:&#39;, config.ipfs.spellbookCid);
+  console.log(&#39;   ✓ Configuration loaded\n&#39;);
+
+  // Test 2: Database
+  console.log(&#39;2. Database:&#39;);
+  const dbConnected = await db.testConnection();
+  console.log(&#39;   Connection:&#39;, dbConnected ? &#39;✓ Connected&#39; : &#39;✗ Failed&#39;);
+  
+  const stats = await db.getStats();
+  console.log(&#39;   Stats:&#39;, stats);
+  console.log(&#39;   ✓ Database operational\n&#39;);
+
+  // Test 3: Zcash
+  console.log(&#39;3. Zcash:&#39;);
+  try {
+    const balance = await zcashClient.getBalance();
+    console.log(&#39;   Balance:&#39;, balance);
+    
+    const height = await zcashClient.getBlockHeight();
+    console.log(&#39;   Height:&#39;, height);
+    console.log(&#39;   ✓ Zcash client working\n&#39;);
+  } catch (error) {
+    console.log(&#39;   ✗ Zcash client error:&#39;, error);
+  }
+
+  // Test 4: Create test submission
+  console.log(&#39;4. Test Submission:&#39;);
+  try {
+    const submission = await db.createSubmission({
+      tracking_code: &#39;TEST-&#39; + Date.now(),
+      sender_address: &#39;t1test...&#39;,
+      proverb_text: &#39;Privacy requires separation, not mere intention.&#39;,
+      amount_zec: 0.01,
+      txid: &#39;test_&#39; + Date.now(),
+    });
+    console.log(&#39;   Created:&#39;, submission.id);
+    console.log(&#39;   ✓ Submission created\n&#39;);
+  } catch (error) {
+    console.log(&#39;   ✗ Submission error:&#39;, error);
+  }
+
+  console.log(&#39;Foundation tests complete!&#39;);
+  await db.close();
+}
+
+testFoundation().catch(console.error);
+</code></pre>
+<p>Run test:</p>
+<pre><code class="language-bash">npm run test
+</code></pre>
+<p><strong>Expected Output</strong>:</p>
+<pre><code>Testing Foundation...
+
+1. Configuration:
+   Nillion API Key: nillion_xxxxxxxxxx...
+   NEAR Cloud AI API Key: xxxxxxxxxx...
+   Spellbook CID: QmXxxx...
+   ✓ Configuration loaded
+
+2. Database:
+   Connection: ✓ Connected
+   Stats: { total_submissions: 0, completed: 0, pending: 0 }
+   ✓ Database operational
+
+3. Zcash:
+   Balance: { transparent: 0.5, shielded: 0 }
+   Height: 2345678
+   ✓ Zcash client working
+
+4. Test Submission:
+   Created: 1
+   ✓ Submission created
+
+Foundation tests complete!
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Phase 2: Backend (Week 2)</h2>
+<h3>Goals</h3>
+<ul>
+<li>IPFS integration working</li>
+<li>AI verification functional</li>
+<li>Nillion TEE deployed</li>
+<li>Transaction signing operational</li>
+</ul>
+<h3>Step 2.1: Create IPFS Client</h3>
+<pre><code class="language-typescript">// src/ipfs-client.ts
+import axios from &#39;axios&#39;;
+import { config } from &#39;./config&#39;;
+
+export interface SpellbookAct {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  keywords: string[];
+}
+
+export interface Spellbook {
+  version: string;
+  created_at: string;
+  description: string;
+  acts: SpellbookAct[];
+}
+
+export class IPFSClient {
+  private gateway = config.ipfs.gateway;
+  private spellbookCid = config.ipfs.spellbookCid;
+  private cache: Spellbook | null = null;
+
+  // Fetch spellbook from IPFS
+  async fetchSpellbook(): Promise&lt;Spellbook&gt; {
+    if (this.cache) {
+      return this.cache;
+    }
+
+    const url = `${this.gateway}/ipfs/${this.spellbookCid}`;
+    
+    try {
+      const response = await axios.get(url, {
+        timeout: 10000,
+        headers: {
+          &#39;Accept&#39;: &#39;application/json&#39;,
+        },
+      });
+      
+      this.cache = response.data;
+      return this.cache;
+    } catch (error: any) {
+      throw new Error(`Failed to fetch spellbook: ${error.message}`);
+    }
+  }
+
+  // Get specific act by ID
+  async getAct(actId: string): Promise&lt;SpellbookAct | null&gt; {
+    const spellbook = await this.fetchSpellbook();
+    return spellbook.acts.find(act =&gt; act.id === actId) || null;
+  }
+
+  // Search acts by keyword
+  async searchActs(keyword: string): Promise&lt;SpellbookAct[]&gt; {
+    const spellbook = await this.fetchSpellbook();
+    const lowerKeyword = keyword.toLowerCase();
+    
+    return spellbook.acts.filter(act =&gt;
+      act.keywords.some(k =&gt; k.toLowerCase().includes(lowerKeyword)) ||
+      act.title.toLowerCase().includes(lowerKeyword) ||
+      act.description.toLowerCase().includes(lowerKeyword)
+    );
+  }
+
+  // Clear cache
+  clearCache(): void {
+    this.cache = null;
+  }
+}
+
+export const ipfsClient = new IPFSClient();
+</code></pre>
+<h3>Step 2.2: Create AI Verifier</h3>
+<pre><code class="language-typescript">// src/near-verifier.ts
+import axios from &#39;axios&#39;;
+import { config } from &#39;./config&#39;;
+import { Spellbook } from &#39;./ipfs-client&#39;;
+
+export interface VerificationResult {
+  quality_score: number;
+  matched_act: string;
+  reasoning: string;
+  approved: boolean;
+}
+
+export class NearVerifier {
+  private endpoint = config.near.endpoint;
+  private apiKey = config.near.apiKey;
+  private model = config.near.model;
+
+  // Verify proverb
+  async verify(proverb: string, spellbook: Spellbook): Promise&lt;VerificationResult&gt; {
+    try {
+      const response = await axios.post(
+        this.endpoint,
+        {
+          model: this.model,
+          proverb: proverb,
+          spellbook_acts: spellbook.acts,
+          context: &#39;privacy_protocol&#39;,
+        },
+        {
+          headers: {
+            &#39;Authorization&#39;: `Bearer ${this.apiKey}`,
+            &#39;Content-Type&#39;: &#39;application/json&#39;,
+          },
+          timeout: 30000,
+        }
+      );
+
+      return response.data;
+    } catch (error: any) {
+      console.error(&#39;NEAR Cloud AI verification failed:&#39;, error.message);
+      
+      // Fallback to basic pattern matching
+      return this.fallbackVerification(proverb, spellbook);
+    }
+  }
+
+  // Fallback verification (basic pattern matching)
+  private fallbackVerification(proverb: string, spellbook: Spellbook): VerificationResult {
+    const lowerProverb = proverb.toLowerCase();
+    
+    // Check for key privacy concepts
+    const concepts = [
+      &#39;privacy&#39;, &#39;separation&#39;, &#39;architecture&#39;, &#39;delegation&#39;,
+      &#39;boundary&#39;, &#39;sovereignty&#39;, &#39;protection&#39;, &#39;encryption&#39;,
+    ];
+    
+    const matchedConcepts = concepts.filter(concept =&gt;
+      lowerProverb.includes(concept)
+    );
+    
+    const quality_score = Math.min(matchedConcepts.length / concepts.length, 0.7);
+    
+    // Try to match an act
+    let matched_act = &#39;act-01-shield&#39;; // default
+    for (const act of spellbook.acts) {
+      for (const keyword of act.keywords) {
+        if (lowerProverb.includes(keyword.toLowerCase())) {
+          matched_act = act.id;
+          break;
+        }
+      }
+    }
+    
+    return {
+      quality_score,
+      matched_act,
+      reasoning: &#39;Fallback verification (AI unavailable). Basic pattern matching used.&#39;,
+      approved: quality_score &gt;= 0.5,
+    };
+  }
+}
+
+export const nearVerifier = new NearVerifier();
+</code></pre>
+<h3>Step 2.3: Create Nillion Signer</h3>
+<pre><code class="language-typescript">// src/nillion-signer.ts
+import { NillionClient, SecretSigner } from &#39;@nillion/client-web&#39;;
+import { config } from &#39;./config&#39;;
+
+export class NillionSigner {
+  private client: NillionClient;
+  private keyStoreId: string | null = null;
+
+  constructor() {
+    this.client = new NillionClient({
+      network: config.nillion.network,
+      apiKey: config.nillion.apiKey,
+    });
+  }
+
+  // Initialize and store Zcash spending key
+  async initializeKey(privateKey: Buffer): Promise&lt;string&gt; {
+    try {
+      this.keyStoreId = await SecretSigner.storeKey({
+        client: this.client,
+        privateKey: privateKey,
+        algorithm: &#39;ECDSA&#39;,
+      });
+      
+      console.log(&#39;Zcash key stored in SecretSigner:&#39;, this.keyStoreId);
+      return this.keyStoreId;
+    } catch (error: any) {
+      throw new Error(`Failed to store key: ${error.message}`);
+    }
+  }
+
+  // Sign transaction
+  async signTransaction(txHash: Buffer): Promise&lt;Buffer&gt; {
+    if (!this.keyStoreId) {
+      throw new Error(&#39;Key not initialized. Call initializeKey() first.&#39;);
+    }
+
+    try {
+      const signature = await SecretSigner.sign({
+        client: this.client,
+        storeId: this.keyStoreId,
+        message: txHash,
+        algorithm: &#39;ECDSA&#39;,
+      });
+      
+      return signature;
+    } catch (error: any) {
+      throw new Error(`Failed to sign transaction: ${error.message}`);
+    }
+  }
+
+  // Get attestation
+  async getAttestation(): Promise&lt;string&gt; {
+    try {
+      const attestation = await this.client.getAttestation();
+      return attestation;
+    } catch (error: any) {
+      throw new Error(`Failed to get attestation: ${error.message}`);
+    }
+  }
+
+  // Verify attestation
+  async verifyAttestation(attestation: string): Promise&lt;boolean&gt; {
+    try {
+      const valid = await this.client.verifyAttestation(attestation);
+      return valid;
+    } catch (error: any) {
+      console.error(&#39;Attestation verification failed:&#39;, error.message);
+      return false;
+    }
+  }
+}
+
+export const nillionSigner = new NillionSigner();
+</code></pre>
+<h3>Step 2.4: Create Main Oracle Loop</h3>
+<pre><code class="language-typescript">// src/index.ts
+import { config } from &#39;./config&#39;;
+import { db } from &#39;./database&#39;;
+import { zcashClient } from &#39;./zcash-client&#39;;
+import { ipfsClient } from &#39;./ipfs-client&#39;;
+import { nearVerifier } from &#39;./near-verifier&#39;;
+import { nillionSigner } from &#39;./nillion-signer&#39;;
+
+let lastProcessedHeight = 0;
+let isProcessing = false;
+
+async function processSubmissions() {
+  if (isProcessing) {
+    console.log(&#39;Already processing, skipping...&#39;);
+    return;
+  }
+
+  isProcessing = true;
+
+  try {
+    // Get current height
+    const currentHeight = await zcashClient.getBlockHeight();
+    
+    // Get new transactions
+    const newTxs = await zcashClient.getNewTransactions(lastProcessedHeight);
+    
+    console.log(`Found ${newTxs.length} new transactions`);
+    
+    for (const tx of newTxs) {
+      await processTransaction(tx);
+    }
+    
+    lastProcessedHeight = currentHeight;
+  } catch (error) {
+    console.error(&#39;Error processing submissions:&#39;, error);
+  } finally {
+    isProcessing = false;
+  }
+}
+
+async function processTransaction(tx: any) {
+  try {
+    console.log(`Processing transaction: ${tx.txid}`);
+    
+    // Extract tracking code and proverb from memo
+    const { tracking_code, proverb } = parseMemo(tx.memo);
+    
+    // Check if already processed
+    const existing = await db.getSubmissionByTrackingCode(tracking_code);
+    if (existing) {
+      console.log(`Already processed: ${tracking_code}`);
+      return;
+    }
+    
+    // Create submission
+    const submission = await db.createSubmission({
+      tracking_code,
+      sender_address: tx.address,
+      proverb_text: proverb,
+      amount_zec: tx.amount,
+      txid: tx.txid,
+      memo_text: tx.memo,
+    });
+    
+    console.log(`Created submission: ${submission.id}`);
+    
+    // Fetch spellbook
+    const spellbook = await ipfsClient.fetchSpellbook();
+    
+    // Verify with AI
+    const verification = await nearVerifier.verify(proverb, spellbook);
+    
+    // Save verification
+    await db.createVerification({
+      submission_id: submission.id,
+      ai_provider: &#39;near&#39;,
+      quality_score: verification.quality_score,
+      matched_act: verification.matched_act,
+      reasoning: verification.reasoning,
+    });
+    
+    console.log(`Verification complete: ${verification.quality_score}`);
+    
+    if (verification.approved) {
+      // Sign and inscribe
+      await inscribeProverb(submission, proverb);
+    } else {
+      await db.updateSubmissionStatus(submission.id, &#39;rejected&#39;);
+      console.log(`Submission rejected: quality too low`);
+    }
+    
+  } catch (error) {
+    console.error(`Error processing transaction:`, error);
+  }
+}
+
+async function inscribeProverb(submission: any, proverb: string) {
+  try {
+    const publicAmount = config.economics.proverb_cost * config.economics.public_split;
+    const privateAmount = config.economics.proverb_cost * config.economics.private_split;
+    
+    // Create inscription transaction (public - to spellbook transparent address)
+    const publicTxid = await zcashClient.sendTransaction(
+      config.zcash.publicInscriptionAddress, // Spellbook&#39;s transparent address
+      publicAmount,
+      `PROVERB:${submission.tracking_code}:${proverb}` // Proverb + proof of revelation
+    );
+    
+    // Create shielded transaction (private)
+    const privateTxid = await zcashClient.sendTransaction(
+      &#39;SHIELDED_ADDRESS&#39;, // Replace with actual shielded address
+      privateAmount
+    );
+    
+    // Save inscription
+    await db.createInscription({
+      submission_id: submission.id,
+      public_txid: publicTxid,
+      private_txid: privateTxid,
+      public_amount: publicAmount,
+      private_amount: privateAmount,
+      network_fee: config.economics.network_fee,
+    });
+    
+    await db.updateSubmissionStatus(submission.id, &#39;completed&#39;);
+    
+    console.log(`Inscription complete: ${publicTxid}`);
+    
+  } catch (error) {
+    console.error(`Error inscribing:`, error);
+    await db.updateSubmissionStatus(submission.id, &#39;failed&#39;);
+  }
+}
+
+function parseMemo(memo: string): { tracking_code: string; proverb: string } {
+  // Parse memo format: &quot;TRACK:CODE|proverb text here&quot;
+  const parts = memo.split(&#39;|&#39;);
+  const tracking_code = parts[0].replace(&#39;TRACK:&#39;, &#39;&#39;);
+  const proverb = parts[1] || &#39;&#39;;
+  return { tracking_code, proverb };
+}
+
+// Main loop
+async function main() {
+  console.log(&#39;Oracle Swordsman starting...&#39;);
+  
+  // Test connections
+  const dbOk = await db.testConnection();
+  if (!dbOk) {
+    console.error(&#39;Database connection failed!&#39;);
+    process.exit(1);
+  }
+  
+  console.log(&#39;Database connected ✓&#39;);
+  
+  // Get initial height
+  lastProcessedHeight = await zcashClient.getBlockHeight();
+  console.log(`Starting from height: ${lastProcessedHeight}`);
+  
+  // Start processing loop
+  setInterval(processSubmissions, config.oracle.checkInterval);
+  
+  console.log(`Oracle running (check interval: ${config.oracle.checkInterval}ms)`);
+}
+
+main().catch(console.error);
+</code></pre>
+<h3>Step 2.5: Test Backend</h3>
+<pre><code class="language-bash"># Start oracle
+npm run dev
+
+# In another terminal, send test transaction
+# (requires testnet ZEC and wallet setup)
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Phase 3: Frontend (Week 3)</h2>
+<h3>Goals</h3>
+<ul>
+<li>User submission interface</li>
+<li>Status tracking</li>
+<li>Quality score display</li>
+<li>Mobile responsive</li>
+</ul>
+<h3>Step 3.1: Initialize Mage Agent</h3>
+<pre><code class="language-bash">cd ~/proverb-protocol/mage-agent
+
+# Create Next.js app
+npx create-next-app@latest . --typescript --tailwind --app --no-src-dir
+
+# Install dependencies
+npm install axios qrcode.react
+</code></pre>
+<h3>Step 3.2: Create API Route</h3>
+<pre><code class="language-typescript">// app/api/submit/route.ts
+import { NextRequest, NextResponse } from &#39;next/server&#39;;
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { proverb, tracking_code } = body;
+
+    // Validate
+    if (!proverb || !tracking_code) {
+      return NextResponse.json(
+        { error: &#39;Missing required fields&#39; },
+        { status: 400 }
+      );
+    }
+
+    // Return payment info
+    return NextResponse.json({
+      success: true,
+      payment_address: process.env.ZCASH_PAYMENT_ADDRESS,
+      amount: 0.01,
+      memo: `TRACK:${tracking_code}|${proverb}`,
+      tracking_code,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: &#39;Internal server error&#39; },
+      { status: 500 }
+    );
+  }
+}
+
+// app/api/status/[code]/route.ts
+import { NextRequest, NextResponse } from &#39;next/server&#39;;
+import { db } from &#39;@/lib/database&#39;; // You&#39;ll need to set this up
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { code: string } }
+) {
+  try {
+    const submission = await db.getSubmissionByTrackingCode(params.code);
+    
+    if (!submission) {
+      return NextResponse.json(
+        { error: &#39;Submission not found&#39; },
+        { status: 404 }
+      );
+    }
+
+    const verification = await db.getVerification(submission.id);
+
+    return NextResponse.json({
+      status: submission.status,
+      quality_score: verification?.quality_score,
+      matched_act: verification?.matched_act,
+      reasoning: verification?.reasoning,
+      txid: submission.txid,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: &#39;Internal server error&#39; },
+      { status: 500 }
+    );
+  }
+}
+</code></pre>
+<h3>Step 3.3: Create Submission Page</h3>
+<pre><code class="language-typescript">// app/page.tsx
+&#39;use client&#39;;
+
+import { useState } from &#39;react&#39;;
+import axios from &#39;axios&#39;;
+import QRCode from &#39;qrcode.react&#39;;
+
+export default function Home() {
+  const [proverb, setProverb] = useState(&#39;&#39;);
+  const [trackingCode, setTrackingCode] = useState(&#39;&#39;);
+  const [paymentInfo, setPaymentInfo] = useState&lt;any&gt;(null);
+  const [status, setStatus] = useState&lt;any&gt;(null);
+
+  const handleSubmit = async () =&gt; {
+    const code = &#39;PROV-&#39; + Date.now();
+    setTrackingCode(code);
+
+    const response = await axios.post(&#39;/api/submit&#39;, {
+      proverb,
+      tracking_code: code,
+    });
+
+    setPaymentInfo(response.data);
+  };
+
+  const checkStatus = async () =&gt; {
+    const response = await axios.get(`/api/status/${trackingCode}`);
+    setStatus(response.data);
+  };
+
+  return (
+    &lt;main className=&quot;min-h-screen p-8 max-w-2xl mx-auto&quot;&gt;
+      &lt;h1 className=&quot;text-4xl font-bold mb-8&quot;&gt;Proverb Revelation Protocol&lt;/h1&gt;
+
+      {!paymentInfo ? (
+        &lt;div&gt;
+          &lt;textarea
+            value={proverb}
+            onChange={(e) =&gt; setProverb(e.target.value)}
+            placeholder=&quot;Enter your proverb here...&quot;
+            className=&quot;w-full p-4 border rounded-lg mb-4&quot;
+            rows={6}
+          /&gt;
+          &lt;button
+            onClick={handleSubmit}
+            className=&quot;bg-blue-600 text-white px-6 py-2 rounded-lg&quot;
+          &gt;
+            Submit Proverb
+          &lt;/button&gt;
+        &lt;/div&gt;
+      ) : (
+        &lt;div&gt;
+          &lt;h2 className=&quot;text-2xl mb-4&quot;&gt;Payment Required&lt;/h2&gt;
+          &lt;p&gt;Send exactly 0.01 ZEC to:&lt;/p&gt;
+          &lt;code className=&quot;block bg-gray-100 p-2 my-4&quot;&gt;
+            {paymentInfo.payment_address}
+          &lt;/code&gt;
+          
+          &lt;p className=&quot;mb-2&quot;&gt;Include this memo:&lt;/p&gt;
+          &lt;code className=&quot;block bg-gray-100 p-2 mb-4 text-xs&quot;&gt;
+            {paymentInfo.memo}
+          &lt;/code&gt;
+
+          &lt;QRCode value={`zcash:${paymentInfo.payment_address}?amount=0.01&amp;memo=${paymentInfo.memo}`} /&gt;
+
+          &lt;div className=&quot;mt-8&quot;&gt;
+            &lt;p&gt;Tracking Code: &lt;code&gt;{trackingCode}&lt;/code&gt;&lt;/p&gt;
+            &lt;button
+              onClick={checkStatus}
+              className=&quot;mt-4 bg-green-600 text-white px-6 py-2 rounded-lg&quot;
+            &gt;
+              Check Status
+            &lt;/button&gt;
+          &lt;/div&gt;
+
+          {status &amp;&amp; (
+            &lt;div className=&quot;mt-4 p-4 border rounded-lg&quot;&gt;
+              &lt;p&gt;Status: &lt;strong&gt;{status.status}&lt;/strong&gt;&lt;/p&gt;
+              {status.quality_score &amp;&amp; (
+                &lt;&gt;
+                  &lt;p&gt;Quality Score: &lt;strong&gt;{status.quality_score}&lt;/strong&gt;&lt;/p&gt;
+                  &lt;p&gt;Matched Act: &lt;strong&gt;{status.matched_act}&lt;/strong&gt;&lt;/p&gt;
+                  &lt;p className=&quot;mt-2 text-sm&quot;&gt;{status.reasoning}&lt;/p&gt;
+                &lt;/&gt;
+              )}
+            &lt;/div&gt;
+          )}
+        &lt;/div&gt;
+      )}
+    &lt;/main&gt;
+  );
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Phase 4: Production (Week 4)</h2>
+<h3>Step 4.1: Testing Checklist</h3>
+<pre><code class="language-bash"># Test Oracle
+- [ ] Can detect Zcash transactions
+- [ ] Parses memo correctly
+- [ ] Fetches spellbook from IPFS
+- [ ] AI verification works
+- [ ] Signs with Nillion
+- [ ] Broadcasts transactions
+- [ ] Updates database correctly
+
+# Test Frontend
+- [ ] Can submit proverb
+- [ ] Displays payment info
+- [ ] Shows QR code
+- [ ] Tracks status
+- [ ] Shows quality score
+
+# Integration Test
+- [ ] End-to-end: submission → inscription
+- [ ] 61.8/38.2 golden ratio split correct
+- [ ] Tracking codes match
+- [ ] All data persisted
+</code></pre>
+<h3>Step 4.2: Production Deployment</h3>
+<pre><code class="language-bash"># Build oracle
+cd oracle-swordsman
+npm run build
+
+# Create systemd service
+sudo cat &gt; /etc/systemd/system/oracle-swordsman.service &lt;&lt; &#39;EOF&#39;
+[Unit]
+Description=Oracle Swordsman
+After=network.target
+
+[Service]
+Type=simple
+User=your_user
+WorkingDirectory=/home/your_user/proverb-protocol/oracle-swordsman
+ExecStart=/usr/bin/node dist/index.js
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Start service
+sudo systemctl enable oracle-swordsman
+sudo systemctl start oracle-swordsman
+
+# Build frontend
+cd ../mage-agent
+npm run build
+
+# Deploy with Nginx
+# Configure reverse proxy for Next.js
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>SpellWeb Feature</h2>
+<p>The SpellWeb is an interactive graph visualization showing your spell constellation. It includes several advanced features:</p>
+<h3>Features</h3>
+<ol>
+<li><strong>Constellation Mode</strong> - View all spells connected by grimoire, sequence, and custom links</li>
+<li><strong>Draw Mode</strong> - Click two nodes to create custom connections between them</li>
+<li><strong>Randomise Layout</strong> - Scatter nodes and let the physics simulation reorganize them</li>
+<li><strong>Expand/Fullscreen</strong> - View the full graph in fullscreen mode (press Escape to exit)</li>
+<li><strong>Grimoire Filter Panel</strong> - Toggle individual grimoires on/off to focus on specific spell groups</li>
+</ol>
+<h3>Key Files</h3>
+<pre><code>src/
+├── components/spellweb/
+│   ├── SpellwebViewer.tsx         # Basic viewer (used on /spells)
+│   └── SpellwebViewerAgentic.tsx  # Enhanced viewer with draw/constellation modes
+├── lib/spellweb/
+│   ├── types.ts                   # Node, Link, DrawnLink type definitions
+│   ├── builder.ts                 # Builds graph from selected spells
+│   └── labels.ts                  # Grimoire colors, emojis, short labels
+└── app/web/page.tsx               # Web page with grimoire filter panel
+</code></pre>
+<h3>SpellwebViewerAgentic Props</h3>
+<pre><code class="language-typescript">interface SpellwebViewerAgenticProps {
+  data: SpellwebData;           // Nodes and links from builder
+  grimoireFilter?: string[];    // Active grimoire IDs to show
+  onNodeSelect?: (node) =&gt; void;// Callback when node is clicked
+  fullHeight?: boolean;         // Fill container height
+}
+</code></pre>
+<h3>Link Types</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Visual</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>grimoire</code></td>
+<td>Spell → grimoire hub</td>
+<td>Gray solid</td>
+</tr>
+<tr>
+<td><code>sequence</code></td>
+<td>Spell → next spell</td>
+<td>Gray dashed</td>
+</tr>
+<tr>
+<td><code>cluster</code></td>
+<td>Skill → skills hub</td>
+<td>Gray solid</td>
+</tr>
+<tr>
+<td><code>constellation</code></td>
+<td>Cross-grimoire</td>
+<td>Orange solid</td>
+</tr>
+<tr>
+<td><code>drawn</code></td>
+<td>User-drawn (temporary)</td>
+<td>Green dashed</td>
+</tr>
+<tr>
+<td><code>saved</code></td>
+<td>User-saved (persistent)</td>
+<td>Green dashed</td>
+</tr>
+</tbody></table>
+<h3>localStorage Persistence</h3>
+<p>User-drawn maps are saved to <code>agentprivacy-web-saved-map</code> in localStorage. When you click &quot;Save map&quot; in Draw mode, your custom links persist and appear in Constellation mode.</p>
+<hr>
+</div>
+<div class="md"><h2>Next Steps</h2>
+<p>✅ <strong>Build Complete!</strong></p>
+<p>You now have:</p>
+<ul>
+<li>Working Oracle Swordsman</li>
+<li>Functional Mage Agent</li>
+<li>Complete integration</li>
+<li>Production deployment</li>
+<li><strong>SpellWeb visualization with draw/constellation modes</strong></li>
+</ul>
+<p><strong>Next</strong>: Reference <code>docs/04-API_REFERENCE.md</code> for detailed code patterns</p>
+<p><strong>Then</strong>: Use <code>docs/05-ROADMAP.md</code> to track your integration checklist</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-architecture-guides.html">The Architecture Guides</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="guide-build-guide.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

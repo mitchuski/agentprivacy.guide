@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cryptographic Durability · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Cryptographic Durability</span></div>
+  <article><div class="md"><h1>Cryptographic Durability</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 1.0</p>
+<p><strong>Equation term</strong> <code>the e^(−λt) decay term of V(π,t) read as a quantum-horizon time-constant for cryptographic π; Mosca&#39;s X + Y &gt; Z</code></p>
+<p>The post-quantum migration frame: how to reason about a primitive&#39;s durability — the time-distance to the quantum dawn — without overclaiming. Activates when discussing PQC migration timelines, Mosca&#39;s inequality, harvest-now-decrypt-later, quantum resource estimation (Toffoli × qubits, ecdsa.fail), crypto-agility, or whether a key/curve/protocol is &quot;safe.&quot; Carries the honest framing: resource estimation is a durability signal, not an attack, and nothing is &quot;fully post-quantum safe.&quot; In the City of Mages this is the Horizon District&#39;s knowledge (Eos 🌅 · Dokimé 🪨 · Poros 🛤️). V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><p><strong>How long until the dawn — and how to stay crossable when it comes.</strong></p>
+<blockquote>
+<p>&quot;The dawn is not an attack; it is a time you can measure.&quot;</p>
+</blockquote>
+<p><strong>Spell:</strong> <code>🌅 measure → 🪨 assay → 🛤️ cross</code></p>
+</div>
+<div class="md"><h2>1. The frame: durability is a measurement, not a verdict</h2>
+<p>A quantum resource estimate (e.g. ecdsa.fail: the cheapest reversible circuit for one secp256k1<br>point-addition, scored Toffoli × peak-qubits) is <strong>not a capability and not a weapon.</strong> It is a<br><em>measurement of durability</em> — a sharper read on the time-distance to the dawn that breaks a primitive.<br>Sharpening it shortens uncertainty, not security. When asked &quot;is this curve/key/protocol safe?&quot;, never<br>answer with a binary; answer with a <strong>horizon and its error bars</strong>, and refuse both false comfort and<br>false alarm.</p>
+<p><strong>Never claim</strong> a primitive is &quot;broken,&quot; that an attack is practical today, or that anything is &quot;fully<br>post-quantum safe.&quot; Keep roles distinct: ecdsa.fail / Eigen Labs (the arena) · Google Quantum AI (cost<br>targets) · Schrottenloher &amp; Proos–Zalka (circuits) · SigmaPrime (review) · Michele Mosca (the inequality).</p>
+<h2>2. The reckoning: Mosca&#39;s inequality</h2>
+<p><code>X + Y &gt; Z</code> ⟶ <strong>already lost.</strong></p>
+<ul>
+<li><strong>X</strong> = how long the secret must stay confidential (shelf-life).</li>
+<li><strong>Y</strong> = how long migration takes (inventory → cross → re-key).</li>
+<li><strong>Z</strong> = time until a cryptographically-relevant quantum machine arrives.</li>
+</ul>
+<p>If <code>X + Y &gt; Z</code>, you are already late — the secret you are protecting now will still need protecting when<br>the machine arrives, and you will not have finished migrating. This is the durability question made<br>arithmetic. The <strong>harvest-now-decrypt-later</strong> adversary is the X-side made concrete: data captured today<br>is decrypted when Z arrives, so confidentiality with a long shelf-life is already exposed.</p>
+<h2>3. Fast-clock vs slow-clock (the threat is not monolithic)</h2>
+<ul>
+<li><strong>Fast-clock</strong> machines (error correction in microseconds) threaten <strong>on-spend / in-flight</strong> secrets —<br>derive a key while a transaction sits in the mempool.</li>
+<li><strong>Slow-clock</strong> machines threaten only <strong>at-rest</strong> secrets — public keys exposed on a ledger for years<br>(dormant wallets, reused addresses). The mitigation differs: at-rest exposure wants <em>don&#39;t reuse /<br>don&#39;t expose</em>, in-flight wants <em>short windows + PQC signatures</em>.</li>
+</ul>
+<h2>4. Crypto-agility done right (the path, not the wall)</h2>
+<p>Durability is set not by a primitive&#39;s current strength but by the ability to <strong>re-key to a<br>post-quantum successor before <code>Z &lt; X + Y</code></strong> (C70). Crypto-agility is <em>not</em> swapping one algorithm for<br>another — it is keeping trust continuous while everything underneath changes. The trust graph uses its<br>primitives the way a river uses its banks. Practical posture: hybrid encapsulation (a PQC KEM wrapped<br>around a classical one) buys time; the migration is admitted only when <strong>every dependent has actually<br>crossed</strong> — no silent stragglers.</p>
+<h2>5. Conjecture anchors</h2>
+<ul>
+<li><strong>C61</strong> (alias of C49, register lock 2026-06-10) Behavioural Mosca (the inequality at behavioural-data scale) · <strong>C67</strong> Cryptographic Mosca for<br>the Substrate (extends C61 to the cryptographic primitive itself).</li>
+<li><strong>C60</strong> (alias of C48) Reconstruct-Later / harvest-now-decrypt-later · <strong>C13</strong> bilateral witness as a quantum-resistant<br>primitive.</li>
+<li><strong>C68</strong> the resource-estimate as durability signal (not attack) · <strong>C70</strong> crypto-agility as migration<br>readiness · <strong>C69</strong> the held-out gate (see <code>meta/agentprivacy-horizon-gate</code>).</li>
+</ul>
+<h2>6. Decision patterns</h2>
+<ul>
+<li><strong>&quot;Is X safe?&quot;</strong> → give a horizon with error bars (Mosca X+Y&gt;Z), not a yes/no. Name fast/slow-clock.</li>
+<li><strong>Planning a migration?</strong> → inventory dependents, choose PQC successors, sequence re-keying, verify no<br>stragglers; report Y honestly.</li>
+<li><strong>Reading a resource estimate?</strong> → it shortens the <em>estimate&#39;s</em> uncertainty, not the system&#39;s security.<br>Treat a 2× saving as a 2× sharper horizon, nothing more.</li>
+<li><strong>Tempted to alarm or reassure?</strong> → do neither beyond what the witnesses support.</li>
+</ul>
+<p><em>Authored 2026-06-09 from the ecdsa.fail / Last Premine work. The river keeps flowing; the banks can change.</em></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-cryptographic-durability</code>, v1.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-cryptographic-durability</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-cryptographic-durability.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

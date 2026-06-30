@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Boundary Enforcement · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Boundary Enforcement</span></div>
+  <article><div class="md"><h1>Boundary Enforcement</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>P — boundary enforcement IS protection in real-time operation</code></p>
+<p>Real-time access control decision engine for 0xagentprivacy swordsman agents. Activates when evaluating incoming data requests against consent preferences, designing allow/block/transform rule sets, implementing the swordsman&#39;s moment-to-moment operational logic, or building the enforcement layer that turns consent declarations into cryptographic actions. Triggers: &quot;boundary&quot;, &quot;access decision&quot;, &quot;allow block&quot;, &quot;consent enforcement&quot;, &quot;data request evaluation&quot;, &quot;rules engine&quot;, &quot;policy enforcement&quot;, &quot;request filtering&quot;, &quot;permission check&quot;.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + Consent Infrastructure (IEEE 7012) + Dual-Agent Separation<br><strong>Target context:</strong> Access control designers, privacy middleware builders, consent enforcement implementers, browser extension architects, API gateway designers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Every second, the swordsman makes decisions: this request gets through, that one gets blocked, this other one gets transformed before passing. Boundary enforcement is the operational core of the P term — not the mathematics of protection (that&#39;s crypto_zkp), not the progressive tiers (that&#39;s armor_progression), not the browser-specific implementation (that&#39;s swordsman_browser), but the decision logic itself.</p>
+<p>A data request arrives. The swordsman evaluates: Who is asking? What are they asking for? Is there valid consent? Does this exceed the minimum disclosure set? What&#39;s the current threat level? The answer — allow, block, or transform — must be instantaneous, consistent, auditable, and cryptographically enforced.</p>
+<h2>The decision pipeline</h2>
+<p>Every incoming request passes through a six-stage pipeline:</p>
+<p><strong>Stage 1 — Authentication.</strong> Who is the requestor? Verify identity against the trust graph. Unknown requestors are not automatically blocked — they enter the evaluation pipeline with zero trust score. Known requestors enter with their accumulated trust weight from A(τ).</p>
+<p><strong>Stage 2 — Consent lookup.</strong> Does the Person have an active consent declaration covering this request? Consent declarations are structured (IEEE 7012 bilateral terms): what data, for what purpose, for how long, with what restrictions. The swordsman matches the request against active declarations. No matching declaration → proceed to default policy.</p>
+<p><strong>Stage 3 — Scope check.</strong> Even with valid consent, does this specific request fit within the declared scope? A consent to share &quot;prescription status&quot; does not authorise sharing &quot;complete medical history.&quot; The swordsman evaluates request scope against declaration scope. Over-broad requests are narrowed, not blocked — the swordsman transforms the request to match the consent scope.</p>
+<p><strong>Stage 4 — Minimum disclosure.</strong> What is the least information that satisfies this request? The swordsman consults the mage (Soulbae) for disclosure set calculation — the mage can see the data and determine the minimum. But the swordsman makes the authorisation decision. This is the dual-agent handshake in real-time: mage recommends, swordsman decides.</p>
+<p><strong>Stage 5 — Threat assessment.</strong> What is the current threat environment? Elevated threat (active adversary detected by Sentinel, recent breach documented by Witness, Sith red team warning) tightens all boundaries. Normal threat applies standard policy. Reduced threat (trusted environment, verified counterparty, established relationship) may relax specific boundaries within consent scope.</p>
+<p><strong>Stage 6 — Execution.</strong> The decision is executed cryptographically. Allow: swordsman signs the authorisation, data flows through the mage&#39;s disclosure channel. Block: no signature, request returns empty or with a privacy-preserving denial (no information about why the request was blocked). Transform: request is modified, swordsman signs the transformed version, modified data flows.</p>
+<h2>Decision types</h2>
+<p><strong>Allow.</strong> The request matches active consent, fits within scope, meets minimum disclosure, and the threat environment is acceptable. The swordsman signs. The signature is the authorisation — without it, the mage cannot release data. The allow decision is logged (encrypted, accessible only to the Person) for audit.</p>
+<p><strong>Block.</strong> The request fails any pipeline stage. No consent exists, scope exceeds declaration, threat level too high, or requestor authentication fails. The swordsman returns nothing — not an error message (which leaks information about what exists), not a redirect (which leaks the swordsman&#39;s address), nothing. Silence is the swordsman&#39;s block.</p>
+<p><strong>Transform.</strong> The request is valid but over-broad. The swordsman narrows it to the minimum disclosure set. &quot;Give me your medical history&quot; transforms to &quot;Here is proof of insurance eligibility.&quot; The original request is never fulfilled — the transformed version satisfies the legitimate need while protecting everything else. Transform is where the Archer&#39;s precision meets the Warden&#39;s enforcement.</p>
+<h2>Policy layers</h2>
+<p>Boundary enforcement operates across multiple policy layers, evaluated in order:</p>
+<p><strong>Layer 0 — Immutable rules.</strong> Hardcoded in the swordsman agent. Never overridable by the Person, the mage, or any external party. Examples: never release the signing key material, never combine signing and viewing keys in a single operation, never authorise a request that would reduce R below the reconstruction ceiling.</p>
+<p><strong>Layer 1 — Person&#39;s standing policy.</strong> The Person&#39;s default preferences. &quot;Block all third-party data sharing unless I&#39;ve explicitly consented.&quot; &quot;Transform all age verification requests to ZKP proofs.&quot; &quot;Allow all requests from entities in my trust graph with reputation score above threshold.&quot; Standing policy is configurable by the Person and persists across sessions.</p>
+<p><strong>Layer 2 — Contextual policy.</strong> Adjustments based on current context. Higher protection in public WiFi. Lower friction for verified healthcare providers during a medical appointment. Contextual policy is suggested by the mage (who can observe context) and approved by the swordsman (who enforces it).</p>
+<p><strong>Layer 3 — Consent declarations.</strong> Specific bilateral agreements (IEEE 7012 terms) with specific counterparties. These override standing policy for the declared scope — a consent to share prescription data with a pharmacy overrides the general &quot;block third-party sharing&quot; rule for that specific data category with that specific counterparty.</p>
+<p><strong>Layer 4 — Emergency overrides.</strong> Pre-authorised emergency disclosures. &quot;If I&#39;m unconscious in a hospital, release my blood type and allergies to the treating physician.&quot; Emergency overrides are the most carefully designed policies — the Person defines them in advance, the swordsman stores them securely, and they activate only under specified conditions.</p>
+<h2>The consent-enforcement gap</h2>
+<p>Current systems have a gap between what consent is declared and what is actually enforced. Cookie consent banners are the canonical failure: &quot;I consent to necessary cookies only&quot; → the site loads 47 tracking scripts anyway. The consent was declared but never enforced.</p>
+<p>Boundary enforcement closes this gap by making consent cryptographically binding. The swordsman&#39;s signature IS the enforcement. No signature, no data flow. A site that ignores the consent declaration gets nothing — not because of a policy promise but because the cryptographic channel doesn&#39;t open without the swordsman&#39;s key.</p>
+<p>This is the MyTerms (IEEE 7012) integration: bilateral privacy agreements enforced by the Warden&#39;s cookie-slashing capability at the browser level, backed by the swordsman&#39;s signing authority at the cryptographic level.</p>
+<h2>Audit trail</h2>
+<p>Every decision is logged in an encrypted audit trail accessible only to the Person:</p>
+<ul>
+<li>Timestamp of request</li>
+<li>Requestor identity (or &quot;unknown&quot;)</li>
+<li>Request type and scope</li>
+<li>Decision (allow/block/transform)</li>
+<li>Policy layer that determined the decision</li>
+<li>Consent declaration referenced (if any)</li>
+<li>Threat level at decision time</li>
+</ul>
+<p>The audit trail enables the Person to review their swordsman&#39;s behaviour — &quot;show me every request that was blocked last week&quot; or &quot;show me every transform decision involving health data.&quot; The Witness can access the audit trail (with the Person&#39;s consent) to document patterns — systematic over-requesting by a specific service, for example.</p>
+<h2>Connection to the equation</h2>
+<p><strong>P — protection.</strong> Boundary enforcement is P in its most operational form. The P^1.5 superlinear return means that consistent, well-calibrated enforcement compounds: each correctly blocked request strengthens the overall protection posture. Inconsistent enforcement (blocking sometimes, allowing others for the same request type) undermines P and reduces V(π,t).</p>
+<p><strong>C — verifiability.</strong> Every enforcement decision is cryptographically verifiable. The swordsman&#39;s signature (or absence of signature) is proof of the decision. This verifiability — C in the equation — is what distinguishes enforcement from policy: enforcement is provable.</p>
+<p><strong>R(d) — reconstruction.</strong> Each allow decision contributes to potential reconstruction. The swordsman&#39;s job is to ensure that the cumulative effect of all allow decisions keeps R(d) &lt; 1. The minimum disclosure principle at Stage 4 is the mechanism: each allow releases the least possible information, keeping total leakage bounded.</p>
+<h2>BRAID verification loops as inference-layer boundary enforcement</h2>
+<p>BRAID&#39;s terminal verification loops (arXiv:2512.15959) encode the same pattern as Swordsman boundary checking:</p>
+<pre><code>[Generate output] → [Check: R(d) disclosure within bounds?]
+  -- pass --&gt; [Deliver]
+  -- fail --&gt; [Feedback edge to revision] → [Re-check]
+</code></pre>
+<p>This &quot;System 2 thinking emulation&quot; is the Swordsman as boundary verifier at the inference layer. Before any output leaves the dual-agent system, verify against privacy boundaries using pre-validated verification nodes.</p>
+<p>For Swordsman deployment: generate BRAID boundary-checking graphs once (expensive), cache as holons, execute via nano-tier models for every access request (cheap). Real-time boundary enforcement becomes economically viable at millions of checks per day.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-boundary-enforcement</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-boundary-enforcement</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-boundary-enforcement.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

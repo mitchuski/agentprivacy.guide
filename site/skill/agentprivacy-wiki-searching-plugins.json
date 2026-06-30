@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Searching Plugins",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "01c785fe43fcd7e7",
+      "text": "# Wiki Searching Plugins\n\n**Category** wikis · **Version** 5.5\n\nA strategy for finding a federated-wiki plugin — or proving one doesn't exist — across six cost-ordered channels (installed, local repos, farm search, npm, GitHub code search, catalog wikis). Activates when looking for a fedwiki plugin or confirming none exists. Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "c889c3865165717c",
+      "text": "A strategy for finding federated wiki plugins — or proving one doesn't exist. The key principle: don't grep page files — the farm has proper indexes, so search them.\n\n## The Six Channels\n\n1. **Installed plugins** — `ls` the wiki's `node_modules` for `wiki-plugin-*`\n2. **Local repos** — `~/Code/wiki-plugins/`\n3. **The farm's own knowledge** — the `wiki-search` CLI (below)\n4. **npm** — the `wiki-plugin-{name}` convention plus description search\n5. **GitHub** — repo search, then the decisive code search\n6. **Plugin catalog wikis** — plugin.fedwiki.club, wiki.dbbs.co, wiki.ralfbarkow.ch sitemaps\n\n## wiki-search — the Custom Local Search\n\n`~/bin/wiki-search` combines both farm indexes in one command:\n\n```bash\nwiki-search \"mermaid plugin\"\nwiki-search \"diagram rendering\" --limit 15\nwiki-search \"similarity\" --domains 'plugin.*'\nwiki-search \"graphviz\" --text-only\n```\n\n**Full-text** — loads the prebuilt MiniSearch indexes (one per domain) and runs a fuzzy/prefix word search across all of them. No servers needed; rebuild stale indexes with `node build.mjs` in the index directory.\n\n**Semantic** — posts to the Farm API's `/search-report`, which embeds the query, scans every domain's vectors, drops stubs, and bundles forks. Finds pages *about* plugins even when they use different words.\n\nThe two are complementary: MiniSearch catches exact names (\"graphviz\"), semantic catches concepts (\"diagram rendering\"). Hits on `plugin.fedwiki.club` are the curated plugin documentation — treat those as authoritative.\n\n## The Decisive GitHub Check\n\nEvery fedwiki client plugin must register itself with a line like `window.plugins.mermaid = {emit, bind}`. A GitHub code search for that string is therefore conclusive:\n\n```bash\ngh api 'search/code?q=%22window.plugins.NAME%22' \\\n  --jq '.items[].repository.full_name'\n```\n\nIf this finds nothing, no public fedwiki plugin of that name exists — regardless of what repo-name searches suggest. Beware false friends: TiddlyWiki, Redmine, DokuWiki, and Obsidian all have plugin ecosystems with confusingly similar names.\n\n## Reporting the Result\n\nState which channels were checked. \"No public plugin exists\" is a valid, useful conclusion when supported by the registration-line code search. When nothing exists and a new plugin is wanted, the best scaffolding templates are `wiki-plugin-graphviz` (client-side rendering with clickable internal links) and `wiki-plugin-similarity` (DSL parsing, server routes, ghost pages).\n\n## Related Skills\n\n- `agentprivacy-wiki-similarity-plugin` — a worked scaffolding example\n- `agentprivacy-wiki-create-plugin` — scaffold a new plugin when none exists\n- `agentprivacy-wiki-document-plugin` — document a plugin on plugin.fedwiki.club"
+    },
+    {
+      "type": "markdown",
+      "id": "11e181d76e89f310",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/searching-for-plugins](https://skill.fedwiki.club/searching-for-plugins) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "eb5048bfc807a7cb",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-searching-plugins`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "71a4fdb1d79e6c1a",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "78f7e999ae9e323b",
+      "text": "agentprivacy-wiki-searching-plugins"
+    },
+    {
+      "type": "markdown",
+      "id": "f35e66bb8ba55529",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Searching Plugins",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "01c785fe43fcd7e7",
+            "text": "# Wiki Searching Plugins\n\n**Category** wikis · **Version** 5.5\n\nA strategy for finding a federated-wiki plugin — or proving one doesn't exist — across six cost-ordered channels (installed, local repos, farm search, npm, GitHub code search, catalog wikis). Activates when looking for a fedwiki plugin or confirming none exists. Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "c889c3865165717c",
+            "text": "A strategy for finding federated wiki plugins — or proving one doesn't exist. The key principle: don't grep page files — the farm has proper indexes, so search them.\n\n## The Six Channels\n\n1. **Installed plugins** — `ls` the wiki's `node_modules` for `wiki-plugin-*`\n2. **Local repos** — `~/Code/wiki-plugins/`\n3. **The farm's own knowledge** — the `wiki-search` CLI (below)\n4. **npm** — the `wiki-plugin-{name}` convention plus description search\n5. **GitHub** — repo search, then the decisive code search\n6. **Plugin catalog wikis** — plugin.fedwiki.club, wiki.dbbs.co, wiki.ralfbarkow.ch sitemaps\n\n## wiki-search — the Custom Local Search\n\n`~/bin/wiki-search` combines both farm indexes in one command:\n\n```bash\nwiki-search \"mermaid plugin\"\nwiki-search \"diagram rendering\" --limit 15\nwiki-search \"similarity\" --domains 'plugin.*'\nwiki-search \"graphviz\" --text-only\n```\n\n**Full-text** — loads the prebuilt MiniSearch indexes (one per domain) and runs a fuzzy/prefix word search across all of them. No servers needed; rebuild stale indexes with `node build.mjs` in the index directory.\n\n**Semantic** — posts to the Farm API's `/search-report`, which embeds the query, scans every domain's vectors, drops stubs, and bundles forks. Finds pages *about* plugins even when they use different words.\n\nThe two are complementary: MiniSearch catches exact names (\"graphviz\"), semantic catches concepts (\"diagram rendering\"). Hits on `plugin.fedwiki.club` are the curated plugin documentation — treat those as authoritative.\n\n## The Decisive GitHub Check\n\nEvery fedwiki client plugin must register itself with a line like `window.plugins.mermaid = {emit, bind}`. A GitHub code search for that string is therefore conclusive:\n\n```bash\ngh api 'search/code?q=%22window.plugins.NAME%22' \\\n  --jq '.items[].repository.full_name'\n```\n\nIf this finds nothing, no public fedwiki plugin of that name exists — regardless of what repo-name searches suggest. Beware false friends: TiddlyWiki, Redmine, DokuWiki, and Obsidian all have plugin ecosystems with confusingly similar names.\n\n## Reporting the Result\n\nState which channels were checked. \"No public plugin exists\" is a valid, useful conclusion when supported by the registration-line code search. When nothing exists and a new plugin is wanted, the best scaffolding templates are `wiki-plugin-graphviz` (client-side rendering with clickable internal links) and `wiki-plugin-similarity` (DSL parsing, server routes, ghost pages).\n\n## Related Skills\n\n- `agentprivacy-wiki-similarity-plugin` — a worked scaffolding example\n- `agentprivacy-wiki-create-plugin` — scaffold a new plugin when none exists\n- `agentprivacy-wiki-document-plugin` — document a plugin on plugin.fedwiki.club"
+          },
+          {
+            "type": "markdown",
+            "id": "11e181d76e89f310",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/searching-for-plugins](https://skill.fedwiki.club/searching-for-plugins) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "eb5048bfc807a7cb",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-searching-plugins`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "71a4fdb1d79e6c1a",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "78f7e999ae9e323b",
+            "text": "agentprivacy-wiki-searching-plugins"
+          },
+          {
+            "type": "markdown",
+            "id": "f35e66bb8ba55529",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384140
+    }
+  ]
+}

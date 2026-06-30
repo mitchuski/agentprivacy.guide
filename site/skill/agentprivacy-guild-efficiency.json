@@ -1,0 +1,96 @@
+{
+  "title": "Guild Efficiency",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "55e550ac10355ed3",
+      "text": "# Guild Efficiency\n\n**Category** role · **Version** 5.0\n\n**Equation term** `G(guilds) = 1 + guild_efficiency; Network_v5 = (1 + Σ wᵢ·nᵢ/N₀)^k · G(guilds)`\n\nGuild efficiency and shared-parent coordination for 0xagentprivacy V5. Activates when discussing G(guilds) network term, O(1) vs O(N²) scaling, shared reasoning libraries, guild coordination economics, or why some networks scale gracefully while others collapse."
+    },
+    {
+      "type": "markdown",
+      "id": "2f74758af2b05c4a",
+      "text": "**Source:** Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)\n**Target context:** Network architects, guild builders, coordination economists\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "3fe68f02ca5c2d30",
+      "text": "## What this is\n\nV4's network term treated all coordination as O(N²) — each agent potentially interacting with every other. BRAID's shared-parent pattern shows this is wrong for structured collaboration.\n\n**Agents sharing a reasoning library from the same Generator don't need pairwise coordination.** They share a parent. The interaction cost drops from O(N²) to O(1) per guild member.\n\nV5 adds:\n\n```\nNetwork_v5(G) = (1 + Σᵢ wᵢ · nᵢ/N₀)^k · G(guilds)\n\nWhere G(guilds) = 1 + guild_efficiency\n```\n\n## The Scaling Problem\n\n### O(N²) Coordination\n\nIn a network of N agents where every pair might interact:\n- Communication channels: N(N-1)/2\n- Synchronisation overhead: O(N²)\n- Coordination cost: Scales quadratically\n\nThis is why many networks collapse as they grow. The coordination overhead eventually exceeds the network benefit.\n\n### O(1) Shared-Parent\n\nAgents sharing a reasoning library (shared parent) coordinate differently:\n- They inherit common context from the parent\n- They don't need to synchronise pairwise\n- New members add O(1) overhead, not O(N)\n\n**The parent absorbs the coordination complexity.**\n\n## Guild Structure\n\nA guild is a set of agents sharing a reasoning parent:\n\n```\nGuild(G) = { agents a : parent(a) = G }\n```\n\nProperties:\n- All agents in the guild share context from G\n- New agent joining: O(1) to acquire parent context\n- Agent-to-agent coordination within guild: O(1) (shared context)\n- Cross-guild coordination: O(N) at guild level, not agent level\n\n### Guild Efficiency\n\n```\nguild_efficiency = Σ_g (|guild_g|/N) · coordination_benefit(g)\n```\n\nWhere:\n- |guild_g| = number of agents in guild g\n- N = total agents in network\n- coordination_benefit(g) = efficiency gain from shared-parent in guild g\n\nAt full guild coverage with optimal structure:\n- guild_efficiency → 1\n- G(guilds) → 2 (doubles network effect)\n\n## Connection to BRAID\n\nBRAID's Generator-Solver split is exactly the shared-parent pattern:\n\n- **Generator** = the parent (produces reasoning libraries)\n- **Solver instances** = guild members (execute reasoning libraries)\n- **Reasoning library** = shared context (skill file, cached graph)\n\nMultiple Solver instances executing the same Generator's reasoning library form a natural guild. They coordinate at O(1) because they share the reasoning structure.\n\n## Why This Matters for Scaling\n\n### Graceful Networks\n\nNetworks that scale gracefully share a common pattern:\n- Hierarchical parent structure\n- Guild-based coordination\n- O(1) per-member overhead\n\nExamples:\n- Academic disciplines (shared methodology = parent)\n- Professional guilds (shared training = parent)\n- BRAID deployments (shared Generator = parent)\n\n### Collapsing Networks\n\nNetworks that collapse under coordination overhead:\n- Flat, fully-connected structure\n- No shared context inheritance\n- O(N²) pairwise coordination\n\nExamples:\n- Unmoderated social networks\n- All-hands meetings that scale with team size\n- Consensus protocols requiring all-to-all communication\n\n## Mapping to PVM-V5\n\n| Concept | V5 Term |\n|---|---|\n| Network term | (1 + Σ wᵢ·nᵢ/N₀)^k |\n| Guild efficiency factor | G(guilds) = 1 + guild_efficiency |\n| Shared parent | Generator / reasoning library |\n| Guild members | Solver instances / agents sharing parent |\n| O(N²) → O(1) | Guild coordination benefit |\n| Full network effect | Network_v5 = base^k · G(guilds) |\n\n## Operational Guidance\n\n### For Guild Design\n\n- Identify natural parent structures (shared methodologies, tools, contexts)\n- Design explicit parent inheritance (skill files, reasoning libraries)\n- Measure guild_efficiency as coordination cost reduction\n- Monitor for guild fragmentation (loss of shared context)\n\n### For Network Scaling\n\n- Structure networks into guilds, not flat meshes\n- Cross-guild coordination should happen at guild level, not agent level\n- Shared-parent patterns reduce coordination overhead exponentially\n- Network health includes guild structure health\n\n### For BRAID Deployment\n\n- One Generator, many Solvers = one guild\n- Multiple Generators = multiple guilds\n- Inter-Generator coordination = cross-guild coordination\n- Measure guild_efficiency as reasoning library reuse rate\n\n## Conjecture C10\n\n**C10:** O(1) shared-parent coordination modifies the effective network exponent k.\n\nStatus: Structurally implied by BRAID architecture; requires calibration against empirical guild performance data.\n\n## Proverb\n\n> \"The ship with a captain sails. The fleet with a shared chart sails together. O(N²) is coordination. O(1) is culture.\"\n\n## Emoji Spell\n\n**🏛️ → O(N²)→O(1) → parent·child → shared_context → G(guilds) = 1+eff → Network↑ → 🌐🏛️∞**\n\n## Open Problems\n\n1. **C10 Calibration:** How do we measure the modification to effective k?\n2. **Optimal Guild Size:** Is there an optimal guild size that maximises efficiency?\n3. **Guild Fragmentation:** How do we detect and repair loss of shared context?\n4. **Cross-Guild Protocols:** What coordination protocols work best between guilds?\n5. **Nested Guilds:** Do hierarchical guild structures (guilds of guilds) provide further efficiency?"
+    },
+    {
+      "type": "markdown",
+      "id": "4c244285115a8701",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+    },
+    {
+      "type": "markdown",
+      "id": "c940ab1cd89ac695",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-guild-efficiency`, v5.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "7d76aa2910ac3f66",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "95a4d9d1d487f661",
+      "text": "agentprivacy-guild-efficiency"
+    },
+    {
+      "type": "markdown",
+      "id": "38ac29d94aa6f47f",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Guild Efficiency",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "55e550ac10355ed3",
+            "text": "# Guild Efficiency\n\n**Category** role · **Version** 5.0\n\n**Equation term** `G(guilds) = 1 + guild_efficiency; Network_v5 = (1 + Σ wᵢ·nᵢ/N₀)^k · G(guilds)`\n\nGuild efficiency and shared-parent coordination for 0xagentprivacy V5. Activates when discussing G(guilds) network term, O(1) vs O(N²) scaling, shared reasoning libraries, guild coordination economics, or why some networks scale gracefully while others collapse."
+          },
+          {
+            "type": "markdown",
+            "id": "2f74758af2b05c4a",
+            "text": "**Source:** Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)\n**Target context:** Network architects, guild builders, coordination economists\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "3fe68f02ca5c2d30",
+            "text": "## What this is\n\nV4's network term treated all coordination as O(N²) — each agent potentially interacting with every other. BRAID's shared-parent pattern shows this is wrong for structured collaboration.\n\n**Agents sharing a reasoning library from the same Generator don't need pairwise coordination.** They share a parent. The interaction cost drops from O(N²) to O(1) per guild member.\n\nV5 adds:\n\n```\nNetwork_v5(G) = (1 + Σᵢ wᵢ · nᵢ/N₀)^k · G(guilds)\n\nWhere G(guilds) = 1 + guild_efficiency\n```\n\n## The Scaling Problem\n\n### O(N²) Coordination\n\nIn a network of N agents where every pair might interact:\n- Communication channels: N(N-1)/2\n- Synchronisation overhead: O(N²)\n- Coordination cost: Scales quadratically\n\nThis is why many networks collapse as they grow. The coordination overhead eventually exceeds the network benefit.\n\n### O(1) Shared-Parent\n\nAgents sharing a reasoning library (shared parent) coordinate differently:\n- They inherit common context from the parent\n- They don't need to synchronise pairwise\n- New members add O(1) overhead, not O(N)\n\n**The parent absorbs the coordination complexity.**\n\n## Guild Structure\n\nA guild is a set of agents sharing a reasoning parent:\n\n```\nGuild(G) = { agents a : parent(a) = G }\n```\n\nProperties:\n- All agents in the guild share context from G\n- New agent joining: O(1) to acquire parent context\n- Agent-to-agent coordination within guild: O(1) (shared context)\n- Cross-guild coordination: O(N) at guild level, not agent level\n\n### Guild Efficiency\n\n```\nguild_efficiency = Σ_g (|guild_g|/N) · coordination_benefit(g)\n```\n\nWhere:\n- |guild_g| = number of agents in guild g\n- N = total agents in network\n- coordination_benefit(g) = efficiency gain from shared-parent in guild g\n\nAt full guild coverage with optimal structure:\n- guild_efficiency → 1\n- G(guilds) → 2 (doubles network effect)\n\n## Connection to BRAID\n\nBRAID's Generator-Solver split is exactly the shared-parent pattern:\n\n- **Generator** = the parent (produces reasoning libraries)\n- **Solver instances** = guild members (execute reasoning libraries)\n- **Reasoning library** = shared context (skill file, cached graph)\n\nMultiple Solver instances executing the same Generator's reasoning library form a natural guild. They coordinate at O(1) because they share the reasoning structure.\n\n## Why This Matters for Scaling\n\n### Graceful Networks\n\nNetworks that scale gracefully share a common pattern:\n- Hierarchical parent structure\n- Guild-based coordination\n- O(1) per-member overhead\n\nExamples:\n- Academic disciplines (shared methodology = parent)\n- Professional guilds (shared training = parent)\n- BRAID deployments (shared Generator = parent)\n\n### Collapsing Networks\n\nNetworks that collapse under coordination overhead:\n- Flat, fully-connected structure\n- No shared context inheritance\n- O(N²) pairwise coordination\n\nExamples:\n- Unmoderated social networks\n- All-hands meetings that scale with team size\n- Consensus protocols requiring all-to-all communication\n\n## Mapping to PVM-V5\n\n| Concept | V5 Term |\n|---|---|\n| Network term | (1 + Σ wᵢ·nᵢ/N₀)^k |\n| Guild efficiency factor | G(guilds) = 1 + guild_efficiency |\n| Shared parent | Generator / reasoning library |\n| Guild members | Solver instances / agents sharing parent |\n| O(N²) → O(1) | Guild coordination benefit |\n| Full network effect | Network_v5 = base^k · G(guilds) |\n\n## Operational Guidance\n\n### For Guild Design\n\n- Identify natural parent structures (shared methodologies, tools, contexts)\n- Design explicit parent inheritance (skill files, reasoning libraries)\n- Measure guild_efficiency as coordination cost reduction\n- Monitor for guild fragmentation (loss of shared context)\n\n### For Network Scaling\n\n- Structure networks into guilds, not flat meshes\n- Cross-guild coordination should happen at guild level, not agent level\n- Shared-parent patterns reduce coordination overhead exponentially\n- Network health includes guild structure health\n\n### For BRAID Deployment\n\n- One Generator, many Solvers = one guild\n- Multiple Generators = multiple guilds\n- Inter-Generator coordination = cross-guild coordination\n- Measure guild_efficiency as reasoning library reuse rate\n\n## Conjecture C10\n\n**C10:** O(1) shared-parent coordination modifies the effective network exponent k.\n\nStatus: Structurally implied by BRAID architecture; requires calibration against empirical guild performance data.\n\n## Proverb\n\n> \"The ship with a captain sails. The fleet with a shared chart sails together. O(N²) is coordination. O(1) is culture.\"\n\n## Emoji Spell\n\n**🏛️ → O(N²)→O(1) → parent·child → shared_context → G(guilds) = 1+eff → Network↑ → 🌐🏛️∞**\n\n## Open Problems\n\n1. **C10 Calibration:** How do we measure the modification to effective k?\n2. **Optimal Guild Size:** Is there an optimal guild size that maximises efficiency?\n3. **Guild Fragmentation:** How do we detect and repair loss of shared context?\n4. **Cross-Guild Protocols:** What coordination protocols work best between guilds?\n5. **Nested Guilds:** Do hierarchical guild structures (guilds of guilds) provide further efficiency?"
+          },
+          {
+            "type": "markdown",
+            "id": "4c244285115a8701",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+          },
+          {
+            "type": "markdown",
+            "id": "c940ab1cd89ac695",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-guild-efficiency`, v5.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "7d76aa2910ac3f66",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "95a4d9d1d487f661",
+            "text": "agentprivacy-guild-efficiency"
+          },
+          {
+            "type": "markdown",
+            "id": "38ac29d94aa6f47f",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384033
+    }
+  ]
+}

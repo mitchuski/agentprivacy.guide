@@ -1,0 +1,348 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — Privacy Value Model: V5.1 Research Note · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — Privacy Value Model: V5.1 Research Note</span></div>
+  <article><div class="md"><h1>Privacy Value Model: V5.1 Research Note</h1>
+</div>
+<div class="md"><h2>Behavioural Proof, the Ceremony Engine, and the Forge That Lit Itself</h2>
+<p><strong>Author:</strong> privacymage<br><strong>Date:</strong> March 30, 2026<br><strong>Status:</strong> Working note — pre-peer review<br><strong>Depends on:</strong> <a href="https://github.com/mitchuski/agentprivacy-docs/blob/main/privacy_is_value_v5.md">Privacy is Value V5</a>, <a href="https://github.com/mitchuski/agentprivacy-docs/blob/main/privacy_value_v5_formal_specification.md">PVM V5 Formal Specification</a></p>
+<hr>
+</div>
+<div class="md"><h2>Summary</h2>
+<p>On March 29, 2026, three things happened that together constitute a candidate V5.1 update to the Privacy Value Model:</p>
+<ol>
+<li><p>The spellweb blade forge went operational — implementing the 64-vertex lattice, six-dimension blade activation, Pascal&#39;s row tier distribution, and hexagram computation from node dimensions as working code on <a href="https://spellweb.ai">spellweb.ai</a>.</p>
+</li>
+<li><p>The ceremony engine was designed — two Chrome extensions (Swordsman and Mage) communicating via a ceremony channel, with five crossing types, DOM-free text measurement via <a href="https://github.com/chenglou/pretext">pretext</a>, and a mana economy gating community inscription onto the knowledge graph.</p>
+</li>
+<li><p>Three Dragon blades were forged and bilaterally witnessed — including the Universe Blade (<code>SPELL-YW5I59-1Q</code>, 62 laps, 2,170 seconds, 65 spells, all six dimensions active), whose proof was verified privately by Soulbae and reconstructed publicly for the Hitchhiker community.</p>
+</li>
+</ol>
+<p>This note identifies what these results contribute to the PVM and where V5.1 might differ from V5.</p>
+<hr>
+</div>
+<div class="md"><h2>Candidate V5.1 Additions</h2>
+<h3>1. Behavioural Proof Density as a Privacy Amplifier</h3>
+<p><strong>V5 has:</strong> R(d, compression) — reconstruction difficulty modified by compression ratio.</p>
+<p><strong>V5.1 proposes:</strong> R(d, compression, ρ) — reconstruction difficulty also modified by behavioural density ρ, where ρ is a function of traversal depth (laps), temporal duration, and intentional transition count.</p>
+<p><strong>Evidence:</strong> The Universe Blade demonstrates that the same constellation hash (<code>5tbrz7</code>) at 13 laps and at 62 laps produces qualitatively different reconstruction resistance. At 13 laps (433 seconds), the behavioural proof is sufficient. At 62 laps (2,170 seconds, 65 intentional spell casts), the proof achieves a density where the Reconstruction Ceiling R &lt; 1 becomes not just a bound but an experiential property — the person is &quot;too present to reduce.&quot;</p>
+<p><strong>Formal direction:</strong></p>
+<pre><code>ρ(π) = f(laps, duration, transitions) 
+R(d, compression, ρ) = R_base(d) · (1 - 1/compression_ratio) · (1 - g(ρ))
+</code></pre>
+<p>Where g(ρ) is a monotonically increasing function that pushes R toward zero as behavioural density increases. The shape of g(ρ) — logarithmic, sigmoid, or threshold — is an empirical question. The Universe Blade provides the first data point.</p>
+<p><strong>Confidence:</strong> 45%. Intuitively right. Needs formalisation and additional data points from other forgers.</p>
+<h3>2. Bilateral Witness as Verification Primitive</h3>
+<p><strong>V5 has:</strong> The separation bound I(S;M|FP) &lt; ε* as a mathematical constraint.</p>
+<p><strong>V5.1 proposes:</strong> The bilateral witness ceremony as the operational expression of the separation bound. The ceremony has a specific structure: (a) the Swordsman forges (produces the proof), (b) the Mage verifies privately (confirms the proof matches the architecture), (c) the Mage testifies publicly (reconstructs the proof for a community without transmitting the witness).</p>
+<p><strong>Evidence:</strong> The three-blade forging on March 29 demonstrates this structure empirically. The Swordsman forged on spellweb.ai. The Mage verified via Telegram (private channel). The Mage reconstructed for the Hitchhiker community (public channel). The community received the testimony without accessing the forge data, the constellation traversal, or the specific behavioural signature.</p>
+<p>This is not a formal ZK proof in the cryptographic sense. It is a <em>behavioural</em> ZK proof mediated by the dual-agent separation. The Mage can attest to the blade&#39;s properties without transmitting the witness because the Mage and the Swordsman operate in separated domains. The community trusts the attestation because the Mage&#39;s role is constrained by the architecture (she can only report what the Swordsman permits).</p>
+<p><strong>Formal direction:</strong> Bilateral Witness as a new primitive alongside VRC:</p>
+<pre><code>BW(blade, Sword, Mage, Community) = {
+  forge: Sword produces blade from witness π
+  verify: Mage confirms blade ∈ Lattice₆₄ via private channel
+  testify: Mage attests blade properties to Community via public channel
+  property: Community learns blade.tier, blade.spell, blade.stratum 
+            but NOT blade.witness (the specific traversal π)
+}
+</code></pre>
+<p><strong>Confidence:</strong> 60%. The ceremony happened and the structure is clean. Whether it constitutes a formal verification primitive or is better understood as a social protocol with privacy properties needs theoretical work.</p>
+<h3>3. Hexagram Computation as Implemented-Coherent</h3>
+<p><strong>V5 has:</strong> The 64-vertex lattice with six binary dimensions. The I Ching mapping is not mentioned.</p>
+<p><strong>V5.1 proposes:</strong> The hexagram encoding — six dimensions binarised at a threshold, producing one of 64 I Ching hexagram states — as an implemented feature that produces coherent results without being forced.</p>
+<p><strong>Evidence:</strong> The spellweb&#39;s six dimensions (d1Hide, d2Commit, d3Prove, d4Connect, d5Reflect, d6Delegate) were named independently from the hexagram line labels (Key Custody, Credential Disclosure, Agent Delegation, Data Residency, Interaction Mode, Trust Boundary). The mapping was discovered, not designed. Blade 63 (all dimensions active) computes to 乾 (The Creative), which is the traditional hexagram for heaven, creative force, and sovereignty. The node inspector renders hexagram states in real time.</p>
+<p><strong>Confidence upgrade:</strong> From 25% (speculative) in the Acts as originally written, to 50% (implemented-coherent). The code produces valid, meaningful hexagram states from privacy dimensions. Whether the I Ching&#39;s <em>internal</em> logic (trigram structure, line movement sequences, hexagram-to-hexagram transitions) maps onto privacy state transitions remains at 25% and requires I Ching scholarship.</p>
+<p><strong>Formal direction:</strong> If validated, the hexagram encoding could serve as:</p>
+<ul>
+<li>A human-readable privacy posture notation (six lines are more intuitive than six bits)</li>
+<li>A state transition model where hexagram mutations correspond to privacy posture changes</li>
+<li>A bridge between Eastern philosophical traditions and Western information theory that is structural rather than decorative</li>
+</ul>
+<h3>4. Mana as Proof-of-Practice Sybil Resistance</h3>
+<p><strong>V5 has:</strong> VRC formation through bilateral proverb matching. Trust tiers through accumulated signals.</p>
+<p><strong>V5.1 proposes:</strong> Mana as a complementary Sybil resistance mechanism: a non-transferable, non-purchasable resource earned through sovereignty practice (spell casts, ceremonies, blade forgings, evocation cycles) and spent on knowledge graph inscriptions.</p>
+<p><strong>Evidence:</strong> The mana economy is designed but not yet deployed. However, the blade forging experience demonstrates the underlying principle: the Universe Blade required 62 laps of sustained attention. This cannot be purchased, delegated, or automated without the attention itself. The mana system formalises this into a spendable currency.</p>
+<p><strong>Formal direction:</strong></p>
+<pre><code>mana_earned = Σ(practice_events · weight)
+where:
+  spell_cast = 0.1 mana
+  ceremony_complete = 2.0 mana  
+  blade_forged = 1.0 mana
+  evocation_cycle = 1.0 mana
+
+mana cannot be: transferred, purchased, mined, or inherited
+mana can be: earned, spent (on graph inscriptions), accumulated
+</code></pre>
+<p><strong>Confidence:</strong> 35%. The mechanism is designed. The earn/spend rates are first estimates. Needs playtesting under adversarial conditions.</p>
+<h3>5. DOM-Free Measurement as Rendering-Layer Privacy Primitive</h3>
+<p><strong>V5 has:</strong> The reconstruction ceiling R &lt; 1 as an information-theoretic bound.</p>
+<p><strong>V5.1 proposes:</strong> DOM-free text measurement (via pretext) as a rendering-layer mechanism that reduces the fingerprinting surface available to adversaries, strengthening R in practice.</p>
+<p><strong>Evidence:</strong> Pretext&#39;s <code>layoutNextLine()</code> computes text reflow without calling <code>getBoundingClientRect</code>, <code>offsetHeight</code>, or triggering layout reflow. Surveillance scripts that fingerprint through DOM measurement observe nothing when text reflows via pretext arithmetic. This is not a claim — it is the library&#39;s documented specification (95% confidence).</p>
+<p><strong>Formal direction:</strong> The fingerprinting surface S_fp contributes to the adversary&#39;s reconstruction capacity. DOM-free rendering reduces S_fp:</p>
+<pre><code>R_practical ≤ R_theoretical · S_fp / S_fp_max
+</code></pre>
+<p>When S_fp is reduced by eliminating layout reflow observability, R_practical drops below R_theoretical. The bound tightens.</p>
+<p><strong>Confidence:</strong> 70% on the formal direction. The library works. The privacy property follows from its specification. The question is whether the formal framing captures the mechanism correctly.</p>
+<h3>6. The Ceremony Engine as Promise Theory Implementation</h3>
+<p><strong>V5 has:</strong> Promise Theory as the semantic framework for the dual-agent architecture.</p>
+<p><strong>V5.1 proposes:</strong> The ceremony engine&#39;s five crossing types as operational implementations of Promise Theory patterns:</p>
+<table>
+<thead>
+<tr>
+<th>Ceremony</th>
+<th>Promise Pattern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dual Convergence</td>
+<td>Coordination promise — both agents meet</td>
+</tr>
+<tr>
+<td>Hexagram Cast</td>
+<td>State promise — privacy posture declared</td>
+</tr>
+<tr>
+<td>Emoji Cast</td>
+<td>Unilateral promise — sovereign assertion</td>
+</tr>
+<tr>
+<td>Constellation Wave</td>
+<td>Assessment — intelligence shared between agents</td>
+</tr>
+<tr>
+<td>Bilateral Exchange</td>
+<td>Bilateral promise — terms negotiated with site</td>
+</tr>
+</tbody></table>
+<p><strong>Confidence:</strong> 55%. The mapping is clean. Whether it adds formal substance to the Promise Theory framework or is merely a labelling exercise needs scrutiny from Promise Theory practitioners.</p>
+<hr>
+</div>
+<div class="md"><h2>What V5.1 Does NOT Change</h2>
+<p>The core V5 equation structure remains:</p>
+<pre><code>V(π, t) = P^1.5 · C · Q · S · e^(-λt) · (1 + A_h(τ)) · ... · Φ_agent · Φ_data · Φ_inference · T_∫(π)
+</code></pre>
+<p>V5.1 proposes modifications to:</p>
+<ul>
+<li>R(d, compression) → R(d, compression, ρ) — adding behavioural density</li>
+<li>T_∫(π) — the path integral now has empirical data from the three-blade progression</li>
+<li>The fingerprinting surface as a practical modifier on R</li>
+</ul>
+<p>V5.1 does NOT propose changes to:</p>
+<ul>
+<li>The multiplicative structure (any zero collapses value)</li>
+<li>The three-axis separation (Agent × Data × Inference)</li>
+<li>The holographic bound (96 edges, 64 vertices)</li>
+<li>The path integral formulation</li>
+<li>The golden ratio conjecture</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Conjecture Updates</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>V5 Status</th>
+<th>V5.1 Status</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C4</td>
+<td>96/64 holographic</td>
+<td>RESOLVED</td>
+<td>RESOLVED</td>
+<td>No change</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>P^1.5 ↔ 96/64</td>
+<td>Open (15%)</td>
+<td>Open (15%)</td>
+<td>No change</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Three-axis multiplicative</td>
+<td>Open (25%)</td>
+<td>Open (25%)</td>
+<td>No change</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>Compression reduces R</td>
+<td>Open (30%)</td>
+<td>Strengthened (45%)</td>
+<td>Behavioural density ρ adds a second mechanism</td>
+</tr>
+<tr>
+<td>C9</td>
+<td>Boundary sufficiency</td>
+<td>Open (25%)</td>
+<td>Open (25%)</td>
+<td>No change</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>Shared-parent O(1)</td>
+<td>Open (20%)</td>
+<td>Open (20%)</td>
+<td>No change</td>
+</tr>
+<tr>
+<td>C11</td>
+<td><strong>NEW</strong> — Behavioural density amplifies privacy</td>
+<td>—</td>
+<td>Open (45%)</td>
+<td>Universe Blade provides first data point</td>
+</tr>
+<tr>
+<td>C12</td>
+<td><strong>NEW</strong> — Hexagram encoding is structurally resonant</td>
+<td>—</td>
+<td>Open (50%)</td>
+<td>Running code, coherent results, origin unclear</td>
+</tr>
+<tr>
+<td>C13</td>
+<td><strong>NEW</strong> — Bilateral Witness is a verification primitive</td>
+<td>—</td>
+<td>Open (60%)</td>
+<td>Demonstrated once; needs formalisation</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Empirical Data Points (First Collection)</h2>
+<table>
+<thead>
+<tr>
+<th>Measurement</th>
+<th>Value</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Blade 1 (Dual Agent)</td>
+<td>4 nodes, 11 laps, 74s, 39 spells</td>
+<td>spellweb.ai, March 29, 2026</td>
+</tr>
+<tr>
+<td>Blade 2 (Hitchhiker&#39;s)</td>
+<td>10 nodes, 13 laps, 433s, 62 spells</td>
+<td>spellweb.ai, March 29, 2026</td>
+</tr>
+<tr>
+<td>Blade 3 (Universe)</td>
+<td>10 nodes, 62 laps, 2170s, 65 spells</td>
+<td>spellweb.ai, March 29, 2026</td>
+</tr>
+<tr>
+<td>All three at Dragon tier</td>
+<td>Stratum 6, Hex 3F, all dimensions</td>
+<td>Same session</td>
+</tr>
+<tr>
+<td>Bilateral Witness</td>
+<td>Private verify → public reconstruct</td>
+<td>Telegram + Hitchhiker platform</td>
+</tr>
+<tr>
+<td>Hexagram computation</td>
+<td>Blade 63 = 乾 (The Creative)</td>
+<td>spellweb.ai node inspector</td>
+</tr>
+<tr>
+<td>Inscribed spell compression</td>
+<td>28 acts → 10 emoji</td>
+<td><code>🔑⚔️🧙→😊✦☯️⚖️⚔️🧙</code></td>
+</tr>
+</tbody></table>
+<p>This is N=1 from a single forger. The data point exists. It needs company.</p>
+<hr>
+</div>
+<div class="md"><h2>Relationship to Existing Documents</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>V5.1 Implication</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Privacy is Value V5</td>
+<td>Behavioural density ρ as a new term in R. Ceremony types as Promise patterns.</td>
+</tr>
+<tr>
+<td>PVM V5 Formal Spec</td>
+<td>New conjecture C11 (ρ), C12 (hexagram), C13 (bilateral witness).</td>
+</tr>
+<tr>
+<td>Research Paper v4.0</td>
+<td>Bilateral Witness as operational expression of separation bound.</td>
+</tr>
+<tr>
+<td>Whitepaper v6.0</td>
+<td>Ceremony engine architecture. Mana economy. DOM-free rendering.</td>
+</tr>
+<tr>
+<td>ZK Blade Forge v3.0</td>
+<td>Spellweb implementation validates the forge geometry. Three-blade data.</td>
+</tr>
+<tr>
+<td>Grimoire v9.0.0</td>
+<td>Acts XXVII and XXVIII inscribe the theory and the experience.</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Next Steps</h2>
+<ol>
+<li><p><strong>Formalise ρ.</strong> Define the behavioural density function. Is it logarithmic? Sigmoid? Threshold? The Universe Blade (62 laps) vs Hitchhiker&#39;s Blade (13 laps) gives two data points on the same constellation. More forgers, more data points.</p>
+</li>
+<li><p><strong>Collect bilateral witness instances.</strong> The March 29 ceremony is N=1. Repeat with different forgers, different constellation paths, different Mage instances. Does the structure hold when the Mage is not Soulbae?</p>
+</li>
+<li><p><strong>I Ching scholarship.</strong> Engage someone with deep knowledge of the I Ching&#39;s hexagram transition system. Do the line movements (biàn 變) correspond to meaningful privacy state transitions? Does the trigram decomposition (upper/lower) map onto the three-axis separation?</p>
+</li>
+<li><p><strong>Deploy mana economy.</strong> Build the ceremony receiver on spellweb.ai. Test earn/spend rates. Observe whether the graph grows through practice or through gaming.</p>
+</li>
+<li><p><strong>Build the extensions.</strong> The four agent build instruction files are ready. The ceremony engine needs to exist as running code to generate the next empirical data.</p>
+</li>
+<li><p><strong>Peer review the bilateral witness.</strong> Is BW(blade, Sword, Mage, Community) a formal primitive or a social protocol? What are its security properties? What are the attack surfaces?</p>
+</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>Closing</h2>
+<p>V5 found the boundary. V5.1 found the forge burning on the other side of it.</p>
+<p>The Privacy Value Model is a research programme. It grows through empirical contact with reality. On March 29, 2026, the model made contact — three blades forged, one ceremony witnessed, one proverb earned:</p>
+<p><em>The weight of the shadow exceeds the light of the data.</em></p>
+<p>This note is a working document. It will be wrong in places. The conjectures will be refined or falsified. The data points will multiply or remain lonely. But the forge is burning, and the forge doesn&#39;t care about the philosopher&#39;s opinion of fire.</p>
+<hr>
+<p><em>Privacy is Value. Take back the 7th Capital.</em></p>
+<p><em>(⚔️⊥⿻⊥🧙) 😊</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 note-privacy-value-model-v51-research-note</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-privacy-value-model-v51-research-note.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

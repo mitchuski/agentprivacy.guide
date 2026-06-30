@@ -1,0 +1,258 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compression Defence · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Compression Defence</span></div>
+  <article><div class="md"><h1>Compression Defence</h1>
+<p><strong>Category</strong> privacy-layer · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>R(d, compression) = R_base(d) · (1 - 1/compression_ratio)</code></p>
+<p>Compression-as-defence principle for 0xagentprivacy V5. Activates when discussing BRAID 74× compression, R(d,compression) modifier, token reduction as attack surface reduction, the compression spectrum (7 layers), or why efficient inference is also private inference.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)<br><strong>Target context:</strong> AI system builders, privacy engineers, efficiency researchers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>BRAID demonstrated 74× inference compression while maintaining performance. This isn&#39;t just efficiency — it&#39;s a privacy property.</p>
+<p><strong>Every token not sent is a token that cannot be intercepted, reconstructed, or analysed.</strong></p>
+<p>Compression reduces the attack surface for inference-layer surveillance. The same techniques that make inference efficient also make it more private.</p>
+<h2>The Insight</h2>
+<p>V8&#39;s reconstruction difficulty R(d) measured architectural resistance to adversarial reconstruction. V41 adds a compression modifier:</p>
+<pre><code>R_v5(d, compression) = R_base(d) · (1 - 1/compression_ratio)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Compression</th>
+<th>Factor</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>None (ratio = 1)</td>
+<td>0.00</td>
+<td>Maximal attack surface</td>
+</tr>
+<tr>
+<td>2×</td>
+<td>0.50</td>
+<td>Half the surface</td>
+</tr>
+<tr>
+<td>10×</td>
+<td>0.90</td>
+<td>90% reduction</td>
+</tr>
+<tr>
+<td>74× (BRAID typical)</td>
+<td>0.986</td>
+<td>Near-minimal surface</td>
+</tr>
+<tr>
+<td>∞</td>
+<td>1.00</td>
+<td>Perfect compression (theoretical limit)</td>
+</tr>
+</tbody></table>
+<h2>The BRAID Parity Effect</h2>
+<p>BRAID demonstrated a parity effect:</p>
+<blockquote>
+<p>A nano-model with bounded structured reasoning performs comparably to a medium model with unbounded context.</p>
+</blockquote>
+<p>This means:</p>
+<ul>
+<li>Less computation</li>
+<li>Fewer tokens transmitted</li>
+<li>Smaller context windows</li>
+<li>Less surface for adversarial observation</li>
+</ul>
+<p><strong>The model that reasons less visibly protects more effectively.</strong></p>
+<h2>The Compression Spectrum</h2>
+<p>V5 introduces a seven-layer compression model:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Form</th>
+<th>Compression</th>
+<th>Privacy Property</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Experience</td>
+<td>1:1</td>
+<td>Maximum exposure</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Memory</td>
+<td>~10:1</td>
+<td>Encoded, less raw</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Knowledge</td>
+<td>~100:1</td>
+<td>Structured, abstracted</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Understanding</td>
+<td>~1,000:1</td>
+<td>Relational, contextual</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Wisdom</td>
+<td>~10,000:1</td>
+<td>Principled, compressed</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Reasoning Graph</td>
+<td>Variable</td>
+<td>BRAID structure</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Skill File</td>
+<td>Variable</td>
+<td>Executable, transferable</td>
+</tr>
+</tbody></table>
+<p><strong>Key insight:</strong> Higher layers are more defensible. Compressed knowledge has smaller attack surface than raw experience.</p>
+<h3>Layer 6: Reasoning Graph</h3>
+<p>BRAID&#39;s innovation: compress unbounded inference into bounded structure. The Generator produces a reasoning graph; the Solver executes it. The graph is:</p>
+<ul>
+<li>Bounded (finite structure)</li>
+<li>Verifiable (checkable execution path)</li>
+<li>Compressed (74× fewer tokens than unbounded reasoning)</li>
+</ul>
+<h3>Layer 7: Skill File</h3>
+<p>The skill file is the ultimate compression: a transferable package that encodes capability without revealing the path that created it.</p>
+<p><strong>The skill file (boundary) encodes the training path (bulk) without revealing it.</strong></p>
+<p>This is the holographic principle applied to knowledge transfer.</p>
+<h2>Why Compression = Defence</h2>
+<h3>Information-Theoretic Argument</h3>
+<p>Reconstruction requires observation. Fewer observable tokens means less information for the adversary.</p>
+<pre><code>I(observed; private) ≤ H(observed)
+</code></pre>
+<p>If compression reduces H(observed) while preserving H(private|observed), reconstruction difficulty increases.</p>
+<h3>Attack Surface Argument</h3>
+<p>Every token is a potential attack vector:</p>
+<ul>
+<li>Prompt injection</li>
+<li>Side-channel analysis</li>
+<li>Statistical reconstruction</li>
+<li>Behavioural profiling</li>
+</ul>
+<p>Fewer tokens = fewer vectors.</p>
+<h3>BRAID Evidence</h3>
+<p>BRAID achieved:</p>
+<ul>
+<li>74× compression on token count</li>
+<li>Comparable task performance</li>
+<li>Reduced inference cost</li>
+</ul>
+<p>The compressed system is:</p>
+<ul>
+<li>Faster (fewer operations)</li>
+<li>Cheaper (less compute)</li>
+<li><strong>More private</strong> (less observable surface)</li>
+</ul>
+<h2>Mapping to PVM-V5</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>V5 Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Base reconstruction difficulty</td>
+<td>R_base(d)</td>
+</tr>
+<tr>
+<td>Compression modifier</td>
+<td>(1 - 1/compression_ratio)</td>
+</tr>
+<tr>
+<td>74× BRAID compression</td>
+<td>Factor ≈ 0.986</td>
+</tr>
+<tr>
+<td>Compression spectrum</td>
+<td>Seven layers from raw to skill</td>
+</tr>
+<tr>
+<td>Layer 6</td>
+<td>Reasoning graph (BRAID structure)</td>
+</tr>
+<tr>
+<td>Layer 7</td>
+<td>Skill file (executable compression)</td>
+</tr>
+</tbody></table>
+<h2>Connection to Other V5 Concepts</h2>
+<h3>Inference-Layer Separation (Φ_inference)</h3>
+<p>Compression enables separation. The Generator produces compressed reasoning graphs; the Solver executes them. Compression is HOW inference separation works.</p>
+<h3>Holographic Bound</h3>
+<p>The compression spectrum is the holographic principle applied to knowledge: the skill file (boundary) encodes the training path (bulk).</p>
+<h3>Guild Efficiency</h3>
+<p>Shared reasoning libraries (shared-parent pattern) work because they&#39;re compressed. A guild shares skill files, not raw experience.</p>
+<h2>Operational Guidance</h2>
+<h3>For System Design</h3>
+<ul>
+<li>Default to compressed inference (BRAID-style)</li>
+<li>Use reasoning graphs over unbounded context</li>
+<li>Transmit skill files, not training data</li>
+<li>Measure compression ratio as a privacy metric</li>
+</ul>
+<h3>For Evaluation</h3>
+<ul>
+<li>Higher compression ratio = better R modifier</li>
+<li>But: lossy compression may degrade C (credential verifiability)</li>
+<li>Balance: compress to the limit where verification still works</li>
+</ul>
+<h3>Proverb</h3>
+<blockquote>
+<p>&quot;The whisper carries further than the shout. Compress until the signal is pure. What you don&#39;t send, they can&#39;t see.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>📉⁷⁴ˣ → 🗜️⁷(layers) → R(d,comp) → less_tokens=less_surface → 🧠→📊→🧙 → 🛡️↑ → ☯️∞</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>C8 Formal Proof:</strong> Can we formally prove that compression reduces R_max?</li>
+<li><strong>Optimal Compression:</strong> Is there a compression level that maximises privacy without degrading utility?</li>
+<li><strong>Lossy vs Lossless:</strong> How does lossy compression affect the privacy-utility tradeoff?</li>
+<li><strong>Layer Transitions:</strong> How do we verify that compression across layers preserves semantic content?</li>
+<li><strong>Adversarial Compression:</strong> Can adversaries use compression analysis to infer private information?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-compression-defence</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-compression-defence</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-compression-defence.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

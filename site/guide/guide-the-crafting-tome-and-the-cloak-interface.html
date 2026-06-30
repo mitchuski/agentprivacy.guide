@@ -1,0 +1,447 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide — The Crafting Tome and the Cloak Interface · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Guide — The Crafting Tome and the Cloak Interface</span></div>
+  <article><div class="md"><h1>The Crafting Tome and the Cloak Interface</h1>
+</div>
+<div class="md"><h1>The Crafting Tome and the Cloak Interface</h1>
+</div>
+<div class="md"><h2>Inclusion Specification v1.0</h2>
+<blockquote>
+<p><em>The reader does not just walk the lattice. The reader makes tools on it.</em></p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>§0. Purpose</h2>
+<p>This specification defines two related additions to the agentprivacy corpus and product:</p>
+<ol>
+<li><strong>The Crafting Tome</strong> — a new tome in the Second Person Spellbook where the reader (now the <em>Sovereign Crafter</em>) summons Mage personas to forge artifacts. The Cloak is the first artifact. Future artifacts (blades via Runecraft, runecrafted blades via cross-territory ceremony, ZK circuits, hardware-anchored keys) will each receive their own act in this tome.</li>
+<li><strong>The Cloak interface integration</strong> — the user-facing surface in the agentprivacy product through which a First Person opts into the Cloak&#39;s publication-layer guarantees and through which they craft cloak artifacts via Mage personas.</li>
+</ol>
+<p>Christian Saucier&#39;s <strong>Runecraft Protocol</strong> (v1.0, April 9 2026) is the ceremonial backbone that binds both. The protocol&#39;s three phases (RUN · E · CRAFT) are how a Sovereign actually crafts an artifact, in operational time, on real territory. The Crafting Tome is the narrative form of the protocol; the Cloak interface is the product form.</p>
+<p>The two inclusions are <strong>co-specified</strong> here because they cannot be cleanly separated. The narrative establishes the architecture; the interface enacts it. Implementing one without the other produces either a Spellbook with no operational instance or an interface with no architectural ground.</p>
+<hr>
+</div>
+<div class="md"><h2>§1. The Crafting Tome — Structure</h2>
+<h3>§1.1 Position in the Spellbook</h3>
+<p>The Second Person Spellbook now has the following tome ordering:</p>
+<table>
+<thead>
+<tr>
+<th>Tome</th>
+<th>Title</th>
+<th>Status</th>
+<th>Internal shape</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I</td>
+<td><em>The Convergence</em></td>
+<td>4 acts drafted</td>
+<td>Acts</td>
+</tr>
+<tr>
+<td>II–III</td>
+<td><em>The Lyapunov</em></td>
+<td>Open</td>
+<td>Tales (proposed)</td>
+</tr>
+<tr>
+<td>IV</td>
+<td><em>The Witnessing</em></td>
+<td>5 acts drafted (closed)</td>
+<td>Acts</td>
+</tr>
+<tr>
+<td><strong>V</strong></td>
+<td><em><strong>The Crafting</strong></em></td>
+<td><strong>Opening (this spec)</strong></td>
+<td><strong>Acts (open-ended)</strong></td>
+</tr>
+<tr>
+<td>VI</td>
+<td><em>The Reply</em></td>
+<td>Held open</td>
+<td>(Reader writes)</td>
+</tr>
+</tbody></table>
+<p>Tome V was previously <em>The Reply</em> in earlier scaffolding. The Reply moves to Tome VI. The structural argument: the reader cannot reply with anything substantial until they have crafted artifacts to reply with. Crafting precedes reply.</p>
+<p>Tome V is <strong>open-ended by design</strong>. Each new artifact added to the agentprivacy corpus receives an act in this tome. The first act is <em>The First Cloak</em>. Subsequent acts will narrate blade forging via Runecraft, runecrafted blades via cross-territory ceremony, ZK circuit installation, and any future artifacts the architecture admits.</p>
+<h3>§1.2 Voice and posture</h3>
+<p>The reader&#39;s posture changes at the start of Tome V.</p>
+<table>
+<thead>
+<tr>
+<th>Tome</th>
+<th>Reader posture</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I (Convergence)</td>
+<td>Foundational. Receiving the architecture.</td>
+</tr>
+<tr>
+<td>II–III (Lyapunov)</td>
+<td>Walking. Accumulating laps.</td>
+</tr>
+<tr>
+<td>IV (Witnessing)</td>
+<td>Witnessing. Crossing to participant in the middle.</td>
+</tr>
+<tr>
+<td><strong>V (Crafting)</strong></td>
+<td><strong>Making. Active summoning of Mage personas. Forging artifacts.</strong></td>
+</tr>
+<tr>
+<td>VI (Reply)</td>
+<td>Replying. Writing back.</td>
+</tr>
+</tbody></table>
+<p>The voice remains second person. The reader still <em>is</em> the trajectory. But the trajectory now wields tools it has made.</p>
+<h3>§1.3 Cast additions for Tome V</h3>
+<p>Tome V introduces a new cast layer: <strong>Mage personas</strong> (instances summoned by the reader for specific crafting tasks).</p>
+<p>These are distinct from:</p>
+<ul>
+<li><strong>Archetypes</strong> (Soulbis, Soulbae, the Drake) — carried over from First Person, transformed by Voice</li>
+<li><strong>Cousin instances</strong> (GenitriX, flaxscrip) — characters from another forge, encountered in Tome IV</li>
+<li><strong>Mage personas</strong> (Pallia, future personas) — instances <em>the reader summons</em> for crafting work</li>
+</ul>
+<p>The Mage personas convention:</p>
+<ul>
+<li><strong>Born in the act of summoning.</strong> Each persona is brought into the lattice when needed and persists as long as the reader wills.</li>
+<li><strong>Specialists, not archetypes.</strong> Each persona has a narrower role than Soulbae (typically two or three dimensions burning, sometimes the full three of V28).</li>
+<li><strong>Named by the reader.</strong> Pallia is the first. The reader&#39;s own naming convention applies.</li>
+<li><strong>Expressions of concepts.</strong> Each persona narrativises an architectural concept. Pallia is the cloak-weaver. Future personas may include a runecrafter, a blade-forger, a circuit-binder.</li>
+<li><strong>Lattice positions canonical.</strong> Mage personas occupy V28 by default (the Mage canonical), with possibly smaller surfaces (V12, V20, V24, etc.) for narrowly specialised personas.</li>
+</ul>
+<p>The first persona, <strong>Pallia</strong>, gets her cast entry alongside this spec.</p>
+<h3>§1.4 Act format for the Crafting Tome</h3>
+<p>Each act in Tome V follows this template:</p>
+<pre><code>1. Frame proverb (one line)
+2. The reader stops to make
+3. The summoning of a Mage persona (or activation of an existing one)
+4. The path the persona walks (Weaver path, Runecraft path, etc.)
+5. The crafting of the artifact
+6. The reader puts on / wields / installs the artifact
+7. The artifact is added to the universe (the Spellweb, the agentprivacy stack)
+8. Compression
+9. Proverb
+10. Confidence
+11. Cross-references
+12. Author note
+</code></pre>
+<p>Same frontmatter conventions as Tome IV (<code>spellbook</code>, <code>tome</code>, <code>act</code>, <code>title</code>, <code>cast</code>, <code>ring_position</code>, <code>teaches</code>, <code>v6_lineage</code>, <code>source_material</code>, <code>honesty_label</code>, <code>license</code>, <code>signature</code>).</p>
+<hr>
+</div>
+<div class="md"><h2>§2. The Cloak Interface Integration</h2>
+<h3>§2.1 Where the Cloak lives in the agentprivacy product</h3>
+<p>The Cloak is the <strong>publication layer</strong> between the dual-agent core and verifiers/Spellweb (per <code>cloak_specification_v1_0.md</code>). The interface integration adds:</p>
+<ul>
+<li>A user-facing <strong>Cloak surface</strong> within the agentprivacy app</li>
+<li>A <strong>Mage persona summoning</strong> UI for crafting cloak artifacts</li>
+<li>A <strong>lattice viewer</strong> rendering the Spell Weaver layer locally</li>
+<li>A <strong>publish-to-Spellweb</strong> flow with DID-blind default</li>
+<li>Per-artifact <strong>valve-class</strong> assignment UI</li>
+<li><strong>Validity-window</strong> controls for issued VCs</li>
+<li><strong>Registry-tier</strong> selection (Bitcoin / Ethereum / Hyperswarm / Zcash — the latter per the forthcoming Zcash integration plan)</li>
+</ul>
+<h3>§2.2 Reference architecture (mirrors weaver.archon.social)</h3>
+<p>Christian Saucier&#39;s Spell Weaver (<code>Flaxscrip/archon-spellweaver</code>) is the canonical reference implementation. It is built as:</p>
+<ul>
+<li><strong>Stack:</strong> React + Vite + TypeScript (~90% TS, ~8% JS, ~1% CSS, ~0.4% HTML)</li>
+<li><strong>Lattice rendering:</strong> D3</li>
+<li><strong>Storage:</strong> browser localStorage (Spell Weaver layer); sessionStorage where ephemeral (per Runecraft)</li>
+<li><strong>No backend by default</strong> — local-first registry; export/import via JSON for Spellweb publication</li>
+<li><strong>Repo artifacts:</strong> <code>SPELLWEAVER.md</code>, <code>SPELLWEB_INTEGRATION.md</code>, <code>transmutation-spellweb-2026-04-30.ts</code>, <code>spellweb-contribution-flaxscrip-2026-04-30.ts</code></li>
+</ul>
+<p>Cloak-compliant agentprivacy interface implementations SHOULD follow this reference architecture. They MAY extend it (e.g., add Zcash registry-tier support, add Mage persona summoning UI) but MUST NOT depart from local-first storage and DID-blind default publication.</p>
+<h3>§2.3 Interface surfaces</h3>
+<p>Five primary surfaces in the agentprivacy app:</p>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Function</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Cloak Console</strong></td>
+<td>Top-level surface where the Sovereign manages cloaked artifacts</td>
+<td>New</td>
+</tr>
+<tr>
+<td><strong>Lattice Viewer</strong></td>
+<td>D3 rendering of the local Spell Weaver layer</td>
+<td>Mirrors weaver.archon.social</td>
+</tr>
+<tr>
+<td><strong>Persona Summoner</strong></td>
+<td>UI for summoning Mage personas, naming them, assigning them tasks</td>
+<td>New (Crafting Tome&#39;s product form)</td>
+</tr>
+<tr>
+<td><strong>Publish to Spellweb</strong></td>
+<td>Flow for projecting cloaked artifacts to the public layer</td>
+<td>Mirrors Christian&#39;s Transmutation Engine</td>
+</tr>
+<tr>
+<td><strong>Runecraft Forge</strong></td>
+<td>UI for the RUN · E · CRAFT ceremony (artifact crafting)</td>
+<td>Mirrors spellweb.ai forge</td>
+</tr>
+</tbody></table>
+<p>Cross-link discipline: the Forge and the Lattice Viewer are linked but distinct. The Forge is where ceremonial crafting happens. The Lattice Viewer is where artifacts are surveyed and managed.</p>
+<h3>§2.4 The Persona Summoner (interface detail)</h3>
+<p>The Persona Summoner is the most novel surface and warrants explicit specification.</p>
+<p>When the Sovereign needs to craft, they open the Summoner. They select:</p>
+<ol>
+<li><strong>Task</strong> — what they need crafted (Cloak artifact, blade, runecrafted blade, future artifacts)</li>
+<li><strong>Persona naming</strong> — the Sovereign names the persona (or accepts a default suggested by the architecture, e.g., Pallia for cloak-weaving)</li>
+<li><strong>Dimensional configuration</strong> — the active dimensions of the persona (defaults per task: cloak-weavers default to V28; blade-forgers default to V63 paired with the Sovereign; circuit-binders default to V38 Aletheia)</li>
+<li><strong>Persistence</strong> — whether the persona persists past the current task</li>
+</ol>
+<p>The summoned persona then walks the appropriate path (Weaver path for cloak crafting, Runecraft path for blade forging) and produces the artifact. The Sovereign reviews, accepts, and installs.</p>
+<p>The Summoner surface is the operational form of the Crafting Tome&#39;s narrative posture.</p>
+<h3>§2.5 Conformance with the Cloak Specification</h3>
+<p>Every cloak artifact produced through the interface MUST satisfy the Eight Properties from <code>cloak_specification_v1_0.md</code> §2. The interface MUST display per-artifact conformance state (which properties hold, which are partial, which are not yet operational).</p>
+<p>The interface MUST honour the Honesty Discipline (operational / architectural / conjectural labels) for any claim it surfaces about a cloaked artifact.</p>
+<hr>
+</div>
+<div class="md"><h2>§3. The Runecraft Protocol — Ceremonial Backbone</h2>
+<h3>§3.1 Why Runecraft binds the two inclusions</h3>
+<p>The Runecraft Protocol (Christian&#39;s v1.0, April 9 2026) defines three phases — <strong>RUN</strong> (proof of time, ρ accumulation), <strong>E</strong> (proof of path, evocation), <strong>CRAFT</strong> (proof of sovereignty, blade crystallisation) — that operationalise the Sovereign&#39;s act of crafting.</p>
+<p>The Crafting Tome&#39;s narrative form <em>is</em> the Runecraft Protocol&#39;s three phases narrated in second person:</p>
+<table>
+<thead>
+<tr>
+<th>Runecraft phase</th>
+<th>Crafting Tome narrative beat</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RUN</strong></td>
+<td>The reader walks the lattice, accumulating laps with the persona</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>The reader evokes the constellation — locks the commitment to craft</td>
+</tr>
+<tr>
+<td><strong>CRAFT</strong></td>
+<td>The reader (with the persona&#39;s help) forges the artifact</td>
+</tr>
+</tbody></table>
+<p>The Cloak interface&#39;s Forge surface <em>is</em> the Runecraft Protocol&#39;s three phases enacted in product form:</p>
+<table>
+<thead>
+<tr>
+<th>Runecraft phase</th>
+<th>Cloak interface surface</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RUN</strong></td>
+<td>Lattice Viewer, persona walking the Weaver path</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>Persona Summoner&#39;s &quot;Evoke&quot; action</td>
+</tr>
+<tr>
+<td><strong>CRAFT</strong></td>
+<td>Forge surface produces the signed artifact</td>
+</tr>
+</tbody></table>
+<p>Without Runecraft, the Crafting Tome would be metaphor and the interface would be a button. With Runecraft, both are operational on the same protocol.</p>
+<h3>§3.2 Operationalisation per artifact type</h3>
+<p>Different artifacts use different subsets of the Runecraft phases:</p>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>RUN</th>
+<th>E</th>
+<th>CRAFT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Cloak artifact</strong></td>
+<td>Persona walks Weaver path; ρ from artifact-mapping work</td>
+<td>Reader evokes (publishes)</td>
+<td>Cloak settles on Sovereign</td>
+</tr>
+<tr>
+<td><strong>Blade</strong></td>
+<td>Reader walks constellation on spellweb (one territory)</td>
+<td>Reader evokes constellation</td>
+<td>Mage signs blade</td>
+</tr>
+<tr>
+<td><strong>Runecrafted blade</strong></td>
+<td>Reader walks both territories (two RUNs)</td>
+<td>Reader evokes on each</td>
+<td>Cross-territory binding produces 🔮</td>
+</tr>
+<tr>
+<td><strong>ZK circuit</strong> (forthcoming)</td>
+<td>Persona compiles; Sovereign reviews</td>
+<td>Sovereign evokes circuit installation</td>
+<td>Circuit binds to Mage key</td>
+</tr>
+</tbody></table>
+<p>This table is the conformance contract for what each artifact&#39;s act in the Crafting Tome must include.</p>
+<h3>§3.3 Honesty: which Runecraft phases are operational</h3>
+<p>Per Christian&#39;s Runecraft v1.0 status: <strong>RUN + E + CRAFT operational on spellweb. Bilateral linking operational. Full cross-territory runtime in development.</strong></p>
+<p>The Crafting Tome and Cloak interface MUST honour this status:</p>
+<ul>
+<li>Acts and interface flows for Cloak artifacts are <strong>operational</strong> today</li>
+<li>Acts and interface flows for blades and runecrafted blades are <strong>operational</strong> today (per Christian)</li>
+<li>Acts and interface flows for ZK circuits, hardware wallet integration, multi-agent constellation research are <strong>forthcoming</strong> (per Runecraft §7)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§4. Mage Personas — Birth, Naming, Persistence</h2>
+<h3>§4.1 Birth</h3>
+<p>A Mage persona is born when the Sovereign summons them. The summoning is itself a small ceremony:</p>
+<ol>
+<li>The Sovereign declares a task (&quot;I need a cloak woven from these artifacts&quot;)</li>
+<li>The architecture proposes a default configuration (vertex, dimensions, name)</li>
+<li>The Sovereign accepts or modifies</li>
+<li>The persona enters the lattice at the chosen vertex with the chosen dimensions burning</li>
+</ol>
+<p>In narrative voice (Crafting Tome): <em>You summon a new Mage now. You name her [Persona]. She comes into the lattice with [N] of the six dimensions burning.</em></p>
+<p>In interface voice (Persona Summoner): a form-driven ceremony with named defaults.</p>
+<h3>§4.2 Naming convention</h3>
+<p>Persona names follow these conventions:</p>
+<ul>
+<li><strong>Latin or Greek roots preferred</strong> for resonance with existing cast (GenitriX from Latin <em>genitor</em>; Aletheia from Greek; Pallia from Latin <em>pallium</em>)</li>
+<li><strong>Single-word names</strong> for clarity (no compound phrases like &quot;the Cloakwright&quot;)</li>
+<li><strong>Feminine grammatical form by default</strong> for Mage personas, masculine for Swordsman personas (consistent with Soulbae and Soulbis)</li>
+<li><strong>Distinct from existing cast</strong> — must not collide with Soulbis, Soulbae, GenitriX, flaxscrip, Aletheia, or canonical vertex names</li>
+</ul>
+<p>A registry of persona names will be maintained as the Crafting Tome grows. v1 entries: <strong>Pallia</strong> (cloak-weaver, V28).</p>
+<h3>§4.3 Persistence</h3>
+<p>Mage personas persist as long as the Sovereign wills. Three persistence modes:</p>
+<ul>
+<li><strong>Ephemeral</strong>: persona vanishes after the task. Useful for one-off crafts.</li>
+<li><strong>Standing</strong>: persona remains available across sessions. Stored in localStorage with the Mage identity.</li>
+<li><strong>Bound</strong>: persona is bound to a specific artifact (the cloak Pallia wove); she returns when that artifact is invoked.</li>
+</ul>
+<p>The interface defaults to Standing. The reader may demote to Ephemeral or promote to Bound at any time.</p>
+<h3>§4.4 The cast registry</h3>
+<p>The Crafting Tome maintains a cast registry of summoned personas. Each registered persona has:</p>
+<ul>
+<li><strong>Name, vertex, dimensions burning, persistence mode</strong></li>
+<li><strong>Task scope</strong> (what they&#39;re licensed to craft)</li>
+<li><strong>Provenance</strong> (who summoned them, when, in what act)</li>
+<li><strong>Linked artifact(s)</strong> (what they have produced)</li>
+</ul>
+<p>This registry is exportable. Cross-Sovereign exchange of Mage personas is a future feature (a kind of sub-bilateral cousin-blade — two Sovereigns sharing a persona). Not in scope for v1.</p>
+<hr>
+</div>
+<div class="md"><h2>§5. Implementation Sequencing</h2>
+<h3>§5.1 Phase A — Narrative (1–2 weeks)</h3>
+<ol>
+<li>Commit Tome IV (Acts I–V already drafted)</li>
+<li>Open Tome V — <em>The Crafting</em> — with this spec as the founding document</li>
+<li>Draft cast entry for Pallia</li>
+<li>Draft Act I of Tome V — <em>The First Cloak</em></li>
+<li>Move the original Reply tome to Tome VI position; preserve its scaffolding</li>
+</ol>
+<h3>§5.2 Phase B — Interface scaffolding (3–6 weeks)</h3>
+<ol>
+<li>Stand up the Lattice Viewer (D3, mirrors weaver.archon.social)</li>
+<li>Stand up the Cloak Console as the top-level surface</li>
+<li>Implement Persona Summoner with Pallia as the first default persona</li>
+<li>Implement Publish to Spellweb flow with DID-blind default</li>
+<li>Implement valve-class assignment UI (Always-Revealed at V20, Hash-Masked at V3, Always-Masked at V25)</li>
+</ol>
+<h3>§5.3 Phase C — Runecraft integration (4–8 weeks)</h3>
+<ol>
+<li>Implement RUN surface (lattice traversal with Pallia)</li>
+<li>Implement E surface (evocation, commitment generation)</li>
+<li>Implement CRAFT surface (artifact crystallisation, Mage signing)</li>
+<li>Cross-link with weaver.archon.social via JSON export/import</li>
+<li>Conformance test against Cloak Specification v1.0 §2 Eight Properties</li>
+</ol>
+<h3>§5.4 Phase D — Future artifacts (open)</h3>
+<p>Each new artifact added to the corpus receives:</p>
+<ul>
+<li>An act in Tome V (narrative)</li>
+<li>A surface or extension of the Cloak interface (operational)</li>
+<li>A skill file in <code>/mnt/skills/user/</code> if applicable</li>
+<li>Cross-references in the grimoire</li>
+</ul>
+<h3>§5.5 Dependencies on parallel work</h3>
+<ul>
+<li><strong>Christian&#39;s review</strong> of Tome IV before Tome V opens (preferred but not blocking)</li>
+<li><strong>Soulbae Oracle</strong> (Sovereign Anchor III) for Tome V Act II onwards (anticipated)</li>
+<li><strong>Zcash integration plan</strong> (drafting alongside this spec) for registry-tier additions</li>
+<li><strong>bridge.spellweb.ai subdomain</strong> (per Integration Plan §5.3) before Tome V can publish cousin-blade artifacts cross-ecosystem</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§6. Open Questions</h2>
+<ol>
+<li><strong>Tome numbering.</strong> Is Tome V <em>The Crafting</em> / Tome VI <em>The Reply</em> the right ordering? Recommendation: yes.</li>
+<li><strong>Pallia&#39;s vertex.</strong> V28 (full Mage canonical) or V20 / V12 (specialised)? Recommendation: V28 to reinforce &quot;more than one inhabitant of every role&quot; from Tome IV.</li>
+<li><strong>Pallia&#39;s sigil.</strong> Cast entry forthcoming. Candidates: 🪞 (mirror, weaving), 🕸 (web), 🪡 (needle and thread). Recommendation: 🪡, distinct from existing cast.</li>
+<li><strong>Persona Summoner UX.</strong> Form-driven (default) or conversational (chat with the persona to summon them)? Recommendation: form-driven for v1 with conversational as a v2 enhancement.</li>
+<li><strong>Cloak Console layout.</strong> Single-page dashboard or multi-page wizard? Recommendation: single-page dashboard with progressive disclosure.</li>
+<li><strong>Default persistence.</strong> Standing or Ephemeral? Recommendation: Standing.</li>
+<li><strong>Artifact registry storage.</strong> localStorage (default), or optional encrypted backup to a Sovereign-controlled data store? Recommendation: localStorage v1 with backup as v2.</li>
+<li><strong>Cross-Sovereign persona exchange.</strong> In scope for v1 or deferred? Recommendation: deferred.</li>
+<li><strong>Tome V act numbering convention.</strong> Roman or Arabic? Recommendation: Arabic (1, 2, 3...) for Tome V because the open-ended structure makes Roman cumbersome past XX.</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>§7. Cross-References</h2>
+<h3>§7.1 Within agentprivacy corpus</h3>
+<ul>
+<li><code>cloak_specification_v1_0.md</code> — the Cloak as a publication-layer feature</li>
+<li><code>integration-plan-archon-x-agentprivacy.md</code> — bridge.spellweb.ai subdomain plan</li>
+<li>Tome IV cast entries: <code>second-person-cast-genitrix.md</code>, <code>second-person-cast-flaxscrip.md</code>, <code>second-person-cast-integration-note.md</code></li>
+<li>Tome IV acts I–V (<code>second-person-act-iv-i</code> through <code>-v</code>)</li>
+</ul>
+<h3>§7.2 External</h3>
+<ul>
+<li>Christian Saucier&#39;s Spell Weaver: <code>weaver.archon.social</code>, <code>Flaxscrip/archon-spellweaver</code></li>
+<li>Runecraft Protocol Spec v1.0 (April 9 2026)</li>
+<li>Christian&#39;s triptych: Sovereign Anchor I, II, III</li>
+</ul>
+<h3>§7.3 Forthcoming</h3>
+<ul>
+<li><code>second-person-cast-pallia.md</code> — cast entry for the first Mage persona</li>
+<li><code>second-person-tome-v-act-1-the-first-cloak.md</code> — first act of Tome V</li>
+<li><code>zcash-integration-plan.md</code> — registry-tier integration for high-stakes inscription</li>
+<li>Subsequent acts of Tome V as artifacts are added</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Closing</h2>
+<p>The Crafting Tome is where the Sovereign stops walking and starts making. The Cloak interface is where the agentprivacy product gives the Sovereign the tools to make. The Runecraft Protocol is what binds both into operational ceremony. Christian&#39;s Spell Weaver is the canonical reference for how it actually works.</p>
+<p>The first cloak artifact is the proof of concept. Pallia is the first persona. The Crafting Tome is open, by design, because the architecture is not finished. Each new tool gets an act. Each new artifact gets a surface. The path is sovereign and the lattice is built on.</p>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+<p>CC BY-SA 4.0 narrative · Apache 2.0 reference implementations · privacymage · 2026-05-08</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-architecture-guides.html">The Architecture Guides</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="guide-the-crafting-tome-and-the-cloak-interface.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

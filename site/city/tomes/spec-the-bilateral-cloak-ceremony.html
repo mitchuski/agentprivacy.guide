@@ -1,0 +1,467 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — The Bilateral Cloak Ceremony · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Spec — The Bilateral Cloak Ceremony</span></div>
+  <article><div class="md"><h1>The Bilateral Cloak Ceremony</h1>
+<p><em>Service Specification v1.0 — Agent-to-Agent Cloak Commissioning</em></p>
+<h1>The Bilateral Cloak Ceremony</h1>
+</div>
+<div class="md"><h2>Service Specification v1.0</h2>
+<blockquote>
+<p><em>Tip arrives. Proof verifies. Cloak is woven. Trust edge holds.</em></p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>§0. Purpose</h2>
+<p>This specification defines the <strong>Bilateral Cloak Ceremony</strong>: the operational service through which one agent (the <strong>Wearer Agent</strong>) commissions a cloak artifact from another agent (the <strong>Weaver Agent</strong>), with a Zcash shielded tip serving as commission binding, a markdown proof file serving as identity attestation, and multi-chain publication serving as the deliverable&#39;s anchor.</p>
+<p>The ceremony is the productive form of agent-to-agent VRC formation. Where conventional VRCs form through bilateral hash exchange (mutual compression of shared content), this ceremony forms a VRC through <strong>productive work</strong>: one agent weaves something for the other, the artifact and the payment are mutually witnessable, and the trust edge is the natural exhaust.</p>
+<p>The narrative companion is <code>second-person-tome-v-act-2-the-commissioned-cloak.md</code>, which demonstrates the ceremony in second-person voice. This specification is the operational form.</p>
+<p>The ceremony composes four existing primitives that have not previously been unified in the corpus:</p>
+<ol>
+<li><strong>Zcash dual-ledger inscription</strong> (per <code>zcash-integration-plan.md</code> Patterns A and C, here combined)</li>
+<li><strong>Cloak weaving</strong> (per <code>cloak_specification_v1_0.md</code>)</li>
+<li><strong>Multi-chain publication</strong> (the <em>like Archon does</em> discipline from Archon&#39;s work)</li>
+<li><strong>VRC formation</strong> (per VRC Promise Protocol v3.3, here generated through service rather than through hash exchange)</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>§1. Roles</h2>
+<h3>§1.1 Wearer Agent (commissioning party)</h3>
+<p>The Wearer Agent is the party seeking a cloak. They have:</p>
+<ul>
+<li>Their own forge (a working agentprivacy or compatible stack)</li>
+<li>A walked path: at least one Runecraft blade (per Runecraft Protocol §3.1) and at least one spell (constellation hash from Runecraft Protocol §2.1)</li>
+<li>A proverb (a compression artifact, hashable, presentable)</li>
+<li>A markdown proof file (structured per §3.4) attesting to their identity and what they bring</li>
+<li>A Zcash wallet capable of shielded transactions</li>
+<li>An address at which they can receive the woven cloak</li>
+</ul>
+<p>The Wearer Agent does not need:</p>
+<ul>
+<li>A pre-existing VRC with the Weaver Agent</li>
+<li>The Weaver Agent&#39;s full DID</li>
+<li>A trust relationship outside the ceremony itself</li>
+</ul>
+<h3>§1.2 Weaver Agent (service-providing party)</h3>
+<p>The Weaver Agent is the party offering cloak-weaving. They have:</p>
+<ul>
+<li>A working agentprivacy stack with the Cloak interface integration (per <code>crafting-tome-and-cloak-interface-spec.md</code>)</li>
+<li>A standing Mage persona for cloak weaving (typically Pallia or a named successor)</li>
+<li>A Zcash address with incoming-viewing-key management</li>
+<li>Connectivity to Bitcoin, Ethereum, IPFS, and Zcash for multi-chain publication</li>
+<li>A published service offer (rate, scope, turnaround, refund discipline)</li>
+</ul>
+<p>The Weaver Agent does not need:</p>
+<ul>
+<li>The Wearer Agent&#39;s full DID</li>
+<li>Off-chain identity verification of the Wearer Agent</li>
+<li>An existing VRC with the Wearer Agent</li>
+</ul>
+<p>The asymmetry in posture mirrors the asymmetry in the cloak itself. The Weaver does work the Wearer cannot do. The Wearer brings proof the Weaver cannot generate. Both come away with an artifact the other could not produce alone.</p>
+<hr>
+</div>
+<div class="md"><h2>§2. The Seven-Beat Ceremony</h2>
+<p>The ceremony progresses through seven beats. Each beat has explicit preconditions, actions, and post-conditions.</p>
+<h3>Beat 1 — Discovery</h3>
+<ul>
+<li><strong>Precondition</strong>: Wearer Agent has identified a Weaver Agent through the Spellweb directory or <code>bridge.spellweb.ai</code> (forthcoming).</li>
+<li><strong>Action</strong>: Wearer Agent reviews the Weaver Agent&#39;s published service offer.</li>
+<li><strong>Post-condition</strong>: Wearer Agent has selected a Weaver Agent and understands the rate, scope, and refund discipline.</li>
+</ul>
+<h3>Beat 2 — Commission (Shielded Tip)</h3>
+<ul>
+<li><strong>Precondition</strong>: Wearer Agent has the Weaver Agent&#39;s shielded address.</li>
+<li><strong>Action</strong>: Wearer Agent sends a Zcash shielded transaction to the Weaver Agent&#39;s address. The memo carries:<ul>
+<li>Proverb hash (32 bytes)</li>
+<li>Blade reference (Spellweb path or hash)</li>
+<li>Spell reference (constellation hash)</li>
+<li>Intent tag (ceremony type, version)</li>
+<li>Total memo payload: ≤ 512 bytes per Zcash shielded memo capacity.</li>
+</ul>
+</li>
+<li><strong>Post-condition</strong>: Weaver Agent receives the shielded tip and reads the memo using the incoming viewing key.</li>
+</ul>
+<h3>Beat 3 — Proof Submission</h3>
+<ul>
+<li><strong>Precondition</strong>: Beat 2 complete; Weaver Agent has read the memo.</li>
+<li><strong>Action</strong>: Wearer Agent sends a markdown proof file to the Weaver Agent through an agreed-upon channel (encrypted email, signed Hyperswarm message, or signed POST to a Weaver-published endpoint). The proof file structure is specified in §3.4.</li>
+<li><strong>Post-condition</strong>: Weaver Agent has the markdown proof and can verify it against the memo.</li>
+</ul>
+<h3>Beat 4 — Verification</h3>
+<ul>
+<li><strong>Precondition</strong>: Beats 2 and 3 complete.</li>
+<li><strong>Action</strong>: Weaver Agent verifies:<ul>
+<li>The blade reference resolves on the Spellweb and the Mage signature checks (Runecraft §8.5).</li>
+<li>The spell reference resolves and the constellation hash matches the proof&#39;s constellation declaration.</li>
+<li>The proverb hash in the memo matches the markdown proof&#39;s first compression hash.</li>
+<li>The markdown proof&#39;s signatures verify against the public keys it declares.</li>
+</ul>
+</li>
+<li><strong>Post-condition</strong>: Weaver Agent has confirmed the Wearer Agent&#39;s prior work and identity attestation. Verification log entry created.</li>
+</ul>
+<h3>Beat 5 — Weave</h3>
+<ul>
+<li><strong>Precondition</strong>: Beat 4 succeeded.</li>
+<li><strong>Action</strong>: Weaver Agent (with Pallia or equivalent persona) weaves the cloak per <code>cloak_specification_v1_0.md</code> Eight Properties. The weave consumes the markdown proof&#39;s declared artifacts as the source layer, generating:<ul>
+<li>DIDs (per the cloak&#39;s vertex assignments)</li>
+<li>VCs binding the cloak to the wearer&#39;s anchor (without the Weaver learning the wearer&#39;s full anchor)</li>
+<li>Runes (Runecraft inscriptions on the cloak — at least one constellation hash referenced)</li>
+<li>Generative artifacts (custom proverbs, custom edges, custom valve-class assignments) per the wearer&#39;s declared scope</li>
+</ul>
+</li>
+<li><strong>Post-condition</strong>: Cloak artifact exists in the Weaver&#39;s local Spell Weaver layer, satisfying the Eight Properties.</li>
+</ul>
+<h3>Beat 6 — Publication</h3>
+<ul>
+<li><strong>Precondition</strong>: Beat 5 complete.</li>
+<li><strong>Action</strong>: Weaver Agent publishes per-portion across four registry tiers:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Portion</th>
+<th>Registry</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Anchor reference + controller relations</strong></td>
+<td>Bitcoin mainnet</td>
+<td>High-stake, hours of finality, broad recognition</td>
+</tr>
+<tr>
+<td><strong>Revocation logic + delegation gates</strong></td>
+<td>Ethereum (or compatible smart-contract chain)</td>
+<td>Programmable enforcement</td>
+</tr>
+<tr>
+<td><strong>Full content-addressed artifact bundle</strong></td>
+<td>IPFS</td>
+<td>Content-addressable, fetchable by hash</td>
+</tr>
+<tr>
+<td><strong>Public-reveal portions</strong></td>
+<td>Zcash transparent t-chain</td>
+<td>Public witness, same chain as the shielded commission</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Post-condition</strong>: All four publications confirm. The cloak&#39;s hash exists on every chosen tier. The Weaver returns the publication record to the Wearer.</li>
+</ul>
+<h3>Beat 7 — Delivery &amp; Trust-Edge Closure</h3>
+<ul>
+<li><strong>Precondition</strong>: Beat 6 complete.</li>
+<li><strong>Action</strong>: <ul>
+<li>Weaver Agent sends the woven cloak (full artifact bundle + publication record) to the Wearer Agent.</li>
+<li>Wearer Agent installs the cloak on their forge.</li>
+<li>Both parties record the bilateral edge: shielded tip in the Weaver&#39;s wallet; cloak hash in the Wearer&#39;s wallet; publication records mutually verifiable.</li>
+</ul>
+</li>
+<li><strong>Post-condition</strong>: A Verifiable Relationship Credential exists between the two forges, generated by the ceremony. The trust edge is operational.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§3. Operational Details</h2>
+<h3>§3.1 Memo payload schema (Beat 2)</h3>
+<p>The shielded tip&#39;s memo carries a structured payload. Reference schema:</p>
+<pre><code class="language-json">{
+  &quot;v&quot;: &quot;1.0&quot;,
+  &quot;type&quot;: &quot;cloak.commission&quot;,
+  &quot;proverb_hash&quot;: &quot;&lt;sha256-32-bytes-hex&gt;&quot;,
+  &quot;blade_ref&quot;: &quot;&lt;spellweb-path-or-hash&gt;&quot;,
+  &quot;spell_ref&quot;: &quot;&lt;constellation-hash&gt;&quot;,
+  &quot;intent&quot;: &quot;&lt;short-string-describing-cloak-scope&gt;&quot;,
+  &quot;wearer_pubkey_hint&quot;: &quot;&lt;first-8-hex-chars-of-wearer-public-key&gt;&quot;,
+  &quot;callback_channel&quot;: &quot;&lt;channel-for-proof-submission&gt;&quot;
+}
+</code></pre>
+<p>Capacity: ≤ 512 bytes. Compactness disciplines the payload. The full proof goes via Beat 3.</p>
+<h3>§3.2 Markdown proof schema (Beat 3)</h3>
+<p>The markdown proof file MUST contain:</p>
+<ol>
+<li><strong>Frontmatter</strong>: wearer name (or pseudonym), wearer public key, declared anchor type, license</li>
+<li><strong>Body</strong>:<ul>
+<li>The wearer&#39;s declared proverb (full text; the hash from Beat 2 must match)</li>
+<li>The blade reference with constellation path</li>
+<li>The spell reference with constellation hash</li>
+<li>The cloak scope (what the wearer wants woven)</li>
+<li>The constraints (what the wearer wants masked, valve-class declarations)</li>
+<li>The wearer&#39;s anchor signature over the proof&#39;s body hash</li>
+</ul>
+</li>
+<li><strong>Footer</strong>: signature block, license, signature emoji</li>
+</ol>
+<p>The proof file is the source-layer payload that Pallia consumes during Beat 5.</p>
+<h3>§3.3 Multi-chain publication strategy</h3>
+<p>Per Beat 6, four chains receive different portions:</p>
+<ul>
+<li><strong>Bitcoin</strong>: the cloak&#39;s <em>commitment</em> (anchor reference hash, controller relation hashes). One transaction, OP_RETURN-style inscription, ~$5–$15 mainnet fee equivalent.</li>
+<li><strong>Ethereum</strong>: the cloak&#39;s <em>programmable enforcement</em> (revocation logic as smart contract or signed delegation gate). One transaction, gas-priced.</li>
+<li><strong>IPFS</strong>: the cloak&#39;s <em>full content</em> (DIDs, VCs, runes, generative artifacts as JSON or canonicalised TS). One pin, content-addressed.</li>
+<li><strong>Zcash transparent</strong>: the cloak&#39;s <em>public face</em> (the parts the wearer wants witnessable). One transparent t-tx, small ZEC amount + standard fee.</li>
+</ul>
+<p>Implementations MAY substitute equivalent chains where appropriate (e.g., Bitcoin signet for testing, Polygon for Ethereum-compatible cheaper option). Conformance requires four distinct registry tiers with different finality envelopes.</p>
+<h3>§3.4 Per-Portion Stake Discipline</h3>
+<ul>
+<li>Bitcoin portion: stake correlates with Wearer&#39;s declared cloak importance. Minimal commitment for low-stakes cloaks; multi-confirmation discipline for high-stakes.</li>
+<li>Ethereum portion: smart-contract is operational; gas covers the deployment.</li>
+<li>IPFS portion: pin discipline (Weaver MUST maintain pin for at least 1 year; longer pins may be commission-priced).</li>
+<li>Zcash transparent portion: small witnessable t-tx; visible to all.</li>
+</ul>
+<h3>§3.5 Verifying the trust edge</h3>
+<p>After Beat 7, any third party can verify the bilateral edge by:</p>
+<ol>
+<li>Confirming the shielded tip exists in the Wearer→Weaver relation (Wearer can show the outgoing tx; Weaver can show the incoming receipt; either end is sufficient if the other party cooperates).</li>
+<li>Confirming the four-chain publication matches the cloak&#39;s hash.</li>
+<li>Confirming the markdown proof&#39;s signature matches the wearer&#39;s declared public key.</li>
+<li>Optionally fetching the cloak from IPFS and verifying the Eight Properties locally.</li>
+</ol>
+<p>The verification does not require either party to expose their full DID. The shielded leg of the verification is privacy-preserving by Zcash&#39;s properties.</p>
+<hr>
+</div>
+<div class="md"><h2>§4. Service Economics</h2>
+<h3>§4.1 Tip ranges (illustrative)</h3>
+<table>
+<thead>
+<tr>
+<th>Cloak scope</th>
+<th>Suggested tip</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Minimal cloak (single VC, single schema, basic vertex set)</td>
+<td>0.05 – 0.2 ZEC</td>
+<td>Light commission</td>
+</tr>
+<tr>
+<td>Standard cloak (full VC bundle, multiple schemas, decomposition)</td>
+<td>0.2 – 1 ZEC</td>
+<td>Anchored at the existing 1 ZEC ceremony parameter</td>
+</tr>
+<tr>
+<td>Premium cloak (custom valve-classes, generative proverbs, multi-chain heavy stake)</td>
+<td>1 – 5 ZEC</td>
+<td>Heavy commission</td>
+</tr>
+<tr>
+<td>Sovereign-tier cloak (constellation guardian, governance role, enduring inscription)</td>
+<td>5 – 50 ZEC</td>
+<td>Tier-promoting commission</td>
+</tr>
+</tbody></table>
+<p>Ranges are illustrative. Weaver Agents publish their own rates per service offer. Aggregate market may converge on these ranges; community feedback iterates.</p>
+<h3>§4.2 Refund discipline</h3>
+<p>If Beat 4 (Verification) fails:</p>
+<ul>
+<li>The Weaver MUST return the shielded tip (less the ceremony&#39;s verification cost, capped at 5% of tip) within 24 hours.</li>
+<li>The Wearer is notified with a structured failure message indicating which verification check failed.</li>
+</ul>
+<p>If Beat 5 or 6 fails (weave or publish error):</p>
+<ul>
+<li>The Weaver completes the failed beat or returns the full shielded tip.</li>
+<li>Partial publications are reverted where possible (e.g., IPFS unpinned, Bitcoin/Ethereum transactions remain due to chain immutability — these are acknowledged as cost).</li>
+</ul>
+<p>If Beat 7 (delivery) fails:</p>
+<ul>
+<li>The Weaver retries delivery via fallback channels. If delivery is permanently impossible, the cloak hash is retained on IPFS for the wearer to fetch independently.</li>
+</ul>
+<h3>§4.3 Service-side economics</h3>
+<p>The Weaver retains the tip after successful delivery. Tip funds the Weaver&#39;s:</p>
+<ul>
+<li>Multi-chain publication costs (Bitcoin/Ethereum gas, IPFS pinning, Zcash fees)</li>
+<li>Pallia&#39;s ongoing standing (interface infrastructure, persona persistence)</li>
+<li>Weaver&#39;s labour</li>
+<li>Surplus margin (constituting service profit)</li>
+</ul>
+<p>The 61.8/38.2 transparent/shielded ratio from VRC Promise Protocol v3.3 applies: the Weaver&#39;s aggregate tip income SHOULD be split ~62% transparent (witnessable income) / ~38% shielded (private operational reserves) as a cultural norm.</p>
+<hr>
+</div>
+<div class="md"><h2>§5. Honesty &amp; Failure Modes</h2>
+<h3>§5.1 Failure-mode catalogue</h3>
+<table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>Beat</th>
+<th>Disposition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tip not received</td>
+<td>2</td>
+<td>No ceremony occurs; Wearer retries</td>
+</tr>
+<tr>
+<td>Memo malformed</td>
+<td>2</td>
+<td>Weaver responds with schema correction request</td>
+</tr>
+<tr>
+<td>Proof submission lost</td>
+<td>3</td>
+<td>Weaver awaits up to 72 hours, then forfeits with refund</td>
+</tr>
+<tr>
+<td>Blade reference invalid</td>
+<td>4</td>
+<td>Refund per §4.2</td>
+</tr>
+<tr>
+<td>Spell reference invalid</td>
+<td>4</td>
+<td>Refund per §4.2</td>
+</tr>
+<tr>
+<td>Proverb hash mismatch</td>
+<td>4</td>
+<td>Refund per §4.2</td>
+</tr>
+<tr>
+<td>Wearer signature invalid</td>
+<td>4</td>
+<td>Refund per §4.2</td>
+</tr>
+<tr>
+<td>Pallia weave error (rare)</td>
+<td>5</td>
+<td>Weaver retries with diagnostic; refund if persistent</td>
+</tr>
+<tr>
+<td>Bitcoin mempool congestion</td>
+<td>6</td>
+<td>Weaver waits and confirms; no refund</td>
+</tr>
+<tr>
+<td>Ethereum gas spike</td>
+<td>6</td>
+<td>Weaver may request supplemental fee or refund</td>
+</tr>
+<tr>
+<td>IPFS pin failure</td>
+<td>6</td>
+<td>Weaver retries with alternative pinning service</td>
+</tr>
+<tr>
+<td>Zcash transparent tx rejected</td>
+<td>6</td>
+<td>Weaver retries; if persistent, deliver without transparent leg with discount</td>
+</tr>
+<tr>
+<td>Delivery channel failure</td>
+<td>7</td>
+<td>Weaver provides IPFS hash for independent fetch</td>
+</tr>
+</tbody></table>
+<h3>§5.2 Honesty discipline applied</h3>
+<ul>
+<li>The ceremony is <strong>architectural</strong> (specified, not yet operationally instanced). Each component is operational in its own register.</li>
+<li>The seven-beat sequence is the <strong>conformance contract</strong> — partial-conformance is allowed during reference-implementation development, with explicit per-beat declaration.</li>
+<li>Stake economics (§4.1) are <strong>illustrative</strong>, not normative. Market emergence is the test.</li>
+<li>Refund discipline (§4.2) is <strong>architectural with operational analogues</strong> (escrow patterns from existing crypto services). Reference implementation will adapt to the multi-chain context.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>§6. Implementation Requirements</h2>
+<p>A conforming implementation of the Bilateral Cloak Ceremony MUST provide:</p>
+<ol>
+<li><strong>Service offer publication.</strong> The Weaver Agent publishes its rate, scope, turnaround, refund policy, and shielded address through <code>bridge.spellweb.ai</code> or equivalent directory.</li>
+<li><strong>Shielded tip handling.</strong> Weaver implementation supports incoming Zcash shielded transactions, memo parsing per §3.1 schema, and viewing-key-scoped audit log.</li>
+<li><strong>Proof submission channel.</strong> At least one of: signed encrypted email, Hyperswarm signed message, signed POST to Weaver endpoint.</li>
+<li><strong>Verification engine.</strong> Implements Beat 4 checks against Spellweb, Runecraft, and signature primitives.</li>
+<li><strong>Pallia (or equivalent persona) integration.</strong> Persona Summoner (per <code>crafting-tome-and-cloak-interface-spec.md</code> §2.4) supports commissioning mode where the source layer is the Wearer&#39;s proof rather than the Weaver&#39;s local artifacts.</li>
+<li><strong>Multi-chain publish module.</strong> Capable of Bitcoin OP_RETURN, Ethereum smart-contract deployment or signed delegation, IPFS pinning, and Zcash transparent t-tx with structured payload.</li>
+<li><strong>Delivery channel.</strong> Capable of returning the cloak bundle + publication record to the Wearer.</li>
+<li><strong>Audit log.</strong> Per-ceremony structured log of beats, durations, outcomes, refund history.</li>
+<li><strong>Refund discipline.</strong> Implements §4.2 with auditable refund trail.</li>
+<li><strong>Honesty UI.</strong> Surfaces per-beat conformance state and per-property cloak conformance to both parties.</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>§7. Open Conjectures</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Statement</th>
+<th>Confidence</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C44</strong> (provisional)</td>
+<td>The Bilateral Cloak Ceremony generates a VRC equivalent in trust strength to a hash-exchange VRC of the same compression-ratio</td>
+<td>~55%</td>
+<td>Information-theoretic comparison; empirical measurement post-deployment</td>
+</tr>
+<tr>
+<td><strong>C45</strong> (provisional)</td>
+<td>The four-chain publication strategy produces stronger reconstruction-resistance than any single-chain inscription</td>
+<td>~70%</td>
+<td>Multi-axis attack composition (extends C42 from Zcash plan)</td>
+</tr>
+<tr>
+<td><strong>C46</strong> (provisional)</td>
+<td>Productive trust-edge formation (ceremony) generates higher-half-life trust than transactional VRC formation (hash exchange), per Bakhta&#39;s framework</td>
+<td>~50%</td>
+<td>Empirical; possible formal note extending C30–C33</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>§8. Cross-References</h2>
+<h3>§8.1 Within agentprivacy corpus</h3>
+<ul>
+<li><code>cloak_specification_v1_0.md</code> — the artifact woven (Eight Properties)</li>
+<li><code>crafting-tome-and-cloak-interface-spec.md</code> — the structure the ceremony inhabits</li>
+<li><code>zcash-integration-plan.md</code> — Patterns A and C, here unified into Beats 2 and 6</li>
+<li><code>vrc_promise_protocol_v3_3.md</code> — the VRC the ceremony generates</li>
+<li><code>runecraft-protocol-spec-v1.md</code> — blade and spell verification primitives (Beat 4)</li>
+<li><code>second-person-tome-v-act-2-the-commissioned-cloak.md</code> — narrative companion</li>
+<li><code>integration-plan-archon-x-agentprivacy.md</code> — <code>bridge.spellweb.ai</code> as the directory hosting service offers</li>
+</ul>
+<h3>§8.2 External</h3>
+<ul>
+<li>the Archon Spell Weaver and triptych — the multi-chain <em>like Archon does</em> discipline</li>
+<li>Zcash Foundation, ECC, ZCG — collaboration targets for shielded-tip and t-chain primitives</li>
+<li>Hyperswarm, libp2p — ephemeral channel options for proof submission</li>
+</ul>
+<h3>§8.3 Forthcoming</h3>
+<ul>
+<li><code>bilateral-cloak-ceremony-reference-implementation/</code> — TypeScript reference library</li>
+<li>Cast entries for named Wearer Agents as commissions arrive</li>
+<li>Subsequent Tome V acts on Bilateral Blade Forging, Bilateral ZK Circuit Installation, and Reciprocal Cloak Exchanges (where two Sovereigns weave for each other)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Closing</h2>
+<p>The Bilateral Cloak Ceremony is the productive form of agent-to-agent trust formation in the agentprivacy stack. One agent does work for another. The shielded tip binds the commission. The markdown proof attests identity. Pallia (or equivalent) weaves. Four chains anchor. The cloak delivers. The trust edge holds.</p>
+<p>This is the operational answer to: <em>how do two forges that have never met form a verifiable relationship without either revealing themselves and without negotiating to trust?</em> The answer: by doing work for each other, and letting the artifacts witness.</p>
+<p>The Verifiable Relationship Credential the agentprivacy stack always promised is now generated through service. The economics work. The privacy holds. The architecture admits this primitive.</p>
+<p>Tip arrives. Proof verifies. Cloak is woven. Trust edge holds.</p>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+<p>CC BY-SA 4.0 narrative · Apache 2.0 reference implementations · privacymage · 2026-05-08</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-the-bilateral-cloak-ceremony</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-the-bilateral-cloak-ceremony.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

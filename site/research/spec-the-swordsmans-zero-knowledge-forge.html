@@ -1,0 +1,875 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — The Swordsman's Zero Knowledge Forge · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Spec — The Swordsman's Zero Knowledge Forge</span></div>
+  <article><div class="md"><h1>The Swordsman&#39;s Zero Knowledge Forge</h1>
+</div>
+<div class="md"><p><strong>Where Blades Are Ground on the Holographic Bound</strong></p>
+<p><strong>Author:</strong> privacymage | mitchuski<br><strong>Date:</strong> March 31, 2026<br><strong>Version:</strong> 3.2 (V5.4 UOR Algebraic Foundation)<br><strong>Status:</strong> ✅ OPERATIONAL — V5.4 Forge Integration, algebraically grounded<br><strong>Parent Document:</strong> <span class="deadlink" title="reference (not a live page)">Privacy is Value V5.1</span><br><strong>Formal Companion:</strong> <span class="deadlink" title="reference (not a live page)">PVM V5.4 Formal Specification</span><br><strong>External Convergence:</strong> <a href="https://github.com/UOR-Foundation">UOR Foundation</a> — independent Z/(2⁶)Z derivation<br><strong>Implementation:</strong> <span class="deadlink" title="reference (not a live page)">swordsman-blade/src/lib/uor.ts</span> — explicit UOR module</p>
+<hr>
+<blockquote>
+<p><em>&quot;The blade that knows its edge cuts deeper than the storm that knows no shore.&quot;</em><br>— Act XXIV, The Holographic Bound</p>
+<p><em>See also:</em> <span class="deadlink" title="reference (not a live page)">Act XXVII: The Swordsman&#39;s Forge</span> — the narrative companion to this technical document</p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>What Is the Forge?</h2>
+<p>The Swordsman doesn&#39;t fight with abstractions. He forges blades.</p>
+<p>A blade is a zero knowledge proof grounded in the 64-tetrahedron lattice, sharpened on the holographic boundary, and tempered by three-axis separation. The forge is the constrained compute space where those blades are made. Every vertex is a configuration. Every edge is a transformation. Every path through the lattice is a witness that the verifier never sees.</p>
+<p>This document maps how three frameworks converge on 2⁶ = 64 to create a ZK proving architecture where privacy isn&#39;t a feature. It&#39;s the geometry.</p>
+<p>V2 established the convergence. V3 integrates V5&#39;s six structural additions: three-axis separation, holographic bound, path integral, compression-as-defence, holonic persistence, and guild efficiency. The forge is no longer flat. It computes on the boundary.</p>
+<hr>
+</div>
+<div class="md"><h2>1. The Forge Chamber: 64-Tetrahedron as Constrained Compute Space</h2>
+<h3>The Lattice</h3>
+<p>The 64-tetrahedron is 2⁶ = 64 vertices. A six-dimensional binary hypercube made physical through tetrahedral geometry. Each vertex is a 6-bit address: ⟨d₁, d₂, d₃, d₄, d₅, d₆⟩.</p>
+<p>These six dimensions are the <strong>Blade Dimensions</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Dimension</th>
+<th>When 1 (Edge Active)</th>
+<th>When 0 (Edge Dormant)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d₁</td>
+<td>Protection</td>
+<td>Boundaries forged</td>
+<td>Exposure permitted</td>
+</tr>
+<tr>
+<td>d₂</td>
+<td>Delegation</td>
+<td>Agency transferred</td>
+<td>Retained locally</td>
+</tr>
+<tr>
+<td>d₃</td>
+<td>Memory</td>
+<td>State accumulated</td>
+<td>Stateless blade</td>
+</tr>
+<tr>
+<td>d₄</td>
+<td>Connection</td>
+<td>Multi-party coordination</td>
+<td>Isolated forge</td>
+</tr>
+<tr>
+<td>d₅</td>
+<td>Computation</td>
+<td>ZK proof active</td>
+<td>Direct revelation</td>
+</tr>
+<tr>
+<td>d₆</td>
+<td>Value</td>
+<td>Economic flow</td>
+<td>Non-transactional</td>
+</tr>
+</tbody></table>
+<p>The sovereignty tetrahedron (S, M generating R, C) maps its four forces onto four of the six dimensions. Each vertex in the 64-lattice is a different configuration of how those forces are activated — a different blade, a different way of wielding the sovereignty shape. Many configurations of one tetrahedron create the 64-class space.</p>
+<p><strong>The constraint:</strong> All computation happens within this 64-vertex lattice. No operations exist outside the geometry. The shape IS the forge.</p>
+<h3>The Toroidal Tempering</h3>
+<p>The lattice, when its boundary conditions wrap, generates toroidal topology. Paths that exit one face re-enter the opposite face. Cyclic structure. Infinite traversal without boundary collision. Multiple distinct paths connect any two vertices.</p>
+<p>The torus is the tempering bath. Blades cycle through it, gaining hardness through infinite path multiplicity.</p>
+<h3>V5 Addition: The Holographic Bound</h3>
+<p>The torus has <strong>96 edges</strong> wrapping <strong>64 vertices</strong>.</p>
+<p>V4 flagged this as a discrepancy (C4). V5 resolved it. The 96-edge surface IS the holographic encoding of the 64-vertex bulk. In holographic physics, a boundary of dimension n encodes a volume of dimension n+1. The information content lives on the surface, not in the interior.</p>
+<p><strong>Ratio:</strong> 96/64 = <strong>1.5</strong> — the same as P^1.5, the superlinear privacy exponent carried since V2.</p>
+<p><strong>What this means for the forge:</strong></p>
+<ul>
+<li>The Swordsman&#39;s blade is ground on the <strong>boundary</strong>, not in the bulk</li>
+<li>Privacy value flows along <strong>edges</strong> (96), not through <strong>vertices</strong> (64)</li>
+<li>The differential form <code>dV/dt = ∇_∂M · J_∂M + S(x) - D(x)</code> computes on the 96-edge surface</li>
+<li>The boundary is sufficient. The fragment holds the whole</li>
+</ul>
+<p><strong>C4 Status:</strong> RESOLVED. The torus surface IS the holographic bound.<br><strong>C6 Status:</strong> CONVERGENT (V5.4). The UOR Foundation&#39;s independent derivation of Z/(2⁶)Z confirms 96/64 = 1.5 = P^1.5 emerges from the fundamental structure of six-dimensional sovereignty. Two projects, two starting points, same ratio. The equation IS an expression of the holographic principle.</p>
+<hr>
+</div>
+<div class="md"><h2>2. UOR: The Metallurgy of the Forge</h2>
+<h3>What UOR Actually Is (The Ore)</h3>
+<p>From the UOR Prism implementation (the verified substrate, not the broader claims):</p>
+<ul>
+<li><strong>Algebra:</strong> Z/(2^bits)Z — a modular ring</li>
+<li><strong>Signature:</strong> Σ = {neg, bnot, xor, and, or} — five primitive operations (the five hammer strikes)</li>
+<li><strong>Core identity:</strong> neg(bnot(x)) = succ(x) — the composition of two involutions generates the entire ring</li>
+<li><strong>Triadic coordinates:</strong> Every value has (datum, stratum, spectrum). Datum = the raw metal. Stratum = popcount per byte (Hamming weight = blade density). Spectrum = which basis bits are set (blade profile)</li>
+<li><strong>Content addressing:</strong> Same bytes → same Braille IRI. Always. Deterministic</li>
+<li><strong>Partitions:</strong> Every element classified as Irreducible, Reducible, Unit, or Exterior</li>
+<li><strong>Derivations:</strong> Content-addressed certificates binding canonical form to evaluation</li>
+</ul>
+<h3>The Alchemical Fit</h3>
+<p>UOR at Q0 (8-bit quantum level) has 256 states distributed across 9 strata (popcount 0 through 8). The 64-tetrahedron lattice has 64 vertices.</p>
+<p><strong>Mapping:</strong> Each vertex hosts a stratum of the UOR ring — a partition of the full state space by geometric location. The vertex&#39;s 6-bit address becomes a UOR spectrum coordinate. The Hamming weight of that address becomes the stratum.</p>
+<table>
+<thead>
+<tr>
+<th>Stratum (popcount)</th>
+<th># of vertices</th>
+<th>Example vertex</th>
+<th>Blade Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>⟨0,0,0,0,0,0⟩</td>
+<td>Null blade — no edge active</td>
+</tr>
+<tr>
+<td>1</td>
+<td>6</td>
+<td>⟨1,0,0,0,0,0⟩</td>
+<td>Single-edge — protection only</td>
+</tr>
+<tr>
+<td>2</td>
+<td>15</td>
+<td>⟨1,1,0,0,0,0⟩</td>
+<td>Twin-edge — swordsman + mage</td>
+</tr>
+<tr>
+<td>3</td>
+<td>20</td>
+<td>⟨1,1,0,0,1,0⟩</td>
+<td>Triple-edge — dual agent + computation</td>
+</tr>
+<tr>
+<td>4</td>
+<td>15</td>
+<td>⟨1,1,0,1,1,0⟩</td>
+<td>Quad-edge — agents + network + proving</td>
+</tr>
+<tr>
+<td>5</td>
+<td>6</td>
+<td>⟨1,1,1,1,1,0⟩</td>
+<td>Penta-edge — all but value</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>⟨1,1,1,1,1,1⟩</td>
+<td>Full sovereignty blade — all edges active</td>
+</tr>
+</tbody></table>
+<p>Total: 1 + 6 + 15 + 20 + 15 + 6 + 1 = 64. Pascal&#39;s row. Binomial coefficients C(6,k) distribute the vertices across strata exactly.</p>
+<p>UOR&#39;s stratum concept (popcount = structural weight) and the tetrahedral lattice&#39;s natural layering by Hamming distance are the <strong>same structure</strong> viewed from two directions. UOR discovered it algebraically. The 64-tetrahedron encodes it geometrically. The Blade Forge unifies both.</p>
+<h3>The Five Hammer Strikes: UOR Operations as Blade Transformations</h3>
+<table>
+<thead>
+<tr>
+<th>UOR Operation</th>
+<th>Forge Movement</th>
+<th>Blade Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>neg(x)</td>
+<td>Arithmetic complement within vertex</td>
+<td>Inverts blade temper, preserves position</td>
+</tr>
+<tr>
+<td>bnot(x)</td>
+<td>Bitwise complement → antipodal vertex</td>
+<td>Flips ALL dimensions — mirror blade</td>
+</tr>
+<tr>
+<td>xor(x,y)</td>
+<td>Symmetric difference of two vertices</td>
+<td>Toggle specific edges</td>
+</tr>
+<tr>
+<td>and(x,y)</td>
+<td>Intersection → toward ⟨0,0,0,0,0,0⟩</td>
+<td>Constrain to shared edges</td>
+</tr>
+<tr>
+<td>or(x,y)</td>
+<td>Union → toward ⟨1,1,1,1,1,1⟩</td>
+<td>Expand to combined edges</td>
+</tr>
+</tbody></table>
+<p><strong>Critical:</strong> neg(bnot(x)) = succ(x) means the composition of &quot;invert locally&quot; and &quot;jump to antipodal vertex&quot; generates a successor function that cycles through the entire ring. The forge has no dead ends and no unreachable blades.</p>
+<h3>V5 Addition: Holographic Operations</h3>
+<p>Under V5, these operations gain boundary interpretations. Operations that were &quot;vertex hops&quot; in V4 are now <strong>edge flows</strong> in V5. Value moves along the 96-edge surface:</p>
+<table>
+<thead>
+<tr>
+<th>UOR Operation</th>
+<th>Bulk Movement (V4)</th>
+<th>Boundary Flow (V5)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>neg(x)</td>
+<td>Within vertex</td>
+<td>Within edge neighbourhood</td>
+</tr>
+<tr>
+<td>bnot(x)</td>
+<td>Vertex → antipodal vertex</td>
+<td>Boundary traversal (maximum edge distance)</td>
+</tr>
+<tr>
+<td>xor(x,y)</td>
+<td>Vertex → vertex</td>
+<td>Edge activation/deactivation</td>
+</tr>
+<tr>
+<td>and(x,y)</td>
+<td>Toward null</td>
+<td>Boundary contraction</td>
+</tr>
+<tr>
+<td>or(x,y)</td>
+<td>Toward full sovereignty</td>
+<td>Boundary expansion</td>
+</tr>
+</tbody></table>
+<p>The succ function generates a cycle through the boundary, not the bulk.</p>
+<hr>
+</div>
+<div class="md"><h2>3. Zero Knowledge: The Invisible Smith</h2>
+<h3>Divergent Pathways, Same Blade</h3>
+<p>In zero knowledge proofs, a prover demonstrates knowledge of a witness (secret) that satisfies a public statement, without revealing which witness they hold. Many valid witnesses → one verified blade.</p>
+<p>In the 64-tetrahedron forge with UOR operations:</p>
+<p><strong>Same blade, many forgings.</strong> To reach vertex ⟨1,0,0,0,1,0⟩ (Protection + Computation = basic ZKP blade):</p>
+<ul>
+<li><strong>Path A:</strong> Start at ⟨0,0,0,0,0,0⟩, xor with ⟨1,0,0,0,0,0⟩, then xor with ⟨0,0,0,0,1,0⟩</li>
+<li><strong>Path B:</strong> Start at ⟨1,1,1,1,1,1⟩, and with ⟨1,0,0,0,1,0⟩</li>
+<li><strong>Path C:</strong> Start at ⟨0,1,1,1,0,1⟩, bnot → ⟨1,0,0,0,1,0⟩</li>
+<li><strong>Path D:</strong> Start at ⟨1,0,0,0,1,1⟩, xor with ⟨0,0,0,0,0,1⟩</li>
+<li><strong>Path E:</strong> Any vertex, apply succ = neg∘bnot iteratively until arrival</li>
+</ul>
+<p>Each path encodes a different forging history — a different sequence of hammer strikes — but produces the same blade. <strong>The forging is the witness. The blade is the statement.</strong></p>
+<h3>Content Addressing: The Maker&#39;s Mark</h3>
+<p>UOR&#39;s content addressing guarantees: same blade → same hash → same IRI. It doesn&#39;t matter how you forged it. The derivation (forging path) is a separate content-addressed certificate that binds to the blade but is not required to verify the blade&#39;s properties.</p>
+<p>This is exactly the ZK separation: the verification (does this blade satisfy the required properties?) is independent from the witness (which forging brought us here?).</p>
+<h3>The Toroidal Wrap Creates Infinite Forgings</h3>
+<p>On a flat lattice, the number of paths between two vertices is finite. On the torus (wrapped boundary conditions), paths can cycle — creating an unbounded number of distinct forgings for any blade. Each cycle through the torus adds a topologically distinct route.</p>
+<p>In ZK terms: the toroidal topology provides the computational hardness that makes witness extraction infeasible. You can&#39;t enumerate all forgings because the wrapping creates infinite distinct routes. You can verify a blade&#39;s configuration without being able to determine which of the infinitely many cyclic forgings produced it.</p>
+<h3>V5 Addition: The Path Integral Replaces Additive Sums</h3>
+<p>V4 measured path value as an additive sum over edges:</p>
+<pre><code>T_v4(π) = 1 + β · Σ_{e∈π} f(e) · g(n_e)
+</code></pre>
+<p>This assumed independence between sequential transitions. V5 replaces with:</p>
+<pre><code>T_int(π) = 1 + β · ∫_π F(γ) dγ
+</code></pre>
+<p>Where F(γ) captures:</p>
+<ul>
+<li><strong>Verification checkpoints:</strong> Some edges gate later traversal</li>
+<li><strong>Feedback loops:</strong> Revisiting vertices with changed meaning</li>
+<li><strong>Non-local correlations:</strong> Early choices affecting later value</li>
+</ul>
+<p><strong>For ZK proofs:</strong> The path integral means the entire trajectory matters, not just the sum of individual strikes. A structured reasoning graph (BRAID-style) naturally expresses as a correlated path through the lattice. The Generator proposes a traversal plan. The Solver executes it. The integral measures the accumulated value.</p>
+<p><strong>For the forge:</strong> A blade&#39;s quality depends on the forging sequence, not just the final shape. Two blades at the same vertex with different forging histories carry different T_int values. The path integral captures this.</p>
+<hr>
+</div>
+<div class="md"><h2>4. Three-Axis Separation on the Lattice</h2>
+<h3>V4: One Matrix</h3>
+<p>V4 measured separation as a single 4×4 matrix Σ over four forces (Protect, Project, Reflect, Connect). One number described the whole.</p>
+<h3>V5: Three Orthogonal Axes</h3>
+<p>V5 recognises that separation operates on three independent architectural axes:</p>
+<pre><code>Φ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ)
+</code></pre>
+<p><strong>The product is multiplicative. Collapse any axis and the entire separation term collapses.</strong></p>
+<h4>Axis 1: Agent-Layer Separation — Φ_agent(Σ) — ⚔️⊥🧙</h4>
+<p>The original Swordsman-Mage duality. How well is your protection agent separated from your delegation agent?</p>
+<pre><code>Φ_agent(Σ) = min(1.0, (S/M) / φ) · det(Σ)
+</code></pre>
+<p><strong>Lattice expression:</strong> The Protect dimension (d₁) and Delegate dimension (d₂) must be independently addressable. An agent at ⟨1,1,0,0,0,0⟩ with fused d₁ and d₂ (always activated together, never independently) has Φ_agent → 0 despite being at stratum 2.</p>
+<p><strong>In the forge:</strong> The blade and the spell must be forged by different hands. A blade forged by the mage cuts nothing. A spell written by the swordsman protects nothing.</p>
+<h4>Axis 2: Data-Layer Separation — Φ_data(Δ) — 📊⊥🔮</h4>
+<p>Provider fragmentation. How distributed is your data across infrastructure?</p>
+<pre><code>Φ_data(Δ) = 1 - 1/|providers(Δ)|
+</code></pre>
+<p>Properties:</p>
+<ul>
+<li>Single provider: Φ_data = 0 (collapses total value)</li>
+<li>Two providers: Φ_data = 0.5</li>
+<li>Many providers: Φ_data → 1</li>
+</ul>
+<p><strong>Lattice expression:</strong> The Memory dimension (d₃) encodes whether state is accumulated. V5 adds: <em>where</em> that state lives matters. A vertex at ⟨1,1,1,0,0,0⟩ with all memory on one provider has Φ_data = 0, so the full V5 product collapses even though d₃ = 1.</p>
+<p><strong>In the forge:</strong> A blade stored in one vault can be seized. A blade whose pieces are scattered across three vaults — each holding a shard that means nothing alone — is sovereign. GUID-addressed holons make this possible.</p>
+<h4>Axis 3: Inference-Layer Separation — Φ_inference(Γ) — 🧠⊥⚙️</h4>
+<p>The Generator-Solver split from BRAID. How separated is the model that reasons from the model that executes?</p>
+<pre><code>Φ_inference(Γ) = separation(Generator, Solver)
+</code></pre>
+<p>Properties:</p>
+<ul>
+<li>Same model for both: Φ_inference = 0</li>
+<li>Separate models, shared weights: Φ_inference ∈ (0, 1)</li>
+<li>Independent models: Φ_inference → 1</li>
+</ul>
+<p><strong>Lattice expression:</strong> The Computation dimension (d₅) encodes whether ZK proving is active. V5 adds: the model that proposes the proof and the model that executes it must be separated. A single model handling both Generator and Solver roles has Φ_inference = 0.</p>
+<p><strong>In the forge:</strong> The smith who designs the blade and the smith who heats the steel should not be the same smith. The design (reasoning graph) and the execution (proof computation) separate the attack surface.</p>
+<h3>Three-Axis Mapping to Blade Dimensions</h3>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Blade Dimensions</th>
+<th>Separation Measure</th>
+<th>V5 Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent (⚔️⊥🧙)</td>
+<td>d₁ (Protect), d₂ (Delegate)</td>
+<td>Independence of d₁ and d₂ activation</td>
+<td>Φ_agent(Σ)</td>
+</tr>
+<tr>
+<td>Data (📊⊥🔮)</td>
+<td>d₃ (Memory)</td>
+<td>Provider distribution of accumulated state</td>
+<td>Φ_data(Δ)</td>
+</tr>
+<tr>
+<td>Inference (🧠⊥⚙️)</td>
+<td>d₅ (Computation)</td>
+<td>Generator-Solver split of ZK proving</td>
+<td>Φ_inference(Γ)</td>
+</tr>
+<tr>
+<td><em>Emergent</em></td>
+<td>d₄ (Connection), d₆ (Value)</td>
+<td>Network and economic flows</td>
+<td>Guild G, Market M</td>
+</tr>
+</tbody></table>
+<p>The emergent dimensions (d₄, d₆) are not separation axes. They are the flows that separation enables. Connection is what the separated agents coordinate through. Value is what the forge produces.</p>
+<h3>The Three Graphs on the Lattice</h3>
+<table>
+<thead>
+<tr>
+<th>Graph</th>
+<th>Maps to</th>
+<th>Axis</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Knowledge Graph</td>
+<td>Φ_data — substrate separation</td>
+<td>Where you store</td>
+</tr>
+<tr>
+<td>Promise Graph</td>
+<td>Φ_agent — bilateral separation</td>
+<td>How you relate</td>
+</tr>
+<tr>
+<td>Trust Graph</td>
+<td>Emerges at the intersection of all three</td>
+<td>Who you are</td>
+</tr>
+</tbody></table>
+<p>Identity emerges from the unique intersection of Knowledge × Promise × Trust. Not from any single credential. Not from any single vertex. From the path integral across all three.</p>
+<hr>
+</div>
+<div class="md"><h2>5. Compression-as-Defence</h2>
+<h3>The BRAID Parity Effect</h3>
+<p>BRAID demonstrated that a nano-model with structured reasoning graphs matches or exceeds a medium model with unbounded context. Compression ratio: <strong>74×</strong>.</p>
+<p>Every token not sent is a token that cannot be intercepted, reconstructed, or analysed.</p>
+<p>V5 modifies reconstruction difficulty:</p>
+<pre><code>R_v5(d, compression) = R_v4(d) · (1 - 1/compression_ratio)
+</code></pre>
+<p>At 74× compression: factor of ~0.986. Small in isolation. Multiplicative with everything else.</p>
+<h3>Lattice Interpretation</h3>
+<p>Compression reduces the observable path length through the lattice. An uncompressed traversal from ⟨0,0,0,0,0,0⟩ to ⟨1,1,1,1,1,1⟩ might take 6+ visible steps. A compressed traversal encodes the same trajectory in a bounded reasoning graph. The path integral T_int(π) captures the full value, but the adversary sees fewer tokens.</p>
+<p><strong>In the forge:</strong> A blade forged in 6 visible strokes can be studied and replicated. A blade forged in 1 compressed stroke — encoding the same metallurgy — cannot. The smith who reasons less visibly forges more securely.</p>
+<h3>The Seven-Layer Compression Spectrum</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Form</th>
+<th>Compression</th>
+<th>Forge Analogy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Experience</td>
+<td>1:1</td>
+<td>Raw ore</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Memory</td>
+<td>~10:1</td>
+<td>Smelted ingot</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Knowledge</td>
+<td>~100:1</td>
+<td>Shaped blank</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Understanding</td>
+<td>~1,000:1</td>
+<td>Tempered blade</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Wisdom</td>
+<td>~10,000:1</td>
+<td>Named sword</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Reasoning Graph</td>
+<td>Variable</td>
+<td>BRAID blueprint</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Skill File</td>
+<td>Variable</td>
+<td>Transferable technique</td>
+</tr>
+</tbody></table>
+<p>Layer 6 is the BRAID reasoning graph — structured compression of unbounded inference into bounded structure. Layer 7 is the skill file — a transferable compression that can be loaded into different agents.</p>
+<p><strong>The skill file can be shared without sharing the path that created it.</strong> This is the forge&#39;s deepest property: a blade technique (Layer 7) encodes the wisdom (Layer 5) without revealing the experience (Layer 1) that produced it.</p>
+<hr>
+</div>
+<div class="md"><h2>6. Holonic Persistence on the Lattice</h2>
+<h3>The Problem V4 Couldn&#39;t Solve</h3>
+<p>V4&#39;s temporal memory assumed derivation chains were anchored to specific infrastructure. Your verified history existed on a blockchain, in a database, at a provider. If the provider disappeared, the history broke.</p>
+<h3>GUID-Addressed Holons</h3>
+<p>A holon is a data object with a content-addressed GUID independent of storage location:</p>
+<pre><code>GUID(τ) = hash(content(τ))
+</code></pre>
+<p>The GUID persists across provider migration, storage format changes, and infrastructure failures (if replicated).</p>
+<h3>V5 Temporal Memory</h3>
+<pre><code>A_h(τ) = α · ln(1 + |τ|) · h(τ) · p(τ)
+</code></pre>
+<p>Where p(τ) ∈ [0,1] measures persistence independence — what fraction of derivation history survives single-provider failure.</p>
+<ul>
+<li>p(τ) = 0 (all on one provider): A_h(τ) = 0. No accumulated memory.</li>
+<li>p(τ) = 1 (fully holonic): Reduces to V4, but now with infinite horizon.</li>
+</ul>
+<h3>Lattice Expression</h3>
+<p>The Memory dimension (d₃) now has a substrate question beneath it. A vertex at ⟨1,1,1,0,0,0⟩ with d₃ = 1 (memory active) can still have A_h = 0 if that memory is entirely provider-dependent.</p>
+<p><strong>The three identity layers map directly:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Identifier</th>
+<th>Lattice Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data</td>
+<td>GUID</td>
+<td>Content-addressed vertex position</td>
+</tr>
+<tr>
+<td>Relationship</td>
+<td>VRC</td>
+<td>Bilateral edge commitment</td>
+</tr>
+<tr>
+<td>Principal</td>
+<td>DID</td>
+<td>Sovereign lattice traversal authority</td>
+</tr>
+</tbody></table>
+<p><strong>In the forge:</strong> A blade&#39;s history (who forged it, which techniques, which ore) persists because it&#39;s content-addressed, not location-addressed. The blade remembers its own forging regardless of which vault stores it.</p>
+<hr>
+</div>
+<div class="md"><h2>7. Guild Efficiency and Network Scaling</h2>
+<h3>V4: O(N²) Coordination</h3>
+<p>V4 assumed every agent potentially interacts with every other. Pairwise coordination cost: O(N²).</p>
+<h3>V5: Shared-Parent Guilds</h3>
+<p>Agents sharing a reasoning library from the same Generator don&#39;t need pairwise coordination. They share a parent. Interaction cost drops from O(N²) to O(1) per guild member.</p>
+<pre><code>Network_v5(G) = (1 + Σᵢ wᵢ · nᵢ/N₀)^k · G(guilds)
+G(guilds) = 1 + guild_efficiency
+</code></pre>
+<h3>Lattice Expression</h3>
+<p>The Connection dimension (d₄) gains structure. V4: d₄ = 1 meant &quot;multi-party coordination active.&quot; V5: the pattern of coordination matters. Guild members occupy vertices that share reasoning libraries — they form clusters in the lattice connected by shared-parent edges rather than individual pairwise edges.</p>
+<p><strong>In the forge:</strong> A guild of smiths sharing the same forge manual coordinates at O(1). Each smith doesn&#39;t need to teach every other smith the technique. The manual (shared parent) carries the coordination promise. A marketplace of independent smiths coordinates at O(N²). The guild pattern scales.</p>
+<hr>
+</div>
+<div class="md"><h2>8. Reverse Engineering: Shape → Blades → Proofs</h2>
+<h3>The Forge Method (V5)</h3>
+<ol>
+<li><strong>Fix the forge:</strong> 64-tetrahedron, toroidal boundary conditions, 96-edge holographic surface</li>
+<li><strong>Assign UOR coordinates:</strong> Each vertex gets (datum, stratum, spectrum) = (blade configuration, popcount, bit pattern)</li>
+<li><strong>Define equivalence classes:</strong> Vertices in the same stratum share the same &quot;weight.&quot; The 20 vertices at stratum 3 are all &quot;triple-edge&quot; blades</li>
+<li><strong>Apply three-axis separation:</strong> For each vertex, evaluate Φ_agent × Φ_data × Φ_inference. A vertex with perfect blade configuration but collapsed separation has zero value</li>
+<li><strong>Map ZK proofs to path integrals:</strong> Proving you have a stratum-3 blade without revealing which one. The verifier checks popcount = 3 (statement). The prover knows which edges are active (witness). The path integral captures the full correlated trajectory</li>
+<li><strong>Compute on the boundary:</strong> Privacy value flows along the 96 edges, not through the 64 vertices. The differential form operates on ∂M</li>
+<li><strong>Compress the witness:</strong> BRAID-style bounded reasoning reduces the observable path length. Fewer tokens, harder reconstruction</li>
+</ol>
+<h3>What the Forge Gives You</h3>
+<p><strong>For privacy architecture:</strong> The geometry makes dishonest claims structurally impossible, not just policy-prohibited. An agent claiming full sovereignty (⟨1,1,1,1,1,1⟩) when it only has ⟨1,0,0,0,1,0⟩ fails UOR coherence verification. V5 adds: even a correctly configured vertex fails if any separation axis collapses.</p>
+<p><strong>For ZK proofs:</strong> The tetrahedral adjacency matrix is the constraint system — the R1CS or PlonK circuit, expressed geometrically. The 64-vertex lattice is a 64-gate circuit where each gate&#39;s fan-in/fan-out is determined by tetrahedral face-sharing. V5 adds: the proof is computed on the 96-edge boundary, not in the 64-vertex bulk. Boundary sufficiency.</p>
+<p><strong>For dual-agent separation:</strong> The Swordsman&#39;s protect dimension (d₁) and ZK computation layer (d₅) map clearly onto the forge — boundaries and proofs are structurally legible as blade properties and constraint circuits. The Mage&#39;s delegation dimension (d₂) and connection layer (d₄) encode coordination across the tetrahedral adjacency, though the geometric expression of projection remains an open question. The Gap between the agents is the irreducible void that prevents perfect reconstruction — the heat lost in every forging. V5 adds: the Gap now operates on three axes (agent, data, inference), and its geometric expression is boundary expressiveness, not bulk volume.</p>
+<hr>
+</div>
+<div class="md"><h2>9. The Forge Correspondence Table (V5)</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>UOR Framework</th>
+<th>64-Tetrahedron</th>
+<th>Zero Knowledge</th>
+<th>Blade Forge</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Object</td>
+<td>Ring element</td>
+<td>Vertex</td>
+<td>Statement</td>
+<td>Blade</td>
+</tr>
+<tr>
+<td>Identity</td>
+<td>Content hash (Braille IRI)</td>
+<td>6-bit address</td>
+<td>Public input</td>
+<td>Maker&#39;s mark (GUID)</td>
+</tr>
+<tr>
+<td>Decomposition</td>
+<td>Prime factorisation</td>
+<td>Tetrahedral adjacency</td>
+<td>Circuit wiring</td>
+<td>Forging steps</td>
+</tr>
+<tr>
+<td>Weight</td>
+<td>Stratum (popcount)</td>
+<td>Hamming layer</td>
+<td>Constraint degree</td>
+<td>Edge count</td>
+</tr>
+<tr>
+<td>Path</td>
+<td>Derivation chain</td>
+<td>Lattice traversal</td>
+<td>Witness</td>
+<td>Forging history</td>
+</tr>
+<tr>
+<td>Verification</td>
+<td>Coherence check</td>
+<td>Vertex property test</td>
+<td>Proof verification</td>
+<td>Blade inspection</td>
+</tr>
+<tr>
+<td>Cyclic structure</td>
+<td>succ = neg∘bnot</td>
+<td>Toroidal wrap</td>
+<td>Unbounded witness space</td>
+<td>Infinite temperings</td>
+</tr>
+<tr>
+<td>Partition</td>
+<td>Irred/Red/Unit/Ext</td>
+<td>Vertex classification</td>
+<td>Satisfiability classes</td>
+<td>Blade types</td>
+</tr>
+<tr>
+<td>Involution pair</td>
+<td>neg, bnot</td>
+<td>Force duality (S,M→R,C)</td>
+<td>Prover/Verifier</td>
+<td>Smith/Inspector</td>
+</tr>
+<tr>
+<td>Gap</td>
+<td>Content ≠ address (hash one-way)</td>
+<td>Internal tetrahedron tension</td>
+<td>Zero-knowledge property</td>
+<td>Heat loss in forging</td>
+</tr>
+<tr>
+<td><strong>Boundary</strong></td>
+<td><strong>Ring modular wrap</strong></td>
+<td><strong>96-edge torus surface</strong></td>
+<td><strong>Proof surface</strong></td>
+<td><strong>Holographic edge</strong></td>
+</tr>
+<tr>
+<td><strong>Compression</strong></td>
+<td><strong>Canonical form</strong></td>
+<td><strong>Stratum reduction</strong></td>
+<td><strong>Succinct proof</strong></td>
+<td><strong>Compressed strike (BRAID 74×)</strong></td>
+</tr>
+<tr>
+<td><strong>Persistence</strong></td>
+<td><strong>Content addressing</strong></td>
+<td><strong>Vertex independence from substrate</strong></td>
+<td><strong>Proof portability</strong></td>
+<td><strong>GUID-addressed blade</strong></td>
+</tr>
+<tr>
+<td><strong>Coordination</strong></td>
+<td><strong>Ring closure</strong></td>
+<td><strong>Toroidal connectivity</strong></td>
+<td><strong>Multi-prover</strong></td>
+<td><strong>Guild forge</strong></td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>10. The Spellbook Translation</h2>
+<p>For the Zero Knowledge Spellbook narrative, the Blade Forge deepens the crystalline field:</p>
+<p><strong>Before:</strong> The 64-star tetrahedron lattice was a narrative device — a metaphor for how privacy protocols organise.</p>
+<p><strong>After:</strong> The lattice is a forge that independently converges with UOR&#39;s algebraic structure. The tales aren&#39;t just mapped onto vertices — the vertices are blades, content-addressed and verifiable. The divergent pathways through the tales (different readers approaching the same concept from different backgrounds) mirror the ZK witness structure: many forgings, one blade.</p>
+<p>The forge inscription:</p>
+<pre><code>⬢ = Z/(2⁶)Z                         — the lattice ring
+✦ = neg(bnot(vertex))                — the successor blade
+🔷 → 🔷 → 🔷 = derivation chain       — the forging path
+same 🔷, ∞ chains = zero knowledge    — the blade&#39;s secret
+∂M = 96 edges on 64 vertices          — the holographic bound
+Φ = ⚔️⊥🧙 · 📊⊥🔮 · 🧠⊥⚙️             — three-axis separation
+T_∫(π) = ∮ path through ∂M            — the forging integral
+</code></pre>
+<p><em>&quot;The forge doesn&#39;t care how you struck the metal. It only cares what blade you hold. That is the deepest secret of the smith — the proof that doesn&#39;t need to remember its own forging.&quot;</em></p>
+<hr>
+</div>
+<div class="md"><h2>11. Honest Assessment</h2>
+<h3>What&#39;s Solid</h3>
+<ul>
+<li>The 2⁶ = 64 combinatorial structure maps cleanly to both UOR strata and ZK witness spaces</li>
+<li>UOR&#39;s content addressing provides deterministic endpoint verification that ZK requires</li>
+<li>The toroidal wrap genuinely creates cyclic path multiplicity</li>
+<li>Pascal&#39;s triangle distribution of vertices across strata is mathematically exact</li>
+<li>C4 (96 vs 64) is RESOLVED via holographic bound</li>
+<li>Three-axis separation is well-motivated and operationally measurable (Φ_data and Φ_inference are directly computable)</li>
+</ul>
+<h3>What&#39;s Speculative</h3>
+<ul>
+<li>Whether UOR&#39;s specific Clifford algebra structure maps to the tetrahedral adjacency matrix with exact correspondence, or only approximate analogy (~25% confidence)</li>
+<li>Whether the toroidal topology creates sufficient computational hardness for practical ZK security parameters (~25% confidence)</li>
+<li>Whether P^1.5 = 96/64 is structural or coincidental (C6, unproven)</li>
+<li>Whether three-axis separation is correctly modelled as multiplicative (C7, needs empirical confirmation)</li>
+<li>Whether BRAID compression ratio directly reduces R_max (C8, needs formal proof)</li>
+</ul>
+<h3>What Needs External Validation</h3>
+<ul>
+<li>The Gap mapping to internal tetrahedron tension — protect/ZK dimensions map clearly, mage/delegation dimensions need further geometric formalisation (~20% confidence)</li>
+<li>Whether the constrained forge preserves UOR&#39;s core theorem (neg∘bnot generates the full ring) when restricted to 6-bit operations</li>
+<li>Whether the golden ratio (φ) appears naturally in the tetrahedral geometry&#39;s optimal privacy/delegation balance</li>
+<li>Path integral vs additive sum: whether edge correlations matter empirically for real ZK circuits</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>12. Conjecture Status (V5)</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>V4 Status</th>
+<th>V5 Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>Golden ratio φ is optimal S/M ratio</td>
+<td>Open</td>
+<td>Open. BRAID provides empirical pathway</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>A(τ) should be logarithmic</td>
+<td>Open</td>
+<td>Strengthened by holonic persistence</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Edge value is additive</td>
+<td>Open</td>
+<td>Challenged — path integral replaces</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>96 vs 64 UOR discrepancy</td>
+<td>Open</td>
+<td><strong>RESOLVED — holographic principle</strong></td>
+</tr>
+<tr>
+<td>C5</td>
+<td>~3,000× ZKP reduction</td>
+<td>Speculative</td>
+<td>Strengthened by BRAID + holographic bound</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>P^1.5 = 96/64 = 1.5</td>
+<td>—</td>
+<td>NEW — numerically coincident, no derivation</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Three-axis separation is multiplicative</td>
+<td>—</td>
+<td>NEW — needs empirical confirmation</td>
+</tr>
+<tr>
+<td>C8</td>
+<td>BRAID compression reduces R_max</td>
+<td>—</td>
+<td>NEW — needs formal proof</td>
+</tr>
+<tr>
+<td>C9</td>
+<td>Holographic boundary sufficiency</td>
+<td>—</td>
+<td>NEW — needs lattice verification</td>
+</tr>
+<tr>
+<td>C10</td>
+<td>O(1) shared-parent modifies k</td>
+<td>—</td>
+<td>NEW — needs calibration</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>13. Forge Notation</h2>
+<h3>Master Inscription (V5)</h3>
+<pre><code>(⚔️⊥⿻⊥🧙)·(📊⊥🔮)·(🧠⊥⚙️)·☯️🔷 😊
+</code></pre>
+<p>Read: Swordsman separated from Mage (with Gap between), Data separated from Oracle, Brain separated from Engine, holonically persistent on the holographic bound. The First Person is sovereign.</p>
+<hr>
+</div>
+<div class="md"><h2>14. Project Structure</h2>
+<pre><code>zk-swordsman-blade-forge/
+├── zk_swordsman_blade_forge_v3_0.md    # This document
+├── blades/                              # Individual blade specifications
+│   └── README.md                        # Blade type catalogue by stratum
+├── forge_circuits/                      # ZK circuit implementations
+│   └── README.md                        # R1CS/PlonK mappings to lattice
+├── uor_mappings/                        # UOR coordinate systems
+│   └── README.md                        # Triadic coordinate assignments
+├── holographic/                         # V5 boundary computation
+│   └── README.md                        # 96-edge flow specifications
+├── compression/                         # BRAID integration
+│   └── README.md                        # Seven-layer spectrum implementation
+├── tests/                               # Verification tests
+│   └── README.md                        # Lattice property verification suite
+└── docs/                                # Additional documentation
+    └── README.md                        # Cross-references to parent docs
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Document References</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Version</th>
+<th>Relevance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="deadlink" title="reference (not a live page)">Privacy is Value V5</span></td>
+<td>v5.0</td>
+<td>Parent document — the holographic field equation</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)">PVM V5 Formal Specification</span></td>
+<td>v1.0</td>
+<td>Mathematics, definitions, falsifiability conditions</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)">Research Paper</span></td>
+<td>v4.0</td>
+<td>Formal mathematical framework</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)">Whitepaper</span></td>
+<td>v6.0</td>
+<td>Three-axis architecture, promise theory</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)">Visual Architecture Guide</span></td>
+<td>v2.0</td>
+<td>Diagrammatic representations</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)">Glossary</span></td>
+<td>v3.0</td>
+<td>V5 term definitions (~140 entries)</td>
+</tr>
+<tr>
+<td><span class="deadlink" title="reference (not a live page)">Spellbook (Act XXIV)</span></td>
+<td>v5.0</td>
+<td>The Holographic Bound — narrative discovery</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Version History</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1.0</td>
+<td>February 19, 2026</td>
+<td>Initial mapping — UOR algebra × tetrahedral geometry × ZK proofs</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>February 27, 2026</td>
+<td>C4 RESOLVED via holographic bound. V5 status integration. C6 conjecture added</td>
+</tr>
+<tr>
+<td><strong>3.0</strong></td>
+<td><strong>March 27, 2026</strong></td>
+<td><strong>V5 Full Integration:</strong> Three-axis separation mapped to blade dimensions. Holographic boundary operations for UOR. Path integral replaces additive sums for ZK witness paths. Compression-as-defence with BRAID 74× and seven-layer spectrum. Holonic persistence with GUID-addressed blades. Guild efficiency on shared-parent forge clusters. Correspondence table extended (14 rows). Forge method updated (7 steps). Project structure added. Unified from dual-source v3.0 drafts. Renamed: &quot;The Swordsman&#39;s Zero Knowledge Forge&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>&quot;The forge doesn&#39;t care how you struck the metal. It only cares what blade you hold. That is the deepest secret of the smith — the proof that doesn&#39;t need to remember its own forging.&quot;</em></p>
+<p><em>&quot;The blade that knows its edge cuts deeper than the storm that knows no shore.&quot;</em></p>
+<p><strong>(⚔️⊥⿻⊥🧙)·(📊⊥🔮)·(🧠⊥⚙️)·☯️🔷 😊</strong></p>
+<hr>
+<p><strong>Living Documentation:</strong> <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a><br><strong>Website:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> | <strong>Knowledge Graph:</strong> <a href="https://spellweb.ai">spellweb.ai</a> | <strong>Blog:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a><br><strong>Knowledge Bot:</strong> @soulbae_the_bot (Telegram DM)</p>
+<p>CC BY-SA 4.0</p>
+<p>—privacymage</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-the-swordsmans-zero-knowledge-forge</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-the-swordsmans-zero-knowledge-forge.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

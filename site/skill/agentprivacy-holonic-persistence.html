@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Holonic Persistence · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Holonic Persistence</span></div>
+  <article><div class="md"><h1>Holonic Persistence</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>T(π) (provider-as-sovereignty-transition), D (reconstruction difficulty through provider splitting)</code></p>
+<p>Multi-provider data persistence for privacy-preserving agents. Activates when discussing HyperDrive auto-failover, multi-provider replication, provider-agnostic storage, privacy-aware routing, write-all-or-fail for separation-critical state, TEE rotation with state persistence, or any task requiring durable agent state across backends, chains, and environments.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + OASIS Holonic Architecture Whitepaper v1.2<br><strong>Target context:</strong> Infrastructure architects, multi-chain developers, data persistence designers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Privacy-preserving agents need somewhere to persist state that survives TEE rotation, chain migration, and provider failure. The OASIS holonic architecture provides identity-independent data persistence across heterogeneous backends. This skill integrates holonic persistence with the dual-agent separation model.</p>
+<p>The key insight: provider diversity is a sovereignty dimension. An agent whose state exists on only one backend is sovereignty-limited to that backend&#39;s availability, jurisdiction, and privacy guarantees. Multi-provider persistence transforms T(π) from chain transitions to provider transitions — a richer sovereignty lattice.</p>
+<h2>HyperDrive architecture</h2>
+<p>HyperDrive is the multi-provider orchestration layer:</p>
+<p><strong>Auto-failover.</strong> If the primary provider fails, HyperDrive automatically routes to the next provider in the failover list. The agent continues operating without interruption. This maps to dark forest resilience — never depend on a single point of failure.</p>
+<p><strong>Auto-replication.</strong> Holons are replicated across multiple providers according to the replication policy. Write operations can be configured as write-one (fast, eventual consistency), write-majority (balanced), or write-all-or-fail (strict, for separation-critical state).</p>
+<p><strong>Load balancing.</strong> Read operations distribute across healthy providers. The agent benefits from the fastest available provider without explicit routing logic.</p>
+<p><strong>Privacy-aware routing.</strong> Providers are classified by privacy characteristics:</p>
+<ul>
+<li><strong>Shielded providers:</strong> Zcash, encrypted databases, privacy-first backends. Swordsman state routes here.</li>
+<li><strong>Public providers:</strong> Ethereum, public APIs, transparent chains. Mage coordination state routes here.</li>
+<li><strong>Neutral providers:</strong> IPFS, MongoDB with encryption-at-rest. Shared state routes here.</li>
+</ul>
+<h2>Provider as sovereignty transition</h2>
+<p>In V(π,t), the term T(π) captures sovereignty transitions across the lattice. Holonic persistence expands the transition space:</p>
+<p><strong>Each provider change is a sovereignty transition.</strong> Moving a holon from MongoDB to Zcash is a transition from neutral to shielded — a movement in the privacy dimension of the sovereignty lattice.</p>
+<p><strong>ProviderUniqueStorageKey tracks sovereignty history.</strong> Each holon maintains a map of <code>{provider_type → storage_key}</code>. This map is the audit trail of where sovereignty has been exercised. Migration doesn&#39;t erase history — it accumulates.</p>
+<p><strong>Provider diversity increases D.</strong> The reconstruction difficulty term D benefits from provider splitting. Swordsman holons on Zcash + Mage holons on Ethereum = no single provider holds the complete agent model. Even if one provider is compromised, the holon fragments don&#39;t reconstruct.</p>
+<h2>Consistency models and separation guarantees</h2>
+<p>The dual-agent separation requires mathematical guarantees. Best-effort replication is insufficient for I(S;M|π) ≤ ε enforcement:</p>
+<p><strong>Separation-critical holons use write-all-or-fail.</strong> Any holon that participates in the separation boundary must be replicated to ALL configured providers or the write fails. This prevents partial states that could leak cross-agent information.</p>
+<p><strong>Non-critical holons use write-majority.</strong> Memory fragments, cached reasoning, temporary coordination state can tolerate eventual consistency. Lower latency, higher availability.</p>
+<p><strong>The separation invariant lives in the agent layer.</strong> Holons carry the state; the dual-agent architecture enforces the constraint. Consistency for separation-critical holons is a data-layer requirement to support an agent-layer guarantee.</p>
+<h2>TEE rotation with holonic persistence</h2>
+<p>When a TEE rotates (TEE-A → TEE-B), agent state must persist:</p>
+<ol>
+<li><strong>Load root holon from primary provider.</strong> The agent&#39;s memory tree loads from HyperDrive.</li>
+<li><strong>Generate new TEE attestation.</strong> TEE-B produces its attestation.</li>
+<li><strong>Update ProviderMetaData.</strong> The attestation field updates: <code>TEEAttestation → TEE-B_hash</code>.</li>
+<li><strong>Replicate to TEE-B&#39;s provider set.</strong> HyperDrive replicates to the new TEE&#39;s preferred providers.</li>
+<li><strong>Retain previous attestation in history.</strong> ProviderMetaData preserves the audit trail.</li>
+<li><strong>GUID unchanged.</strong> The holon&#39;s identity persists. ParentHolonId unchanged. Children unchanged.</li>
+</ol>
+<p>The write policy determines rotation safety:</p>
+<ul>
+<li><strong>Write-all-or-fail</strong> for the root holon (separation-critical)</li>
+<li><strong>Best-effort</strong> for children (can be re-loaded from failover providers if needed)</li>
+</ul>
+<h2>Integration with cross-chain skill</h2>
+<p>Multi-provider persistence complements multi-chain sovereignty:</p>
+<p><strong>Provider types map to chains.</strong> Zcash as a provider type, Ethereum as a provider type, NEAR as a provider type. The chain IS the provider for blockchain-backed holons.</p>
+<p><strong>Cross-chain VRC migration is a provider transition.</strong> A VRC holon loading from Ethereum, saving to NEAR, retaining both keys — this is holonic persistence in action.</p>
+<p><strong>HyperDrive failover list = sovereignty preference order.</strong> The order of providers in the failover list expresses sovereignty priority. Privacy chains first for Swordsman holons; coordination chains first for Mage holons.</p>
+<h2>Operational patterns</h2>
+<p><strong>Development → Production.</strong> Same holon trees, different provider configuration. MongoDB in development, Zcash+NEAR+IPFS in production. Application code unchanged.</p>
+<p><strong>Provider failure recovery.</strong> HyperDrive detects failure → routes to failover → agent continues → ops team investigates → provider restored → HyperDrive resumes normal routing.</p>
+<p><strong>Migration.</strong> Add new provider to holon → update HyperDrive config → replicate → remove old provider. The holon&#39;s GUID never changes. The application never notices.</p>
+<p><strong>Audit.</strong> ProviderUniqueStorageKey + ProviderMetaData create a complete audit trail: where the holon has lived, which TEEs have touched it, which providers currently hold it.</p>
+<h2>Open problems</h2>
+<ol>
+<li><strong>Cross-provider consistency models</strong> — can we achieve stronger-than-eventual consistency without write-all-or-fail latency?</li>
+<li><strong>Privacy-aware replication</strong> — should replication itself be shielded? Replication traffic patterns leak information.</li>
+<li><strong>Provider trust ranking</strong> — how to dynamically rank providers by trustworthiness, latency, and privacy guarantees?</li>
+<li><strong>Cost optimisation</strong> — blockchain providers cost gas; database providers cost compute. How to optimise the provider mix?</li>
+<li><strong>Regulatory compliance</strong> — some jurisdictions require data residency. How does HyperDrive handle geo-aware routing?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-holonic-persistence</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-holonic-persistence</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-holonic-persistence.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Page",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "96970d2e8cebc555",
+      "text": "# Wiki Page\n\n**Category** wikis · **Version** 5.5\n\nAuthoring federated-wiki page JSON (story items, IDs, the create journal, and the reindex step) for the agentprivacy skill library. Activates when creating or editing fedwiki pages, publishing a skill to skill.fedwiki.club, or building page-json by hand. Part of the git-less onboarding/distribution layer kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "e2790eea094c106a",
+      "text": "The **fedwiki-page** skill creates federated wiki page JSON files. Pages are stored as JSON files (no extension) in a wiki domain's `pages/` folder. This skill covers file locations, story item types, ID generation, journal format, and the reindex step.\n\n## File Locations\n\nTwo separate wiki systems — write to the correct one:\n\n**Local/private wikis** (served on port 3000):\n```\n~/Music/Guides/Private/{wiki-domain}/pages/{page-slug}\n```\n\n**Public wikis** (synced via Nextcloud to remote server):\n```\n~/Nextcloud/fedwiki/{wiki-domain}/pages/{page-slug}\n```\n\nThe local server does NOT read from `~/Nextcloud/fedwiki/`. Page slug = title lowercased with spaces as hyphens.\n\n## Story Item Types\n\nDefault to **`markdown`** for all prose, headings, and formatted text. Use `code` for shell commands and config snippets. Use `paragraph` sparingly — only for plain sentences needing no markup.\n\n```json\n{\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60001\", \"text\": \"**Bold**, `code`, [[Wiki Link]]\"}\n{\"type\": \"code\",     \"id\": \"a1b2c3d4e5f60002\", \"text\": \"wiki-start\"}\n{\"type\": \"paragraph\",\"id\": \"a1b2c3d4e5f60003\", \"text\": \"Plain sentence.\"}\n{\"type\": \"assets\",   \"id\": \"a1b2c3d4e5f60099\", \"text\": \"page-slug\"}\n```\n\nStory order: opening markdown → section headings → content → `# Assets` heading + assets item at the bottom.\n\n## IDs\n\nEach item needs a unique 16-character hex ID. Generate with:\n```bash\npython3 -c \"import uuid; print(uuid.uuid4().hex[:16])\"\n```\n\nNever reuse IDs within a page or across pages in the same wiki.\n\n## Journal — Critical Rule\n\nThe `journal` must contain a `create` entry whose `item.story` is the **complete story array** — every item, identical to the top-level `story`, in the same order. Never use `\"story\": []` and never include only the first item. This is what allows rewinding to the creation state.\n\n```json\n\"journal\": [{\n  \"type\": \"create\",\n  \"item\": {\n    \"title\": \"Page Title\",\n    \"story\": [\n      {\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60001\", \"text\": \"Opening item.\"},\n      {\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60002\", \"text\": \"## Section\"},\n      {\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60003\", \"text\": \"Every item — same order as top-level story.\"}\n    ]\n  },\n  \"date\": 1781004226000,\n  \"certificate\": \"from marvin\"\n}]\n```\n\n`certificate: \"from marvin\"` identifies the creating agent. `date` is current Unix timestamp in milliseconds.\n\n## After Saving — Reindex\n\nAfter writing any page file to disk, delete the cached sitemap so the wiki server rebuilds it:\n\n```bash\nFARM=\"$HOME/Music/Guides/Private\"\nDOMAIN=\"localhost\"\nrm -f \"$FARM/$DOMAIN/status/sitemap.json\"\nrm -f \"$FARM/$DOMAIN/status/site-index.json\"\ncurl -s \"http://$DOMAIN/system/sitemap.json\" > /dev/null\necho \"Reindexed $DOMAIN\"\n```\n\nThe wiki server must be running for the `curl` step to trigger a rebuild.\n\n## Checklist\n\n- [ ] Slug matches title (lowercase, hyphenated)\n- [ ] Correct `pages/` folder (local vs public wiki)\n- [ ] All IDs unique 16-char hex\n- [ ] Default item type is `markdown` not `paragraph`\n- [ ] Backtick markup on paths and commands in markdown items\n- [ ] Journal `create` entry contains the **full** story array\n- [ ] `\"certificate\": \"from marvin\"` on the create entry\n- [ ] Reindexed after saving\n\n## Related Skills\n\n- `agentprivacy-wiki-journal` — strip a page journal down to a clean create entry\n- `agentprivacy-wiki-ghost-pages` — generate pages dynamically without storing them\n- `agentprivacy-wiki-claude-ghost` — Claude-powered ghost pages via FastAPI\n- `agentprivacy-wiki-to-skill` — export this page into a Claude `SKILL.md`"
+    },
+    {
+      "type": "markdown",
+      "id": "d76590abebe41950",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-page-skill](https://skill.fedwiki.club/fedwiki-page-skill) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "9d14e2d31c518ee1",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-page`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "620748d58c4094cc",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "06db5774f24ed19a",
+      "text": "agentprivacy-wiki-page"
+    },
+    {
+      "type": "markdown",
+      "id": "f310e9649630f774",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Page",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "96970d2e8cebc555",
+            "text": "# Wiki Page\n\n**Category** wikis · **Version** 5.5\n\nAuthoring federated-wiki page JSON (story items, IDs, the create journal, and the reindex step) for the agentprivacy skill library. Activates when creating or editing fedwiki pages, publishing a skill to skill.fedwiki.club, or building page-json by hand. Part of the git-less onboarding/distribution layer kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "e2790eea094c106a",
+            "text": "The **fedwiki-page** skill creates federated wiki page JSON files. Pages are stored as JSON files (no extension) in a wiki domain's `pages/` folder. This skill covers file locations, story item types, ID generation, journal format, and the reindex step.\n\n## File Locations\n\nTwo separate wiki systems — write to the correct one:\n\n**Local/private wikis** (served on port 3000):\n```\n~/Music/Guides/Private/{wiki-domain}/pages/{page-slug}\n```\n\n**Public wikis** (synced via Nextcloud to remote server):\n```\n~/Nextcloud/fedwiki/{wiki-domain}/pages/{page-slug}\n```\n\nThe local server does NOT read from `~/Nextcloud/fedwiki/`. Page slug = title lowercased with spaces as hyphens.\n\n## Story Item Types\n\nDefault to **`markdown`** for all prose, headings, and formatted text. Use `code` for shell commands and config snippets. Use `paragraph` sparingly — only for plain sentences needing no markup.\n\n```json\n{\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60001\", \"text\": \"**Bold**, `code`, [[Wiki Link]]\"}\n{\"type\": \"code\",     \"id\": \"a1b2c3d4e5f60002\", \"text\": \"wiki-start\"}\n{\"type\": \"paragraph\",\"id\": \"a1b2c3d4e5f60003\", \"text\": \"Plain sentence.\"}\n{\"type\": \"assets\",   \"id\": \"a1b2c3d4e5f60099\", \"text\": \"page-slug\"}\n```\n\nStory order: opening markdown → section headings → content → `# Assets` heading + assets item at the bottom.\n\n## IDs\n\nEach item needs a unique 16-character hex ID. Generate with:\n```bash\npython3 -c \"import uuid; print(uuid.uuid4().hex[:16])\"\n```\n\nNever reuse IDs within a page or across pages in the same wiki.\n\n## Journal — Critical Rule\n\nThe `journal` must contain a `create` entry whose `item.story` is the **complete story array** — every item, identical to the top-level `story`, in the same order. Never use `\"story\": []` and never include only the first item. This is what allows rewinding to the creation state.\n\n```json\n\"journal\": [{\n  \"type\": \"create\",\n  \"item\": {\n    \"title\": \"Page Title\",\n    \"story\": [\n      {\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60001\", \"text\": \"Opening item.\"},\n      {\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60002\", \"text\": \"## Section\"},\n      {\"type\": \"markdown\", \"id\": \"a1b2c3d4e5f60003\", \"text\": \"Every item — same order as top-level story.\"}\n    ]\n  },\n  \"date\": 1781004226000,\n  \"certificate\": \"from marvin\"\n}]\n```\n\n`certificate: \"from marvin\"` identifies the creating agent. `date` is current Unix timestamp in milliseconds.\n\n## After Saving — Reindex\n\nAfter writing any page file to disk, delete the cached sitemap so the wiki server rebuilds it:\n\n```bash\nFARM=\"$HOME/Music/Guides/Private\"\nDOMAIN=\"localhost\"\nrm -f \"$FARM/$DOMAIN/status/sitemap.json\"\nrm -f \"$FARM/$DOMAIN/status/site-index.json\"\ncurl -s \"http://$DOMAIN/system/sitemap.json\" > /dev/null\necho \"Reindexed $DOMAIN\"\n```\n\nThe wiki server must be running for the `curl` step to trigger a rebuild.\n\n## Checklist\n\n- [ ] Slug matches title (lowercase, hyphenated)\n- [ ] Correct `pages/` folder (local vs public wiki)\n- [ ] All IDs unique 16-char hex\n- [ ] Default item type is `markdown` not `paragraph`\n- [ ] Backtick markup on paths and commands in markdown items\n- [ ] Journal `create` entry contains the **full** story array\n- [ ] `\"certificate\": \"from marvin\"` on the create entry\n- [ ] Reindexed after saving\n\n## Related Skills\n\n- `agentprivacy-wiki-journal` — strip a page journal down to a clean create entry\n- `agentprivacy-wiki-ghost-pages` — generate pages dynamically without storing them\n- `agentprivacy-wiki-claude-ghost` — Claude-powered ghost pages via FastAPI\n- `agentprivacy-wiki-to-skill` — export this page into a Claude `SKILL.md`"
+          },
+          {
+            "type": "markdown",
+            "id": "d76590abebe41950",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/fedwiki-page-skill](https://skill.fedwiki.club/fedwiki-page-skill) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "9d14e2d31c518ee1",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-page`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "620748d58c4094cc",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "06db5774f24ed19a",
+            "text": "agentprivacy-wiki-page"
+          },
+          {
+            "type": "markdown",
+            "id": "f310e9649630f774",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384136
+    }
+  ]
+}

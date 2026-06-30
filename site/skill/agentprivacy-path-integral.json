@@ -1,0 +1,96 @@
+{
+  "title": "Path Integral",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "2526c6a387dc4811",
+      "text": "# Path Integral\n\n**Category** privacy-layer · **Version** 5.0\n\n**Equation term** `T_∫(π) = 1 + β · ∫_π F(γ) dγ`\n\nPath integral edge value for 0xagentprivacy V5. Activates when discussing T_∫(π) replacing additive T(π), non-local correlations in paths, verification checkpoints, feedback loops in traversal, or why edges are not independent."
+    },
+    {
+      "type": "markdown",
+      "id": "140a0892f938e295",
+      "text": "**Source:** Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)\n**Target context:** Graph theorists, protocol designers, sovereignty architects\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "8507d2ec27956a38",
+      "text": "## What this is\n\nV4's edge value T(π) was an **additive sum** over edges:\n\n```\nT_v4(π) = 1 + β · Σ_e∈π f(e) · g(n_e)\n```\n\nThis assumed independence between sequential transitions. BRAID's structured reasoning graphs show that edges are **not independent** — they form verification checkpoints, feedback loops, and structured flows.\n\nV5 replaces the additive sum with a **path integral**:\n\n```\nT_∫(π) = 1 + β · ∫_π F(γ) dγ\n```\n\n## Why Path Integral?\n\n### The Independence Assumption Fails\n\nThe additive form assumes that edge e₃ contributes the same value regardless of whether you traversed e₁ and e₂ before it. This is often false:\n\n**Verification checkpoints:** Some edges gate later traversal. If you haven't proven identity at e₂, the value of e₇ is inaccessible.\n\n**Feedback loops:** Paths can revisit vertices with changed meaning. The second visit to a node carries different value than the first.\n\n**Non-local correlations:** A choice at step 3 affects value at step 7. The edges are coupled through the path history.\n\n### BRAID Evidence\n\nBRAID's structured reasoning graphs exhibit all three patterns:\n- Some reasoning steps validate preconditions for later steps (checkpoints)\n- The Solver may revisit parts of the graph with updated context (loops)\n- Early reasoning choices constrain later possibilities (correlations)\n\nThe additive form can't capture these structures. The path integral can.\n\n## The Path Integral Form\n\n```\nT_∫(π) = 1 + β · ∫_π F(γ) dγ\n```\n\n| Symbol | Definition | Domain |\n|---|---|---|\n| π | Path through sovereignty lattice | Continuous or discrete path |\n| γ | Path parameter | [0, 1] |\n| F(γ) | Path density function | ℝ⁺ |\n| β | Scaling coefficient | ℝ⁺ |\n\n### The Density Function F(γ)\n\nF(γ) captures the value density at each point along the path. It can encode:\n\n- **Local value:** What is this edge worth at this point in the path?\n- **Context dependence:** How does path history affect this edge's contribution?\n- **Checkpoint gating:** Is this edge accessible given prior traversals?\n- **Loop adjustment:** How does revisitation change value?\n\n### V4 Reduction\n\nWhen edges are truly independent:\n\n```\n∫_π F(γ) dγ = Σ_e∈π f(e) · g(n_e)\n```\n\nThe path integral reduces to the additive sum. V4 is a special case of V5.\n\n## Connection to BRAID\n\n### Generator-Solver Split\n\nThe path integral naturally handles the BRAID architecture:\n\n- **Generator proposes:** Creates a reasoning graph = proposes a path π\n- **Solver executes:** Traverses the path = computes ∫_π F(γ) dγ\n- **Value accumulates:** The integral measures actual traversal value\n\n### Structured Graphs\n\nBRAID graphs have:\n- Defined entry and exit points\n- Conditional branches based on intermediate results\n- Verification steps that must pass before continuation\n\nThese are exactly the patterns the path integral captures.\n\n## Mapping to PVM-V5\n\n| Concept | V5 Term |\n|---|---|\n| Additive edge sum | T_v4(π) (V4, special case) |\n| Path integral | T_∫(π) (V5, general case) |\n| Path density | F(γ) |\n| Verification checkpoints | Gating in F(γ) |\n| Feedback loops | Loop contributions in integral |\n| Non-local correlations | Context dependence in F(γ) |\n| Generator-Solver | Path proposal / path execution |\n\n## Implications\n\n### For Path Design\n\nPaths should be designed with integral value in mind:\n- Verification checkpoints should be placed where they maximise downstream value\n- Loops should only occur when they add value (not just cycles)\n- Correlations should be explicit, not accidental\n\n### For Value Estimation\n\nEstimating T_∫(π) requires understanding the full path, not just summing edges:\n- Path history matters\n- Context propagates\n- Checkpoints can gate large value regions\n\n### For Privacy\n\nThe path integral provides more accurate value measurement:\n- Surveillance that interrupts checkpoints loses access to downstream value\n- Loop structures can confuse adversarial path analysis\n- Non-local correlations mean partial path observation is less informative\n\n## Conjecture Status\n\n**C3 (V4: edge value additivity):** **Challenged.** The path integral form better captures observed structure in BRAID reasoning graphs. The additive form is retained as a special case for uncorrelated paths.\n\n## Proverb\n\n> \"The path is not the sum of its steps. Each step changes what the next step means. The integral remembers what the sum forgets.\"\n\n## Emoji Spell\n\n**∮🛤️ → Σ→∫ → F(γ) → checkpoints·loops·correlations → T_∫(π) = 1+β∫ → path=holistic → ☯️∞**\n\n## Open Problems\n\n1. **Discrete Formulation:** How does the continuous path integral discretise cleanly to graph traversal?\n2. **F(γ) Specification:** What functional forms of F(γ) are practically useful?\n3. **Computational Complexity:** Is computing T_∫(π) tractable for large graphs?\n4. **Optimisation:** Given a graph, what path π maximises T_∫(π)?\n5. **Adversarial Paths:** How do we defend against adversaries who manipulate path structure to exploit integral vulnerabilities?"
+    },
+    {
+      "type": "markdown",
+      "id": "41ca7ef032b60b77",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+    },
+    {
+      "type": "markdown",
+      "id": "2690948a38956f38",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-path-integral`, v5.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "647af5c7f4aa1171",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "558d4621362b51cf",
+      "text": "agentprivacy-path-integral"
+    },
+    {
+      "type": "markdown",
+      "id": "d4ac46cc7e149853",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Privacy Layer Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Path Integral",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "2526c6a387dc4811",
+            "text": "# Path Integral\n\n**Category** privacy-layer · **Version** 5.0\n\n**Equation term** `T_∫(π) = 1 + β · ∫_π F(γ) dγ`\n\nPath integral edge value for 0xagentprivacy V5. Activates when discussing T_∫(π) replacing additive T(π), non-local correlations in paths, verification checkpoints, feedback loops in traversal, or why edges are not independent."
+          },
+          {
+            "type": "markdown",
+            "id": "140a0892f938e295",
+            "text": "**Source:** Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)\n**Target context:** Graph theorists, protocol designers, sovereignty architects\n**Architecture:** [agentprivacy.ai](https://agentprivacy.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "8507d2ec27956a38",
+            "text": "## What this is\n\nV4's edge value T(π) was an **additive sum** over edges:\n\n```\nT_v4(π) = 1 + β · Σ_e∈π f(e) · g(n_e)\n```\n\nThis assumed independence between sequential transitions. BRAID's structured reasoning graphs show that edges are **not independent** — they form verification checkpoints, feedback loops, and structured flows.\n\nV5 replaces the additive sum with a **path integral**:\n\n```\nT_∫(π) = 1 + β · ∫_π F(γ) dγ\n```\n\n## Why Path Integral?\n\n### The Independence Assumption Fails\n\nThe additive form assumes that edge e₃ contributes the same value regardless of whether you traversed e₁ and e₂ before it. This is often false:\n\n**Verification checkpoints:** Some edges gate later traversal. If you haven't proven identity at e₂, the value of e₇ is inaccessible.\n\n**Feedback loops:** Paths can revisit vertices with changed meaning. The second visit to a node carries different value than the first.\n\n**Non-local correlations:** A choice at step 3 affects value at step 7. The edges are coupled through the path history.\n\n### BRAID Evidence\n\nBRAID's structured reasoning graphs exhibit all three patterns:\n- Some reasoning steps validate preconditions for later steps (checkpoints)\n- The Solver may revisit parts of the graph with updated context (loops)\n- Early reasoning choices constrain later possibilities (correlations)\n\nThe additive form can't capture these structures. The path integral can.\n\n## The Path Integral Form\n\n```\nT_∫(π) = 1 + β · ∫_π F(γ) dγ\n```\n\n| Symbol | Definition | Domain |\n|---|---|---|\n| π | Path through sovereignty lattice | Continuous or discrete path |\n| γ | Path parameter | [0, 1] |\n| F(γ) | Path density function | ℝ⁺ |\n| β | Scaling coefficient | ℝ⁺ |\n\n### The Density Function F(γ)\n\nF(γ) captures the value density at each point along the path. It can encode:\n\n- **Local value:** What is this edge worth at this point in the path?\n- **Context dependence:** How does path history affect this edge's contribution?\n- **Checkpoint gating:** Is this edge accessible given prior traversals?\n- **Loop adjustment:** How does revisitation change value?\n\n### V4 Reduction\n\nWhen edges are truly independent:\n\n```\n∫_π F(γ) dγ = Σ_e∈π f(e) · g(n_e)\n```\n\nThe path integral reduces to the additive sum. V4 is a special case of V5.\n\n## Connection to BRAID\n\n### Generator-Solver Split\n\nThe path integral naturally handles the BRAID architecture:\n\n- **Generator proposes:** Creates a reasoning graph = proposes a path π\n- **Solver executes:** Traverses the path = computes ∫_π F(γ) dγ\n- **Value accumulates:** The integral measures actual traversal value\n\n### Structured Graphs\n\nBRAID graphs have:\n- Defined entry and exit points\n- Conditional branches based on intermediate results\n- Verification steps that must pass before continuation\n\nThese are exactly the patterns the path integral captures.\n\n## Mapping to PVM-V5\n\n| Concept | V5 Term |\n|---|---|\n| Additive edge sum | T_v4(π) (V4, special case) |\n| Path integral | T_∫(π) (V5, general case) |\n| Path density | F(γ) |\n| Verification checkpoints | Gating in F(γ) |\n| Feedback loops | Loop contributions in integral |\n| Non-local correlations | Context dependence in F(γ) |\n| Generator-Solver | Path proposal / path execution |\n\n## Implications\n\n### For Path Design\n\nPaths should be designed with integral value in mind:\n- Verification checkpoints should be placed where they maximise downstream value\n- Loops should only occur when they add value (not just cycles)\n- Correlations should be explicit, not accidental\n\n### For Value Estimation\n\nEstimating T_∫(π) requires understanding the full path, not just summing edges:\n- Path history matters\n- Context propagates\n- Checkpoints can gate large value regions\n\n### For Privacy\n\nThe path integral provides more accurate value measurement:\n- Surveillance that interrupts checkpoints loses access to downstream value\n- Loop structures can confuse adversarial path analysis\n- Non-local correlations mean partial path observation is less informative\n\n## Conjecture Status\n\n**C3 (V4: edge value additivity):** **Challenged.** The path integral form better captures observed structure in BRAID reasoning graphs. The additive form is retained as a special case for uncorrelated paths.\n\n## Proverb\n\n> \"The path is not the sum of its steps. Each step changes what the next step means. The integral remembers what the sum forgets.\"\n\n## Emoji Spell\n\n**∮🛤️ → Σ→∫ → F(γ) → checkpoints·loops·correlations → T_∫(π) = 1+β∫ → path=holistic → ☯️∞**\n\n## Open Problems\n\n1. **Discrete Formulation:** How does the continuous path integral discretise cleanly to graph traversal?\n2. **F(γ) Specification:** What functional forms of F(γ) are practically useful?\n3. **Computational Complexity:** Is computing T_∫(π) tractable for large graphs?\n4. **Optimisation:** Given a graph, what path π maximises T_∫(π)?\n5. **Adversarial Paths:** How do we defend against adversaries who manipulate path structure to exploit integral vulnerabilities?"
+          },
+          {
+            "type": "markdown",
+            "id": "41ca7ef032b60b77",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+          },
+          {
+            "type": "markdown",
+            "id": "2690948a38956f38",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-path-integral`, v5.0).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "647af5c7f4aa1171",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "558d4621362b51cf",
+            "text": "agentprivacy-path-integral"
+          },
+          {
+            "type": "markdown",
+            "id": "d4ac46cc7e149853",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Privacy Layer Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384098
+    }
+  ]
+}

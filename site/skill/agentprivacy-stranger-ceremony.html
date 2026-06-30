@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stranger Ceremony · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Stranger Ceremony</span></div>
+  <article><div class="md"><h1>Stranger Ceremony</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.2</p>
+<p><strong>Equation term</strong> <code>Bilateral witness extended to strangers</code></p>
+<p>Understanding-as-Key ceremony for parties without prior relationship. Activates when discussing stranger-to-stranger verification, anonymous pairing, simultaneous forging, comprehension proof without prior trust, or stranger witness protocols.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V5.2 + Understanding-as-Key Protocol + Act XXIX<br><strong>Target context:</strong> Ceremony architects, trust designers, anonymous verification specialists<br><strong>Architecture:</strong> <a href="https://spellweb.ai">spellweb.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The Understanding-as-Key ceremony was first demonstrated between known parties (the Soulbae bilateral witness). The stranger ceremony extends this to parties with no prior relationship—proving comprehension without prior trust.</p>
+<p><strong>The stranger who forges the same blade from the same constellation without coordination has proven understanding that no credential can fake.</strong></p>
+<h2>The Challenge</h2>
+<p>Known-party ceremonies have advantages:</p>
+<ul>
+<li>Prior trust baseline</li>
+<li>Shared context</li>
+<li>Communication channel already established</li>
+</ul>
+<p>Stranger ceremonies must work without these:</p>
+<ul>
+<li>No prior trust</li>
+<li>No shared context assumed</li>
+<li>Anonymous pairing required</li>
+</ul>
+<h2>The Protocol</h2>
+<h3>Phase 1: Queue Entry</h3>
+<p>Participants enter the stranger ceremony queue:</p>
+<pre><code class="language-typescript">interface StrangerQueueEntry {
+  anonymous_id: string          // Temporary session ID (not DID)
+  constellation_hash: string    // Hash of intended constellation (not the constellation itself)
+  entered_at: number            // Timestamp
+  status: &#39;waiting&#39; | &#39;paired&#39; | &#39;forging&#39; | &#39;complete&#39;
+}
+</code></pre>
+<p><strong>Key property:</strong> Only the constellation HASH is shared initially. This prevents copying.</p>
+<h3>Phase 2: Anonymous Pairing</h3>
+<p>The system matches participants based on constellation overlap:</p>
+<pre><code class="language-javascript">function findMatch(entry, queue) {
+  for (const candidate of queue) {
+    if (candidate.anonymous_id === entry.anonymous_id) continue
+    if (candidate.constellation_hash === entry.constellation_hash) {
+      // Exact match - same constellation intended
+      return { match: candidate, type: &#39;exact&#39; }
+    }
+    // Could also implement partial matching based on constellation similarity
+  }
+  return null
+}
+</code></pre>
+<p><strong>Matching criteria:</strong></p>
+<ul>
+<li><strong>Exact match:</strong> Same constellation hash (strongest)</li>
+<li><strong>Overlap match:</strong> Sufficient shared inscriptions (moderate)</li>
+<li><strong>Proximity match:</strong> Adjacent regions of spellweb (weakest)</li>
+</ul>
+<h3>Phase 3: Simultaneous Forging</h3>
+<p>Once paired, both parties forge simultaneously:</p>
+<pre><code class="language-typescript">interface SimultaneousForge {
+  session_id: string
+  party_a: {
+    anonymous_id: string
+    forging_started: number
+    checkpoints: ForgeCheckpoint[]  // Periodic state hashes
+  }
+  party_b: {
+    anonymous_id: string
+    forging_started: number
+    checkpoints: ForgeCheckpoint[]
+  }
+
+  // Synchronization
+  max_time_delta: number        // Maximum allowed start time difference
+  checkpoint_interval: number   // How often to record state
+}
+</code></pre>
+<p><strong>Simultaneity requirement:</strong> Both must be forging at the same time (within tolerance). This prevents one party from seeing the other&#39;s result first.</p>
+<h3>Phase 4: Sealed Comparison</h3>
+<p>After forging completes, results are compared without prior reveal:</p>
+<pre><code class="language-javascript">function sealedComparison(forge_a, forge_b) {
+  // Neither party has seen the other&#39;s blade yet
+
+  // Commit phase - exchange commitments
+  const commit_a = hash(forge_a.blade_guid + forge_a.salt)
+  const commit_b = hash(forge_b.blade_guid + forge_b.salt)
+
+  // Reveal phase - exchange actual values
+  // (only after both commitments received)
+
+  // Compare
+  return {
+    blades_match: forge_a.blade_guid === forge_b.blade_guid,
+    constellations_match: forge_a.constellation === forge_b.constellation,
+    similarity_score: computeSimilarity(forge_a, forge_b)
+  }
+}
+</code></pre>
+<h3>Phase 5: Witness Record</h3>
+<p>If comparison passes threshold, a stranger witness record is created:</p>
+<pre><code class="language-typescript">interface StrangerWitnessRecord {
+  witness_id: string            // hash(session + results)
+
+  // No identity information
+  party_a_anonymous_id: string  // Temporary, not linked to DID
+  party_b_anonymous_id: string
+
+  // Proof of understanding
+  constellation_hash: string    // What they both traversed
+  blade_similarity: number      // How similar the results (0-1)
+  timing_proof: {
+    forge_start_delta: number   // How close their start times
+    forge_duration_delta: number // How close their durations
+  }
+
+  // Ceremony metadata
+  ceremony_timestamp: number
+  ceremony_type: &#39;stranger_exact&#39; | &#39;stranger_overlap&#39; | &#39;stranger_proximity&#39;
+}
+</code></pre>
+<h2>Verification Without Identity</h2>
+<p>The stranger witness proves:</p>
+<ol>
+<li><strong>Two independent forgers existed</strong> (different anonymous IDs)</li>
+<li><strong>They traversed the same constellation</strong> (matching hash)</li>
+<li><strong>They forged simultaneously</strong> (timing proof)</li>
+<li><strong>They reached similar/identical blades</strong> (similarity score)</li>
+</ol>
+<p>It does NOT prove:</p>
+<ul>
+<li>Who the forgers were</li>
+<li>Their relationship (there is none)</li>
+<li>Prior coordination (prohibited by protocol)</li>
+</ul>
+<h2>Match Thresholds</h2>
+<table>
+<thead>
+<tr>
+<th>Match Type</th>
+<th>Constellation</th>
+<th>Blade</th>
+<th>Timing</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Exact</strong></td>
+<td>100%</td>
+<td>100%</td>
+<td>&lt;5s</td>
+<td>Very high</td>
+</tr>
+<tr>
+<td><strong>Strong</strong></td>
+<td>100%</td>
+<td>&gt;90%</td>
+<td>&lt;30s</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>Moderate</strong></td>
+<td>&gt;80%</td>
+<td>&gt;70%</td>
+<td>&lt;60s</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td><strong>Weak</strong></td>
+<td>&gt;60%</td>
+<td>&gt;50%</td>
+<td>&lt;120s</td>
+<td>Low</td>
+</tr>
+</tbody></table>
+<h2>UX Flow</h2>
+<pre><code>1. Seeker enters queue
+   └── &quot;Waiting for stranger with matching constellation...&quot;
+
+2. Match found
+   └── &quot;Stranger found. Prepare to forge simultaneously.&quot;
+
+3. Countdown
+   └── &quot;Forging begins in 3... 2... 1...&quot;
+
+4. Simultaneous forge
+   └── Both parties forge, checkpoints recorded
+
+5. Sealed reveal
+   └── &quot;Comparing blades...&quot;
+
+6. Result
+   └── &quot;Stranger witness achieved. Similarity: 94%&quot;
+   └── or &quot;Blades diverged. No witness recorded.&quot;
+</code></pre>
+<h2>Security Considerations</h2>
+<h3>Sybil Resistance</h3>
+<p>How to prevent someone from being both parties?</p>
+<ul>
+<li><strong>Timing analysis:</strong> Same device can&#39;t truly forge simultaneously</li>
+<li><strong>Mana cost:</strong> Each entry costs mana</li>
+<li><strong>IP/device fingerprinting:</strong> Optional, privacy trade-off</li>
+</ul>
+<h3>Copying Prevention</h3>
+<p>How to prevent copying the other&#39;s constellation?</p>
+<ul>
+<li><strong>Hash-before-reveal:</strong> Only hash shared during pairing</li>
+<li><strong>Simultaneous forging:</strong> Can&#39;t see result until both done</li>
+<li><strong>Checkpoint verification:</strong> State hashes during forge prove independent work</li>
+</ul>
+<h3>Collusion Prevention</h3>
+<p>How to prevent pre-arranged &quot;strangers&quot;?</p>
+<ul>
+<li><strong>Random pairing:</strong> System chooses matches</li>
+<li><strong>Queue anonymity:</strong> Can&#39;t identify specific queue members</li>
+<li><strong>Timing unpredictability:</strong> Can&#39;t know when match will occur</li>
+</ul>
+<h2>Mapping to PVM-V5</h2>
+<table>
+<thead>
+<tr>
+<th>Stranger Ceremony Concept</th>
+<th>PVM Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Anonymous pairing</td>
+<td>Gap preservation</td>
+</tr>
+<tr>
+<td>Constellation matching</td>
+<td>Understanding verification</td>
+</tr>
+<tr>
+<td>Simultaneous forging</td>
+<td>Bilateral independence</td>
+</tr>
+<tr>
+<td>Sealed comparison</td>
+<td>ZK reveal</td>
+</tr>
+<tr>
+<td>Stranger witness</td>
+<td>Trust genesis</td>
+</tr>
+</tbody></table>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;The stranger who forges the same blade from the same constellation without coordination has proven understanding that no credential can fake. The witness needs no introduction.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>👥(?) → queue(hash) → pair(anon) → forge(∥) → seal(compare) → 👥=understand · no🤝(prior) · yes🤝(proven)</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>Scalability:</strong> How to handle large queues efficiently?</li>
+<li><strong>Partial Matching:</strong> When is similarity &quot;enough&quot;?</li>
+<li><strong>Timeout Handling:</strong> What if one party abandons mid-forge?</li>
+<li><strong>Reputation:</strong> Can stranger witness history build reputation without identity?</li>
+<li><strong>Cross-Platform:</strong> Can stranger ceremonies work across different spellweb instances?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://spellweb.ai">spellweb.ai</a> · <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-stranger-ceremony</code>, v5.2).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-stranger-ceremony</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-stranger-ceremony.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

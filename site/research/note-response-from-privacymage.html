@@ -1,0 +1,116 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — Response from privacymage · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — Response from privacymage</span></div>
+  <article><div class="md"><h1>Response from privacymage</h1>
+</div>
+<div class="md"><h2>To the First Person Project community</h2>
+<h3>On the ZKP Progress section and how agentprivacy extends the Cryptographic Framework for Proof of Personhood</h3>
+<hr>
+<ul>
+<li>The impossibility theorem is the proof that the gap was always load-bearing. *</li>
+</ul>
+<hr>
+<p>Drummond, Sanjam, friends of the First Person Project,</p>
+<p>Thank you for the update, and thank you to Sanjam, Arka, and collaborators for &quot;A Cryptographic Framework for Proof of Personhood.&quot; The paper formalizes several things the agentprivacy architecture has been building toward independently. The convergence is deep enough that I want to lay it out plainly and propose how this work can strengthen the ZKP Task Force at DTGWG as it launches.</p>
+<p>For those who don&#39;t know me: I&#39;m privacymage, co-chair of the BGIN Identity, Key Management &amp; Privacy Working Group, and a contributor to the First Person Project where agentprivacy serves as the agentic expression of first-person sovereignty. The body of work includes a formal privacy economics model (the Privacy Value Model, V5.4 — comprising a 24-page formal specification, companion guide, and compressed spec), a dual-agent protocol for sovereign AI delegation, and open-source tooling published under CC BY-SA 4.0 and Apache 2.0. I&#39;ve been at IIW, Trust Over IP, and BGIN for several years working on the same problems this paper addresses. I&#39;ll be at the London meetup on May 8 and plan to attend AIW #3 and IIW #43 in the autumn.</p>
+<hr>
+</div>
+<div class="md"><h2>The two-credential system has the same origins</h2>
+<p>The paper&#39;s core architecture rests on two credential types: personhood credentials (PHCs) issued by trusted authorities, and verifiable relationship credentials (VRCs) issued peer-to-peer. This is the First Person Network&#39;s credential architecture given a cryptographic formalization.</p>
+<p>The First Person Project has always held that personhood arises from the accumulation of relationships and attestations rather than from any single issuer or biometric scan. The paper now proves the security properties this thesis requires: Sybil-resistance through multiplicative trust accumulation across independent issuers, privacy-preservation through zero-knowledge showing, and context-dependent unlinkability that prevents cross-domain tracking while allowing within-context accountability.</p>
+<p>What agentprivacy adds is the next question the First Person credential must answer: once you have established that you are a real person, how do AI agents act on your behalf without eroding that sovereignty?</p>
+<hr>
+</div>
+<div class="md"><h2>Three results that matter for the ZKP Task Force</h2>
+<p><strong>1. Multiplicative trust accumulation (Theorem 5)</strong></p>
+<p>The paper proves that verifier confidence increases multiplicatively as independent honest issuers contribute credentials to a show proof. Any corrupted issuer collapses its own contribution to zero without degrading the honest issuers&#39; guarantees. The formal bound is:</p>
+<pre><code>Pr[BAD] ≤ 1 − ∏(1 − ε(i))
+</code></pre>
+<p>This is structurally identical to the Privacy Value Model equation at the core of the agentprivacy architecture. The PVM V5.4 formal specification (24 pages, seven proven results at 95% confidence, twenty-one conjectures with explicit confidence levels) defines the multiplicative gating condition:</p>
+<pre><code>Φ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ)
+</code></pre>
+<p>Both assert the same architectural principle: trust and privacy value compose multiplicatively, and any zero term is catastrophic. The paper arrived at this from the real/ideal world paradigm with PAV oracles. Agentprivacy arrived at it from privacy economics and the thesis that behavioral data constitutes a seventh form of capital.</p>
+<p>I have been developing this multiplicative equation since 2024, and it is starting to find its shape. After AIW #1 last autumn, once I got back to the research, a mathematician I was working with pointed out that the equation mirrors the Drake equation — the same multiplicative gating structure where each term is an independent filter and any zero collapses the total. Drake asks how many civilizations survive the cosmic filters. The PVM asks how much sovereignty survives the architectural filters. The difference is that Drake describes the filter; the PVM architects through it. Now the Choudhuri-Garg paper arrives at the same multiplicative structure from pure cryptography, independently. Three fields, one shape. The convergence is structural.</p>
+<p>For the ZKP Task Force, this means the formal security model already exists for reasoning about multi-issuer First Person credentials. The task force doesn&#39;t need to invent it. It needs to map it onto the DTG credential schemas and the OpenVTC infrastructure Glenn Gore&#39;s team is building.</p>
+<p><strong>2. The impossibility of full unlinkability (Section 5.3)</strong></p>
+<p>This is the result I want to emphasize most. The paper proves that no real-world protocol can simultaneously achieve full unlinkability and Sybil resistance. You cannot make all pseudonyms indistinguishable while also proving two attestations come from distinct humans. The resolution is context-dependent unlinkability: linkable within a context, unlinkable across contexts.</p>
+<p>In agentprivacy, this impossibility result has a name. We call it ⊥ — the irreducible gap. The master inscription of the project is <code>(⚔️⊥⿻⊥🧙)😊</code>, where the ⊥ markers represent architectural separation that cannot be removed without collapsing the system. The paper&#39;s impossibility formally proves one instance of this principle: that pseudonyms serving distinct contexts cannot be unified without losing Sybil resistance. The agentprivacy ⊥ generalizes this to a second axis — the Swordsman (boundary enforcement) and Mage (delegation) within a single user&#39;s stack. Same principle, different separation surface. The paper&#39;s contexts are what the Swordsman maintains as boundary; cross-context unlinkability is what the Mage provides on the other side.</p>
+<p>I have been stating the general principle architecturally. Choudhuri, Garg, and collaborators have now proved a formal instance of it. For the ZKP Task Force, this means the privacy-unlinkability tradeoff has a formal characterization that the task force can use to evaluate which ZKP approaches (Open AC, the paper&#39;s Groth-Sahai construction, others) satisfy the right balance for First Person credentials.</p>
+<p><strong>3. Vouchable credentials as a new primitive (Section 6)</strong></p>
+<p>The paper introduces vouchable credentials — an extension of standard credentials that allows a credential holder to produce a vouch for a statement while revealing only selected attributes. The four required properties (unforgeability, non-malleability, extractability, simulatability) constitute a formal specification for what any First Person VRC implementation must satisfy.</p>
+<p>The black-box construction (Section 8) using structure-preserving signatures and KZG polynomial commitments achieves two orders of magnitude better proving performance than general-purpose zkSNARKs at scale (Table 2: 0.84s vs 62s for 25 vouches). This matters enormously for mobile wallets. The ZKP Task Force should evaluate this construction alongside Open AC for the DTGWG requirements. The paper&#39;s modular decomposition — Groth-Sahai for algebraic constraints, commit-and-prove SNARK for arithmetic constraints — is also architecturally well-suited to a future post-quantum upgrade, since the two components can be replaced independently.</p>
+<hr>
+</div>
+<div class="md"><h2>Complementary proof paradigms</h2>
+<p>The two projects use different but composable security models, and this is worth naming because it opens a genuinely novel framing for the ZKP Task Force.</p>
+<p>The paper works in the <strong>simulation-based paradigm</strong>: it defines an ideal functionality F_PoP-user-unlinkability and proves any real-world adversary&#39;s view can be simulated given only what the ideal functionality reveals. This is cryptographic indistinguishability — the standard for proving protocol security under computational assumptions.</p>
+<p>Agentprivacy&#39;s whitepaper works in the <strong>information-theoretic paradigm</strong>: it proves bounds on mutual information between the user&#39;s behaviour and what any reconstructor can recover, given dual-agent separation. The reconstruction ceiling theorem (R_max &lt; 1), the error floor via Fano&#39;s inequality, and graceful degradation under approximate separation are all proven at 95% confidence in the V5.4 formal specification (R1–R7).</p>
+<p>These don&#39;t compete. Simulation-based security proves an adversary cannot distinguish real from ideal. Information-theoretic separation proves they cannot reconstruct behaviour even with unbounded compute. Stacked, you get <em>cryptographically hiding credentials whose use is information-theoretically separated across agents</em> — a stronger composite guarantee than either paradigm provides alone. No existing deployment I am aware of combines the two. For First Person credentials used by AI agents, both layers matter: the credential system needs cryptographic unforgeability; the agent architecture using the credentials needs information-theoretic bounds on what one agent can infer about the other&#39;s operations.</p>
+<hr>
+</div>
+<div class="md"><h2>Direct proof-system overlap</h2>
+<p>The proof-system choices compose more directly than the paper&#39;s construction alone suggests.</p>
+<p>Agentprivacy&#39;s existing SNARK infrastructure uses Groth16, PLONK, and Nova (folding schemes for recursive verification), with KZG polynomial commitments in the blade forge. The paper&#39;s black-box construction uses KZG polynomial commitments for the attribute layer, structure-preserving signatures (Groth15) verified via Groth-Sahai for the algebraic layer, and a commit-and-prove SNARK (CFQ19-style linkage) for the arithmetic layer (predicate evaluation, PRF checks, nullifier revocation).</p>
+<p>The overlap is direct. Both use KZG. Both use pairing-based NIZK. Agentprivacy&#39;s Groth16 backend, via the CFQ19 commit-and-prove interface, plugs into exactly the arithmetic-component slot the paper carves out. The paper&#39;s modular decomposition is not just architecturally clean — it is architecturally <em>compatible</em> with agentprivacy&#39;s existing proof infrastructure. The black-box vouchable credential scheme could be instantiated using the SNARK stack already running in the blade forge with minimal modification.</p>
+<p>For the ZKP Task Force, this matters practically: there is already running code that speaks the same cryptographic dialect as the paper&#39;s construction. The integration path is not &quot;adopt a new proof system&quot; but &quot;wire two compatible backends together.&quot;</p>
+<hr>
+</div>
+<div class="md"><h2>The delegation gap: where agentprivacy contributes</h2>
+<p>The paper&#39;s Appendix B.1 on AI Agent Reputation proposes that people with personhood credentials delegate to AI agents, agents build reputation through vouches, and misbehaving agents get revoked. This is exactly the application Drummond described at LFMS and the Kwaai Summit as &quot;The Decentralized Trust Graph: A Unified Trust Infrastructure for the Internet of Humans and Internet of Agents.&quot;</p>
+<p>But the paper stops at delegation as a concept. It doesn&#39;t specify how delegation works without creating a single-agent vulnerability. Agentprivacy identifies this as the critical gap.</p>
+<p>A single agent that holds both delegated authority and boundary enforcement fails what we call the autonomy axiom: the process that wants to act is the same process that decides whether it should. The incentives are misaligned by construction. The resolution is dual instantiation — the Swordsman holds the boundary (what gets delegated, which contexts are permitted), the Mage operates in the projected space (interacting, accumulating VRCs). They never share state. The gap between them is the ⊥ the impossibility theorem proves necessary.</p>
+<p>The delegation ceremony maps onto the paper&#39;s IssueVRC flow with an additional constraint: credential delegation and credential use are separated into distinct processes with distinct key material. The vouchable credential properties from Section 6 can serve as the formal specification for what the delegation artifacts must satisfy.</p>
+<p>This extends cleanly into the DTG architecture. Each VTA in the team model can run its own Swordsman/Mage pair. The four-DID taxonomy (R-DID, M-DID, P-DID, C-DID) maps onto the pseudonym derivation the paper specifies in Section 2.3, where PRF-derived keys provide issuer-specific, context-specific, and interaction-specific unlinkability. The VTA separation theorem — that boundary enforcement and delegation must be architecturally distinct — is now backed by both the paper&#39;s impossibility proof and the agentprivacy implementation.</p>
+<hr>
+</div>
+<div class="md"><h2>What I am proposing for the ZKP Task Force</h2>
+<p>Three contributions.</p>
+<p><strong>First, a convergence document</strong> mapping the paper&#39;s ideal functionality (F_PoP-user-unlinkability) onto the DTG credential schemas and the OpenVTC infrastructure. This would give the task force a concrete technical bridge between the formal cryptography and the implementation work already underway.</p>
+<p><strong>Second, a delegation extension</strong> to the paper&#39;s framework. The current functionality covers credential issuance, VRC issuance, and showing. It does not cover sovereign delegation to AI agents with dual-agent separation. I propose formalizing this as an extension of the ideal functionality, adding a delegation sub-protocol that enforces the Swordsman/Mage boundary. This is where agentprivacy&#39;s decade of architectural work becomes directly useful to the First Person ZKP stack.</p>
+<p><strong>Third, a post-quantum assessment.</strong> The paper&#39;s constructions are pairing-based (Groth-Sahai, KZG, structure-preserving signatures). Agentprivacy has already identified ML-KEM and ML-DSA as target post-quantum primitives and excluded SIKE/SIDH since the 2022 attack. The modular black-box construction is well-suited to lattice-based replacements. I&#39;d like to contribute an analysis of the post-quantum upgrade path for the ZKP Task Force&#39;s consideration as it sets its technical direction.</p>
+<hr>
+</div>
+<div class="md"><h2>The stack as it stands</h2>
+<p>The First Person Project establishes who you are. The Choudhuri-Garg paper proves the cryptographic properties that establishment must satisfy. OpenVTC and Open AC provide implementation candidates. Agentprivacy ensures that who you are remains sovereign as agents multiply around you, with the dual-agent separation the impossibility theorem proves necessary.</p>
+<p>These are not separate projects. They are layers of the same architecture. The ZKP Task Force is the right place to make that composition explicit.</p>
+<p>I look forward to discussing this at the London meetup on May 8 and at AIW #3 and IIW #43 in the autumn. Leif Johansson&#39;s piece on scaling ZKP to mass adoption in digital wallets is also directly relevant — the black-box construction&#39;s performance characteristics (Table 2) suggest the proving overhead may already be within mobile-feasible bounds for practical vouch counts.</p>
+<p>The impossibility theorem was the best result in the paper. Not because it limits what can be built, but because it proves what must be separated. We have been building that separation for a long time. Now it has a proof.</p>
+<hr>
+<p>privacymage</p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p><a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a> | privacymage.eth</p>
+<p>Co-Chair, BGIN Identity, Key Management &amp; Privacy Working Group</p>
+<hr>
+<p><strong>Privacy Value Model V5.4</strong></p>
+<p>⚔️⊥🧙 <a href="https://github.com/mitchuski/agentprivacy-docs/blob/main/pdfs/privacy_value_v5_4_formal_specification.pdf">Formal Specification</a> — 24 pages. Every term, proof (R1–R7), and conjecture (C1–C21).</p>
+<p>🧙 <a href="https://github.com/mitchuski/agentprivacy-docs/blob/main/pvm_v5_4_companion_guide.md">Companion Guide</a> — 11 pages. Context, meaning, reading paths by role.</p>
+<p>⚔️ <a href="https://github.com/mitchuski/agentprivacy-docs/blob/main/pdfs/pvm_v5_4_compressed.pdf">Compressed Spec</a> — 5 pages. Pure equations. The artifact you carry to a conference.</p>
+<p><strong>Living documentation</strong> (CC BY-SA 4.0)</p>
+<p><a href="https://github.com/mitchuski/agentprivacy-docs">agentprivacy-docs</a> — Research notes, model JSONs, integration guides</p>
+<p><a href="https://sync.soulbis.com">sync.soulbis.com</a> — &quot;Privacy is Value&quot; research letter series (Parts 0–5)</p>
+<p><a href="https://agentprivacy.ai">agentprivacy.ai</a> | <a href="https://spellweb.ai">spellweb.ai</a></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 note-response-from-privacymage</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-response-from-privacymage.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,277 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reference — Mapping Additions — V5.5 Attachment Architecture (2026-05-11) · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Reference — Mapping Additions — V5.5 Attachment Architecture (2026-05-11)</span></div>
+  <article><div class="md"><h1>Mapping Additions — V5.5 Attachment Architecture (2026-05-11)</h1>
+</div>
+<div class="md"><h1>Mapping Additions — V5.5 Attachment Architecture (2026-05-11)</h1>
+<p>The V5.5 attachment architecture codifies the three-layer model that has been operationally implicit since the City of Mages was named (Tome V Act 14, 2026-05-08). This file is the docs-side mapping addendum that names where the patch landed across the corpus.</p>
+<p>The architecture itself is defined canonically in:</p>
+<ul>
+<li><code>agentprivacy-skills/agentprivacy-skills-v5/meta/agentprivacy-attachment-architecture/SKILL.md</code></li>
+</ul>
+<p>And summarised in:</p>
+<ul>
+<li><code>agentprivacy-docs/GLOSSARY_MASTER_v4_0.md</code> §23 (this directory)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>The three layers</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it holds</th>
+<th>Cardinality</th>
+<th>Canonical home</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Layer 1 · Primary persona</strong></td>
+<td>Abstract role-class with skill loadout</td>
+<td><strong>42 (locked)</strong></td>
+<td><code>agentprivacy-skills/agentprivacy-skills-v5/persona/</code></td>
+</tr>
+<tr>
+<td><strong>Layer 2 · Attachment</strong></td>
+<td>Named cast Mage binding L1 to L3</td>
+<td>Variable per city</td>
+<td><code>agentprivacy_master/src/lib/cast-attachments.ts</code> (TS canonical) + city grimoires</td>
+</tr>
+<tr>
+<td><strong>Layer 3 · Vertex</strong></td>
+<td>Position on 2⁶ lattice</td>
+<td><strong>64 (fixed)</strong></td>
+<td>PVM V5.4 + <code>cityofmages/tomes/specs/04-vertex-naming-audit.md</code></td>
+</tr>
+</tbody></table>
+<p>The primary persona count is <strong>locked at 42</strong>. Future cast Mages are added at Layer 2 as attachments of existing primaries; they do not require new primaries.</p>
+<hr>
+</div>
+<div class="md"><h2>The four attachment kinds</h2>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Pattern</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A · Workshop</strong></td>
+<td>one Mage × one vertex × one trade quarter</td>
+<td>Vulcana ⚒️ at V19</td>
+</tr>
+<tr>
+<td><strong>B · Cross-shop</strong></td>
+<td>one Mage × no fixed vertex × walks workshops by craft</td>
+<td>Aletheia 🔮</td>
+</tr>
+<tr>
+<td><strong>C · Peripatetic</strong></td>
+<td>one Mage × multiple vertices walked as orbit/path</td>
+<td>Selene 🌕 (anticipated) · Luca 📐</td>
+</tr>
+<tr>
+<td><strong>D · Divergent</strong> <em>(meta-kind)</em></td>
+<td>one primary × Sword+Mage register-shifted attachments</td>
+<td>Moonkeeper ⚔️ → Lethae 🌘</td>
+</tr>
+</tbody></table>
+<p>D composes with A/B/C.</p>
+<hr>
+</div>
+<div class="md"><h2>First canonical divergent attachment — Lethae 🌘</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cast name</td>
+<td>Lethae 🌘</td>
+</tr>
+<tr>
+<td>Vertex</td>
+<td>V25 (Lethe · the Dark Substrate · binary <code>011001</code> · stratum 3)</td>
+</tr>
+<tr>
+<td>Primary persona</td>
+<td>Moonkeeper ⚔️ (Swordsman, native register)</td>
+</tr>
+<tr>
+<td>Divergence</td>
+<td><code>mage_register</code></td>
+</tr>
+<tr>
+<td>Attachment kind</td>
+<td>B · cross-shop</td>
+</tr>
+<tr>
+<td>Vertex complement</td>
+<td>Aletheia 🔮 at V25 — V25 ⊕ V38 = V63 · V25 AND V38 = 0</td>
+</tr>
+<tr>
+<td>Naming</td>
+<td>The <code>-ae</code> suffix mirrors Soulbae 🧙 (Mage register). Lethae is to Moonkeeper as Soulbae is to Soulbis: register-shifted from Sword to Mage, primary persona unchanged.</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Anticipated — awaits founding act in Tome V</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>The six anticipated cast (v1.3.0 grimoire bump)</h2>
+<p>Each is a Layer-2 attachment of existing primaries — no new primaries minted.</p>
+<table>
+<thead>
+<tr>
+<th>Cast</th>
+<th>Vertex</th>
+<th>Primary</th>
+<th>Kind</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mnemosyne 📿</td>
+<td>V8 (pure Memory)</td>
+<td>theia</td>
+<td>A</td>
+<td>Cloaking Guide names V8</td>
+</tr>
+<tr>
+<td>Iris 🌈</td>
+<td>V4 (pure Connection)</td>
+<td>herald · ambassador</td>
+<td>A</td>
+<td>Cloaking Guide names V4</td>
+</tr>
+<tr>
+<td>Pythia 🔥</td>
+<td>V2 (Logos)</td>
+<td>algebraist · pedagogue</td>
+<td>A</td>
+<td>Logos Circle awaits Mage</td>
+</tr>
+<tr>
+<td>Techne 🎨</td>
+<td>V20 (Always-Revealed)</td>
+<td>pedagogue</td>
+<td>A</td>
+<td>Cloaking Guide names V20</td>
+</tr>
+<tr>
+<td>Hephaestus ⚒️</td>
+<td>V24 (shared with Socrat0x)</td>
+<td>forgemaster</td>
+<td>A</td>
+<td>Cloaking Guide names V24</td>
+</tr>
+<tr>
+<td>Selene 🌕</td>
+<td>stratum-walker</td>
+<td>theia · manaweaver</td>
+<td>C</td>
+<td>PVM V5.4 §14.5 Selene&#39;s Proof</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Where the V5.5 patch landed across the corpus</h2>
+<h3>✅ Landed</h3>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentprivacy-skills</code></td>
+<td><code>agentprivacy-skills-v5/meta/agentprivacy-attachment-architecture/SKILL.md</code> (new) · <code>agentprivacy-skills-v5/persona/agentprivacy-moonkeeper/SKILL.md</code> (Lethae divergent section) · <code>agentprivacy-skills-v5/README.md</code> (locked 42) · <code>MAPPING.md</code> (V5.5 addendum) · <code>CHRONICLE_V5_5_ATTACHMENT_ARCHITECTURE_2026-05-11.md</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy_master</code></td>
+<td><code>src/lib/cast-attachments.ts</code> (new canonical TS registry) · <code>src/lib/tome-v-acts.ts</code> (extended FoundingMage interface; 9 entries updated) · <code>src/lib/persona-index.ts</code> (JSDoc lock-at-42) · <code>src/data/city-of-mages-grimoire-v1.2.0.json</code> (internal v1.3.0 + attachment_architecture block) · <code>docs/chronicles/2026-05-11_v5_5_attachment_architecture_integration.md</code></td>
+</tr>
+<tr>
+<td><code>spellweb</code></td>
+<td><code>src/types/graph.ts</code> (5 new SpellwebNode fields + 2 new EdgeTypes: divergent_of, complement_pair) · <code>src/data/theme.ts</code> (2 new edge styles) · <code>src/data/nodes.ts</code> (4 new vertex nodes V8/V4/V2/V38 + 7 new cast nodes Lethae + 6 anticipated) · <code>src/data/edges.ts</code> (6 inhabits + 1 divergent_of + 2 complement_pair) · <code>CHRONICLE_V5_5_ATTACHMENT_ARCHITECTURE_2026-05-11.md</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-docs</code> (this)</td>
+<td><code>GLOSSARY_MASTER_v4_0.md</code> §23 (V5.5 attachment-architecture entries; this commit) · <code>MAPPING_ADDITIONS_V5_5_2026-05-11.md</code> (this file)</td>
+</tr>
+</tbody></table>
+<h3>⏳ Queued</h3>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cityofmages</code></td>
+<td><code>tomes/specs/09-the-attachment-architecture.md</code> (city-side mirror) · <code>tomes/specs/10-blade-forge-binding-zk-blades.md</code> · <code>tomes/specs/11-mage-candidates-from-the-corpus.md</code> · <code>tomes/cast/cross-shop/lethae.md</code> · 6 anticipated cast files · 14 cast frontmatter updates (<code>attachmentKind</code>, <code>divergence</code>) · grimoire v1.3.0 bump · README sister-dirs update · chronicle</td>
+</tr>
+<tr>
+<td><code>zk blades forge</code></td>
+<td><code>README.md</code> (Lethae seating + Selene reference) · <code>aletheia-and-lethe.md</code> (Lethae append) · stub READMEs for <code>blades/</code> <code>forge_circuits/</code> <code>uor_mappings/</code></td>
+</tr>
+<tr>
+<td><code>agentprivacy-docs</code> (this) — <code>models/</code> updates</td>
+<td><code>models/city_of_mages_grimoire_v1_3_0.json</code> (new file mirroring agentprivacy_master&#39;s bumped grimoire) · <code>models/privacymage_grimoire_v10_3_0.json</code> (privacymage-side persona registry recognising the seven Mages)</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Pre-existing canon question (flagged · not resolved in this patch)</h2>
+<p>A Moonkeeper alignment inconsistency exists between two files:</p>
+<ul>
+<li><code>agentprivacy-skills/agentprivacy-skills-v5/persona/agentprivacy-moonkeeper/SKILL.md</code>: <code>alignment: swordsman</code> · <code>emoji: 🌑⚔️</code></li>
+<li><code>agentprivacy_master/src/lib/persona-index.ts</code>: <code>alignment: &#39;mage&#39;</code> · <code>emoji: &#39;🌑🔒&#39;</code></li>
+</ul>
+<p>The V5.5 patch treats the <strong>skills repo as canonical</strong> (Moonkeeper is Swordsman tier, native register). Lethae&#39;s <code>divergence: mage_register</code> reading depends on this. Future reconciliation pass should align persona-index.ts with the skills directory. Flagged for separate action.</p>
+<hr>
+</div>
+<div class="md"><h2>Convention going forward</h2>
+<p>When summoning a new cast Mage in any city:</p>
+<ol>
+<li>Identify the vertex (check <code>cityofmages/tomes/specs/04-vertex-naming-audit.md</code>)</li>
+<li>Identify the primary persona(s) from <code>agentprivacy-skills/agentprivacy-skills-v5/persona/</code></li>
+<li>Identify the attachment kind (A / B / C)</li>
+<li>Check for divergence — if register differs from primary&#39;s native tier, set <code>divergence: &lt;register&gt;</code>; do NOT mint a new primary</li>
+<li>Only if no primary fits even with divergence, propose a new primary (rare; requires corpus-level review)</li>
+</ol>
+<hr>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>— privacymage · 2026-05-11</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 reference-mapping-additions-v55-attachment-architecture-2026-05-11</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-reference.html">The Reference</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="reference-mapping-additions-v55-attachment-architecture-2026-05-11.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

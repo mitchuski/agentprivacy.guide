@@ -1,0 +1,899 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paper — Privacy Value Model: Companion Guide · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Paper — Privacy Value Model: Companion Guide</span></div>
+  <article><div class="md"><h1>Privacy Value Model: Companion Guide</h1>
+</div>
+<div class="md"><p><strong>The Mage&#39;s Reading</strong></p>
+<p><strong>Version:</strong> 2.0 (aligned to PVM V5.4 Formal Specification v2.0)<br><strong>Date:</strong> April 10, 2026<br><strong>Author:</strong> privacymage<br><strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a><br><strong>License:</strong> CC BY-SA 4.0<br><strong>Purpose:</strong> Bridge the mathematical specification to the full agentprivacy vision</p>
+<hr>
+</div>
+<div class="md"><h2>How to Read These Documents</h2>
+<p>The formal specification and this companion are two readings of the same work.</p>
+<p>The <strong>Formal Specification</strong> (⚔️ Swordsman reading) presents the mathematics: equations, proofs, bounds, conjectures with explicit confidence levels. It answers WHAT the model is. It draws boundaries.</p>
+<p>This <strong>Companion Guide</strong> (🧙 Mage reading) presents the context: motivation, implementation, narrative, standards, economics. It answers WHY the model matters. It projects outward.</p>
+<p>Neither is complete without the other. The gap between them — the ⊥ — is where understanding lives.</p>
+<table>
+<thead>
+<tr>
+<th>If you want...</th>
+<th>Start with...</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>The equations</td>
+<td>Formal Spec §1–§11</td>
+</tr>
+<tr>
+<td>The algebra</td>
+<td>Formal Spec §12</td>
+</tr>
+<tr>
+<td>The ceremonies</td>
+<td>Formal Spec §13–§15, then this guide §6</td>
+</tr>
+<tr>
+<td>The economic case</td>
+<td>This guide §4</td>
+</tr>
+<tr>
+<td>The narrative</td>
+<td>This guide §7</td>
+</tr>
+<tr>
+<td>The standards</td>
+<td>This guide §5</td>
+</tr>
+<tr>
+<td>The agents explained</td>
+<td>This guide §2</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>1. The Mission the Math Serves</h2>
+<h3>1.1 The 7th Capital</h3>
+<p><strong>Formal Spec gap:</strong> The specification never states WHY privacy has value.</p>
+<p><strong>The Thesis:</strong> There are seven forms of capital:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Capital</th>
+<th>Traditional View</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Financial</td>
+<td>Money, credit, investments</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Manufactured</td>
+<td>Infrastructure, tools, machines</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Intellectual</td>
+<td>Patents, copyrights, trade secrets</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Human</td>
+<td>Skills, knowledge, health</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Social</td>
+<td>Networks, trust, relationships</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Natural</td>
+<td>Resources, ecosystems, land</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td><strong>Behavioural</strong></td>
+<td><strong>Patterns, preferences, predictions</strong></td>
+</tr>
+</tbody></table>
+<p>Behavioural capital is being extracted at scale. Every click, scroll, pause, and purchase generates data that platforms convert into predictive models sold not to serve you but to modify your behaviour for others&#39; benefit.</p>
+<p><strong>The Inversion:</strong> When behavioural capital stays with the person who generates it (the First Person), the entire economic structure inverts. Privacy isn&#39;t about hiding — it&#39;s about ownership. The spec&#39;s equation $V(\pi, t)$ measures the value that SHOULD accrue to the First Person.</p>
+<p>The spec&#39;s multiplicative gating (§1.3) formalises this: if any single axis of privacy collapses, the ENTIRE value collapses. There are no partial victories.</p>
+<p><strong>Deep dive:</strong> <code>what-agentprivacy-is.md</code></p>
+<h3>1.2 The Window</h3>
+<p><strong>Formal Spec gap:</strong> No urgency context.</p>
+<p>Surveillance architectures are approaching lock-in. Within 2–3 years, behavioural prediction models become infrastructure, regulatory capture solidifies platform positions, and alternative architectures become economically unviable.</p>
+<p>Promise Theory insight: surveillance systems use the <em>attack pattern</em> — imposing data extraction without prior consent. Privacy infrastructure must establish the <em>invitation pattern</em> — acceptance relationships before specific proposals. This architectural choice cannot be retrofitted.</p>
+<p>The spec is not academic. It&#39;s a race condition.</p>
+<p><strong>Deep dive:</strong> <code>README.md</code> (Critical Window), <code>research_proposal_v2_0.md</code></p>
+<hr>
+</div>
+<div class="md"><h2>2. The Agents Behind the Algebra</h2>
+<h3>2.1 Swordsman and Mage</h3>
+<p><strong>Formal Spec reference:</strong> §4.2 (Φ_agent), §12.2 (neg/bnot), §13 (operational cycle), §14 (amnesia)</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Symbol</th>
+<th>Domain</th>
+<th>Function</th>
+<th>Operation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Swordsman</strong></td>
+<td>⚔️</td>
+<td>Protection</td>
+<td>Sets boundaries, says &quot;no&quot;, guards the threshold</td>
+<td>neg(x) = 64 − x</td>
+</tr>
+<tr>
+<td><strong>Mage</strong></td>
+<td>🧙</td>
+<td>Delegation</td>
+<td>Projects outward, acts in the world on your behalf</td>
+<td>bnot(x) = 63 − x</td>
+</tr>
+<tr>
+<td><strong>First Person</strong></td>
+<td>😊</td>
+<td>Sovereignty</td>
+<td>Authorises both, owns the path</td>
+<td>succ(x) = neg(bnot(x))</td>
+</tr>
+</tbody></table>
+<p>The Swordsman never delegates. The Mage never protects. This is the guarantee — when the functions are separated into different agents, neither can be coerced into the other&#39;s domain.</p>
+<p><strong>The Gap (⿻):</strong> The irreducible separation between them. The spec&#39;s Φ_agent measures this gap. When Φ_agent → 0, the agents collapse into one, and privacy fails. The dihedral group D₆₄ (§12.5) gives this algebraic structure — two involutions that must remain independent for the full group to be accessible.</p>
+<p><strong>The Amnesia Protocol (§14):</strong> The Swordsman and Mage don&#39;t just operate separately — they are structurally unable to recover shared origin. This is not a policy (&quot;don&#39;t share data&quot;). It is topology (&quot;cannot share memory&quot;). Extension process boundaries enforce this: separate processes = separate memory = structural amnesia.</p>
+<p>The cosmological precedent: the Moon cannot recover the Theia impact from its geological state. The tides prove the relationship without disclosing the origin. This is <strong>Selene&#39;s Proof</strong> — zero-knowledge by physics, not by policy.</p>
+<p><strong>Betweenness centrality (⿻):</strong> The Gap is not empty — it is the node with highest betweenness centrality in the trust graph (Brandes, 2001). The value lives in the gap because the most paths cross there.</p>
+<p><strong>Deep dive:</strong> <code>swordsman_mage_whitepaper_v6_0.md</code>, extension whitepapers</p>
+<h3>2.2 Generator and Solver</h3>
+<p><strong>Formal Spec reference:</strong> §4.4 (Φ_inference)</p>
+<p>From BRAID (Bounded Reasoning for Autonomous Inference and Decisions):</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Function</th>
+<th>Promise</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Generator</strong></td>
+<td>Proposes reasoning graphs, suggests paths</td>
+<td>&quot;I will structure the question fairly&quot;</td>
+</tr>
+<tr>
+<td><strong>Solver</strong></td>
+<td>Executes reasoning graphs, validates answers</td>
+<td>&quot;I will compute the answer honestly&quot;</td>
+</tr>
+</tbody></table>
+<p>When the same model does both, it can manipulate its own reasoning. When separated, the Solver can only execute what the Generator proposed. The spec&#39;s Φ_inference = 1 − I(model ; executor) measures this separation.</p>
+<p><strong>Deep dive:</strong> <code>dualprivacy_researchpaper_v4_0.md</code> (§4)</p>
+<hr>
+</div>
+<div class="md"><h2>3. Promise Theory: The Semantic Foundation</h2>
+<h3>3.1 Why Promises Matter</h3>
+<p><strong>Formal Spec reference:</strong> §22</p>
+<p>Promise Theory (Bergstra &amp; Burgess, 2019) provides the semantic foundation. A promise is voluntary, unilateral, and observable. Traditional architectures assume control: &quot;The server WILL do X.&quot; Promise architectures assume autonomy: &quot;The server PROMISES to do X, and here&#39;s how you verify.&quot;</p>
+<p>The autonomy axiom — <em>an agent can only make promises about its own behaviour</em> — formally explains why single agents fail at the privacy-delegation paradox. Attempting to promise both protection and delegation exceeds autonomous capability.</p>
+<h3>3.2 How Promises Map to the Spec</h3>
+<table>
+<thead>
+<tr>
+<th>Spec Term</th>
+<th>Promise Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P (Privacy Strength)</td>
+<td>Quality of the promise that data won&#39;t leak</td>
+</tr>
+<tr>
+<td>C (Credential Verifiability)</td>
+<td>Ability to verify a promise was kept without seeing content</td>
+</tr>
+<tr>
+<td>Φ_agent</td>
+<td>Separation of protection promises from delegation promises</td>
+</tr>
+<tr>
+<td>Φ_data</td>
+<td>No single provider can break the data promise alone</td>
+</tr>
+<tr>
+<td>Φ_inference</td>
+<td>Reasoning promises kept separate from execution promises</td>
+</tr>
+<tr>
+<td>VRC</td>
+<td>Bilateral promise bundle between two First Persons</td>
+</tr>
+<tr>
+<td>T_∫(π)</td>
+<td>Accumulated value of promises kept along a path</td>
+</tr>
+<tr>
+<td>R(d, c, ρ)</td>
+<td>How hard it is to break the promise retrospectively</td>
+</tr>
+<tr>
+<td>The Gap (⿻)</td>
+<td>Irreducible promise of the superagent — owned by neither agent</td>
+</tr>
+</tbody></table>
+<p><strong>Deep dive:</strong> <code>promise_theory_reference_v1_4.md</code></p>
+<hr>
+</div>
+<div class="md"><h2>4. Economic Architecture: VRCs and Guilds</h2>
+<h3>4.1 Verifiable Relationship Credentials (VRCs)</h3>
+<p><strong>Formal Spec reference:</strong> §19 (Three Identity Layers)</p>
+<p>A VRC is a bilateral commitment between two First Persons — cryptographically verifiable without revealing relationship content, relationship-scoped (dies when the relationship ends).</p>
+<table>
+<thead>
+<tr>
+<th>Old Model</th>
+<th>VRC Model</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Platform owns the social graph</td>
+<td>First Persons own their edges</td>
+</tr>
+<tr>
+<td>Relationships are platform assets</td>
+<td>Relationships are bilateral property</td>
+</tr>
+<tr>
+<td>Exit means losing connections</td>
+<td>Exit means taking your edges with you</td>
+</tr>
+</tbody></table>
+<p>No platform can hold relationships hostage. Switching costs collapse to zero. Network effects accrue to people, not platforms.</p>
+<p><strong>Economic parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ceremony</td>
+<td>1 ZEC (~$500)</td>
+<td>One-time genesis of agent pair</td>
+</tr>
+<tr>
+<td>Signal</td>
+<td>0.01 ZEC (~$5)</td>
+<td>Ongoing proof of comprehension</td>
+</tr>
+<tr>
+<td>Fee split</td>
+<td>61.8% transparent / 38.2% shielded</td>
+<td>φ-derived constant</td>
+</tr>
+</tbody></table>
+<p><strong>Deep dive:</strong> <code>vrc_promise_protocol_v3_3.md</code></p>
+<h3>4.2 Guild Efficiency</h3>
+<p><strong>Formal Spec reference:</strong> §6</p>
+<p>A guild is a group of agents sharing a reasoning library (shared-parent pattern). Members coordinate at O(1) cost instead of O(N²). The spec&#39;s G(guilds) = 1 + guild_efficiency captures the multiplier.</p>
+<p><strong>Trust Tier Progression:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Signals</th>
+<th>Capabilities</th>
+<th>Trust Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Blade 🗡️</td>
+<td>0–50</td>
+<td>Basic participation, learning</td>
+<td>0.0–0.2</td>
+</tr>
+<tr>
+<td>Light 🛡️</td>
+<td>50–150</td>
+<td>Multi-site coordination</td>
+<td>0.2–0.5</td>
+</tr>
+<tr>
+<td>Heavy ⚔️</td>
+<td>150–500</td>
+<td>Template creation, governance</td>
+<td>0.5–0.8</td>
+</tr>
+<tr>
+<td>Dragon 🐉</td>
+<td>500+</td>
+<td>Guardian eligibility, unlimited VRCs</td>
+<td>0.8–1.0</td>
+</tr>
+</tbody></table>
+<p><strong>Deep dive:</strong> <code>vrc_promise_protocol_v3_3.md</code> (§3)</p>
+<hr>
+</div>
+<div class="md"><h2>5. Standards Integration</h2>
+<h3>5.1 IEEE 7012-2025 (MyTerms)</h3>
+<p><strong>Formal Spec gap:</strong> Not mentioned in the spec (correctly — it&#39;s implementation, not mathematics).</p>
+<p>IEEE 7012-2025 provides machine-readable privacy terms. Instead of humans reading Terms of Service, agents read MyTerms and negotiate automatically. The Swordsman evaluates MyTerms against your preferences. Negotiation happens in milliseconds.</p>
+<h3>5.2 Identity Stack</h3>
+<p><strong>Formal Spec reference:</strong> §19 (Three Identity Layers)</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Spec Symbol</th>
+<th>Standard</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data</td>
+<td>GUID</td>
+<td>Content addressing</td>
+<td>SHA-256 hash of content</td>
+</tr>
+<tr>
+<td>Relationship</td>
+<td>VRC</td>
+<td>W3C VCs / DIDs</td>
+<td>Bilateral promise bundles</td>
+</tr>
+<tr>
+<td>Principal</td>
+<td>DID</td>
+<td>W3C DID</td>
+<td>Self-sovereign identity</td>
+</tr>
+</tbody></table>
+<p>Additional standards: ERC-8004 (trustless agent identity), ERC-7812 (ZK identity commitments), Trust Spanning Protocol (TSP) for agent-to-agent messaging.</p>
+<h3>5.3 Post-Quantum Context</h3>
+<p><strong>Formal Spec reference:</strong> §16 (Proven Results — ring algebra), references</p>
+<p>The stored-secret model (2D algebraic space, e.g. secp256k1) is vulnerable to quantum attack. The behavioural manifold proof (6D sovereignty space) has no secret to solve — only a path to walk. Canonical post-quantum recommendation: ML-KEM (Kyber) for key encapsulation, ML-DSA (Dilithium) for signatures. Hybrid constructions (Kyber512-X25519) as transitional.</p>
+<p>The bilateral witness ceremony (C13, 65% confidence) is a candidate quantum-resistant primitive: proof of comprehension, not possession.</p>
+<p><strong>Deep dive:</strong> Google Quantum AI (Babbush et al., 2026), <code>understanding_as_key_zypher_paper_v1.md</code></p>
+<hr>
+</div>
+<div class="md"><h2>6. The Ceremonies</h2>
+<h3>6.1 What Ceremonies Are</h3>
+<p><strong>Formal Spec reference:</strong> §13 (operational cycle), §15 (ceremony implementation)</p>
+<p>Privacy isn&#39;t just computed — it&#39;s performed. A ceremony is a structured interaction that produces a verifiable outcome. The Celestial Ceremony maps the operational cycle (§13) to two people:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Symbol</th>
+<th>Spec Operation</th>
+<th>Human Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sun</td>
+<td>☀️</td>
+<td>id(x)</td>
+<td>Disclosure — you speak your poem</td>
+</tr>
+<tr>
+<td>Gap</td>
+<td>⊥</td>
+<td>neg(x)</td>
+<td>Silence — boundary negotiation</td>
+</tr>
+<tr>
+<td>Moon</td>
+<td>🌑</td>
+<td>bnot(neg(x))</td>
+<td>Reflection — shared understanding</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>↻</td>
+<td>succ(x)</td>
+<td>Recursion — carry forward or close</td>
+</tr>
+</tbody></table>
+<p>Cryptography provides guarantees. Ceremony provides meaning.</p>
+<h3>6.2 The Blade Forge</h3>
+<p><strong>Formal Spec reference:</strong> §15.3 (forge cryptography), §15.5 (moon phases), §15.6 (tier classification)</p>
+<p>Forging a blade:</p>
+<ol>
+<li>Select a constellation (six sovereignty dimensions → spectrum)</li>
+<li>Walk the nodes (traverse the lattice → accumulate laps)</li>
+<li>Create the hash (SHA-256 commitment → content addressing)</li>
+<li>Sign with your key (Ed25519 binding → identity)</li>
+</ol>
+<p>The spec&#39;s behavioural density ρ (§5.3) captures why two blades with identical constellations but different lap counts have qualitatively different reconstruction resistance. The Universe Blade (62 laps, 2,170s) vs Hitchhiker&#39;s Blade (13 laps, 433s) — same hash position, different proof depth.</p>
+<p><strong>Deep dive:</strong> <code>zk_swordsman_blade_forge_v3_0.md</code></p>
+<hr>
+</div>
+<div class="md"><h2>7. The Narrative Layer</h2>
+<h3>7.1 Three Expressions, One Architecture</h3>
+<p>Every concept has three simultaneous expressions:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Document Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Mathematical</strong></td>
+<td>Formal Spec</td>
+<td>Verification — can it be proven?</td>
+</tr>
+<tr>
+<td><strong>Architectural</strong></td>
+<td>Whitepapers</td>
+<td>Implementation — can it be built?</td>
+</tr>
+<tr>
+<td><strong>Narrative</strong></td>
+<td>Grimoires + Blog</td>
+<td>Transmission — can it be understood?</td>
+</tr>
+</tbody></table>
+<p>The grimoires tell the same truths in story form. The math proves what the stories teach. The whitepapers show what the math demands.</p>
+<h3>7.2 The Five Grimoires</h3>
+<table>
+<thead>
+<tr>
+<th>Grimoire</th>
+<th>Focus</th>
+<th>Entry Point</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>The First Person Spellbook</strong></td>
+<td>The complete 31-act journey (CLOSED)</td>
+<td>First-time readers</td>
+</tr>
+<tr>
+<td><strong>The Zero Knowledge Spellbook</strong></td>
+<td>ZK proofs as narrative — cryptography as story</td>
+<td>Cryptographers seeking intuition</td>
+</tr>
+<tr>
+<td><strong>The Canon Spellbook</strong></td>
+<td>Canonical formulations, axioms, principles</td>
+<td>Researchers, architects</td>
+</tr>
+<tr>
+<td><strong>The Parallel Society Spellbook</strong></td>
+<td>Alternative social structures, governance</td>
+<td>Political theorists</td>
+</tr>
+<tr>
+<td><strong>The Plurality Spellbook</strong></td>
+<td>Many-to-many relationships, ⿻ overlap</td>
+<td>Network thinkers</td>
+</tr>
+</tbody></table>
+<p>The <strong>PrivacyMage JSON</strong> (v10.0.0) is the grimoire as compression — the entire architecture encoded as structured data. Not a sixth grimoire but the grimoire&#39;s holographic boundary: the surface that encodes the volume.</p>
+<h3>7.3 The Blog Series: Privacy is Value V5</h3>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Title</th>
+<th>Spec Connection</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>The Myth Before the Math</td>
+<td>Why the equation exists</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Forming Constellations</td>
+<td>§12.6 sovereignty dimensions</td>
+</tr>
+<tr>
+<td>2</td>
+<td>The Forge and the Ceremony</td>
+<td>§15 ceremony + forge</td>
+</tr>
+<tr>
+<td>3</td>
+<td>The Dragon Wakes</td>
+<td>§14 amnesia, cosmological quaternion</td>
+</tr>
+<tr>
+<td>4</td>
+<td>The Dihedral Mirror</td>
+<td>§12 algebraic foundation</td>
+</tr>
+<tr>
+<td>5</td>
+<td>The Amnesia Protocol</td>
+<td>§14 structural amnesia as ZK</td>
+</tr>
+</tbody></table>
+<p>Published at sync.soulbis.com.</p>
+<hr>
+</div>
+<div class="md"><h2>8. Conjectures in Context</h2>
+<h3>8.1 What the Conjectures Mean</h3>
+<p><strong>Formal Spec reference:</strong> §17</p>
+<table>
+<thead>
+<tr>
+<th>Conjecture</th>
+<th>Plain Language</th>
+<th>Why It Matters</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C1</strong> (φ optimal)</td>
+<td>Nature&#39;s ratio applies to agent balance</td>
+<td>Not arbitrary architecture — structurally optimal</td>
+</tr>
+<tr>
+<td><strong>C6</strong> (P^1.5 = 96/64)</td>
+<td>The privacy exponent emerges from geometry</td>
+<td>CONVERGENT — two independent projects confirm</td>
+</tr>
+<tr>
+<td><strong>C7</strong> (multiplicative)</td>
+<td>No trade-offs between axes</td>
+<td>You can&#39;t buy your way out of broken separation</td>
+</tr>
+<tr>
+<td><strong>C11</strong> (ρ amplifies)</td>
+<td>Living the proof makes it harder to fake</td>
+<td>Depth creates resistance</td>
+</tr>
+<tr>
+<td><strong>C14</strong> (D₂ₙ)</td>
+<td>Agent separation has a group theory name</td>
+<td>75% — strongest new conjecture</td>
+</tr>
+<tr>
+<td><strong>C17</strong> (amnesia &gt; policy)</td>
+<td>Structural forgetting beats promised forgetting</td>
+<td>Topology enforces what policy only promises</td>
+</tr>
+</tbody></table>
+<h3>8.2 The V6 Horizon</h3>
+<p><strong>Formal Spec reference:</strong> §11.4, §17.2</p>
+<p>Four new conjectures (C18–C21) explore whether the sovereignty path is a <em>strange attractor</em> in phase space. If the Lorenz attractor analogy holds:</p>
+<ul>
+<li><strong>C18</strong> (25%): Positive Lyapunov exponent → reconstruction error <em>grows</em> with observation time</li>
+<li><strong>C19</strong> (20%): ρ is accumulated Lyapunov divergence — exponential, not linear</li>
+<li><strong>C20</strong> (30%): Three separation axes couple like three Lorenz variables</li>
+<li><strong>C21</strong> (10%): Sovereignty manifold has fractal, not integer, dimension</li>
+</ul>
+<p>This would establish a <em>dynamical</em> reconstruction ceiling independent of the information-theoretic one (§11.1). Two ceilings: Shannon says you lack information; Lorenz says the dynamics defeat you. Remove one and the other still holds.</p>
+<p>These are speculative. They need a dynamical systems mathematician who finds privacy architectures interesting.</p>
+<p><strong>Deep dive:</strong> <code>privacy_value_v6_research_note.md</code></p>
+<h3>8.3 What &quot;Convergent&quot; Means</h3>
+<p>The spec marks C6 as CONVERGENT. This means independent projects arrived at the same structure — agentprivacy from privacy geometry, UOR Foundation from content addressing. Same math, different starting points. Not coincidence.</p>
+<hr>
+</div>
+<div class="md"><h2>9. Reading Paths by Role</h2>
+<h3>For Mathematicians</h3>
+<ol>
+<li>Formal Spec v2.0 — the equations</li>
+<li><code>dualprivacy_researchpaper_v4_0.md</code> — proofs and bounds</li>
+<li><code>uor_tetrahedra_zk_mapping_v2_0.md</code> — geometric grounding</li>
+<li>V5.1–V5.3 Research Notes — evolution</li>
+<li>V6 Research Note — dynamical horizon</li>
+</ol>
+<h3>For Developers</h3>
+<ol>
+<li>This companion (context)</li>
+<li><code>DUAL_TERRITORY_CEREMONY_SPEC_v1.md</code> — implementation architecture</li>
+<li><code>runecraft-protocol-spec-v1.md</code> — key management</li>
+<li><code>CEREMONY_INTEGRATION_GUIDE_v10_0_0.md</code> — how to integrate</li>
+</ol>
+<h3>For Economists</h3>
+<ol>
+<li><code>what-agentprivacy-is.md</code> — the 7th capital thesis</li>
+<li><code>vrc_promise_protocol_v3_3.md</code> — economic architecture</li>
+<li>This companion §4 — VRCs and guilds</li>
+</ol>
+<h3>For Philosophers</h3>
+<ol>
+<li>The First Person Spellbook — 31 acts at <a href="https://agentprivacy.ai/story">agentprivacy.ai/story</a></li>
+<li><code>promise_theory_reference_v1_4.md</code> — semantic foundations</li>
+<li>Blog series at <a href="https://sync.soulbis.com">sync.soulbis.com</a> — accessible entry points</li>
+<li>Poems at <a href="https://agentprivacy.ai/poems">agentprivacy.ai/poems</a> — alternative epistemology</li>
+</ol>
+<h3>For Security Researchers</h3>
+<ol>
+<li>Formal Spec §10–§11 — separation bound and reconstruction ceiling</li>
+<li><code>dualprivacy_researchpaper_v4_0.md</code> — full proof treatment</li>
+<li><code>zk_swordsman_blade_forge_v3_0.md</code> — cryptographic properties</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>10. Quick Reference: Spec Section to Full Context</h2>
+<table>
+<thead>
+<tr>
+<th>Spec Section</th>
+<th>Topic</th>
+<th>Full Context Document</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>§1</td>
+<td>The equation</td>
+<td><code>privacy_is_value_v5.md</code></td>
+</tr>
+<tr>
+<td>§4</td>
+<td>Three-axis separation</td>
+<td><code>VISUAL_ARCHITECTURE_GUIDE_v2_0.md</code></td>
+</tr>
+<tr>
+<td>§5</td>
+<td>Reconstruction difficulty</td>
+<td><code>dualprivacy_researchpaper_v4_0.md</code></td>
+</tr>
+<tr>
+<td>§6</td>
+<td>Guild efficiency</td>
+<td><code>vrc_promise_protocol_v3_3.md</code> §3</td>
+</tr>
+<tr>
+<td>§7</td>
+<td>Path integral T_∫</td>
+<td>V5.2 + V5.3 Research Notes</td>
+</tr>
+<tr>
+<td>§8</td>
+<td>Holographic bound</td>
+<td><code>uor_tetrahedra_zk_mapping_v2_0.md</code></td>
+</tr>
+<tr>
+<td>§10</td>
+<td>Separation bound</td>
+<td><code>dualprivacy_researchpaper_v4_0.md</code> §5</td>
+</tr>
+<tr>
+<td>§11</td>
+<td>Reconstruction ceiling</td>
+<td><code>dualprivacy_researchpaper_v4_0.md</code> §5</td>
+</tr>
+<tr>
+<td>§12</td>
+<td>Z/(2⁶)Z algebra</td>
+<td><code>SYSTEMS_HEXAGRAM_PHYSICS.md</code></td>
+</tr>
+<tr>
+<td>§13</td>
+<td>Operational cycle</td>
+<td>V5.3 Research Note</td>
+</tr>
+<tr>
+<td>§14</td>
+<td>Amnesia Protocol</td>
+<td>V5.3 Research Note, Act XXXI</td>
+</tr>
+<tr>
+<td>§15</td>
+<td>Ceremony + Forge</td>
+<td><code>ceremonies/</code> directory</td>
+</tr>
+<tr>
+<td>§19</td>
+<td>Identity layers</td>
+<td><code>swordsman_mage_whitepaper_v6_0.md</code> §7</td>
+</tr>
+<tr>
+<td>§20</td>
+<td>Cosmological quaternion</td>
+<td>Grimoire v10.0.0, Act XXXI</td>
+</tr>
+<tr>
+<td>§22</td>
+<td>Promise Theory</td>
+<td><code>promise_theory_reference_v1_4.md</code></td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>11. The Equation, Decoded</h2>
+<p>For those who want plain English alongside the math:</p>
+<p>$$V(\pi, t) = P^{1.5} \cdot C \cdot Q \cdot S \cdot e^{-\lambda t} \cdot (1 + A_h(\tau)) \cdot \left(1 + \sum_i w_i \frac{n_i}{N_0}\right)^k \cdot G \cdot R \cdot M \cdot \Phi_a \cdot \Phi_d \cdot \Phi_i \cdot T_\int(\pi)$$</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Plain English</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>P^1.5</strong></td>
+<td>How strong is the cryptographic protection? (superlinear — privacy compounds)</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>Can claims be verified without revealing secrets?</td>
+</tr>
+<tr>
+<td><strong>Q</strong></td>
+<td>Is the data accurate and fresh?</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td>How sensitive is this data domain?</td>
+</tr>
+<tr>
+<td><strong>e^(−λt)</strong></td>
+<td>How old is the data? (decays without maintenance)</td>
+</tr>
+<tr>
+<td><strong>(1 + A_h(τ))</strong></td>
+<td>Has this data proven itself over time? (verified history adds value)</td>
+</tr>
+<tr>
+<td><strong>Network term</strong></td>
+<td>How connected is the sovereignty network?</td>
+</tr>
+<tr>
+<td><strong>G</strong></td>
+<td>Are agents organised into efficient guilds?</td>
+</tr>
+<tr>
+<td><strong>R(d, c, ρ)</strong></td>
+<td>How hard is it for adversaries to reconstruct?</td>
+</tr>
+<tr>
+<td><strong>M</strong></td>
+<td>How mature is the market for privacy?</td>
+</tr>
+<tr>
+<td><strong>Φ_agent</strong></td>
+<td>Are protection and delegation properly separated? (Swordsman ⊥ Mage)</td>
+</tr>
+<tr>
+<td><strong>Φ_data</strong></td>
+<td>Is data distributed across providers?</td>
+</tr>
+<tr>
+<td><strong>Φ_inference</strong></td>
+<td>Are reasoning and execution properly separated? (Generator ⊥ Solver)</td>
+</tr>
+<tr>
+<td><strong>T_∫(π)</strong></td>
+<td>What value accumulated along the path? (the dance, not the stance)</td>
+</tr>
+</tbody></table>
+<p><strong>The multiplicative insight:</strong> Any term at zero kills the whole thing. You can&#39;t compensate for broken separation with better cryptography. All axes must work.</p>
+<hr>
+</div>
+<div class="md"><h2>12. Glossary Bridge</h2>
+<p>Key terms that appear in the spec without full definition:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Spec Usage</th>
+<th>Full Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>First Person</strong></td>
+<td>Implied throughout</td>
+<td>The human whose behavioural capital is at stake. Not &quot;user&quot; — users are used.</td>
+</tr>
+<tr>
+<td><strong>Sovereignty</strong></td>
+<td>&quot;sovereignty lattice&quot;</td>
+<td>Self-determination over one&#39;s own boundaries, delegations, and data</td>
+</tr>
+<tr>
+<td><strong>Blade</strong></td>
+<td>§12.4, §15</td>
+<td>A forged commitment — six dimensions, cryptographically bound</td>
+</tr>
+<tr>
+<td><strong>Constellation</strong></td>
+<td>§15.3</td>
+<td>The selection of dimensions before forging</td>
+</tr>
+<tr>
+<td><strong>Stratum</strong></td>
+<td>§12.4, §15.5</td>
+<td>Hamming weight — how many sovereignty dimensions are active</td>
+</tr>
+<tr>
+<td><strong>Spectrum</strong></td>
+<td>§12.4</td>
+<td>Six-bit decomposition — which specific dimensions</td>
+</tr>
+<tr>
+<td><strong>Datum</strong></td>
+<td>§12.4</td>
+<td>Raw blade value (0–63)</td>
+</tr>
+<tr>
+<td><strong>The Gap</strong> (⿻)</td>
+<td>§10</td>
+<td>The irreducible space where sovereignty lives — not a void but a guarantee</td>
+</tr>
+</tbody></table>
+<p><strong>Full glossary:</strong> <code>GLOSSARY_MASTER_v4_0.md</code> (160+ entries)</p>
+<hr>
+</div>
+<div class="md"><h2>Conclusion</h2>
+<p>The Formal Spec proves that privacy can be mathematically grounded. This companion shows why it matters.</p>
+<p>The equation computes value. The ceremonies create meaning. The grimoires spread understanding. The architecture enforces guarantees.</p>
+<p>Together, they make privacy normal again.</p>
+<hr>
+<p><em>&quot;The boundary is always enough.&quot;</em> — V5 Axiom</p>
+<p><em>For the math: <code>privacy_value_v5_4_formal_specification.md</code></em><br><em>For the story: <a href="https://agentprivacy.ai/story">agentprivacy.ai/story</a></em><br><em>For the mission: <code>what-agentprivacy-is.md</code></em></p>
+<p><em>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+<hr>
+</div>
+<div class="md"><h2>Document Metadata</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Version</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>Created</td>
+<td>April 10, 2026</td>
+</tr>
+<tr>
+<td>Dependencies</td>
+<td>Formal Spec V5.4 (v2.0), README (V10.0), V6 Research Note</td>
+</tr>
+<tr>
+<td>Author</td>
+<td>privacymage</td>
+</tr>
+<tr>
+<td>Contact</td>
+<td><a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></td>
+</tr>
+<tr>
+<td>License</td>
+<td>CC BY-SA 4.0</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 paper-privacy-value-model-companion-guide</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-papers.html">The Papers</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="paper-privacy-value-model-companion-guide.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

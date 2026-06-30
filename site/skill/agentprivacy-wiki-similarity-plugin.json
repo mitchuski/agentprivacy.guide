@@ -1,0 +1,96 @@
+{
+  "title": "Wiki Similarity Plugin",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "d572c0c2cc6841fc",
+      "text": "# Wiki Similarity Plugin\n\n**Category** wikis · **Version** 5.5\n\nThe wiki-plugin-similarity package — adds semantic similarity search to a fedwiki farm via two item types (similarity search form, similar ambient panel) using in-browser cosine scoring over BGE embedding vectors. Activates when adding similarity/related-pages search to a fedwiki, or as a plugin scaffolding reference. Kept by the Librarian 🗃️."
+    },
+    {
+      "type": "markdown",
+      "id": "1f7683de916869a4",
+      "text": "This plugin adds semantic similarity search to a Federated Wiki farm. It ships two item types — **similarity** (an interactive search form) and **similar** (an ambient panel that automatically finds pages related to the one you are reading).\n\n## Repositories\n\n- **GitHub**: `Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-similarity`\n- **npm**: not yet published — install locally with `npm link` during development\n\n## How It Works\n\nPages in the farm are pre-indexed as 384-dimensional embedding vectors using `BAAI/bge-small-en-v1.5` via the `fastembed` library. At query time the plugin loads these compact `semantic-vectors.json` index files directly in the browser and performs cosine similarity scoring in JavaScript — no round-trip to a remote search engine.\n\n## Item Types\n\n**similarity** — renders a search input. Type a query and the plugin embeds it, scans the loaded indices, and presents the top matching pages as scored links with domain attribution.\n\n**similar** — renders silently on page load. It looks up the current page's pre-computed vector from the cached index (no embed call if the page is already indexed) and displays a *Similar Pages* link list ranked by cosine score.\n\n## Domain DSL\n\nThe item's `text` field is a small configuration language. Write one entry per line:\n\n```\n*                        all indexed domains on this server\ndavid.*                  glob pattern\ndavid.hitchhikers.earth  explicit domain\n# comment                ignored"
+    },
+    {
+      "type": "markdown",
+      "id": "7e9fdb44c1ee5824",
+      "text": "SIMILAR: high            threshold preset  (high=0.78 / medium=0.68 / low=0.58)\nTHRESHOLD: 0.72          exact cosine threshold\nLIMIT: 8                 max results (default 10)\n```\n\nLeave `text` empty to search the current domain at the default medium threshold.\n\n## Server Component\n\nThe plugin's `server/server.js` registers three routes with the wiki's Express app at startup — no changes to wiki-server core required:\n\n- `GET /system/indexed-domains.json?pattern=glob` — list domains with a built index\n- `GET /system/semantic-vectors.json` — serve the vector index for the current domain\n- `GET /system/embed?text=…` — proxy to a local FastAPI embedding service\n\nThe embedding service runs `fastembed` in-process and responds in ~5 ms on an M-series Mac using CoreML acceleration.\n\n## See Also\n\n- `agentprivacy-wiki-searching-plugins` — finding plugins (this is a scaffolding template)\n- `agentprivacy-wiki-create-plugin` — scaffold a new plugin\n- `agentprivacy-wiki-ghost-pages` — the ghost-page pattern this plugin's forms use"
+    },
+    {
+      "type": "markdown",
+      "id": "19ad4dfd270c5651",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/similarity-plugin](https://skill.fedwiki.club/similarity-plugin) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "3b2fa86aaea14ba9",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-similarity-plugin`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "c4100bf837e14ede",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "5051c7ac414ce893",
+      "text": "agentprivacy-wiki-similarity-plugin"
+    },
+    {
+      "type": "markdown",
+      "id": "32f311dba0db9015",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Similarity Plugin",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "d572c0c2cc6841fc",
+            "text": "# Wiki Similarity Plugin\n\n**Category** wikis · **Version** 5.5\n\nThe wiki-plugin-similarity package — adds semantic similarity search to a fedwiki farm via two item types (similarity search form, similar ambient panel) using in-browser cosine scoring over BGE embedding vectors. Activates when adding similarity/related-pages search to a fedwiki, or as a plugin scaffolding reference. Kept by the Librarian 🗃️."
+          },
+          {
+            "type": "markdown",
+            "id": "1f7683de916869a4",
+            "text": "This plugin adds semantic similarity search to a Federated Wiki farm. It ships two item types — **similarity** (an interactive search form) and **similar** (an ambient panel that automatically finds pages related to the one you are reading).\n\n## Repositories\n\n- **GitHub**: `Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-similarity`\n- **npm**: not yet published — install locally with `npm link` during development\n\n## How It Works\n\nPages in the farm are pre-indexed as 384-dimensional embedding vectors using `BAAI/bge-small-en-v1.5` via the `fastembed` library. At query time the plugin loads these compact `semantic-vectors.json` index files directly in the browser and performs cosine similarity scoring in JavaScript — no round-trip to a remote search engine.\n\n## Item Types\n\n**similarity** — renders a search input. Type a query and the plugin embeds it, scans the loaded indices, and presents the top matching pages as scored links with domain attribution.\n\n**similar** — renders silently on page load. It looks up the current page's pre-computed vector from the cached index (no embed call if the page is already indexed) and displays a *Similar Pages* link list ranked by cosine score.\n\n## Domain DSL\n\nThe item's `text` field is a small configuration language. Write one entry per line:\n\n```\n*                        all indexed domains on this server\ndavid.*                  glob pattern\ndavid.hitchhikers.earth  explicit domain\n# comment                ignored"
+          },
+          {
+            "type": "markdown",
+            "id": "7e9fdb44c1ee5824",
+            "text": "SIMILAR: high            threshold preset  (high=0.78 / medium=0.68 / low=0.58)\nTHRESHOLD: 0.72          exact cosine threshold\nLIMIT: 8                 max results (default 10)\n```\n\nLeave `text` empty to search the current domain at the default medium threshold.\n\n## Server Component\n\nThe plugin's `server/server.js` registers three routes with the wiki's Express app at startup — no changes to wiki-server core required:\n\n- `GET /system/indexed-domains.json?pattern=glob` — list domains with a built index\n- `GET /system/semantic-vectors.json` — serve the vector index for the current domain\n- `GET /system/embed?text=…` — proxy to a local FastAPI embedding service\n\nThe embedding service runs `fastembed` in-process and responds in ~5 ms on an M-series Mac using CoreML acceleration.\n\n## See Also\n\n- `agentprivacy-wiki-searching-plugins` — finding plugins (this is a scaffolding template)\n- `agentprivacy-wiki-create-plugin` — scaffold a new plugin\n- `agentprivacy-wiki-ghost-pages` — the ghost-page pattern this plugin's forms use"
+          },
+          {
+            "type": "markdown",
+            "id": "19ad4dfd270c5651",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/similarity-plugin](https://skill.fedwiki.club/similarity-plugin) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "3b2fa86aaea14ba9",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-similarity-plugin`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "c4100bf837e14ede",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "5051c7ac414ce893",
+            "text": "agentprivacy-wiki-similarity-plugin"
+          },
+          {
+            "type": "markdown",
+            "id": "32f311dba0db9015",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384143
+    }
+  ]
+}

@@ -1,0 +1,431 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PVM v6 — Compressed (Swordsman reading) · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>PVM v6 — Compressed (Swordsman reading)</span></div>
+  <article><div class="md"><h1>PVM v6 — Compressed (Swordsman reading)</h1>
+</div>
+<div class="md"><h1>The Equation</h1>
+<p>Static form:</p>
+<p>$$\boxed{\begin{aligned}<br>V(\pi, t) = ; &amp; P^{1.5} \cdot C \cdot Q \cdot S \cdot e^{-\lambda t} \cdot (1 + A_h(\tau)) \<br>&amp; \cdot \left(1 + \sum_i w_i \frac{n_i}{N_0}\right)^k \cdot G(\text{guilds}) \<br>&amp; \cdot R(d, \text{compression}, \rho) \cdot M(u, y) \<br>&amp; \cdot \Phi_{\text{agent}}(\Sigma) \cdot \Phi_{\text{data}}(\Delta) \cdot \Phi_{\text{inference}}(\Gamma) \<br>&amp; \cdot T_{!\int}(\pi)<br>\end{aligned}}$$</p>
+<p>Differential form: $\quad \frac{dV}{dt} = \nabla_{\partial M} \cdot J_{\partial M} + S(x) - D(x)$</p>
+<p>Gating: Multiplicative. Any term $= 0 \implies V = 0$.</p>
+<p>Lattice: $\pi$ is a path through $\mathcal{L} = \mathbb{Z}/64\mathbb{Z}$, $;t$ is time since data generation.</p>
+<p>Grouped V6 reading of the same equation:</p>
+<p>$$V(\pi, t) = \Phi_{v5} \cdot \left[ \sum_{\text{terms}} \right] \cdot A_h(\tau) \cdot T_{\int}(\pi)$$</p>
+<p>$$\Phi_{v5} = \Phi_{agent}(\Sigma) \cdot \Phi_{data}(\Delta) \cdot \Phi_{inference}(\Gamma)$$</p>
+<p>Multiplicative gating: any axis at 0 collapses V. The form is unchanged from V5.4. V6 takes the t in the signature seriously everywhere below.</p>
+<h1>Inherited Terms (V1--V4)</h1>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Name</th>
+<th>Domain</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$P$</td>
+<td>Privacy Strength</td>
+<td>$[0,1]$</td>
+<td>Cryptographic enforcement. Exponent 1.5 via C6.</td>
+</tr>
+<tr>
+<td>$C$</td>
+<td>Credential Verifiability</td>
+<td>$[0,1]$</td>
+<td>Verify without revealing.</td>
+</tr>
+<tr>
+<td>$Q$</td>
+<td>Data Quality</td>
+<td>$[0,1]$</td>
+<td>Accuracy, completeness, fitness.</td>
+</tr>
+<tr>
+<td>$S$</td>
+<td>Scope / Sensitivity</td>
+<td>$\mathbb{R}^+$</td>
+<td>Domain-specific multiplier.</td>
+</tr>
+<tr>
+<td>$e^{-\lambda t}$</td>
+<td>Temporal Decay</td>
+<td>$(0,1]$</td>
+<td>Freshness. $\lambda &gt; 0$.</td>
+</tr>
+<tr>
+<td>$M(u,y)$</td>
+<td>Market Maturity</td>
+<td>$[0,1]$</td>
+<td>User sophistication, market year.</td>
+</tr>
+</tbody></table>
+<h1>Holonic Temporal Memory</h1>
+<p>$$A_h(\tau) = \sum_j p(\tau_j) \cdot w(\tau_j) \cdot e^{-\mu \cdot \text{age}(\tau_j)}$$</p>
+<p>GUID-addressed holons. Infrastructure-independent. $p(\tau_j) = 0 \implies A_h = 0$.</p>
+<h1>Three-Axis Separation</h1>
+<p>$$\Phi_{v5} = \Phi_{\text{agent}}(\Sigma) \cdot \Phi_{\text{data}}(\Delta) \cdot \Phi_{\text{inference}}(\Gamma)$$</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Formula</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent</td>
+<td>$\Phi_a = \min(1, \frac{S/M}{\varphi}) \cdot \det(\Sigma)$</td>
+<td>Swordsman $\perp$ Mage. $\cong D_{2n}$ (C14, 75%)</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>$\Phi_d = 1 - \max_j(\text{share}_j)$</td>
+<td>No single provider holds majority</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>$\Phi_i = 1 - I(\text{model};\text{executor})$</td>
+<td>Generator $\perp$ Solver</td>
+</tr>
+</tbody></table>
+<p>Collapse any axis $\implies$ total collapse.</p>
+<p>C7 (multiplicative form, 30%) is the falsification frontier. Boundary cases register-bound: partial collapse (alternatives: additive-with-floor, min()); axis correlation under composition (candidate correction: det(Σ) form); time dependence (repair path: the differential form). Structural anchor (C85, 40%): Protection+Delegation → Σ · Memory+Value → Δ · Connection+Computation → Γ.</p>
+<h1>Reconstruction Difficulty · the Moving Ceiling</h1>
+<p>Static form (V5.4):</p>
+<p>$$R(d, c, \rho) = R_{\text{base}}(d) \cdot \left(1 - \frac{1}{c}\right) \cdot (1 + \alpha \cdot \rho)$$</p>
+<p>$\rho = f(\text{traversal depth, duration, intentional transitions})$. Dual: privacy amplifier + agent maturity. <strong>Ceiling (proven):</strong> $R &lt; 1$ under budget constraints. $\quad$ <strong>Error floor (proven):</strong> $P_e \geq 1 - R_{\max}$ via Fano.</p>
+<p>The static form is superseded at V6 by the time-indexed form:</p>
+<p>$$R(t) = \frac{C_S(t) + C_M(t)}{H(X)}$$</p>
+<p>$$t^* = \sup{, t : R(t) &lt; 1 ,}$$</p>
+<p>H(X) fixed by the person; capacities evaluated against the strongest adversary class at time t; R(t) non-decreasing under capability growth (C82, 65%). The mechanism is the decoder, not the data. Every static guarantee has a shelf life.</p>
+<h1>Guild Efficiency</h1>
+<p>$$G(\text{guilds}) = \prod_g (1 + \text{efficiency}_g \cdot \text{active}_g / \text{total}_g)$$</p>
+<p>Shared-parent coordination: O(1) not O($N^2$).</p>
+<h1>Path Integral</h1>
+<p>$$T_{!\int}(\pi) = 1 + \beta \int_\pi F(\gamma),d\gamma ;\cong; 1 + \beta \sum_{i=1}^{n} R(\text{step}_i)$$</p>
+<p>$F(\gamma) = \text{resolution_depth} \cdot \text{fidelity}$. One lap = one cycle. Dragon ($\geq$62 laps) = closure.</p>
+<h1>Holographic Bound</h1>
+<p>$$\partial M: \text{96 edges encoding 64 vertices, toroidal topology} \qquad \frac{96}{64} = 1.5 = P^{1.5}$$</p>
+<p>C4 RESOLVED. Boundary encodes bulk. $dV/dt$ computes on $\partial M$, not the 64-vertex interior.</p>
+<p>$J_{\partial M} = J_{\text{agent}} + J_{\text{data}} + J_{\text{inference}} + J_{\text{compression}} + J_{\text{holonic}}$</p>
+<p>96-edge boundary / 64-vertex bulk; $P^{1.5} \leftrightarrow 96/64$ (C6, convergent, 35%). Unchanged at V6.</p>
+<h1>Separation Bound · preconditions explicit</h1>
+<p>$$I(S; M \mid FP) &lt; \varepsilon^* \qquad \text{(load-bearing wall)}$$</p>
+<p><strong>Theorem (95%):</strong> Conditional independence $\implies$ additive MI bound $\implies R_{\max} &lt; 1$.</p>
+<p><strong>Precondition 1 (non-collusion):</strong> $I(Y_S; Y_M \mid X) = 0$ and no third channel carries the inter-agent residue. <strong>Precondition 2:</strong> capacities against a stated adversary class. Grounding: Wyner (1975) equivocation; Fano converse; Leung-Yan-Cheong and Hellman (1978); Bayes-capacity; Geiger and Kubin.</p>
+<p>Amnesia: $\varepsilon_{\text{amnesia}} &lt; \varepsilon_{\text{policy}}$ (C17, quantitative at V6 via the compounding bound below). Topology &gt; policy.</p>
+<p>Betweenness centrality: $C_B(v) = \sum_{s,t} \sigma(s,t|v)/\sigma(s,t)$ (Brandes, 2001). The $\perp$ is the node with maximal betweenness in the trust graph.</p>
+<h1>The Reconstruction Ceiling · Proven, conditional regime</h1>
+<p>$$R_{max} = \frac{C_S + C_M}{H(X)} &lt; 1 \qquad P_e \geq 1 - R_{max}$$</p>
+<p>Both hold inside Preconditions 1 and 2; time-indexed per R(t). Outside the regime, the compounding bound governs:</p>
+<p>$$I(O_N; S_1, \dots, S_N) ;\leq; \sum_{i} 2^{N-i}\varepsilon_i ;=; (2^N - 1)\varepsilon ;;\text{(uniform)}$$</p>
+<p>(Asif-Amiri Theorem 4.1.) Amnesia separation breaks the chain and caps at $N\varepsilon$ (C83, 55%). The policy-to-amnesia gap is exponential-to-linear in N: at N=2, 3ε versus 2ε; at N=5, 31ε versus 5ε. C17 is hereby quantitative.</p>
+<h1>Algebraic Foundation · with the bridge</h1>
+<p>$$\mathcal{L} = (\mathbb{Z}/64\mathbb{Z},;+,;\times) \qquad D_{64} = \langle \text{neg}, \text{bnot} \mid \text{neg}^2 = \text{bnot}^2 = 1,;(\text{neg} \circ \text{bnot})^{64} = 1\rangle$$</p>
+<table>
+<thead>
+<tr>
+<th>Op</th>
+<th>Formula</th>
+<th>Agent</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>neg</td>
+<td>$(64-x) \bmod 64$</td>
+<td>Swordsman</td>
+<td>Boundary. Additive inverse.</td>
+</tr>
+<tr>
+<td>bnot</td>
+<td>$63-x$</td>
+<td>Mage</td>
+<td>Projection. Bitwise complement.</td>
+</tr>
+<tr>
+<td>$\text{neg} \circ \text{bnot}$</td>
+<td>$x+1 = \text{succ}(x)$</td>
+<td>First Person</td>
+<td>The step forward. $\blacksquare$</td>
+</tr>
+</tbody></table>
+<p>PRISM coordinates: $\text{blade}(x) = (\delta, \sigma, s)$: datum, stratum (Hamming weight), spectrum.</p>
+<p>Pascal: ${1,6,15,20,15,6,1}$. Tiers: Null(0) / Light(1--2) / Heavy(3--4) / Dragon(5--6).</p>
+<p>Six dimensions: Protection, Delegation, Memory, Connection, Computation, Value.</p>
+<p>Hexagram: $[d_1 \ldots d_6] \to$ 64 I Ching states. Blade 63 = 111111 = Qian (The Creative).</p>
+<p>All of the above carries unchanged. V6 adds: ARCH-1 enters the lineage, $\Sigma := \mu S.(\beta \lor \Omega(S,S))$ with activation ρ (C26-C29); operational layer ARCH-1R/T (C72-C76): ternary $\tau: T \to {+, 0, -}$, latent ≠ obstructed, $T = \text{orbit}(\rho, G)$. Bridge (C85, 40%): the axes and the triadic coordinates are one primitive; <strong>the gap is β</strong> (the recursion branches share only the First Person). Predictions: bnot-pairs invert all three axes; stratum-3 carries no dominant axis.</p>
+<h1>Operational Cycle</h1>
+<p>$$\text{cycle}(x) = \text{succ}(x) = \text{neg}(\text{bnot}(x))$$</p>
+<p>Observe → Boundary → Project → Return:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Operation</th>
+<th>Agent</th>
+<th>Ceremony</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Observe</td>
+<td>$\text{id}(x)$</td>
+<td>First Person</td>
+<td>Sun · disclosure</td>
+</tr>
+<tr>
+<td>Boundary</td>
+<td>$\text{neg}(x)$</td>
+<td>Swordsman</td>
+<td>Gap · silence</td>
+</tr>
+<tr>
+<td>Project</td>
+<td>$\text{bnot}(\text{neg}(x))$</td>
+<td>Mage</td>
+<td>Moon · reflection</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>$\text{succ}(x)$</td>
+<td>Composition</td>
+<td>Recursion</td>
+</tr>
+</tbody></table>
+<p>$T_{!\int}(\pi) = 1 + \beta \sum_i \text{cycle}(\text{step}_i)$.<br>Progressive trust: Understanding $\to$ Constellation $\to$ Blade $\to$ Runecraft.</p>
+<h1>Amnesia Protocol · the obstruction upgrade</h1>
+<p><strong>Definition (reachability statement, V5.4):</strong> Structural amnesia w.r.t. origin $O$ if no permitted operation sequence can reconstruct $O$.</p>
+<p>ZK: completeness (output demonstrates), soundness (unique configuration), zero-knowledge (origin hidden).</p>
+<p>Implementation: process boundary. Cosmological: Moon&#39;s orbit. Runecraft: Ed25519 key burned on close.</p>
+<p>Obstruction statement (C86, 30%): Grade-2 forgetting $\iff$ the obstruction class to gluing local agent views into a global witness of O is non-vanishing; Grade-1 $\iff$ vanishing class, withheld gluing data. Terminal obstruction = structural loss of β (C73, 50%). Consequence if C86 holds: <strong>amnesia is the only term whose security is independent of t.</strong> Falsification: any view-composition recovering a Grade-2-forgotten O.</p>
+<h1>Forge Cryptography · with the accumulator</h1>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Content addressing</td>
+<td>SHA-256</td>
+</tr>
+<tr>
+<td>Tamper evidence</td>
+<td>Hash chain</td>
+</tr>
+<tr>
+<td>Pre-evocation lock</td>
+<td>Commitment scheme</td>
+</tr>
+<tr>
+<td>Identity binding</td>
+<td>Ed25519 (Mage, held)</td>
+</tr>
+<tr>
+<td>Bilateral binding</td>
+<td>Dual Ed25519 (Mage held + Swordsman burned)</td>
+</tr>
+</tbody></table>
+<p>Moon phase: stratum $\to$ visibility ratio. $;$ 0 = New Moon, 6 = Full Moon.</p>
+<p>V6 adds the City Key trust recursion as IVC (C87, 50%): Key = folded accumulator · trust tasks = step circuits · Charge = folding step · V63 = attested invariant. Substrate line: Nova, HyperNova, MicroNova, LatticeFold (post-quantum hedge). Presence regime 1: 🪢 is non-transferable, non-attesting local color; upgrade ladder: witness co-signing, elapsed-time proofs.</p>
+<h1>The Temporal Thread</h1>
+<p>$$X_b + Y_b &gt; Z_b, \qquad Z_b = t^*$$</p>
+<p>Behavioural Mosca (C49, 70%) closed onto the moving ceiling. Existence-Leak (C81, 70%): $I(\text{feasibility}; \text{method}) &gt; 0$; floor: leakage-resilient ZK with $\lambda &lt; 1$ impossible (Garg-Jain-Sahai). Discount (C84, 50%): $Z_b&#39; = Z_b - D(a)$ on every public feasibility attestation. Countermeasure chain (C18-C21, 10-30%): $|\pi(t) - \pi&#39;(t)| \gtrsim |\delta_0| e^{\lambda t}$, λ unmeasured. Taxonomy: ages progressively (C47, 50%). Trust edges: half-life from inscription (C30-C33).</p>
+<h1>The Geometry of the Gap</h1>
+<p>Stella octangula: no golden ratio (volumes rational: tetrahedron 1/3, octahedral core 1/6, compound 5/12 of the cube); C1 beside the figure is resonance, not derivation. φ lives in the lattice: $\delta(38) = 38/63 = 0.60317$ vs $1/\varphi = 0.61803$, gap 2.4% (C54). Parity cube (C88, 30%): the two tetrahedra are the even/odd parity classes of ${0,1}^3$; ${0,1}^6 = {0,1}^3 \times {0,1}^3$. Octahedral gap (C89, 30%): the intersection is the locus of the conditional-independence bound; β, the conditioning, and the core are three readings of one thing.</p>
+<h1>Conjectures</h1>
+<p>Numbering authority: <code>CONJECTURE_REGISTER_V6.md</code>, head C89. Bands: C1-C17 core · C18-C37 V6 series · C38-C46 bound collection · C47-C55 coherence (C51-C55 occupied) · C56-C66 City · C67-C71 Horizon (pinned v1.8.0) · C72-C80 renumbered at the register lock · C81-C89 registered during the V6 runs. Aliases: C46↔C32 · C60↔C48 · C61↔C49 · CM-C47↔C85.</p>
+<p>Core band, V5.4 baseline (confidences as of April 2026; the register supersedes where they differ):</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C4</td>
+<td>96/64 discrepancy</td>
+<td><strong>RESOLVED</strong></td>
+</tr>
+<tr>
+<td>C6</td>
+<td>$P^{1.5} \leftrightarrow 96/64$ structural</td>
+<td><strong>CONVERGENT</strong> 35%</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Three-axis multiplicative</td>
+<td>30%</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>$\rho$ amplifies + indicates maturity</td>
+<td>55%</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>Hexagram encoding</td>
+<td>60%</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>Bilateral witness quantum-resistant</td>
+<td>65%</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>$\Phi_a \cong D_{2n}$</td>
+<td>75%</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>$T_{!\int} \cong$ resolution pipeline</td>
+<td>65%</td>
+</tr>
+<tr>
+<td>C16</td>
+<td>Betti number trust invariants</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>C17</td>
+<td>Amnesia &gt; policy separation</td>
+<td>60% (quantitative at V6 via C83)</td>
+</tr>
+<tr>
+<td>C18</td>
+<td>Strange attractor dynamics ($\lambda &gt; 0$)</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>C19</td>
+<td>$\rho$ = Lyapunov divergence</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>C20</td>
+<td>Three axes couple as Lorenz variables</td>
+<td>30%</td>
+</tr>
+<tr>
+<td>C21</td>
+<td>Fractal sovereignty dimension</td>
+<td>10%</td>
+</tr>
+</tbody></table>
+<h1>Proven Results · scoped</h1>
+<p>V5.4 baseline (95%):</p>
+<ol>
+<li>Additive MI bounds from conditional independence</li>
+<li>Reconstruction ceiling $R &lt; 1$ under budget constraints</li>
+<li>Error floor via Fano&#39;s inequality</li>
+<li>Graceful degradation under partial compromise</li>
+<li>Ring algebra $\mathbb{Z}/(2^6)\mathbb{Z}$ substrate</li>
+<li>Two-extension autonomy axiom (separate processes)</li>
+<li>Pretext DOM-free measurement as privacy primitive</li>
+</ol>
+<p>V6 scoping: Additive leakage $I(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M)$ at 95% <strong>inside Precondition 1 only</strong>. Separation bound and ceiling: Proven, conditional regime. Worked instances of the drift (2026): Orchard (flaw 2022-05, found 2026-05-29, fixed block 3,364,600 on 2026-06-03); Schrottenloher (eprint 2026/1128, 2026-06-02, ~2 months after the ZK attestation).</p>
+<h1>Version Lineage</h1>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Core Addition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>2024</td>
+<td>$P \cdot C \cdot Q \cdot S$</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Oct 2025</td>
+<td>$+ e^{-\lambda t}$, network effects</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Nov 2025</td>
+<td>$+ R(d), M, \Phi$</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>Feb 2026</td>
+<td>$+ \Sigma, A(\tau), T(\pi)$</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>Feb 2026</td>
+<td>$+$ three-axis $\Phi$, holographic bound, $T_{!\int}$</td>
+</tr>
+<tr>
+<td>V5.1</td>
+<td>Mar 29</td>
+<td>$+ \rho$, bilateral witness (C11--C13)</td>
+</tr>
+<tr>
+<td>V5.2</td>
+<td>Mar 31</td>
+<td>$+ D_{2n}$, PRISM (C14--C16)</td>
+</tr>
+<tr>
+<td>V5.3</td>
+<td>Apr 4</td>
+<td>$+$ operational cycle, amnesia (C17)</td>
+</tr>
+<tr>
+<td>V5.4</td>
+<td>Apr 10</td>
+<td>Consolidated. C18--C21. Full references.</td>
+</tr>
+<tr>
+<td>V5.5</td>
+<td>2026</td>
+<td>Sublayer: attachment architecture</td>
+</tr>
+<tr>
+<td><strong>V6</strong></td>
+<td><strong>Jun 2026</strong></td>
+<td><strong>The gathering turn</strong></td>
+</tr>
+</tbody></table>
+<p>V6 in full: R(t), t*; preconditions and external provenance; the exponential-to-linear gap; the Existence-Leak law; the bridge; obstruction amnesia; the Key as accumulator; the honest geometry; the unified register; unified V6 labels across all canon papers.</p>
+<h1>References</h1>
+<p>V6 grounding: Wyner 1975 · Fano 1961 / Cover-Thomas · Leung-Yan-Cheong &amp; Hellman 1978 · Csiszár &amp; Körner 1978 · Asif &amp; Amiri arXiv:2603.05520 · Patil et al. arXiv:2509.14284 · AgentLeak arXiv:2602.11510 · Garg-Jain-Sahai · Schrottenloher eprint 2026/1128 · Blanco-Romero et al. arXiv:2603.01091 · Bakhta 2026 · Nova / HyperNova / MicroNova / LatticeFold · Mosca 2018 · Bergstra &amp; Burgess 2019 · full list: privacy_value_v6.md §32.</p>
+<p>V5.4 baseline references, carried: Shannon (1948). Fano (1961). Cover &amp; Thomas (2006). Bergstra &amp; Burgess (2019). Susskind (1995). McGilchrist (2009). Groth (2016). PLONK (2019). Nova (2022). Dwork &amp; Roth (2014). Brandes (2001, 2008). Branco et al. (2025). Babbush et al. (2026). Cain et al. (2026). IEEE 7012-2025. UOR Foundation (2026). Hope &amp; Ludlow (2023). Weyl &amp; Tang (2023).</p>
+<p>Narrative corpus (V5.4 record): The First Person Spellbook (31 acts, v10.0.0, CLOSED). Blog: sync.soulbis.com (Parts 0--5). Six grimoires: First Person, Zero Knowledge, Canon, Parallel Society, Plurality, City of Mages (Second Person). The Second Person Spellbook opened 2026-05-08 as the bound collection at <code>tomes/</code>; Tome IV (Witnessing · 5 acts) closed; Tome V (Crafting) open at the City of Mages on Drake Island.</p>
+<p>Full spec: <code>privacy_value_v6.md</code>. Companion: <code>pvm_v6_companion_guide.md</code>.</p>
+<p>Docs: github.com/mitchuski/agentprivacy-docs. Forge: spellweb.ai. Training: agentprivacy.ai. Trust: bgin.ai.</p>
+<hr>
+<p><em>The boundary is always enough. Peer review invited: <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></em></p>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 pvm-v6-compressed-swordsman-reading</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-pvm-papers.html">The PVM Papers</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="pvm-v6-compressed-swordsman-reading.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

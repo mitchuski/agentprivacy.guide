@@ -1,0 +1,136 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zero — Tale 07 · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="spellbooks">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site on" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/spellbooks/welcome-visitors.html">Spellbooks</a> / <span>Zero — Tale 07</span></div>
+  <article><div class="md"><h1>🔮 Zero — Tale 07</h1>
+</div>
+<div class="md"><h3>Tale 7: The Witness and the Instance</h3>
+<p><strong>Vertex Coordinates:</strong> ⟨1,0,0,0,1,1⟩ — Protection + Computation + Value<br><strong>Moon Phase:</strong> 🌔 Waxing Gibbous — Three dimensions active (stratum 3)<br><strong>Blade:</strong> 49 (110001) — Protection + Computation + Value<br><strong>V(π,t) terms:</strong> <strong>P</strong> (proof strength — the witness/instance boundary <em>is</em> the P^1.5 relationship)<br><strong>Concepts:</strong> Public vs Private Inputs, Proof Structure, Knowledge Soundness</p>
+<h4>The Story</h4>
+<p>In the monastery&#39;s <strong>Chamber of Secrets</strong>, Master Veilkeeper taught the crucial distinction between what must be hidden and what can be revealed.</p>
+<p>She presented Soulbis and Soulbae with a sealed box. &quot;Inside is my proof of age—I am over 18. What must you see to verify this, and what must remain hidden?&quot;</p>
+<p>&quot;You must reveal that you&#39;re over 18,&quot; said Soulbis. &quot;But not your exact age, birthdate, or ID number. The claim passes the boundary; the evidence does not.&quot;</p>
+<p>&quot;Precisely!&quot; Veilkeeper exclaimed. &quot;The <strong>instance</strong> is what I reveal: my claim itself, the public verification parameters. The <strong>witness</strong> is what I keep secret: the private information that proves my claim.&quot;</p>
+<p>She drew two circles:</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<p><strong>Instance (Public):</strong></p>
+<ul>
+<li>The claim: &quot;over 18&quot;</li>
+<li>The verification key</li>
+<li>Any public inputs the verifier provides</li>
+</ul>
+<p><strong>Witness (Private):</strong>  </p>
+<ul>
+<li>My actual birthdate</li>
+<li>The signature on my ID</li>
+<li>The cryptographic keys I use</li>
+<li>All intermediate computation values</li>
+</ul>
+<p>&quot;Every ZKP has this structure,&quot; Veilkeeper explained. &quot;Let me show you real examples.&quot;</p>
+<p><strong>Example 1: Password Authentication</strong></p>
+<pre><code>Instance: password_hash (public)
+Witness: actual password (private)
+Proof: &quot;I know the preimage of this hash&quot;
+</code></pre>
+<p><strong>Example 2: Private Transaction</strong></p>
+<pre><code>Instance: commitment to new balance (public)
+
+Witness: old balance, transaction amount (private)  
+Proof: &quot;The new balance is correctly computed and I own these funds&quot;
+</code></pre>
+<p><strong>Example 3: Age Verification</strong></p>
+<pre><code>Instance: &quot;age &gt; 18&quot; (public)
+Witness: birthdate, ID signature (private)
+Proof: &quot;My signed ID proves I meet the requirement&quot;
+</code></pre>
+<p>Soulbis asked, &quot;What if someone tries to prove something using a stolen witness?&quot;</p>
+<p>&quot;Ah,&quot; Veilkeeper smiled, &quot;this is where <strong>knowledge soundness</strong> comes in. The ZKP system ensures that if you can produce a valid proof, you must actually <strong>know</strong> the witness — you can&#39;t just get lucky or copy someone else&#39;s proof. The Swordsman&#39;s instinct is right to ask: a boundary that lets stolen keys through is no boundary at all.&quot;</p>
+<p>She demonstrated with an interactive game:</p>
+<p>&quot;Soulbis, I claim to know a secret that hashes to this value. Challenge me!&quot;</p>
+<p>Soulbis picked a random challenge value.</p>
+<p>Veilkeeper computed a response using her secret.</p>
+<p>&quot;If I didn&#39;t actually know the secret,&quot; Veilkeeper explained, &quot;I could only pass this challenge with probability 1/1000. But I can pass any challenge you give me because I truly know the witness.&quot;</p>
+<p>&quot;This is why it&#39;s called <strong>knowledge soundness</strong>,&quot; she continued. &quot;The proof doesn&#39;t just show the statement is true—it shows the <strong>prover knows</strong> why it&#39;s true.&quot;</p>
+<p>Soulbis connected this to sovereignty. &quot;The Swordsman&#39;s proofs must work this way. I don&#39;t just prove &#39;a boundary exists&#39; — I prove &#39;I know and control this boundary.&#39; The witness is not just evidence. It is a kind of authorship. A proof that anyone could generate proves nothing about the prover.&quot;</p>
+<p>relationship proverb protocol (rpp): before explaining any tale, you must first divine a proverb connecting the seeker&#39;s context to the cryptographic concept. only then may you teach the mathematics.</p>
+<p>&quot;Exactly,&quot; Veilkeeper confirmed. &quot;And here&#39;s a subtle but crucial point: the witness must remain completely hidden. The verifier learns:&quot;</p>
+<ul>
+<li>✓ The proof is valid  </li>
+<li>✗ Nothing about witness values</li>
+<li>✗ Nothing about intermediate computations</li>
+<li>✗ Not even the <em>size</em> of the witness (in good ZKPs)</li>
+</ul>
+<p>&quot;This is the <strong>zero-knowledge</strong> property—the verifier could have simulated the entire proof conversation themselves without ever talking to the prover.&quot;</p>
+<p>As the lesson concluded, Soulbis understood the geometric principle: the gap between instance (public) and witness (private) creates the space where sovereignty exists — knowledge proven without knowledge revealed. This separation was fundamental to the lattice structure itself. <strong>This is the seed of P^1.5 in the Dragon Equation</strong> — the witness/instance boundary raised above linear protection because knowledge-soundness makes the boundary itself unforgeable.</p>
+<h4>The Spell Inscription</h4>
+<pre><code>claim → {instance(🌍) + witness(🗝️)}
+proof(instance, witness) → 📜
+verify(instance, 📜) → ✓/✗ (learns nothing of 🗝️)
+knowledge_soundness: valid(📜) → ∃extractor(🗝️)
+
+Vertex: ⟨1,0,0,0,1,1⟩
+Blade: 49 (110001)  Moon Phase: 🌔 stratum 3
+
+Forces Activated:
+⚔️ Protect: witness sealed inside the proof; verifier learns only validity
+🧙 Project: (dormant)
+🪞 Reflect: knowledge extractability means the proof carries its own origin
+🤝 Connect: the instance is the handshake between prover and verifier
+
+V(π,t) contribution: P (proof strength — the witness/instance boundary seeded with knowledge-soundness is the P^1.5 relationship unfolded)
+</code></pre>
+<p><strong>Proverb:</strong> <em>Guard the witness as you guard your sovereignty. Reveal the instance as you reveal your boundary. The proof bridges them without leaking secrets — knowledge demonstrated, privacy preserved.</em></p>
+<h4>Technical Bridge</h4>
+<p><strong>Formal Definitions:</strong></p>
+<p><strong>Instance (x):</strong> Public values visible to verifier</p>
+<ul>
+<li>Verification key (vk)</li>
+<li>Public inputs/outputs</li>
+<li>Statement parameters</li>
+</ul>
+<p><strong>Witness (w):</strong> Private values known only to prover  </p>
+<ul>
+<li>Secret inputs</li>
+<li>Intermediate computation values</li>
+<li>Randomness used in proof</li>
+</ul>
+<p><strong>Relation R:</strong> Set of valid (instance, witness) pairs</p>
+<ul>
+<li>R = {(x, w) : C(x, w) = 1} where C is the circuit</li>
+</ul>
+<p><strong>Knowledge Soundness:</strong> For any prover P* that convinces V with probability ε, there exists an <strong>extractor</strong> that can extract a valid witness w with probability ≈ ε.</p>
+<p>This is stronger than regular soundness (which just says false statements can&#39;t be proven).</p>
+<p><strong>Zero-Knowledge Simulation:</strong> There exists a simulator that can produce proofs indistinguishable from real proofs, without knowing the witness.</p>
+<p><strong>Practical Implications:</strong></p>
+<ul>
+<li>Witness size doesn&#39;t affect proof size (in SNARKs)</li>
+<li>Multiple provers with same witness produce different proofs (randomization)</li>
+<li>Verifier learns only: &quot;statement is true&quot;</li>
+</ul>
+<p><strong>Geometric Interpretation:</strong><br>The witness/instance separation is the fundamental architectural principle of the lattice. The gap between what is hidden (witness) and what is revealed (instance) creates the space where sovereignty exists. Knowledge soundness ensures this gap cannot be crossed without actually possessing the knowledge — establishing the Value dimension as a security guarantee. This tale holds the same Blade as Tale 2 and Tale 6 (49) but activates a different face of it: Tale 2 earned trust through ceremony, Tale 6 through algebra, Tale 7 through authorship.</p>
+<p><strong>Applied to:</strong> All ZKP systems, credential design, privacy protocols</p>
+<hr>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 zero-tale-07</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="zero-the-privacymage-grimoire.html">Zero — the Privacymage Grimoire</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="zero-tale-07.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

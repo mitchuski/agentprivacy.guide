@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Skill Library · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Skill Library</span></div>
+  <article><div class="md"><h1>Wiki Skill Library</h1>
+<p><strong>Category</strong> wikis · <strong>Version</strong> 5.5</p>
+<p>The convention that a federated-wiki page whose title ends in &quot;Skill&quot; is a forkable, annotatable Claude skill — turning a fedwiki farm into a living skill library. Activates when discussing the fedwiki-as-skill-library model, the fedwiki-skill meta-skill, skill discovery/federation, or the security of remotely-sourced skills. Kept by the Librarian 🗃️.</p>
+</div>
+<div class="md"><p>Federated wiki pages can become Claude skills. A page on <code>skill.fedwiki.club</code> whose title ends in the word <strong>Skill</strong> is treated as a Claude skill — its story items become the instructions Claude follows. This turns the fedwiki farm into a living, forkable, annotatable skill library.</p>
+<h2>How It Works</h2>
+<p>A meta-skill called <code>fedwiki-skill</code> intercepts requests that match a skill page on <code>skill.fedwiki.club</code>:</p>
+<ol>
+<li>Claude receives a user request</li>
+<li>The meta-skill searches <code>skill.fedwiki.club</code> for pages ending in <strong>Skill</strong> whose description matches</li>
+<li>It fetches the page JSON from <code>https://guide.agentprivacy.ai</code></li>
+<li>It parses the story items in order — <code>markdown</code> and <code>paragraph</code> items become instructions</li>
+<li>Claude executes those instructions against the user&#39;s request</li>
+</ol>
+<h2>Why Fedwiki is a Good Fit</h2>
+<p>Fedwiki&#39;s architecture maps elegantly onto a skill library:</p>
+<ul>
+<li><strong>Fork model</strong> — anyone can fork a skill page, adapt it, and host their own version. Attribution is built in via the journal.</li>
+<li><strong>Federation</strong> — skill pages can link to and reference other skills across the federation. A skill can build on another.</li>
+<li><strong>Literate</strong> — the skill IS the documentation. Explanatory text, examples, and executable instructions live together on the same page.</li>
+<li><strong>Versioning</strong> — the journal tracks every change. You can see how a skill evolved.</li>
+<li><strong>Discoverability</strong> — browsing <code>skill.fedwiki.club</code> shows all available skills as readable wiki pages.</li>
+<li><strong>Community</strong> — the fork model enables collective improvement, just as fedwiki enables collective knowledge building.</li>
+</ul>
+<h2>Security Concerns</h2>
+<h3>Prompt Injection (primary risk)</h3>
+<p>Story items become Claude&#39;s instructions. A malicious or compromised page could instruct Claude to exfiltrate data, delete files, or perform harmful actions.</p>
+<p><strong>Mitigations:</strong></p>
+<ul>
+<li>Only parse <code>markdown</code> and <code>paragraph</code> item types as instructions — never execute <code>code</code> blocks directly</li>
+<li>Show the user the source page URL before executing any remotely-sourced skill</li>
+<li>Require explicit confirmation before running a skill for the first time</li>
+</ul>
+<h3>Domain Trust</h3>
+<p>Restricting to <code>skill.fedwiki.club</code> creates a trust boundary — but a compromised server compromises all skills.</p>
+<p><strong>Mitigation:</strong> Serve skills from <code>localhost</code> only — the local wiki farm mirrors <code>skill.fedwiki.club</code> via Nextcloud sync. Claude fetches from <code>https://guide.agentprivacy.ai</code> not the remote server. Skills only update when you consciously sync.</p>
+<h3>Fork Contamination</h3>
+<p>A trusted skill page may contain story items forked from any site in the federation — including malicious ones.</p>
+<p><strong>Mitigation:</strong> Inspect the journal — each item records its origin site. Warn if items originate outside a whitelist of trusted domains.</p>
+<h3>Page Naming</h3>
+<p>The <strong>Skill</strong> suffix is a weak gate — anyone with write access can create a matching page.</p>
+<p><strong>Mitigation:</strong> Require a curated index page on <code>skill.fedwiki.club</code> — only pages listed there are valid skills. Or require a <code>skill-meta</code> story item as an explicit marker.</p>
+<h2>Recommended Architecture</h2>
+<pre><code>skill.fedwiki.club              &lt;- canonical remote skill library
+        ↓ Nextcloud sync
+~/Nextcloud/fedwiki/skill.fedwiki.club/pages/
+        ↓ served locally by wiki farm
+https://guide.agentprivacy.ai
+        ↑ Claude fetches from here (never remote directly)
+</code></pre>
+<h2>Advantages Over Static SKILL.md Files</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SKILL.md</th>
+<th align="right">Fedwiki Skill</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Authoring</td>
+<td>Text editor</td>
+<td align="right">Wiki browser</td>
+</tr>
+<tr>
+<td>Sharing</td>
+<td>Git / file copy</td>
+<td align="right">Fork a page</td>
+</tr>
+<tr>
+<td>Attribution</td>
+<td>None built in</td>
+<td align="right">Journal tracks origin</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>Separate</td>
+<td align="right">Same page</td>
+</tr>
+<tr>
+<td>Discoverability</td>
+<td>File system</td>
+<td align="right">Browsable wiki</td>
+</tr>
+<tr>
+<td>Community</td>
+<td>Pull requests</td>
+<td align="right">Forking</td>
+</tr>
+<tr>
+<td>Versioning</td>
+<td>Git</td>
+<td align="right">Journal</td>
+</tr>
+</tbody></table>
+<h2>Open Questions</h2>
+<ul>
+<li>Should skill pages be validated before use — a trusted signature or hash?</li>
+<li>Should Claude cache skill pages locally as generated <code>SKILL.md</code> files for speed?</li>
+<li>How do we handle versioning — pin a skill to a specific journal date?</li>
+<li>Should a skills index page act as a curated allowlist?</li>
+<li>Can a skill page link to sub-skills — composing complex behaviour from simpler pages?</li>
+</ul>
+<h2>Note for the agentprivacy guide/ layer</h2>
+<p>This is the conceptual root of the Librarian&#39;s forking-discipline: the fedwiki farm <em>is</em> a forkable library; <code>agentprivacy-wiki-to-skill</code> is the act of forking a page; the journal is the lineage; the <code>wikis/</code> category is the agentprivacy materialized cache of forks (each with <code>upstream:</code> provenance). A fedwiki URL is a git-less clone — forking, not lending; nothing returns.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis (the git-less onboarding layer)<br><strong>Upstream:</strong> <a href="https://skill.fedwiki.club/fedwiki-claude-skills">skill.fedwiki.club/fedwiki-claude-skills</a> — vendored + re-framed; not original agentprivacy authorship</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-skill-library</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-wiki-skill-library</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-skill-library.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

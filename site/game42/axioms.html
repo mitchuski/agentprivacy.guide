@@ -1,0 +1,167 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AXIOMS — the canon game42 conforms to · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="game42">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site on" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/game42/welcome-visitors.html">Game of 42</a> / <span>AXIOMS — the canon game42 conforms to</span></div>
+  <article><div class="md"><h1>AXIOMS — the canon game42 conforms to</h1>
+<p>These are load-bearing rules, not suggestions. The soulbis <strong>sovereignty lattice</strong> is<br>the shared coordinate system across <code>soulbis website/</code>, <code>star/</code>, and <code>game42/</code>. When<br>game42 disagrees with it, <strong>game42 is wrong and must be corrected</strong> — the lattice is<br>MODEL-locked (2026-06-12, PVM §12.6) and carries the production κ conformance vector<br>and the named anchors. An agent asked to &quot;correct game42 to canon&quot; checks every axiom<br>below and fixes any drift.</p>
+<hr>
+</div>
+<div class="md"><h2>A1 · The six dimensions and their bits (d₁ is the HIGH bit)</h2>
+<p>The lattice is ℒ = ℤ/64ℤ = {0,1}⁶. A vertex is a 6-bit address. The bit order is fixed<br>by soulbis <code>lattice/index.html</code> (<code>DIMS</code>, line ~220). <strong>Protection is the high bit (32);<br>Value is the low bit (1).</strong></p>
+<table>
+<thead>
+<tr>
+<th>dim</th>
+<th>name</th>
+<th>emoji</th>
+<th>bit</th>
+<th>vertex value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d₁</td>
+<td>Protection</td>
+<td>🛡️</td>
+<td>5 (HIGH)</td>
+<td><strong>32</strong></td>
+</tr>
+<tr>
+<td>d₂</td>
+<td>Delegation</td>
+<td>🤝</td>
+<td>4</td>
+<td><strong>16</strong></td>
+</tr>
+<tr>
+<td>d₃</td>
+<td>Memory</td>
+<td>📜</td>
+<td>3</td>
+<td><strong>8</strong></td>
+</tr>
+<tr>
+<td>d₄</td>
+<td>Connection</td>
+<td>🔗</td>
+<td>2</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>d₅</td>
+<td>Computation</td>
+<td>⚡</td>
+<td>1</td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>d₆</td>
+<td>Value</td>
+<td>💎</td>
+<td>0 (LOW)</td>
+<td><strong>1</strong></td>
+</tr>
+</tbody></table>
+<p>game42&#39;s axis ids map straight onto these: <code>protection→32, delegation→16, memory→8, connection→4, compute→2, value→1</code>.</p>
+<p><strong>Check:</strong> every slot in <code>game-of-42.json</code> has <code>latticeAxisVertex</code> equal to the value<br>above for its <code>axisId</code>; each entry in <code>axisSpace.axes</code> carries the same <code>latticeAxisVertex</code>.<br>Any projection code (e.g. <code>src/citykey.js</code> <code>AXIS_VERTEX</code>) uses this exact map — <strong>never<br><code>1 &lt;&lt; axisIndex</code></strong> (that wrongly assigns protection→8).</p>
+<p><strong>Anchor test (must hold):</strong> V38 = <code>100110</code> = 🛡️🔗⚡ (Protection·Connection·Computation,<br>&quot;Aletheia&quot;); V25 = <code>011001</code> = 🤝📜💎 (Delegation·Memory·Value, &quot;Lethe&quot;);<br>V41 = <code>101001</code> = 🛡️📜💎 (&quot;Memora&quot;). Read the 6-bit string left→right as d₁…d₆.</p>
+<hr>
+</div>
+<div class="md"><h2>A2 · The operators</h2>
+<p>Over ℤ/64ℤ, with <code>neg</code>/<code>bnot</code>/<code>succ</code> as the only operators:</p>
+<ul>
+<li><code>neg(x)  = (64 - x) % 64</code> — ⚔️ Swordsman · Protect · reflection (fixed points 0, 32)</li>
+<li><code>bnot(x) = 63 - x</code>        — 🧙 Mage · Project · antipode (no fixed point)</li>
+<li><code>succ(x) = (x + 1) % 64</code>  — the wheel; <code>succ = neg ∘ bnot</code></li>
+</ul>
+<p>Swordsman and Mage are the two reflections whose composition is sovereignty; the model<br><strong>starts from two</strong>. In game42 they are bound to two of the six roots: <strong>protection =<br>Swordsman ⚔️</strong>, <strong>delegation = Mage 🧙</strong>. Their separation is the Gap ⿻ (the <code>⊥</code> in the<br>seal <code>(⚔️⊥⿻⊥🧙)😊</code>).</p>
+<hr>
+</div>
+<div class="md"><h2>A3 · κ — the identity hash (two parameterizations, one algorithm)</h2>
+<p>κ = <code>SHA-256</code> over a <strong>canonical form</strong>: object keys sorted recursively, no whitespace,<br>UTF-8. <strong>Numbers must be stringified upstream</strong> before hashing (Python <code>1.0</code> ≠ JS <code>1</code>);<br>never feed a raw float into a hash.</p>
+<p>Two parameterizations exist on purpose — keep them distinct:</p>
+<table>
+<thead>
+<tr>
+<th>use</th>
+<th>excludes</th>
+<th>label format</th>
+<th>where</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>game42 VRC / seal</td>
+<td><code>{kappa, seal, vrcId, gameId}</code></td>
+<td><strong>bare hex</strong></td>
+<td><code>src/hash.js</code></td>
+</tr>
+<tr>
+<td>soulbis City Key (incl. our projection)</td>
+<td><strong><code>kappa</code> only</strong></td>
+<td><strong><code>sha256:</code></strong><code>&lt;hex&gt;</code></td>
+<td><code>src/citykey.js</code>, soulbis <code>/skye /star /lattice /sigil</code></td>
+</tr>
+</tbody></table>
+<p><strong>Check:</strong> a City Key projection&#39;s <code>kappa</code> re-derives byte-identically in soulbis <code>/skye</code><br>(<code>kappaLabel</code>, exclude-only-<code>kappa</code>, <code>sha256:</code> prefix). The soulbis default-key<br>conformance vector is <code>sha256:0b4916babe5eb17104b342ab06030f2071a818024b345bf6d2e4115617c3c527</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>A4 · What is hashed (so corrections don&#39;t cause false alarms)</h2>
+<ul>
+<li>The <strong>group seal</strong> hashes the 42 VRC κ-labels (sorted) + the geometry snapshot at p=1<br>(positions <code>toFixed(3)</code> as strings). It does <strong>not</strong> hash <code>latticeAxisVertex</code>,<br><code>barycentric</code>, <code>position2D</code>, palette, or preset.</li>
+<li>A <strong>VRC κ</strong> hashes the VRC fields only.</li>
+</ul>
+<p>Therefore: correcting <code>latticeAxisVertex</code> (A1), changing palette (A6), or relabeling a<br>preset does <strong>not</strong> invalidate any existing seal or κ. The only thing the lattice-vertex<br>map affects is the <strong>projection</strong> — which vertices light and the <code>axisBitmask</code> — i.e.<br>whether two systems agree on which point &quot;protection&quot; means. That agreement is the whole<br>point of A1.</p>
+<hr>
+</div>
+<div class="md"><h2>A5 · The stable seam (what may cross between games and rooms)</h2>
+<p>Cross-system overlap binds to <strong>only</strong> these four fields of a sealed game:<br><code>{ seal, kappa, axisBitmask, packets }</code>. Everything interior — the 42-slot layout, the<br>fold geometry, the preset vocabularies, the fractal seam — stays game-side and may<br>change freely. <strong>No integration may read a game&#39;s interior.</strong> (See <code>src/citykey.js</code>.)</p>
+<hr>
+</div>
+<div class="md"><h2>A6 · Palette (carrier vs forge)</h2>
+<ul>
+<li><strong>Carrier palette (canon)</strong> — soulbis: <code>cool #141a3d · warm #f0eee8 · sword #e8523a (coral) · mage #4dd9e8 (cyan)</code>. Used whenever a key is projected for soulbis to render<br>or charge.</li>
+<li><strong>Forge theme (game42&#39;s own)</strong> — <code>sword/protection #E0A526 (amber) · mage/delegation #2563EB (sapphire)</code>. Permitted as a <em>theme preset only</em>; it rides as descriptive<br>metadata, never as canon and never inside an identity hash.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>A7 · The PNG carrier</h2>
+<p>JSON embedded base64 in a PNG <code>tEXt</code> chunk, CRC-32 valid, byte-exact round-trip. Keywords:<br><code>game42</code> (event log), <code>cityKey</code> (single City Key / projection), <code>citySky</code> (a whole sky).<br>One PNG may carry several chunks; each reader greps its own keyword and ignores the rest.</p>
+<hr>
+</div>
+<div class="md"><h2>A8 · Multiplicative collapse (any axis at zero zeros the whole)</h2>
+<p>The board seals only when all six heptads lock; one incomplete heptad keeps it open — there<br>is no partial seal. This is Φ_v5 = Φ_agent · Φ_data · Φ_inference made into a gate<br>(GAME-FLOW §3, MODEL-SYNC §1). <strong>Check:</strong> <code>flow.js boardPhase()</code> returns <code>sealed</code> only when<br>every axis&#39; <code>heptadPhase</code> is <code>locked</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>A9 · p is derived, never set</h2>
+<p>The fold scalar <code>p = (slots sealed) / 42</code>. Geometry reads it; nothing writes game state from<br>it. The fold is a readout of honest completion, not a control (the manual <code>p</code> slider is a dev<br>what-if only). <strong>Check:</strong> no path mutates slot/heptad/board state from <code>p</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>A10 · The event log is the canonical artifact</h2>
+<p>A game is a fold over an ordered event log: the same log yields the same state and the same<br>seal, every time (GAME-FLOW §6). Persist the log; derive everything else. <strong>Check:</strong> loading a<br>saved game replays its log and re-seals byte-identically; the PNG carries the log, not a<br>snapshot of derived state.</p>
+<hr>
+</div>
+<div class="md"><h2>A11 · Generator ⊥ Solver (the head/hands split)</h2>
+<p>In every heptad the head-class stations (vision fish) are the Generator and the hands/heart<br>stations (mice) are the Solver; the keystone guide (head+heart+hands) integrates. This ⊥ is<br>Φ_inference and is carried by the fill order (fish before mice before guide) and the gates.<br><strong>Check:</strong> each heptad stays 3 vision-fish (head-containing, non-centre) / 3 mice / 1 guide<br>(the centre), guide sealing last.</p>
+<hr>
+<h3>How to use this file</h3>
+<p>An agent asked to bring game42 to canon should, in order: verify A1 against<br><code>game-of-42.json</code> and every vertex-map in <code>src/</code>; verify A3/A4 against <code>src/hash.js</code> and<br><code>src/citykey.js</code>; verify A6 palettes; and report (not silently &quot;fix&quot;) any place where the<br>interior leaks across the A5 seam. Cross-references: <code>MODEL-SYNC.md</code> (the model mapping),<br>soulbis <code>lattice/index.html</code> (the bit order source of truth), and<br><code>soulbis website/PLAN_INTEGRATION_VIZ_KEY_GAME42_2026-06-27.md</code> (the integration).</p>
+</div>
+<div class="md"><hr>
+<p><a class="wlink" href="welcome.html">Welcome</a> · the Game of 42 — six axes × seven stations = 42</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">14 revisions</div>
+    <a class="json-link" href="axioms.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

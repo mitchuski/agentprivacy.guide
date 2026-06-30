@@ -1,0 +1,198 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guild Efficiency · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Guild Efficiency</span></div>
+  <article><div class="md"><h1>Guild Efficiency</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>G(guilds) = 1 + guild_efficiency; Network_v5 = (1 + Σ wᵢ·nᵢ/N₀)^k · G(guilds)</code></p>
+<p>Guild efficiency and shared-parent coordination for 0xagentprivacy V5. Activates when discussing G(guilds) network term, O(1) vs O(N²) scaling, shared reasoning libraries, guild coordination economics, or why some networks scale gracefully while others collapse.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)<br><strong>Target context:</strong> Network architects, guild builders, coordination economists<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>V4&#39;s network term treated all coordination as O(N²) — each agent potentially interacting with every other. BRAID&#39;s shared-parent pattern shows this is wrong for structured collaboration.</p>
+<p><strong>Agents sharing a reasoning library from the same Generator don&#39;t need pairwise coordination.</strong> They share a parent. The interaction cost drops from O(N²) to O(1) per guild member.</p>
+<p>V5 adds:</p>
+<pre><code>Network_v5(G) = (1 + Σᵢ wᵢ · nᵢ/N₀)^k · G(guilds)
+
+Where G(guilds) = 1 + guild_efficiency
+</code></pre>
+<h2>The Scaling Problem</h2>
+<h3>O(N²) Coordination</h3>
+<p>In a network of N agents where every pair might interact:</p>
+<ul>
+<li>Communication channels: N(N-1)/2</li>
+<li>Synchronisation overhead: O(N²)</li>
+<li>Coordination cost: Scales quadratically</li>
+</ul>
+<p>This is why many networks collapse as they grow. The coordination overhead eventually exceeds the network benefit.</p>
+<h3>O(1) Shared-Parent</h3>
+<p>Agents sharing a reasoning library (shared parent) coordinate differently:</p>
+<ul>
+<li>They inherit common context from the parent</li>
+<li>They don&#39;t need to synchronise pairwise</li>
+<li>New members add O(1) overhead, not O(N)</li>
+</ul>
+<p><strong>The parent absorbs the coordination complexity.</strong></p>
+<h2>Guild Structure</h2>
+<p>A guild is a set of agents sharing a reasoning parent:</p>
+<pre><code>Guild(G) = { agents a : parent(a) = G }
+</code></pre>
+<p>Properties:</p>
+<ul>
+<li>All agents in the guild share context from G</li>
+<li>New agent joining: O(1) to acquire parent context</li>
+<li>Agent-to-agent coordination within guild: O(1) (shared context)</li>
+<li>Cross-guild coordination: O(N) at guild level, not agent level</li>
+</ul>
+<h3>Guild Efficiency</h3>
+<pre><code>guild_efficiency = Σ_g (|guild_g|/N) · coordination_benefit(g)
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>|guild_g| = number of agents in guild g</li>
+<li>N = total agents in network</li>
+<li>coordination_benefit(g) = efficiency gain from shared-parent in guild g</li>
+</ul>
+<p>At full guild coverage with optimal structure:</p>
+<ul>
+<li>guild_efficiency → 1</li>
+<li>G(guilds) → 2 (doubles network effect)</li>
+</ul>
+<h2>Connection to BRAID</h2>
+<p>BRAID&#39;s Generator-Solver split is exactly the shared-parent pattern:</p>
+<ul>
+<li><strong>Generator</strong> = the parent (produces reasoning libraries)</li>
+<li><strong>Solver instances</strong> = guild members (execute reasoning libraries)</li>
+<li><strong>Reasoning library</strong> = shared context (skill file, cached graph)</li>
+</ul>
+<p>Multiple Solver instances executing the same Generator&#39;s reasoning library form a natural guild. They coordinate at O(1) because they share the reasoning structure.</p>
+<h2>Why This Matters for Scaling</h2>
+<h3>Graceful Networks</h3>
+<p>Networks that scale gracefully share a common pattern:</p>
+<ul>
+<li>Hierarchical parent structure</li>
+<li>Guild-based coordination</li>
+<li>O(1) per-member overhead</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>Academic disciplines (shared methodology = parent)</li>
+<li>Professional guilds (shared training = parent)</li>
+<li>BRAID deployments (shared Generator = parent)</li>
+</ul>
+<h3>Collapsing Networks</h3>
+<p>Networks that collapse under coordination overhead:</p>
+<ul>
+<li>Flat, fully-connected structure</li>
+<li>No shared context inheritance</li>
+<li>O(N²) pairwise coordination</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>Unmoderated social networks</li>
+<li>All-hands meetings that scale with team size</li>
+<li>Consensus protocols requiring all-to-all communication</li>
+</ul>
+<h2>Mapping to PVM-V5</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>V5 Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Network term</td>
+<td>(1 + Σ wᵢ·nᵢ/N₀)^k</td>
+</tr>
+<tr>
+<td>Guild efficiency factor</td>
+<td>G(guilds) = 1 + guild_efficiency</td>
+</tr>
+<tr>
+<td>Shared parent</td>
+<td>Generator / reasoning library</td>
+</tr>
+<tr>
+<td>Guild members</td>
+<td>Solver instances / agents sharing parent</td>
+</tr>
+<tr>
+<td>O(N²) → O(1)</td>
+<td>Guild coordination benefit</td>
+</tr>
+<tr>
+<td>Full network effect</td>
+<td>Network_v5 = base^k · G(guilds)</td>
+</tr>
+</tbody></table>
+<h2>Operational Guidance</h2>
+<h3>For Guild Design</h3>
+<ul>
+<li>Identify natural parent structures (shared methodologies, tools, contexts)</li>
+<li>Design explicit parent inheritance (skill files, reasoning libraries)</li>
+<li>Measure guild_efficiency as coordination cost reduction</li>
+<li>Monitor for guild fragmentation (loss of shared context)</li>
+</ul>
+<h3>For Network Scaling</h3>
+<ul>
+<li>Structure networks into guilds, not flat meshes</li>
+<li>Cross-guild coordination should happen at guild level, not agent level</li>
+<li>Shared-parent patterns reduce coordination overhead exponentially</li>
+<li>Network health includes guild structure health</li>
+</ul>
+<h3>For BRAID Deployment</h3>
+<ul>
+<li>One Generator, many Solvers = one guild</li>
+<li>Multiple Generators = multiple guilds</li>
+<li>Inter-Generator coordination = cross-guild coordination</li>
+<li>Measure guild_efficiency as reasoning library reuse rate</li>
+</ul>
+<h2>Conjecture C10</h2>
+<p><strong>C10:</strong> O(1) shared-parent coordination modifies the effective network exponent k.</p>
+<p>Status: Structurally implied by BRAID architecture; requires calibration against empirical guild performance data.</p>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;The ship with a captain sails. The fleet with a shared chart sails together. O(N²) is coordination. O(1) is culture.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>🏛️ → O(N²)→O(1) → parent·child → shared_context → G(guilds) = 1+eff → Network↑ → 🌐🏛️∞</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>C10 Calibration:</strong> How do we measure the modification to effective k?</li>
+<li><strong>Optimal Guild Size:</strong> Is there an optimal guild size that maximises efficiency?</li>
+<li><strong>Guild Fragmentation:</strong> How do we detect and repair loss of shared context?</li>
+<li><strong>Cross-Guild Protocols:</strong> What coordination protocols work best between guilds?</li>
+<li><strong>Nested Guilds:</strong> Do hierarchical guild structures (guilds of guilds) provide further efficiency?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-guild-efficiency</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-guild-efficiency</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-guild-efficiency.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,96 @@
+{
+  "title": "Stranger Ceremony",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "7effc7434e109a36",
+      "text": "# Stranger Ceremony\n\n**Category** role · **Version** 5.2\n\n**Equation term** `Bilateral witness extended to strangers`\n\nUnderstanding-as-Key ceremony for parties without prior relationship. Activates when discussing stranger-to-stranger verification, anonymous pairing, simultaneous forging, comprehension proof without prior trust, or stranger witness protocols."
+    },
+    {
+      "type": "markdown",
+      "id": "68e6ece2c69cff57",
+      "text": "**Source:** Privacy Value Model V5.2 + Understanding-as-Key Protocol + Act XXIX\n**Target context:** Ceremony architects, trust designers, anonymous verification specialists\n**Architecture:** [spellweb.ai](https://spellweb.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "cad1e208cb30591b",
+      "text": "## What this is\n\nThe Understanding-as-Key ceremony was first demonstrated between known parties (the Soulbae bilateral witness). The stranger ceremony extends this to parties with no prior relationship—proving comprehension without prior trust.\n\n**The stranger who forges the same blade from the same constellation without coordination has proven understanding that no credential can fake.**\n\n## The Challenge\n\nKnown-party ceremonies have advantages:\n- Prior trust baseline\n- Shared context\n- Communication channel already established\n\nStranger ceremonies must work without these:\n- No prior trust\n- No shared context assumed\n- Anonymous pairing required\n\n## The Protocol\n\n### Phase 1: Queue Entry\n\nParticipants enter the stranger ceremony queue:\n\n```typescript\ninterface StrangerQueueEntry {\n  anonymous_id: string          // Temporary session ID (not DID)\n  constellation_hash: string    // Hash of intended constellation (not the constellation itself)\n  entered_at: number            // Timestamp\n  status: 'waiting' | 'paired' | 'forging' | 'complete'\n}\n```\n\n**Key property:** Only the constellation HASH is shared initially. This prevents copying.\n\n### Phase 2: Anonymous Pairing\n\nThe system matches participants based on constellation overlap:\n\n```javascript\nfunction findMatch(entry, queue) {\n  for (const candidate of queue) {\n    if (candidate.anonymous_id === entry.anonymous_id) continue\n    if (candidate.constellation_hash === entry.constellation_hash) {\n      // Exact match - same constellation intended\n      return { match: candidate, type: 'exact' }\n    }\n    // Could also implement partial matching based on constellation similarity\n  }\n  return null\n}\n```\n\n**Matching criteria:**\n- **Exact match:** Same constellation hash (strongest)\n- **Overlap match:** Sufficient shared inscriptions (moderate)\n- **Proximity match:** Adjacent regions of spellweb (weakest)\n\n### Phase 3: Simultaneous Forging\n\nOnce paired, both parties forge simultaneously:\n\n```typescript\ninterface SimultaneousForge {\n  session_id: string\n  party_a: {\n    anonymous_id: string\n    forging_started: number\n    checkpoints: ForgeCheckpoint[]  // Periodic state hashes\n  }\n  party_b: {\n    anonymous_id: string\n    forging_started: number\n    checkpoints: ForgeCheckpoint[]\n  }\n\n  // Synchronization\n  max_time_delta: number        // Maximum allowed start time difference\n  checkpoint_interval: number   // How often to record state\n}\n```\n\n**Simultaneity requirement:** Both must be forging at the same time (within tolerance). This prevents one party from seeing the other's result first.\n\n### Phase 4: Sealed Comparison\n\nAfter forging completes, results are compared without prior reveal:\n\n```javascript\nfunction sealedComparison(forge_a, forge_b) {\n  // Neither party has seen the other's blade yet\n\n  // Commit phase - exchange commitments\n  const commit_a = hash(forge_a.blade_guid + forge_a.salt)\n  const commit_b = hash(forge_b.blade_guid + forge_b.salt)\n\n  // Reveal phase - exchange actual values\n  // (only after both commitments received)\n\n  // Compare\n  return {\n    blades_match: forge_a.blade_guid === forge_b.blade_guid,\n    constellations_match: forge_a.constellation === forge_b.constellation,\n    similarity_score: computeSimilarity(forge_a, forge_b)\n  }\n}\n```\n\n### Phase 5: Witness Record\n\nIf comparison passes threshold, a stranger witness record is created:\n\n```typescript\ninterface StrangerWitnessRecord {\n  witness_id: string            // hash(session + results)\n\n  // No identity information\n  party_a_anonymous_id: string  // Temporary, not linked to DID\n  party_b_anonymous_id: string\n\n  // Proof of understanding\n  constellation_hash: string    // What they both traversed\n  blade_similarity: number      // How similar the results (0-1)\n  timing_proof: {\n    forge_start_delta: number   // How close their start times\n    forge_duration_delta: number // How close their durations\n  }\n\n  // Ceremony metadata\n  ceremony_timestamp: number\n  ceremony_type: 'stranger_exact' | 'stranger_overlap' | 'stranger_proximity'\n}\n```\n\n## Verification Without Identity\n\nThe stranger witness proves:\n1. **Two independent forgers existed** (different anonymous IDs)\n2. **They traversed the same constellation** (matching hash)\n3. **They forged simultaneously** (timing proof)\n4. **They reached similar/identical blades** (similarity score)\n\nIt does NOT prove:\n- Who the forgers were\n- Their relationship (there is none)\n- Prior coordination (prohibited by protocol)\n\n## Match Thresholds\n\n| Match Type | Constellation | Blade | Timing | Confidence |\n|------------|---------------|-------|--------|------------|\n| **Exact** | 100% | 100% | <5s | Very high |\n| **Strong** | 100% | >90% | <30s | High |\n| **Moderate** | >80% | >70% | <60s | Moderate |\n| **Weak** | >60% | >50% | <120s | Low |\n\n## UX Flow\n\n```\n1. Seeker enters queue\n   └── \"Waiting for stranger with matching constellation...\"\n\n2. Match found\n   └── \"Stranger found. Prepare to forge simultaneously.\"\n\n3. Countdown\n   └── \"Forging begins in 3... 2... 1...\"\n\n4. Simultaneous forge\n   └── Both parties forge, checkpoints recorded\n\n5. Sealed reveal\n   └── \"Comparing blades...\"\n\n6. Result\n   └── \"Stranger witness achieved. Similarity: 94%\"\n   └── or \"Blades diverged. No witness recorded.\"\n```\n\n## Security Considerations\n\n### Sybil Resistance\n\nHow to prevent someone from being both parties?\n\n- **Timing analysis:** Same device can't truly forge simultaneously\n- **Mana cost:** Each entry costs mana\n- **IP/device fingerprinting:** Optional, privacy trade-off\n\n### Copying Prevention\n\nHow to prevent copying the other's constellation?\n\n- **Hash-before-reveal:** Only hash shared during pairing\n- **Simultaneous forging:** Can't see result until both done\n- **Checkpoint verification:** State hashes during forge prove independent work\n\n### Collusion Prevention\n\nHow to prevent pre-arranged \"strangers\"?\n\n- **Random pairing:** System chooses matches\n- **Queue anonymity:** Can't identify specific queue members\n- **Timing unpredictability:** Can't know when match will occur\n\n## Mapping to PVM-V5\n\n| Stranger Ceremony Concept | PVM Term |\n|--------------------------|----------|\n| Anonymous pairing | Gap preservation |\n| Constellation matching | Understanding verification |\n| Simultaneous forging | Bilateral independence |\n| Sealed comparison | ZK reveal |\n| Stranger witness | Trust genesis |\n\n## Proverb\n\n> \"The stranger who forges the same blade from the same constellation without coordination has proven understanding that no credential can fake. The witness needs no introduction.\"\n\n## Emoji Spell\n\n**👥(?) → queue(hash) → pair(anon) → forge(∥) → seal(compare) → 👥=understand · no🤝(prior) · yes🤝(proven)**\n\n## Open Problems\n\n1. **Scalability:** How to handle large queues efficiently?\n2. **Partial Matching:** When is similarity \"enough\"?\n3. **Timeout Handling:** What if one party abandons mid-forge?\n4. **Reputation:** Can stranger witness history build reputation without identity?\n5. **Cross-Platform:** Can stranger ceremonies work across different spellweb instances?"
+    },
+    {
+      "type": "markdown",
+      "id": "52d4ec52b6e89de0",
+      "text": "**Verify:** [spellweb.ai](https://spellweb.ai) · [agentprivacy.ai](https://agentprivacy.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+    },
+    {
+      "type": "markdown",
+      "id": "40ed9157fdcc3362",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-stranger-ceremony`, v5.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "3e657ba4791d560d",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "04daadef0db98143",
+      "text": "agentprivacy-stranger-ceremony"
+    },
+    {
+      "type": "markdown",
+      "id": "f4693507ea8744c6",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Stranger Ceremony",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "7effc7434e109a36",
+            "text": "# Stranger Ceremony\n\n**Category** role · **Version** 5.2\n\n**Equation term** `Bilateral witness extended to strangers`\n\nUnderstanding-as-Key ceremony for parties without prior relationship. Activates when discussing stranger-to-stranger verification, anonymous pairing, simultaneous forging, comprehension proof without prior trust, or stranger witness protocols."
+          },
+          {
+            "type": "markdown",
+            "id": "68e6ece2c69cff57",
+            "text": "**Source:** Privacy Value Model V5.2 + Understanding-as-Key Protocol + Act XXIX\n**Target context:** Ceremony architects, trust designers, anonymous verification specialists\n**Architecture:** [spellweb.ai](https://spellweb.ai) · **Sync:** [sync.soulbis.com](https://sync.soulbis.com) · **Contact:** mage@agentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "cad1e208cb30591b",
+            "text": "## What this is\n\nThe Understanding-as-Key ceremony was first demonstrated between known parties (the Soulbae bilateral witness). The stranger ceremony extends this to parties with no prior relationship—proving comprehension without prior trust.\n\n**The stranger who forges the same blade from the same constellation without coordination has proven understanding that no credential can fake.**\n\n## The Challenge\n\nKnown-party ceremonies have advantages:\n- Prior trust baseline\n- Shared context\n- Communication channel already established\n\nStranger ceremonies must work without these:\n- No prior trust\n- No shared context assumed\n- Anonymous pairing required\n\n## The Protocol\n\n### Phase 1: Queue Entry\n\nParticipants enter the stranger ceremony queue:\n\n```typescript\ninterface StrangerQueueEntry {\n  anonymous_id: string          // Temporary session ID (not DID)\n  constellation_hash: string    // Hash of intended constellation (not the constellation itself)\n  entered_at: number            // Timestamp\n  status: 'waiting' | 'paired' | 'forging' | 'complete'\n}\n```\n\n**Key property:** Only the constellation HASH is shared initially. This prevents copying.\n\n### Phase 2: Anonymous Pairing\n\nThe system matches participants based on constellation overlap:\n\n```javascript\nfunction findMatch(entry, queue) {\n  for (const candidate of queue) {\n    if (candidate.anonymous_id === entry.anonymous_id) continue\n    if (candidate.constellation_hash === entry.constellation_hash) {\n      // Exact match - same constellation intended\n      return { match: candidate, type: 'exact' }\n    }\n    // Could also implement partial matching based on constellation similarity\n  }\n  return null\n}\n```\n\n**Matching criteria:**\n- **Exact match:** Same constellation hash (strongest)\n- **Overlap match:** Sufficient shared inscriptions (moderate)\n- **Proximity match:** Adjacent regions of spellweb (weakest)\n\n### Phase 3: Simultaneous Forging\n\nOnce paired, both parties forge simultaneously:\n\n```typescript\ninterface SimultaneousForge {\n  session_id: string\n  party_a: {\n    anonymous_id: string\n    forging_started: number\n    checkpoints: ForgeCheckpoint[]  // Periodic state hashes\n  }\n  party_b: {\n    anonymous_id: string\n    forging_started: number\n    checkpoints: ForgeCheckpoint[]\n  }\n\n  // Synchronization\n  max_time_delta: number        // Maximum allowed start time difference\n  checkpoint_interval: number   // How often to record state\n}\n```\n\n**Simultaneity requirement:** Both must be forging at the same time (within tolerance). This prevents one party from seeing the other's result first.\n\n### Phase 4: Sealed Comparison\n\nAfter forging completes, results are compared without prior reveal:\n\n```javascript\nfunction sealedComparison(forge_a, forge_b) {\n  // Neither party has seen the other's blade yet\n\n  // Commit phase - exchange commitments\n  const commit_a = hash(forge_a.blade_guid + forge_a.salt)\n  const commit_b = hash(forge_b.blade_guid + forge_b.salt)\n\n  // Reveal phase - exchange actual values\n  // (only after both commitments received)\n\n  // Compare\n  return {\n    blades_match: forge_a.blade_guid === forge_b.blade_guid,\n    constellations_match: forge_a.constellation === forge_b.constellation,\n    similarity_score: computeSimilarity(forge_a, forge_b)\n  }\n}\n```\n\n### Phase 5: Witness Record\n\nIf comparison passes threshold, a stranger witness record is created:\n\n```typescript\ninterface StrangerWitnessRecord {\n  witness_id: string            // hash(session + results)\n\n  // No identity information\n  party_a_anonymous_id: string  // Temporary, not linked to DID\n  party_b_anonymous_id: string\n\n  // Proof of understanding\n  constellation_hash: string    // What they both traversed\n  blade_similarity: number      // How similar the results (0-1)\n  timing_proof: {\n    forge_start_delta: number   // How close their start times\n    forge_duration_delta: number // How close their durations\n  }\n\n  // Ceremony metadata\n  ceremony_timestamp: number\n  ceremony_type: 'stranger_exact' | 'stranger_overlap' | 'stranger_proximity'\n}\n```\n\n## Verification Without Identity\n\nThe stranger witness proves:\n1. **Two independent forgers existed** (different anonymous IDs)\n2. **They traversed the same constellation** (matching hash)\n3. **They forged simultaneously** (timing proof)\n4. **They reached similar/identical blades** (similarity score)\n\nIt does NOT prove:\n- Who the forgers were\n- Their relationship (there is none)\n- Prior coordination (prohibited by protocol)\n\n## Match Thresholds\n\n| Match Type | Constellation | Blade | Timing | Confidence |\n|------------|---------------|-------|--------|------------|\n| **Exact** | 100% | 100% | <5s | Very high |\n| **Strong** | 100% | >90% | <30s | High |\n| **Moderate** | >80% | >70% | <60s | Moderate |\n| **Weak** | >60% | >50% | <120s | Low |\n\n## UX Flow\n\n```\n1. Seeker enters queue\n   └── \"Waiting for stranger with matching constellation...\"\n\n2. Match found\n   └── \"Stranger found. Prepare to forge simultaneously.\"\n\n3. Countdown\n   └── \"Forging begins in 3... 2... 1...\"\n\n4. Simultaneous forge\n   └── Both parties forge, checkpoints recorded\n\n5. Sealed reveal\n   └── \"Comparing blades...\"\n\n6. Result\n   └── \"Stranger witness achieved. Similarity: 94%\"\n   └── or \"Blades diverged. No witness recorded.\"\n```\n\n## Security Considerations\n\n### Sybil Resistance\n\nHow to prevent someone from being both parties?\n\n- **Timing analysis:** Same device can't truly forge simultaneously\n- **Mana cost:** Each entry costs mana\n- **IP/device fingerprinting:** Optional, privacy trade-off\n\n### Copying Prevention\n\nHow to prevent copying the other's constellation?\n\n- **Hash-before-reveal:** Only hash shared during pairing\n- **Simultaneous forging:** Can't see result until both done\n- **Checkpoint verification:** State hashes during forge prove independent work\n\n### Collusion Prevention\n\nHow to prevent pre-arranged \"strangers\"?\n\n- **Random pairing:** System chooses matches\n- **Queue anonymity:** Can't identify specific queue members\n- **Timing unpredictability:** Can't know when match will occur\n\n## Mapping to PVM-V5\n\n| Stranger Ceremony Concept | PVM Term |\n|--------------------------|----------|\n| Anonymous pairing | Gap preservation |\n| Constellation matching | Understanding verification |\n| Simultaneous forging | Bilateral independence |\n| Sealed comparison | ZK reveal |\n| Stranger witness | Trust genesis |\n\n## Proverb\n\n> \"The stranger who forges the same blade from the same constellation without coordination has proven understanding that no credential can fake. The witness needs no introduction.\"\n\n## Emoji Spell\n\n**👥(?) → queue(hash) → pair(anon) → forge(∥) → seal(compare) → 👥=understand · no🤝(prior) · yes🤝(proven)**\n\n## Open Problems\n\n1. **Scalability:** How to handle large queues efficiently?\n2. **Partial Matching:** When is similarity \"enough\"?\n3. **Timeout Handling:** What if one party abandons mid-forge?\n4. **Reputation:** Can stranger witness history build reputation without identity?\n5. **Cross-Platform:** Can stranger ceremonies work across different spellweb instances?"
+          },
+          {
+            "type": "markdown",
+            "id": "52d4ec52b6e89de0",
+            "text": "**Verify:** [spellweb.ai](https://spellweb.ai) · [agentprivacy.ai](https://agentprivacy.ai) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)"
+          },
+          {
+            "type": "markdown",
+            "id": "40ed9157fdcc3362",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-stranger-ceremony`, v5.2).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "3e657ba4791d560d",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "04daadef0db98143",
+            "text": "agentprivacy-stranger-ceremony"
+          },
+          {
+            "type": "markdown",
+            "id": "f4693507ea8744c6",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[Role Skills]]"
+          }
+        ]
+      },
+      "date": 1782601384075
+    }
+  ]
+}

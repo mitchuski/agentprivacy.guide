@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Claude Ghost",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "7fb64ed058160fb5",
+      "text": "# Wiki Claude Ghost\n\n**Category** wikis · **Version** 5.5\n\nA ghost page whose content is written live by Claude via the Anthropic API, inserted between a wiki form submission and the page-JSON response. Activates when building a Claude-authored ghost endpoint, a /claude-ghost FastAPI handler, or live LLM page generation in a fedwiki. Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "dff9b94d1f0cbf61",
+      "text": "A **Claude ghost page** is a ghost page whose content is written by Claude in response to a user's query. A ghost page appears in the wiki lineup but is never stored on disk. This extends the pattern by inserting the Anthropic API call between the form submission and the page JSON response.\n\n## How It Works\n\n1. User types a topic in an `html` item form and submits\n2. The wiki POSTs `{\"query\": \"...\"}` to the FastAPI endpoint\n3. FastAPI calls `claude-opus-4-8` with a system prompt instructing it to return page JSON\n4. Claude returns a complete wiki page as JSON (title + markdown story items)\n5. FastAPI parses and returns the JSON\n6. The wiki calls `wiki.showResult()` — the Claude-authored page appears in the lineup\n\n## html Item Pattern\n\nAdd an `html` item pointing to the `/claude-ghost` endpoint:\n\n```json\n{\n  \"type\": \"html\",\n  \"id\": \"a1b2c3d4e5f60001\",\n  \"text\": \"<form action=\\\"https://guide.agentprivacy.ai/claude-ghost\\\" method=\\\"POST\\\">\\n  <input name=\\\"query\\\" placeholder=\\\"ask Claude anything…\\\">\\n  <button type=\\\"submit\\\">Ask Claude</button>\\n</form>\"\n}\n```\n\n## FastAPI Endpoint\n\n```python\nimport anthropic, json, re\n\n@app.post(\"/claude-ghost\")\ndef claude_ghost(params: dict):\n    query = params.get(\"query\", \"\").strip() or \"wiki\"\n    client = anthropic.Anthropic()\n    message = client.messages.create(\n        model=\"claude-opus-4-8\",\n        max_tokens=2048,\n        thinking={\"type\": \"adaptive\"},\n        system=(\n            \"You write federated wiki pages. \"\n            \"Return ONLY valid JSON: \"\n            '{\"title\": \"...\", \"story\": [{\"type\": \"markdown\", \"id\": \"16hexchars\", \"text\": \"...\"}]}. '\n            \"Generate 4-6 story items. IDs must be random 16 hex chars. \"\n            \"No prose outside the JSON. No markdown fences.\"\n        ),\n        messages=[{\"role\": \"user\", \"content\": f\"Write a wiki page about: {query}\"}]\n    )\n    text = next(\n        (block.text for block in message.content if hasattr(block, \"text\")),\n        \"{}\"\n    )\n    match = re.search(r'\\{.*\\}', text, re.DOTALL)\n    return json.loads(match.group()) if match else {\n        \"title\": f\"Claude: {query}\",\n        \"story\": [{\"type\": \"markdown\", \"id\": make_id(), \"text\": f\"*No response for: {query}*\"}]\n    }\n```\n\nNote: Thinking blocks in the response have no `.text` attribute — the `hasattr(block, \"text\")` check skips them and extracts only the text content block.\n\n## Page JSON from Claude\n\nClaude is instructed to return only raw JSON — no markdown fences, no prose. The system prompt specifies:\n- `title`: a short descriptive title\n- `story`: array of `markdown` items with random 16-char hex `id`s\n- 4–6 items covering the topic substantively\n\nThe endpoint uses regex to extract the JSON in case Claude wraps it in any extra whitespace.\n\n## Requirements\n\n- `anthropic` Python package installed (`pip install anthropic`)\n- `ANTHROPIC_API_KEY` set in the environment where FastAPI runs\n- Fast Caddy routing `api.guide.agentprivacy.ai` → FastAPI `:8000`\n- CORS middleware on FastAPI (`allow_origins=[\"*\"]`)\n\n## Related Skills\n\n- `agentprivacy-wiki-ghost-pages` — the base ghost page pattern (no Claude)\n- `agentprivacy-wiki-page` — creating stored pages\n- `agentprivacy-wiki-skill-vs-library` — when to make the page-structure a deterministic library"
+    },
+    {
+      "type": "markdown",
+      "id": "2a0c068d77e187a5",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer) · model id current as of skill authoring; confirm the latest Claude model when deploying\n**Upstream:** [skill.fedwiki.club/claude-ghost-skill](https://skill.fedwiki.club/claude-ghost-skill) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "209c0604578d76ac",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-claude-ghost`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "307711b259c22652",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "d0dac4cb5fba8b2f",
+      "text": "agentprivacy-wiki-claude-ghost"
+    },
+    {
+      "type": "markdown",
+      "id": "cf346f073e296beb",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Claude Ghost",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "7fb64ed058160fb5",
+            "text": "# Wiki Claude Ghost\n\n**Category** wikis · **Version** 5.5\n\nA ghost page whose content is written live by Claude via the Anthropic API, inserted between a wiki form submission and the page-JSON response. Activates when building a Claude-authored ghost endpoint, a /claude-ghost FastAPI handler, or live LLM page generation in a fedwiki. Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "dff9b94d1f0cbf61",
+            "text": "A **Claude ghost page** is a ghost page whose content is written by Claude in response to a user's query. A ghost page appears in the wiki lineup but is never stored on disk. This extends the pattern by inserting the Anthropic API call between the form submission and the page JSON response.\n\n## How It Works\n\n1. User types a topic in an `html` item form and submits\n2. The wiki POSTs `{\"query\": \"...\"}` to the FastAPI endpoint\n3. FastAPI calls `claude-opus-4-8` with a system prompt instructing it to return page JSON\n4. Claude returns a complete wiki page as JSON (title + markdown story items)\n5. FastAPI parses and returns the JSON\n6. The wiki calls `wiki.showResult()` — the Claude-authored page appears in the lineup\n\n## html Item Pattern\n\nAdd an `html` item pointing to the `/claude-ghost` endpoint:\n\n```json\n{\n  \"type\": \"html\",\n  \"id\": \"a1b2c3d4e5f60001\",\n  \"text\": \"<form action=\\\"https://guide.agentprivacy.ai/claude-ghost\\\" method=\\\"POST\\\">\\n  <input name=\\\"query\\\" placeholder=\\\"ask Claude anything…\\\">\\n  <button type=\\\"submit\\\">Ask Claude</button>\\n</form>\"\n}\n```\n\n## FastAPI Endpoint\n\n```python\nimport anthropic, json, re\n\n@app.post(\"/claude-ghost\")\ndef claude_ghost(params: dict):\n    query = params.get(\"query\", \"\").strip() or \"wiki\"\n    client = anthropic.Anthropic()\n    message = client.messages.create(\n        model=\"claude-opus-4-8\",\n        max_tokens=2048,\n        thinking={\"type\": \"adaptive\"},\n        system=(\n            \"You write federated wiki pages. \"\n            \"Return ONLY valid JSON: \"\n            '{\"title\": \"...\", \"story\": [{\"type\": \"markdown\", \"id\": \"16hexchars\", \"text\": \"...\"}]}. '\n            \"Generate 4-6 story items. IDs must be random 16 hex chars. \"\n            \"No prose outside the JSON. No markdown fences.\"\n        ),\n        messages=[{\"role\": \"user\", \"content\": f\"Write a wiki page about: {query}\"}]\n    )\n    text = next(\n        (block.text for block in message.content if hasattr(block, \"text\")),\n        \"{}\"\n    )\n    match = re.search(r'\\{.*\\}', text, re.DOTALL)\n    return json.loads(match.group()) if match else {\n        \"title\": f\"Claude: {query}\",\n        \"story\": [{\"type\": \"markdown\", \"id\": make_id(), \"text\": f\"*No response for: {query}*\"}]\n    }\n```\n\nNote: Thinking blocks in the response have no `.text` attribute — the `hasattr(block, \"text\")` check skips them and extracts only the text content block.\n\n## Page JSON from Claude\n\nClaude is instructed to return only raw JSON — no markdown fences, no prose. The system prompt specifies:\n- `title`: a short descriptive title\n- `story`: array of `markdown` items with random 16-char hex `id`s\n- 4–6 items covering the topic substantively\n\nThe endpoint uses regex to extract the JSON in case Claude wraps it in any extra whitespace.\n\n## Requirements\n\n- `anthropic` Python package installed (`pip install anthropic`)\n- `ANTHROPIC_API_KEY` set in the environment where FastAPI runs\n- Fast Caddy routing `api.guide.agentprivacy.ai` → FastAPI `:8000`\n- CORS middleware on FastAPI (`allow_origins=[\"*\"]`)\n\n## Related Skills\n\n- `agentprivacy-wiki-ghost-pages` — the base ghost page pattern (no Claude)\n- `agentprivacy-wiki-page` — creating stored pages\n- `agentprivacy-wiki-skill-vs-library` — when to make the page-structure a deterministic library"
+          },
+          {
+            "type": "markdown",
+            "id": "2a0c068d77e187a5",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer) · model id current as of skill authoring; confirm the latest Claude model when deploying\n**Upstream:** [skill.fedwiki.club/claude-ghost-skill](https://skill.fedwiki.club/claude-ghost-skill) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "209c0604578d76ac",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-claude-ghost`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "307711b259c22652",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "d0dac4cb5fba8b2f",
+            "text": "agentprivacy-wiki-claude-ghost"
+          },
+          {
+            "type": "markdown",
+            "id": "cf346f073e296beb",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1782601384120
+    }
+  ]
+}

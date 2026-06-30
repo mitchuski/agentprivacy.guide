@@ -1,0 +1,79 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revocation Mechanics · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Revocation Mechanics</span></div>
+  <article><div class="md"><h1>Revocation Mechanics</h1>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>P (the undo function), A(τ) (revocation as verified history event), e^{-λt} (temporal decay as passive revocation)</code></p>
+<p>Consent withdrawal, key revocation, credential invalidation, and data deletion enforcement for 0xagentprivacy swordsman operations. Activates when designing how to undo a previous delegation, implementing right-to- be-forgotten enforcement, building credential revocation infrastructure, or managing the lifecycle end of any trust relationship or authorisation. Triggers: &quot;revoke&quot;, &quot;revocation&quot;, &quot;withdraw consent&quot;, &quot;delete data&quot;, &quot;right to be forgotten&quot;, &quot;nullifier&quot;, &quot;credential invalidation&quot;, &quot;undo delegation&quot;, &quot;consent expiry&quot;, &quot;relationship termination&quot;.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + Temporal Dynamics + Consent Infrastructure<br><strong>Target context:</strong> Credential revocation architects, consent lifecycle managers, right-to-deletion implementers, trust graph maintainers, privacy regulation compliance builders<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>The ability to undo is sovereignty&#39;s most critical test. Any system can grant access. Only a sovereign system can reliably revoke it. Revocation is the swordsman&#39;s ability to take back what was given — to withdraw consent, invalidate credentials, revoke keys, and enforce data deletion. Without reliable revocation, every delegation becomes permanent and every disclosure becomes irrevocable. The mage projects; the swordsman retracts.</p>
+<h2>The revocation taxonomy</h2>
+<p>Not all revocations are the same. The mechanism depends on what is being revoked:</p>
+<h3>Consent revocation</h3>
+<p>The Person withdraws a previously granted consent declaration. &quot;I no longer consent to this service processing my browsing data.&quot;</p>
+<p><strong>Mechanism.</strong> The swordsman publishes a signed revocation notice to the consent channel. The revocation references the original consent declaration by hash. From the revocation timestamp forward, the swordsman will block any requests that previously matched this consent. The boundary enforcement pipeline (Stage 2) no longer finds a matching declaration — the request falls to default policy.</p>
+<p><strong>Immediate vs. windowed.</strong> Immediate revocation takes effect on the next request. Windowed revocation allows a grace period for the counterparty to adjust (e.g., 30 days to delete accumulated data). The Person chooses the window. The swordsman enforces it.</p>
+<p><strong>The deletion obligation.</strong> Consent revocation triggers a deletion obligation for the counterparty. &quot;You had consent to hold this data. You no longer do. Delete it.&quot; In the current system, deletion obligations are policy-enforced (GDPR Article 17). In the agentprivacy architecture, deletion obligations can be cryptographically enforced — if the data was shared through encryption keyed to the consent declaration, revoking consent also revokes the decryption key. The data becomes unreadable without any action required from the counterparty.</p>
+<h3>Key revocation</h3>
+<p>A signing key is invalidated — it can no longer produce valid signatures.</p>
+<p><strong>Mechanism.</strong> The swordsman publishes a revocation nullifier: a pre-computed value that, when published, invalidates all future signatures from the revoked key. Verifiers who check signatures against the key also check the revocation registry. If the nullifier is present, the signature is rejected regardless of cryptographic validity.</p>
+<p><strong>Cascade revocation.</strong> Revoking a parent key in the hierarchy cascades to all derived keys. Revoking the identity domain key invalidates all VRC inscription keys derived from it. This is the nuclear option — used only when the parent key is compromised or the Person needs a complete identity reset.</p>
+<p><strong>Non-cascade revocation.</strong> Revoking a leaf key (session key, delegation key) affects only that specific key. No other keys are invalidated. This is the surgical option — revoking a single delegation to a single service without disrupting anything else.</p>
+<h3>Credential revocation</h3>
+<p>A verifiable credential is invalidated — it no longer proves what it once proved.</p>
+<p><strong>Mechanism.</strong> Credentials in the agentprivacy architecture carry an embedded revocation handle. The issuer (typically the Person&#39;s swordsman, co-signed by the counterparty&#39;s swordsman for bilateral credentials) can publish the handle to a revocation registry. Verifiers check the registry before accepting any credential.</p>
+<p><strong>Privacy-preserving revocation.</strong> Standard revocation registries (CRLs, OCSP) leak information: checking whether credential X is revoked tells the registry that someone is interested in credential X. Privacy-preserving alternatives include accumulator-based revocation (the verifier checks membership in a non-revoked set without revealing which credential they&#39;re checking) and zero-knowledge revocation proofs.</p>
+<p><strong>VRC inscription revocation.</strong> Revoking a VRC inscription does not erase it from the chain — inscriptions are immutable once published. Instead, revocation publishes a complementary record: &quot;This inscription was valid from [inception] to [revocation]. It is no longer active.&quot; The temporal span remains part of both parties&#39; A(τ), but the relationship is marked as ended.</p>
+<h3>Data deletion enforcement</h3>
+<p>Previously shared data is rendered inaccessible or destroyed.</p>
+<p><strong>Cryptographic deletion.</strong> If data was encrypted with keys derived from the consent declaration, revoking consent revokes the decryption keys. The encrypted data remains on the counterparty&#39;s storage but is computationally inaccessible. This is &quot;crypto-shredding&quot; — destruction through key revocation rather than data destruction.</p>
+<p><strong>Verified deletion.</strong> For data shared in cleartext (Open inscriptions, unencrypted disclosures), deletion requires the counterparty to actively destroy their copy. The swordsman can request deletion and the counterparty can provide a deletion attestation — but this is a trust relationship, not a cryptographic guarantee. The Witness documents whether counterparties honour deletion requests.</p>
+<p><strong>Residual data.</strong> Some data cannot be fully deleted: backups, log files, derivative works, cached copies. The swordsman acknowledges this reality through the &quot;forgetting&quot; protocol (Act 12): formal acceptance that perfect deletion is impossible in distributed systems, combined with enforcement of practical deletion to the extent technically feasible.</p>
+<h2>Temporal revocation</h2>
+<p>The temporal dynamics term e^{-λt} provides passive revocation: information decays in relevance over time. This interacts with active revocation in important ways:</p>
+<p><strong>Expiry as revocation.</strong> Every delegation key, every consent declaration, every session credential has an expiry timestamp. When the timestamp passes, the authorisation expires without any active revocation needed. The swordsman doesn&#39;t have to remember to revoke — the temporal bound handles it automatically.</p>
+<p><strong>Decay-assisted revocation.</strong> Even after active revocation, residual risk decays. A revoked credential that was valid for 30 days poses less reconstruction risk 6 months later than 1 day later — the information it authorised is increasingly stale. The e^{-λt} decay models this declining relevance.</p>
+<p><strong>Renewal as active consent.</strong> Because everything expires, continued access requires active renewal. The Person must positively re-consent. This inverts the default: instead of &quot;access until revoked&quot; (opt-out), the architecture enforces &quot;no access unless actively renewed&quot; (opt-in with expiry).</p>
+<h2>The revocation latency problem</h2>
+<p>Revocation is only as fast as its propagation. If the Person revokes consent at time T but the revocation doesn&#39;t reach all verifiers until T+Δ, there is a window of Δ seconds during which the revoked authorisation is still accepted. Reducing Δ is a core infrastructure challenge:</p>
+<p><strong>Blockchain-based revocation.</strong> Revocation published to a blockchain is globally available within one block confirmation time. For Ethereum, ~12 seconds. For faster chains, potentially sub-second. The tradeoff: on-chain revocation costs gas and is publicly visible (though the content of what&#39;s being revoked can be obscured through nullifiers).</p>
+<p><strong>Registry-based revocation.</strong> A centralised or federated revocation registry provides near-instant propagation but introduces trust assumptions: the registry must be available, honest, and resistant to censorship.</p>
+<p><strong>Local revocation with gossip.</strong> The swordsman broadcasts revocation to directly connected nodes, which propagate through the trust graph. Propagation time depends on graph connectivity. No central point of failure, but also no guaranteed latency.</p>
+<h2>Connection to the equation</h2>
+<p><strong>P — protection.</strong> Revocation IS retrospective protection. The ability to undo a delegation retroactively constrains the damage from any single authorisation decision. P without revocation is one-directional: once granted, forever exposed. P with revocation is bilateral: granted today, revocable tomorrow.</p>
+<p><strong>A(τ) — verified history.</strong> Revocation is a verified history event. The temporal span of an authorisation (inception → revocation) is part of the Person&#39;s history. A history rich in timely revocations (delegations that were granted, served their purpose, and were cleanly revoked) demonstrates sovereignty. A history lacking revocations (delegations that persist indefinitely) suggests passive exposure.</p>
+<p><strong>e^{-λt} — temporal decay.</strong> Active revocation and passive decay work in parallel. Active revocation sets the hard boundary (this authorisation is invalid NOW). Passive decay reduces the residual risk (the information released under this authorisation becomes less relevant over time). Together they ensure that V(π,t) recovers after any disclosure.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-revocation-mechanics</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-revocation-mechanics</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="role-skills.html">Role Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-revocation-mechanics.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

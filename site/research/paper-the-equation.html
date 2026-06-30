@@ -1,0 +1,390 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paper — The Equation · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Paper — The Equation</span></div>
+  <article><div class="md"><h1>The Equation</h1>
+</div>
+<div class="md"><h1>The Equation</h1>
+<p>Static form:</p>
+<p>$$\boxed{\begin{aligned}<br>V(\pi, t) = ; &amp; P^{1.5} \cdot C \cdot Q \cdot S \cdot e^{-\lambda t} \cdot (1 + A_h(\tau)) \<br>&amp; \cdot \left(1 + \sum_i w_i \frac{n_i}{N_0}\right)^k \cdot G(\text{guilds}) \<br>&amp; \cdot R(d, \text{compression}, \rho) \cdot M(u, y) \<br>&amp; \cdot \Phi_{\text{agent}}(\Sigma) \cdot \Phi_{\text{data}}(\Delta) \cdot \Phi_{\text{inference}}(\Gamma) \<br>&amp; \cdot T_{!\int}(\pi)<br>\end{aligned}}$$</p>
+<p>Differential form: $\quad \frac{dV}{dt} = \nabla_{\partial M} \cdot J_{\partial M} + S(x) - D(x)$</p>
+<p>Gating: Multiplicative. Any term $= 0 \implies V = 0$.</p>
+<p>Lattice: $\pi$ is a path through $\mathcal{L} = \mathbb{Z}/64\mathbb{Z}$, $;t$ is time since data generation.</p>
+<h1>Inherited Terms (V1--V4)</h1>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Name</th>
+<th>Domain</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$P$</td>
+<td>Privacy Strength</td>
+<td>$[0,1]$</td>
+<td>Cryptographic enforcement. Exponent 1.5 via C6.</td>
+</tr>
+<tr>
+<td>$C$</td>
+<td>Credential Verifiability</td>
+<td>$[0,1]$</td>
+<td>Verify without revealing.</td>
+</tr>
+<tr>
+<td>$Q$</td>
+<td>Data Quality</td>
+<td>$[0,1]$</td>
+<td>Accuracy, completeness, fitness.</td>
+</tr>
+<tr>
+<td>$S$</td>
+<td>Scope / Sensitivity</td>
+<td>$\mathbb{R}^+$</td>
+<td>Domain-specific multiplier.</td>
+</tr>
+<tr>
+<td>$e^{-\lambda t}$</td>
+<td>Temporal Decay</td>
+<td>$(0,1]$</td>
+<td>Freshness. $\lambda &gt; 0$.</td>
+</tr>
+<tr>
+<td>$M(u,y)$</td>
+<td>Market Maturity</td>
+<td>$[0,1]$</td>
+<td>User sophistication, market year.</td>
+</tr>
+</tbody></table>
+<h1>Holonic Temporal Memory</h1>
+<p>$$A_h(\tau) = \sum_j p(\tau_j) \cdot w(\tau_j) \cdot e^{-\mu \cdot \text{age}(\tau_j)}$$</p>
+<p>GUID-addressed holons. Infrastructure-independent. $p(\tau_j) = 0 \implies A_h = 0$.</p>
+<h1>Three-Axis Separation</h1>
+<p>$$\Phi_{v5} = \Phi_{\text{agent}}(\Sigma) \cdot \Phi_{\text{data}}(\Delta) \cdot \Phi_{\text{inference}}(\Gamma)$$</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Formula</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent</td>
+<td>$\Phi_a = \min(1, \frac{S/M}{\varphi}) \cdot \det(\Sigma)$</td>
+<td>Swordsman $\perp$ Mage. $\cong D_{2n}$ (C14, 75%)</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>$\Phi_d = 1 - \max_j(\text{share}_j)$</td>
+<td>No single provider holds majority</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>$\Phi_i = 1 - I(\text{model};\text{executor})$</td>
+<td>Generator $\perp$ Solver</td>
+</tr>
+</tbody></table>
+<p>Collapse any axis $\implies$ total collapse.</p>
+<h1>Reconstruction Difficulty</h1>
+<p>$$R(d, c, \rho) = R_{\text{base}}(d) \cdot \left(1 - \frac{1}{c}\right) \cdot (1 + \alpha \cdot \rho)$$</p>
+<p><strong>Ceiling (proven):</strong> $R &lt; 1$ under budget constraints. $\quad$ <strong>Error floor (proven):</strong> $P_e \geq 1 - R_{\max}$ via Fano.</p>
+<p>$\rho = f(\text{traversal depth, duration, intentional transitions})$. Dual: privacy amplifier + agent maturity.</p>
+<h1>Guild Efficiency</h1>
+<p>$$G(\text{guilds}) = \prod_g (1 + \text{efficiency}_g \cdot \text{active}_g / \text{total}_g)$$</p>
+<p>Shared-parent coordination: O(1) not O($N^2$).</p>
+<h1>Path Integral</h1>
+<p>$$T_{!\int}(\pi) = 1 + \beta \int_\pi F(\gamma),d\gamma ;\cong; 1 + \beta \sum_{i=1}^{n} R(\text{step}_i)$$</p>
+<p>$F(\gamma) = \text{resolution_depth} \cdot \text{fidelity}$. One lap = one cycle. Dragon ($\geq$62 laps) = closure.</p>
+<h1>Holographic Bound</h1>
+<p>$$\partial M: \text{96 edges encoding 64 vertices, toroidal topology} \qquad \frac{96}{64} = 1.5 = P^{1.5}$$</p>
+<p>C4 RESOLVED. Boundary encodes bulk. $dV/dt$ computes on $\partial M$, not the 64-vertex interior.</p>
+<p>$J_{\partial M} = J_{\text{agent}} + J_{\text{data}} + J_{\text{inference}} + J_{\text{compression}} + J_{\text{holonic}}$</p>
+<h1>Separation Bound</h1>
+<p>$$I(S;M \mid FP) &lt; \varepsilon^* \qquad \text{(load-bearing wall)}$$</p>
+<p><strong>Theorem (95%):</strong> Conditional independence $\implies$ additive MI bound $\implies R_{\max} &lt; 1$.</p>
+<p>Amnesia: $\varepsilon_{\text{amnesia}} &lt; \varepsilon_{\text{policy}}$ (C17, 60%). Topology &gt; policy.</p>
+<p>Betweenness centrality: $C_B(v) = \sum_{s,t} \sigma(s,t|v)/\sigma(s,t)$ (Brandes, 2001). The $\perp$ is the node with maximal betweenness in the trust graph.</p>
+<h1>Algebraic Foundation</h1>
+<p>$$\mathcal{L} = (\mathbb{Z}/64\mathbb{Z},;+,;\times) \qquad D_{64} = \langle \text{neg}, \text{bnot} \mid \text{neg}^2 = \text{bnot}^2 = 1,;(\text{neg} \circ \text{bnot})^{64} = 1\rangle$$</p>
+<table>
+<thead>
+<tr>
+<th>Op</th>
+<th>Formula</th>
+<th>Agent</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>neg</td>
+<td>$(64-x) \bmod 64$</td>
+<td>Swordsman</td>
+<td>Boundary. Additive inverse.</td>
+</tr>
+<tr>
+<td>bnot</td>
+<td>$63-x$</td>
+<td>Mage</td>
+<td>Projection. Bitwise complement.</td>
+</tr>
+<tr>
+<td>$\text{neg} \circ \text{bnot}$</td>
+<td>$x+1 = \text{succ}(x)$</td>
+<td>First Person</td>
+<td>The step forward. $\blacksquare$</td>
+</tr>
+</tbody></table>
+<p>PRISM coordinates: $\text{blade}(x) = (\delta, \sigma, s)$ --- datum, stratum (Hamming weight), spectrum.</p>
+<p>Pascal: ${1,6,15,20,15,6,1}$. Tiers: Null(0) / Light(1--2) / Heavy(3--4) / Dragon(5--6).</p>
+<p>Six dimensions: Protection, Delegation, Memory, Connection, Computation, Value.</p>
+<p>Hexagram: $[d_1 \ldots d_6] \to$ 64 I Ching states. Blade 63 = 111111 = Qian (The Creative).</p>
+<h1>Operational Cycle</h1>
+<p>$$\text{cycle}(x) = \text{succ}(x) = \text{neg}(\text{bnot}(x))$$</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Operation</th>
+<th>Agent</th>
+<th>Ceremony</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Observe</td>
+<td>$\text{id}(x)$</td>
+<td>First Person</td>
+<td>Sun --- disclosure</td>
+</tr>
+<tr>
+<td>Boundary</td>
+<td>$\text{neg}(x)$</td>
+<td>Swordsman</td>
+<td>Gap --- silence</td>
+</tr>
+<tr>
+<td>Project</td>
+<td>$\text{bnot}(\text{neg}(x))$</td>
+<td>Mage</td>
+<td>Moon --- reflection</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>$\text{succ}(x)$</td>
+<td>Composition</td>
+<td>Recursion</td>
+</tr>
+</tbody></table>
+<p>$T_{!\int}(\pi) = 1 + \beta \sum_i \text{cycle}(\text{step}_i)$.<br>Progressive trust: Understanding $\to$ Constellation $\to$ Blade $\to$ Runecraft.</p>
+<h1>Amnesia Protocol</h1>
+<p><strong>Definition:</strong> Structural amnesia w.r.t. origin $O$ if no operation sequence can reconstruct $O$.</p>
+<p>ZK: completeness (output demonstrates), soundness (unique configuration), zero-knowledge (origin hidden).</p>
+<p>Implementation: process boundary. Cosmological: Moon&#39;s orbit. Runecraft: Ed25519 key burned on close.</p>
+<h1>Forge Cryptography</h1>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Content addressing</td>
+<td>SHA-256</td>
+</tr>
+<tr>
+<td>Tamper evidence</td>
+<td>Hash chain</td>
+</tr>
+<tr>
+<td>Pre-evocation lock</td>
+<td>Commitment scheme</td>
+</tr>
+<tr>
+<td>Identity binding</td>
+<td>Ed25519 (Mage, held)</td>
+</tr>
+<tr>
+<td>Bilateral binding</td>
+<td>Dual Ed25519 (Mage held + Swordsman burned)</td>
+</tr>
+</tbody></table>
+<p>Moon phase: stratum $\to$ visibility ratio. $;$  0 = New Moon, 6 = Full Moon.</p>
+<h1>Conjectures</h1>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Claim</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C4</td>
+<td>96/64 discrepancy</td>
+<td><strong>RESOLVED</strong></td>
+</tr>
+<tr>
+<td>C6</td>
+<td>$P^{1.5} \leftrightarrow 96/64$ structural</td>
+<td><strong>CONVERGENT</strong> 35%</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Three-axis multiplicative</td>
+<td>30%</td>
+</tr>
+<tr>
+<td>C11</td>
+<td>$\rho$ amplifies + indicates maturity</td>
+<td>55%</td>
+</tr>
+<tr>
+<td>C12</td>
+<td>Hexagram encoding</td>
+<td>60%</td>
+</tr>
+<tr>
+<td>C13</td>
+<td>Bilateral witness quantum-resistant</td>
+<td>65%</td>
+</tr>
+<tr>
+<td>C14</td>
+<td>$\Phi_a \cong D_{2n}$</td>
+<td>75%</td>
+</tr>
+<tr>
+<td>C15</td>
+<td>$T_{!\int} \cong$ resolution pipeline</td>
+<td>65%</td>
+</tr>
+<tr>
+<td>C16</td>
+<td>Betti number trust invariants</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>C17</td>
+<td>Amnesia &gt; policy separation</td>
+<td>60%</td>
+</tr>
+<tr>
+<td>C18</td>
+<td>Strange attractor dynamics ($\lambda &gt; 0$)</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>C19</td>
+<td>$\rho$ = Lyapunov divergence</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>C20</td>
+<td>Three axes couple as Lorenz variables</td>
+<td>30%</td>
+</tr>
+<tr>
+<td>C21</td>
+<td>Fractal sovereignty dimension</td>
+<td>10%</td>
+</tr>
+</tbody></table>
+<h1>Proven Results (95%)</h1>
+<ol>
+<li>Additive MI bounds from conditional independence</li>
+<li>Reconstruction ceiling $R &lt; 1$ under budget constraints</li>
+<li>Error floor via Fano&#39;s inequality</li>
+<li>Graceful degradation under partial compromise</li>
+<li>Ring algebra $\mathbb{Z}/(2^6)\mathbb{Z}$ substrate</li>
+<li>Two-extension autonomy axiom (separate processes)</li>
+<li>Pretext DOM-free measurement as privacy primitive</li>
+</ol>
+<h1>Version Lineage</h1>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Core Addition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>2024</td>
+<td>$P \cdot C \cdot Q \cdot S$</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Oct 2025</td>
+<td>$+ e^{-\lambda t}$, network effects</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Nov 2025</td>
+<td>$+ R(d), M, \Phi$</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>Feb 2026</td>
+<td>$+ \Sigma, A(\tau), T(\pi)$</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>Feb 2026</td>
+<td>$+$ three-axis $\Phi$, holographic bound, $T_{!\int}$</td>
+</tr>
+<tr>
+<td>V5.1</td>
+<td>Mar 29</td>
+<td>$+ \rho$, bilateral witness (C11--C13)</td>
+</tr>
+<tr>
+<td>V5.2</td>
+<td>Mar 31</td>
+<td>$+ D_{2n}$, PRISM (C14--C16)</td>
+</tr>
+<tr>
+<td>V5.3</td>
+<td>Apr 4</td>
+<td>$+$ operational cycle, amnesia (C17)</td>
+</tr>
+<tr>
+<td><strong>V5.4</strong></td>
+<td><strong>Apr 10</strong></td>
+<td><strong>Consolidated. C18--C21. Full references.</strong></td>
+</tr>
+</tbody></table>
+<h1>References</h1>
+<p>Shannon (1948). Fano (1961). Cover &amp; Thomas (2006). Bergstra &amp; Burgess (2019). Susskind (1995). McGilchrist (2009). Groth (2016). PLONK (2019). Nova (2022). Dwork &amp; Roth (2014). Brandes (2001, 2008). Branco et al. (2025). Babbush et al. (2026). Cain et al. (2026). IEEE 7012-2025. UOR Foundation (2026). Hope &amp; Ludlow (2023). Weyl &amp; Tang (2023).</p>
+<p>The First Person Spellbook (31 acts, v10.0.0, CLOSED). Blog: sync.soulbis.com (Parts 0--5).</p>
+<p>Six grimoires now: First Person, Zero Knowledge, Canon, Parallel Society, Plurality, <strong>City of Mages (Second Person · v1.1 · IPFS pinned 2026-05-10)</strong>. The Second Person Spellbook opened 2026-05-08 as the bound collection at <code>tomes/</code> — Tome IV (Witnessing · 5 acts) closed; Tome V (Crafting · 14 acts) open at the City of Mages on Drake Island.</p>
+<p>Full spec: <code>privacy_value_v5_4_formal_specification.md</code> (v2.0). Companion: <code>pvm_v5_4_companion_guide.md</code>.</p>
+<p>Docs: github.com/mitchuski/agentprivacy-docs. Forge: spellweb.ai. Training: agentprivacy.ai. Trust: bgin.ai.</p>
+<hr>
+<p><em>The boundary is always enough. Peer review invited: <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 paper-the-equation</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-papers.html">The Papers</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="paper-the-equation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

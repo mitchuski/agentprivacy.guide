@@ -1,0 +1,145 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dragon · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Dragon</span></div>
+  <article><div class="md"><h1>Dragon</h1>
+<p><strong>Category</strong> privacy_layer · <strong>Version</strong> 6.0</p>
+<p><strong>Equation term</strong> <code>V(π, t) — the complete model</code></p>
+<p>Root equation and complete Privacy Value Model V6 overview for 0xagentprivacy. Activates when discussing V(π,t), the sovereignty value equation, proven bounds (reconstruction ceiling, Proven in the conditional regime; time-indexed as R(t) with shelf life t* at V6), conjectured properties (golden ratio φ optimality), or any foundational question about how privacy creates measurable value. Use when the user needs the complete model, equation term definitions, or version lineage. V4 is the lineage stage this skill was first written against; V6 is current. V6 register note (2026-06-10): conjecture and version citations resolve to agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md (head C89); model head: privacy_value_v6_formal_specification.md.</p>
+</div>
+<div class="md"><blockquote>
+<p><em>The Dragon is the Drake that learned it contained geometry.</em></p>
+</blockquote>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>A formal economic model that prices privacy as infrastructure, not preference. It answers: <em>what is a unit of privacy-preserving data worth compared to a unit of surveilled data, and why?</em></p>
+<h2>Core equation</h2>
+<p><strong>V(π, t) = P^1.5 · C · Q · S · e^{-λt} · (1 + A_h(τ)) · (1 + Σ wᵢ nᵢ/N₀)^k · G(guilds) · R(d, compression, ρ) · M(u,y) · Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ) · T_∫(π)</strong></p>
+<p>Multiplicative gating: if any term hits zero, total value collapses. This is deliberate — privacy systems fail catastrophically, not gracefully.</p>
+<p>V6 takes the t in the signature seriously everywhere. The reconstruction term is time-indexed: R(t) = (C_S(t) + C_M(t))/H(X), with shelf life t* = sup{t : R(t) &lt; 1}. The form of the equation is unchanged from V5.4; what changed is how long any value of it can be trusted.</p>
+<h2>Six valuation dimensions</h2>
+<ol>
+<li><strong>Data properties</strong> — Privacy strength (P), credential verifiability (C), data quality (Q), sensitivity/scope (S). Cryptographic enforcement quality, ZKP-backed claims, fitness for purpose.</li>
+<li><strong>Temporal dynamics</strong> — Exponential decay (e^{-λt}) counteracted by verified history accumulation A(τ) = α · ln(1+|τ|) · h(τ). Longer verified derivation chains build value that offsets entropy. Unverified history contributes nothing.</li>
+<li><strong>Network topology</strong> — A 64-vertex Boolean lattice ({0,1}⁶) models sovereignty configurations. Six binary dimensions yield 7 strata following Pascal&#39;s row. Agents are weighted by stratum, with combinatorial midpoints (stratum 3) contributing most. Power-law network effects.</li>
+<li><strong>Reconstruction resistance</strong> — Proven ceiling: R_max = (C_S + C_M)/H(X) &lt; 1 under dual-agent separation. An adversary observing all outputs from both agents still cannot reconstruct the full private state. V6: the ceiling is time-indexed, R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* (C82, ~65%); the static result is Proven in the conditional regime (Precondition 1 non-collusion, Precondition 2 fixed adversary class).</li>
+<li><strong>Market conditions</strong> — User sophistication × market maturity. Captures adoption readiness.</li>
+<li><strong>Sovereignty geometry</strong> — A 4×4 separation matrix Σ over four forces (Protect, Project, Reflect, Connect). The determinant measures the &quot;volume&quot; of the sovereignty tetrahedron. Entanglement between any pair of forces shrinks the entire multiplier. Golden ratio φ ≈ 1.618 conjectured as optimal protect-to-project ratio.</li>
+</ol>
+<h2>Key architectural concepts</h2>
+<p><strong>Dual-agent separation.</strong> Two agents — Swordsman (privacy/boundaries) and Mage (delegation/projection) — must remain conditionally independent. A single agent knowing both privacy preferences and delegation goals can reconstruct behavioural models. Mathematical separation is not a design preference; it is a security requirement.</p>
+<p><strong>Four sovereignty forces.</strong> Protect and Project are primary. Reflect (temporal integral of protection decisions) and Connect (network effect of delegation patterns) emerge from sustained operation. These four forces form a tetrahedron whose volume (det(Σ)) gates the entire model.</p>
+<p><strong>Edge value T(π).</strong> Prior models measured what an agent <em>is</em> at a configuration. V4 adds what an agent <em>does</em> — its trajectory through sovereignty space. The 64-vertex lattice has 192 undirected edges; the transition space dominates the state space. Vertical moves (activating/deactivating sovereignty dimensions) are weighted more than lateral moves. Repetition decays.</p>
+<p><strong>Stratum logic.</strong> The 64 vertices sit across 7 strata (0–6 active dimensions). Distribution follows binomial coefficients: 1, 6, 15, 20, 15, 6, 1. Stratum 0 = full surveillance; stratum 6 = full sovereignty. Network value peaks at combinatorial midpoints.</p>
+<h2>What it connects to</h2>
+<ul>
+<li><strong>Information theory</strong> — Shannon entropy bounds on reconstruction; information-theoretic separation proofs.</li>
+<li><strong>Zero-knowledge proofs</strong> — Groth16, PLONK, Nova. ZKP integrity fraction h(τ) validates derivation chains. Conjectured ~3,000× proof size reduction from sovereignty-class constraints.</li>
+<li><strong>Promise Theory</strong> (Bergstra &amp; Burgess) — Agents as autonomous promise-making entities; voluntary cooperation over imposed coordination.</li>
+<li><strong>Category theory</strong> — Edge value draws on Yoneda&#39;s lemma: objects are determined by their morphisms (transitions define identity more than states).</li>
+<li><strong>Drake Equation analogy</strong> — Multiplicative gating of independent survival conditions, applied to privacy infrastructure viability.</li>
+<li><strong>UOR Foundation correspondence</strong> — Mapping between the 64-vertex lattice and UOR&#39;s toroidal algebraic structure. The 96 vs 64 edge-count discrepancy is resolved (C4, holographic + algebraic): 96 boundary edges encode 64 vertices, and 96/64 = 1.5 is the P exponent.</li>
+<li><strong>Decentralized identity</strong> — DIDs, verifiable credentials, Trust Over IP, IEEE 7012 (MyTerms).</li>
+<li><strong>Blockchain/crypto</strong> — Zcash (private transactions, proof-of-understanding), NEAR (TEEs), Privacy Pools.</li>
+<li><strong>Token economics</strong> — SWORD/MAGE dual tokens, armor progression (Blade → Light → Heavy → Dragon) gated by demonstrated privacy-respecting behaviour.</li>
+<li><strong>Behavioral economics</strong> — &quot;7th capital&quot;: behavioural data as wealth belonging to individuals, not platforms. Privacy as value-generating infrastructure, not cost centre.</li>
+</ul>
+<h2>Proven vs. conjectured</h2>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Claim</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Proven · conditional regime</strong></td>
+<td>Reconstruction ceiling R &lt; 1 under dual-agent conditional independence; V6 form R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* (Precondition 1 non-collusion, Precondition 2 fixed adversary class)</td>
+</tr>
+<tr>
+<td><strong>Proven · conditional regime</strong></td>
+<td>Additive (not multiplicative) information bounds from agent separation, inside Precondition 1</td>
+</tr>
+<tr>
+<td><strong>Proven</strong></td>
+<td>Multiplicative gating: any zero term kills total value (by construction)</td>
+</tr>
+<tr>
+<td><strong>Open (C1)</strong></td>
+<td>Golden ratio φ as optimal protect/project balance</td>
+</tr>
+<tr>
+<td><strong>Open (C2)</strong></td>
+<td>Logarithmic growth of temporal memory (vs. power-law or sigmoid)</td>
+</tr>
+<tr>
+<td><strong>Challenged (C3)</strong></td>
+<td>Edge value additivity; the path integral T_∫(π) replaces it</td>
+</tr>
+<tr>
+<td><strong>Resolved (C4)</strong></td>
+<td>The 96 vs 64 discrepancy (holographic + algebraic)</td>
+</tr>
+<tr>
+<td><strong>Resolved (C5)</strong></td>
+<td>~3,000× ZKP proof size reduction (strengthened by BRAID + holographic bound)</td>
+</tr>
+<tr>
+<td><strong>Active (C7, 30%)</strong></td>
+<td>Three-axis separation is multiplicative: the gating claim, and the V6 falsification frontier</td>
+</tr>
+</tbody></table>
+<h3>What V6 changed</h3>
+<ul>
+<li><strong>The ceiling moves.</strong> Capacities are evaluated against the strongest adversary class at time t. R(t) is non-decreasing under capability growth, so every static reconstruction guarantee has a finite shelf life t* (C82, ~65%). The mechanism is the decoder, not the data.</li>
+<li><strong>The gap is exponential-to-linear.</strong> Policy-only separation compounds toward (2^N − 1)ε with chain depth; amnesia separation breaks the chain and caps at Nε (C83, ~55%). C17 is hereby quantitative.</li>
+<li><strong>Amnesia is the t-independent term.</strong> If Grade-2 forgetting is a non-vanishing gluing obstruction (C86, ~30%), amnesia is the only term whose security does not depend on t.</li>
+</ul>
+<h2>Breaking conditions</h2>
+<p>The model weakens or fails if: (1) the three-axis multiplicative form fails at its boundary cases (C7, 30%, the V6 falsification frontier: partial collapse, axis correlation, time dependence); (2) dual-agent conditional independence cannot be maintained with ε &lt; 0.1 in practice; (3) sovereignty coordination shows sublinear rather than power-law network effects; (4) real sovereignty architectures cluster near singular Σ matrices, making det(Σ) numerically unstable. The V4-era UOR breaking condition is retired: C4 is resolved at the register.</p>
+<h2>Measurement gaps</h2>
+<ul>
+<li>No methodology exists for measuring emergent forces (Reflect, Connect)</li>
+<li>No empirical data on relative value of sovereignty transitions (edge weights)</li>
+<li>Scaling coefficients α, β require calibration against real agent systems</li>
+<li>Determinant may not be the right matrix aggregation (trace, min eigenvalue, or other norms are alternatives)</li>
+</ul>
+<h2>Surveillance gap</h2>
+<p>Depending on parameterisation, sovereign architectures produce 17× to 12,000× more value than surveillance architectures. Under V4&#39;s manifold framing, this gap is topological: surveillance systems are structurally constrained because activating protection breaks extraction pipelines. The gap is not a number line — it is the ratio of accessible manifold volume between two architectural classes.</p>
+<h2>Version lineage</h2>
+<p>V1 (2024): static scalar P·C·Q·S → V2 (Oct 2025): +decay, +network → V3 (Nov 2025): +reconstruction, +market, +sovereignty → V4 (Feb 2026): +separation matrix Σ, +temporal memory A(τ), +edge value T(π), +manifold awareness → V5/V5.4 (Feb to Apr 2026): three-axis Φ, holographic bound, path integral T_∫, ρ, D₂ₙ, operational cycle, amnesia (C17) → V5.5 (2026): attachment-architecture sublayer → <em><em>V6 (Jun 2026, current): the gathering turn. R(t) and t</em>, explicit preconditions, the exponential-to-linear gap, the Existence-Leak law, the ARCH-1 bridge, obstruction amnesia, the Key as accumulator, the unified register (head C89)</em>*.</p>
+<h2>Skill ecosystem</h2>
+<p>This is the root skill. All other PVM skills branch from this context:</p>
+<p><strong>Privacy layer (always loaded):</strong> <code>vrc_identity</code> · <code>promise_theory</code> · <code>knowledgegraph</code> · <code>tetrahedral_sovereignty</code> · <code>uor_toroidal</code></p>
+<p><strong>Role skills (loaded by pathway):</strong> <code>crypto_zkp</code> · <code>personhood_sybil</code> · <code>academic</code> · <code>swordsman_browser</code> · <code>dark_forest</code> · <code>ai_agent</code> · <code>economics</code> · <code>hitchhiker_governance</code> · <code>narrative_compression</code> · <code>plurality_cooperative</code> · <code>policy_governance</code></p>
+<p><strong>Template system:</strong> 16 persona templates generate seeker-specific SKILL.md files from this knowledge base via <code>SKILL_BASE_FORMAT.md</code>.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-dragon</code>, v6.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-dragon</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-dragon.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

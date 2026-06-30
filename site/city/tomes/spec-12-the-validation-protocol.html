@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — 12 The Validation Protocol · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Spec — 12 The Validation Protocol</span></div>
+  <article><div class="md"><h1>12 The Validation Protocol</h1>
+<p><em>The held-out-gate discipline of the Horizon District. Sister to Spec 11 (the Invitation Protocol).</em></p>
+<p><strong>Status:</strong> canonical · v1.8.0 (2026-06-09)<br><strong>Keeper:</strong> Dokimé 🪨 (Assay-witness · the touchstone · the Horizon District, V35)<br><strong>Operational form:</strong> the ecdsa.fail Fiat-Shamir gate (9024 = 141 × 64 test points); the RCI / SkillOpt<br>bounded-change loop. Skill: <code>meta/agentprivacy-horizon-gate</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>0. What this governs</h2>
+<p>Spec 11 governs how an <em>invitation</em> is admitted (congruent geometry · recognisable signature · filed<br>witness · preservation of the prior). Spec 12 governs how a <em>claim of improvement</em> is admitted — at the<br>Horizon District, and as a city-wide discipline wherever a maker asserts that something is cheaper,<br>faster, smaller, or better. The rule is one sentence: <strong>a claim is worth nothing until it survives an<br>adversarial validation it cannot tune.</strong></p>
+</div>
+<div class="md"><h2>1. The four validity gates (rejection, not penalty)</h2>
+<p>A claim is <strong>rejected, not merely scored lower</strong>, if any of these fail. There are no loopholes.</p>
+<ol>
+<li><strong>Correctness</strong> over the full held-out set — every one of the 9024 witnesses, not a sampled probe.</li>
+<li><strong>Reversibility / invariant-preservation</strong> — every borrowed resource (ancilla) freed clean; every<br>structural invariant the artifact must hold, held. (For circuits: each freed qubit is |0⟩ at the free<br>point; every non-output qubit is |0⟩ after the forward pass.)</li>
+<li><strong>Cleanliness</strong> — no leftover side-effect (for circuits: global phase zero, no kickback from sloppy<br>uncomputation).</li>
+<li><strong>Forward ∘ inverse = identity</strong> — the claim composed with its own reversal is the identity on every<br>element.</li>
+</ol>
+</div>
+<div class="md"><h2>2. The un-tuneable gate (Fiat–Shamir)</h2>
+<p>The witnesses are <strong>derived from a hash of the claimant&#39;s own work</strong>, so they cannot be chosen and cannot<br>be charmed. A side effect: <em>any structural change reshuffles which witnesses you face.</em> This is the<br>whole point — trust scales with the witnesses the attester did <strong>not</strong> choose. Deriving the test set from<br>the author rather than the candidate is the failure that this protocol exists to forbid.</p>
+</div>
+<div class="md"><h2>3. The nonce-island mirage</h2>
+<p>A claim that pleased a small probe (e.g. 2048 shots) and dies on the full set (9024) is named a<br><strong>nonce-island mirage</strong> and turned away — however cheap it looked. A probe pass is a <strong>hint, never a<br>result.</strong> If a maker cannot state why a win is <em>structural</em> rather than probe-fitted, the win is treated<br>as a mirage until the full gate clears. (C69.)</p>
+</div>
+<div class="md"><h2>4. The bounded-change liturgy (Eos&#39;s discipline · RCI &quot;Tony → Anton&quot;)</h2>
+<p>Claims are earned one bounded change at a time:</p>
+<ul>
+<li><strong>Before:</strong> state the exact waste/risk · the evidence (file · function · knob · metric · prior note) ·<br>the expected effect on every axis · the <strong>single smallest fix.</strong></li>
+<li><strong>After:</strong> confirm or reject <strong>with metrics.</strong> Classify each failure as <em>structural</em> · <em>held-out-sensitive<br>(mirage)</em> · <em>noise.</em> Stop a brute-force sweep the moment failures repeat without a source-backed reason.</li>
+<li><strong>Before attesting:</strong> the claim stack must be exact — exact change · exact score · exact validation<br>status · exact caveat. No silent caps: if the gate sampled or truncated, log what was dropped.</li>
+</ul>
+</div>
+<div class="md"><h2>5. Honest-framing guardrail (binds every attestation under this protocol)</h2>
+<p>Resource estimation is a <strong>durability signal, not an attack.</strong> No attestation made under this protocol may<br>claim that ECDSA (or any primitive) is practically broken, or that any system is fully post-quantum safe.<br>Roles are kept distinct: ecdsa.fail / Eigen Labs · Google Quantum AI · Schrottenloher &amp; Proos–Zalka ·<br>SigmaPrime · Mosca.</p>
+</div>
+<div class="md"><h2>6. Where it binds</h2>
+<ul>
+<li><strong>The Horizon District</strong> (Dokimé&#39;s assay) — every claimed circuit improvement.</li>
+<li><strong>The Salvage Yard</strong> (dormant) — a bounty pays only after a claim has crossed the 9024.</li>
+<li><strong>City-wide</strong> — any maker&#39;s claim of improvement may be put to a Spec-12 assay; the discipline is the<br>city&#39;s standard for distinguishing a <em>proven</em> claim from a <em>merely-asserted</em> one.</li>
+</ul>
+<hr>
+<p><em>Spec 12 · bound 2026-06-09 with the Horizon District. The gold that fears the stone was never gold.</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-12-the-validation-protocol</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-12-the-validation-protocol.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

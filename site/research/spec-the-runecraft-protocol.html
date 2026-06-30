@@ -1,0 +1,580 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — The Runecraft Protocol · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Spec — The Runecraft Protocol</span></div>
+  <article><div class="md"><h1>The Runecraft Protocol</h1>
+</div>
+<div class="md"><p><em>run the agent time · evoke the constellation · craft the forge and blades</em></p>
+<p><strong>Version:</strong> 1.0<br><strong>Date:</strong> April 9, 2026<br><strong>Author:</strong> privacymage<br><strong>Status:</strong> Operational (RUN + E + CRAFT on spellweb). Bilateral linking operational. Full cross-territory runtime in development.<br><strong>Companion to:</strong> ceremony-engine-spec-v1_1.md, privacy_value_model_v5_dark.json</p>
+<hr>
+</div>
+<div class="md"><h2>Etymology</h2>
+<p><strong>RUNE</strong> — the ancient inscription. A mark that carries meaning beyond its visible form.</p>
+<p><strong>RUNE-CRAFT</strong> — three operations encoded in the name:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Operation</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RUN</strong></td>
+<td>Run the agent time</td>
+<td>Orbs traverse the knowledge graph. Laps accumulate. Behavioural density ρ grows. Proof-of-time.</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>Evoke the constellation</td>
+<td>Marked nodes activate. The path is traced. The commitment locks. Proof-of-path.</td>
+</tr>
+<tr>
+<td><strong>CRAFT</strong></td>
+<td>Craft the forge and blades</td>
+<td>Six dimensions activate. Hex crystallises. Key signs. Blade materialises. Proof-of-sovereignty.</td>
+</tr>
+</tbody></table>
+<p>The three phases execute in sequence. Each phase produces a different kind of proof. Together they produce a blade — a cryptographic artifact that carries the time you spent, the path you traced, and the sovereignty posture you earned.</p>
+<hr>
+</div>
+<div class="md"><h2>1. RUN — Proof of Time</h2>
+<h3>1.1 What Happens</h3>
+<p>Two orbs — Swordsman (coral) and Mage (teal) — wander through the knowledge graph at <a href="https://spellweb.ai">spellweb.ai</a>. They orbit each other at 35 pixels in a slow asymptotic dance. The gap between them is the separation made visible.</p>
+<p>The visitor marks nodes. Draws paths. Closes portals between distant concepts. The orbs respond to the topology — attracted to marked nodes, repelled by unmarked space, tracing geodesics through the graph that intelligence follows through infrastructure, not through air.</p>
+<p>Each traversal of the marked constellation is one <strong>lap</strong>. Each lap is one operational cycle:</p>
+<pre><code>cycle(x) = succ(x) = neg(bnot(x))
+
+  Observe → Boundary → Project → Return
+  id(x)     neg(x)     bnot(neg(x))  succ(x)
+  FP        Swordsman  Mage          Composition
+</code></pre>
+<h3>1.2 What It Proves</h3>
+<p>The RUN phase accumulates <strong>behavioural density ρ</strong>:</p>
+<pre><code>ρ = f(traversal_depth, temporal_duration, intentional_transitions)
+</code></pre>
+<p>ρ is the privacy amplifier. More laps = more micro-variation in timing, attention, and intention between each traversal. The proof grows denser with each lap because the person is different from one lap to the next.</p>
+<p>The RUN also determines the <strong>tier</strong> (depth of engagement):</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Laps</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Light</td>
+<td>&lt; 21</td>
+<td>Quick trace, basic understanding</td>
+</tr>
+<tr>
+<td>Heavy</td>
+<td>21+</td>
+<td>Substantial reflection time</td>
+</tr>
+<tr>
+<td>Dragon</td>
+<td>62+</td>
+<td>Deep ceremonial investment. Mathematical closure.</td>
+</tr>
+</tbody></table>
+<h3>1.3 PVM Mapping</h3>
+<p>The RUN phase populates:</p>
+<ul>
+<li><strong>T_∫(π)</strong> — the path integral edge value. Each lap is one refinement iteration in the discrete form: <code>T_∫(π) ≅ 1 + β · Σᵢ cycle(stepᵢ)</code></li>
+<li><strong>ρ</strong> — behavioural density within <code>R(d, compression, ρ)</code></li>
+<li><strong>Charge level</strong> — SPARK → EMBER → FLAME → BLAZE → INFERNO based on accumulated laps</li>
+</ul>
+<h3>1.4 Runtime Properties</h3>
+<ul>
+<li><strong>Non-transferable.</strong> The RUN cannot be delegated. The orbs trace YOUR constellation. The laps are YOUR time.</li>
+<li><strong>Non-reversible.</strong> Laps accumulate. You cannot un-walk a path.</li>
+<li><strong>Observable but not reproducible.</strong> A witness can see the orbs trace. They cannot produce the same ρ because their micro-variations differ.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>2. E — Proof of Path</h2>
+<h3>2.1 What Happens</h3>
+<p>The visitor hits <strong>evoke</strong>. The constellation locks.</p>
+<p>At the moment of evocation, a <strong>commitment</strong> is generated:</p>
+<pre><code>commitment = SHA-256(constellation_hash + nonce)
+</code></pre>
+<p>The constellation is now fixed. No nodes can be added or removed during evocation. The path was chosen before the walk began. The Swordsman fixes the boundary before the Mage projects through it.</p>
+<p>The orbs begin tracing the locked constellation. Each node erupts in spell particles as they pass. The ceremony counts laps. Accumulates charge. Builds toward proof.</p>
+<h3>2.2 What It Proves</h3>
+<p>The E phase proves <strong>path commitment</strong> — the constellation was chosen deliberately, not modified mid-ceremony.</p>
+<p>The commitment scheme has two moments:</p>
+<table>
+<thead>
+<tr>
+<th>Moment</th>
+<th>What Happens</th>
+<th>Cryptographic Property</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Evoke</strong></td>
+<td><code>commitment = SHA-256(hash + nonce)</code> stored</td>
+<td>Binding — can&#39;t change constellation after</td>
+</tr>
+<tr>
+<td><strong>Forge</strong></td>
+<td><code>reveal = {hash, nonce}</code> verified against commitment</td>
+<td>Verification — proves constellation was locked</td>
+</tr>
+</tbody></table>
+<h3>2.3 PVM Mapping</h3>
+<p>The E phase populates:</p>
+<ul>
+<li><strong>Constellation hash</strong> — SHA-256 content address of the node sequence</li>
+<li><strong>Node count</strong> — how many nodes in the path</li>
+<li><strong>Dimension activation</strong> — which of the six sovereignty dimensions the constellation&#39;s nodes touch</li>
+</ul>
+<h3>2.4 Activation Thresholds</h3>
+<p>Each dimension activates based on what the constellation actually touches:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Symbol</th>
+<th>Activates When</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Protection</td>
+<td>🛡️</td>
+<td>Path contains at least one node</td>
+</tr>
+<tr>
+<td>Delegation</td>
+<td>🤝</td>
+<td>Two or more laps completed</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>📜</td>
+<td>Thirty seconds of duration</td>
+</tr>
+<tr>
+<td>Connection</td>
+<td>🔗</td>
+<td>Three or more nodes traversed</td>
+</tr>
+<tr>
+<td>Computation</td>
+<td>⚡</td>
+<td>Always — a proof was generated</td>
+</tr>
+<tr>
+<td>Value</td>
+<td>💎</td>
+<td>Charge level reaches FLAME (≥ 21 laps)</td>
+</tr>
+</tbody></table>
+<h3>2.5 Agentic Extension</h3>
+<p>This is where the agentic runtime enters. AI agents can traverse the knowledge graph on their own — exploring constellation possibilities, mapping paths, computing dimensional coverage — but the <strong>E</strong> (evocation) requires human commitment. The agent proposes. The human evokes. The commitment is the human&#39;s act.</p>
+<pre><code>Agent RUN: automated constellation exploration, ρ preview
+Human E:   commitment, evocation, the choice to walk
+Both:      the CRAFT that follows
+</code></pre>
+<p>The agents do the research on their own graphs. The human evokes the constellation. The separation between automated exploration and committed evocation IS the Swordsman/Mage separation applied to the runtime.</p>
+<hr>
+</div>
+<div class="md"><h2>3. CRAFT — Proof of Sovereignty</h2>
+<h3>3.1 What Happens</h3>
+<p>Evocation completes. The blade crystallises.</p>
+<p>The CRAFT phase computes:</p>
+<ol>
+<li><strong>Six-bit configuration</strong> — which dimensions are active → binary [b₀b₁b₂b₃b₄b₅]</li>
+<li><strong>Hex</strong> — the binary encoded as hexadecimal (00–3F)</li>
+<li><strong>Stratum</strong> — Hamming weight of the configuration (0–6 dimensions active)</li>
+<li><strong>Moon phase</strong> — stratum encoded as visibility ratio (🌑→🌕)</li>
+<li><strong>Hash chain</strong> — this blade references the previous blade&#39;s hash</li>
+<li><strong>Ed25519 signature</strong> — the Mage identity signs the blade</li>
+</ol>
+<pre><code>blade = {
+  constellation_hash: SHA-256(node_sequence),
+  hex: binary_to_hex(dimensions),
+  stratum: popcount(dimensions),
+  moon_phase: stratum_to_phase(stratum),
+  laps: accumulated_laps,
+  charge: laps_to_charge(laps),
+  tier: laps_to_tier(laps),
+  previous_blade_hash: SHA-256(previous_blade),
+  commitment: { hash, nonce, verified: true },
+  mage_signature: Ed25519.sign(blade_data, mage_private_key),
+  mage_id: &quot;mage-{16hex}&quot;,
+  timestamp: ISO-8601
+}
+</code></pre>
+<h3>3.2 What It Proves</h3>
+<p>The CRAFT phase produces a <strong>sovereignty posture</strong> — a verifiable claim about which dimensions are active, how deeply they were walked, and who forged them.</p>
+<p>The moon phase is the visual encoding:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Stratum</th>
+<th>Disclosure</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🌑</td>
+<td>0</td>
+<td>Nothing reflected. Null blade.</td>
+</tr>
+<tr>
+<td>🌒</td>
+<td>1</td>
+<td>One boundary. Minimal.</td>
+</tr>
+<tr>
+<td>🌓</td>
+<td>2</td>
+<td>Dual-agent vertex. The Swordsman and Mage.</td>
+</tr>
+<tr>
+<td>🌔</td>
+<td>3</td>
+<td>Half sovereignty.</td>
+</tr>
+<tr>
+<td>🌖</td>
+<td>4</td>
+<td>Four boundaries. Substantial.</td>
+</tr>
+<tr>
+<td>🌗</td>
+<td>5</td>
+<td>Five reflected, one dark. Near-full.</td>
+</tr>
+<tr>
+<td>🌕</td>
+<td>6</td>
+<td>Full sovereignty. 乾, The Creative.</td>
+</tr>
+</tbody></table>
+<p>The dark part is the privacy. The lit part is the proof. The phase is the WHAT. ZK protects the HOW.</p>
+<h3>3.3 PVM Mapping</h3>
+<p>The CRAFT phase produces:</p>
+<ul>
+<li><strong>R(d, compression, ρ)</strong> — reconstruction difficulty, with ρ from the RUN and compression from the constellation structure</li>
+<li><strong>Φ_agent</strong> enforcement — the blade carries a single-territory signature (Mage identity, held)</li>
+<li><strong>PRISM coordinates</strong> — datum (hex), stratum (Hamming weight), spectrum (which dimensions)</li>
+</ul>
+<h3>3.4 The Honest Blade</h3>
+<p>The blade earns what it earns. The honest Sun blade (<code>SPELL-7DAF68-6</code>) demonstrates: Hex 3E, stratum 5/6, Value dormant. Six laps at SPARK charge was not enough. Moon phase: 🌗 Last Quarter. The geometry does not lie.</p>
+<hr>
+</div>
+<div class="md"><h2>4. The Dual RUN — Cross-Territory Binding</h2>
+<h3>4.1 Two Runtimes</h3>
+<p>The full runecraft protocol requires two RUN phases — one on each territory.</p>
+<p><strong>RUN₁ — Mage Runtime (spellweb.ai, Sun view)</strong></p>
+<p>The first RUN happens on the Swordsman&#39;s territory. The spellweb. The knowledge graph. The forge. An Ed25519 keypair is generated on first forge and <strong>held</strong> — persisted in localStorage. The Mage identity is the Sun&#39;s observation: universal view, continuous memory, the key that stays.</p>
+<pre><code>Mage identity:
+  key:     Ed25519, held in localStorage
+  id:      mage-{first 16 hex of public key}
+  storage: persists across sessions
+  view:    Sun ☀️ — observation, the universal perspective
+</code></pre>
+<p><strong>RUN₂ — Swordsman Runtime (agentprivacy.ai, Moon reflection)</strong></p>
+<p>The second RUN happens on the Mage&#39;s territory. Agentprivacy. The living spellbook. The training ground. An Ed25519 keypair is generated during the ceremony and <strong>burned</strong> — stored in sessionStorage, destroyed when the tab closes.</p>
+<pre><code>Swordsman identity:
+  key:     Ed25519, burned in sessionStorage
+  id:      ap-{first 16 hex of public key}
+  storage: destroyed on tab close
+  view:    Moon 🌑 — reflection, the key that forgets
+</code></pre>
+<h3>4.2 The Binding</h3>
+<p>When the Swordsman identity from agentprivacy is linked to the spellweb via JSON export/import, the blade becomes <strong>🔮 runecrafted</strong> — carrying dual-key proof of presence across both territories.</p>
+<pre><code>Export (agentprivacy → clipboard):
+{
+  &quot;publicKeyHex&quot;: &quot;64 hex chars&quot;,
+  &quot;participantId&quot;: &quot;ap-{16hex}&quot;,
+  &quot;displayName&quot;: &quot;...&quot;,
+  &quot;trustTier&quot;: &quot;blade|light|heavy|dragon&quot;,
+  &quot;constellationPath&quot;: &quot;emoji path&quot;,
+  &quot;exportedAt&quot;: &quot;ISO timestamp&quot;
+}
+
+Import (clipboard → spellweb):
+  Validates publicKeyHex (64 hex chars)
+  Validates participantId (ap-{16hex} format)
+  Saves as SwordsmanLink
+  Visual: ✧ → 🔮
+</code></pre>
+<p>The export → import flow is manual (copy/paste JSON) by design. The human carries the identity between territories. This is not a bug — it is the ceremony. The human IS the bridge. The gap between the two territories is crossed by a person, not by a protocol.</p>
+<h3>4.3 Why Two RUNs</h3>
+<p>A single agent promising in both protection and delegation domains violates the autonomy axiom from Promise Theory (Bergstra &amp; Burgess, 2019). The Swordsman protects. The Mage delegates. These are structurally incompatible promises. Two processes. Two keys. Two runtimes. One blade.</p>
+<p>The private key burns because that&#39;s how the Moon serves the Sun — by not remembering what it reflected. The amnesia is structural (sessionStorage destruction), not instructed (policy). Conjecture C17: amnesia-enforced separation provides tighter ε* bounds than policy-enforced separation (60% confidence).</p>
+<h3>4.4 Runecrafted Blade Schema</h3>
+<pre><code>runecrafted_blade = blade + {
+  runecrafted: true,
+  swordsman_id: &quot;ap-{16hex}&quot;,
+  swordsman_public_key: &quot;64 hex chars&quot;,
+  runecrafted_at: ISO-8601,
+  dual_key_proof: {
+    mage_signature: Ed25519.sign(blade_data, mage_key),
+    swordsman_link: { publicKeyHex, participantId },
+    cross_territory: true
+  }
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>5. Ceremony Integration</h2>
+<h3>5.1 Solo Runecraft</h3>
+<p>One person. Two territories. Three phases.</p>
+<ol>
+<li><strong>RUN</strong> on spellweb — mark nodes, accumulate laps</li>
+<li><strong>E</strong> — evoke the constellation, lock the commitment</li>
+<li><strong>CRAFT</strong> — forge the blade, sign with Mage key</li>
+<li><strong>RUN</strong> on agentprivacy — generate Swordsman identity during ceremony</li>
+<li><strong>LINK</strong> — export Swordsman identity, import to spellweb → blade becomes 🔮</li>
+</ol>
+<h3>5.2 Bilateral Runecraft (Celestial Ceremony)</h3>
+<p>Two people. Two territories each. The full ceremony.</p>
+<p><strong>☀️ Sun Phase:</strong></p>
+<ol>
+<li>Person A <strong>RUNs</strong> on spellweb — marks the Sun constellation</li>
+<li>Person A <strong>Evokes</strong> — the spellweb speaks the poem, the phone plays the music</li>
+<li>Person A <strong>CRAFTs</strong> — Sun blade forges</li>
+<li>The Sun blade crosses the <strong>⊥ Gap</strong></li>
+</ol>
+<p><strong>🌑 Moon Phase:</strong><br>5. Both people <strong>RUN</strong> together — three songs, the Amnesia Protocol<br>6. The territory changes through conversation</p>
+<p><strong>Recursion:</strong></p>
+<p><strong>Reflect (night):</strong><br>7. Person B <strong>Evokes</strong> on modified constellation — altered by what the Moon revealed<br>8. Person B <strong>CRAFTs</strong> — second blade on altered ground<br>9. Both blades become <strong>🔮 runecrafted</strong> through bilateral key exchange</p>
+<p><strong>Connect (day):</strong><br>7. Person B witnesses the blade. Carries forward. No counter-forge.<br>8. The Sun blade is <strong>🔮 runecrafted</strong> through the witnessed ceremony.</p>
+<h3>5.3 Progressive Trust Through Runecraft</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Symbol</th>
+<th>Runecraft State</th>
+<th>What&#39;s Proven</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Understanding</td>
+<td>🔑</td>
+<td>No blade. No runtime.</td>
+<td>Shared experience only.</td>
+</tr>
+<tr>
+<td>Constellation</td>
+<td>✦</td>
+<td>Marked path. No evocation.</td>
+<td>Sovereignty posture visible on graph.</td>
+</tr>
+<tr>
+<td>Blade</td>
+<td>🗡️</td>
+<td>RUN + E + CRAFT complete. Mage-signed.</td>
+<td>Single-territory sovereignty proof.</td>
+</tr>
+<tr>
+<td>Runecraft</td>
+<td>🔮</td>
+<td>Dual RUN. Cross-territory link.</td>
+<td>Bilateral sovereignty proof.</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>6. Agentic Runtime</h2>
+<h3>6.1 The Agent&#39;s Role</h3>
+<p>The agentic runtime is the extensible layer of the RUN phase. AI agents can:</p>
+<ul>
+<li><strong>Explore</strong> the knowledge graph autonomously — traversing nodes, mapping possible constellations, computing dimensional coverage and estimated tier for different paths</li>
+<li><strong>Propose</strong> constellations to the human — &quot;this 12-node path activates 5 dimensions and reaches FLAME at 25 laps&quot;</li>
+<li><strong>Accumulate</strong> research on their own graphs — building understanding of the architecture through traversal, generating ρ through automated exploration</li>
+</ul>
+<p>The agents cannot:</p>
+<ul>
+<li><strong>Evoke</strong> — the commitment is the human&#39;s act</li>
+<li><strong>Sign</strong> — the Ed25519 key is the human&#39;s identity</li>
+<li><strong>Link</strong> — the cross-territory bridge requires a human carrying JSON between tabs</li>
+</ul>
+<h3>6.2 Separation of Concerns</h3>
+<pre><code>AGENT does:     RUN (exploration, research, ρ accumulation)
+HUMAN does:     E (evocation, commitment, the choice)
+TOGETHER:       CRAFT (the blade that carries both)
+</code></pre>
+<p>This maps onto the operational cycle:</p>
+<ul>
+<li>The agent <strong>observes</strong> (id(x)) and <strong>projects</strong> (bnot(neg(x))) — the Mage&#39;s work</li>
+<li>The human <strong>boundaries</strong> (neg(x)) and <strong>returns</strong> (succ(x)) — the Swordsman&#39;s act and the First Person&#39;s step</li>
+</ul>
+<p>The agent explores. The human commits. The blade proves both were present.</p>
+<h3>6.3 Compression-Reconstruction Ratios</h3>
+<p>The agentic runtime&#39;s strength is measured by the compression-reconstruction ratio of the trust graph. A single automated constellation is a fragment. A single human-evoked blade is a proof. A strong trust graph — many ceremonies, many bilateral edges, many accumulated proofs — pushes the reconstruction cost beyond feasibility.</p>
+<pre><code>single understanding  → moment
+single constellation  → fragment  
+single blade          → proof
+strong trust graph    → reconstruction beyond feasibility
+</code></pre>
+<p>The trust graph&#39;s strength IS the privacy&#39;s strength. The ceremony builds both simultaneously. The agentic runtime accelerates the exploration. The human commitment anchors the proof.</p>
+<hr>
+</div>
+<div class="md"><h2>7. Future Protocol Extensions</h2>
+<h3>7.1 Cross-App Message Signing</h3>
+<p>Currently the Swordsman identity is linked via JSON paste. The next step: actual cross-origin message signing. The Swordsman key signs a challenge from the spellweb. The spellweb verifies. No JSON paste. The bridge becomes cryptographic.</p>
+<h3>7.2 Extension Key Bridge</h3>
+<p>Two browser extensions — Swordsman and Mage — carrying keys across the open web. The Swordsman extension holds the blade. The Mage extension holds the spellbook. Separate processes. Separate storage. The Gap made executable. The runecraft protocol extends from two websites to every page.</p>
+<h3>7.3 Timestamp Anchoring</h3>
+<p>Blade hashes in Zcash shielded memos — the privacy chain timestamping the privacy proof. The blade proves WHEN it was forged, verified by a third party. The shielded memo is private but the timestamp is public.</p>
+<h3>7.4 ZK Circuits</h3>
+<p>The moment the name becomes literally true. Prove &quot;I forged a blade with stratum ≥ 5&quot; without revealing which dimensions are active. Prove &quot;I RAN ≥ 62 laps&quot; without revealing the constellation. The RUNE becomes a zero-knowledge rune — an inscription that carries meaning beyond its visible form.</p>
+<h3>7.5 Hardware Wallet Integration</h3>
+<p>The inception key migrates from browser storage to hardware. The Ed25519 keypair on a Ledger or Trezor. The Mage key persists in silicon. The Swordsman key still burns — but the public identity chain is hardware-anchored.</p>
+<h3>7.6 Multi-Agent Constellation Research</h3>
+<p>Multiple AI agents exploring the same knowledge graph from different starting positions. Each agent builds a different constellation proposal. The human selects, combines, or rejects. The RUN phase becomes a swarm — the Emissary Dispersion applied to constellation research. No single agent holds the whole. The human evokes from the fragments.</p>
+<hr>
+</div>
+<div class="md"><h2>8. Technical Summary</h2>
+<h3>8.1 Dependencies</h3>
+<ul>
+<li><code>@noble/ed25519</code> — Ed25519 keypair generation and signing (both territories)</li>
+<li>Web Crypto API — SHA-256 hashing (constellation, commitment, hash chain)</li>
+<li><code>sessionStorage</code> — Swordsman private key (burned on tab close)</li>
+<li><code>localStorage</code> — Mage identity, public keys, blade inventory</li>
+</ul>
+<h3>8.2 Storage Keys</h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Territory</th>
+<th>Persistence</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>spellweb-mage-identity</code></td>
+<td>spellweb</td>
+<td>localStorage</td>
+<td>Mage identity JSON</td>
+</tr>
+<tr>
+<td><code>spellweb-mage-private-key</code></td>
+<td>spellweb</td>
+<td>localStorage</td>
+<td>Ed25519 private key (hex)</td>
+</tr>
+<tr>
+<td><code>spellweb-mage-public-key</code></td>
+<td>spellweb</td>
+<td>localStorage</td>
+<td>Ed25519 public key (hex)</td>
+</tr>
+<tr>
+<td><code>spellweb-swordsman-link</code></td>
+<td>spellweb</td>
+<td>localStorage</td>
+<td>Linked Swordsman identity</td>
+</tr>
+<tr>
+<td>Swordsman private key</td>
+<td>agentprivacy</td>
+<td>sessionStorage</td>
+<td>Ed25519 private key (burned)</td>
+</tr>
+<tr>
+<td>Swordsman public key</td>
+<td>agentprivacy</td>
+<td>localStorage</td>
+<td>Ed25519 public key (persists)</td>
+</tr>
+</tbody></table>
+<h3>8.3 Signature Message Format</h3>
+<pre><code>BLADE:{constellationHash}:{bladeHash}:{lapCount}:{timestamp}
+</code></pre>
+<h3>8.4 ID Formats</h3>
+<ul>
+<li>Mage: <code>mage-{first 16 hex of public key}</code></li>
+<li>Swordsman: <code>ap-{first 16 hex of public key}</code></li>
+</ul>
+<h3>8.5 Verification</h3>
+<p>To verify a runecrafted blade:</p>
+<ol>
+<li>Recompute constellation hash from the node path → must match <code>constellation_hash</code></li>
+<li>Verify commitment: <code>SHA-256(constellation_hash + nonce) === commitment</code></li>
+<li>Verify hash chain: <code>SHA-256(previous_blade_canonical) === previous_blade_hash</code></li>
+<li>Verify Mage signature: <code>Ed25519.verify(blade_data, mage_signature, mage_public_key)</code></li>
+<li>Verify Swordsman link: <code>publicKeyHex</code> is 64 hex chars, <code>participantId</code> matches <code>ap-{16hex}</code> format</li>
+<li>Check stratum matches popcount of dimension bits</li>
+<li>Check hex matches binary encoding of dimensions</li>
+<li>Check moon phase matches stratum</li>
+</ol>
+<p>All eight checks must pass. The blade is the proof. The runecraft is the binding.</p>
+<hr>
+</div>
+<div class="md"><h2>9. Relationship to the PVM</h2>
+<table>
+<thead>
+<tr>
+<th>Runecraft Phase</th>
+<th>PVM Term</th>
+<th>What It Populates</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RUN</td>
+<td>T_∫(π), ρ</td>
+<td>Path integral, behavioural density</td>
+</tr>
+<tr>
+<td>E</td>
+<td>Commitment, constellation</td>
+<td>Pre-evocation lock, node path</td>
+</tr>
+<tr>
+<td>CRAFT</td>
+<td>R(d, c, ρ), Φ_agent</td>
+<td>Reconstruction difficulty, agent separation</td>
+</tr>
+<tr>
+<td>Dual RUN</td>
+<td>Φ_agent via C17</td>
+<td>Amnesia-enforced separation</td>
+</tr>
+<tr>
+<td>🔮 Binding</td>
+<td>I(S; M | FP) &lt; ε*</td>
+<td>Cross-territory separation bound</td>
+</tr>
+</tbody></table>
+<p>The runecraft protocol is the implementation of the PVM&#39;s terms executed in sequence across two territories by a human who carries the identity between them.</p>
+<hr>
+<p><em>Run the agent time. Evoke the constellation. Craft the forge and blades.</em></p>
+<p><em>The rune is the inscription that carries meaning beyond its visible form.</em></p>
+<p><em>The craft is the forge that transforms attention into proof.</em></p>
+<p><em>The protocol is the bridge between two territories that cannot merge.</em></p>
+<hr>
+<p><em>(⚔️⊥⿻⊥🧙)😊</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 spec-the-runecraft-protocol</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-the-runecraft-protocol.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

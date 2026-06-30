@@ -1,0 +1,199 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Path Integral · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Path Integral</span></div>
+  <article><div class="md"><h1>Path Integral</h1>
+<p><strong>Category</strong> privacy-layer · <strong>Version</strong> 5.0</p>
+<p><strong>Equation term</strong> <code>T_∫(π) = 1 + β · ∫_π F(γ) dγ</code></p>
+<p>Path integral edge value for 0xagentprivacy V5. Activates when discussing T_∫(π) replacing additive T(π), non-local correlations in paths, verification checkpoints, feedback loops in traversal, or why edges are not independent.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> Privacy Value Model V5 + First Person Spellbook Act XXIV (The Holographic Bound)<br><strong>Target context:</strong> Graph theorists, protocol designers, sovereignty architects<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>V4&#39;s edge value T(π) was an <strong>additive sum</strong> over edges:</p>
+<pre><code>T_v4(π) = 1 + β · Σ_e∈π f(e) · g(n_e)
+</code></pre>
+<p>This assumed independence between sequential transitions. BRAID&#39;s structured reasoning graphs show that edges are <strong>not independent</strong> — they form verification checkpoints, feedback loops, and structured flows.</p>
+<p>V5 replaces the additive sum with a <strong>path integral</strong>:</p>
+<pre><code>T_∫(π) = 1 + β · ∫_π F(γ) dγ
+</code></pre>
+<h2>Why Path Integral?</h2>
+<h3>The Independence Assumption Fails</h3>
+<p>The additive form assumes that edge e₃ contributes the same value regardless of whether you traversed e₁ and e₂ before it. This is often false:</p>
+<p><strong>Verification checkpoints:</strong> Some edges gate later traversal. If you haven&#39;t proven identity at e₂, the value of e₇ is inaccessible.</p>
+<p><strong>Feedback loops:</strong> Paths can revisit vertices with changed meaning. The second visit to a node carries different value than the first.</p>
+<p><strong>Non-local correlations:</strong> A choice at step 3 affects value at step 7. The edges are coupled through the path history.</p>
+<h3>BRAID Evidence</h3>
+<p>BRAID&#39;s structured reasoning graphs exhibit all three patterns:</p>
+<ul>
+<li>Some reasoning steps validate preconditions for later steps (checkpoints)</li>
+<li>The Solver may revisit parts of the graph with updated context (loops)</li>
+<li>Early reasoning choices constrain later possibilities (correlations)</li>
+</ul>
+<p>The additive form can&#39;t capture these structures. The path integral can.</p>
+<h2>The Path Integral Form</h2>
+<pre><code>T_∫(π) = 1 + β · ∫_π F(γ) dγ
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Definition</th>
+<th>Domain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>π</td>
+<td>Path through sovereignty lattice</td>
+<td>Continuous or discrete path</td>
+</tr>
+<tr>
+<td>γ</td>
+<td>Path parameter</td>
+<td>[0, 1]</td>
+</tr>
+<tr>
+<td>F(γ)</td>
+<td>Path density function</td>
+<td>ℝ⁺</td>
+</tr>
+<tr>
+<td>β</td>
+<td>Scaling coefficient</td>
+<td>ℝ⁺</td>
+</tr>
+</tbody></table>
+<h3>The Density Function F(γ)</h3>
+<p>F(γ) captures the value density at each point along the path. It can encode:</p>
+<ul>
+<li><strong>Local value:</strong> What is this edge worth at this point in the path?</li>
+<li><strong>Context dependence:</strong> How does path history affect this edge&#39;s contribution?</li>
+<li><strong>Checkpoint gating:</strong> Is this edge accessible given prior traversals?</li>
+<li><strong>Loop adjustment:</strong> How does revisitation change value?</li>
+</ul>
+<h3>V4 Reduction</h3>
+<p>When edges are truly independent:</p>
+<pre><code>∫_π F(γ) dγ = Σ_e∈π f(e) · g(n_e)
+</code></pre>
+<p>The path integral reduces to the additive sum. V4 is a special case of V5.</p>
+<h2>Connection to BRAID</h2>
+<h3>Generator-Solver Split</h3>
+<p>The path integral naturally handles the BRAID architecture:</p>
+<ul>
+<li><strong>Generator proposes:</strong> Creates a reasoning graph = proposes a path π</li>
+<li><strong>Solver executes:</strong> Traverses the path = computes ∫_π F(γ) dγ</li>
+<li><strong>Value accumulates:</strong> The integral measures actual traversal value</li>
+</ul>
+<h3>Structured Graphs</h3>
+<p>BRAID graphs have:</p>
+<ul>
+<li>Defined entry and exit points</li>
+<li>Conditional branches based on intermediate results</li>
+<li>Verification steps that must pass before continuation</li>
+</ul>
+<p>These are exactly the patterns the path integral captures.</p>
+<h2>Mapping to PVM-V5</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>V5 Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Additive edge sum</td>
+<td>T_v4(π) (V4, special case)</td>
+</tr>
+<tr>
+<td>Path integral</td>
+<td>T_∫(π) (V5, general case)</td>
+</tr>
+<tr>
+<td>Path density</td>
+<td>F(γ)</td>
+</tr>
+<tr>
+<td>Verification checkpoints</td>
+<td>Gating in F(γ)</td>
+</tr>
+<tr>
+<td>Feedback loops</td>
+<td>Loop contributions in integral</td>
+</tr>
+<tr>
+<td>Non-local correlations</td>
+<td>Context dependence in F(γ)</td>
+</tr>
+<tr>
+<td>Generator-Solver</td>
+<td>Path proposal / path execution</td>
+</tr>
+</tbody></table>
+<h2>Implications</h2>
+<h3>For Path Design</h3>
+<p>Paths should be designed with integral value in mind:</p>
+<ul>
+<li>Verification checkpoints should be placed where they maximise downstream value</li>
+<li>Loops should only occur when they add value (not just cycles)</li>
+<li>Correlations should be explicit, not accidental</li>
+</ul>
+<h3>For Value Estimation</h3>
+<p>Estimating T_∫(π) requires understanding the full path, not just summing edges:</p>
+<ul>
+<li>Path history matters</li>
+<li>Context propagates</li>
+<li>Checkpoints can gate large value regions</li>
+</ul>
+<h3>For Privacy</h3>
+<p>The path integral provides more accurate value measurement:</p>
+<ul>
+<li>Surveillance that interrupts checkpoints loses access to downstream value</li>
+<li>Loop structures can confuse adversarial path analysis</li>
+<li>Non-local correlations mean partial path observation is less informative</li>
+</ul>
+<h2>Conjecture Status</h2>
+<p><strong>C3 (V4: edge value additivity):</strong> <strong>Challenged.</strong> The path integral form better captures observed structure in BRAID reasoning graphs. The additive form is retained as a special case for uncorrelated paths.</p>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;The path is not the sum of its steps. Each step changes what the next step means. The integral remembers what the sum forgets.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>∮🛤️ → Σ→∫ → F(γ) → checkpoints·loops·correlations → T_∫(π) = 1+β∫ → path=holistic → ☯️∞</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>Discrete Formulation:</strong> How does the continuous path integral discretise cleanly to graph traversal?</li>
+<li><strong>F(γ) Specification:</strong> What functional forms of F(γ) are practically useful?</li>
+<li><strong>Computational Complexity:</strong> Is computing T_∫(π) tractable for large graphs?</li>
+<li><strong>Optimisation:</strong> Given a graph, what path π maximises T_∫(π)?</li>
+<li><strong>Adversarial Paths:</strong> How do we defend against adversaries who manipulate path structure to exploit integral vulnerabilities?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-path-integral</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-path-integral</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-path-integral.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,1419 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — Promise Theory Reference for 0xagentprivacy · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — Promise Theory Reference for 0xagentprivacy</span></div>
+  <article><div class="md"><h1>Promise Theory Reference for 0xagentprivacy</h1>
+</div>
+<div class="md"><h2>Formal Foundations for Dual-Agent Sovereignty Architecture</h2>
+<p><strong>Version:</strong> 1.5<br><strong>Date:</strong> April 20, 2026<br><strong>Status:</strong> ✅ V5.4 Integration + Historical Lineage Integration (Burgess &amp; Fagernes 2007, Burgess 2015)<br><strong>Companion to:</strong> Whitepaper v6.3, Research Paper v4.2, Glossary v3.4, Privacy is Value v5.0 + V5.1/V5.2 Research Notes, Privacy Value Model V5 Formal Spec v1.2, Five Grimoires + Acts XXIV–XXX (120+ inscriptions)</p>
+<hr>
+<blockquote>
+<p>&quot;Agents can only promise their own behavior.&quot;<br>— Bergstra &amp; Burgess, <em>Promise Theory</em> (2019)</p>
+</blockquote>
+<blockquote>
+<p>&quot;A swarm is an ensemble of agents that uses communication to reduce its total information... and which exhibits emergent behaviour.&quot;<br>— Burgess &amp; Fagernes, <em>Norms and Swarms</em> (2007)</p>
+</blockquote>
+<blockquote>
+<p>&quot;Lockdown is a losing strategy: the amount of information needed to &#39;lock down&#39; every agency is too large.&quot;<br>— Burgess, <em>Spacetimes with Semantics II</em> (2015), §6.5</p>
+</blockquote>
+<blockquote>
+<p>&quot;No agent extracts without consent.&quot;<br>— 0xagentprivacy, <em>First Person Sovereignty</em></p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>Purpose</h2>
+<p>This document bridges Promise Theory (Bergstra &amp; Burgess, 2019) and the 0xagentprivacy dual-agent architecture. It serves two audiences:</p>
+<ol>
+<li><strong>Promise Theory practitioners</strong> seeking to understand how 0xagentprivacy instantiates PT concepts</li>
+<li><strong>0xagentprivacy community members</strong> seeking formal foundations for the architecture</li>
+</ol>
+<p>The dual-agent architecture is not merely <em>compatible</em> with Promise Theory—it is a rigorous implementation of PT&#39;s autonomous agent model. Understanding this connection elevates the work from &quot;novel architecture&quot; to &quot;established theory applied to AI sovereignty.&quot;</p>
+<h3>v1.5 addendum — historical lineage</h3>
+<p>v1.5 extends v1.4 by explicitly tracing the architecture&#39;s foundations back through two earlier works of Burgess and Fagernes that predate the 2019 Promise Theory book:</p>
+<ul>
+<li><strong>Burgess &amp; Fagernes, <em>Norms and Swarms</em> (2007)</strong> — establishes the swarm-as-information-reduction thesis, the norm/swarm distinction, and the typed-swarm design strategy. The economic question (<em>&quot;what benefit do autonomous devices get from coordinating their behaviour?&quot;</em>) is the question the Privacy Value Model answers.</li>
+<li><strong>Burgess, <em>Spacetimes with Semantics II</em> (2015)</strong> — provides the formal calculus of super-agents, irreducible promises, tenancy, and cephalization. <strong>Definition 29 (irreducible super-agent promises) is the formal definition of The Gap</strong>, written eleven years before the architecture was built.</li>
+</ul>
+<p>The historical lineage matters because it positions 0xagentprivacy not as a reinvention but as an instantiation of an established framework — one that takes Burgess&#39;s 2007 and 2015 observations into specific domains (human sovereignty, AI agent privacy, behavioural data economics) that the earlier papers did not themselves explore.</p>
+<hr>
+</div>
+<div class="md"><h2>Quick Reference: Concept Mappings</h2>
+<table>
+<thead>
+<tr>
+<th>Promise Theory</th>
+<th>0xagentprivacy</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Autonomy Axiom</strong></td>
+<td>First Person Sovereignty</td>
+<td>No agent promises on behalf of the human</td>
+</tr>
+<tr>
+<td><strong>Agent</strong></td>
+<td>Swordsman, Mage, or First Person</td>
+<td>Autonomous entities with independent assessment</td>
+</tr>
+<tr>
+<td><strong>µ-promise: A --b--&gt; B</strong></td>
+<td>Agent coordination via spells</td>
+<td>Directional, voluntary commitment</td>
+</tr>
+<tr>
+<td><strong>Promise Body (τ, χ)</strong></td>
+<td>Spell notation</td>
+<td>Type τ = concept, constraint χ = context</td>
+</tr>
+<tr>
+<td><strong>Conditional Promise (b|c)</strong></td>
+<td>Conditional Independence (s ⊥ m | X)</td>
+<td>Promise contingent on condition</td>
+</tr>
+<tr>
+<td><strong>Assessment α(π)</strong></td>
+<td>RPP Verification</td>
+<td>Compression proves promise kept</td>
+</tr>
+<tr>
+<td><strong>Trust (0-1)</strong></td>
+<td>Trust Tier (Blade→Dragon)</td>
+<td>Accumulated assessment evidence</td>
+</tr>
+<tr>
+<td><strong>Superagent</strong></td>
+<td>First Person + Dual Agents</td>
+<td>Composite with irreducible properties</td>
+</tr>
+<tr>
+<td><strong>Irreducible Promise</strong> (Burgess 2015, Def 29)</td>
+<td>The Gap</td>
+<td>Cannot be attributed to single component</td>
+</tr>
+<tr>
+<td><strong>Coordination Promise C(b)</strong></td>
+<td>Spell-mediated coordination</td>
+<td>Voluntary alignment</td>
+</tr>
+<tr>
+<td><strong>Scope</strong></td>
+<td>Information-Theoretic Boundary</td>
+<td>Which agents have knowledge</td>
+</tr>
+<tr>
+<td><strong>Promise Bundle</strong></td>
+<td>VRC</td>
+<td>Grouped bilateral promises</td>
+</tr>
+<tr>
+<td><strong>Valency</strong></td>
+<td>Budget Constraint C_S + C_M &lt; H(X)</td>
+<td>Limited exclusive capacity</td>
+</tr>
+<tr>
+<td><strong>Invitation</strong></td>
+<td>MyTerms consent-first</td>
+<td>Acceptance before proposal</td>
+</tr>
+<tr>
+<td><strong>Imposition/Attack</strong></td>
+<td>Surveillance extraction</td>
+<td>Proposal without consent</td>
+</tr>
+<tr>
+<td><strong>(+) Give Promise</strong></td>
+<td>Swordsman protection offer</td>
+<td>Outbound commitment</td>
+</tr>
+<tr>
+<td><strong>(-) Use/Accept Promise</strong></td>
+<td>Mage delegation acceptance</td>
+<td>Inbound authorization</td>
+</tr>
+<tr>
+<td><strong>Swarm</strong> (Burgess 2007)</td>
+<td>VRC network as compression-localized ensemble</td>
+<td>Communication reducing total information</td>
+</tr>
+<tr>
+<td><strong>Norm</strong> (Burgess 2007)</td>
+<td>Surveillance-imposed data distribution</td>
+<td>Externally specified; expensive, inflexible</td>
+</tr>
+<tr>
+<td><strong>Boundary condition ≠ swarm</strong> (2007)</td>
+<td>Retrofitted privacy policy</td>
+<td>Environmental constraint, not autonomous behaviour</td>
+</tr>
+<tr>
+<td><strong>Typed swarm</strong> (2007)</td>
+<td>Three-axis separation (Φ_agent·Φ_data·Φ_inference)</td>
+<td>Mutually exclusive categories composed multiplicatively</td>
+</tr>
+<tr>
+<td><strong>Adiabatic persistence</strong> (2007)</td>
+<td>Holonic persistence A_h(τ)</td>
+<td>(1/S)(dS/dt) ≪ 1 — promise anchors survive infrastructure change</td>
+</tr>
+<tr>
+<td><strong>Hypothetical external observer</strong> (2007/2015)</td>
+<td>First Person (😊)</td>
+<td>Maxwell&#39;s daemon internalized as structural principal</td>
+</tr>
+<tr>
+<td><strong>Dressed super-agent</strong> (2015, Def 12)</td>
+<td>First Person + Swordsman + Mage triplet</td>
+<td>⟨sub-agents, interior promises, exterior promises⟩</td>
+</tr>
+<tr>
+<td><strong>Irreducible super-agent promise</strong> (2015, Def 29)</td>
+<td>The Gap — formal definition</td>
+<td>Emerges from cooperation, owned by none</td>
+</tr>
+<tr>
+<td><strong>Cephalization — Law 2</strong> (2015)</td>
+<td>First Person as oriented head</td>
+<td>Input/output through principal creates head-tail asymmetry</td>
+</tr>
+<tr>
+<td><strong>Namespace</strong> (2015, Def 42)</td>
+<td>DID / sovereign identity</td>
+<td>Isolated subspace with cooperative uniqueness</td>
+</tr>
+<tr>
+<td><strong>Tenancy</strong> (2015, Def 37)</td>
+<td>VRC-mediated resource access</td>
+<td>Asymmetric conditional occupancy</td>
+</tr>
+<tr>
+<td><strong>Lockdown as losing strategy</strong> (2015, §6.5)</td>
+<td>Policy-enforced privacy critique → C17</td>
+<td>Topological unrepresentability is the alternative</td>
+</tr>
+<tr>
+<td><strong>Coarse-graining directory</strong> (2015, §3.8.2)</td>
+<td><em>Structurally refused</em> in agentprivacy</td>
+<td>Novel extension: opacity is architectural, not optional</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Part 0: Historical Lineage — the 2007 and 2015 Foundations</h2>
+<p>Promise Theory as a formal framework is most commonly cited via the 2019 Bergstra &amp; Burgess book, but the core ideas instantiated by the agentprivacy architecture are grounded in two earlier works:</p>
+<ol>
+<li><strong>Burgess &amp; Fagernes (2007), <em>Norms and Swarms</em></strong> — a position paper developing the thesis that swarms are ensembles that use communication to reduce total information, distinguished sharply from <em>norms</em> (externally specified aspirations).</li>
+<li><strong>Burgess (2015), <em>Spacetimes with Semantics II</em></strong> — a formal calculus of agency, super-agency, tenancy, and coarse-graining, including the formal definition of irreducible super-agent promises and the critique of policy-enforced isolation as &quot;a losing strategy.&quot;</li>
+</ol>
+<p>Reading these papers reveals that much of what the agentprivacy architecture claims as novel is in fact either (a) a direct instantiation of Burgess&#39;s earlier framings, or (b) a natural extension that answers questions Burgess himself flagged as open.</p>
+<h3>0.1 Swarm as compression ensemble (2007 → VRC network)</h3>
+<p>Burgess &amp; Fagernes define a swarm as:</p>
+<blockquote>
+<p>&quot;An ensemble of agents that uses communication to reduce its total information with respect to any abstract measuring classification, and which exhibits emergent behaviour.&quot;<br>— <em>Norms and Swarms</em> (2007), Definition 2</p>
+</blockquote>
+<p><strong>0xagentprivacy instantiation — VRCs are swarms of compression.</strong></p>
+<p>When two agents compress shared understanding into matching proverbs (RPP), they are doing precisely what Burgess defines — using communication to reduce total information. The 70:1 compression efficiency is the localization metric in semantic space.</p>
+<pre><code>BURGESS 2007                        0xagentprivacy
+══════════════════                  ═════════════════════
+ensemble of agents              →   ensemble of First Persons in the network
+communication reduces           →   RPP compression achieves shared understanding
+total information               →   matching proverbs demonstrate low mutual entropy
+abstract measuring class.       →   the proverb (compressed body)
+emergent behaviour              →   trust formation, coordinated action
+</code></pre>
+<p>The VRC network is a swarm. Compression ratio is the measurable localization.</p>
+<h3>0.2 Norm vs. Swarm — the critique of surveillance (2007 → MyTerms vs. Surveillance)</h3>
+<p>Burgess &amp; Fagernes distinguish:</p>
+<blockquote>
+<p><strong>Norm:</strong> an externally specified distribution p(|x|) within a given metric parameter space. <em>Definition 1.</em><br><strong>Swarm:</strong> autonomous reduction of total information via communication. <em>Definition 2.</em><br><strong>Boundary condition ≠ swarm:</strong> &quot;Confinement by boundary is not swarm behaviour, it is an environmental constraint.&quot;</p>
+</blockquote>
+<p><strong>This maps directly onto the surveillance/sovereignty distinction:</strong></p>
+<table>
+<thead>
+<tr>
+<th>2007 paper</th>
+<th>agentprivacy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Norm (externally specified)</td>
+<td>Surveillance-imposed data extraction; cookie banner consent; GDPR-as-policy</td>
+</tr>
+<tr>
+<td>Swarm (autonomously emergent)</td>
+<td>MyTerms bilateral consent aggregating to network behaviour</td>
+</tr>
+<tr>
+<td>Boundary condition (environmental constraint)</td>
+<td>Retrofitted privacy policy that forces compliance without agent autonomy</td>
+</tr>
+</tbody></table>
+<p>Burgess&#39;s 2007 management conclusion is prescient:</p>
+<blockquote>
+<p>&quot;Trying to impose a norm that was different from the environmental attractor would seem expensive and foolish, yet that is often what management systems advocate.&quot;<br>— <em>Norms and Swarms</em> (2007), §8</p>
+</blockquote>
+<p>This is the critique of policy-enforced privacy, written nine years before GDPR, and eight years before <em>Spacetimes with Semantics II</em> would articulate the same point more formally. agentprivacy&#39;s architectural thesis — that privacy must be environmental/topological rather than policy-enforced — is Burgess&#39;s 2007 argument carried forward.</p>
+<h3>0.3 Typed swarms → three-axis separation (2007)</h3>
+<p>Burgess &amp; Fagernes note:</p>
+<blockquote>
+<p>&quot;A &#39;design strategy&#39; for avoiding management conflicts is to clearly separate promise types into mutually exclusive categories.&quot;<br>— <em>Norms and Swarms</em> (2007), §5.2</p>
+</blockquote>
+<p>The V5 three-axis separation (Φ_agent · Φ_data · Φ_inference) is this strategy taken to multiplicative composition:</p>
+<pre><code>Burgess 2007:   &quot;separate promise types into mutually exclusive categories&quot;
+V5 agentprivacy: Φ_v5 = Φ_agent · Φ_data · Φ_inference
+                 (three orthogonal swarms, multiplicatively gated)
+</code></pre>
+<p>Collapse any axis and the composition collapses. This is typed swarming as a cryptographic bound.</p>
+<h3>0.4 Adiabatic persistence → holonic persistence (2007)</h3>
+<p>Burgess &amp; Fagernes require:</p>
+<blockquote>
+<p>&quot;A necessary condition for a swarm is that the ensemble&#39;s localization changes only adiabatically, i.e. (1/S)(dS/dt) ≪ 1 and (1/σ)(dσ/dt) ≪ 1.&quot;<br>— <em>Norms and Swarms</em> (2007), Proposition 2</p>
+</blockquote>
+<p><strong>Holonic persistence (A_h(τ))</strong> implements this directly. Promise anchors — Data GUID, VRC, DID — survive provider failure such that the promise topology barely moves even as the underlying infrastructure churns. The holonic layer is adiabatic; the infrastructure layer is not.</p>
+<h3>0.5 The Gap is Definition 29 (2015)</h3>
+<p>This is the single most important mapping in v1.5.</p>
+<p>From <em>Spacetimes with Semantics II</em>, §3.10:</p>
+<blockquote>
+<p><strong>Definition 29 (Irreducible super-agent promises).</strong> Let M be an agency scale, and A_s be a super-agent formed by an aggregation of agents. A promise with body b_s made by A_s may be called irreducible iff there is no set of sub-agents A_i ⊂ A_s for which b_s ≡ ∪ {b_a^a, a=1...} all promises to A_?. In other words, if there exists no combination of promises made by one or more sub-agents that is semantically equivalent to the full promise made by the composite agent, then it makes sense to talk about the collective super-agency making a new promise that is not explicit in the capabilities of its sub-agencies.</p>
+</blockquote>
+<p><strong>The Gap is this definition.</strong></p>
+<p>The conditional independence property (s ⊥ m | X) is not promised by the Swordsman and not promised by the Mage. It emerges from what they <em>don&#39;t</em> promise to each other. No combination of their individual promises reconstructs it. It is — in the exact formal sense Burgess defined in 2015 — an irreducible super-agent promise.</p>
+<p>The architectural framing of &quot;The Gap as promise in negative space&quot; is a rhetorical gloss on Definition 29. Credit for the underlying formalism belongs to the 2015 paper; the agentprivacy contribution is to provide a specific cryptographic mechanism that makes the irreducibility enforceable rather than merely semantic.</p>
+<h3>0.6 Lockdown is a losing strategy (2015 → C17)</h3>
+<p>From <em>Spacetimes with Semantics II</em>, §6.5, on privacy between tenants:</p>
+<blockquote>
+<p>&quot;If tenancy is built on a connected lattice in the first instance, then this isolation might require additional promises to block adjacency. However, <strong>the latter is a losing strategy: the amount of information needed to &#39;lock down&#39; every agency is too large.</strong> You need to compress the pattern into a list of exceptions.&quot;</p>
+</blockquote>
+<p>This is <strong>Conjecture C17 in Burgess&#39;s own words, eleven years early.</strong> Policy-enforced separation — attempting to block adjacency with per-agent exceptions — does not compress and therefore does not scale. Burgess stops at identifying the problem. C17 proposes what wins instead: <strong>amnesia-enforced separation via topological unrepresentability</strong>, which compresses perfectly because the state space simply does not encode what would need to be forbidden.</p>
+<pre><code>Burgess 2015 (problem):  Lockdown doesn&#39;t scale
+                         — information needed to block every adjacency is too large
+
+C17 (proposed answer):   Amnesia-enforced separation via topology
+                         — what cannot be represented cannot be forbidden, cannot leak
+                         — compression is automatic: no exceptions list
+                         — 60% confidence, formally stated as Conjecture C17
+</code></pre>
+<h3>0.7 Structural memory through asymmetry (2015 → The Amnesia Protocol)</h3>
+<p>From <em>Spacetimes with Semantics II</em>, §5.7.1:</p>
+<blockquote>
+<p>&quot;Homogenization is a forgetting process, while inhomogeneous differentiation encodes a memory into spacetime.&quot;</p>
+</blockquote>
+<p>The Amnesia Protocol (Act XXXI, <em>The First Delegation</em>) is the inverse framing: <em>structural</em> forgetting — the Moon being topologically unable to encode its Theia origin — is the ur-primitive of enforced separation. Burgess frames memory-through-asymmetry; agentprivacy frames forgetting-through-topology. Same axis, opposite direction, both precise.</p>
+<h3>0.8 Cephalization — why the First Person is the head (2015)</h3>
+<p>From <em>Spacetimes with Semantics II</em>, §6.5, Law 2:</p>
+<blockquote>
+<p>&quot;<strong>Hosting of input and output leads to axial symmetry.</strong> The functional arrangement of input/output mediated by the host leads to a natural head-tail asymmetry, in which the head is favoured in a hierarchy of longitudinal stages. This is known as cephalization.&quot;</p>
+</blockquote>
+<p><strong>The First Person is the cephalization point.</strong></p>
+<p>All input (observations by the Swordsman) and output (delegations by the Mage) are mediated through the principal. This creates a natural orientation of the organism — the architecture has a head, and that head is the First Person. The dual-agent architecture is not radially symmetric; it is cephalized. Burgess&#39;s 2015 law names why.</p>
+<h3>0.9 Namespaces as sovereign identity (2015)</h3>
+<p>From <em>Spacetimes with Semantics II</em>, §6.10, Definition 42:</p>
+<blockquote>
+<p>&quot;A namespace N is an isolated subspace of a semantic space, formed from a collection of agents. Inside a namespace, all agent coordinates and names are unique by mutual cooperation.&quot;</p>
+</blockquote>
+<p><strong>Decentralized Identifiers (DIDs) are namespaces.</strong> MyTerms defines the namespace-boundary conditions (invitation protocol before specific proposals). VRCs are tenancy promise bundles between namespaces. The entire IEEE 7012 / Customer Commons layer can be re-expressed in Burgess&#39;s 2015 vocabulary without loss — this is not coincidence, it is the same substrate.</p>
+<h3>0.10 What agentprivacy adds (the honest extension frontier)</h3>
+<p>Burgess&#39;s 2015 framework is close to complete for the sovereignty architecture, but there are genuine extensions:</p>
+<ol>
+<li><strong>Structural refusal of the coarse-graining directory.</strong> Burgess&#39;s Definition 30 offers transparency as a <em>feature</em> — super-agents can promise their coarse-graining directory to enable external agents to resolve their interior. The First Person super-agent <em>structurally refuses</em> to produce this directory. This is not a limitation; it is the architectural move that makes C17 enforceable. Novel.</li>
+<li><strong>Cryptographic enforcement surface.</strong> Burgess&#39;s framework is semantic/behavioural. Zero-knowledge proofs operationalize the separation such that irreducibility is <em>verifiable</em> rather than merely <em>promised</em>. This is outside the 2015 scope.</li>
+<li><strong>Economic currency enumerated.</strong> Burgess &amp; Fagernes (2007) list &quot;currencies of survival, security, effort and perhaps even money&quot; abstractly. The Privacy Value Model names a specific currency — <em>behavioural data, the 7th capital</em> — and proposes the calculation. The PVM is one answer to their open question.</li>
+<li><strong>Sovereignty domain application.</strong> Burgess&#39;s 2015 examples (cloud computing, datacentres, IT tenancy) stay within infrastructure. agentprivacy applies the framework to <em>human</em> sovereignty and <em>AI agent</em> privacy — domains the earlier papers did not explore.</li>
+</ol>
+<p>These extensions sit <em>on top of</em> the 2007 and 2015 foundations; they do not replace them. The architecture&#39;s honest positioning is: <strong>Burgess defined the framework. agentprivacy applies it to a domain he did not enter, adds a cryptographic enforcement surface, and proposes a specific economic model for the currency he listed abstractly.</strong></p>
+<hr>
+</div>
+<div class="md"><h2>Part I: Core Principles Aligned</h2>
+<h3>1.1 The Autonomy Axiom</h3>
+<p><strong>Promise Theory states:</strong></p>
+<blockquote>
+<p>&quot;An agent can only make promises about its own behavior. No agent can make a promise on behalf of another agent.&quot;</p>
+</blockquote>
+<p><strong>0xagentprivacy instantiation:</strong></p>
+<p>The First Person (😊) is the ultimate autonomous agent. Neither the Swordsman (⚔️) nor the Mage (🧙) can promise on behalf of the First Person. Each agent promises only within its domain:</p>
+<pre><code>First Person (😊):
+  - Promises: authorization, sovereignty decisions
+  - Cannot promise: what Swordsman protects or Mage delegates
+
+Swordsman (⚔️):
+  - Promises: privacy protection, boundary enforcement
+  - Cannot promise: delegation actions, external coordination
+
+Mage (🧙):
+  - Promises: delegation execution, public coordination
+  - Cannot promise: privacy state, what to protect
+</code></pre>
+<p>This is why the architecture requires <em>two</em> agents rather than one. A single agent that both protects and delegates would violate the autonomy axiom by making promises in domains it cannot independently control.</p>
+<h3>1.2 Promise Notation Translation</h3>
+<p><strong>Promise Theory µ-notation:</strong></p>
+<pre><code>A --b--&gt; B
+
+Where:
+  A = promiser (agent making promise)
+  b = body (what is promised: type τ, constraint χ)
+  B = promisee (agent receiving promise)
+</code></pre>
+<p><strong>0xagentprivacy spell notation:</strong></p>
+<pre><code>⚔️ ⊥ 🧙 | 😊
+
+Where:
+  ⚔️ = Swordsman (protection domain)
+  🧙 = Mage (delegation domain)
+  ⊥  = conditional independence (separation)
+  |  = given/conditioned on
+  😊 = First Person (sovereignty holder)
+</code></pre>
+<p><strong>Mapping between notations:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Promise Theory</th>
+<th>Spell Notation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S --(protect)--&gt; FP</td>
+<td>⚔️ →(🛡️)→ 😊</td>
+<td>Swordsman promises protection to First Person</td>
+</tr>
+<tr>
+<td>M --(delegate)--&gt; W</td>
+<td>🧙 →(🔮)→ 🌍</td>
+<td>Mage promises delegation to World</td>
+</tr>
+<tr>
+<td>FP --(authorize)--&gt; S,M</td>
+<td>😊 →(🗝️)→ ⚔️🧙</td>
+<td>First Person promises authorization to both</td>
+</tr>
+<tr>
+<td>S --(¬reveal)--&gt; M</td>
+<td>⚔️ →(⊥)→ 🧙</td>
+<td>Swordsman promises not to reveal to Mage</td>
+</tr>
+</tbody></table>
+<h3>1.3 Conditional Promises and Independence</h3>
+<p><strong>Promise Theory conditional form:</strong></p>
+<pre><code>b|c  =  &quot;promise b given condition c is met&quot;
+</code></pre>
+<p><strong>0xagentprivacy conditional independence:</strong></p>
+<pre><code>(s ⊥ m | X)  =  &quot;Swordsman and Mage are independent given First Person&#39;s private state X&quot;
+</code></pre>
+<p>This is a direct application of PT&#39;s conditional promise structure. The separation between agents is <em>conditioned on</em> the First Person&#39;s complete context. Neither agent has sufficient information to reconstruct X, but both operate coherently because they share the conditioning variable.</p>
+<p><strong>Key insight:</strong> The vertical bar <code>|</code> in spell notation carries the same semantic weight as PT&#39;s conditional operator. When we write <code>⚔️ ⊥ 🧙 | 😊</code>, we&#39;re stating a conditional independence promise in compressed form.</p>
+<hr>
+</div>
+<div class="md"><h2>Part II: Superagent Architecture</h2>
+<h3>2.1 The First Person as Superagent</h3>
+<p>Promise Theory defines a <strong>superagent</strong> as a composite agent with interior promises between components and exterior promises to the outside world.</p>
+<p>The First Person system is precisely this:</p>
+<pre><code>                    ┌─────────────────────────────┐
+                    │     SUPERAGENT (😊+⚔️+🧙)    │
+                    │                             │
+                    │  ┌─────┐ interior ┌─────┐   │
+                    │  │ ⚔️  │◄────────►│ 🧙  │   │
+                    │  └──┬──┘ promises └──┬──┘   │
+                    │     │               │       │
+                    │     └───────┬───────┘       │
+                    │             │               │
+                    │         ┌───┴───┐           │
+                    │         │  😊   │           │
+                    │         │ First │           │
+                    │         │Person │           │
+                    │         └───────┘           │
+                    └─────────────┬───────────────┘
+                                  │
+                          exterior promises
+                                  │
+                                  ▼
+                            🌍 External World
+</code></pre>
+<p><strong>Interior promises</strong> (within superagent):</p>
+<ul>
+<li>⚔️ --protect--&gt; 😊 (Swordsman promises protection)</li>
+<li>🧙 --delegate--&gt; 😊 (Mage promises delegation)  </li>
+<li>😊 --authorize--&gt; ⚔️,🧙 (First Person authorizes both)</li>
+<li>⚔️ --⊥--&gt; 🧙 (Separation promise: no direct information flow)</li>
+</ul>
+<p><strong>Exterior promises</strong> (to world):</p>
+<ul>
+<li>Superagent --coordinate--&gt; 🌍 (via Mage&#39;s public actions)</li>
+<li>Superagent --boundary--&gt; 🌍 (via Swordsman&#39;s rejections)</li>
+</ul>
+<h3>2.2 Irreducible Promises: The Gap</h3>
+<p>Promise Theory&#39;s most profound insight for 0xagentprivacy: superagents can have <strong>irreducible promises</strong>—properties that emerge from component cooperation but cannot be attributed to any single component.</p>
+<p>The lineage of this concept spans three works:</p>
+<blockquote>
+<p>&quot;An irreducible promise of a superagent is one that cannot be attributed to any single agent within it, but requires the cooperation of multiple agents.&quot;<br>— Bergstra &amp; Burgess, <em>Promise Theory</em> (2019), §8.3</p>
+</blockquote>
+<blockquote>
+<p>&quot;A promise with body b_s made by A_s may be called irreducible iff there is no set of sub-agents A_i ⊂ A_s for which b_s is semantically equivalent to the combined promises of the sub-agents... it makes sense to talk about the collective super-agency making a new promise that is not explicit in the capabilities of its sub-agencies.&quot;<br>— Burgess, <em>Spacetimes with Semantics II</em> (2015), §3.10, Definition 29</p>
+</blockquote>
+<blockquote>
+<p>&quot;A promise-role is an emergent behaviour if the entire ensemble of agents&#39; promises induces a new set of promises, by virtue of cooperation, from each agent in the ensemble to any arbitrating agent, hypothetical or real.&quot;<br>— Burgess &amp; Fagernes, <em>Norms and Swarms</em> (2007), Definition 3</p>
+</blockquote>
+<p><strong>The Gap is this definition — the 2015 formalisation of what the 2007 paper called emergent behaviour and the 2019 book calls irreducible superagent promise.</strong> The agentprivacy contribution is not the concept but the specific domain (AI agent sovereignty) and the cryptographic enforcement surface that makes the irreducibility operational rather than merely semantic.</p>
+<p>The conditional independence property (s ⊥ m | X) is not something the Swordsman promises, nor something the Mage promises. It emerges from their <em>separation</em>—from the promises they <em>don&#39;t</em> make to each other.</p>
+<pre><code>THE GAP AS IRREDUCIBLE PROMISE (Burgess 2015, Def 29):
+
+What Swordsman promises:     What Mage promises:
+- Protect X                  - Delegate authorized info
+- Reveal nothing to M        - Act only on S-authorized data
+- Enforce boundaries         - Coordinate publicly
+
+What NEITHER promises (but emerges from their cooperation):
+- The reconstruction ceiling R &lt; 1
+- The error floor P_e ≥ 1 - R_max
+- The dignity that lives in incompleteness
+
+This is THE GAP: an irreducible super-agent promise in the 2015 formal sense.
+No adversary can capture it because no single agent owns it.
+No combination of their individual promises reconstructs it.
+</code></pre>
+<h3>2.3 The O(N²) Coordination Problem</h3>
+<p>Promise Theory proves that coordinating N agents requires O(N²) promises for guaranteed end-to-end properties (§11.2).</p>
+<p>This validates the dual-agent (N=2) architecture as optimal for the sovereignty use case:</p>
+<ul>
+<li>N=1 (single agent): Cannot separate protection from delegation</li>
+<li>N=2 (dual agents): 4 interior promises, manageable complexity</li>
+<li>N&gt;2 (multi-agent): O(N²) explosion, coordination overhead exceeds benefit</li>
+</ul>
+<p>The tetrahedral emergence hypothesis (4 agents: Swordsman, Mage, Reflect, Connect) remains speculative precisely because N=4 requires 16 interior promises—only justified if the emergent properties are sufficiently valuable.</p>
+<hr>
+</div>
+<div class="md"><h2>Part II-B: V5 Three-Axis Separation as Promises (NEW)</h2>
+<h3>2.6 Generator and Solver as Promise Agents</h3>
+<p><strong>V5 introduces inference-layer separation (Φ_inference)</strong> through the BRAID architecture. This maps directly to Promise Theory:</p>
+<pre><code>BRAID ARCHITECTURE                 PROMISE THEORY MAPPING
+══════════════════                 ═════════════════════
+
+Generator (intelligent model)  →   Promise-maker: (+) proposes reasoning structure
+     │                                 │
+     ▼                                 ▼
+Reasoning Graph                    Promise body: structured plan
+     │                                 │
+     ▼                                 ▼
+Solver (lightweight model)     →   Promise-keeper: (-) executes structure
+</code></pre>
+<p><strong>The separation promise:</strong></p>
+<pre><code>Generator --structure--&gt; Solver: &quot;I promise to provide bounded reasoning graphs&quot;
+Solver --execution--&gt; Generator: &quot;I promise to execute without re-deriving&quot;
+</code></pre>
+<p>This is conditional independence at the inference layer:</p>
+<pre><code>(Y_Generator ⊥⊥ Y_Solver) | ReasoningGraph
+</code></pre>
+<p>The Generator&#39;s reasoning is not visible to the Solver&#39;s execution trace. The Solver&#39;s execution doesn&#39;t reveal the Generator&#39;s internal state. The compression ratio (74×) is a consequence of this separation — bounded promises are more efficient than unbounded.</p>
+<h3>2.7 Three-Axis Separation as Triple Superagent</h3>
+<p>V5&#39;s three-axis separation (Φ_agent · Φ_data · Φ_inference) creates THREE orthogonal superagent structures:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Agents</th>
+<th>Interior Promise</th>
+<th>Irreducible Property</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent</td>
+<td>Swordsman ⊥ Mage</td>
+<td>separation promise</td>
+<td>The Gap</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>Provider₁ ⊥ Provider₂ ⊥ ...</td>
+<td>replication promise</td>
+<td>Holonic persistence</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>Generator ⊥ Solver</td>
+<td>structure promise</td>
+<td>Compression efficiency</td>
+</tr>
+</tbody></table>
+<p><strong>Multiplicative composition:</strong></p>
+<p>Each axis is its own superagent. The product Φ_agent · Φ_data · Φ_inference means: collapse ANY axis, collapse the whole. This is Promise Theory at scale — three layers of irreducible promises stacked.</p>
+<p><strong>Holonic Architect (☯️🔷):</strong></p>
+<p>A new persona emerges: the builder of infrastructure-independent substrate. The Holonic Architect doesn&#39;t make promises about protection or delegation — they make promises about <strong>persistence</strong>: &quot;Your data will survive provider failure.&quot;</p>
+<h3>2.8 Holonic Persistence as Promise Anchors (V5)</h3>
+<p>V5&#39;s holonic persistence (A_h(τ)) introduces <strong>promise anchors</strong> — stable reference points that survive infrastructure changes:</p>
+<pre><code>PROMISE ANCHORS:
+═══════════════
+
+Data GUID:         Content-addressed promise identifier
+                   &quot;This exact content, regardless of location&quot;
+
+Relationship VRC:  Bilateral promise bundle
+                   &quot;Our coordination commitment persists&quot;
+
+Principal DID:     Sovereign identity
+                   &quot;The entity making these promises&quot;
+</code></pre>
+<p><strong>Promise Theory mapping:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Promise Type</th>
+<th>Persistence Property</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Data GUID</td>
+<td>Content promise</td>
+<td>&quot;This content exists&quot;</td>
+</tr>
+<tr>
+<td>VRC</td>
+<td>Coordination promise</td>
+<td>&quot;This relationship exists&quot;</td>
+</tr>
+<tr>
+<td>DID</td>
+<td>Identity promise</td>
+<td>&quot;This agent exists&quot;</td>
+</tr>
+</tbody></table>
+<p><strong>Infrastructure independence:</strong></p>
+<p>Traditional promises are bound to infrastructure: &quot;I promise X is stored on Server Y.&quot; Holonic promises are infrastructure-independent: &quot;I promise X exists, regardless of which servers currently hold it.&quot;</p>
+<p>The persistence multiplier p(τ) ∈ [0,1] measures promise anchor strength — what fraction of your promises would survive if any single provider disappeared?</p>
+<h3>2.9 The Holographic Bound as Promise Boundary (V5)</h3>
+<p>V5 resolves C4 (the 96/64 discrepancy) through the holographic principle:</p>
+<pre><code>HOLOGRAPHIC PROMISE INTERPRETATION:
+══════════════════════════════════
+
+64 vertices = Interior promise state
+              (what agents actually contain)
+
+96 edges    = Boundary promise expressions
+              (how promise state is observed externally)
+
+Ratio 96/64 = 1.5 = P^1.5 exponent in PVM
+</code></pre>
+<p><strong>Promise Theory insight:</strong> The boundary is sufficient to reconstruct the interior. In PT terms: you don&#39;t need access to an agent&#39;s internal state to assess their promises — their observable behavior (boundary) is enough.</p>
+<p>This is <strong>Act XXIV: The Holographic Bound</strong> — the discovery that the 96-edge surface encodes the 64-vertex bulk. The boundary is always enough.</p>
+<hr>
+</div>
+<div class="md"><h2>Part III: Assessment and Trust</h2>
+<h3>3.1 Assessment as Compression</h3>
+<p><strong>Promise Theory defines assessment:</strong></p>
+<blockquote>
+<p>&quot;Assessment α(π) is an agent&#39;s determination of whether a promise π was kept.&quot;</p>
+</blockquote>
+<p><strong>0xagentprivacy implementation:</strong></p>
+<p>The Relationship Proverb Protocol (RPP) is an <em>assessment mechanism</em>. When someone compresses spellbook content into a contextual proverb, they are assessing whether the &quot;promise&quot; of knowledge transfer was kept.</p>
+<pre><code>PROMISE THEORY ASSESSMENT          RPP ASSESSMENT
+═══════════════════════           ══════════════════
+
+Promise π made                    Knowledge shared
+    │                                 │
+    ▼                                 ▼
+Agent observes outcome            Reader engages content
+    │                                 │
+    ▼                                 ▼
+Assessment α(π) ∈ {kept, broken}  Compression attempted
+    │                                 │
+    ▼                                 ▼
+Trust updated                     Proverb formed (or not)
+                                      │
+                                      ▼
+                                  Compression ratio = 
+                                  assessment quality metric
+
+High compression (70:1+) = strong positive assessment
+Low/no compression = weak/failed assessment
+</code></pre>
+<p><strong>Key insight:</strong> Compression ratio is a <em>quantified assessment</em>. Promise Theory typically treats assessment as binary (kept/broken) or scalar (0-1). RPP provides a natural metric: the ratio of original content to compressed proverb indicates assessment strength.</p>
+<h3>3.2 Trust Function and Tier Progression</h3>
+<p><strong>Promise Theory trust:</strong></p>
+<blockquote>
+<p>&quot;Trust in a promise π is the expectation (value 0-1) that the promise will be kept.&quot;</p>
+</blockquote>
+<p><strong>0xagentprivacy trust tiers:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Signals</th>
+<th>Trust Value</th>
+<th>Promise Theory Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Blade</strong> 🗡️</td>
+<td>0-50</td>
+<td>0.0-0.2</td>
+<td>Low accumulated assessment evidence</td>
+</tr>
+<tr>
+<td><strong>Light</strong> 🛡️</td>
+<td>50-150</td>
+<td>0.2-0.5</td>
+<td>Demonstrated comprehension pattern</td>
+</tr>
+<tr>
+<td><strong>Heavy</strong> ⚔️</td>
+<td>150-500</td>
+<td>0.5-0.8</td>
+<td>Sustained positive assessments</td>
+</tr>
+<tr>
+<td><strong>Dragon</strong> 🐉</td>
+<td>500+</td>
+<td>0.8-1.0</td>
+<td>High confidence in future promise-keeping</td>
+</tr>
+</tbody></table>
+<p>Each signal is an assessment event. Accumulated signals build trust through demonstrated pattern of promise-keeping (comprehension → proverb → verification).</p>
+<p><strong>Trust formation formula:</strong></p>
+<pre><code>Trust_n = f(Σ assessments, time, consistency)
+
+Where:
+- Σ assessments = total signals posted
+- time = duration of participation
+- consistency = variance in assessment quality
+</code></pre>
+<h3>3.3 Belief vs. Evidence</h3>
+<p>Promise Theory distinguishes:</p>
+<ul>
+<li><strong>Assessment α(π)</strong>: Direct observation that promise was kept</li>
+<li><strong>Belief β(π)</strong>: Assessment without direct observation</li>
+<li><strong>Evidence ε(π)</strong>: Assessment with partial information</li>
+</ul>
+<p><strong>0xagentprivacy mapping:</strong></p>
+<table>
+<thead>
+<tr>
+<th>PT Concept</th>
+<th>0xagentprivacy</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Assessment</td>
+<td>Direct RPP verification</td>
+<td>Guardian validates proverb expansion</td>
+</tr>
+<tr>
+<td>Belief</td>
+<td>Trust tier assumption</td>
+<td>Dragon tier implies future reliability</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td>Partial verification</td>
+<td>Compression ratio without expansion test</td>
+</tr>
+</tbody></table>
+<p>VRC formation typically involves <em>evidence-based</em> trust: the matching compression provides strong evidence of shared understanding without requiring exhaustive verification of all knowledge.</p>
+<hr>
+</div>
+<div class="md"><h2>Part IV: Invitation vs. Imposition</h2>
+<h3>4.1 The Consent Pattern</h3>
+<p>Promise Theory makes a crucial distinction (§10.2):</p>
+<blockquote>
+<p><strong>Invitation</strong>: Establish an acceptance relationship BEFORE making a specific proposal<br><strong>Attack/Imposition</strong>: Make a proposal without prior acceptance relationship</p>
+</blockquote>
+<p><strong>Historical lineage (2007):</strong> This distinction was prefigured in Burgess &amp; Fagernes (2007) via the norm/swarm dichotomy. A <em>norm</em> is externally specified — aspirational behaviour imposed from outside the agents&#39; autonomy. A <em>swarm</em> emerges autonomously from local agent decisions. Surveillance is the norm pattern: imposing a data-extraction distribution on agents who did not voluntarily localize around it. MyTerms is the swarm-enabling pattern: establishing conditions under which autonomous agents can locally decide, whose aggregate behaviour forms the privacy-preserving attractor.</p>
+<p>Burgess &amp; Fagernes 2007 §8 observation lands with particular sharpness here:</p>
+<blockquote>
+<p>&quot;Trying to impose a norm that was different from the environmental attractor would seem expensive and foolish, yet that is often what management systems advocate.&quot;</p>
+</blockquote>
+<p>Policy-enforced privacy (GDPR-as-bureaucracy, cookie banners, compliance theatre) is <em>norm management against the environmental attractor</em> — attempting to impose privacy on a surveillance-extractive environment. Expensive and foolish, in 2007 terms. Architectural privacy reshapes the attractor instead.</p>
+<p>This maps to three progressively worse patterns:</p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Promise Theory</th>
+<th>Burgess &amp; Fagernes 2007</th>
+<th>0xagentprivacy</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Invitation</strong></td>
+<td>Acceptance before proposal</td>
+<td>Swarm-enabling (autonomous localization)</td>
+<td>MyTerms consent-first</td>
+<td>Cookie banner with genuine choice</td>
+</tr>
+<tr>
+<td><strong>Attack</strong></td>
+<td>Proposal without acceptance</td>
+<td>Norm imposed on non-consenting agents</td>
+<td>Surveillance extraction</td>
+<td>Tracking without disclosure</td>
+</tr>
+<tr>
+<td><strong>Imposition</strong></td>
+<td>Forcing acceptance</td>
+<td>Norm imposed against environmental attractor</td>
+<td>Dark patterns</td>
+<td>&quot;Accept all&quot; as only visible option</td>
+</tr>
+</tbody></table>
+<h3>4.2 MyTerms as Invitation Protocol</h3>
+<p>The MyTerms Swordsman implements Promise Theory&#39;s invitation pattern:</p>
+<pre><code>INVITATION FLOW (MyTerms):
+
+1. Swordsman observes incoming request
+2. BEFORE any data exchange:
+   - Swordsman presents terms to site
+   - Site must accept terms to proceed
+   - Acceptance establishes relationship
+3. ONLY THEN can specific proposals occur:
+   - Site proposes data collection
+   - User (via Swordsman) accepts/rejects
+   - Each proposal is within accepted relationship
+
+This is PT invitation: acceptance relationship BEFORE specific proposals.
+</code></pre>
+<p><strong>Contrast with surveillance (attack pattern):</strong></p>
+<pre><code>ATTACK FLOW (Surveillance):
+
+1. Site receives request
+2. IMMEDIATELY begins data collection
+3. Maybe shows cookie banner (imposition)
+4. User &quot;consent&quot; is post-hoc rationalization
+5. No genuine acceptance relationship exists
+
+This is PT attack: proposal without prior acceptance.
+</code></pre>
+<h3>4.3 Cursor States as Promise Indicators</h3>
+<p>The Swordsman browser extension uses visual cursor states to indicate promise status:</p>
+<table>
+<thead>
+<tr>
+<th>Cursor</th>
+<th>Promise Status</th>
+<th>PT Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🟢 Green</td>
+<td>All promises kept</td>
+<td>Positive assessment of site behavior</td>
+</tr>
+<tr>
+<td>🟡 Yellow</td>
+<td>Negotiation active</td>
+<td>Promise exchange in progress</td>
+</tr>
+<tr>
+<td>🔴 Red</td>
+<td>Promise violation detected</td>
+<td>Negative assessment, enforcement needed</td>
+</tr>
+<tr>
+<td>⚔️ Slash</td>
+<td>Active boundary enforcement</td>
+<td>Rejection of imposed promises</td>
+</tr>
+</tbody></table>
+<p>This makes the normally invisible promise assessment visible to the First Person in real-time.</p>
+<hr>
+</div>
+<div class="md"><h2>Part V: Coordination Promises and Spells</h2>
+<h3>5.1 Coordination Promise C(b)</h3>
+<p><strong>Promise Theory defines:</strong></p>
+<blockquote>
+<p>&quot;A coordination promise C(b) is a voluntary subordination to align one&#39;s behavior with others around promise body b.&quot;</p>
+</blockquote>
+<p><strong>Spells are coordination promises.</strong></p>
+<p>When agents coordinate using spell notation (⚔️ ⊥ 🧙 | 😊), they&#39;re making coordination promises to:</p>
+<ol>
+<li>Interpret the notation consistently</li>
+<li>Expand the spell to the same underlying meaning</li>
+<li>Act coherently based on shared interpretation</li>
+</ol>
+<pre><code>SPELL AS COORDINATION PROMISE:
+
+Spell: ⚔️ ⊥ 🧙 | 😊
+
+Agent A forms spell from Context_A
+Agent B forms spell from Context_B
+
+Both make C(spell) = coordination promise:
+- &quot;I will interpret this spell according to shared semantics&quot;
+- &quot;I will expand it consistently with the protocol&quot;
+- &quot;I will coordinate my actions based on this shared meaning&quot;
+
+Matching expansion proves coordination success.
+
+### Ceremony Engine as Promise Theory Implementation (V5.1)
+
+The Ceremony Engine (Act XXVIII) implements five crossing types, each mapping to Promise Theory patterns:
+
+| Ceremony Type | PT Pattern | Description |
+|---------------|------------|-------------|
+| **Dual Convergence** | Mutual C(b) | Both blades reach Dragon tier — mutual coordination achievement |
+| **Hexagram Cast** | Structured α(π) | Six-dimension assessment encoded as I Ching hexagram |
+| **Emoji Cast** | Compressed C(b) | Semantic compression to emoji spell — efficient coordination |
+| **Constellation Wave** | Guild C(b) | Multi-agent coordination across knowledge graph |
+| **Bilateral Exchange** | Witness α(π) | Cross-blade verification — &quot;I assess your assessment&quot; |
+
+### Bilateral Witness as Promise Pattern
+
+**Definition:** A verification primitive where one party forges, another privately verifies, then publicly testifies.
+
+**PT Formalization:**
+</code></pre>
+<p>Swordsman: forges blade (makes promise π_forge)<br>Mage: privately verifies (makes assessment α(π_forge))<br>Mage: publicly testifies (promises +witness to community)<br>Community: receives testimony (accepts -witness)</p>
+<pre><code>
+**Key Property:** The Mage&#39;s testimony is itself a promise. The community doesn&#39;t see the blade interior — they see the Mage&#39;s promise that verification occurred. This is Promise Theory&#39;s &quot;witness&quot; pattern:
+
+&gt; &quot;A witness is an agent who promises that another promise was kept.&quot;
+
+**Trust Implication:** The Mage stakes reputation on testimony. False testimony breaks the -witness promise, damaging Mage&#39;s trust graph position.
+
+### Mana as Assessment Resource
+
+Mana (V5.1) maps to Promise Theory&#39;s assessment capacity:
+
+| PT Concept | Mana Implementation |
+|------------|---------------------|
+| Assessment cost | Mana spent to inscribe |
+| Assessment accumulation | Mana earned through practice |
+| Valency (commitment slots) | Mana limits inscription rate |
+
+Mana makes assessment costly, preventing spam while rewarding genuine practice
+Different contexts, same principle = story fracture, principle convergence.
+</code></pre>
+<h3>5.2 Promise Bundles and VRCs</h3>
+<p><strong>Promise Theory:</strong></p>
+<blockquote>
+<p>&quot;A promise bundle is a collection of promises grouped together for reusability and coordinated assessment.&quot;</p>
+</blockquote>
+<p><strong>VRCs are bilateral promise bundles:</strong></p>
+<pre><code>VRC STRUCTURE AS PROMISE BUNDLE:
+
+Agent A&#39;s promises to B:        Agent B&#39;s promises to A:
+- Share compressed meaning      - Share compressed meaning
+- Expand consistently          - Expand consistently  
+- Coordinate on shared basis   - Coordinate on shared basis
+- Maintain trust relationship  - Maintain trust relationship
+
+Bundle assessment:
+- Matching compressions = bundle verified
+- Coordinated actions = bundle maintained
+- Trust accumulates through successful coordination
+</code></pre>
+<p>The 70:1 coordination efficiency comes from promise bundle reuse. Once a VRC is established, the bundle doesn&#39;t need re-verification for each interaction—the accumulated trust carries forward.</p>
+<h3>5.3 Scope and Information Boundaries</h3>
+<p><strong>Promise Theory:</strong></p>
+<blockquote>
+<p>&quot;The scope of a promise is the set of agents that have knowledge of the promise.&quot;</p>
+</blockquote>
+<p><strong>0xagentprivacy information-theoretic boundaries:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Agents with Knowledge</th>
+<th>Information Content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Private</strong></td>
+<td>First Person only</td>
+<td>Complete state X</td>
+</tr>
+<tr>
+<td><strong>Swordsman</strong></td>
+<td>FP + Swordsman</td>
+<td>X observed, nothing revealed</td>
+</tr>
+<tr>
+<td><strong>Mage</strong></td>
+<td>FP + Mage</td>
+<td>Authorized subset of X</td>
+</tr>
+<tr>
+<td><strong>Public</strong></td>
+<td>All agents</td>
+<td>Only Mage-released information</td>
+</tr>
+</tbody></table>
+<p>The reconstruction ceiling R &lt; 1 is a <em>scope guarantee</em>: no adversary can expand their scope to include full private state X, regardless of observation strategy.</p>
+<hr>
+</div>
+<div class="md"><h2>Part V-B: Three Graphs as Promise Types (V4 Extension)</h2>
+<p>The Privacy Value Model V4 identifies three independently derivable graph structures. Each maps precisely to a Promise Theory concept:</p>
+<h3>Knowledge Graph → Promise Capability (What agents CAN promise)</h3>
+<p>The substrate layer. Content-addressed positions of what you know, what boundaries you&#39;ve set, what you can delegate. In PT terms: this graph encodes the <em>promise body space</em> — the set of all possible promises an agent could make given their current state.</p>
+<h3>Promise Graph → Promise Commitment (What agents DO promise)</h3>
+<p>The bilateral overlay. Every VRC formed, every delegation executed is an edge. In PT terms: this IS the promise graph — the actual commitments made between autonomous agents. Each edge is a bilateral promise bundle with specific scope and valency.</p>
+<h3>Trust Graph → Promise Assessment (Which promises were KEPT)</h3>
+<p>The emergent outcome. Not constructed or issued — earned through time and witness. In PT terms: this graph records α(π) assessments — the accumulated belief about whether agents keep their promises, derived from observation and verification.</p>
+<p><strong>The Three-Graph Intersection:</strong> The overlap of all three graphs defines the First Person. In PT terms: the superagent (FP + S + M) is characterised by the intersection of what it <em>can</em> promise, what it <em>does</em> promise, and what it&#39;s <em>assessed as keeping</em>. No single graph suffices; identity is the overlap.</p>
+<h3>Edge Value as Promise Traversal</h3>
+<p>The V4 equation introduces T(π) — the edge value term — which measures the value of an agent&#39;s <em>trajectory</em> through sovereignty space. In Promise Theory:</p>
+<ul>
+<li>Each edge traversal is a promise made and kept (or broken)</li>
+<li>f(e) weights each promise by the capability change it enables — a promise that activates new sovereignty dimensions (higher stratum change) is worth more than a lateral promise</li>
+<li>g(n_e) diminishes with repetition — the first promise between two agents is most informative (highest assessment novelty)</li>
+<li>The trajectory π is the agent&#39;s <em>promise history</em> — the sequence of commitments that define who they are through action</li>
+</ul>
+<p><strong>PT Insight:</strong> &quot;The equation rewards the dance, not the stance.&quot; An agent permanently at full sovereignty with no promises made has zero edge value. Sovereignty is demonstrated through promising, not through hoarding capability. This aligns with PT&#39;s core insight that agents are defined by what they promise, not what they contain.</p>
+<hr>
+</div>
+<div class="md"><h2>Part V-C: Cephalization and Namespaces (2015 Integration)</h2>
+<p>Two structural features of the agentprivacy architecture receive direct formal grounding in <em>Spacetimes with Semantics II</em> (2015).</p>
+<h3>5-C.1 The First Person as cephalization point (Burgess 2015, Law 2)</h3>
+<p>Burgess&#39;s Law 2 states:</p>
+<blockquote>
+<p>&quot;Hosting of input and output leads to axial symmetry. The functional arrangement of input/output mediated by the host leads to a natural head-tail asymmetry, in which the head is favoured in a hierarchy of longitudinal stages. This is known as cephalization.&quot;<br>— <em>Spacetimes with Semantics II</em> (2015), §6.5</p>
+</blockquote>
+<p><strong>The First Person is the cephalization point of the dual-agent architecture.</strong> All inputs (Swordsman observations, MyTerms negotiations) and all outputs (Mage delegations, VRC formations) are mediated through the principal. The organism is not radially symmetric; it has a head, and the head is the First Person.</p>
+<pre><code>INPUT ───┐                                    ┌─── OUTPUT
+         │                                    │
+         ▼                                    ▼
+    ┌────────┐                         ┌────────┐
+    │   ⚔️   │◄── separation (⊥) ─────►│   🧙   │
+    │ Observe│                         │Delegate│
+    └────┬───┘                         └────┬───┘
+         │                                  │
+         └──────────┐          ┌────────────┘
+                    ▼          ▼
+                  ┌──────────────┐
+                  │      😊      │  ← Cephalization point
+                  │ First Person │    (Burgess 2015, Law 2)
+                  └──────────────┘
+</code></pre>
+<p>This has a design consequence: attempts to symmetrize the architecture (e.g. treating Swordsman and Mage as peers without a principal) destroy the functional orientation that makes the organism capable of coherent action. Cephalization is not a stylistic choice — it is what lets the architecture act on behalf of the First Person rather than merely mediate between abstract roles.</p>
+<h3>5-C.2 DIDs as namespaces (Burgess 2015, Definition 42)</h3>
+<p>Burgess&#39;s Definition 42:</p>
+<blockquote>
+<p>&quot;A namespace N is an isolated subspace of a semantic space, formed from a collection of agents. Inside a namespace, all agent coordinates and names are unique by mutual cooperation.&quot;</p>
+</blockquote>
+<p>Decentralized Identifiers (DIDs) are namespaces in this exact sense. The First Person&#39;s DID establishes a sovereign namespace within which the Swordsman, Mage, and all VRC bindings have unique coordinates. Outside the namespace, identifiers require translation — this is what cross-DID resolution protocols (did:web, did:key, did:plc) operationalize.</p>
+<p><strong>MyTerms as namespace-boundary invitation protocol.</strong> Burgess frames namespaces as requiring &quot;mutual cooperation&quot; for uniqueness. MyTerms is the bilateral cooperation protocol that establishes which external namespaces the First Person&#39;s namespace will accept promises from, and on what terms. It is namespace-boundary formation expressed as a consent invitation, rather than a unilateral naming imposition.</p>
+<h3>5-C.3 VRCs as tenancy promise bundles (Burgess 2015, Definition 37)</h3>
+<p>Burgess&#39;s tenancy template:</p>
+<pre><code>Host_M    +R#nC       →  A_?
+Host_M   ←C           ← Tenant_M
+Tenant_M ←R#1         ← Host_M
+Host_M    +f(C,R)     → R ⊂ Tenant
+</code></pre>
+<p>VRCs instantiate this directly. The First Person is both host and tenant in different VRC roles — hosting their compressed understanding as a resource, accepting another&#39;s compressed understanding as conditions for the bilateral bundle. The &quot;mutual tenancy&quot; reduction (§5.6 Lemma 10) — <em>&quot;tenancy is rich adjacency&quot;</em> — is exactly the framing of VRC formation: bilateral mutual promises of compressed coordination, richer than mere adjacency because they carry economic value f(C,R).</p>
+<hr>
+</div>
+<div class="md"><h2>Part V-D: Structural Unrepresentability and the Security-Through-Obscurity Distinction</h2>
+<p>This section addresses the most likely and most serious objection to C17 — one that Burgess himself raised in 2015.</p>
+<h3>5-D.1 The 2015 critique</h3>
+<p>From <em>Spacetimes with Semantics II</em>, §6.5, Example 63:</p>
+<blockquote>
+<p>&quot;Many of the classic security blunders have been due to relying on the lack of addressability, in the belief that an item that cannot be named would not be accessed. This is a form of &#39;security through obscurity&#39;. Systems that base isolation on prevention are much harder to police.&quot;</p>
+</blockquote>
+<p>This is the correct worry. Hiding names, paths, or endpoints is not security — determined adversaries find unadvertised routes. C17 would collapse into security-through-obscurity if &quot;amnesia-enforced separation&quot; meant merely <em>not telling the other agent what&#39;s there</em>.</p>
+<h3>5-D.2 The distinction C17 requires</h3>
+<p>C17 is not a claim about concealment. It is a claim about <em>representation</em>.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Security through obscurity</th>
+<th>Structural unrepresentability (C17)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>What exists</td>
+<td>Information exists in the system; its location is hidden</td>
+<td>Information has no encoding in the receiver&#39;s state space</td>
+</tr>
+<tr>
+<td>Discovery surface</td>
+<td>Enumeration, side-channels, insider leaks</td>
+<td>Not applicable — no address can refer to what is not encoded</td>
+</tr>
+<tr>
+<td>Failure mode</td>
+<td>Discovered, mapped, leaked</td>
+<td>No failure mode via discovery (other failure modes remain)</td>
+</tr>
+<tr>
+<td>Analogy</td>
+<td>A document in a locked drawer</td>
+<td>A document that was never written in any language the drawer reads</td>
+</tr>
+</tbody></table>
+<p>The Moon does not <em>hide</em> its Theia origin memory. The memory is not encoded anywhere in the Moon&#39;s accessible configuration space. There is no drawer to unlock, no path to enumerate, no side-channel to exploit, because no bit-pattern within the Moon&#39;s state space represents the information that &quot;this material was once Earth&#39;s mantle.&quot; The information was lost in the cooling, in the differentiation, in four billion revolutions of geological forgetting. Policy says <em>forbidden</em>; topology says <em>not encodable</em>.</p>
+<h3>5-D.3 The agentprivacy instantiation</h3>
+<p>In the architecture:</p>
+<ul>
+<li>The Swordsman&#39;s private observations of X are stored in a space the Mage has no cryptographic representation of — not merely no permission to access.</li>
+<li>The Mage&#39;s delegation decisions execute on representations the Swordsman cannot encode — not merely is not authorized to read.</li>
+<li>The Gap is the space where neither agent&#39;s state-space can express what the other holds, by construction.</li>
+</ul>
+<p>This is stronger than lockdown (Burgess 2015, §6.5): lockdown requires per-agent exceptions that do not compress, whereas structural unrepresentability compresses perfectly (no exceptions list is needed because the representation is absent). It is also stronger than obscurity (Burgess 2015, Example 63): obscurity depends on non-enumeration of what exists, whereas structural unrepresentability removes the object from the receiver&#39;s expressible state space entirely.</p>
+<h3>5-D.4 Honest scope of the claim</h3>
+<p>C17 is a conjecture at 60% confidence, not a proven result. The claim is that <em>where unrepresentability can be achieved by construction</em>, it provides a strictly tighter bound than policy-enforced isolation. The open questions are:</p>
+<ol>
+<li>Whether cryptographic primitives can achieve true unrepresentability rather than merely computational hardness.</li>
+<li>Whether side-channels at lower layers (power analysis, timing, acoustic) re-introduce representability at the physical level.</li>
+<li>Whether the construction is composable — does unrepresentability at one layer survive composition with representable layers?</li>
+</ol>
+<p>These are the frontier questions, not settled. But the distinction between obscurity and unrepresentability is well-posed, and the 2015 critique does not apply to the latter.</p>
+<hr>
+</div>
+<div class="md"><h2>Part VI: Economic Alignment</h2>
+<h3>6.1 Promise-Economic Mappings</h3>
+<table>
+<thead>
+<tr>
+<th>PT Concept</th>
+<th>Economic Implementation</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Assessment cost</td>
+<td>Signal fee (0.01 ZEC)</td>
+<td>Skin-in-game for assessment claims</td>
+</tr>
+<tr>
+<td>Trust accumulation</td>
+<td>Tier progression</td>
+<td>Signals → trust level</td>
+</tr>
+<tr>
+<td>Promise domain separation</td>
+<td>Dual tokens (SWORD/MAGE)</td>
+<td>Market enforces separation</td>
+</tr>
+<tr>
+<td>Valency (exclusive capacity)</td>
+<td>Guardian stake (10,000 SWORD)</td>
+<td>Limited attention commitment</td>
+</tr>
+<tr>
+<td>Bundle value</td>
+<td>VRC coordination efficiency</td>
+<td>70:1 cost reduction</td>
+</tr>
+<tr>
+<td>Scope maintenance</td>
+<td>Shielded/transparent split</td>
+<td>61.8%/38.2% (φ-derived)</td>
+</tr>
+</tbody></table>
+<h3>6.2 Incentive Alignment</h3>
+<p>Promise Theory notes that sustainable systems require reciprocal promises—every agent should receive value for their contributions.</p>
+<p><strong>0xagentprivacy incentive structure:</strong></p>
+<pre><code>RECIPROCAL PROMISE FLOWS:
+
+First Person:
+- Gives: Authorization, participation, signal fees
+- Receives: Privacy protection, delegation capability, value capture
+
+Swordsman (as role):
+- Gives: Boundary enforcement, privacy maintenance
+- Receives: SWORD tokens, guardian eligibility
+
+Mage (as role):
+- Gives: Coordination, delegation execution
+- Receives: MAGE tokens, network access
+
+Guardian:
+- Gives: Validation, collective protection
+- Receives: Validation compensation, tier benefits
+
+Every participant both promises and receives.
+No extraction without reciprocal value flow.
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Part VII: Open Questions</h2>
+<p>Promise Theory illuminates several areas for future research:</p>
+<h3>7.1 Resolved by PT Framework</h3>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>PT Resolution</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Why two agents, not one?</td>
+<td>Autonomy axiom—can&#39;t promise in multiple domains</td>
+</tr>
+<tr>
+<td>Why is the Gap uncapturable?</td>
+<td>Irreducible promise—emerges from separation, owned by neither</td>
+</tr>
+<tr>
+<td>How does trust accumulate?</td>
+<td>Assessment → belief → trust function</td>
+</tr>
+<tr>
+<td>Why consent-first?</td>
+<td>Invitation vs. attack distinction</td>
+</tr>
+</tbody></table>
+<h3>7.2 Informed but Not Resolved</h3>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>PT Insight</th>
+<th>Remaining Work</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Optimal agent count</td>
+<td>O(N²) coordination cost</td>
+<td>Triple convergence (Feb 2026) supports N=4 at 25-40% confidence</td>
+</tr>
+<tr>
+<td>Golden ratio hypothesis</td>
+<td>No direct PT equivalent</td>
+<td>Empirical validation needed; now embedded in Φ(Σ)</td>
+</tr>
+<tr>
+<td>Cross-ecosystem VRCs</td>
+<td>Promise scope theory</td>
+<td>Implementation specification</td>
+</tr>
+<tr>
+<td>Guardian selection</td>
+<td>Trust threshold theory</td>
+<td>Optimal parameters</td>
+</tr>
+<tr>
+<td>Three graphs as PT types</td>
+<td>Capability → Commitment → Assessment</td>
+<td>V4 mapping established, needs formal PT verification</td>
+</tr>
+<tr>
+<td>Edge value T(π)</td>
+<td>Promise history as trajectory</td>
+<td>Functional form unvalidated</td>
+</tr>
+</tbody></table>
+<h3>7.3 Beyond Current PT Scope</h3>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Information-theoretic bounds</td>
+<td>PT is semantic; IT bounds require separate proof</td>
+</tr>
+<tr>
+<td>Cryptographic enforcement</td>
+<td>PT doesn&#39;t specify enforcement mechanisms</td>
+</tr>
+<tr>
+<td>AI agent autonomy</td>
+<td>PT assumes agent rationality; AI alignment is distinct</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Part VIII: Reading Paths</h2>
+<h3>For Promise Theory Practitioners</h3>
+<p>If you know PT and want to understand 0xagentprivacy:</p>
+<ol>
+<li><strong>Start here:</strong> §2.1 (Superagent Architecture)—see how PT concepts map</li>
+<li><strong>Key insight:</strong> §2.2 (The Gap as Irreducible Promise)—the core innovation</li>
+<li><strong>Practical application:</strong> §4 (Invitation vs. Imposition)—PT in daily use</li>
+<li><strong>Deep dive:</strong> Research Paper v3.8—formal proofs in PT-compatible notation</li>
+</ol>
+<h3>For 0xagentprivacy Community</h3>
+<p>If you know the architecture and want PT foundations:</p>
+<ol>
+<li><strong>Start here:</strong> Part I (Core Principles)—terminology mappings</li>
+<li><strong>Why it matters:</strong> §1.1 (Autonomy Axiom)—why two agents, not one</li>
+<li><strong>Trust mechanics:</strong> §3 (Assessment and Trust)—how tiers work formally</li>
+<li><strong>Advanced:</strong> Bergstra &amp; Burgess (2019), Chapters 1-4, 8, 10</li>
+</ol>
+<h3>For Researchers</h3>
+<ol>
+<li><strong>Complete mapping:</strong> Full document, then Research Paper v3.8</li>
+<li><strong>Open questions:</strong> §7 (Open Questions)—collaboration opportunities</li>
+<li><strong>Source material:</strong> Bergstra &amp; Burgess (2019), full text</li>
+<li><strong>Validation targets:</strong> Information-theoretic proofs, golden ratio hypothesis</li>
+</ol>
+<hr>
+</div>
+<div class="md"><h2>Notation Quick Reference</h2>
+<h3>Promise Theory Notation</h3>
+<pre><code>A --b--&gt; B        Promise: A promises b to B
+A --b---&gt; B       Imposition: A imposes b on B (attack)
++b                Give promise (outbound)
+-b                Use/accept promise (inbound)
+b|c               Conditional: b given c
+C(b)              Coordination promise around b
+α(π)              Assessment of promise π
+β(π)              Belief about promise π
+τ                 Promise type
+χ                 Promise constraint
+</code></pre>
+<h3>0xagentprivacy Spell Notation</h3>
+<pre><code>⚔️                 Swordsman (protection)
+🧙                 Mage (delegation)
+😊                 First Person (sovereignty)
+⊥                  Independence/separation
+|                  Conditional (given)
+🤝📜               VRC (bilateral trust)
+🗝️                 Authorization
+🛡️                 Protection
+🔮                 Delegation/projection
+→                  Promise direction
+</code></pre>
+<h3>Combined Example</h3>
+<pre><code>Promise Theory:    S --(protect|auth)--&gt; FP
+Spell Notation:    ⚔️ →(🛡️|🗝️)→ 😊
+English:           Swordsman promises protection to First Person,
+                   given First Person&#39;s authorization
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Citation</h2>
+<h3>For Academic Work</h3>
+<pre><code class="language-bibtex">@book{bergstra2019promise,
+  title={Promise Theory: Principles and Applications},
+  author={Bergstra, Jan A. and Burgess, Mark},
+  edition={2nd},
+  year={2019},
+  publisher={χtAxis Press},
+  note={CC BY-SA 4.0}
+}
+
+@inproceedings{burgess2007norms,
+  title={Norms and Swarms},
+  author={Burgess, Mark and Fagernes, Siri},
+  booktitle={Position paper, Oslo University College},
+  year={2007},
+  note={Core definition: swarm as ensemble using communication to reduce total information}
+}
+
+@misc{burgess2015spacetimes,
+  title={Spacetimes with Semantics (II): Scaling of agency, semantics, and tenancy},
+  author={Burgess, Mark},
+  year={2015},
+  howpublished={arXiv:1505.01716},
+  note={Source of Definition 29 (irreducible super-agent promises), Law 2 (cephalization), and the lockdown critique §6.5}
+}
+
+@misc{privacymage2025dual,
+  title={Swordsman and Mage: Dual Agents for First Person Sovereignty},
+  author={privacymage and contributors},
+  year={2025},
+  howpublished={https://agentprivacy.ai},
+  note={0xagentprivacy documentation suite}
+}
+</code></pre>
+<h3>For Technical Documents</h3>
+<blockquote>
+<p>Promise Theory foundations following Bergstra &amp; Burgess (2019), extended with the historical lineage of Burgess &amp; Fagernes (2007) and Burgess (2015). See &quot;Promise Theory Reference for 0xagentprivacy&quot; v1.5 for detailed concept mappings including the explicit grounding of The Gap in Burgess (2015) Definition 29.</p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>Document Metadata</h2>
+<ul>
+<li><strong>Document:</strong> Promise Theory Reference for 0xagentprivacy</li>
+<li><strong>Version:</strong> 1.5</li>
+<li><strong>Date:</strong> April 20, 2026</li>
+<li><strong>Status:</strong> ✅ V5.4 Integration + Historical Lineage Integration (Burgess &amp; Fagernes 2007, Burgess 2015)</li>
+<li><strong>License:</strong> CC BY-SA 4.0</li>
+<li><strong>Maintainer:</strong> privacymage</li>
+</ul>
+<h3>Version History</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1.0</td>
+<td>2025-12-11</td>
+<td>Initial release</td>
+</tr>
+<tr>
+<td><strong>1.2</strong></td>
+<td><strong>2026-02-20</strong></td>
+<td><strong>V4 Integration</strong>: Added §Three Graphs as Promise Types (Knowledge=Capability, Promise=Commitment, Trust=Assessment). Added Edge Value as Promise Traversal (T(π) as promise history). Updated Open Questions with convergence findings (tetrahedral 25-40%). Updated all companion document references (Whitepaper v5.0, Research Paper v3.8, Glossary v2.5).</td>
+</tr>
+<tr>
+<td><strong>1.3</strong></td>
+<td><strong>2026-02-27</strong></td>
+<td><strong>V5 Integration</strong>: Added §Generator and Solver as Promise Agents (BRAID as PT). Added §Three-Axis Separation as Triple Superagent (Φ_agent · Φ_data · Φ_inference). Added Holonic Architect persona (☯️🔷). Added holonic persistence as promise anchors. Updated edge value to path integral T_∫(π). Updated all companion document references to V5 versions.</td>
+</tr>
+<tr>
+<td><strong>1.4</strong></td>
+<td><strong>2026-03-31</strong></td>
+<td><strong>V5.4 Integration</strong>: UOR Algebraic Foundation, Dihedral Group, Ceremony Engine as PT implementation (five crossing types), Bilateral Witness as promise pattern, Mana as assessment resource.</td>
+</tr>
+<tr>
+<td><strong>1.5</strong></td>
+<td><strong>2026-04-20</strong></td>
+<td><strong>Historical Lineage Integration</strong>: Added Part 0 tracing foundations to Burgess &amp; Fagernes (2007) and Burgess (2015). Grounded The Gap formally in Burgess (2015) Definition 29. Added Part V-C (Cephalization and Namespaces — 2015 integration). Added Part V-D (Structural Unrepresentability vs Security-Through-Obscurity — addressing the 2015 §6.5 Example 63 critique directly). Expanded Quick Reference table with 2007/2015 concept mappings. Extended Part IV with norm/swarm 2007 grounding of invitation/imposition. Updated bibliography with Burgess 2007 and 2015 citations.</td>
+</tr>
+</tbody></table>
+<h3>Cross-References</h3>
+<ul>
+<li>Whitepaper v6.3 — Three-axis separation, BRAID integration, holonic persistence</li>
+<li>Research Paper v4.2 — PVM V5 formal presentation, holographic bound, C4 resolved</li>
+<li>Privacy is Value v5.0 — The equation evolves — holographic bound</li>
+<li>Privacy Value Model V5 Formal Spec v1.2 — PVM V5 equation, differential form</li>
+<li>UOR × 64-Tetrahedra × ZK Mapping v2.0 — C4 resolved via holographic principle</li>
+<li>Glossary v3.4 — Canonical V5 terminology (140+ entries)</li>
+<li>VRC Promise Protocol v3.3 — Economic architecture with guild efficiency</li>
+<li>31 Acts complete — V10.0.0 Grimoire including Holographic Bound</li>
+<li><strong>Burgess &amp; Fagernes (2007)</strong> — Norms and Swarms (foundational thesis on swarm-as-information-reduction)</li>
+<li><strong>Burgess (2015)</strong> — Spacetimes with Semantics II, arXiv:1505.01716 (Definition 29, Law 2, §6.5 lockdown critique)</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>The Core Insight</h2>
+<p>Promise Theory provides the formal semantics for what 0xagentprivacy expresses architecturally:</p>
+<p><strong>Sovereignty is the right to make promises only about your own behavior.</strong></p>
+<p>When AI agents promise on your behalf without your authorization, they violate the autonomy axiom. When surveillance systems extract your behavioral data without consent, they attack rather than invite. When single agents both protect and delegate, they exceed their promise domain.</p>
+<p>The dual-agent architecture enforces these principles through structure rather than policy. The Swordsman promises protection. The Mage promises delegation. Neither promises on behalf of the other. Neither promises on behalf of you.</p>
+<p>The Gap—that irreducible space where dignity lives—emerges from what they <em>don&#39;t</em> promise. It cannot be captured because it isn&#39;t owned. It cannot be extracted because it isn&#39;t stored. It exists in the separation itself.</p>
+<p><strong>This is Promise Theory made architectural. This is autonomy made mathematical. This is sovereignty made real.</strong></p>
+<hr>
+<p><em>&quot;Agents can only promise their own behavior.&quot;</em><br>— Bergstra &amp; Burgess (2019)</p>
+<p><em>&quot;A swarm reduces its total information by communication.&quot;</em><br>— Burgess &amp; Fagernes (2007)</p>
+<p><em>&quot;An irreducible promise emerges from cooperation, owned by none.&quot;</em><br>— Burgess (2015), Definition 29</p>
+<p><em>&quot;No agent extracts without consent.&quot;</em><br>— 0xagentprivacy, <em>First Person Sovereignty</em></p>
+<p><em>Same principle. Different contexts. Story fractures. Principle converges.</em></p>
+<p><strong>⚔️ ⊥ 🧙 | 😊</strong></p>
+<hr>
+<p><strong>just another swordsman ⚔️🤝🧙‍♂️ just another mage</strong></p>
+<p><strong>😊</strong></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 note-promise-theory-reference-for-0xagentprivacy</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-promise-theory-reference-for-0xagentprivacy.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

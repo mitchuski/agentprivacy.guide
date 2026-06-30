@@ -1,0 +1,263 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Content Addressing · agentprivacy guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛️</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Content Addressing</span></div>
+  <article><div class="md"><h1>Content Addressing</h1>
+<p><strong>Category</strong> privacy-layer · <strong>Version</strong> 5.2</p>
+<p><strong>Equation term</strong> <code>A(τ) foundation, h(τ) integrity verification</code></p>
+<p>UOR content addressing foundation for holonic persistence. Activates when discussing content-based identity, same bytes same hash, GUID derivation, infrastructure independence, Braille IRI encoding, or why identity follows content not location.</p>
+</div>
+<div class="md"><p><strong>Source:</strong> UOR Framework + Privacy Value Model V5.2 + Three-Layer Identity Architecture<br><strong>Target context:</strong> Protocol architects, identity designers, persistence engineers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
+</div>
+<div class="md"><h2>What this is</h2>
+<p>Content addressing is the principle that identity derives from content, not location. The same bytes always produce the same identifier. This is the foundation of holonic persistence—blades that survive infrastructure failure because their identity IS their configuration.</p>
+<p><strong>Same bytes → same hash → same identity. Always. Everywhere. Forever.</strong></p>
+<h2>The Core Bijection</h2>
+<p>UOR&#39;s content addressing establishes a bijection (one-to-one correspondence):</p>
+<pre><code>AD_1: ∀ content C: hash(C) is unique and deterministic
+AD_2: ∀ hash H: at most one content C produces H (collision resistance)
+</code></pre>
+<p>This means:</p>
+<ul>
+<li><strong>Forward:</strong> Content deterministically maps to identifier</li>
+<li><strong>Reverse:</strong> Identifier uniquely identifies content (probabilistically)</li>
+</ul>
+<h2>Why This Matters</h2>
+<h3>1. Infrastructure Independence</h3>
+<p>A content-addressed blade persists across:</p>
+<ul>
+<li><strong>Provider migration:</strong> Move between vaults, identity unchanged</li>
+<li><strong>Format changes:</strong> Serialize differently, hash recomputed from content</li>
+<li><strong>Infrastructure failure:</strong> Restore from any backup, identity preserved</li>
+</ul>
+<p>The blade doesn&#39;t know where it&#39;s stored. It only knows what it is.</p>
+<h3>2. Verification Without Trust</h3>
+<p>Anyone can verify a blade&#39;s identity:</p>
+<ol>
+<li>Receive the blade content</li>
+<li>Compute the hash</li>
+<li>Compare to claimed identifier</li>
+</ol>
+<p>No trusted third party required. The mathematics is the authority.</p>
+<h3>3. Deduplication</h3>
+<p>Identical blades automatically share identity:</p>
+<ul>
+<li>Two seekers forging identical configurations get the same GUID</li>
+<li>Not a collision—a feature</li>
+<li>The configuration IS the identity</li>
+</ul>
+<h2>GUID Derivation</h2>
+<p>Blade GUIDs derive from configuration content:</p>
+<pre><code class="language-javascript">function deriveGUID(blade) {
+  const canonical = canonicalize(blade.configuration)
+  const hash = sha256(canonical)
+  return `blade:${hash.slice(0, 16)}`
+}
+</code></pre>
+<p>The canonicalization step ensures:</p>
+<ul>
+<li>Field order doesn&#39;t matter</li>
+<li>Whitespace doesn&#39;t matter</li>
+<li>Only configuration values matter</li>
+</ul>
+<h2>The Three Identity Layers</h2>
+<p>Content addressing enables the three-layer identity architecture:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Identifier</th>
+<th>Derivation</th>
+<th>Persistence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Data</strong></td>
+<td>GUID</td>
+<td>hash(content)</td>
+<td>Infrastructure-independent</td>
+</tr>
+<tr>
+<td><strong>Relationship</strong></td>
+<td>VRC</td>
+<td>hash(derivation_chain)</td>
+<td>Bilateral commitment</td>
+</tr>
+<tr>
+<td><strong>Principal</strong></td>
+<td>DID</td>
+<td>Sovereign choice</td>
+<td>Temporal continuity</td>
+</tr>
+</tbody></table>
+<h3>Layer 1: Data (GUID)</h3>
+<p>The blade IS its bytes. No external authority assigns identity.</p>
+<pre><code>GUID = hash(blade_configuration)
+</code></pre>
+<p>This is pure content addressing.</p>
+<h3>Layer 2: Relationship (VRC)</h3>
+<p>Verifiable Relationship Credentials bind derivation history:</p>
+<pre><code>VRC = hash(forging_path + blade_guid + witness_signatures)
+</code></pre>
+<p>The VRC is content-addressed from the relationship, not just the data.</p>
+<h3>Layer 3: Principal (DID)</h3>
+<p>The sovereign identity that controls traversal:</p>
+<pre><code>DID = chosen_identifier + proof_of_control
+</code></pre>
+<p>This layer adds agency to content.</p>
+<h2>Braille IRI Encoding</h2>
+<p>UOR uses Braille IRI encoding for human-readability:</p>
+<pre><code>Standard hash: 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
+Braille IRI:   ⠽⢏⡱⠥⠷⠿⡏⡣⢃⢉⡜⠘⠔⢏⡱⡵⠿⢁⢄⡱⢘⡻⡷⢁⢍⠔⡜⠂⡓⠃⡑⠃⠹
+</code></pre>
+<p>The Braille encoding is:</p>
+<ul>
+<li>Equally deterministic</li>
+<li>More compact in some contexts</li>
+<li>Visually distinctive</li>
+</ul>
+<h2>Content Addressing vs Location Addressing</h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Content Addressing</th>
+<th>Location Addressing</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Identity</td>
+<td>Derived from data</td>
+<td>Assigned by system</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>Infrastructure-independent</td>
+<td>Infrastructure-dependent</td>
+</tr>
+<tr>
+<td>Verification</td>
+<td>Self-verifying</td>
+<td>Requires trust</td>
+</tr>
+<tr>
+<td>Deduplication</td>
+<td>Automatic</td>
+<td>Requires coordination</td>
+</tr>
+<tr>
+<td>Migration</td>
+<td>Trivial</td>
+<td>Complex</td>
+</tr>
+</tbody></table>
+<h2>Implementation Pattern</h2>
+<pre><code class="language-typescript">interface ContentAddressed&lt;T&gt; {
+  content: T
+  guid: string  // hash(canonicalize(content))
+
+  verify(): boolean {
+    return this.guid === hash(canonicalize(this.content))
+  }
+}
+
+class Blade implements ContentAddressed&lt;BladeConfig&gt; {
+  content: BladeConfig
+  guid: string
+
+  constructor(config: BladeConfig) {
+    this.content = config
+    this.guid = deriveGUID(config)
+  }
+
+  verify(): boolean {
+    return this.guid === deriveGUID(this.content)
+  }
+}
+</code></pre>
+<h2>The Gap in Content Terms</h2>
+<p>The Gap between Swordsman and Mage manifests in content addressing:</p>
+<p><strong>Content ≠ Address</strong></p>
+<p>The hash function is one-way:</p>
+<ul>
+<li>Given content → compute hash (easy)</li>
+<li>Given hash → find content (computationally infeasible)</li>
+</ul>
+<p>This one-way property IS the Gap:</p>
+<ul>
+<li>You can verify a blade without knowing how it was forged</li>
+<li>The verification (hash check) doesn&#39;t reveal the derivation (forging path)</li>
+</ul>
+<h2>Mapping to PVM-V5</h2>
+<table>
+<thead>
+<tr>
+<th>Content Addressing Concept</th>
+<th>PVM Term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GUID persistence</td>
+<td>A(τ) memory term</td>
+</tr>
+<tr>
+<td>Hash verification</td>
+<td>h(τ) integrity gate</td>
+</tr>
+<tr>
+<td>One-way function</td>
+<td>The Gap</td>
+</tr>
+<tr>
+<td>Deduplication</td>
+<td>Lattice vertex uniqueness</td>
+</tr>
+<tr>
+<td>Three layers</td>
+<td>Data × Relationship × Principal</td>
+</tr>
+</tbody></table>
+<h2>Proverb</h2>
+<blockquote>
+<p>&quot;The blade that knows its own name cannot be renamed. The identity that derives from content cannot be stolen. What you ARE is what you&#39;re called.&quot;</p>
+</blockquote>
+<h2>Emoji Spell</h2>
+<p><strong>📦 → hash(📦) → 🔑(GUID) · same📦=same🔑 · ∀vault:🔑=🔑 · 📦≠🔑(gap) · 🔷∞</strong></p>
+<h2>Open Problems</h2>
+<ol>
+<li><strong>Hash Algorithm Choice:</strong> SHA-256? Blake3? Post-quantum considerations?</li>
+<li><strong>Canonicalization Standards:</strong> What is the canonical form for complex configurations?</li>
+<li><strong>Collision Probability:</strong> What are the practical collision bounds at scale?</li>
+<li><strong>Partial Content:</strong> Can you content-address fragments while preserving whole identity?</li>
+<li><strong>Quantum Resistance:</strong> Do content addressing schemes survive quantum attacks?</li>
+</ol>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-content-addressing</code>, v5.2).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 agentprivacy-content-addressing</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="privacy-layer-skills.html">Privacy Layer Skills</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-content-addressing.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>
