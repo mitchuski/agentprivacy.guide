@@ -233,9 +233,11 @@ function nav(active) {
   // federation, minus the nested Tomes (reached via the City parent)
   const fed = FEDERATION.filter(s => !s.nested).map(link).join('');
   const sib = SIBLINGS.map(link).join('');
+  // the Gatehouse — built by tools/gate.mjs AFTER the snapshot (which clears site/)
+  const gate = `<a class="nav-site${active === 'gates' ? ' on' : ''}" href="/gates/"><span>⚔️</span>Gatehouse</a>`;
   return `<header class="top">
     <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
-    <nav class="sites">${fed}<span class="nav-sep"></span>${sib}</nav>
+    <nav class="sites">${fed}<span class="nav-sep"></span>${sib}${gate}</nav>
     <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
   </header>`;
 }
@@ -438,6 +440,7 @@ function deadLinkSweep() {
     let html = fs.readFileSync(f, 'utf8'); const orig = html;
     const resolves = href => {
       if (/^(https?:|mailto:|#|data:)/i.test(href)) return true;
+      if (href === '/gates/') return true; // built AFTER the snapshot by tools/gate.mjs; audit enforces it exists
       const t = href.split('#')[0].split('?')[0]; if (!t) return true;
       let tgt = t.startsWith('/') ? path.join(OUT, t) : path.join(dir, t);
       if (t.endsWith('/')) tgt = path.join(tgt, 'index.html');
