@@ -3,47 +3,47 @@
   "story": [
     {
       "type": "markdown",
-      "id": "019f0bcab9d0736a",
+      "id": "019f193925ac736a",
       "text": "# GAME-FLOW"
     },
     {
       "type": "markdown",
-      "id": "019f0bcad8bf11a2",
+      "id": "019f1939449b11a2",
       "text": "## state machine, phases, gating\n\nPure logic, no rendering. Implement as a reducer over events. The geometry and visuals subscribe to this state; they never drive it.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcaf7aeafd9",
+      "id": "019f1939638aafd9",
       "text": "## 1. Slot lifecycle\n\nEach of the 42 slots moves through five states:\n\n```\nempty -> proposed -> in_progress -> verified -> sealed\n```\n\n- **empty**: nothing yet.\n- **proposed**: a vision fish path has introduced a candidate (head-class slots can self-propose; others are proposed once their heptad is ignited).\n- **in_progress**: a trust task has started for this slot (a candidate is doing the work).\n- **verified**: the trust task passed and a VRC edge was issued and kappa-compressed. The integrity gate h(tau) must be satisfied to reach this state. Unverified history does not advance.\n- **sealed**: the slot is locked into the heptad. A sealed slot is immutable.\n\nAllowed transitions only as above, plus `in_progress -> empty` on abandon, and `proposed -> empty` on withdraw. No backward step out of `verified` or `sealed`.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcb169d4e11",
+      "id": "019f193982794e11",
       "text": "## 2. Heptad lifecycle\n\nEach of the 6 heptads:\n\n```\ndormant -> ignited -> fishing -> building -> sealing -> locked\n```\n\n- **ignited**: the root lights; the axis is declared; the empty triangle appears.\n- **fishing**: the three vision-fish (head-class) slots are open for proposal and work. Fill order 1, 2, 3.\n- **building**: at least the lead advisor is verified; the three mouse slots open. Fill order 4, 5, 6.\n- **sealing**: all three vision fish and all three mice are verified; the centre guide slot opens. Fill order 7.\n- **locked**: all seven stations sealed, guide sealed last. The heptad folds (its flap lifts). Immutable.\n\n**Gating inside a heptad.** The guide (centre, fill order 7) cannot reach `in_progress` until the other six are `verified`. This enforces guide-seals-last and gives the keystone its meaning.\n\nHeptads run in parallel. Six can be at different phases at once.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcb358cec48",
+      "id": "019f1939a168ec48",
       "text": "## 3. Board lifecycle\n\n```\nseeded -> assembling -> sealed\n```\n\n- **seeded**: board centre lit, six roots dormant or igniting.\n- **assembling**: one or more heptads past dormant, not all locked.\n- **sealed**: all six heptads locked. The board folds whole (p -> 1), the group seal is computed, the game becomes a trust-graph node.\n\n**Multiplicative collapse (hard rule).** The board reaches `sealed` only when all six heptads are `locked`. If any heptad is short even one verified slot, the board stays `assembling`. There is no partial seal. This is the any-axis-zero-zeros-the-whole property as a gate.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcb547b8a80",
+      "id": "019f1939c0578a80",
       "text": "## 4. Completion scalar p\n\n```\np = (count of slots in state 'sealed') / 42\n```\n\n`p` drives the fold in GEOMETRY.md. It is derived state, never set directly.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcb736a28b7",
+      "id": "019f1939df4628b7",
       "text": "## 5. Events\n\nThe reducer consumes these. Names are suggestions; keep them stable for the visual layer.\n\n```\nROOT_IGNITE        { axisId }\nFISH_PROPOSE       { slotId, candidateDid }        proposed\nTASK_START         { slotId, candidateDid }        in_progress\nTASK_VERIFY        { slotId, vrc, kappaLabel }     verified   (gate: h(tau) ok)\nSLOT_SEAL          { slotId }                       sealed\nHEPTAD_ADVANCE     { axisId, phase }                derived, emitted by reducer\nBOARD_SEAL         { groupSeal }                    emitted when all six lock\nTASK_ABANDON       { slotId }\nPROPOSAL_WITHDRAW  { slotId }\n```\n\n`TASK_VERIFY` is the only event that may be rejected by the reducer (failed integrity gate, wrong fill order, guide opened too early). All rejections are explicit and logged; the visual layer shows the reason.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcb9259c6ef",
+      "id": "019f1939fe35c6ef",
       "text": "## 6. Determinism and replay\n\nThe full game is a fold over an ordered event log. Given the same log, the same state and the same group seal result every time. This makes a game of 42 auditable and shareable as its log plus its seal. Persist the log; derive everything else.\n\n> nothing seals until the keystone, and the keystone cannot be laid until the rest is true\n\n(⚔️⊥⿻⊥🧙)😊"
     },
     {
       "type": "markdown",
-      "id": "019f0bcbb1486526",
+      "id": "019f193a1d246526",
       "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
     }
   ],
@@ -54,97 +54,97 @@
         "title": "GAME-FLOW",
         "story": []
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcab9d0736a",
+      "id": "019f193925ac736a",
       "item": {
         "type": "markdown",
-        "id": "019f0bcab9d0736a",
+        "id": "019f193925ac736a",
         "text": "# GAME-FLOW"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcad8bf11a2",
+      "id": "019f1939449b11a2",
       "item": {
         "type": "markdown",
-        "id": "019f0bcad8bf11a2",
+        "id": "019f1939449b11a2",
         "text": "## state machine, phases, gating\n\nPure logic, no rendering. Implement as a reducer over events. The geometry and visuals subscribe to this state; they never drive it.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcaf7aeafd9",
+      "id": "019f1939638aafd9",
       "item": {
         "type": "markdown",
-        "id": "019f0bcaf7aeafd9",
+        "id": "019f1939638aafd9",
         "text": "## 1. Slot lifecycle\n\nEach of the 42 slots moves through five states:\n\n```\nempty -> proposed -> in_progress -> verified -> sealed\n```\n\n- **empty**: nothing yet.\n- **proposed**: a vision fish path has introduced a candidate (head-class slots can self-propose; others are proposed once their heptad is ignited).\n- **in_progress**: a trust task has started for this slot (a candidate is doing the work).\n- **verified**: the trust task passed and a VRC edge was issued and kappa-compressed. The integrity gate h(tau) must be satisfied to reach this state. Unverified history does not advance.\n- **sealed**: the slot is locked into the heptad. A sealed slot is immutable.\n\nAllowed transitions only as above, plus `in_progress -> empty` on abandon, and `proposed -> empty` on withdraw. No backward step out of `verified` or `sealed`.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcb169d4e11",
+      "id": "019f193982794e11",
       "item": {
         "type": "markdown",
-        "id": "019f0bcb169d4e11",
+        "id": "019f193982794e11",
         "text": "## 2. Heptad lifecycle\n\nEach of the 6 heptads:\n\n```\ndormant -> ignited -> fishing -> building -> sealing -> locked\n```\n\n- **ignited**: the root lights; the axis is declared; the empty triangle appears.\n- **fishing**: the three vision-fish (head-class) slots are open for proposal and work. Fill order 1, 2, 3.\n- **building**: at least the lead advisor is verified; the three mouse slots open. Fill order 4, 5, 6.\n- **sealing**: all three vision fish and all three mice are verified; the centre guide slot opens. Fill order 7.\n- **locked**: all seven stations sealed, guide sealed last. The heptad folds (its flap lifts). Immutable.\n\n**Gating inside a heptad.** The guide (centre, fill order 7) cannot reach `in_progress` until the other six are `verified`. This enforces guide-seals-last and gives the keystone its meaning.\n\nHeptads run in parallel. Six can be at different phases at once.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcb358cec48",
+      "id": "019f1939a168ec48",
       "item": {
         "type": "markdown",
-        "id": "019f0bcb358cec48",
+        "id": "019f1939a168ec48",
         "text": "## 3. Board lifecycle\n\n```\nseeded -> assembling -> sealed\n```\n\n- **seeded**: board centre lit, six roots dormant or igniting.\n- **assembling**: one or more heptads past dormant, not all locked.\n- **sealed**: all six heptads locked. The board folds whole (p -> 1), the group seal is computed, the game becomes a trust-graph node.\n\n**Multiplicative collapse (hard rule).** The board reaches `sealed` only when all six heptads are `locked`. If any heptad is short even one verified slot, the board stays `assembling`. There is no partial seal. This is the any-axis-zero-zeros-the-whole property as a gate.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcb547b8a80",
+      "id": "019f1939c0578a80",
       "item": {
         "type": "markdown",
-        "id": "019f0bcb547b8a80",
+        "id": "019f1939c0578a80",
         "text": "## 4. Completion scalar p\n\n```\np = (count of slots in state 'sealed') / 42\n```\n\n`p` drives the fold in GEOMETRY.md. It is derived state, never set directly.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcb736a28b7",
+      "id": "019f1939df4628b7",
       "item": {
         "type": "markdown",
-        "id": "019f0bcb736a28b7",
+        "id": "019f1939df4628b7",
         "text": "## 5. Events\n\nThe reducer consumes these. Names are suggestions; keep them stable for the visual layer.\n\n```\nROOT_IGNITE        { axisId }\nFISH_PROPOSE       { slotId, candidateDid }        proposed\nTASK_START         { slotId, candidateDid }        in_progress\nTASK_VERIFY        { slotId, vrc, kappaLabel }     verified   (gate: h(tau) ok)\nSLOT_SEAL          { slotId }                       sealed\nHEPTAD_ADVANCE     { axisId, phase }                derived, emitted by reducer\nBOARD_SEAL         { groupSeal }                    emitted when all six lock\nTASK_ABANDON       { slotId }\nPROPOSAL_WITHDRAW  { slotId }\n```\n\n`TASK_VERIFY` is the only event that may be rejected by the reducer (failed integrity gate, wrong fill order, guide opened too early). All rejections are explicit and logged; the visual layer shows the reason.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcb9259c6ef",
+      "id": "019f1939fe35c6ef",
       "item": {
         "type": "markdown",
-        "id": "019f0bcb9259c6ef",
+        "id": "019f1939fe35c6ef",
         "text": "## 6. Determinism and replay\n\nThe full game is a fold over an ordered event log. Given the same log, the same state and the same group seal result every time. This makes a game of 42 auditable and shareable as its log plus its seal. Persist the log; derive everything else.\n\n> nothing seals until the keystone, and the keystone cannot be laid until the rest is true\n\n(⚔️⊥⿻⊥🧙)😊"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcbb1486526",
+      "id": "019f193a1d246526",
       "item": {
         "type": "markdown",
-        "id": "019f0bcbb1486526",
+        "id": "019f193a1d246526",
         "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     }
   ]
 }

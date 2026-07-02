@@ -20,6 +20,7 @@ const B = n => path.join(HERE, 'builders', n);
 const BUILDERS = {
   grimoire: B('grimoire.mjs'),            // v10.4 atoms: blades · proverbs · principles · incantations
   research: B('research.mjs'),            // Band IX conjectures C90–C93 + the Limitative Reading
+  'research-hearthold': B('research-hearthold.mjs'), // Band X conjectures C94–C96 + the Hearthold Reading
   'research-notes': B('research-notes.mjs'), // the distinct V6 working notes
   crosslinks: B('crosslinks.mjs'),        // prev/next on sequential acts (tomes + spellbooks)
   'skills-cleanup': B('skills-cleanup.mjs'), // linkify reverts + dup-block removal on skill pages

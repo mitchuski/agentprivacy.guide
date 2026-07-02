@@ -3,52 +3,52 @@
   "story": [
     {
       "type": "markdown",
-      "id": "019f0bcd058d3188",
+      "id": "019f193b71693188",
       "text": "# VISUAL-SPEC"
     },
     {
       "type": "markdown",
-      "id": "019f0bcd247ccfc0",
+      "id": "019f193b9058cfc0",
       "text": "## palette, per-state rendering, animation\n\nAligns to the soulbis / soulbae canon palette. A coding agent should apply the project's frontend-design tokens on top of this; these are the domain-specific choices.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcd436b6df7",
+      "id": "019f193baf476df7",
       "text": "## 1. Palette\n\n**Canonical agent colours.**\n```\nSoulbis (Swordsman, protection) : amber-gold  #E0A526\nSoulbae (Mage, delegation)      : sapphire     #2563EB\n```\n\n**Axis accent colours** (also in `data/game-of-42.json`):\n```\ncompute     #7C5CFF   violet\nconnection  #14B8A6   teal\ndelegation  #2563EB   sapphire   (mage)\nprotection  #E0A526   amber-gold (sword)\nmemory      #E0568A   rose\nvalue       #2FB67C   emerald\n```\n\n**Persona-class colours.**\n```\nvision_fish    #38BDF8   lens cyan\nmouse          #C9A227   warm node gold\nprivacy_guide  #F5F0E1   white-gold core, sapphire ring #2563EB\n```\n\n**Ground.** Deep neutral, near-black with a faint blue cast (#0B0E14), so the gold and sapphire read as light. The floating star is semi-transparent over this.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcd625a0c2f",
+      "id": "019f193bce360c2f",
       "text": "## 2. Per-state rendering of a slot\n\n| State | Look |\n|---|---|\n| empty | thin dashed outline in the axis colour at low alpha; barely there |\n| proposed | a vesica path gleams in from the root; slot ring brightens |\n| in_progress | slow pulse of the persona-class colour; a working glyph |\n| verified | filled in the axis colour; kappa-label shown as a short hash chip on hover |\n| sealed | full fill, gold rim, small lock; the flap it belongs to begins to lift |\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcd8149aa66",
+      "id": "019f193bed25aa66",
       "text": "## 3. The three personas, visually\n\n- **Vision fish.** A vesica piscis lens travelling along the root-to-slot path. Lens cyan. When its slot seals, the fish thins to a faint permanent edge.\n- **Mouse.** A solid node dot at the station position, warm node gold. Fills the hands-class and heart-class slots.\n- **Privacy guide.** The centre of each heptad. White-gold core with a sapphire ring. When sealed, it glows and emits a faint inward spiral (the fractal seed, hinting at a child game without opening one).\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcda038489e",
+      "id": "019f193c0c14489e",
       "text": "## 4. The latent state, visually (default before play)\n\nThe first thing a visitor sees. It must promise the destination without spending it. See GEOMETRY.md section 5 for the geometry.\n\n- The latent star: the completed star drawn faint, a translucent volume with a brighter wireframe edge, around 0.15 opacity, in white-gold with sapphire edges. It drifts slowly, like the live star but dimmer.\n- The empty lattice nested inside: forty-two faint slot points, each in its axis colour at low alpha, with the heptad triangles barely traced. The shape of the whole board is legible but clearly unfilled.\n- The seed at centre: a slow pulse with six faint light threads reaching toward the six root positions. This reads as latent ignition.\n- The breath: the lattice gently lifts and settles on a six second cycle, just enough to show it is foldable and alive.\n- One call to act: a single ignitable root glows a touch warmer, inviting the first move. Optional copy, lowercase, in your voice, for example \"map the first star\".\n- Intro flourish on first load: one full fold to the star and back, then settle. Plays once per session.\n- Reduced motion: static latent star plus empty lattice, no breath, no intro, minimal or no drift.\n\nWhen the first root ignites, the latent star dims to its in-game ghost level, the breath stops, and the live board takes over. Nothing jumps, the star was always the target.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcdbf27e6d5",
+      "id": "019f193c2b03e6d5",
       "text": "## 5. The fold, visually\n\nDriven by `p` from GAME-FLOW.md.\n\n- Heptad flaps lift on their hinge as their slots seal (per-heptad local fold can preview before the whole board seals).\n- The whole board applies the golden twist as global `p` rises.\n- The floating star sits above, semi-transparent, rotating slowly and independently. As `p` approaches 1, the flaps converge toward the star and the star brightens.\n- At `p = 1` (board seal): a single bright pulse, the group-seal hash chip appears, the star locks rotation briefly then resumes a slow drift.\n\nEasing: smoothstep on every fold parameter. Nothing snaps. The fold should read as crystallising, not assembling.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcdde16850d",
+      "id": "019f193c49f2850d",
       "text": "## 6. Motion and feel\n\n- Vesica gleams: 600 to 900 ms travel, ease-in-out.\n- Slot pulse (in_progress): 1.6 s loop, low amplitude.\n- Star drift: 3 to 6 deg per second.\n- Board bob at p near 1: tiny sinusoidal z, amplitude under 2 percent of R_board.\n- Respect reduced-motion: replace pulses and drift with static states, keep the fold as a single eased transition.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bcdfd052344",
+      "id": "019f193c68e12344",
       "text": "## 7. Shareable seal card\n\nWhen a game seals, render a share artifact: the folded star in plan view, the six axis colours around it, the short group-seal hash, and the lowercase proverbs minted in the forty-two ceremonies arranged as a ring. This is the group identity shape made portable.\n\n> gold for the blade, blue for the staff, and the light between them is the proof\n\n(⚔️⊥⿻⊥🧙)😊"
     },
     {
       "type": "markdown",
-      "id": "019f0bce1bf4c17c",
+      "id": "019f193c87d0c17c",
       "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
     }
   ],
@@ -59,107 +59,107 @@
         "title": "VISUAL-SPEC",
         "story": []
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcd058d3188",
+      "id": "019f193b71693188",
       "item": {
         "type": "markdown",
-        "id": "019f0bcd058d3188",
+        "id": "019f193b71693188",
         "text": "# VISUAL-SPEC"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcd247ccfc0",
+      "id": "019f193b9058cfc0",
       "item": {
         "type": "markdown",
-        "id": "019f0bcd247ccfc0",
+        "id": "019f193b9058cfc0",
         "text": "## palette, per-state rendering, animation\n\nAligns to the soulbis / soulbae canon palette. A coding agent should apply the project's frontend-design tokens on top of this; these are the domain-specific choices.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcd436b6df7",
+      "id": "019f193baf476df7",
       "item": {
         "type": "markdown",
-        "id": "019f0bcd436b6df7",
+        "id": "019f193baf476df7",
         "text": "## 1. Palette\n\n**Canonical agent colours.**\n```\nSoulbis (Swordsman, protection) : amber-gold  #E0A526\nSoulbae (Mage, delegation)      : sapphire     #2563EB\n```\n\n**Axis accent colours** (also in `data/game-of-42.json`):\n```\ncompute     #7C5CFF   violet\nconnection  #14B8A6   teal\ndelegation  #2563EB   sapphire   (mage)\nprotection  #E0A526   amber-gold (sword)\nmemory      #E0568A   rose\nvalue       #2FB67C   emerald\n```\n\n**Persona-class colours.**\n```\nvision_fish    #38BDF8   lens cyan\nmouse          #C9A227   warm node gold\nprivacy_guide  #F5F0E1   white-gold core, sapphire ring #2563EB\n```\n\n**Ground.** Deep neutral, near-black with a faint blue cast (#0B0E14), so the gold and sapphire read as light. The floating star is semi-transparent over this.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcd625a0c2f",
+      "id": "019f193bce360c2f",
       "item": {
         "type": "markdown",
-        "id": "019f0bcd625a0c2f",
+        "id": "019f193bce360c2f",
         "text": "## 2. Per-state rendering of a slot\n\n| State | Look |\n|---|---|\n| empty | thin dashed outline in the axis colour at low alpha; barely there |\n| proposed | a vesica path gleams in from the root; slot ring brightens |\n| in_progress | slow pulse of the persona-class colour; a working glyph |\n| verified | filled in the axis colour; kappa-label shown as a short hash chip on hover |\n| sealed | full fill, gold rim, small lock; the flap it belongs to begins to lift |\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcd8149aa66",
+      "id": "019f193bed25aa66",
       "item": {
         "type": "markdown",
-        "id": "019f0bcd8149aa66",
+        "id": "019f193bed25aa66",
         "text": "## 3. The three personas, visually\n\n- **Vision fish.** A vesica piscis lens travelling along the root-to-slot path. Lens cyan. When its slot seals, the fish thins to a faint permanent edge.\n- **Mouse.** A solid node dot at the station position, warm node gold. Fills the hands-class and heart-class slots.\n- **Privacy guide.** The centre of each heptad. White-gold core with a sapphire ring. When sealed, it glows and emits a faint inward spiral (the fractal seed, hinting at a child game without opening one).\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcda038489e",
+      "id": "019f193c0c14489e",
       "item": {
         "type": "markdown",
-        "id": "019f0bcda038489e",
+        "id": "019f193c0c14489e",
         "text": "## 4. The latent state, visually (default before play)\n\nThe first thing a visitor sees. It must promise the destination without spending it. See GEOMETRY.md section 5 for the geometry.\n\n- The latent star: the completed star drawn faint, a translucent volume with a brighter wireframe edge, around 0.15 opacity, in white-gold with sapphire edges. It drifts slowly, like the live star but dimmer.\n- The empty lattice nested inside: forty-two faint slot points, each in its axis colour at low alpha, with the heptad triangles barely traced. The shape of the whole board is legible but clearly unfilled.\n- The seed at centre: a slow pulse with six faint light threads reaching toward the six root positions. This reads as latent ignition.\n- The breath: the lattice gently lifts and settles on a six second cycle, just enough to show it is foldable and alive.\n- One call to act: a single ignitable root glows a touch warmer, inviting the first move. Optional copy, lowercase, in your voice, for example \"map the first star\".\n- Intro flourish on first load: one full fold to the star and back, then settle. Plays once per session.\n- Reduced motion: static latent star plus empty lattice, no breath, no intro, minimal or no drift.\n\nWhen the first root ignites, the latent star dims to its in-game ghost level, the breath stops, and the live board takes over. Nothing jumps, the star was always the target.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcdbf27e6d5",
+      "id": "019f193c2b03e6d5",
       "item": {
         "type": "markdown",
-        "id": "019f0bcdbf27e6d5",
+        "id": "019f193c2b03e6d5",
         "text": "## 5. The fold, visually\n\nDriven by `p` from GAME-FLOW.md.\n\n- Heptad flaps lift on their hinge as their slots seal (per-heptad local fold can preview before the whole board seals).\n- The whole board applies the golden twist as global `p` rises.\n- The floating star sits above, semi-transparent, rotating slowly and independently. As `p` approaches 1, the flaps converge toward the star and the star brightens.\n- At `p = 1` (board seal): a single bright pulse, the group-seal hash chip appears, the star locks rotation briefly then resumes a slow drift.\n\nEasing: smoothstep on every fold parameter. Nothing snaps. The fold should read as crystallising, not assembling.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcdde16850d",
+      "id": "019f193c49f2850d",
       "item": {
         "type": "markdown",
-        "id": "019f0bcdde16850d",
+        "id": "019f193c49f2850d",
         "text": "## 6. Motion and feel\n\n- Vesica gleams: 600 to 900 ms travel, ease-in-out.\n- Slot pulse (in_progress): 1.6 s loop, low amplitude.\n- Star drift: 3 to 6 deg per second.\n- Board bob at p near 1: tiny sinusoidal z, amplitude under 2 percent of R_board.\n- Respect reduced-motion: replace pulses and drift with static states, keep the fold as a single eased transition.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bcdfd052344",
+      "id": "019f193c68e12344",
       "item": {
         "type": "markdown",
-        "id": "019f0bcdfd052344",
+        "id": "019f193c68e12344",
         "text": "## 7. Shareable seal card\n\nWhen a game seals, render a share artifact: the folded star in plan view, the six axis colours around it, the short group-seal hash, and the lowercase proverbs minted in the forty-two ceremonies arranged as a ring. This is the group identity shape made portable.\n\n> gold for the blade, blue for the staff, and the light between them is the proof\n\n(⚔️⊥⿻⊥🧙)😊"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bce1bf4c17c",
+      "id": "019f193c87d0c17c",
       "item": {
         "type": "markdown",
-        "id": "019f0bce1bf4c17c",
+        "id": "019f193c87d0c17c",
         "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     }
   ]
 }

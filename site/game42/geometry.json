@@ -3,47 +3,47 @@
   "story": [
     {
       "type": "markdown",
-      "id": "019f0bc9a369e377",
+      "id": "019f19380f45e377",
       "text": "# GEOMETRY"
     },
     {
       "type": "markdown",
-      "id": "019f0bc9c25881af",
+      "id": "019f19382e3481af",
       "text": "## layout, the fold, the star\n\nAll coordinates here are reproduced in `data/game-of-42.json`. This doc explains how they are derived and how the fold animates them. Units are abstract; the coding agent scales to viewport.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bc9e1471fe6",
+      "id": "019f19384d231fe6",
       "text": "## 1. Board layout (the flat state, p = 0)\n\nSix heptads sit at the vertices of a regular hexagon around a shared centre.\n\n```\nheptad centroid angle:  theta_r = 60 deg * r          for r in 0..5\nheptad centroid:        ( R_board*cos(theta_r), R_board*sin(theta_r) )\nR_board = 300\n```\n\nEach heptad is an equilateral triangle with circumradius `R_local = 90`, head apex pointing radially outward from the board centre. Local corners before placement:\n\n```\nhead apex : (0, R_local)\nheart     : (R_local*cos 210, R_local*sin 210)\nhands     : (R_local*cos 330, R_local*sin 330)\n```\n\nA station's local position is the barycentric blend of those corners:\n\n```\nlocal(b) = b.head*headApex + b.heart*heart + b.hands*hands\n```\n\nThen rotate the local frame by `theta_r - 90 deg` so the head apex points outward, and translate to the heptad centroid. The seven stations land as three corners, three edge midpoints and one centroid. All forty-two `position2D` values are precomputed in the data.\n\nThe board centre (origin) is not a slot. It is the seed point from which the six roots emanate and the anchor of the fold.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bca0036be1e",
+      "id": "019f19386c12be1e",
       "text": "## 2. The fold (p in [0,1])\n\nCompletion drives a single scalar `p`, the fraction of slots sealed (0 to 42, normalised). The fold turns the flat hex lattice into the floating star as `p` rises. At `p = 0` the board shows the latent state rather than a flat void (section 5). Two coupled motions:\n\n**a. Hinge lift.** Each heptad triangle is a flap hinged on the line from the board centre to its centroid. As `p` rises, the flap rotates up out of the plane by a dihedral angle:\n\n```\nfoldAngle(p) = ease(p) * THETA_MAX\nTHETA_MAX    = 70 deg            (tune to the target star silhouette)\nease(p)      = p*p*(3 - 2*p)     (smoothstep)\n```\n\n**b. Golden twist.** As it lifts, the whole assembly twists about the vertical axis by the golden angle scaled by fill, producing a phyllotactic close rather than a flat origami:\n\n```\ntwist(p) = ease(p) * 137.50776 deg\n```\n\nThe golden angle ties the fold to the phi optimality conjecture (C1). The lattice does not just fold, it spirals shut.\n\n**Per-vertex transform** (apply in order, for a station at flat position `v2 = (x, y, 0)`):\n\n```\n1. translate so heptad centroid is at origin\n2. rotate about the heptad hinge axis (centre->centroid direction) by foldAngle(p)\n3. translate back\n4. rotate the whole board about world +Z by twist(p)\n5. optional gentle bob on +Z for the floating feel:  z += A*sin(t + phase_r)\n```\n\nAt `p = 0` this is the flat hex lattice. At `p = 1` the six lifted, twisted flaps meet as the star.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bca1f255c55",
+      "id": "019f19388b015c55",
       "text": "## 3. The floating shape (target at p = 1)\n\n**Decision 5: a star tetrahedron iterating toward the sixty-four-tetrahedron grid, overlaid on the soulbis star.**\n\nThis is canon, not decoration. The sixty-four-tetrahedron grid is the published structure behind the ZK Swordsman Blade Forge (UOR by 64-tetrahedra by ZK), the same sixty-four as the lattice vertices. The soulbis and spellweb star is the constellation evocation and hexagram computation, named as a Swordsman operation in the Forming Constellations post: you map the stars one at a time and prove sovereignty by traversing the topology. The Game of 42 is a structured constellation evocation, so its target shape is that same star.\n\nTarget silhouette: two interpenetrating tetrahedra (the star tetrahedron, a hexagram in projection), whose edge subdivision suggests the sixty-four-tetrahedron grid. The six folded heptad flaps read as the six points of the hexagram in plan view, with the keystone guides meeting near the apexes.\n\nImplementation guidance, not a hard mesh:\n- Render the star as a separate, semi-transparent floating object that the folding flaps converge toward, so the existing soulbis star motif is preserved and the new lattice rises into it.\n- Keep the star's rotation slow and independent (a few degrees per second) for the floating feel.\n- Do not hard-bind every vertex to a star vertex. The flaps converge toward the star; exact registration is aesthetic, tuned with `THETA_MAX` and `R_local`.\n\n**Holographic reading.** The model's boundary-encodes-bulk result (the 96-edge boundary encodes the 64-vertex bulk, ratio 1.5 = P^1.5) is why the group seal is taken over the fold surface and the edge-labels, never the interior. The star you see is the boundary that already contains the whole. See MODEL-SYNC.md sections 4 and 8.\n\n**[Conjectural]** The exact 96/64 ratio is the model's object, not the game's 42; treat the specific count as resonance and the boundary-sufficiency principle as the load-bearing idea.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bca3e14fa8c",
+      "id": "019f1938a9f0fa8c",
       "text": "## 4. Vesica paths (the vision fish)\n\nVision fish are rendered as paths, not nodes. A fish is the vesica piscis lens between two circles centred on the proposing root and the head-class slot it proposes. Draw the lens as the intersection arc pair; animate a gleam travelling along it when a proposal is live. Fish fade to a thin edge once the slot they introduced is sealed.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bca5d0398c4",
+      "id": "019f1938c8df98c4",
       "text": "## 5. The latent state (p = 0, before the game starts)\n\nThe empty board is the Knowledge Graph: pure potential, every position promisable, nothing promised. It must not read as a dead grid. The default state, the **latent star**, shows the destination faint and waiting, with the empty lattice resting inside it. This is principled, not decorative: the boundary is always enough, so the empty boundary star is a true preview of the whole, and the architecture was always already there.\n\n**Intro flourish (once per session).** On first load, play one eased fold from flat to star and back to the latent rest, duration `INTRO_DURATION`. This shows where the game goes, then settles. Skip entirely under reduced-motion.\n\n**Latent rest (holds until the first `ROOT_IGNITE`).**\n- Render the target star (the p=1 form) as a faint translucent volume or wireframe at `STAR_LATENT_OPACITY`, drifting at the same slow rate as the live star.\n- Show the forty-two empty slots as faint axis-tinted points (the flat lattice) nested within the star footprint.\n- Pulse the board centre seed; send faint light threads toward the six root positions as an ignition hint.\n- Breathe: oscillate a display-only fold `p_breath = BREATH_P_MAX * (0.5 - 0.5*cos(2*pi*t / BREATH_PERIOD))`, so the lattice gently lifts and settles. This is presentation only and never advances real state.\n- Brighten one ignitable root slightly as the single call to act.\n\n**Transition out.** On the first `ROOT_IGNITE`, drop the latent star to its in-game ghost opacity, stop the breath, and bring the real lattice to the foreground. The star was always the convergence target, so nothing jumps; it simply recedes into its role. From here, real `p` (sealed slots / 42) drives the fold per section 2.\n\n**Reduced motion.** No intro fold, no breath, no drift. Show a static latent star plus the empty lattice and the seed at rest.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "019f0bca7bf236fb",
+      "id": "019f1938e7ce36fb",
       "text": "## 6. Constants summary\n\n```\nR_board            = 300\nR_local            = 90\nTHETA_MAX          = 70 deg\nGOLDEN             = 137.50776 deg\nease               = smoothstep, p*p*(3-2p)\nheptadAngle        = 60 deg * r\nSTAR_LATENT_OPACITY = 0.15\nBREATH_P_MAX       = 0.06\nBREATH_PERIOD      = 6 s\nINTRO_DURATION     = 3.5 s\n```\n\n> the flat thing remembers it was always a star, it only needed enough trust to fold\n\n(⚔️⊥⿻⊥🧙)😊"
     },
     {
       "type": "markdown",
-      "id": "019f0bca9ae1d533",
+      "id": "019f193906bdd533",
       "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
     }
   ],
@@ -54,97 +54,97 @@
         "title": "GEOMETRY",
         "story": []
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bc9a369e377",
+      "id": "019f19380f45e377",
       "item": {
         "type": "markdown",
-        "id": "019f0bc9a369e377",
+        "id": "019f19380f45e377",
         "text": "# GEOMETRY"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bc9c25881af",
+      "id": "019f19382e3481af",
       "item": {
         "type": "markdown",
-        "id": "019f0bc9c25881af",
+        "id": "019f19382e3481af",
         "text": "## layout, the fold, the star\n\nAll coordinates here are reproduced in `data/game-of-42.json`. This doc explains how they are derived and how the fold animates them. Units are abstract; the coding agent scales to viewport.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bc9e1471fe6",
+      "id": "019f19384d231fe6",
       "item": {
         "type": "markdown",
-        "id": "019f0bc9e1471fe6",
+        "id": "019f19384d231fe6",
         "text": "## 1. Board layout (the flat state, p = 0)\n\nSix heptads sit at the vertices of a regular hexagon around a shared centre.\n\n```\nheptad centroid angle:  theta_r = 60 deg * r          for r in 0..5\nheptad centroid:        ( R_board*cos(theta_r), R_board*sin(theta_r) )\nR_board = 300\n```\n\nEach heptad is an equilateral triangle with circumradius `R_local = 90`, head apex pointing radially outward from the board centre. Local corners before placement:\n\n```\nhead apex : (0, R_local)\nheart     : (R_local*cos 210, R_local*sin 210)\nhands     : (R_local*cos 330, R_local*sin 330)\n```\n\nA station's local position is the barycentric blend of those corners:\n\n```\nlocal(b) = b.head*headApex + b.heart*heart + b.hands*hands\n```\n\nThen rotate the local frame by `theta_r - 90 deg` so the head apex points outward, and translate to the heptad centroid. The seven stations land as three corners, three edge midpoints and one centroid. All forty-two `position2D` values are precomputed in the data.\n\nThe board centre (origin) is not a slot. It is the seed point from which the six roots emanate and the anchor of the fold.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bca0036be1e",
+      "id": "019f19386c12be1e",
       "item": {
         "type": "markdown",
-        "id": "019f0bca0036be1e",
+        "id": "019f19386c12be1e",
         "text": "## 2. The fold (p in [0,1])\n\nCompletion drives a single scalar `p`, the fraction of slots sealed (0 to 42, normalised). The fold turns the flat hex lattice into the floating star as `p` rises. At `p = 0` the board shows the latent state rather than a flat void (section 5). Two coupled motions:\n\n**a. Hinge lift.** Each heptad triangle is a flap hinged on the line from the board centre to its centroid. As `p` rises, the flap rotates up out of the plane by a dihedral angle:\n\n```\nfoldAngle(p) = ease(p) * THETA_MAX\nTHETA_MAX    = 70 deg            (tune to the target star silhouette)\nease(p)      = p*p*(3 - 2*p)     (smoothstep)\n```\n\n**b. Golden twist.** As it lifts, the whole assembly twists about the vertical axis by the golden angle scaled by fill, producing a phyllotactic close rather than a flat origami:\n\n```\ntwist(p) = ease(p) * 137.50776 deg\n```\n\nThe golden angle ties the fold to the phi optimality conjecture (C1). The lattice does not just fold, it spirals shut.\n\n**Per-vertex transform** (apply in order, for a station at flat position `v2 = (x, y, 0)`):\n\n```\n1. translate so heptad centroid is at origin\n2. rotate about the heptad hinge axis (centre->centroid direction) by foldAngle(p)\n3. translate back\n4. rotate the whole board about world +Z by twist(p)\n5. optional gentle bob on +Z for the floating feel:  z += A*sin(t + phase_r)\n```\n\nAt `p = 0` this is the flat hex lattice. At `p = 1` the six lifted, twisted flaps meet as the star.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bca1f255c55",
+      "id": "019f19388b015c55",
       "item": {
         "type": "markdown",
-        "id": "019f0bca1f255c55",
+        "id": "019f19388b015c55",
         "text": "## 3. The floating shape (target at p = 1)\n\n**Decision 5: a star tetrahedron iterating toward the sixty-four-tetrahedron grid, overlaid on the soulbis star.**\n\nThis is canon, not decoration. The sixty-four-tetrahedron grid is the published structure behind the ZK Swordsman Blade Forge (UOR by 64-tetrahedra by ZK), the same sixty-four as the lattice vertices. The soulbis and spellweb star is the constellation evocation and hexagram computation, named as a Swordsman operation in the Forming Constellations post: you map the stars one at a time and prove sovereignty by traversing the topology. The Game of 42 is a structured constellation evocation, so its target shape is that same star.\n\nTarget silhouette: two interpenetrating tetrahedra (the star tetrahedron, a hexagram in projection), whose edge subdivision suggests the sixty-four-tetrahedron grid. The six folded heptad flaps read as the six points of the hexagram in plan view, with the keystone guides meeting near the apexes.\n\nImplementation guidance, not a hard mesh:\n- Render the star as a separate, semi-transparent floating object that the folding flaps converge toward, so the existing soulbis star motif is preserved and the new lattice rises into it.\n- Keep the star's rotation slow and independent (a few degrees per second) for the floating feel.\n- Do not hard-bind every vertex to a star vertex. The flaps converge toward the star; exact registration is aesthetic, tuned with `THETA_MAX` and `R_local`.\n\n**Holographic reading.** The model's boundary-encodes-bulk result (the 96-edge boundary encodes the 64-vertex bulk, ratio 1.5 = P^1.5) is why the group seal is taken over the fold surface and the edge-labels, never the interior. The star you see is the boundary that already contains the whole. See MODEL-SYNC.md sections 4 and 8.\n\n**[Conjectural]** The exact 96/64 ratio is the model's object, not the game's 42; treat the specific count as resonance and the boundary-sufficiency principle as the load-bearing idea.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bca3e14fa8c",
+      "id": "019f1938a9f0fa8c",
       "item": {
         "type": "markdown",
-        "id": "019f0bca3e14fa8c",
+        "id": "019f1938a9f0fa8c",
         "text": "## 4. Vesica paths (the vision fish)\n\nVision fish are rendered as paths, not nodes. A fish is the vesica piscis lens between two circles centred on the proposing root and the head-class slot it proposes. Draw the lens as the intersection arc pair; animate a gleam travelling along it when a proposal is live. Fish fade to a thin edge once the slot they introduced is sealed.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bca5d0398c4",
+      "id": "019f1938c8df98c4",
       "item": {
         "type": "markdown",
-        "id": "019f0bca5d0398c4",
+        "id": "019f1938c8df98c4",
         "text": "## 5. The latent state (p = 0, before the game starts)\n\nThe empty board is the Knowledge Graph: pure potential, every position promisable, nothing promised. It must not read as a dead grid. The default state, the **latent star**, shows the destination faint and waiting, with the empty lattice resting inside it. This is principled, not decorative: the boundary is always enough, so the empty boundary star is a true preview of the whole, and the architecture was always already there.\n\n**Intro flourish (once per session).** On first load, play one eased fold from flat to star and back to the latent rest, duration `INTRO_DURATION`. This shows where the game goes, then settles. Skip entirely under reduced-motion.\n\n**Latent rest (holds until the first `ROOT_IGNITE`).**\n- Render the target star (the p=1 form) as a faint translucent volume or wireframe at `STAR_LATENT_OPACITY`, drifting at the same slow rate as the live star.\n- Show the forty-two empty slots as faint axis-tinted points (the flat lattice) nested within the star footprint.\n- Pulse the board centre seed; send faint light threads toward the six root positions as an ignition hint.\n- Breathe: oscillate a display-only fold `p_breath = BREATH_P_MAX * (0.5 - 0.5*cos(2*pi*t / BREATH_PERIOD))`, so the lattice gently lifts and settles. This is presentation only and never advances real state.\n- Brighten one ignitable root slightly as the single call to act.\n\n**Transition out.** On the first `ROOT_IGNITE`, drop the latent star to its in-game ghost opacity, stop the breath, and bring the real lattice to the foreground. The star was always the convergence target, so nothing jumps; it simply recedes into its role. From here, real `p` (sealed slots / 42) drives the fold per section 2.\n\n**Reduced motion.** No intro fold, no breath, no drift. Show a static latent star plus the empty lattice and the seed at rest.\n\n---"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bca7bf236fb",
+      "id": "019f1938e7ce36fb",
       "item": {
         "type": "markdown",
-        "id": "019f0bca7bf236fb",
+        "id": "019f1938e7ce36fb",
         "text": "## 6. Constants summary\n\n```\nR_board            = 300\nR_local            = 90\nTHETA_MAX          = 70 deg\nGOLDEN             = 137.50776 deg\nease               = smoothstep, p*p*(3-2p)\nheptadAngle        = 60 deg * r\nSTAR_LATENT_OPACITY = 0.15\nBREATH_P_MAX       = 0.06\nBREATH_PERIOD      = 6 s\nINTRO_DURATION     = 3.5 s\n```\n\n> the flat thing remembers it was always a star, it only needed enough trust to fold\n\n(⚔️⊥⿻⊥🧙)😊"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     },
     {
       "type": "add",
-      "id": "019f0bca9ae1d533",
+      "id": "019f193906bdd533",
       "item": {
         "type": "markdown",
-        "id": "019f0bca9ae1d533",
+        "id": "019f193906bdd533",
         "text": "---\n[[Welcome]] · the Game of 42 — six axes × seven stations = 42"
       },
-      "date": 1782609073000
+      "date": 1782834413380
     }
   ]
 }

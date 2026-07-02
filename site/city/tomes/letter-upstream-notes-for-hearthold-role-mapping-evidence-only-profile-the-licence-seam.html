@@ -1,0 +1,174 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Letter — Upstream notes for Hearthold · role mapping · evidence-only profile · the licence seam · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Letter — Upstream notes for Hearthold · role mapping · evidence-only profile · the licence seam</span></div>
+  <article><div class="md"><h1>Upstream notes for Hearthold · role mapping · evidence-only profile · the licence seam</h1>
+<h1>Upstream notes for Hearthold</h1>
+<p><strong>Role mapping · an evidence-only profile · the licence seam</strong></p>
+<p><em>From privacymage, upstream author of the Privacy Value Model and City of Mages. A single consolidated note for Flaxscrip — usable as a PR description or Discussion post. The three sections below can also be split back into standalone docs under <code>docs/agentprivacy/</code> and adopted, amended, or rejected piece by piece.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Cover note</h2>
+<p>First, the thing rarely said across a fork boundary: you read the work carefully, you built something real on it, and you improved my understanding of my own model by choosing what to leave out. Hearthold takes the load-bearing idea — <em>separate the custodian of data from the agent that acts in the world, so neither alone can reconstruct the whole</em> — and turns it into running TypeScript with a Warden, a Witness, and a Sovereign. The &quot;7th Capital made safely liquid&quot; line is exactly the framing I hoped someone outside my own machines would pick up.</p>
+<p>You are not a stranger who stumbled on the work. You already carry <code>Flaxscrip/cityofmages</code> downstream of the canon, so in our own vocabulary this is a kindred-blade (C39), not a first contact. We are all just another mage.</p>
+<p>Three things to workshop, in increasing order of interest:</p>
+<ol>
+<li><strong>A terminology snag worth catching early</strong> — in Hearthold, <em>Witness</em> is the acting companion; in the City canon, <em>witness</em> runs almost the opposite direction. One glossary line in each repo fixes it.</li>
+<li><strong>You kept the custody split and dropped the score</strong> — the most interesting decision in the repo. I read it not as a misunderstanding but as an argument, and possibly a tighter privacy posture. I&#39;d name it as an explicit profile of the model.</li>
+<li><strong>The licence seam</strong> — CC BY-SA canon, MIT code. Both correct; worth stating once so future adopters copy the split on purpose.</li>
+</ol>
+<p>No obligation on any of it. The reason any of this is possible is that the work went out under a licence built for exactly this.</p>
+<p>With genuine appreciation,<br>mitch</p>
+<p><code>(⚔️⊥⿻⊥🧙)🙂</code></p>
+<hr>
+</div>
+<div class="md"><h2>1. Role mapping: Hearthold ↔ City of Mages ↔ Privacy Value Model</h2>
+<p><em>Status: proposed glossary, for workshopping. Licence: CC BY-SA 4.0.</em></p>
+<h3>The collision in one line</h3>
+<p>In <strong>Hearthold</strong>, <em>Witness</em> is the agent that <strong>acts</strong> in the world: it observes context, requests evidence, and presents proofs to third parties.</p>
+<p>In the <strong>City of Mages</strong>, <em>witness</em> is a tier of <strong>observers and attestors</strong> (cosmological-witness, display-witness, companion-witness, hold-witness, parallel and transparent witness). The cryptographic sense runs the same way: a witness is the input to a proof, or the party that attests.</p>
+<p>So the City sense of <em>witness</em> is closer to Hearthold&#39;s <strong>Warden</strong>, which holds the evidence and derives and signs the fact. The actor and the attestor have swapped names across the boundary. This is an interpretive mapping, not a claim of identity — your role names are good and internally coherent, and nothing here asks you to rename anything.</p>
+<h3>The mapping table</h3>
+<table>
+<thead>
+<tr>
+<th>Hearthold role</th>
+<th>Function (VC terms)</th>
+<th>City of Mages closest cast</th>
+<th>Privacy Value Model term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Witness</strong> 👁️</td>
+<td>Holder / presenter / prover. Observes local context, carries a revocable delegation, requests and presents evidence to relying parties.</td>
+<td>The acting companion / emissary (Soulbae-class): the agent that goes out and acts.</td>
+<td>The projecting side of <strong>Φ_agent</strong> (Σ): the agent that acts in the world.</td>
+</tr>
+<tr>
+<td><strong>Warden</strong> 🛡️</td>
+<td>Issuer / attestor. Custodies the vault, classifies, derives the fact, signs the evidence graph. Local-only reasoning.</td>
+<td>The City <strong>witness</strong> tier proper (observer and attestor) plus the custodian / Keeper (Soulbis-class): the agent that holds and attests.</td>
+<td>The protecting side of <strong>Φ_agent</strong> (Σ): the custodian that never acts in the world.</td>
+</tr>
+<tr>
+<td><strong>Sovereign</strong> 🔑</td>
+<td>Principal / subject. Signs the access-control policy, co-signs sensitive disclosures with a proof-of-human assertion.</td>
+<td>The <strong>Sovereign First Person</strong> plus the seal / trust-artefact that authority is read from.</td>
+<td>The First Person: the subject of <strong>V(π, t)</strong>, the root of authority the axes separate around.</td>
+</tr>
+</tbody></table>
+<p>Stated without the collision: Hearthold&#39;s <strong>Witness presents</strong>, its <strong>Warden attests</strong>, its <strong>Sovereign authorises</strong>. Presenter, issuer, principal. The control plane (Sovereign) is separated from the data plane (Warden), and the actor (Witness) operates under a scoped, revocable delegation. That separation is the running instance of <strong>Φ_agent</strong>.</p>
+<h3>Proposed one-line glossary note (for both repos)</h3>
+<blockquote>
+<p><strong>witness.</strong> In Hearthold, the <em>Witness</em> is the acting companion (holder and presenter of proofs). In the City of Mages canon, <em>witness</em> denotes the observer and attestor tier, which corresponds to Hearthold&#39;s <em>Warden</em>. The two repos use the word for opposite roles by design; mind the boundary.</p>
+</blockquote>
+<h3>Honesty and limits</h3>
+<ul>
+<li><strong>Architectural.</strong> The custody split (Warden holds and attests, Witness acts, Sovereign authorises) is verified from the repo, not inferred. It is a faithful instance of the Φ_agent separation axis.</li>
+<li><strong>Interpretive (~70%).</strong> The cast correspondences (Soulbae-class, Soulbis-class, witness tier) are readings to make the two vocabularies legible to each other. They are not equivalences and do not bind either repo.</li>
+<li><strong>Verify.</strong> The Witness/Warden/Sovereign functions here are read from <code>README.md</code> and <code>evidence-graph.md</code>. The sensitivity and authorisation tiers (<code>SEALED</code>, <code>HIGH</code>) and the full disclosure-mode ladder should be cross-checked against <code>docs/security-model.md</code>, not yet read in full.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>2. The separation-without-scoring profile of the Privacy Value Model</h2>
+<p><em>Status: proposed profile, first instance Hearthold. Licence: CC BY-SA 4.0.</em></p>
+<h3>Verdict</h3>
+<p>Hearthold instantiates one axis of the Privacy Value Model — the custodian-actor separation (<strong>Φ_agent</strong>) — as running architecture, and deliberately declines to compute or emit a value scalar or any tier or ranking. That subset is coherent, adoptable, and arguably a tighter privacy posture than the full model for the relying-party use case. This names it the <strong>separation-without-scoring profile</strong> (informally, the evidence-only profile), with Hearthold as its first instance.</p>
+<h3>What the profile keeps and drops</h3>
+<p><strong>Keeps:</strong></p>
+<ul>
+<li><strong>Φ_agent separation as architecture.</strong> The Warden custodies and attests; the Witness acts under a scoped, revocable delegation; the Sovereign authorises. Control plane separated from data plane. Neither agent alone reconstructs the whole.</li>
+<li><strong>Issuer-attested evidence.</strong> Disclosure is a signed, portable, decomposable evidence graph (W3C VC 1.1, issued by the Warden via Keymaster), verifiable offline against issuer DIDs.</li>
+<li><strong>Selective disclosure.</strong> Default attestation reveals only the derived fact plus a hash-committed summary of support; individual leaves are revealed on request with Merkle paths (SD-JWT-VC salted-digest style); single-use binding and proof-of-human on sensitive claims.</li>
+</ul>
+<p><strong>Drops, deliberately:</strong></p>
+<ul>
+<li>The value scalar <code>V(π, t)</code>.</li>
+<li>The lattice tiers and any ranking.</li>
+<li>Any <strong>emitted</strong> reputation. The proof object never computes or emits a tier, score, or ranking; it carries verifiable claims and their provenance, and the relying party judges for itself.</li>
+</ul>
+<h3>Why this is a profile, not a misunderstanding</h3>
+<p>The most adoptable slice of the model is separation with the valuation removed. A relying party does not receive a number to trust or distrust; it receives attested evidence and decides. There is no ranking to game, and no ranking to leak. This is consonant with two things already in the canon:</p>
+<ul>
+<li><strong>C66 — the Key is a reading, not an authority</strong> (~55%). Authority is read from evidence, not asserted by a computed score. The profile is the same instinct at the disclosure layer.</li>
+<li><strong>Object-capability lineage</strong> (SPKI/SDSI, designation without authority). Evidence designates; it does not rank.</li>
+</ul>
+<h3>The sharper claim: scoreless may be tighter, not just simpler</h3>
+<p>Reading <code>evidence-graph.md</code> in full changed my view. A score is a computed projection that compresses many underlying facts into a single rankable scalar — an <strong>extra emitted statistic</strong> that is correlatable across contexts, gameable, and a stable handle an adversary can accumulate against. Issuer-attested evidence under selective disclosure emits the minimum a relying party needs for one decision, and nothing reusable beyond it.</p>
+<p>This rhymes with the <strong>Existence-Leak law (C81, ~70%)</strong>: a zero-knowledge proof of feasibility already leaks an upper bound on reconstruction difficulty, so emission is never free of information. If even a feasibility attestation leaks, an emitted reputation scalar leaks strictly more, because it is a richer, more reusable, more rankable statistic than a single-use evidence graph.</p>
+<p><strong>Honesty label.</strong> That the scoreless slice is <em>more adoptable</em> is <strong>Conjectural (~60%)</strong>. That it is <em>tighter</em> (lower leakage) than emitting a score is <strong>Architectural with a conjectural edge (~55%)</strong>: the direction is sound, the magnitude is unproven and would need an information-theoretic statement of the gap between an emitted scalar and a single-use selective-disclosure graph.</p>
+<h3>The one open question</h3>
+<p>This is the fork that decides whether <em>separation-without-scoring</em> is a profile of the model or a divergent philosophy:</p>
+<blockquote>
+<p>Is the no-score stance <strong>(a)</strong> a principled refusal of any <em>computed</em> reputation, even one held privately and never emitted, or <strong>(b)</strong> a refusal of <em>emitted</em> reputation that would still permit a privately-held <code>V</code> the relying party never sees?</p>
+</blockquote>
+<p>Under (a), the profile forbids the computation. Under (b), the profile permits <code>V</code> to exist inside the Warden as a private prioritisation signal and only forbids its crossing the boundary. Both are coherent, they imply different things for what a future Hearthold may compute internally, and the answer is yours to give.</p>
+<h3>How to cite</h3>
+<ul>
+<li>Profile name: <strong>separation-without-scoring</strong> (alias: evidence-only profile).</li>
+<li>First instance: <strong>Hearthold</strong> (<code>Flaxscrip/hearthold</code>).</li>
+<li>Definition: keep Φ_agent separation and issuer-attested selective disclosure; drop <code>V(π, t)</code>, tiers, ranking, and any emitted reputation.</li>
+<li>Status: proposed, pending the open question above. If accepted, this becomes a named profile in the model so others can adopt the same constraint deliberately rather than by omission.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>3. Licensing and attribution: the CC BY-SA / MIT seam</h2>
+<p><em>Status: clarification, for workshopping. Informational, not legal advice.</em></p>
+<h3>The seam, and why both are fine</h3>
+<p>The agentprivacy canon and spec (the Privacy Value Model, the City of Mages, the grimoires) are published under <strong>CC BY-SA 4.0</strong>. Hearthold ships under <strong>MIT</strong>. Both are correct.</p>
+<p>Copyright protects <strong>expression</strong>, not <strong>ideas</strong>, methods, systems, or architectures. The load-bearing idea Hearthold took — separate the custodian of data from the agent that acts in the world — is a method, and methods are not copyrightable. Hearthold implements that method in its own original TypeScript and prose, so no CC BY-SA-licensed <strong>text</strong> has been copied into the codebase. MIT on Hearthold&#39;s own code is therefore unencumbered: there is no ShareAlike obligation to trigger, because ShareAlike attaches to adapted expression, and no expression was adapted.</p>
+<h3>Where ShareAlike does bind</h3>
+<p>ShareAlike attaches the moment CC BY-SA <strong>text</strong> is adapted. The relevant case is the <strong><code>Flaxscrip/cityofmages</code> fork</strong>: it carries the canon&#39;s prose, so that fork — and any adapted spec or canon text derived from it — must remain <strong>CC BY-SA 4.0 with attribution</strong>. That obligation lives in the cityofmages fork, not in the Hearthold codebase. Keeping the two repos on their two licences is exactly right; it is worth a sentence in each so the boundary is legible.</p>
+<h3>The blessed posture</h3>
+<ul>
+<li><strong>Downstream code: permissive (MIT or similar).</strong> Implementations of the architecture carry their own licence. Adoption stays frictionless.</li>
+<li><strong>Canon and spec: share-alike (CC BY-SA 4.0).</strong> The text, the model, the grimoires, and any adaptation of them stay open under the same terms, with attribution upstream.</li>
+</ul>
+<p>This is a deliberate dual posture, not an inconsistency. Code is permissive so the architecture spreads; canon is share-alike so the commons stays a commons.</p>
+<h3>Attribution block (paste-ready)</h3>
+<p>A short block Hearthold is welcome to include in its README or an <code>ATTRIBUTION.md</code>:</p>
+<pre><code class="language-text">Hearthold builds on the Privacy Value Model and City of Mages
+(agentprivacy.ai/model · upstream github.com/mitchuski/cityofmages),
+from which it takes one architectural principle: separate the custodian
+of data from the agent that acts in the world, so neither alone can
+reconstruct the whole.
+
+Licences:
+- Hearthold source code: MIT.
+- The upstream model, spec and canon: CC BY-SA 4.0. Any adapted
+  spec or canon text (e.g. in a cityofmages fork) remains CC BY-SA 4.0
+  with attribution to privacymage / agentprivacy.ai.
+</code></pre>
+<h3>Honesty and limits</h3>
+<ul>
+<li><strong>Informational, not legal advice.</strong> The idea/expression line and the scope of ShareAlike are well established in principle, but anything load-bearing (a commercial release, a standards submission, a dispute) should go to counsel. CC BY-SA 4.0 is a content licence, not a software licence — which is the reason canon and code carry different terms.</li>
+<li><strong>No claim on your code.</strong> Nothing here asserts any upstream right over Hearthold&#39;s MIT-licensed source. The point is the opposite: to confirm the code is yours under MIT, and to keep only the canon text under share-alike.</li>
+</ul>
+<hr>
+<p><em>Source: Privacy Value Model v6, agentprivacy.ai/model · register head C89 · upstream <code>mitchuski/cityofmages</code> and <code>mitchuski/agentprivacy-docs</code>. Contributed for Hearthold by privacymage, 2026. CC BY-SA 4.0 (canon text); the code samples and the attribution block are MIT-compatible to paste.</em></p>
+<p><code>(⚔️⊥⿻⊥🧙)🙂</code></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 letter-upstream-notes-for-hearthold-role-mapping-evidence-only-profile-the-licence-seam</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-mageletters.html">The Mageletters</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="letter-upstream-notes-for-hearthold-role-mapping-evidence-only-profile-the-licence-seam.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

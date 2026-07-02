@@ -3,72 +3,72 @@
   "story": [
     {
       "type": "markdown",
-      "id": "9b2099c26ca48e9b",
+      "id": "f8bc35e5cb8013fa",
       "text": "# Architecture Guide"
     },
     {
       "type": "markdown",
-      "id": "62a43438e1eeff4f",
+      "id": "e44d6a5a9cab7f91",
       "text": "**System design, data flow, and security model**\n\n**Document Alignment**: [Whitepaper v4.3], [Research Paper v3.2], [Glossary v2.1]\n\n---"
     },
     {
       "type": "markdown",
-      "id": "01506c3ad5e338ed",
+      "id": "addecf2ffc5913bd",
       "text": "## System Overview\n\nThe Proof of Proverb Revelation Protocol implements the **dual-agent architecture** [Whitepaper v4.3, §3] with a three-layer design achieving hardware-enforced privacy with AI-powered verification:\n\n```\n┌──────────────────────────────────────────────────────────────┐\n│  Layer 3: Knowledge (IPFS/Pinata)                           │\n│  - Spellbook v4.0.1-canonical (immutable)                   │\n│  - NO access to keys                                         │\n└────────────────────────────┬─────────────────────────────────┘\n                             │\n┌──────────────────────────────────────────────────────────────┐\n│  Layer 2: AI Verification (NEAR Cloud AI)                   │\n│  - Semantic proverb matching                                │\n│  - Quality scoring                                          │\n│  - NO access to keys                                         │\n└────────────────────────────┬─────────────────────────────────┘\n                             │\n┌──────────────────────────────────────────────────────────────┐\n│  Layer 1: TEE (Nillion nilCC) — Optional                    │\n│  ┌────────────────────────────────────────────────────────┐  │\n│  │  AMD SEV-SNP Confidential Compute                      │  │\n│  │  - Zcash keys in SecretSigner (distributed MPC)        │  │\n│  │  - Calls Layer 2 (AI)                                  │  │\n│  │  - Calls Layer 3 (Knowledge)                           │  │\n│  │  - Signs transactions with threshold ECDSA             │  │\n│  └────────────────────────────────────────────────────────┘  │\n└──────────────────────────────────────────────────────────────┘\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "e8cb826c81435e2c",
+      "id": "177dd1a8f3aedf7e",
       "text": "## Dual-Agent Model\n\n### The Separation Principle [Whitepaper v4.3, §3]\n\n```\n                        ┌────────────────┐\n                        │  FIRST PERSON  │\n                        │   (You - 🗝️)    │\n                        └────────┬───────┘\n                                 │\n                    Private State X (complete context)\n                                 │\n                    ┌────────────┼────────────┐\n                    │                         │\n                    ▼                         ▼\n            ┌───────────────┐         ┌───────────────┐\n            │  SWORDSMAN ⚔️  │         │    MAGE 🧙    │\n            │   (Protect)   │         │  (Delegate)   │\n            │   Soulbis     │         │   Soulbae     │\n            └───────────────┘         └───────────────┘\n                    │                         │\n        Observes X completely      Acts using authorized info\n        Reveals nothing directly   Public coordination\n                    │                         │\n                    └────────────┬────────────┘\n                                 │\n                    THE GAP (conditional independence)\n                                 │\n                            s ⊥ m | X\n                                 │\n                    Additive information bounds:\n                    I(X; s,m) ≤ I(X;s) + I(X;m)\n                                 │\n                    Reconstruction ceiling: R < 1\n```\n\n**Mathematical Guarantee** [Research Paper v3.2, Theorem 2.2]:\nWhen observations are conditionally independent, information leakage becomes additive rather than multiplicative. Combined with budget constraints, this creates a reconstruction ceiling that cannot be exceeded.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "56b6ab70569dc799",
+      "id": "2ef28ee6783f9ec9",
       "text": "## Components\n\n### 1. Mage Agent (Frontend)\n\n**Technology**: Next.js + React  \n**Purpose**: First Person interface for proverb submission  \n**Location**: `src/`\n\n**Features**:\n- Spellbook reader (18 Acts + 30 Tales)\n- Soulbae chat (optional AI assistance)\n- Signal flow UI\n- Proverbs gallery (VRC viewer)\n\n**Security**:\n- No keys stored\n- No transaction data visible\n- HTTPS only\n- CORS configured\n\n### 2. Oracle Swordsman (Backend)\n\n**Technology**: TypeScript/Express  \n**Purpose**: TEE worker that processes signals  \n**Location**: `oracle-swordsman/`\n\n**Core Functions** [Whitepaper v4.3, §3.2]:\n1. Monitor Zcash shielded pool for incoming signals (z→z)\n2. Decrypt and extract proverb from memo field\n3. Fetch spellbook from IPFS\n4. Call NEAR Cloud AI for verification\n5. Execute golden split (61.8% transparent, 38.2% shielded)\n6. Sign and broadcast inscription\n\n**Address Requirements**:\n- **Shielded Address (z-addr)**: Receives signal submissions from First Persons (private)\n- **Transparent Address (t-addr)**: Posts public inscriptions with proverb + proof\n\n**Security**:\n- Runs inside Nillion nilCC (TEE) — optional\n- Keys stored in SecretSigner (distributed)\n- Attestation verified\n- Zero-trust external calls\n\n### 3. NEAR Cloud AI\n\n**Technology**: openai/gpt-oss-120b via NEAR Cloud AI API  \n**Purpose**: Intelligent proverb verification  \n**Integration**: REST API\n\n**Verification Process**:\n```typescript\n// Oracle calls NEAR Cloud AI\nconst response = await verifier.verify({\n    proverb: \"First Person's proverb text...\",\n    spellbook: canonicalSpellbook,\n    actId: \"act-5-golden-split\"\n});\n\n// Returns:\n{\n    quality_score: 0.85,      // 0.0 - 1.0\n    matched_act: \"act-5\",     // Act ID\n    reasoning: \"Demonstrates understanding...\",\n    approved: true\n}\n```\n\n**Privacy Guarantee**:\n```\nI(Soulbae; Transaction_Amount) = 0\nI(Soulbae; First_Person_Identity) = 0\nI(Soulbae; Wallet_Address) = 0\nI(Soulbae; Transaction_Timing) = 0\n```\n\n### 4. IPFS/Pinata\n\n**Technology**: InterPlanetary File System  \n**Purpose**: Immutable knowledge storage\n\n**Spellbook**:\n- **Version**: 4.0.1-canonical\n- **IPFS CID**: `bafkreigopjrfwjsz56oft7nmv26q2oddq6j4fexj27zjirzgkdeogm2myq`\n- **Content**: 18 Acts + 30 Tales with canonical proverbs\n\n### 5. Zcash Network\n\n**Technology**: Zcash blockchain  \n**Purpose**: Transaction layer + inscription storage  \n**Client**: Zebra full node + Zallet wallet\n\n**Transaction Types**:\n- **Incoming Signal**: Shielded z-addr receives 0.01 ZEC + encrypted memo\n- **Outgoing Inscription**: t-addr receives OP_RETURN with proverb + proof (61.8%)\n- **Outgoing Fee**: z-addr receives shielded transfer (38.2%)\n\n---"
     },
     {
       "type": "markdown",
-      "id": "274e46107a93e8a9",
+      "id": "260ddf121b1fe645",
       "text": "## Signal Flow\n\n### Complete Transaction Path (10 Steps)\n\n```\n1. FIRST PERSON READS\n   First Person → Spellbook\n   - Reads tale from Acts or Zero Spellbook\n   - Clicks \"Learn\" to copy content\n   - Forms understanding through context\n   ↓\n   \n2. PROVERB FORMATION\n   First Person → Mage Agent (optional)\n   - Crafts proverb expressing principle\n   - (Optional) Consults Soulbae for assistance\n   - Generates formatted memo\n   ↓\n   \n3. SIGNAL SENT (SHIELDED)\n   First Person Wallet → Zcash Network\n   - 0.01 ZEC to Oracle shielded address (z-addr)\n   - Proverb in encrypted memo field\n   - Transaction is private (z→z)\n   ↓\n   \n4. ORACLE DETECTS (SHIELDED)\n   Zcash → Oracle Database\n   - Monitors shielded pool via viewing key\n   - Decrypts memo to extract proverb\n   - Stores in submissions table\n   ↓\n   \n5. FETCH KNOWLEDGE\n   Oracle → IPFS (via Pinata Gateway)\n   - Retrieves spellbook v4.0.1-canonical\n   - Fetches canonical proverb for matched act\n   - Validates CID integrity\n   ↓\n   \n6. AI VERIFICATION\n   Oracle → NEAR Cloud AI API\n   - Sends proverb + spellbook context\n   - NO transaction data sent\n   - Returns quality score + reasoning\n   ↓\n   \n7. GOLDEN SPLIT CALCULATION [Tokenomics v2.0, §2]\n   Oracle calculates split:\n   - Signal amount: 0.01 ZEC\n   - Transparent portion: 0.00618 ZEC (61.8%)\n   - Shielded portion: 0.00382 ZEC (38.2%)\n   - Network fee: ~0.0001 ZEC\n   ↓\n   \n8. TRANSACTION SIGNING\n   Oracle → Nillion SecretSigner (or local)\n   - Prepares inscription transaction (t-addr)\n   - Prepares shielded return (z-addr)\n   - Requests threshold signature\n   ↓\n   \n9. BROADCAST\n   Oracle → Zcash Network\n   - Broadcasts inscription to transparent address\n   - Broadcasts fee to shielded pool\n   - Records TXIDs\n   ↓\n   \n10. VRC CREATION\n    Inscription confirmed → VRC exists\n    - Proverb permanently onchain\n    - First Person has verifiable proof of understanding\n    - Bilateral trust credential established\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "8a34920f8009bc7f",
+      "id": "49e41628d303f43e",
       "text": "## Economic Model\n\n### Golden Ratio Split [Tokenomics v2.0, §2]\n\n**Mathematical Basis**:\n```\nφ (phi) = 1.618033988749895\n1/φ = 0.618033988749895\n\nPer Signal (0.01 ZEC):\n├── 61.8% (0.00618 ZEC) → Transparent Pool\n│   └── Public inscription with proverb\n│\n└── 38.2% (0.00382 ZEC) → Shielded Pool\n    └── Protocol operations\n```\n\n**Why This Ratio** [Glossary v2.1, §Economic Parameters]:\n- Balance between openness and privacy\n- Mathematically elegant (golden ratio φ)\n- Visible accountability (61.8% public)\n- Operational privacy (38.2% shielded)\n\n### Transaction Economics\n\n```\nPer Signal:\n    First Person payment:  0.01 ZEC\n    Public inscription:    0.00618 ZEC (61.8%)\n    Shielded return:       0.00382 ZEC (38.2%)\n    Network fee:           ~0.0001 ZEC\n    AI verification:       ~$0.03 USD\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "53eafd3c3f8460f4",
+      "id": "b5169d0af5ca0f3e",
       "text": "## Security Model\n\n### Threat Model\n\n**What We Protect Against**:\n- ✅ Key extraction from TEE\n- ✅ AI provider accessing keys or amounts\n- ✅ IPFS provider accessing keys\n- ✅ Database compromise revealing keys\n- ✅ Network eavesdropping on keys\n- ✅ Reconstruction of First Person state (R < 1)\n\n**Trust Assumptions**:\n```\n┌─────────────────────────────────────────┐\n│  TRUST REQUIRED                         │\n├─────────────────────────────────────────┤\n│  1. AMD (SEV-SNP hardware) — if TEE     │\n│  2. Nillion (TEE platform) — if TEE     │\n│  3. Zcash Foundation (protocol)         │\n└─────────────────────────────────────────┘\n\n┌─────────────────────────────────────────┐\n│  NO TRUST REQUIRED                      │\n├─────────────────────────────────────────┤\n│  1. NEAR Cloud AI (sees no keys/amounts)│\n│  2. IPFS/Pinata (public data only)      │\n│  3. Mage Frontend (no sensitive access) │\n└─────────────────────────────────────────┘\n```\n\n### Information Bounds [Research Paper v3.2, Theorem 2.1]\n\nThe dual-agent separation ensures:\n```\nI(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M)\n```\n\nThis means information leakage is **additive**, not multiplicative. Combined with budget constraints:\n```\nC_S + C_M < H(X)\n```\n\nWe get a **reconstruction ceiling**:\n```\nR_max = (C_S + C_M) / H(X) < 1\n```\n\nNo adversary can perfectly reconstruct the First Person's private state.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "82a0c6825d60092b",
+      "id": "9b9ca0d431362b93",
       "text": "## Performance Characteristics\n\n### Latency\n\n```\nSignal Submission → Confirmation\n    ↓ <1s    Mage Agent → Zcash Network\n    ↓ 75s    Zcash mempool → Block (avg)\n    ↓ 10s    Oracle detects transaction\n    ↓ 2s     Fetch spellbook from IPFS\n    ↓ 3s     AI verification (NEAR Cloud AI)\n    ↓ 1s     Database recording\n    ↓ 2s     Sign transactions\n    ↓ 1s     Broadcast to network\n    ↓ 75s    Zcash confirmation (avg)\n    ↓ 1s     Update database\n    ─────\n    ~170s total (under 3 minutes)\n```\n\n### Throughput\n\n```\nLight Client Sync: 4-6 hours (first time), then <1 minute\nSignal Processing: 10-15 seconds per signal\nConcurrent Capacity: Limited by Zcash block time (75s)\nMax Throughput: ~40 signals per hour (conservative)\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "ecacc50a719c8433",
+      "id": "44384bfdb5720d61",
       "text": "## Deployment Architecture\n\n### Development\n\n```\nlocalhost:\n    ├── PostgreSQL (Docker or local)\n    ├── Oracle Swordsman (local process :3001)\n    ├── Mage Agent (npm run dev :5000)\n    └── Zcash Light Client (testnet)\n```\n\n### Production\n\n```\nVPS (Ubuntu 20.04+):\n    ├── Nginx (reverse proxy)\n    ├── Oracle Swordsman (systemd service)\n    │   └── Optionally deployed to Nillion nilCC\n    ├── Mage Agent (Next.js production build)\n    ├── PostgreSQL (managed or local)\n    └── Zcash (Zebra + Zallet, mainnet)\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "200222cfa8399d4e",
+      "id": "e705c2692fe4fb50",
       "text": "## API Boundaries\n\n### Mage Agent → Oracle\n\n```http\nPOST /api/status\n{\n    \"tracking_code\": string\n}\n\nResponse:\n{\n    \"status\": \"pending\" | \"verified\" | \"inscribed\",\n    \"quality_score\": number,\n    \"txid\": string\n}\n```\n\n### Oracle → NEAR Cloud AI\n\n```typescript\nPOST /api/verify\n{\n    \"proverb\": string,\n    \"spellbook\": Spellbook,\n    \"actId\": string\n}\n\nResponse:\n{\n    \"quality_score\": number,    // 0.0 - 1.0\n    \"matched_act\": string,      // Act ID\n    \"reasoning\": string,        // Explanation\n    \"approved\": boolean\n}\n```\n\n### Oracle → IPFS\n\n```http\nGET https://gateway.pinata.cloud/ipfs/{CID}\n\nResponse: JSON (spellbook v4.0.1-canonical)\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "fac5d1696b007ede",
+      "id": "f9e40b4aa753f6ee",
       "text": "## Configuration\n\n### Environment Variables\n\n```bash\n# Critical (required)\nNEAR_SWORDSMAN_API_KEY    # AI verification\nPINATA_JWT                # IPFS access\nDATABASE_URL              # PostgreSQL\nZEBRA_RPC_URL             # Blockchain\nZALLET_RPC_URL            # Wallet\n\n# Economic [Tokenomics v2.0]\nSIGNAL_COST=0.01          # ZEC per signal\nPUBLIC_SPLIT=0.618        # 61.8% transparent\nPRIVATE_SPLIT=0.382       # 38.2% shielded\n\n# Optional\nNILLION_API_KEY           # TEE access (if using)\nORACLE_CHECK_INTERVAL=30  # seconds\nLOG_LEVEL=info\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "49989352b49c43e2",
+      "id": "a9462275eeb58c6b",
       "text": "## Next Steps\n\n✅ **Architecture Understood!**\n\nYou now understand:\n- Dual-agent separation model [Whitepaper v4.3]\n- Complete signal flow (10 steps)\n- Security guarantees [Research Paper v3.2]\n- Economic model [Tokenomics v2.0]\n- Performance characteristics\n\n**Next**: Read `03-BUILD_GUIDE.md` to start implementing\n\n**Reference**: Use `04-API_REFERENCE.md` for code patterns"
     },
     {
       "type": "markdown",
-      "id": "e4b264e704d07f8b",
+      "id": "0956cd8ab98f946a",
       "text": "---\n← [[Welcome Visitors]] · [[The Architecture Guides]]"
     }
   ],
@@ -80,77 +80,77 @@
         "story": [
           {
             "type": "markdown",
-            "id": "9b2099c26ca48e9b",
+            "id": "f8bc35e5cb8013fa",
             "text": "# Architecture Guide"
           },
           {
             "type": "markdown",
-            "id": "62a43438e1eeff4f",
+            "id": "e44d6a5a9cab7f91",
             "text": "**System design, data flow, and security model**\n\n**Document Alignment**: [Whitepaper v4.3], [Research Paper v3.2], [Glossary v2.1]\n\n---"
           },
           {
             "type": "markdown",
-            "id": "01506c3ad5e338ed",
+            "id": "addecf2ffc5913bd",
             "text": "## System Overview\n\nThe Proof of Proverb Revelation Protocol implements the **dual-agent architecture** [Whitepaper v4.3, §3] with a three-layer design achieving hardware-enforced privacy with AI-powered verification:\n\n```\n┌──────────────────────────────────────────────────────────────┐\n│  Layer 3: Knowledge (IPFS/Pinata)                           │\n│  - Spellbook v4.0.1-canonical (immutable)                   │\n│  - NO access to keys                                         │\n└────────────────────────────┬─────────────────────────────────┘\n                             │\n┌──────────────────────────────────────────────────────────────┐\n│  Layer 2: AI Verification (NEAR Cloud AI)                   │\n│  - Semantic proverb matching                                │\n│  - Quality scoring                                          │\n│  - NO access to keys                                         │\n└────────────────────────────┬─────────────────────────────────┘\n                             │\n┌──────────────────────────────────────────────────────────────┐\n│  Layer 1: TEE (Nillion nilCC) — Optional                    │\n│  ┌────────────────────────────────────────────────────────┐  │\n│  │  AMD SEV-SNP Confidential Compute                      │  │\n│  │  - Zcash keys in SecretSigner (distributed MPC)        │  │\n│  │  - Calls Layer 2 (AI)                                  │  │\n│  │  - Calls Layer 3 (Knowledge)                           │  │\n│  │  - Signs transactions with threshold ECDSA             │  │\n│  └────────────────────────────────────────────────────────┘  │\n└──────────────────────────────────────────────────────────────┘\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "e8cb826c81435e2c",
+            "id": "177dd1a8f3aedf7e",
             "text": "## Dual-Agent Model\n\n### The Separation Principle [Whitepaper v4.3, §3]\n\n```\n                        ┌────────────────┐\n                        │  FIRST PERSON  │\n                        │   (You - 🗝️)    │\n                        └────────┬───────┘\n                                 │\n                    Private State X (complete context)\n                                 │\n                    ┌────────────┼────────────┐\n                    │                         │\n                    ▼                         ▼\n            ┌───────────────┐         ┌───────────────┐\n            │  SWORDSMAN ⚔️  │         │    MAGE 🧙    │\n            │   (Protect)   │         │  (Delegate)   │\n            │   Soulbis     │         │   Soulbae     │\n            └───────────────┘         └───────────────┘\n                    │                         │\n        Observes X completely      Acts using authorized info\n        Reveals nothing directly   Public coordination\n                    │                         │\n                    └────────────┬────────────┘\n                                 │\n                    THE GAP (conditional independence)\n                                 │\n                            s ⊥ m | X\n                                 │\n                    Additive information bounds:\n                    I(X; s,m) ≤ I(X;s) + I(X;m)\n                                 │\n                    Reconstruction ceiling: R < 1\n```\n\n**Mathematical Guarantee** [Research Paper v3.2, Theorem 2.2]:\nWhen observations are conditionally independent, information leakage becomes additive rather than multiplicative. Combined with budget constraints, this creates a reconstruction ceiling that cannot be exceeded.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "56b6ab70569dc799",
+            "id": "2ef28ee6783f9ec9",
             "text": "## Components\n\n### 1. Mage Agent (Frontend)\n\n**Technology**: Next.js + React  \n**Purpose**: First Person interface for proverb submission  \n**Location**: `src/`\n\n**Features**:\n- Spellbook reader (18 Acts + 30 Tales)\n- Soulbae chat (optional AI assistance)\n- Signal flow UI\n- Proverbs gallery (VRC viewer)\n\n**Security**:\n- No keys stored\n- No transaction data visible\n- HTTPS only\n- CORS configured\n\n### 2. Oracle Swordsman (Backend)\n\n**Technology**: TypeScript/Express  \n**Purpose**: TEE worker that processes signals  \n**Location**: `oracle-swordsman/`\n\n**Core Functions** [Whitepaper v4.3, §3.2]:\n1. Monitor Zcash shielded pool for incoming signals (z→z)\n2. Decrypt and extract proverb from memo field\n3. Fetch spellbook from IPFS\n4. Call NEAR Cloud AI for verification\n5. Execute golden split (61.8% transparent, 38.2% shielded)\n6. Sign and broadcast inscription\n\n**Address Requirements**:\n- **Shielded Address (z-addr)**: Receives signal submissions from First Persons (private)\n- **Transparent Address (t-addr)**: Posts public inscriptions with proverb + proof\n\n**Security**:\n- Runs inside Nillion nilCC (TEE) — optional\n- Keys stored in SecretSigner (distributed)\n- Attestation verified\n- Zero-trust external calls\n\n### 3. NEAR Cloud AI\n\n**Technology**: openai/gpt-oss-120b via NEAR Cloud AI API  \n**Purpose**: Intelligent proverb verification  \n**Integration**: REST API\n\n**Verification Process**:\n```typescript\n// Oracle calls NEAR Cloud AI\nconst response = await verifier.verify({\n    proverb: \"First Person's proverb text...\",\n    spellbook: canonicalSpellbook,\n    actId: \"act-5-golden-split\"\n});\n\n// Returns:\n{\n    quality_score: 0.85,      // 0.0 - 1.0\n    matched_act: \"act-5\",     // Act ID\n    reasoning: \"Demonstrates understanding...\",\n    approved: true\n}\n```\n\n**Privacy Guarantee**:\n```\nI(Soulbae; Transaction_Amount) = 0\nI(Soulbae; First_Person_Identity) = 0\nI(Soulbae; Wallet_Address) = 0\nI(Soulbae; Transaction_Timing) = 0\n```\n\n### 4. IPFS/Pinata\n\n**Technology**: InterPlanetary File System  \n**Purpose**: Immutable knowledge storage\n\n**Spellbook**:\n- **Version**: 4.0.1-canonical\n- **IPFS CID**: `bafkreigopjrfwjsz56oft7nmv26q2oddq6j4fexj27zjirzgkdeogm2myq`\n- **Content**: 18 Acts + 30 Tales with canonical proverbs\n\n### 5. Zcash Network\n\n**Technology**: Zcash blockchain  \n**Purpose**: Transaction layer + inscription storage  \n**Client**: Zebra full node + Zallet wallet\n\n**Transaction Types**:\n- **Incoming Signal**: Shielded z-addr receives 0.01 ZEC + encrypted memo\n- **Outgoing Inscription**: t-addr receives OP_RETURN with proverb + proof (61.8%)\n- **Outgoing Fee**: z-addr receives shielded transfer (38.2%)\n\n---"
           },
           {
             "type": "markdown",
-            "id": "274e46107a93e8a9",
+            "id": "260ddf121b1fe645",
             "text": "## Signal Flow\n\n### Complete Transaction Path (10 Steps)\n\n```\n1. FIRST PERSON READS\n   First Person → Spellbook\n   - Reads tale from Acts or Zero Spellbook\n   - Clicks \"Learn\" to copy content\n   - Forms understanding through context\n   ↓\n   \n2. PROVERB FORMATION\n   First Person → Mage Agent (optional)\n   - Crafts proverb expressing principle\n   - (Optional) Consults Soulbae for assistance\n   - Generates formatted memo\n   ↓\n   \n3. SIGNAL SENT (SHIELDED)\n   First Person Wallet → Zcash Network\n   - 0.01 ZEC to Oracle shielded address (z-addr)\n   - Proverb in encrypted memo field\n   - Transaction is private (z→z)\n   ↓\n   \n4. ORACLE DETECTS (SHIELDED)\n   Zcash → Oracle Database\n   - Monitors shielded pool via viewing key\n   - Decrypts memo to extract proverb\n   - Stores in submissions table\n   ↓\n   \n5. FETCH KNOWLEDGE\n   Oracle → IPFS (via Pinata Gateway)\n   - Retrieves spellbook v4.0.1-canonical\n   - Fetches canonical proverb for matched act\n   - Validates CID integrity\n   ↓\n   \n6. AI VERIFICATION\n   Oracle → NEAR Cloud AI API\n   - Sends proverb + spellbook context\n   - NO transaction data sent\n   - Returns quality score + reasoning\n   ↓\n   \n7. GOLDEN SPLIT CALCULATION [Tokenomics v2.0, §2]\n   Oracle calculates split:\n   - Signal amount: 0.01 ZEC\n   - Transparent portion: 0.00618 ZEC (61.8%)\n   - Shielded portion: 0.00382 ZEC (38.2%)\n   - Network fee: ~0.0001 ZEC\n   ↓\n   \n8. TRANSACTION SIGNING\n   Oracle → Nillion SecretSigner (or local)\n   - Prepares inscription transaction (t-addr)\n   - Prepares shielded return (z-addr)\n   - Requests threshold signature\n   ↓\n   \n9. BROADCAST\n   Oracle → Zcash Network\n   - Broadcasts inscription to transparent address\n   - Broadcasts fee to shielded pool\n   - Records TXIDs\n   ↓\n   \n10. VRC CREATION\n    Inscription confirmed → VRC exists\n    - Proverb permanently onchain\n    - First Person has verifiable proof of understanding\n    - Bilateral trust credential established\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "8a34920f8009bc7f",
+            "id": "49e41628d303f43e",
             "text": "## Economic Model\n\n### Golden Ratio Split [Tokenomics v2.0, §2]\n\n**Mathematical Basis**:\n```\nφ (phi) = 1.618033988749895\n1/φ = 0.618033988749895\n\nPer Signal (0.01 ZEC):\n├── 61.8% (0.00618 ZEC) → Transparent Pool\n│   └── Public inscription with proverb\n│\n└── 38.2% (0.00382 ZEC) → Shielded Pool\n    └── Protocol operations\n```\n\n**Why This Ratio** [Glossary v2.1, §Economic Parameters]:\n- Balance between openness and privacy\n- Mathematically elegant (golden ratio φ)\n- Visible accountability (61.8% public)\n- Operational privacy (38.2% shielded)\n\n### Transaction Economics\n\n```\nPer Signal:\n    First Person payment:  0.01 ZEC\n    Public inscription:    0.00618 ZEC (61.8%)\n    Shielded return:       0.00382 ZEC (38.2%)\n    Network fee:           ~0.0001 ZEC\n    AI verification:       ~$0.03 USD\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "53eafd3c3f8460f4",
+            "id": "b5169d0af5ca0f3e",
             "text": "## Security Model\n\n### Threat Model\n\n**What We Protect Against**:\n- ✅ Key extraction from TEE\n- ✅ AI provider accessing keys or amounts\n- ✅ IPFS provider accessing keys\n- ✅ Database compromise revealing keys\n- ✅ Network eavesdropping on keys\n- ✅ Reconstruction of First Person state (R < 1)\n\n**Trust Assumptions**:\n```\n┌─────────────────────────────────────────┐\n│  TRUST REQUIRED                         │\n├─────────────────────────────────────────┤\n│  1. AMD (SEV-SNP hardware) — if TEE     │\n│  2. Nillion (TEE platform) — if TEE     │\n│  3. Zcash Foundation (protocol)         │\n└─────────────────────────────────────────┘\n\n┌─────────────────────────────────────────┐\n│  NO TRUST REQUIRED                      │\n├─────────────────────────────────────────┤\n│  1. NEAR Cloud AI (sees no keys/amounts)│\n│  2. IPFS/Pinata (public data only)      │\n│  3. Mage Frontend (no sensitive access) │\n└─────────────────────────────────────────┘\n```\n\n### Information Bounds [Research Paper v3.2, Theorem 2.1]\n\nThe dual-agent separation ensures:\n```\nI(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M)\n```\n\nThis means information leakage is **additive**, not multiplicative. Combined with budget constraints:\n```\nC_S + C_M < H(X)\n```\n\nWe get a **reconstruction ceiling**:\n```\nR_max = (C_S + C_M) / H(X) < 1\n```\n\nNo adversary can perfectly reconstruct the First Person's private state.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "82a0c6825d60092b",
+            "id": "9b9ca0d431362b93",
             "text": "## Performance Characteristics\n\n### Latency\n\n```\nSignal Submission → Confirmation\n    ↓ <1s    Mage Agent → Zcash Network\n    ↓ 75s    Zcash mempool → Block (avg)\n    ↓ 10s    Oracle detects transaction\n    ↓ 2s     Fetch spellbook from IPFS\n    ↓ 3s     AI verification (NEAR Cloud AI)\n    ↓ 1s     Database recording\n    ↓ 2s     Sign transactions\n    ↓ 1s     Broadcast to network\n    ↓ 75s    Zcash confirmation (avg)\n    ↓ 1s     Update database\n    ─────\n    ~170s total (under 3 minutes)\n```\n\n### Throughput\n\n```\nLight Client Sync: 4-6 hours (first time), then <1 minute\nSignal Processing: 10-15 seconds per signal\nConcurrent Capacity: Limited by Zcash block time (75s)\nMax Throughput: ~40 signals per hour (conservative)\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "ecacc50a719c8433",
+            "id": "44384bfdb5720d61",
             "text": "## Deployment Architecture\n\n### Development\n\n```\nlocalhost:\n    ├── PostgreSQL (Docker or local)\n    ├── Oracle Swordsman (local process :3001)\n    ├── Mage Agent (npm run dev :5000)\n    └── Zcash Light Client (testnet)\n```\n\n### Production\n\n```\nVPS (Ubuntu 20.04+):\n    ├── Nginx (reverse proxy)\n    ├── Oracle Swordsman (systemd service)\n    │   └── Optionally deployed to Nillion nilCC\n    ├── Mage Agent (Next.js production build)\n    ├── PostgreSQL (managed or local)\n    └── Zcash (Zebra + Zallet, mainnet)\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "200222cfa8399d4e",
+            "id": "e705c2692fe4fb50",
             "text": "## API Boundaries\n\n### Mage Agent → Oracle\n\n```http\nPOST /api/status\n{\n    \"tracking_code\": string\n}\n\nResponse:\n{\n    \"status\": \"pending\" | \"verified\" | \"inscribed\",\n    \"quality_score\": number,\n    \"txid\": string\n}\n```\n\n### Oracle → NEAR Cloud AI\n\n```typescript\nPOST /api/verify\n{\n    \"proverb\": string,\n    \"spellbook\": Spellbook,\n    \"actId\": string\n}\n\nResponse:\n{\n    \"quality_score\": number,    // 0.0 - 1.0\n    \"matched_act\": string,      // Act ID\n    \"reasoning\": string,        // Explanation\n    \"approved\": boolean\n}\n```\n\n### Oracle → IPFS\n\n```http\nGET https://gateway.pinata.cloud/ipfs/{CID}\n\nResponse: JSON (spellbook v4.0.1-canonical)\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "fac5d1696b007ede",
+            "id": "f9e40b4aa753f6ee",
             "text": "## Configuration\n\n### Environment Variables\n\n```bash\n# Critical (required)\nNEAR_SWORDSMAN_API_KEY    # AI verification\nPINATA_JWT                # IPFS access\nDATABASE_URL              # PostgreSQL\nZEBRA_RPC_URL             # Blockchain\nZALLET_RPC_URL            # Wallet\n\n# Economic [Tokenomics v2.0]\nSIGNAL_COST=0.01          # ZEC per signal\nPUBLIC_SPLIT=0.618        # 61.8% transparent\nPRIVATE_SPLIT=0.382       # 38.2% shielded\n\n# Optional\nNILLION_API_KEY           # TEE access (if using)\nORACLE_CHECK_INTERVAL=30  # seconds\nLOG_LEVEL=info\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "49989352b49c43e2",
+            "id": "a9462275eeb58c6b",
             "text": "## Next Steps\n\n✅ **Architecture Understood!**\n\nYou now understand:\n- Dual-agent separation model [Whitepaper v4.3]\n- Complete signal flow (10 steps)\n- Security guarantees [Research Paper v3.2]\n- Economic model [Tokenomics v2.0]\n- Performance characteristics\n\n**Next**: Read `03-BUILD_GUIDE.md` to start implementing\n\n**Reference**: Use `04-API_REFERENCE.md` for code patterns"
           },
           {
             "type": "markdown",
-            "id": "e4b264e704d07f8b",
+            "id": "0956cd8ab98f946a",
             "text": "---\n← [[Welcome Visitors]] · [[The Architecture Guides]]"
           }
         ]
       },
-      "date": 1782603700690
+      "date": 1782920600451
     }
   ]
 }

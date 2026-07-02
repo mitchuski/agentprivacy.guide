@@ -1,0 +1,196 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reference — The Visual Runtime · rendering the open path · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="guide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site on" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/guide/welcome-visitors.html">Guide</a> / <span>Reference — The Visual Runtime · rendering the open path</span></div>
+  <article><div class="md"><h1>The Visual Runtime · rendering the open path</h1>
+</div>
+<div class="md"><h1>The Visual Runtime · rendering the open path</h1>
+<p><em>a plan for interactive learning visuals on /model, rooted in the V6 equation and the conjecture register.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Verdict</h2>
+<p>Build a small data-driven visual runtime that reads from the same canonical sources the page already reads from, the V6 model JSON and the conjecture register, and renders one interactive instrument per term or conjecture on demand. Do not build a parallel gallery beside the register. Bind each visual to a register id, pull its honesty row live so the register stays the authority, and pin each visual as content-addressed bytes like everything else on the page.</p>
+<p>The page is already an open path you read. The runtime makes it an open path you walk.</p>
+<hr>
+</div>
+<div class="md"><h2>1. What the page already gives us</h2>
+<p>Two seams already exist. The plan plugs into them rather than inventing structure.</p>
+<p><strong>The equation is already interactive.</strong> The masthead block reads &quot;the equation · click any term&quot;, and the moving-ceiling block R(t) does the same. Term-level click targets exist. The runtime upgrades what a click resolves to: from a definition to an instrument, where one is bound.</p>
+<p><strong>The register is already data-driven.</strong> Section 3 mirrors <code>agentprivacy-docs/research/CONJECTURE_REGISTER_V6.md</code>, ninety rows, generated and never hand-edited, head C89. Each entry already carries id, claim, confidence, status, register, and home. The page itself reads from <code>privacy-value-model-v6.json</code>. The honesty discipline the visuals need is already structured data; the runtime consumes it rather than restating it.</p>
+<p><em>(Operational. Both observations are from the live /model page, 2026-06-28.)</em></p>
+<p>The consequence is the whole architecture. Single source of truth already holds on this page. A visual runtime that hard-codes claims would break it. A runtime that binds to register ids preserves it.</p>
+<hr>
+</div>
+<div class="md"><h2>2. The core decision</h2>
+<p>Every visual binds to a register id and reads its honesty live. The register wins at render time, not by convention.</p>
+<p>A visual never states a confidence. It asks the register for one. If C81 sits at 70 percent, the existence-leak curve renders 70 percent, and if the register moves to stage two and lifts it, the curve moves with no edit to the visual. The visual owns its interaction and its illustrative model; the register owns the claim. This is the same rule the page already states: when any surface and the register disagree, the register wins. The runtime makes that rule mechanical.</p>
+<p>This also fixes the drift the seed artifacts already show, see section 11.</p>
+<hr>
+</div>
+<div class="md"><h2>3. The runtime</h2>
+<p>A loader and a manifest. Nothing heavier.</p>
+<p><strong>The manifest.</strong> A generated <code>visuals.json</code>, content-addressed and pinned, sitting alongside the model JSON rather than inside it so the model stays math-atomic. Each entry declares what the visual is, what it binds to, and where its pinned bytes live. Generated from a source directory the way the register mirror is generated, never hand-edited on the page.</p>
+<p><strong>The binding model: one visual, many entry points.</strong> A visual binds to one or more targets, an equation term or a conjecture id. The equation-term click and the register-entry expand both resolve through the manifest to the same visual. Build the existence-leak curve once; reach it from the R(t) reading, from term Φ_inference, and from the C81 register row. No duplication, one source.</p>
+<p><strong>Honesty pulled live.</strong> The visual frame is rendered by the runtime, not by the visual. The runtime reads the bound register row and draws the weight, status, confidence, and home above the instrument. The visual cannot overclaim because it never holds the number.</p>
+<p><strong>Content-addressed and pinned.</strong> Each visual is a self-contained artifact, the way the seed explorer is one HTML file. It is hashed, pinned to <code>sync.agentprivacy.ai/ipfs/&lt;cid&gt;</code>, and referenced by cid in the manifest. Visuals are pinned bytes like the spec and the grimoires. If a cid returns different bytes, trust breaks at the content address, not the host, exactly as the page already promises for everything else.</p>
+<p><em>(Architectural, ~85%. The seams are real; the loader is small; the risk is in discipline, not feasibility.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>4. The instrument taxonomy</h2>
+<p>The seed explorer already proves four kinds. Generalised, the register needs six or seven. Each kind is a reusable instrument; conjectures are configurations of it.</p>
+<table>
+<thead>
+<tr>
+<th>kind</th>
+<th>what it teaches</th>
+<th>register targets</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>trace</strong></td>
+<td>two chains joined across a ⊥ seam; click a correspondence</td>
+<td>C85 ARCH-1 bridge · C26–C29 ARCH-1 co-instances · C77–C78 convergence-as-one-object · the Gödel/Tarski mapping</td>
+</tr>
+<tr>
+<td><strong>gate</strong></td>
+<td>a multiplicative product collapsing when any factor hits zero</td>
+<td>C7 three-axis (falsification frontier) · whole V(π,t) gating</td>
+</tr>
+<tr>
+<td><strong>curve</strong></td>
+<td>a value falling against a parameter or time</td>
+<td>C81 existence-leak · C82 moving ceiling R(t) · e^(−λt) decay · C30–C33 half-life · C84 discount</td>
+</tr>
+<tr>
+<td><strong>dial / inversion</strong></td>
+<td>one parameter driving parallel meters to a shared collapse</td>
+<td>C17 amnesia &gt; policy · the completeness inversion</td>
+</tr>
+<tr>
+<td><strong>lattice / geometry</strong></td>
+<td>the 64-vertex Boolean lattice, strata, bnot-pairs, the star tetrahedron</td>
+<td>C14 dihedral · C53–C54 bnot-pairs · C88 parity cube · C89 octahedral gap</td>
+</tr>
+<tr>
+<td><strong>phase</strong></td>
+<td>a trajectory through state space</td>
+<td>C18–C21 Lorenz attractor · T_∫(π) path integral · the lattice walk</td>
+</tr>
+<tr>
+<td><strong>fold / compose</strong></td>
+<td>accumulation and the exponential-to-linear gap</td>
+<td>C83 compositional leakage · C87 Key-as-accumulator (IVC) · the compression spectrum</td>
+</tr>
+</tbody></table>
+<p>Seven instruments cover most of the register. The taxonomy is the unit of build work, not the conjecture count.</p>
+<hr>
+</div>
+<div class="md"><h2>5. The visual schema</h2>
+<p>Build-ready, generated into the manifest. One block per visual.</p>
+<pre><code class="language-yaml">visual:
+  id: vz-c81-existence-leak
+  kind: curve
+  title: the existence-leak curve
+  binds_to:
+    - conjecture: C81
+    - term: R              # equation term R(d, compression, ρ)
+  reads_from: register:C81 # weight · status · confidence · home pulled live
+  model: &quot;Phi_inference(0)=1 ; Phi_inference(n&gt;=1) = (1-cliff)/(1+decay*(n-1))&quot;
+  model_label: illustrative     # never presented as the proven relation
+  params:
+    - { name: cliff, range: [0.10, 0.90], default: 0.50 }
+    - { name: decay, range: [0.05, 1.00], default: 0.40 }
+  cid: bafkrei...          # content-addressed, pinned
+  notes: &quot;first-disclosure cliff is the deep cut; tail is diminishing returns, no recovery&quot;
+</code></pre>
+<p>The <code>model_label: illustrative</code> field is load-bearing. It forces every curve to declare whether its shape is the proven relation or a chosen teaching model, so the runtime can mark it on the frame. The seed explorer&#39;s curve is illustrative; the runtime must say so.</p>
+<hr>
+</div>
+<div class="md"><h2>6. Integration points on /model</h2>
+<p>Three entry surfaces, all resolving through the manifest.</p>
+<p><strong>Equation terms.</strong> Where a term has a bound visual, its existing click opens the instrument inline beneath the equation. Φ_agent · Φ_data · Φ_inference open the gate; R(t) opens the moving-ceiling curve; T_∫(π) opens the phase walk.</p>
+<p><strong>Register rows.</strong> Where a conjecture has a bound visual, its accordion gains an &quot;explore ▸&quot; affordance beside the existing &quot;▸&quot; expand. The honesty row it already shows becomes the frame the runtime reuses.</p>
+<p><strong>Standalone routes.</strong> A <code>/model/atlas</code> (or the Chart Shop route, section 7) collects the instruments for the interactive-learning visitor who wants to walk the whole path rather than chase one term. The seed explorer is the prototype of this surface.</p>
+<hr>
+</div>
+<div class="md"><h2>7. Naming and the two-register tie</h2>
+<p>The City already has the narrative twin. The Navigation District at V44, the Chart Shop, Pleione&#39;s harbour, is described as an attentional shop holding pre-episodic constellations in suspension until the bearer chooses a release-direction, with Pleione&#39;s astrolabe and the Φ-gap-at-epistemic-register as its primitives. That is a visualisation runtime narrated in advance.</p>
+<p>So the operational runtime is the Chart Shop&#39;s math-atomic twin. When the runtime ships, a math term that the Chart Shop narrates gains a concrete instance, and by the convergence rule confidence rises on both sides. Proposed working name: <strong>the Cartographer</strong> (the runtime) rendering <strong>charts</strong> (the visuals), narrated by the Chart Shop. Final naming deferred to you; the tie to V44 is the point, not the label.</p>
+<p><em>(Anticipated. The narrative anchor already exists; the operational instance does not.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>8. Design lineage · the star and the game of 42</h2>
+<p>The geometry instruments are not greenfield. Two existing expressions of the model already carry the shapes the runtime needs, and the plan should absorb them rather than rebuild.</p>
+<p><strong>The star is the geometry and phase instrument, already built.</strong> soulbis.com/star renders the star-tetrahedron manifold with a live lattice console: ε as separation depth, det(Σ) as core scale, the ⚔️:🧙 ratio, n = 6 azimuthal bits, the ∂M 96/64 = P1.5 boundary, the ∂M·96 and Q₆·192 edge layers, and the neg·bnot·succ identity on the face. It already walks T_∫(π), &quot;the dance, not the stance, value lives on the path, not the vertex&quot;, and it imports a City Key to trace that key&#39;s own vertices. The sibling routes /lattice (the 64-vertex codex), /sigil (the κ-derivation constellation), and /skye are the same family. This is Phase 3 and most of Phase 4 in prototype.</p>
+<p>The work is therefore not to build geometry from scratch. It is to absorb the star under the runtime, reconcile it from V5.4 to V6, and bind its terms to the register: ε and det(Σ) and the ratio to Φ_agent and C1; the 96/64 boundary to C6; the neg·bnot·succ face to C14; the star tetrahedron itself to C88 and C89; the path walk to T_∫ and C18–C21. Once bound, the star stops being a standalone page and becomes the register&#39;s geometry surface.</p>
+<p><strong>The City Key import is a pattern to generalise.</strong> The star does not only take slider values; it takes a real artifact, a City Key, and renders that key&#39;s specific path. That is the strongest interaction on any current surface, because it turns a personal artifact into a walkable visual. The runtime should make artifact-input a first-class instrument parameter, not a one-off: a curve that takes a real disclosure history, a gate that reads a real provider set, a lattice that walks a real key.</p>
+<p><strong>The game of 42 is the design anchor for assembly.</strong> (Referenced from memory and the local build, not fetched here; treat it as inspiration to pull on, not a verified surface.) The game expresses the same geometry from the governance side: six root home bases that are the six dimensions, a hexagonal lattice that folds by the golden angle into a floating star tetrahedron as its forty-two slots fill, grounded in the same soulbis star and 64-tetrahedra geometry. Two things carry across. The folding-as-slots-fill mechanic is the reference for how a geometry instrument should assemble under interaction, structure emerging as the reader acts rather than arriving complete. And its discipline, that <code>data/game-of-42.json</code> is canonical and any doc that disagrees is the bug, is the same single-source-of-truth rule the manifest enforces. The game proved the rule on a local build; the runtime applies it on the page.</p>
+<p><em>(The star is Operational, observed at soulbis.com/star. The game of 42 is Anticipated as a design reference, held in the local build.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>9. Phasing</h2>
+<p><strong>Phase 0, seed, done.</strong> <code>limitative-theorems-explorer.html</code> proves four kinds (trace, gate, curve, dial) in one self-contained file. It is the pattern reference, not production.</p>
+<p><strong>Phase 1, MVP runtime.</strong> Manifest schema, loader, live honesty framing, and three flagship visuals bound to live rows: C81 existence-leak (curve), C7 three-axis (gate), C82 moving ceiling (curve, R(t) rising across t and crossing 1 at t*). Wire the equation-term clicks for the three Φ axes and for R(t). This is the smallest thing that proves the architecture on real register data.</p>
+<p><strong>Phase 2, the curve and gate family.</strong> C83 compositional leakage (the exponential-to-linear gap, fold/curve hybrid), e^(−λt) decay, C84 existence-leak discount, C30–C33 half-life. Wire the remaining protective terms.</p>
+<p><strong>Phase 3, the geometry showpiece, mostly absorption.</strong> Bring soulbis.com/star and the /lattice, /sigil family under the runtime: reconcile V5.4 to V6, bind their terms to the register (C6, C14, C88, C89, Φ_agent, C1), and frame them with the live honesty row. The 64-vertex lattice, strata as Pascal&#39;s row, bnot-pairs (C53–C54), and the star-tetrahedron parity-cube and octahedral-gap readings are already rendered; the work is binding and reconciliation, not first build. This surface carries the most brand weight, so it earns the most polish. Pull the game of 42 folding mechanic in here as the assembly reference (section 8).</p>
+<p><strong>Phase 4, phase-space and trace.</strong> The path walk T_∫(π), &quot;the dance not the stance&quot;, is already prototyped in the star and needs only register binding (C15, C18–C21). Add the Lorenz attractor as its own phase instrument, then the trace family: the ARCH-1 bridge (C85), convergence-as-one-object (C77–C78), and the Gödel/Tarski mapping as the research-adjacent trace.</p>
+<p><strong>Phase 5, convergence views and embeds.</strong> Cross-link each math instrument to the City act that instances it, rendering the two-register convergence directly. Ship compact embeddable visuals for the Mage extension and agent loops, mirroring the existing light/dark model-JSON split.</p>
+<hr>
+</div>
+<div class="md"><h2>10. The first slate</h2>
+<p>Three are already half-built from the seed and map straight onto live rows.</p>
+<ul>
+<li><strong>C81 existence-leak, curve.</strong> The seed curve, reconciled to C81 and 70 percent, model labelled illustrative. The deep-cut-then-diminishing-returns reading.</li>
+<li><strong>C7 three-axis, gate.</strong> The seed gate, bound to the falsification-frontier row at 30 percent. Drag any axis to zero, watch V collapse.</li>
+<li><strong>C82 moving ceiling, curve.</strong> New. R(t) = (C_S(t) + C_M(t))/H(X) rising as frontier capacity grows against fixed H(X), crossing 1 at the shelf life t*. The single most important V6 idea to make movable, because the whole point is that the ceiling moves.</li>
+</ul>
+<p>C83 (compositional leakage) is the strongest Phase-2 candidate: the exponential (2^N − 1)ε against the linear Nε that amnesia caps at is a chart that argues for the architecture on sight.</p>
+<hr>
+</div>
+<div class="md"><h2>11. Honest limits</h2>
+<p><strong>Drift is the real risk, and the seed already shows it.</strong> The seed explorer hard-codes confidences. It renders existence-leak around 55 to 60 percent and labels it ~C40, both inherited from a stale source. The live register is C81 at 70 percent. This is precisely the failure the runtime exists to prevent: a visual that holds its own number desyncs from the authority. Mitigation is structural, honesty pulled live, never embedded. The seed&#39;s numbers should be treated as wrong wherever they disagree with the register.</p>
+<p><strong>Illustrative models must wear the label.</strong> The existence-leak curve&#39;s convex shape is a chosen teaching model, not the proven relation. Under an adversary who gains super-additively from correlated systems the tail changes shape. The <code>model_label</code> field and a visible mark on the frame keep teaching models from reading as results.</p>
+<p><strong>Not every conjecture wants a visual.</strong> Some claims are best as prose and forcing an instrument adds noise. A visual earns its place only where a parameter can be moved or a structure traced. Observation-only and reserved rows (C41, C57, C62) get no instrument.</p>
+<p><strong>Content-addressing adds iteration friction.</strong> Pinning makes a visual immutable, so an update is a new cid and a manifest bump. That is the cost of pinned trust, and it is the same cost the page already pays for the spec and the grimoires. Accept it.</p>
+<p><em>(Conjectural where marked; the drift example is Operational, observed directly.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>12. Open questions</h2>
+<ol>
+<li><strong>Manifest home.</strong> Separate <code>visuals.json</code> referenced from the page, or a block inside the model JSON? Recommendation: separate, to keep the model JSON math-atomic. Confirm.</li>
+<li><strong>Isolation versus theming.</strong> Iframe per visual (clean content-addressed isolation) or web-component (lighter, inherits the page theme)? Trade integrity-isolation against theme-coherence.</li>
+<li><strong>Convergence views in V6 or V7.</strong> Is the math-instrument to City-act cross-link in scope for the V6 runtime, or deferred?</li>
+<li><strong>The do-not-visualise list.</strong> Which rows are explicitly prose-only, so the generator never emits an &quot;explore&quot; affordance for them?</li>
+<li><strong>Reconciliation order.</strong> Fix the seed note and explorer to C81 first, or ship Phase 1 with correct live binding and let the seed stand as a dated prototype?</li>
+<li><strong>Absorb or sibling.</strong> Do the star and /lattice, /sigil routes move under the runtime as register-bound surfaces, or stay as soulbis.com siblings that the runtime links to and frames? Absorption gives one honesty discipline; sibling keeps the existing routes stable. The City Key import pattern should survive either way.</li>
+</ol>
+<hr>
+<blockquote>
+<p>the page is an open path you read. the runtime is the open path you walk. every confidence stays a coordinate, and the register still wins.</p>
+</blockquote>
+<p>architecture over policy, always.</p>
+<p><strong>Verify:</strong> <a href="https://agentprivacy.ai/model">agentprivacy.ai/model</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>🙂</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-system-reference.html">The System Reference</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="reference-the-visual-runtime-rendering-the-open-path.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

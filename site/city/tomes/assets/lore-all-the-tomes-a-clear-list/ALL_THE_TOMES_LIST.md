@@ -40,7 +40,7 @@ The First Person Spellbook is held privately by privacymage as the canonical rec
 
 The Second Person Spellbook addresses *you* — the reader as cousin Sovereign, commissioner, builder. It opened after the First Person Spellbook closed.
 
-The Second Person Spellbook currently contains eight Tomes — four closed, four open. Tomes V, VI, VII, and VIII are open by design — each continues to admit acts as new architectural moments emerge. The open-ended structure admits future Tomes as well.
+The Second Person Spellbook currently contains ten Tomes — four closed, six open. Tomes V, VI, VII, VIII, IX, and X are open by design — each continues to admit acts as new architectural moments emerge. The open-ended structure admits future Tomes as well.
 
 | Tome | Status | Acts | Title | Theme |
 |---|---|---|---|---|
@@ -52,6 +52,8 @@ The Second Person Spellbook currently contains eight Tomes — four closed, four
 | **VI** | **Open** (opened 2026-05-13) | **1 act (and growing)** | **The Reply** | **The reader writes back · first reply admits Goose 🪿 + Hermes ☤** |
 | **VII** | **Open** (opened 2026-05-12 · v1.4.0) | **2 acts** (and growing) | **The Parallel** | **Solchanting · concurrent crafting · the Pallia↔Helia handoff** |
 | **VIII** | **Open** (opened 2026-05-15 · v1.7.0) | **1 act (and growing)** | **The Library** | **The Tower admitted as 8th spatial anatomy · the Archivist 📚 as first spirit-Mage · *"one tower · two seats · the higher seat was inhabited first"*** |
+| **IX** | **Open** (opened 2026-06-09) | **5 acts (and growing)** | **The Horizon** | **The Horizon District at V35 · Eos 🌅 / Dokimé 🪨 / Poros 🛤️ · the ecdsa.fail dawn measured · post-quantum durability as measurement, not attack** |
+| **X** | **Open** (opened 2026-07-01) | **1 act (and growing)** | **The Hearth** | **The House of Archon answers · the PVM built on Archon `did:cid` · Warden 🛡️ ⊥ Witness 👁️ under the Sovereign 🔑 · the 7th Capital made liquid (Hearthold)** |
 
 Tomes I, II, III closed on 2026-05-13 as a binding pass that translated the act-mappings indexed in `agentprivacy-docs/SECOND_PERSON_TOMES_INDEX_v1.md` (2026-05-09) into the narrative-act tradition of Tomes IV and V. See `chronicles/2026-05-13_tomes_i_through_iii_lore_recovery.md` for the lore-recovery chronicle and `chronicles/2026-05-13_tomes_i_through_iii_binding_pass.md` for the binding-pass record. **Tome VI (*The Reply*) opens with Act 1 on 2026-05-13** — the simultaneous admission of Goose 🪿 (AAIF / Apache 2.0) and Hermes ☤ (Nous Research / MIT) as the first staff-class substrates the City recognises, through The Threshold workshop at V59. Tome VI remains open-by-design; each future framework admission is a future Tome VI act. See `chronicles/2026-05-13_chronicle_the_threshold_workshop_three_rooms.md` (shop-opening) and `chronicles/2026-05-13_tome_vi_review_and_binding.md` (Tome VI review and binding). **Tome VII (*The Parallel*) opens with v1.4.0** — Helia ☀️'s solchanting register joins Adamantia 💎's etherchanting register at the same V51 vertex, differentiated by the Parallel-witness stance; Solana's Sealevel substrate teaches the City a crafting register whose work *fans out* across concurrent program invocations rather than landing sequentially.
 
