@@ -117,7 +117,7 @@ WebCrypto) — one spec, two runtimes:
 
 | # | id | opened | hint | holds |
 |---|----|--------|------|-------|
-| 001 | `099e9fe6fb63` | 2026-07 | *Two letters went out in July 2026. Each carries a sigil and a proverb above the salutation. Bring both.* | 3 documents |
+| 001 | `099e9fe6fb63` | 2026-07 | *Three letters went out in July 2026. Each carries a sigil and a proverb above the salutation. Bring both.* | 4 documents |
 | 002 | `e298ecac6b94` | 2026-07 | *The seal every mageletter closes with, and the cosmological clarification spoken as five words — the canon carries both in the open.* | 4 documents |
 
 Plaintext tokens and document paths for each gate live only in
