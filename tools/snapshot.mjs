@@ -574,6 +574,25 @@ figcaption{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:6p
 .site-desc{color:var(--dim);font-size:13.5px}
 .site-wikis{font-family:var(--mono);font-size:12px;color:var(--cyan);display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:640px){.page-list{columns:1}.search{order:3;width:100%}#q{width:100%}#results{width:100%}}
+/* mobile nav toggle — button injected by app.js (progressive: collapse only when .js-nav present, so no-JS keeps the wrapping nav) */
+.nav-toggle{display:none;align-items:center;gap:6px;cursor:pointer;font-family:var(--mono);font-size:12px;
+  color:var(--dim);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 11px}
+.nav-toggle:hover{color:var(--white);border-color:var(--border-hi)}
+.nav-toggle .nt-x{display:none}
+@media(max-width:760px){
+  .top{gap:12px}
+  .brand{flex:1}
+  .top.js-nav .nav-toggle{display:inline-flex}
+  .top.js-nav .sites{display:none;flex-basis:100%;flex-direction:column;gap:2px;order:5}
+  .top.js-nav .search{display:none;flex-basis:100%;order:6}
+  .top.js-nav.nav-open .sites{display:flex}
+  .top.js-nav.nav-open .search{display:block}
+  .top.js-nav.nav-open .nav-toggle .nt-x{display:inline}
+  .top.js-nav.nav-open .nav-toggle .nt-bars{display:none}
+  .js-nav .nav-site{font-size:13px;padding:9px 11px}
+  .js-nav .nav-sep{display:none}
+  .js-nav #q{width:100%} .js-nav #results{width:100%;right:auto;left:0}
+}
 `; }
 
 function APP_JS() { return `// client-side search over /search-index.json
@@ -588,4 +607,12 @@ function run(v){if(!v||v.length<2){box.classList.remove('on');box.innerHTML='';r
   box.classList.add('on');}
 if(q){q.addEventListener('focus',load);q.addEventListener('input',e=>run(e.target.value));
   document.addEventListener('click',e=>{if(!e.target.closest('.search'))box.classList.remove('on');});}
+// mobile nav toggle — inject a minimise/expand button so the menu can be folded away for reading
+(function(){var top=document.querySelector('.top');if(!top)return;top.classList.add('js-nav');
+  var b=document.createElement('button');b.type='button';b.className='nav-toggle';
+  b.setAttribute('aria-label','Toggle navigation menu');b.setAttribute('aria-expanded','false');
+  b.innerHTML='<span class="nt-bars">\\u2630 menu</span><span class="nt-x">\\u2715 close</span>';
+  var brand=top.querySelector('.brand');
+  if(brand&&brand.nextSibling)top.insertBefore(b,brand.nextSibling);else top.appendChild(b);
+  b.addEventListener('click',function(){var open=top.classList.toggle('nav-open');b.setAttribute('aria-expanded',open?'true':'false');});}());
 `; }

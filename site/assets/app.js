@@ -10,3 +10,11 @@ function run(v){if(!v||v.length<2){box.classList.remove('on');box.innerHTML='';r
   box.classList.add('on');}
 if(q){q.addEventListener('focus',load);q.addEventListener('input',e=>run(e.target.value));
   document.addEventListener('click',e=>{if(!e.target.closest('.search'))box.classList.remove('on');});}
+// mobile nav toggle — inject a minimise/expand button so the menu can be folded away for reading
+(function(){var top=document.querySelector('.top');if(!top)return;top.classList.add('js-nav');
+  var b=document.createElement('button');b.type='button';b.className='nav-toggle';
+  b.setAttribute('aria-label','Toggle navigation menu');b.setAttribute('aria-expanded','false');
+  b.innerHTML='<span class="nt-bars">☰ menu</span><span class="nt-x">✕ close</span>';
+  var brand=top.querySelector('.brand');
+  if(brand&&brand.nextSibling)top.insertBefore(b,brand.nextSibling);else top.appendChild(b);
+  b.addEventListener('click',function(){var open=top.classList.toggle('nav-open');b.setAttribute('aria-expanded',open?'true':'false');});}());
