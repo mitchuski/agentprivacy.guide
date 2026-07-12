@@ -1,0 +1,255 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — Limitative Theorems and the Privacy Is Value Model · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — Limitative Theorems and the Privacy Is Value Model</span></div>
+  <article><div class="md"><h1>Limitative Theorems and the Privacy Is Value Model</h1>
+</div>
+<div class="md"><h1>Limitative Theorems and the Privacy Is Value Model</h1>
+<p><em>Gödel, Tarski, and the inversion of the unprovable gap.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Verdict</h2>
+<p>Of the classical limitative results, Gödel and Tarski sit closest to the spine of Privacy is Value. The reconstruction ceiling is a privacy-flavoured second incompleteness theorem. ARCH-1 is the diagonal lemma in different notation. The existence-leak conjecture is the Tarski instance, loading onto Φ_inference. Zero-memory is the Gödel instance, loading onto Φ_agent.</p>
+<p>The one move the model makes that logic does not: it flips the sign on the gap. Where Gödel found a limit to mourn, the model banks the same gap as the asset.</p>
+<p>This note consolidates the mapping, the existence-leak reading, and the axis-assignment that falls out of both.</p>
+<hr>
+</div>
+<div class="md"><h2>1. The central inversion</h2>
+<p>In a consistent formal system, completeness is unreachable, and that is the wound. Push a system to prove everything and you have proven its inconsistency: it collapses into triviality where every sentence is a theorem.</p>
+<p>The architecture runs the same algebra with the value sign reversed. A system that can reconstruct everything is complete, and completeness drives Φ to zero on at least one axis, so the multiplicative product collapses.</p>
+<pre><code>logic:    completeness ⇒ inconsistency ⇒ every sentence provable ⇒ collapse
+privacy:  completeness ⇒ reconstruction ⇒ Φ → 0 on some axis    ⇒ collapse
+</code></pre>
+<p>Same shape, opposite polarity. The gap logic cannot close is the gap the model refuses to close. This is the C17 lineage stated in limitative terms: privacy cannot be retrofitted because the gap is load-bearing, and a system without an undecidable remainder is a system that has already leaked.</p>
+<p><em>(Architectural, ~90% as an observation. The reduction of either side to a formal theorem of the other is not claimed here.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>2. The Gödel mapping</h2>
+<h3>2.1 Structure</h3>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph GODEL[&quot;Gödel · consistent formal system F ⊇ arithmetic&quot;]
+        G1[&quot;Arithmetisation&lt;br/&gt;syntax → Gödel numbers&quot;]
+        G2[&quot;Provability predicate&lt;br/&gt;Prov(⌜x⌝)&quot;]
+        G3[&quot;Diagonal lemma (fixed point)&lt;br/&gt;G ↔ ¬Prov(⌜G⌝)&quot;]
+        G4[&quot;First theorem&lt;br/&gt;G is true but unprovable&quot;]
+        G5[&quot;Second theorem&lt;br/&gt;Con(F) unprovable in F&quot;]
+        G1 --&gt; G2 --&gt; G3 --&gt; G4
+        G3 --&gt; G5
+    end
+
+    subgraph PVM[&quot;Privacy is Value · Σ (dual-agent sovereignty)&quot;]
+        P1[&quot;Lattice arithmetisation&lt;br/&gt;6 dims → Z/(2⁶)Z, 64 vertices&quot;]
+        P2[&quot;Verification predicate&lt;br/&gt;ZK verify / VRC verify&quot;]
+        P3[&quot;ARCH-1 fixed point&lt;br/&gt;Σ := μS.(β ∨ Ω(S,S))&quot;]
+        P4[&quot;Existence-Leak / zero-memory&lt;br/&gt;verifiable, unreconstructable&quot;]
+        P5[&quot;Reconstruction ceiling&lt;br/&gt;R = (C_S+C_M)/H(X) &amp;lt; 1&quot;]
+        P1 --&gt; P2 --&gt; P3 --&gt; P4
+        P3 --&gt; P5
+    end
+
+    G1 -. &quot;encode structure into a ring&quot; .-&gt; P1
+    G2 -. &quot;verifier without witness recovery&quot; .-&gt; P2
+    G3 -. &quot;self-reference = least fixed point&quot; .-&gt; P3
+    G4 -. &quot;true ⊥ provable  =  verify ⊥ reconstruct&quot; .-&gt; P4
+    G5 -. &quot;no proof from within = no reconstruction from within&quot; .-&gt; P5
+
+    INV[&quot;THE INVERSION (load-bearing gap)&lt;br/&gt;logic: completeness ⇒ inconsistency ⇒ collapse&lt;br/&gt;privacy: completeness ⇒ Φ → 0 ⇒ collapse&lt;br/&gt;the unprovable / unreconstructable gap IS the value&quot;]
+    G4 --&gt; INV
+    G5 --&gt; INV
+    P4 --&gt; INV
+    P5 --&gt; INV
+</code></pre>
+<h3>2.2 Term-by-term correspondence</h3>
+<table>
+<thead>
+<tr>
+<th>Gödel</th>
+<th>Privacy is Value</th>
+<th>label</th>
+<th>confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Gödel numbering (arithmetisation of syntax)</td>
+<td>64-vertex lattice over Z/(2⁶)Z</td>
+<td>Architectural, loose</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td>Provability predicate Prov(⌜x⌝)</td>
+<td>ZK / VRC verification predicate</td>
+<td>Architectural</td>
+<td>~80%</td>
+</tr>
+<tr>
+<td>Diagonal lemma, G ↔ ¬Prov(⌜G⌝)</td>
+<td>ARCH-1 fixed point Σ := μS.(β ∨ Ω(S,S))</td>
+<td>Architectural, tightest</td>
+<td>~75%</td>
+</tr>
+<tr>
+<td>First theorem: true but unprovable</td>
+<td>Existence-leak / zero-memory witness</td>
+<td>Conjectural</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td>Second theorem: Con(F) unprovable in F</td>
+<td>Reconstruction ceiling R &lt; 1</td>
+<td>Conjectural / framing</td>
+<td>~85% framing, ~50% reduction</td>
+</tr>
+<tr>
+<td>Consistency precondition</td>
+<td>Multiplicative gating: completeness ⇒ Φ → 0</td>
+<td>Architectural inversion</td>
+<td>~90%</td>
+</tr>
+<tr>
+<td>Irreducibly undecidable sentence</td>
+<td>Amnesia Protocol terminal obstruction (β-loss)</td>
+<td>Architectural</td>
+<td>~70%</td>
+</tr>
+</tbody></table>
+<p>The arithmetisation row is the weakest. Gödel numbering injectively codes derivations; Z/(2⁶)Z is a state space, not a coding of proofs. Shared substrate intuition only.</p>
+<h3>2.3 The two tightest joins</h3>
+<p><strong>Ceiling against the second theorem.</strong> Con(F) cannot be derived inside F; to certify consistency you must step out into a stronger metatheory. R = (C_S + C_M)/H(X) &lt; 1 says X cannot be recovered inside the separated budget; to breach it you must import capacity from outside the architecture. Both are from-within impossibilities, structural rather than effort-bound. The external metatheory and the external compute are the same role spoken in two languages.</p>
+<p><strong>Selene against the first theorem.</strong> Gödel&#39;s G is true precisely because it is unprovable. Selene&#39;s proof is sound precisely because the witness is gone. In both, the inability is the guarantee, not a workaround for it.</p>
+<hr>
+</div>
+<div class="md"><h2>3. Existence-leak as the Tarski instance</h2>
+<h3>3.1 Verdict</h3>
+<p>Existence-leak is the Tarski instance, not the Gödel one. It loads onto Φ_inference, not Φ_agent.</p>
+<p>The leak is not a one-off disclosure event. It is a monotone erosion of the inference axis that begins the moment an existence claim becomes corroborable across more than one system. Zero-knowledge pays this tax by design. Zero-memory is the only architecture that does not, because it has no existence to claim.</p>
+<h3>3.2 The disclosure-as-existence-claim reading</h3>
+<p>A disclosure is an existence claim. To reveal anything derived from X is to assert that some X stands behind the output.</p>
+<p>A zero-knowledge proof is the strongest form of that assertion. It certifies that a valid witness exists without revealing the witness. But certifying existence bounds difficulty. If a witness provably exists, reconstruction is provably not impossible, and that is already an upper bound on how hard reconstruction is. The proof of feasibility leaks the ceiling on its own difficulty.</p>
+<p><em>(Conjectural. Existence-leak, ~C40, ~60%. Not yet formally derived.)</em></p>
+<p>Distribute it. In a decentralised substrate, every system that holds or corroborates the existence claim is an independent place from which the upper bound can be tightened. Reconstruction difficulty D(X) is therefore monotone non-increasing in the number of corroborating systems, and Φ_inference falls with it.</p>
+<p>That is the reading, term for term. From the moment of disclosure, privacy as value experiences diminishing returns on exposure to new information systems, because the existence claim, once made, is corroborable everywhere it lands.</p>
+<h3>3.3 Why Tarski, not Gödel</h3>
+<p>Gödel&#39;s first theorem gives a sentence true but unprovable inside the system. Read into the model, that is a witness which is real yet cannot be derived. It is a statement about what something is versus what can be proven about it. That is the agent axis, intrinsic to a single system. It is closer to zero-memory than to existence-leak.</p>
+<p>Tarski&#39;s theorem says no system can define its own truth predicate; truth must be named from outside, in a metalanguage. Read into the model, that is reconstruction-feasibility refusing to stay contained inside the disclosing system. The instant feasibility is asserted, it has already crossed into the layer where any observer can hold it. That crossing is the leak. The fact that you cannot un-disclose is Tarskian non-containment, not Gödelian unprovability.</p>
+<p>Tarski is inherently multi-system. The theorem needs two layers, object and meta, to bite. That is exactly the distributed-systems framing. Gödel needs one system to be incomplete; Tarski needs the truth to escape one system into the next. The leak escapes.</p>
+<p><em>(Architectural, ~70%.)</em></p>
+<p>Honest nuance: the mechanism has a Gödelian seed. An existence claim is a positive provability statement, &quot;a proof exists&quot;, which is provability-predicate territory. But the seed is not where the value drains. The value drains where the truth escapes containment and accumulates across observers. That is Tarski, and that is Φ_inference.</p>
+<h3>3.4 The inverse: zero-memory and the existence tax</h3>
+<p>Existence-leak is the inverse of Selene&#39;s proof, and the inversion is the argument.</p>
+<p>Zero-memory destroys the witness. I(Origin; Service | Separation) &lt; ε. The Moon serves the tides without encoding Theia. There is no existence claim to leak because the thing that would be reconstructed is genuinely gone. This is why zero-memory is stronger than zero-knowledge: zero-knowledge hides a witness, zero-memory burns it.</p>
+<p>Existence-leak is the dual hazard, and it is precisely the tax on choosing to keep a witness. A zero-knowledge proof must assert that a valid witness exists; that is its completeness property, and it cannot do its job otherwise. Existence is exactly the quantity that leaks an upper bound on reconstruction difficulty.</p>
+<p>The two architectures pay differently:</p>
+<ul>
+<li>Keep the witness and hide it, the zero-knowledge path. You pay the existence tax.</li>
+<li>Destroy the witness, the zero-memory path. You pay no tax, at the price of irreversibility.</li>
+</ul>
+<p>Read as one conjecture from both ends: zero-memory makes the existence claim void, and existence-leak is what a true, disclosed existence claim costs you. Same structure, opposite sign on the witness.</p>
+<h3>3.5 Content-addressed concretisation</h3>
+<p>The holonic layer is content-addressed. Same bytes, same hash, same identity, everywhere, forever. The one-way hash is the Gap: content to address is easy, address to content is infeasible. That infeasibility is the privacy.</p>
+<p>Content addressing ships an existence-leak surface in the box: deduplication. Two seekers forging identical configurations get the same GUID. That is a feature for persistence and an existence claim for an adversary. The instant a GUID is known to be live, an attacker holding a candidate can guess-and-check. If hash(candidate) equals the live GUID, existence is confirmed and reconstruction is complete.</p>
+<p>A live address is an existence claim about its content. Across a distributed substrate, each system that resolves the address corroborates the claim and narrows the candidate space.</p>
+<p>The address does not leak the content. The liveness of the address leaks the existence of the content, and existence is what bounds the search.</p>
+<h3>3.6 The shape of the curve</h3>
+<p>Let D(X) be reconstruction difficulty, gating the inference-axis ceiling.</p>
+<p>Before any disclosure, D(X) sits at its structural maximum and the existence of X is undetermined from outside. The first disclosure establishes existence and replaces an open upper bound with a finite one. That is the steep drop. Every further system that corroborates the claim can only hold or lower the bound, never raise it, so D(X) is monotone non-increasing in exposure count and Φ_inference falls with it.</p>
+<p>The returns diminish because existence is binary and is spent once. The first system that learns X exists does the structural damage. The tenth only tightens an estimate. The curve is convex, steep then shallow, and it has no recovery branch.</p>
+<p><em>(Conjectural, ~55%. The monotonicity is clean. The convex profile needs a fixed corroboration model to pin down.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>4. Synthesis: limitative theorems across the three axes</h2>
+<p>The two readings combine into a single assignment across the multiplicative product Φ_v5 = Φ_agent · Φ_data · Φ_inference.</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Limitative twin</th>
+<th>Privacy primitive</th>
+<th>Mechanism</th>
+<th>label</th>
+<th>confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Φ_agent(Σ)</td>
+<td>Gödel, first theorem</td>
+<td>zero-memory (Selene)</td>
+<td>witness destroyed; true yet underivable from within</td>
+<td>Conjectural</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td>Φ_inference(Γ)</td>
+<td>Tarski undefinability</td>
+<td>existence-leak</td>
+<td>feasibility-truth escapes containment across systems</td>
+<td>Conjectural</td>
+<td>~70%</td>
+</tr>
+<tr>
+<td>Φ_data(Δ)</td>
+<td>open</td>
+<td>none assigned</td>
+<td>fails by degree (provider count) rather than undecidability?</td>
+<td>Anticipated</td>
+<td>open</td>
+</tr>
+</tbody></table>
+<p>The pairing is clean on two axes and open on the third. Gödel sits behind the agent axis because burning the witness is a structural act of separation. Tarski sits behind the inference axis because the leak is a containment failure across systems. Φ_data has no limitative twin yet, and may not need one: provider fragmentation Φ_data = 1 − 1/|providers| fails smoothly, by degree, not by an impossibility result.</p>
+<p>If that asymmetry holds, the three-axis product rests on two limitative theorems and one degree-of-freedom, not three theorems. That is a structural claim about the model worth settling.</p>
+<hr>
+</div>
+<div class="md"><h2>5. Honest limits</h2>
+<p>Gödel and Tarski live in syntactic logic over recursively axiomatised arithmetic. The model&#39;s bounds live in information theory and computation: entropy budgets, ZK soundness, provider counts. Every join in this note is structural framing, not a theorem-to-theorem reduction. <em>(~80% as framing, ~50% as reduction.)</em></p>
+<p>To make the ceiling a genuine instance of the second theorem, one would need a system in which reconstruction is literally a provability question, then show R &lt; 1 falls out of incompleteness rather than merely resembling it. That bridge is unbuilt.</p>
+<p>The existence-leak conjecture itself is ~60% and not yet formally derived. The Tarski axis-assignment rides on top of it and cannot exceed its base confidence.</p>
+<p>&quot;Diminishing returns&quot; is convex-decreasing under a single-corroboration model. Against adversaries who gain super-additively from correlated systems, marginal cost could rise before it falls. That is a different curve, worth modelling separately.</p>
+<p>The content-addressing concretisation assumes a guessable candidate space. For high-entropy witnesses the existence claim still leaks the upper bound, but the search may remain infeasible. The leak is in the bound, not always in the recovery.</p>
+<p>The arithmetisation correspondence (Gödel numbering ↔ Z/(2⁶)Z) is the weakest link in the whole structure and should be treated as intuition, not analogy load-bearing for any downstream claim.</p>
+<hr>
+</div>
+<div class="md"><h2>6. Open questions for the register</h2>
+<ol>
+<li><p><strong>Axis-assignment register entries.</strong> The Tarski ↔ Φ_inference and Gödel ↔ Φ_agent correspondences await formal conjecture labels. Assignment deferred to the register owner; these are presented as proposed correspondences, not minted entries.</p>
+</li>
+<li><p><strong>The Φ_data question.</strong> Does the data axis have its own incompleteness shadow, or is it the one axis that fails by degree rather than undecidability? This decides whether Φ_v5 stands on three limitative theorems or two.</p>
+</li>
+<li><p><strong>Tarski versus Gödel-1 for existence-leak, residual.</strong> The mechanism carries a Gödelian seed (existence as positive provability) even though the load-bearing consequence is Tarskian. Is the seed worth a separate sub-conjecture, or is it absorbed by the Tarski assignment?</p>
+</li>
+<li><p><strong>Register collision.</strong> <del>The cityofmages C38–C61 range and the main PVM thread ~C40 (existence-leak) collide. This note uses ~C40 for existence-leak by inheritance and does not resolve the collision.</del> <strong>Erratum (2026-06-28, register-aligned):</strong> the authoritative register settled this at Run 0 / Gate G1. C40 is occupied by Zcash dual-ledger (spec-resident, act-referenced); existence-leak is <strong>C81</strong>. This note now cites C81 throughout. The C51–C55 no-reuse rule stands. See <code>research/CONJECTURE_REGISTER_V6.md</code> and <code>plans/V6_LIMITATIVE_THEOREMS_PATCH_2026-06-28.md</code>.</p>
+</li>
+<li><p><strong>Reduction target.</strong> Which formal system, if any, makes R &lt; 1 a theorem of incompleteness rather than a structural echo of it? Identifying that system is the precondition for promoting any join above from framing to reduction.</p>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p>the gap you cannot close is the value you can. existence is the one secret you cannot take back. the first disclosure is the deep cut; the rest only tighten the knot.</p>
+</blockquote>
+<p>architecture over policy, always.</p>
+<p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a></p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>🙂</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 note-limitative-theorems-and-the-privacy-is-value-model</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-limitative-theorems-and-the-privacy-is-value-model.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

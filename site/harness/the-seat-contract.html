@@ -1,0 +1,198 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Seat Contract · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Seat Contract</span></div>
+  <article><div class="md"><h1>📋 The Seat Contract</h1>
+</div>
+<div class="md"><p>The engine (<code>engine/dual_agent_loop.mjs</code>) is target-agnostic. A concrete<br>harness is a <strong>config object</strong> that fills the seats for one domain. You<br>should never need to touch the engine; you write a config, bundle it with<br><code>tools/bundle.mjs</code>, and run it.</p>
+</div>
+<div class="md"><h2>The seven seats</h2>
+<table>
+<thead>
+<tr>
+<th>seat id</th>
+<th>holder</th>
+<th>glyph</th>
+<th>algebra</th>
+<th>phase</th>
+<th>permitted writes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>measure</code></td>
+<td>the assessor</td>
+<td>🧙💰</td>
+<td>—</td>
+<td>Measure</td>
+<td>nothing (numbers are returned, not written)</td>
+</tr>
+<tr>
+<td><code>propose</code></td>
+<td><strong>soulbae</strong></td>
+<td>🧙</td>
+<td><code>bnot</code></td>
+<td>Propose</td>
+<td>nothing (plans only, never implements)</td>
+</tr>
+<tr>
+<td><code>hold-apart</code></td>
+<td><strong>the Gap</strong></td>
+<td>⿻</td>
+<td><code>xor</code></td>
+<td>Hold-apart</td>
+<td><code>runs/&lt;id&gt;/p&lt;i&gt;-*/gap.json</code></td>
+</tr>
+<tr>
+<td><code>assay</code></td>
+<td><strong>soulbis</strong></td>
+<td>⚔️</td>
+<td><code>neg</code></td>
+<td>Assay</td>
+<td><code>runs/&lt;id&gt;/p&lt;i&gt;-*/</code> scratch + <code>verdict.json</code></td>
+</tr>
+<tr>
+<td><code>critic</code></td>
+<td>the critic</td>
+<td>🗡️</td>
+<td>—</td>
+<td>Critic</td>
+<td>nothing (classifications are returned)</td>
+</tr>
+<tr>
+<td><code>chronicle</code></td>
+<td>the chronicler</td>
+<td>📚</td>
+<td>—</td>
+<td>Chronicle</td>
+<td><code>runs/&lt;id&gt;/CHRONICLE_DRAFT.md</code></td>
+</tr>
+<tr>
+<td><code>keystone</code></td>
+<td><strong>soulbae ⊥ soulbis</strong></td>
+<td>🧙⚔️</td>
+<td><code>succ</code></td>
+<td>between rounds, main session</td>
+<td><code>frontier.json</code> · <code>claims_register.md</code> · <code>manifest.yaml</code> · fold into the artifact</td>
+</tr>
+</tbody></table>
+<p>The three algebra seats are the core: soulbae proposes (<code>bnot</code>, complement —<br>reduce, reshape), the Gap separates (<code>xor</code>, the held-apart derivation),<br>soulbis proves (<code>neg</code>, negation — the verdict that does not flatter). Their<br>composition is the successor: <code>neg(bnot(x)) = succ(x)</code>. The keystone is not a<br>third agent — it is the pair itself, operating in the main session where the<br>ledgers live, with the door (G4) always the First Person&#39;s.</p>
+</div>
+<div class="md"><h2>The config shape</h2>
+<pre><code class="language-js">export default {
+  name: &#39;my-harness&#39;,
+
+  // objective — the first three required; the fourth is advised and will
+  // likely become required
+  objective: {
+    metric: &#39;what frontier.json tracks, lower is better (e.g. &quot;words&quot;)&#39;,
+    gate: &#39;the held-out check that must fully pass — T5: zero collapses&#39;,
+    hardConstraint: &#39;validity no score can override — GR-3&#39;,
+    canary: &#39;an artifact that passes `gate` BY CONSTRUCTION, and why&#39;,
+  },
+
+  // trust literals — conform.mjs checks these
+  door: &#39;first-person&#39;,                       // T6, exact literal
+  heldApartRule: &#39;REQUIRED. Injected verbatim into every propose prompt. &#39; +
+    &#39;State that the proposer never sees, chooses, or influences the &#39; +
+    &#39;held-out witnesses, and that witnesses derive from the proposal &#39; +
+    &#39;artifact by hashing.&#39;,                   // T2 / GR-4
+  keystoneOnlyWrites: [&#39;frontier.json&#39;, &#39;claims_register.md&#39;, &#39;manifest.yaml&#39;],
+
+  // finders — soulbae&#39;s parallel lenses, &gt;= 2, blind to each other
+  finders: [
+    { lens: &#39;lens-a&#39;, hint: &#39;what this lens looks for&#39; },
+    { lens: &#39;lens-b&#39;, hint: &#39;a genuinely different angle&#39; },
+  ],
+
+  // prompt builders — strings; the engine prepends the boot preamble
+  prompts: {
+    measure:   (ctx) =&gt; &#39;...&#39;,
+    propose:   (finder, measure, ctx) =&gt; &#39;...&#39;,
+    holdApart: (proposal, i, ctx) =&gt; &#39;...&#39;,
+    assay:     (proposal, gap, i, ctx) =&gt; &#39;...&#39;,
+    critic:    (proposals, verdicts, ctx) =&gt; &#39;...&#39;,
+    chronicle: (round, ctx) =&gt; &#39;...&#39;,
+  },
+
+  // JSON Schemas forcing structured seat output — all five required
+  schemas: { measure, proposal, gap, verdict, critic },
+
+  // stopping
+  stop: { dryRounds: 2, maxRounds: 5 },
+
+  // predicates
+  isValidated:  (v, measure) =&gt; v.status === &#39;VALIDATED&#39;,  // must already
+      // conjoin gate-pass AND metric win inside the assay verdict (T5)
+  isStructural: (critic, leverId) =&gt;
+      critic.classifications?.some(c =&gt; c.leverId === leverId &amp;&amp; c.class === &#39;structural&#39;),
+
+  // optional: extra numeric checks conform.mjs runs against frontier.json
+  conformChecks: [(frontier) =&gt; /* return array of error strings */ []],
+}
+</code></pre>
+<p><code>ctx</code> is <code>{ root, repo, runId, runDir, config }</code> — paths already normalized.<br><code>repo</code> is the instance directory (frontier, artifact, runs); <code>root</code> is the<br>skeleton clone holding <code>GROUND_RULES.md</code>, <code>TRUSTS.md</code>, and <code>seats/</code>, which<br>every seat boots from (T3). Pass <code>root</code> in the run args whenever the instance<br>lives outside the skeleton and does not carry its own copies of those<br>documents — it defaults to <code>repo</code>.</p>
+</div>
+<div class="md"><h2>Recommended schema fields</h2>
+<p>Instantiate these for your domain; the shapes below are what survived the<br>source harnesses.</p>
+<ul>
+<li><strong>proposal</strong>: the schema validates one FINDER&#39;s return, and the engine<br>expects the wrapper <code>{ proposals: Proposal[] }</code> (a lens may return more<br>than one lever). Each <code>Proposal</code> is <code>{ leverId, title, lens, rationale, expectedMetric, hardConstraintNote, diffPlan, killedLeverCitations[] }</code> —<br><code>leverId</code> is a short kebab id; <code>diffPlan</code> names real parts of the real<br>artifact; <code>killedLeverCitations</code> proves the proposer read<br><code>notes/KILLED_LEVERS.md</code>.</li>
+<li><strong>gap</strong>: <code>{ seedHex, draw, transcript }</code> — the transcript must let a third<br>party re-derive the seed: the exact canonical serialization (sorted keys,<br>no whitespace), the exact hash command, the exact draw rule.</li>
+<li><strong>verdict</strong>: <code>{ leverId, status: &#39;VALIDATED&#39;|&#39;MIRAGE&#39;|&#39;BLOCKED&#39;, metric, gateResult, evidence, scratchDir }</code> — evidence is run commands plus key<br>output lines. <code>MIRAGE</code> = passed the proposer&#39;s story, failed the full gate;<br>name the failing check. <code>BLOCKED</code> = could not run; name the missing piece.</li>
+<li><strong>critic</strong>: <code>{ classifications: [{leverId, class: &#39;structural&#39;|&#39;probe-limited&#39;|&#39;noise&#39;, why}], nextLead, killedLeverDrafts[] }</code><br>— exactly one <code>nextLead</code>.</li>
+</ul>
+<h3>Optional: <code>mana</code> (advisory, display-only)</h3>
+<p>A config MAY declare <code>mana: [&#39;🌞&#39;, …]</code> (or a single string) — the instance&#39;s<br>declared mana affinity from the workshop taxonomy of its universe. The engine<br>ignores it entirely; the conformance gate does not check it; the workshop<br>console and the artefact mint carry it through as display chips and as<br><code>artefact.json.mana</code>. It is colour, not proof — <em>the mana is what you play<br>with; the VRC is what you prove with</em> — and an instance with no universe<br>simply omits it.</p>
+</div>
+<div class="md"><h2>The canary — and when NOT to build a harness</h2>
+<p><strong>A gate with no artifact known to pass it cannot distinguish a bad candidate<br>from an impossible gate.</strong> Name one, in <code>objective.canary</code>.</p>
+<p>The spar is safe by accident: its 8 questions are drawn <em>from</em> <code>GUIDE.md</code>, so<br>the uncompressed original answers all 8 by construction. The feasible set is<br>provably non-empty, and every <code>MIRAGE</code> is therefore the candidate&#39;s fault.<br>Take the canary away and a total failure becomes ambiguous — which is exactly<br>what happened to the <code>universe-builder</code> instance, where two blind lenses each<br>scored 0/8 against a gate that <em>no</em> candidate could pass, and the critic,<br>having no word for a bad gate, convicted the proposer on sound evidence.<br><code>conform.mjs</code> advises on a missing canary today.</p>
+<p>Before you write any of this, ask whether you need a harness at all:</p>
+<blockquote>
+<p><strong>The Gap earns its cost only where the claim space is too large to check.</strong></p>
+</blockquote>
+<p>shor_mage samples 9,024 witnesses because you cannot run every input. tigzkp<br>samples held-out points because R1CS equivalence cannot be enumerated. There,<br>sampling is a necessity and hashing the proposal is what makes it honest.</p>
+<p>If your claim space is <strong>enumerable</strong>, check all of it. Against an exhaustive<br>check a mirage is impossible: there is nothing to tune to. You want an<br><strong>auditor</strong> — deterministic, total, cheap — not a prover. <code>universe/audit.mjs</code><br>is one, and <code>universe/retired/</code> is the harness it replaced, kept as a worked<br>negative result.</p>
+<p>The complementary test, from Promise Theory: the split is warranted when a<br>single agent would have to promise <strong>two things it cannot independently<br>control</strong>. If one agent can honestly promise the whole job — because anyone<br>may verify it completely, afterward — you do not need the pair.</p>
+</div>
+<div class="md"><h2>Product objectives — the complement pair</h2>
+<p>If your objective is a <strong>product</strong> of two factors (say <code>gates × qubits</code>),<br>give soulbae one finder per factor — Factor-A-minimiser ⊥ Factor-B-minimiser,<br>blind to each other — and put a <strong>cliff-watcher</strong> clause in the assay prompt:<br>score Δ(product), and reject any move that wins one factor at the other&#39;s<br>expense past break-even. The constitutional basis is T5: any zero (or any<br>net-negative trade) collapses the whole. This pattern comes from the<br>shor_mage instance, where the score is <code>avg executed Toffoli × peak qubits</code>.</p>
+<p>When one factor is a <strong>binary gate</strong> (pass/fail), the gate itself is the<br>cliff-watcher: a fail is a zero, and a zero collapses the product. The spar<br>(<code>examples/field-guide/</code>) uses this form.</p>
+</div>
+<div class="md"><h2>The runtime adapter</h2>
+<p>The engine takes <code>rt = { agent, parallel, pipeline, phase, log }</code>:</p>
+<ul>
+<li><code>agent(prompt, opts) -&gt; Promise&lt;any&gt;</code> — run a subagent; with<br><code>opts.schema</code> (JSON Schema) it returns a validated object.</li>
+<li><code>parallel(thunks) -&gt; Promise&lt;any[]&gt;</code> — barrier; failed thunks resolve null.</li>
+<li><code>pipeline(items, ...stages) -&gt; Promise&lt;any[]&gt;</code> — per-item stages, no<br>barrier between stages; stage callbacks receive <code>(prev, item, index)</code>.</li>
+<li><code>phase(title)</code>, <code>log(msg)</code> — progress display.</li>
+</ul>
+<p><code>runHarness</code> returns <code>{ status, rounds, tally, confirmed, best, detail, keystoneTodo }</code>. <strong><code>status</code> is <code>&#39;COMPLETE&#39;</code> or <code>&#39;INCOMPLETE&#39;</code>.</strong> A round that<br>loses a seat to infrastructure — a dead agent, a killed session — is marked<br><code>FAILED</code>, does <strong>not</strong> count as a dry round, and stops the loop with an<br><code>aborted</code> block naming the dead seats. An outage is not an exhausted search,<br>and <code>keystoneTodo</code> says <strong>FOLD NOTHING</strong> when the two are confused. A finder<br>that <em>returns</em> zero proposals is still a dry round: empty is evidence, dead is<br>not. <code>engine/loop.test.mjs</code> pins this.</p>
+<p>Inside the Claude Code <strong>Workflow tool</strong> these five exist as globals and<br><code>import</code> is unavailable — which is why <code>tools/bundle.mjs</code> concatenates the<br>engine and your config into one self-contained <code>.workflow.mjs</code>. Under the<br>Claude Agent SDK or a plain node driver, implement the five functions<br>yourself and call <code>runHarness(config, rt)</code> directly. Configs must therefore<br>be self-contained: no imports.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 the-seat-contract</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-seat-contract.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -3,62 +3,62 @@
   "story": [
     {
       "type": "markdown",
-      "id": "81ba90a9ee9ed65f",
+      "id": "6ce44dc3ffbd0964",
       "text": "# Dual-Agent Harness — Framework Specification v1"
     },
     {
       "type": "markdown",
-      "id": "7068bd423b2c6504",
+      "id": "6d23559265834354",
       "text": "# Dual-Agent Harness — Framework Specification v1\n\n**A framework for building Swordsman ⚔️ ⊥ Mage 🧙 harnesses: interchangeable autoresearch\nloops where a proposer (Mage, reduces) and a prover (Swordsman, validates) are held apart by a\nheld-out gate the proposer cannot tune to. One engine, many purposes, swappable crews — built\nto be given to many ecosystems.**\n\n> **Honest framing, carried into every instance.** A harness produces *validated* improvements to\n> a stated objective; only the held-out gate makes a claim true. The first instance is quantum\n> resource estimation — a durability signal, not an attack.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "f7444f33da86d37e",
+      "id": "0a29b72777621ffa",
       "text": "## 1. The architecture\n\nThe agentprivacy V6 master inscription **is** the architecture, proven on Z/64Z\n(`privacy_value_v6_formal_specification.md`):\n\n```\n(⚔️ ⊥ ⿻ ⊥ 🧙) 😊  =  neg ⊕ bnot → succ            neg(bnot(x)) = succ(x)\n```\n\n- **⚔️ Swordsman = `neg` = the prover.** Signs/commits only what survives the full held-out gate.\n- **🧙 Mage = `bnot` = the proposer.** Conceals/reduces; re-expresses paid work as free operations.\n- **⿻ the Gap = the held-out gate.** The non-collusion precondition `I(Y_S;Y_M|X)=0` made real:\n  the proposer cannot tune to the witnesses the prover will draw.\n- **→ succ = the validated result.** It emerges *only* from the two held apart.\n\nThe ceiling the loop pushes against is `R(t) = (C_S(t) + C_M(t)) / H(X)` — two capacities, two\nagents (C82, *Proven, conditional regime*; non-collusion the precondition, C83). **A proposer that\ngrades itself builds mirages**, so the Gap is the whole point, not an add-on."
     },
     {
       "type": "markdown",
-      "id": "2fe30166fb55e6b4",
+      "id": "3527529330b3b3ff",
       "text": "## 2. The framework directory\n\n`agentprivacy-dual-agent-harness/` (standalone; serves many ecosystems, so it is not owned by any\none of them):\n\n```\ncore/dual_agent_loop.mjs   the generic engine: dualAgentHarness(config, rt). Never edited per harness.\ncore/SEAT_CONTRACT.md      what a harness config provides (the three seats, objective, schemas).\nbindings/personas-and-skills.md   how to seat agentprivacy-skills personas + role-skills.\nharnesses/ecdsafail-pqc/   instance #1 (config + provenance).\nharnesses/_TEMPLATE/       copy to start a new harness.\nSKILL.md · README.md · ECOSYSTEMS.md · LICENSE\n```\n\nA harness is a **config** passed to the engine with a runtime adapter `rt = {agent, parallel,\npipeline, phase, log}`. (The Claude Agent SDK / a node runner import the engine; the Workflow tool,\nwhich has no `import`, runs a self-contained bundle — see `shor_mage/harness/swordsman_mage_pqc.mjs`.)"
     },
     {
       "type": "markdown",
-      "id": "9b301c8613bc388d",
+      "id": "d8634f18d9c820e9",
       "text": "## 3. The seats and the complement pair\n\nThe config seats a **Mage** (proposer persona + reduction skills + finders), a **Swordsman**\n(prover persona + `agentprivacy-horizon-gate` + domain skills), and a **Gap** (the held-out\nmechanism). When the objective is a *product* of factors (cost × size), split the Mage into\n**Factor-A-Min ⊥ Factor-B-Min** finders and let the Swordsman run a **cliff-watcher** on\n`Δ(product)`. See `core/SEAT_CONTRACT.md` and `bindings/personas-and-skills.md`.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "afdca436686a3d8c",
+      "id": "cd8fa66d3b31cc77",
       "text": "## 4. Integration map — how it links into the work\n\nThe framework references each ecosystem; it does not duplicate them (the link-out rule).\n\n### 4.1 agentprivacy-docs (home of the law)\nThis spec lives here, beside `specs/DUAL_TERRITORY_CEREMONY_SPEC_v1.md`. The algebra and the\ndual-agent law are in `privacy_value_v6_formal_specification.md` and `dualprivacy_researchpaper_v6.md`;\nthe conjectures are C82 (moving ceiling), C83 (non-collusion / compositional leakage), C9\n(holographic sufficiency — the precompute lead), C67–C71 (the Horizon District / the first\ninstance's domain). When a surface and the register disagree, the register wins.\n\n### 4.2 agentprivacy-skills (the crew)\nThe catalog of **8 swordsman / 7 mage / 7 balanced** personas + role skills is the source of seat\nassignments. The operational method is the skill `meta/agentprivacy-dual-agent-harness` (the\nplugin-registered **mirror** of the framework's `SKILL.md`); it composes\n`role/agentprivacy-separation-enforcement` (the held-apart law, `det(Σ)≠0`) and\n`meta/agentprivacy-horizon-gate` (the un-tuneable gate). Always-load: `persona/agentprivacy-architect`\n(the harness designer — *\"the system that trusts its agents to behave has already delegated\nsovereignty to hope\"*).\n\n### 4.3 star — the Swordsman's Key + UOR (attestation & addressing)\n**The deepest link: star already runs this algebra.** Its master figure is `(⚔️ ⊥ ⿻ ⊥ 🧙)` with the\nsame `neg`/`bnot` operators, and its pages sync over `BroadcastChannel('agentprivacy-succ')` — the\n*succ*. star content-addresses artifacts by a **κ-label** `sha256:<hex>` (UOR; Law L5: *identity is\ncontent, not location*), derived from canonical JSON (`star/index.html` → `canonicalJSON`,\n`kappaLabel`; `HOLOSPACE.md`). Three integration points:\n\n1. **Result attestation (Swordsman seat → Swordsman's Key).** When the Swordsman validates a result,\n   it stamps the result object's κ-label (`kappaLabel(result)`) and may ed25519-sign the identity\n   block (Phase 3, `CHRONICLE_SWORDSMAN_KEY_2026-05-27.md` §5). A validated harness output becomes a\n   `{identity, trace, witness, kappa}` tuple — a verifiable City Key.\n2. **UOR addressing of configs & outputs.** A harness config and its validated outputs are\n   κ-addressed artifacts (same content ⇒ same κ), provisionable/resumable by κ with no registry\n   (`HOLOSPACE.md` boot model; `.devcontainer/devcontainer.json`).\n3. **Result lineage (the κ-chain).** Each result's `prior` field links the previous κ — a\n   content-addressed chain of validated steps without a registry\n   (`CONCEPT_COMPRESSION_REHYDRATION_DUAL_AGENTS.md` §4).\n\n**Disposition:** the harness adopts the κ-label as the canonical name of a validated result; the\nSwordsman seat is the natural holder of the Swordsman's Key. (star's Swordsman holds *no memory* —\nidentity + geometry + proof only — which is exactly the prover's posture.)\n\n### 4.4 agentprivacy_master — the surface\nThe site presents the framework already: `/model` (V(π,t) + the C-register), `/guide/swordsman` and\n`/guide/mage` (the archetype codices), and `/guide/agentic-deployments` (the Threshold District V59,\nStaff Shop's alexandrite archetype-modal stone). Proposed surface (choose one to start):\n- **(recommended)** a new route **`/guide/dual-agent`** — the prover ⊥ proposer ⊥ gate page, an\n  export codex like `/guide/mage`, linking to `/model` and `/guide/agentic-deployments`\n  (`src/app/guide/dual-agent/page.tsx`, add to `src/lib/nav.ts`).\n- a §on `/model` — how V(π,t) gates in the dual-agent register (C58 Forge(t) ∥ Threshold).\n- a subpage under `/guide/agentic-deployments` — the Threshold as the operational realization.\n\n### 4.5 spellweb — the graph vocabulary\nSchema in `src/types/graph.ts` (NodeType/EdgeType unions); data in `src/data/nodes.ts`,\n`src/data/edges.ts`; visuals in `src/data/theme.ts`. spellweb already carries `con-dualagent`,\n`con-gap`, the `proves` edge, persona/cast/skill nodes, and swordsman/mage `domain`s. Proposed\nadditions (matching the snake_case-verb convention):\n- **NodeType** `harness` (one new type); seats as existing types — `seat-swordsman`/`seat-mage` as\n  `cast`, `seat-gap` as `concept`.\n- **EdgeTypes**: reuse `proves`; add `proposes` (Mage proposes) and `gates` (the held-apart Gap,\n  dashed amber — separation). Node ids `harness-*`, `seat-*` per the `shop-*`/`cast-*` convention.\n- One instance: `harness-ecdsafail-pqc` linked `built_on` the shor_mage kit + `proves`→a result node.\n\n### 4.6 shor_mage — instance #1 (built)\nThe PQC kit holds the self-contained runnable bundle (`harness/swordsman_mage_pqc.mjs`) and the\ntoolchain the Gap uses (the GPU island toolkit; trailmix circuits). It stays PQC-only and links out\nto this framework for the generic method.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "9a29b1c3f064cb99",
+      "id": "b9d85e643ea7cc88",
       "text": "## 5. Instance roadmap\n\n| # | Instance | Objective | The Gap | Status |\n|---|---|---|---|---|\n| 1 | `ecdsafail-pqc` | cheapest reversible secp256k1 point-add (Toffoli × qubits) | Fiat-Shamir 9,024 | ✅ built |\n| 2 | **`myterms`** | best `SD-BASE` agreement + spell constellation per page (PVM score) | unlock lattice + IEEE-7012 registry + constellation-hash witness | ✅ built (config + extension-runtime adapter + mock pass, §6); real-bus wiring pending |\n| 3+ | future | ZKP-audit, gas/cost, … | a held-out gate the proposer can't game | ⬜ |\n\nThe abstraction only becomes honest at instance #2 — myterms is where the engine's seams get\npressure-tested, because it already has a real dual-agent split to seat against."
     },
     {
       "type": "markdown",
-      "id": "cb93717e00aca249",
+      "id": "ffd22037062171e9",
       "text": "## 6. Scope — the myterms instance (the next build)\n\n**myterms** implements IEEE 7012-2025 (machine-readable personal privacy terms) as the agreement\nlayer of the dual-agent architecture, with two browser extensions that are **already** a\nproposer/prover split:\n\n- **🧙 Mage = `mymage/`** (proposer/intelligence): deep-scans the page, rates six privacy\n  dimensions, proposes a candidate **blade** (hexagram over `Z/(2⁶)Z`) + a spell constellation, and\n  sends `INTELLIGENCE` / `CONSTELLATION_WAVE` to the Swordsman (`mymage/src/background/index.ts`).\n- **⚔️ Swordsman = `myswordsman/`** (prover/enforcer): owns the canvas (the Mage cannot render —\n  a hard held-apart boundary), records bilateral IEEE-7012 agreements, and gates forging with\n  `checkCanForge()` (`myswordsman/src/content/blade-forge.ts`; `src/background/index.ts`). Its\n  `src/lib/uor.ts` already verifies `neg(bnot(x)) = succ(x)` (`verifyCriticalIdentity`).\n- Their handshake/sync is `myswordsman/src/content/ceremony-channel.ts` (`MAGE_PRESENT` /\n  `SWORD_PRESENT` / `CONVERGENCE_READY`).\n\n**What's missing to make it a harness:** the loop is single-round and heuristic, not a held-apart\nautoresearch loop. The instance wires:\n- **Objective:** maximise the PVM score `Φ = Φ_agent(Σ)·Φ_data(Δ)·Φ_inference(Γ)` of the chosen\n  agreement + constellation, subject to user intent / low friction. (A product objective ⇒ a\n  complement pair of Mage finders + a cliff-watcher.)\n- **The Gap (held-out, un-tuneable by the Mage):** (a) the **unlock lattice** — the Mage proposes a\n  blade, the Swordsman checks earned unlock (layer/forgings/domains); the Mage cannot lower it.\n  (b) the **IEEE-7012 registry** — agreement IDs come from Customer Commons, the Mage cannot mint\n  them. (c) the **constellation-hash witness chain** — cast spells must hash to the recorded\n  hexagram (double-spend prevention). (d) **bilateral immutable recording** — auditor-disputable.\n- **Seats:** Mage ← `agentprivacy-cipher`/`agentprivacy-weaver` + selective-disclosure skills;\n  Swordsman ← `agentprivacy-sentinel`/`agentprivacy-gatekeeper` + `horizon-gate` +\n  `separation-enforcement`; design ← `agentprivacy-architect`.\n- **Integration points:** (1) `INTELLIGENCE` → blade proposal (threshold-gated); (2)\n  `CONSTELLATION_WAVE` → witness-hash verification; (3) convergence → bilateral chronicle.\n- **Result attestation:** validated agreements κ-addressed via the star Swordsman's Key (§4.3) —\n  the bilateral chronicle entry as a κ-named, optionally signed City Key.\n\nA `harnesses/myterms/` config will be added to the framework; the runnable form attaches to the\nexisting extension message bus rather than a Workflow bundle.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "41864cdbaf1e56cf",
+      "id": "c965cf4e1f236b58",
       "text": "## 7. Coherence rules\n\n1. **The engine is generic; never special-case a target in `core/`.** Targets live in `harnesses/`.\n2. **Link out, don't duplicate.** V6 stays in agentprivacy-docs; personas in agentprivacy-skills;\n   attestation in star; the PQC toolchain in shor_mage. This framework references them.\n3. **Every harness declares its Gap.** A config without a real `heldApartRule` is rejected by review.\n4. **Honest framing travels.** A harness produces validated improvements; only the Gate makes a\n   claim true.\n\n*Provenance: the framework `agentprivacy-dual-agent-harness/`; the V6 algebra\n(`privacy_value_v6_formal_specification.md`); the first instance (`shor_mage/`); the attestation\nsubstrate (`star/`); the next instance's existing agentic work (`myterms/`, `myswordsman/`,\n`mymage/`).*"
     },
     {
       "type": "markdown",
-      "id": "22a893d427aadd4a",
+      "id": "563c72773dd50389",
       "text": "# Assets"
     },
     {
-      "id": "d0a1e8d1da04b48e",
+      "id": "bb9110fa05f27ed5",
       "type": "assets",
       "text": "spec-dual-agent-harness-framework-specification-v1"
     },
     {
       "type": "markdown",
-      "id": "147079fc8275a74d",
+      "id": "67e0ede42e9cc70d",
       "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
     }
   ],
@@ -70,67 +70,67 @@
         "story": [
           {
             "type": "markdown",
-            "id": "81ba90a9ee9ed65f",
+            "id": "6ce44dc3ffbd0964",
             "text": "# Dual-Agent Harness — Framework Specification v1"
           },
           {
             "type": "markdown",
-            "id": "7068bd423b2c6504",
+            "id": "6d23559265834354",
             "text": "# Dual-Agent Harness — Framework Specification v1\n\n**A framework for building Swordsman ⚔️ ⊥ Mage 🧙 harnesses: interchangeable autoresearch\nloops where a proposer (Mage, reduces) and a prover (Swordsman, validates) are held apart by a\nheld-out gate the proposer cannot tune to. One engine, many purposes, swappable crews — built\nto be given to many ecosystems.**\n\n> **Honest framing, carried into every instance.** A harness produces *validated* improvements to\n> a stated objective; only the held-out gate makes a claim true. The first instance is quantum\n> resource estimation — a durability signal, not an attack.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "f7444f33da86d37e",
+            "id": "0a29b72777621ffa",
             "text": "## 1. The architecture\n\nThe agentprivacy V6 master inscription **is** the architecture, proven on Z/64Z\n(`privacy_value_v6_formal_specification.md`):\n\n```\n(⚔️ ⊥ ⿻ ⊥ 🧙) 😊  =  neg ⊕ bnot → succ            neg(bnot(x)) = succ(x)\n```\n\n- **⚔️ Swordsman = `neg` = the prover.** Signs/commits only what survives the full held-out gate.\n- **🧙 Mage = `bnot` = the proposer.** Conceals/reduces; re-expresses paid work as free operations.\n- **⿻ the Gap = the held-out gate.** The non-collusion precondition `I(Y_S;Y_M|X)=0` made real:\n  the proposer cannot tune to the witnesses the prover will draw.\n- **→ succ = the validated result.** It emerges *only* from the two held apart.\n\nThe ceiling the loop pushes against is `R(t) = (C_S(t) + C_M(t)) / H(X)` — two capacities, two\nagents (C82, *Proven, conditional regime*; non-collusion the precondition, C83). **A proposer that\ngrades itself builds mirages**, so the Gap is the whole point, not an add-on."
           },
           {
             "type": "markdown",
-            "id": "2fe30166fb55e6b4",
+            "id": "3527529330b3b3ff",
             "text": "## 2. The framework directory\n\n`agentprivacy-dual-agent-harness/` (standalone; serves many ecosystems, so it is not owned by any\none of them):\n\n```\ncore/dual_agent_loop.mjs   the generic engine: dualAgentHarness(config, rt). Never edited per harness.\ncore/SEAT_CONTRACT.md      what a harness config provides (the three seats, objective, schemas).\nbindings/personas-and-skills.md   how to seat agentprivacy-skills personas + role-skills.\nharnesses/ecdsafail-pqc/   instance #1 (config + provenance).\nharnesses/_TEMPLATE/       copy to start a new harness.\nSKILL.md · README.md · ECOSYSTEMS.md · LICENSE\n```\n\nA harness is a **config** passed to the engine with a runtime adapter `rt = {agent, parallel,\npipeline, phase, log}`. (The Claude Agent SDK / a node runner import the engine; the Workflow tool,\nwhich has no `import`, runs a self-contained bundle — see `shor_mage/harness/swordsman_mage_pqc.mjs`.)"
           },
           {
             "type": "markdown",
-            "id": "9b301c8613bc388d",
+            "id": "d8634f18d9c820e9",
             "text": "## 3. The seats and the complement pair\n\nThe config seats a **Mage** (proposer persona + reduction skills + finders), a **Swordsman**\n(prover persona + `agentprivacy-horizon-gate` + domain skills), and a **Gap** (the held-out\nmechanism). When the objective is a *product* of factors (cost × size), split the Mage into\n**Factor-A-Min ⊥ Factor-B-Min** finders and let the Swordsman run a **cliff-watcher** on\n`Δ(product)`. See `core/SEAT_CONTRACT.md` and `bindings/personas-and-skills.md`.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "afdca436686a3d8c",
+            "id": "cd8fa66d3b31cc77",
             "text": "## 4. Integration map — how it links into the work\n\nThe framework references each ecosystem; it does not duplicate them (the link-out rule).\n\n### 4.1 agentprivacy-docs (home of the law)\nThis spec lives here, beside `specs/DUAL_TERRITORY_CEREMONY_SPEC_v1.md`. The algebra and the\ndual-agent law are in `privacy_value_v6_formal_specification.md` and `dualprivacy_researchpaper_v6.md`;\nthe conjectures are C82 (moving ceiling), C83 (non-collusion / compositional leakage), C9\n(holographic sufficiency — the precompute lead), C67–C71 (the Horizon District / the first\ninstance's domain). When a surface and the register disagree, the register wins.\n\n### 4.2 agentprivacy-skills (the crew)\nThe catalog of **8 swordsman / 7 mage / 7 balanced** personas + role skills is the source of seat\nassignments. The operational method is the skill `meta/agentprivacy-dual-agent-harness` (the\nplugin-registered **mirror** of the framework's `SKILL.md`); it composes\n`role/agentprivacy-separation-enforcement` (the held-apart law, `det(Σ)≠0`) and\n`meta/agentprivacy-horizon-gate` (the un-tuneable gate). Always-load: `persona/agentprivacy-architect`\n(the harness designer — *\"the system that trusts its agents to behave has already delegated\nsovereignty to hope\"*).\n\n### 4.3 star — the Swordsman's Key + UOR (attestation & addressing)\n**The deepest link: star already runs this algebra.** Its master figure is `(⚔️ ⊥ ⿻ ⊥ 🧙)` with the\nsame `neg`/`bnot` operators, and its pages sync over `BroadcastChannel('agentprivacy-succ')` — the\n*succ*. star content-addresses artifacts by a **κ-label** `sha256:<hex>` (UOR; Law L5: *identity is\ncontent, not location*), derived from canonical JSON (`star/index.html` → `canonicalJSON`,\n`kappaLabel`; `HOLOSPACE.md`). Three integration points:\n\n1. **Result attestation (Swordsman seat → Swordsman's Key).** When the Swordsman validates a result,\n   it stamps the result object's κ-label (`kappaLabel(result)`) and may ed25519-sign the identity\n   block (Phase 3, `CHRONICLE_SWORDSMAN_KEY_2026-05-27.md` §5). A validated harness output becomes a\n   `{identity, trace, witness, kappa}` tuple — a verifiable City Key.\n2. **UOR addressing of configs & outputs.** A harness config and its validated outputs are\n   κ-addressed artifacts (same content ⇒ same κ), provisionable/resumable by κ with no registry\n   (`HOLOSPACE.md` boot model; `.devcontainer/devcontainer.json`).\n3. **Result lineage (the κ-chain).** Each result's `prior` field links the previous κ — a\n   content-addressed chain of validated steps without a registry\n   (`CONCEPT_COMPRESSION_REHYDRATION_DUAL_AGENTS.md` §4).\n\n**Disposition:** the harness adopts the κ-label as the canonical name of a validated result; the\nSwordsman seat is the natural holder of the Swordsman's Key. (star's Swordsman holds *no memory* —\nidentity + geometry + proof only — which is exactly the prover's posture.)\n\n### 4.4 agentprivacy_master — the surface\nThe site presents the framework already: `/model` (V(π,t) + the C-register), `/guide/swordsman` and\n`/guide/mage` (the archetype codices), and `/guide/agentic-deployments` (the Threshold District V59,\nStaff Shop's alexandrite archetype-modal stone). Proposed surface (choose one to start):\n- **(recommended)** a new route **`/guide/dual-agent`** — the prover ⊥ proposer ⊥ gate page, an\n  export codex like `/guide/mage`, linking to `/model` and `/guide/agentic-deployments`\n  (`src/app/guide/dual-agent/page.tsx`, add to `src/lib/nav.ts`).\n- a §on `/model` — how V(π,t) gates in the dual-agent register (C58 Forge(t) ∥ Threshold).\n- a subpage under `/guide/agentic-deployments` — the Threshold as the operational realization.\n\n### 4.5 spellweb — the graph vocabulary\nSchema in `src/types/graph.ts` (NodeType/EdgeType unions); data in `src/data/nodes.ts`,\n`src/data/edges.ts`; visuals in `src/data/theme.ts`. spellweb already carries `con-dualagent`,\n`con-gap`, the `proves` edge, persona/cast/skill nodes, and swordsman/mage `domain`s. Proposed\nadditions (matching the snake_case-verb convention):\n- **NodeType** `harness` (one new type); seats as existing types — `seat-swordsman`/`seat-mage` as\n  `cast`, `seat-gap` as `concept`.\n- **EdgeTypes**: reuse `proves`; add `proposes` (Mage proposes) and `gates` (the held-apart Gap,\n  dashed amber — separation). Node ids `harness-*`, `seat-*` per the `shop-*`/`cast-*` convention.\n- One instance: `harness-ecdsafail-pqc` linked `built_on` the shor_mage kit + `proves`→a result node.\n\n### 4.6 shor_mage — instance #1 (built)\nThe PQC kit holds the self-contained runnable bundle (`harness/swordsman_mage_pqc.mjs`) and the\ntoolchain the Gap uses (the GPU island toolkit; trailmix circuits). It stays PQC-only and links out\nto this framework for the generic method.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "9a29b1c3f064cb99",
+            "id": "b9d85e643ea7cc88",
             "text": "## 5. Instance roadmap\n\n| # | Instance | Objective | The Gap | Status |\n|---|---|---|---|---|\n| 1 | `ecdsafail-pqc` | cheapest reversible secp256k1 point-add (Toffoli × qubits) | Fiat-Shamir 9,024 | ✅ built |\n| 2 | **`myterms`** | best `SD-BASE` agreement + spell constellation per page (PVM score) | unlock lattice + IEEE-7012 registry + constellation-hash witness | ✅ built (config + extension-runtime adapter + mock pass, §6); real-bus wiring pending |\n| 3+ | future | ZKP-audit, gas/cost, … | a held-out gate the proposer can't game | ⬜ |\n\nThe abstraction only becomes honest at instance #2 — myterms is where the engine's seams get\npressure-tested, because it already has a real dual-agent split to seat against."
           },
           {
             "type": "markdown",
-            "id": "cb93717e00aca249",
+            "id": "ffd22037062171e9",
             "text": "## 6. Scope — the myterms instance (the next build)\n\n**myterms** implements IEEE 7012-2025 (machine-readable personal privacy terms) as the agreement\nlayer of the dual-agent architecture, with two browser extensions that are **already** a\nproposer/prover split:\n\n- **🧙 Mage = `mymage/`** (proposer/intelligence): deep-scans the page, rates six privacy\n  dimensions, proposes a candidate **blade** (hexagram over `Z/(2⁶)Z`) + a spell constellation, and\n  sends `INTELLIGENCE` / `CONSTELLATION_WAVE` to the Swordsman (`mymage/src/background/index.ts`).\n- **⚔️ Swordsman = `myswordsman/`** (prover/enforcer): owns the canvas (the Mage cannot render —\n  a hard held-apart boundary), records bilateral IEEE-7012 agreements, and gates forging with\n  `checkCanForge()` (`myswordsman/src/content/blade-forge.ts`; `src/background/index.ts`). Its\n  `src/lib/uor.ts` already verifies `neg(bnot(x)) = succ(x)` (`verifyCriticalIdentity`).\n- Their handshake/sync is `myswordsman/src/content/ceremony-channel.ts` (`MAGE_PRESENT` /\n  `SWORD_PRESENT` / `CONVERGENCE_READY`).\n\n**What's missing to make it a harness:** the loop is single-round and heuristic, not a held-apart\nautoresearch loop. The instance wires:\n- **Objective:** maximise the PVM score `Φ = Φ_agent(Σ)·Φ_data(Δ)·Φ_inference(Γ)` of the chosen\n  agreement + constellation, subject to user intent / low friction. (A product objective ⇒ a\n  complement pair of Mage finders + a cliff-watcher.)\n- **The Gap (held-out, un-tuneable by the Mage):** (a) the **unlock lattice** — the Mage proposes a\n  blade, the Swordsman checks earned unlock (layer/forgings/domains); the Mage cannot lower it.\n  (b) the **IEEE-7012 registry** — agreement IDs come from Customer Commons, the Mage cannot mint\n  them. (c) the **constellation-hash witness chain** — cast spells must hash to the recorded\n  hexagram (double-spend prevention). (d) **bilateral immutable recording** — auditor-disputable.\n- **Seats:** Mage ← `agentprivacy-cipher`/`agentprivacy-weaver` + selective-disclosure skills;\n  Swordsman ← `agentprivacy-sentinel`/`agentprivacy-gatekeeper` + `horizon-gate` +\n  `separation-enforcement`; design ← `agentprivacy-architect`.\n- **Integration points:** (1) `INTELLIGENCE` → blade proposal (threshold-gated); (2)\n  `CONSTELLATION_WAVE` → witness-hash verification; (3) convergence → bilateral chronicle.\n- **Result attestation:** validated agreements κ-addressed via the star Swordsman's Key (§4.3) —\n  the bilateral chronicle entry as a κ-named, optionally signed City Key.\n\nA `harnesses/myterms/` config will be added to the framework; the runnable form attaches to the\nexisting extension message bus rather than a Workflow bundle.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "41864cdbaf1e56cf",
+            "id": "c965cf4e1f236b58",
             "text": "## 7. Coherence rules\n\n1. **The engine is generic; never special-case a target in `core/`.** Targets live in `harnesses/`.\n2. **Link out, don't duplicate.** V6 stays in agentprivacy-docs; personas in agentprivacy-skills;\n   attestation in star; the PQC toolchain in shor_mage. This framework references them.\n3. **Every harness declares its Gap.** A config without a real `heldApartRule` is rejected by review.\n4. **Honest framing travels.** A harness produces validated improvements; only the Gate makes a\n   claim true.\n\n*Provenance: the framework `agentprivacy-dual-agent-harness/`; the V6 algebra\n(`privacy_value_v6_formal_specification.md`); the first instance (`shor_mage/`); the attestation\nsubstrate (`star/`); the next instance's existing agentic work (`myterms/`, `myswordsman/`,\n`mymage/`).*"
           },
           {
             "type": "markdown",
-            "id": "22a893d427aadd4a",
+            "id": "563c72773dd50389",
             "text": "# Assets"
           },
           {
-            "id": "d0a1e8d1da04b48e",
+            "id": "bb9110fa05f27ed5",
             "type": "assets",
             "text": "spec-dual-agent-harness-framework-specification-v1"
           },
           {
             "type": "markdown",
-            "id": "147079fc8275a74d",
+            "id": "67e0ede42e9cc70d",
             "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
           }
         ]
       },
-      "date": 1782602088927
+      "date": 1783100388144
     }
   ]
 }

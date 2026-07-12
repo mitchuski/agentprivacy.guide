@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Harness Path — The Universe Builder Retired · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>Harness Path — The Universe Builder Retired</span></div>
+  <article><div class="md"><h1>🪦 Harness Path — The Universe Builder Retired</h1>
+</div>
+<div class="md"><p><em>9 · universe-builder — where the harness was applied and should not have been</em> — one of the ten embodiments catalogued in <a class="wlink" href="the-harness-paths.html">The Harness Paths</a> (group: The negative result). None of its code lives in the harness repo; this is the map entry, so you can see what a filled config looks like at this weight.</p>
+</div>
+<div class="md"><p><em>(in this repo, at <code>universe/retired/</code>. Kept on purpose.)</em></p>
+</div>
+<div class="md"><p>The most useful entry in this catalogue, because it is the only one that<br>failed. Its target was a <strong>map of a corpus</strong>, and it was given the full<br>apparatus: two blind lenses, a Fiat-Shamir Gap, a held-out gate, an advancing<br>frontier. Two rounds, roughly <strong>1.4 million subagent tokens, and not one fact<br>learned about the map.</strong></p>
+</div>
+<div class="md"><ul>
+<li><strong>u1</strong> died of infrastructure — and paid for itself by exposing that the<br>engine counted dead agents as <em>dry rounds</em>, reporting an outage as an<br>exhausted search. Fixed, and pinned by <code>engine/loop.test.mjs</code>.</li>
+<li><strong>u2</strong> ran perfectly: 9/9 agents, seeds re-derived, verdicts on disk. Both<br>candidates <strong>beat the metric</strong>, and both scored <strong>0/8</strong> — because the Gap was<br>drawing arbitrary facts (a licence string, a JSON <code>version</code> field) from<br>612 KB of sources that the 7 KB map was never responsible for carrying. The<br>objective demanded compression; the gate demanded a transcript. <strong>The<br>feasible set was empty.</strong> The verdicts measured the config, not the artifact.</li>
+</ul>
+</div>
+<div class="md"><p>Then a nine-line auditor found, on its first run, in milliseconds, for zero<br>tokens, the very defect u2&#39;s <code>by-container</code> lens had found and been unable to<br>validate: the map described five corpus layers where the frontier enumerates<br>six.</p>
+</div>
+<div class="md"><p><strong>Why it failed.</strong> The Gap earns its cost only where the claim space is too<br>large to check. The map makes ~100 <strong>enumerable</strong> claims. Check them all, and a<br>mirage becomes impossible — there is nothing to tune to. What that domain<br>wanted was an <strong>integrity gate, not an adversary</strong>, exactly as this catalogue<br>already classifies the substrate&#39;s audit triad and the publishing loop. The<br>lesson was on the page the whole time: <em>the harness transfers to any pipeline<br>where generated artifacts must survive <strong>adversarial</strong> scrutiny.</em></p>
+</div>
+<div class="md"><p><strong>What it gave the core.</strong> The <code>mis-gated</code> critic classification — the only one<br>that accuses the config rather than the proposer, because <code>structural</code>,<br><code>probe-limited</code>, and <code>noise</code> leave a critic nowhere else to look. And<br><code>objective.canary</code>: name an artifact that passes your gate <strong>by construction</strong>,<br>or you will not be able to tell a bad candidate from an impossible gate.</p>
+</div>
+<div class="md"><p><em>A harness is for adversaries. An auditor is for facts. Knowing which you have<br>is the first design decision, and the cheapest one to get wrong.</em></p>
+</div>
+<div class="md"><blockquote>
+<p><strong>At a glance</strong> —<br><strong>objective (historical):</strong> words of a corpus map, ↓ · <strong>gate:</strong> 8 comprehension claims hashed from the map — drawn from 612 KB of sources a 7 KB map was never responsible for carrying; <strong>the feasible set was empty</strong> · <strong>hard constraint:</strong> every claim traces<br><strong>the Gap:</strong> a sampled draw it never needed — the map makes ~100 claims and every one is enumerable · <strong>lenses:</strong> by-container ⊥ by-content — both refused at 0/8 while both beat the metric · <strong>canary:</strong> MISSING, and that was the diagnosis: without one you cannot tell a bad candidate from an impossible gate. <code>objective.canary</code> was born here.<br><strong>weight:</strong> RETIRED — replaced by <code>universe/audit.mjs</code>, exhaustive and agent-free, which found on its first run what two rounds and ~1.4M tokens could not · <strong>the lesson it carries:</strong> a harness is for adversaries; an auditor is for facts.</p>
+</blockquote>
+</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-harness-paths.html">The Harness Paths</a> · <a class="wlink" href="adopting-the-harness.html">Adopting The Harness</a> · <a class="wlink" href="workflows-and-runtimes.html">Workflows And Runtimes</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="harness-path-the-universe-builder-retired.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

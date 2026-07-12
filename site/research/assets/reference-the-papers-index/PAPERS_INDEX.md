@@ -2,7 +2,7 @@
 
 **What this is:** the catalogue of every paper in the agentprivacy-docs corpus, each made known for its purpose. The V6 documents cite siblings by name; this file is where every name resolves. When a new paper enters the corpus, it enters this index in the same commit.
 **Naming convention (First Person, 2026-06-10):** the canon papers are one book, ***Privacy is Value***, in versioned volumes. Each volume stands alone and carries the series title plus its own direct title: *Privacy is Value · V5.4: The Amnesia Protocol* · *Privacy is Value · V6: The Gathering Turn and the Moving Ceiling*. Same book, different volumes, readable independently.
-**Updated:** 2026-06-10 · register head C89
+**Updated:** 2026-07-01 · register head C96
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Series title | File | Purpose | Status |
 |---|---|---|---|
-| *Privacy is Value · V6: The Gathering Turn and the Moving Ceiling* | `papers/v6/privacy_value_v6_formal_specification.md` | THE formal specification and current authority: the full model, R(t) and t*, the preconditions, C1 to C89 reproduced in §17, the narrative corpus, full references | **CURRENT HEAD** |
+| *Privacy is Value · V6: The Gathering Turn and the Moving Ceiling* | `papers/v6/privacy_value_v6_formal_specification.md` | THE formal specification and current authority: the full model, R(t) and t*, the preconditions, C1 to C89 reproduced in §17 (register since advanced to C96 — Bands IX–X), the narrative corpus, full references | **CURRENT HEAD** |
 | *Privacy is Value · V6: The Swordsman Reading* | `papers/v6/pvm_v6_compressed.md` | the compressed specification: every equation, eight pages, for agents and reviewers who need the shape before the proofs | current |
 | *Privacy is Value · V6: The Mage Reading* | `papers/v6/pvm_v6_companion_guide.md` | the companion guide: what the mathematics means, Promise Theory, economics, ceremonies, standards, reading paths by role, glossary bridge | current |
 | *Privacy is Value · V6: The Research Paper Edition* | `papers/v6/dualprivacy_researchpaper_v6.md` | what changed in the mathematics at V6, plus the provenance reconciliation; builds on the v4.3 proof body below | current |
@@ -28,7 +28,7 @@
 
 | File | Purpose |
 |---|---|
-| `research/CONJECTURE_REGISTER_V6.md` | the single conjecture-numbering authority, C1 to C89 plus CM-C47; when any paper and the register disagree, the register wins |
+| `research/CONJECTURE_REGISTER_V6.md` | the single conjecture-numbering authority, C1 to C96 plus CM-C47; when any paper and the register disagree, the register wins |
 | `models/privacy_value_model_v6_dark.json` · `_light.json` | the machine-readable model: full (learning path, register, equations) and runtime-compact |
 | `research/privacy_value_v6_draft.md` | the V6 working record: Parts I to V as drafted on the autopath, full honest-limits sections |
 
@@ -43,7 +43,7 @@
 
 ## The research-note series (where V6 grew)
 
-`research/` holds the dated note series: the Lorenz dynamical ceiling, the EML three ceilings, ARCH-1 and ARCH-1R/T, the two Bakhta responses, wound-and-cap, the Schrottenloher/Existence-Leak note, the Horizon District durability note, Aletheia-and-Lethe, and the V5.1 to V5.3 notes before them. Each carries its own conjecture block, reconciled to the register at the 2026-06-10 lock.
+`research/` holds the dated note series: the Lorenz dynamical ceiling, the EML three ceilings, ARCH-1 and ARCH-1R/T, the two Bakhta responses, wound-and-cap, the Schrottenloher/Existence-Leak note, the Horizon District durability note, Aletheia-and-Lethe, and the V5.1 to V5.3 notes before them. Each carries its own conjecture block, reconciled to the register at the 2026-06-10 lock. Post-path: *Limitative Theorems and the Privacy Is Value Model* (`research/limitative-theorems-and-privacy-is-value.md`, 2026-06-28) reads the V6 ceilings and the existence-leak law as privacy-flavoured instances of Gödel and Tarski; it minted Band IX (C90 to C93) at Gate G6. Framing layer, not a new result; the existence-leak Stage-2 bar is untouched. The Hearthold edition (cityofmages Tome X — *The Hearth*, 2026-07-01) minted **Band X (C94 to C96)** — the Privacy Is Value Model read off the cousin-forge's running `did:cid` build (Hearthold), discharging C39 to ~80%; framing/build layer, city-lineage.
 
 ## The reference shelf (`reference/`)
 
@@ -51,7 +51,7 @@ Glossary Master v4.0 (terminology, ~160 entries; V6 addendum pending) · Promise
 
 ## The spec shelf (`specs/`)
 
-Dual Territory Ceremony Spec v1 · Dual Agent Harness Spec v1 · Runecraft Protocol Spec v1 · Protocol Schemas · VRC Promise Protocol v3.3 (the economic architecture) · ZK Swordsman Blade Forge v3.0 (operational) · Blade Forge build instructions.
+Dual Territory Ceremony Spec v1 · Dual Agent Harness Spec v1 · Runecraft Protocol Spec v1 · Protocol Schemas · VRC Promise Protocol v3.4 (the economic architecture; file retains the v3_3 name for link stability) · ZK Swordsman Blade Forge v3.0 (operational) · Blade Forge build instructions.
 
 ## The grimoire shelf (`grimoires/`)
 

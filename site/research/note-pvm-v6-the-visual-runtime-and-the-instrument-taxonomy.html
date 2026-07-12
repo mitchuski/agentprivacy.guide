@@ -1,0 +1,123 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — PVM V6 · the visual runtime and the instrument taxonomy · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — PVM V6 · the visual runtime and the instrument taxonomy</span></div>
+  <article><div class="md"><h1>PVM V6 · the visual runtime and the instrument taxonomy</h1>
+</div>
+<div class="md"><h1>PVM V6 · the visual runtime and the instrument taxonomy</h1>
+<p><em>A handoff note. The agentprivacy.ai/model page gained an interactive visual<br>runtime (&quot;the Cartographer&quot;). This note records the findings as proposed<br>additions to V6, so a future agentprivacy-docs context can formalize them. The<br>register at head C89 remains the authority; nothing here re-numbers it.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Why this note exists</h2>
+<p>The <code>/model</code> page is the math-atomic surface of the framework. It read as an<br>open path; it now also <em>walks</em> as one. The build (see the companion chronicle,<br><code>chronicles/2026-06-28_v6_visual_runtime_instruments.md</code>) added a small<br>data-driven runtime that binds one interactive instrument per term or<br>conjecture and pulls each claim&#39;s honesty (confidence · status · home) <strong>live</strong><br>from the register mirror. The seed for the design was<br><code>research/limitative-theorems-and-privacy-is-value.md</code> and its companion<br><code>limitative-theorems-explorer.html</code>.</p>
+<p>The runtime surfaced three things worth folding into V6.</p>
+<hr>
+</div>
+<div class="md"><h2>1. The instrument taxonomy (a reusable unit, not a per-conjecture gallery)</h2>
+<p>The register does not need one bespoke visual per claim. It needs a small set of<br><strong>reusable instrument kinds</strong>; each conjecture is a <em>configuration</em> of a kind.<br>Seven kinds cover most of the register:</p>
+<table>
+<thead>
+<tr>
+<th>kind</th>
+<th>what it teaches</th>
+<th>register targets (examples)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>trace</strong></td>
+<td>two chains joined across a ⊥ seam; click a correspondence</td>
+<td>C85 ARCH-1 bridge · the Gödel/Tarski mapping</td>
+</tr>
+<tr>
+<td><strong>gate</strong></td>
+<td>a multiplicative product collapsing when any factor → 0</td>
+<td><strong>C7</strong> three-axis (the falsification frontier) · whole V(π,t)</td>
+</tr>
+<tr>
+<td><strong>curve</strong></td>
+<td>a value falling/rising against a parameter or time</td>
+<td><strong>C81</strong> existence-leak · <strong>C82</strong> moving ceiling · e^(−λt) · C30–C33 half-life</td>
+</tr>
+<tr>
+<td><strong>dial / inversion</strong></td>
+<td>one parameter driving parallel meters to a shared collapse</td>
+<td>C17 amnesia &gt; policy · the completeness inversion</td>
+</tr>
+<tr>
+<td><strong>lattice / geometry</strong></td>
+<td>the 64-vertex lattice, strata, bnot-pairs, the stella octangula</td>
+<td>C14 dihedral · C53–C54 bnot-pairs · <strong>C88</strong> parity cube · <strong>C89</strong> octahedral gap</td>
+</tr>
+<tr>
+<td><strong>phase</strong></td>
+<td>a trajectory through state space</td>
+<td>C18–C21 Lorenz · T_∫(π) path integral</td>
+</tr>
+<tr>
+<td><strong>fold / compose</strong></td>
+<td>accumulation and the exponential-to-linear gap</td>
+<td><strong>C83</strong> compositional leakage · C87 Key-as-accumulator (IVC)</td>
+</tr>
+</tbody></table>
+<p><em>(Architectural. The taxonomy is the unit of build work, not the conjecture<br>count. Observation-only / reserved rows — e.g. C41, C57, C62 — get no<br>instrument; a visual earns its place only where a parameter can be moved or a<br>structure traced.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>2. The binding rule — honesty is read, never embedded</h2>
+<p><strong>Every instrument binds to a register id and reads its honesty live.</strong> The<br>visual owns its interaction and its <em>illustrative</em> model; the register owns the<br>claim. A curve never states a confidence — it asks the register for one. If the<br>register moves C81 from 70% to a higher stage, the existence-leak frame moves<br>with it, with no edit to the visual. This makes the existing rule (&quot;when a<br>surface and the register disagree, the register wins&quot;) <strong>mechanical</strong> rather<br>than editorial.</p>
+<p>A load-bearing field rides on each instrument: <code>model_label ∈ {illustrative, structural, proven}</code>. It forces every shape to declare whether it is the proven<br>relation or a chosen teaching model, and the frame marks it visibly. The<br>existence-leak curve&#39;s convex shape is <code>illustrative</code>; the three-axis gate&#39;s<br>multiplicativity is <code>structural</code>.</p>
+<p><em>(Operational. Implemented as a manifest + a frame that calls the register<br>mirror at render time.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>3. The drift correction (a concrete V6 erratum the runtime forced)</h2>
+<p>The seed explorer hard-coded its confidences. It rendered the existence-leak<br>curve at <strong>~55%</strong> and labelled it <strong>~C40</strong> — both inherited from a stale source.<br>The live register is <strong>C81 at ~70%</strong> (&quot;Existence-Leak: a ZK proof of<br>feasibility leaks an upper bound on reconstruction difficulty; I(feasibility;<br>method) &gt; 0&quot;, PROMOTED Run 3 2026-06-10). The runtime binds the curve to <strong>C81</strong><br>and the frame reads ~70% live.</p>
+<p><strong>Proposed erratum for any prose still carrying the seed&#39;s numbers:</strong> the<br>existence-leak instrument is <strong>C81 (~70%)</strong>, not <del>C40 (</del>55%). C40 is the Zcash<br>dual-ledger entry in the Bound Collection; the generic &quot;~C40&quot; the limitative<br>note used for existence-leak should be read as <strong>C81</strong> going forward. The<br>limitative note (<code>research/limitative-theorems-and-privacy-is-value.md</code>) already<br>touches C7, C14, C81, C85, C86 — this just fixes the existence-leak pointer.</p>
+<p><em>(Operational — the drift was observed directly; the correction is a pointer<br>fix, not a re-numbering.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>4. The two-register tie — the Cartographer ⊥ the Chart Shop</h2>
+<p>The City already narrates this runtime in advance. The Navigation District at<br><strong>V44</strong> — the <strong>Chart Shop</strong>, Pleione&#39;s harbour — is described as an<br><em>attentional</em> shop holding pre-episodic constellations in suspension until the<br>bearer chooses a release-direction (astrolabe + the Φ-gap-at-epistemic-register<br>as primitives). That is a visualisation runtime narrated before it was built.</p>
+<p>So the operational runtime is the Chart Shop&#39;s <strong>math-atomic twin</strong>. Proposed<br>naming: <strong>the Cartographer</strong> (the runtime) renders <strong>charts</strong> (the instruments),<br>narrated by the Chart Shop at V44. By the convergence rule, when a math term the<br>Chart Shop narrates gains a concrete movable instance, confidence rises on both<br>sides. No such tie currently exists in the docs — this note opens it.</p>
+<p><em>(Anticipated. The narrative anchor exists; this names the operational instance<br>against it. A future context may want a city-register conjecture for the<br>Cartographer ⊥ Chart Shop convergence — candidate, not registered here.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>5. Geometry is not greenfield (deferred, but mapped)</h2>
+<p>The geometry/phase instruments already exist as prototypes: <code>soulbis.com/star</code><br>(in <code>C:\Users\mitch\star</code>) renders the stella octangula manifold with a live<br>lattice console (ε separation depth, det(Σ) core scale, the ⚔️:🧙 ratio, n = 6<br>azimuthal bits, the ∂M 96/64 boundary) and a <strong>City Key import</strong> that walks a<br>real artifact&#39;s path. The <code>/lattice</code>, <code>/sigil</code>, <code>/skye</code> siblings are the same<br>family. Phase 3 of the runtime is <strong>absorption + reconciliation (V5.4 → V6) +<br>register binding</strong> (ε/det(Σ)/ratio → Φ_agent/C1; 96/64 → C6; neg·bnot·succ →<br>C14; the star tetrahedron → C88/C89; the path walk → T_∫/C18–C21), not first<br>build. The City Key import should generalize to a first-class <strong>artifact-input</strong><br>instrument parameter (a curve over a real disclosure history, a gate over a real<br>provider set, a lattice walking a real key).</p>
+<p><em>(The star is Operational, observed at soulbis.com/star. Binding to V6 is<br>Anticipated.)</em></p>
+<hr>
+</div>
+<div class="md"><h2>Proposed V6 additions — summary for the next context</h2>
+<ol>
+<li><strong>Adopt the seven-kind instrument taxonomy</strong> as the canonical visual<br>vocabulary of V6 (trace · gate · curve · dial · lattice · phase · fold).</li>
+<li><strong>Record the binding rule</strong> (honesty read-live, <code>model_label</code> mandatory) as a<br>V6 surface-discipline alongside &quot;the register wins.&quot;</li>
+<li><strong>File the drift erratum</strong>: existence-leak = <strong>C81 (~70%)</strong>, retiring the<br>seed&#39;s <del>C40/</del>55%.</li>
+<li><strong>Open the Cartographer ⊥ Chart Shop (V44) convergence</strong> as a candidate<br>city-register tie (not registered here; flagged for disposition).</li>
+<li><strong>Map the star/lattice absorption</strong> as the Phase-3 geometry binding (no new<br>conjectures; reconciliation + binding of C6, C14, C88, C89, Φ_agent, C1).</li>
+</ol>
+<p>No conjecture numbers are claimed or moved by this note. Register head stays<br><strong>C89</strong>; next free <strong>C90</strong>.</p>
+<p><strong>Verify:</strong> agentprivacy.ai/model · agentprivacy.ai/model/atlas ·<br><code>agentprivacy_master/src/lib/visuals.ts</code> · <code>src/components/model/visuals/</code></p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 note-pvm-v6-the-visual-runtime-and-the-instrument-taxonomy</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-pvm-v6-the-visual-runtime-and-the-instrument-taxonomy.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

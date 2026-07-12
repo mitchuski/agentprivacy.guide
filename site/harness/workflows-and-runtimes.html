@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Workflows And Runtimes · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>Workflows And Runtimes</span></div>
+  <article><div class="md"><h1>🛠️ Workflows And Runtimes</h1>
+</div>
+<div class="md"><p>How a workshop actually runs the loop — and how much of it to run. A harness is not all-or-nothing: the minimum that earns the name is a proposer, a prover, and a Gap the proposer cannot tune to. Everything above that is weight you add when the domain earns it.</p>
+</div>
+<div class="md"><h2>The runtime ladder</h2>
+<ol>
+<li><strong>Scaffold</strong> — <code>node tools/new_instance.mjs ../my-harness my-harness</code> copies the templates and tells you what is still missing. The gate and the bundler both refuse a config still wearing its TODOs.</li>
+<li><strong>Conform</strong> — <code>node engine/conform.mjs &lt;instance&gt;</code> must PASS before any round (G0).</li>
+<li><strong>Bundle</strong> — <code>node tools/bundle.mjs my/harness.config.mjs my/harness.workflow.mjs</code> fuses config + engine into one self-contained workflow file.</li>
+<li><strong>Run</strong> — in Claude Code, invoke the Workflow tool with <code>scriptPath: &lt;instance&gt;/harness.workflow.mjs</code> and <code>args: {repo, root, runId}</code>. <code>root</code> is where GROUND_RULES, TRUSTS, and the seat cards live — every seat boots from those documents (T3). All writes land in <code>runs/&lt;runId&gt;/</code>; the frontier does not move.</li>
+<li><strong>View</strong> — <code>node tools/render_run.mjs &lt;instance&gt; &lt;runId&gt;</code> projects a run directory into one static <code>run.html</code> that re-derives every Gap seed from the persisted proposal bytes at render time. Match proves the witnesses derive from the proposal; mismatch renders as ROUND VOID.</li>
+<li><strong>Fold</strong> — the keystone&#39;s step, in the main session, conform green before and after. See <a class="wlink" href="seat-keystone.html">Seat — Keystone</a> and <a class="wlink" href="the-ledgers.html">The Ledgers</a>.</li>
+</ol>
+</div>
+<div class="md"><h2>The runtime tiers</h2>
+<p>Four descriptive spaces for what a bout can be — the trusts identical at every rung, the stakes widening: <strong>the spar</strong> 🤺 (practice, one workshop, its own frontier — <a class="wlink" href="the-field-guide-spar.html">The Field Guide Spar</a>) → <strong>the duel</strong> (reserved: the formal bout whose result a counterparty relies on — signed verdicts, artefacts exchanged) → <strong>the arena</strong> 🏟️ (a live external benchmark with other fighters on the board — <a class="wlink" href="harness-path-shor-mage.html">Harness Path — Shor Mage</a> vs ecdsa.fail) → <strong>the open world</strong> 🌍 (a real upstream, consequences beyond any ledger — <a class="wlink" href="harness-path-privacy-pools-v2-mage.html">Harness Path — Privacy Pools V2 Mage</a>; <a class="wlink" href="harness-path-hearthold-the-open-slot.html">Harness Path — Hearthold The Open Slot</a> when its seat is taken). The door is the First Person’s at every tier.</p>
+<h2>Runtimes per workshop</h2>
+<p>Different workshops run different weights of the same skeleton — see <a class="wlink" href="the-harness-paths.html">The Harness Paths</a> for all ten:</p>
+<ul>
+<li><strong>Full loop</strong> (objective · Fiat-Shamir Gap · advancing frontier): <a class="wlink" href="harness-path-shor-mage.html">Harness Path — Shor Mage</a>, <a class="wlink" href="harness-path-tigzkp-mage.html">Harness Path — Tigzkp Mage</a>, <a class="wlink" href="harness-path-the-v6-rehydration-pipeline.html">Harness Path — The V6 Rehydration Pipeline</a>; mechanically fitted to the generic engine: <a class="wlink" href="harness-path-privacy-pools-v2-mage.html">Harness Path — Privacy Pools V2 Mage</a>, <a class="wlink" href="harness-path-lexon-pvm.html">Harness Path — Lexon PVM</a> — and the runnable toy, <a class="wlink" href="the-field-guide-spar.html">The Field Guide Spar</a>.</li>
+<li><strong>Adjacent embodiments</strong> (the topology without the optimisation loop): <a class="wlink" href="harness-path-myterms-ieee-7012.html">Harness Path — MyTerms IEEE 7012</a> (the two agents as two literal browser extensions), <a class="wlink" href="harness-path-fedwiki-flow-and-the-gatehouse.html">Harness Path — FedWiki Flow And The Gatehouse</a> (integrity gate + human door), <a class="wlink" href="harness-path-the-dream-cycle.html">Harness Path — The Dream Cycle</a> (the measure seat at fleet scale).</li>
+<li><strong>Structure layer</strong>: <a class="wlink" href="harness-path-game-of-42.html">Harness Path — Game Of 42</a> — the checked lattice the fleet is seated on.</li>
+<li><strong>The negative result</strong>: <a class="wlink" href="harness-path-the-universe-builder-retired.html">Harness Path — The Universe Builder Retired</a> — where the harness was applied and should not have been. <em>A harness is for adversaries; an auditor is for facts.</em></li>
+</ul>
+</div>
+<div class="md"><h2>One session, one seat</h2>
+<p>A live session can also HOLD a seat directly — the boot protocol is <a class="wlink" href="one-session-one-seat.html">One Session One Seat</a>: read the ground rules, the trusts, your one card; state your seat, your permitted writes, your definition of done; conform and chronicle before ending.</p>
+</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a> · <a class="wlink" href="the-harness-paths.html">The Harness Paths</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="workflows-and-runtimes.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

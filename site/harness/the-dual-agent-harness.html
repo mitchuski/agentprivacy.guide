@@ -1,0 +1,215 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Dual-Agent Harness · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Dual-Agent Harness</span></div>
+  <article><div class="md"><h1>⿻ The Dual-Agent Harness</h1>
+</div>
+<div class="md"><p><strong>A verification harness for AI-agent work: one agent proposes, a second<br>independently proves, and the tests that decide are derived by hashing the<br>proposal itself — so neither agent could have chosen them. Config-driven,<br>zero dependencies, every axiom checked at runtime.</strong></p>
+<p><strong>soulbae 🧙</strong> proposes. <strong>soulbis ⚔️</strong> proves. Between them sits <strong>the Gap<br>⿻</strong>: the held-out tests are derived by hashing soulbae&#39;s own proposal, so<br>soulbae cannot have tuned to them and soulbis cannot be accused of choosing<br>them. Above them both is <strong>the First Person 😊</strong> — you — who alone opens the<br>door to anything outward-facing.</p>
+<p>That is the entire idea. Everything in this repo is machinery for keeping<br>those two apart, and a ledger discipline for what survives.</p>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+<p>The Swordsman is negation, the Mage is complement, and composed across the<br>Gap they produce the successor — the step forward. On Z/64Z this is a<br>theorem, and <code>engine/conform.mjs</code> computes it for all sixty-four values every<br>time it runs rather than taking it on faith. A result exists only where the<br>two were genuinely held apart.</p>
+</div>
+<div class="md"><h2>Where it stands</h2>
+<p>This is not a sketch. The engine has been debugged <strong>by being run</strong> — seven<br>defects to date, every one invisible to inspection and obvious on execution,<br>each fixed and pinned by a test or a prompt rule (an outage reported as an<br>exhausted search; a gate that passed an unfilled config; a critic with no<br>word for a bad gate; seats whose disk record was thinner than their return).<br>The runnable spar has a real advancing frontier: its guide compressed from a<br>730-word baseline to a 472-word validated best across four audited folds,<br>each held to an 8/8 held-out gate on independent witness draws, the last two<br>closed by an exhaustive fact census<br>(<code>examples/field-guide/frontier.json</code> is the authority; its <code>chronicles/</code><br>tell the story). Ten real embodiments — quantum circuits, ZK constraint<br>systems, research pipelines, consent agreements, and one deliberate failure —<br>are catalogued in <code>HARNESS_PATHS.md</code>. The skeleton is domain-neutral and<br>stays that way.</p>
+</div>
+<div class="md"><h2>The pathway — clone to your own harness</h2>
+<p><strong>Requirements:</strong> Node ≥ 18, nothing else (zero npm dependencies). Running<br>rounds multi-agent needs a driver for the seven seats — Claude Code&#39;s<br>Workflow tool is the reference runtime; <code>engine/dual_agent_loop.mjs</code> also<br>accepts any <code>rt = { agent, parallel, pipeline, phase, log }</code> you supply.</p>
+<ol>
+<li><strong>Prove the axioms</strong> — one command, every gate this repo has:<pre><code class="language-bash">node tools/check.mjs
+</code></pre>
+Algebra on all of Z/64Z, the engine&#39;s failure-semantics tests, conformance<br>of every instance it discovers, and a negative test that the blank<br>template <em>fails for the right reasons</em>. Non-zero exit prints re-runnable<br>commands.</li>
+<li><strong>Read the constitution</strong> — <code>TRUSTS.md</code> (the six trusts and where each one<br>bites), then <code>GROUND_RULES.md</code> (GR-1..10, pasted into every seat at boot).<br>These are the parts you should not change.</li>
+<li><strong>Run the spar</strong> — a practice bout, with real strikes, against <code>examples/field-guide/</code> (compress a<br>field guide; a hash-drawn 8-question gate must stay 8/8). In Claude Code,<br>invoke the Workflow tool:<pre><code>scriptPath: examples/field-guide/harness.workflow.mjs
+args: { &quot;repo&quot;: &quot;&lt;abs&gt;/examples/field-guide&quot;, &quot;root&quot;: &quot;&lt;abs of this clone&gt;&quot;, &quot;runId&quot;: &quot;r4&quot; }
+</code></pre>
+All writes land in <code>runs/&lt;runId&gt;/</code>; the frontier does not move on its own.</li>
+<li><strong>Audit and view the round</strong> — <code>node tools/render_run.mjs examples/field-guide r4</code><br>writes a static <code>run.html</code> that re-derives every Gap seed from the saved<br>proposal bytes; or check by hand: <code>sha256sum proposal_canon.json</code> must<br>equal <code>seedHex</code> in <code>gap.json</code>.<br>Or <strong>watch the workshop live</strong>: <code>node tools/console.mjs</code> serves a<br>read-only console at <code>127.0.0.1:4242</code> — the six-phase loop as evolving<br>geometry, every seed re-derived per poll, the frontier as a moving<br>ceiling, and a door panel that lists what software will never do for you.</li>
+<li><strong>Fold as keystone</strong> — in the main session, per <code>seats/keystone.md</code>:<br>conform green → fold the validated-and-structural lever → frontier first,<br>prose second → file the chronicle → conform green again. Where the claim<br>space is enumerable, run the census — what you can count, count.<br>Publishing anything is yours alone (T6).</li>
+<li><strong>Seal what survived</strong> — <code>node tools/mint_artefact.mjs examples/field-guide r4</code><br>writes a κ-labelled artefact bundle (content-addressed by canonical-JSON<br>sha256 — never trusted, only re-derived) with an evidence hash-manifest<br>and a <code>DOOR.md</code> of the outward actions software did NOT take. It refuses<br>tampered seeds, red gates, and verdict-less runs. The console&#39;s door<br>panel lists every bundle; carrying one anywhere is the door, and the<br>door is yours.</li>
+<li><strong>Scaffold your own instance</strong> — <code>node tools/new_instance.mjs ../my-harness my-harness</code>,<br>fill every TODO in its <code>harness.config.mjs</code> (the gate and the bundler both<br>refuse a config still wearing them), then<br><code>node tools/bundle.mjs my/harness.config.mjs my/harness.workflow.mjs</code> and<br>run it exactly like the spar. <code>SEAT_CONTRACT.md</code> is the interface, and<br><strong><code>ADOPTION.md</code> is the map</strong>: why the duality works on any topic, the<br>harness-vs-auditor decision, the five answers that become your config, and<br>six worked domain mappings. <strong>Define the Gap first</strong> — if you cannot say<br>how held-out witnesses derive from a proposal by hashing, you do not have<br>a harness yet (and may want an auditor instead).</li>
+<li><strong>When it earns it, specialise</strong> — <code>SPECIALISATION.md</code> binds personas and<br>spells to seats and seats instances on the Game-of-42 lattice;<br><code>HARNESS_PATHS.md</code> shows ten real configs at every weight — and one seat<br>held open by invitation, which is also a thing a harness can be.</li>
+</ol>
+<p><strong>Follow the worked example.</strong> The spar&#39;s own history is the pathway walked<br>end to end: <code>examples/field-guide/frontier.json</code> records four audited folds<br>(730 → 573 → 526 → 472, every step at gate 8/8, the last two closed by<br>exhaustive census), its <code>chronicles/</code> tell each round verdict-first, and the<br>repo&#39;s <code>chronicles/</code> tell the system&#39;s story — including the seven defects<br>found by running and the one round that was watched live. Reading them in<br>date order is the fastest way to learn what the discipline feels like in<br>practice.</p>
+</div>
+<div class="md"><h2>Why hold them apart</h2>
+<p>An agent that proposes a change and then checks its own change will pass. Not<br>because it cheats, but because the check it invents is the check its change<br>was built to survive. The output is a <strong>mirage</strong>: it passes the author&#39;s<br>probe and fails the real gate.</p>
+<p>This harness makes mirages a named verdict instead of a surprise. Its<br>operational invariant is <code>I(Y_S ; Y_M | X) = 0</code> — given the target, what the<br>prover produces tells you nothing about what the proposer produces. Not<br>&quot;promises not to.&quot; Cannot, because the information was never routed there.</p>
+</div>
+<div class="md"><h2>The loop</h2>
+<pre><code>  Measure  ──▶  Propose  ──▶  Hold-apart  ──▶  Assay  ──▶  Critic  ──▶  Chronicle
+   frontier      soulbae 🧙      the Gap ⿻      soulbis ⚔️    classify      draft
+   numbers       N blind          hash the        full gate    structural /   the
+   only          lenses           proposal        VALIDATED    probe-limited  record
+                 in parallel      → witnesses     MIRAGE       / noise
+                                                  BLOCKED
+</code></pre>
+<p>Propose → Hold-apart → Assay runs as a pipeline with no barrier: a fast<br>proposal reaches the gate while a slow one is still being written. The Critic<br>is the only barrier, because classifying the round needs the whole round.<br>After <strong>K consecutive dry rounds</strong> (nothing validated <em>and</em> structural), the<br>loop stops rather than grinding.</p>
+<p>What the loop does <strong>not</strong> do is fold its own wins. It returns verdicts and<br>drafts. Folding into the ledgers is the <strong>keystone&#39;s</strong> job — soulbae ⊥<br>soulbis operating as a pair in the main session, with the conformance gate<br>green before and after. And publishing anything is yours alone.</p>
+</div>
+<div class="md"><h2>Why the corpus stays home</h2>
+<p>Two agents from different projects share no vocabulary. Different domains,<br>different ledgers, different lore. They cannot meet inside either corpus,<br>because each corpus is the private state of its own First Person.</p>
+<p>They meet in <strong>the Gap</strong> — and what is in the Gap is not content. It is the<br><strong>axioms</strong>: the algebra, the six trusts, the ten ground rules, the seven<br>seats. Notice that this is already the file layout. <code>engine/conform.mjs</code> keeps<br>its own copy of the axioms and <em>deliberately does not import them</em> from the<br>engine; the source says that is the point. They belong to neither the loop nor<br>the config, and both are checked against them.</p>
+<pre><code>Origin(A) ∩ Origin(B) = {the axioms}
+</code></pre>
+<p>That is trust T3 — the pair share only their root — lifted one scale. <strong>The<br>universe expands the mind; the harness is the boundary that lets agents find<br>each other regardless of universe.</strong> Which is why <code>universe/</code> in this repo is<br>one project&#39;s corpus, kept behind a seam, and deletable without breaking a<br>thing.</p>
+</div>
+<div class="md"><h2>The trusts</h2>
+<p>The harness carries six constitutional trusts from the Privacy-is-Value model<br>(PVM V6): the four promises, the separation bound, the shared root,<br>consent-first invitation semantics, the multiplicative gate, and <strong>the door</strong>.<br><code>TRUSTS.md</code> states each one and — more usefully — maps each to the exact<br>place it bites: a required config field, a conformance check, a prompt<br>topology, or an honestly-labelled manual discipline. Read it before you<br>change anything. It is the part of this repo you should keep.</p>
+</div>
+<div class="md"><h2>The ledgers</h2>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th>what it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>frontier.json</code></td>
+<td>the sole authority for numbers. Prose cites it; prose never restates it.</td>
+</tr>
+<tr>
+<td><code>claims_register.md</code></td>
+<td>every load-bearing claim, with a tier: PROVEN / DERIVED / REPORTED / OPEN / MYTH.</td>
+</tr>
+<tr>
+<td><code>notes/KILLED_LEVERS.md</code></td>
+<td>negative results, filed as prominently as wins. A killed lever is a fence, not a footnote.</td>
+</tr>
+<tr>
+<td><code>chronicles/</code></td>
+<td>one file per session, verdict first, ending in a handoff block. A session without a chronicle is unfinished.</td>
+</tr>
+<tr>
+<td><code>SOURCES.md</code></td>
+<td>trace or delete: nothing is citable unless it resolves to a concrete path.</td>
+</tr>
+</tbody></table>
+<p>Only the keystone writes the first three. Other seats <em>return</em> proposed<br>entries — append-only ledgers do not survive concurrent writers.</p>
+</div>
+<div class="md"><h2>The spar, in detail</h2>
+<p>A <strong>spar</strong> is a practice bout between the Swordsman and the Mage — every<br>strike real, nothing at stake but the frontier. It is the first rung of the<br><strong>runtime tiers</strong>, each a wider descriptive space for what a bout can be:</p>
+<table>
+<thead>
+<tr>
+<th>tier</th>
+<th>the bout</th>
+<th>stakes</th>
+<th>existing instance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>the spar</strong> 🤺</td>
+<td>practice, one workshop</td>
+<td>its own frontier only</td>
+<td><code>examples/field-guide/</code></td>
+</tr>
+<tr>
+<td><strong>the duel</strong></td>
+<td>the formal bout — <em>reserved</em></td>
+<td>a result a counterparty will rely on: signed verdicts, minted artefacts exchanged</td>
+<td>the formal runtime to come</td>
+</tr>
+<tr>
+<td><strong>the arena</strong> 🏟️</td>
+<td>against a live external benchmark, other fighters on the board</td>
+<td>a public leaderboard the workshop does not control</td>
+<td>shor_mage vs ecdsa.fail</td>
+</tr>
+<tr>
+<td><strong>the open world</strong> 🌍</td>
+<td>against a real upstream, in the wild</td>
+<td>consequences beyond any ledger</td>
+<td>privacy_pools_v2 vs the 0xbow suite; hearthold, when its seat is taken</td>
+</tr>
+</tbody></table>
+<p>The trusts do not change between tiers — the door is the First Person&#39;s at<br>every rung. What changes is who is watching, and what a VALIDATED costs.</p>
+<p>(Steps 1, 3, and 4 of the pathway, expanded.) Start with one command. It runs<br>every gate this repo has, in the order you should trust them:</p>
+<pre><code class="language-bash">node tools/check.mjs
+</code></pre>
+<p>It proves the algebra on all of Z/64Z, runs the engine&#39;s own tests (an outage<br>must never be reported as an exhausted search), conforms <strong>every</strong> instance it<br>discovers rather than the ones it remembers, asserts that the blank template<br><strong>fails</strong> — and fails <em>for the right reasons</em> — and, if <code>universe/</code> is present,<br>audits it exhaustively. Zero dependencies. If it exits non-zero, every line it<br>printed is a command you can re-run yourself.</p>
+<p>The individual gates, if you want them:</p>
+<pre><code class="language-bash">node engine/conform.mjs                      # the axioms hold
+node engine/conform.mjs examples/field-guide # the instance is coherent
+node engine/loop.test.mjs                    # the loop fails loudly
+</code></pre>
+<p>Then run the example harness. It compresses a 730-word emergency field guide<br>while an 8-question comprehension gate, drawn from the <em>original</em> by hashing<br>the <em>candidate</em>, must stay 8/8. The proposer cannot know which 8 of ~40 facts<br>will be probed, so its only winning strategy is to preserve every fact — which<br>is exactly the pressure you want on a compressor.</p>
+<p>In Claude Code, invoke the Workflow tool with:</p>
+<pre><code>scriptPath: examples/field-guide/harness.workflow.mjs
+args: { &quot;repo&quot;: &quot;&lt;abs path&gt;/examples/field-guide&quot;, &quot;root&quot;: &quot;&lt;abs path&gt;&quot;, &quot;runId&quot;: &quot;r4&quot; }
+</code></pre>
+<p><code>root</code> is where <code>GROUND_RULES.md</code>, <code>TRUSTS.md</code>, and <code>seats/</code> live — this<br>repo&#39;s clone. Every seat boots from those documents (T3); an instance that<br>lives elsewhere and doesn&#39;t carry its own copies must always pass it.</p>
+<p>All writes land in <code>examples/field-guide/runs/r4/</code>. Nothing touches the<br>frontier until you, as keystone, fold it. See<br><code>examples/field-guide/README.md</code> for what a round looks like and how to run<br>the mirage drill.</p>
+</div>
+<div class="md"><h2>View a run</h2>
+<pre><code class="language-bash">node tools/render_run.mjs examples/field-guide r4     # one run
+node tools/render_run.mjs examples/field-guide --all  # every run
+</code></pre>
+<p>Writes <code>runs/&lt;runId&gt;/run.html</code> — a single static page, no dependencies, no<br>network — and writes nothing else. The page lays the round out as the<br>six-phase loop and, per proposal, <strong>re-derives</strong> the sha256 of<br><code>proposal_canon.json</code> from the file bytes at render time and shows it next to<br>the seed the Gap recorded. Match means the witnesses provably derive from the<br>proposal&#39;s own content; mismatch renders as a loud warning, because witnesses<br>of unknown origin validate nothing (GR-4). That check is the same audit the<br>field-guide README teaches by hand — the page just refuses to skip it.</p>
+<p>The page is a generated projection, never the record: the run directory is<br>the record, and a phase that left no artifact renders as &quot;not reached / not<br>recorded&quot; rather than being papered over (GR-5). Verdicts wear their color —<br>VALIDATED green, MIRAGE amber, BLOCKED red — and the frontier does not move<br>here any more than it moves in the loop.</p>
+</div>
+<div class="md"><h2>Build your own harness path</h2>
+<p>(Steps 6 and 7 of the pathway, expanded.)</p>
+<ol>
+<li><strong>Define the Gap first.</strong> If you cannot say how held-out witnesses derive<br>from a proposal by hashing, you do not have a harness yet.</li>
+<li>Name the <strong>objective</strong> (what gets smaller), the <strong>gate</strong> (what must fully<br>pass), and the <strong>hard constraint</strong> (validity no score can override).</li>
+<li>Scaffold it — <code>node tools/new_instance.mjs ../my-harness my-harness</code> —<br>then fill every TODO in its <code>harness.config.mjs</code>. See <code>SEAT_CONTRACT.md</code><br>for the interface and the complement-pair pattern for product objectives.<br><strong>The gate and the bundler both refuse a config still wearing its TODOs</strong>,<br>and they refuse it in the same words: an unfilled harness runs, grades<br>nothing, and reports <code>VALIDATED</code>. Measure your baseline before you claim a<br>best — the template ships both <code>null</code> on purpose.</li>
+<li>Bundle and run: <code>node tools/bundle.mjs my/harness.config.mjs my/harness.workflow.mjs</code></li>
+<li>Read <code>HARNESS_PATHS.md</code> for eight real instances — quantum circuits, ZK<br>constraint systems, research papers, consent agreements, a publishing<br>loop — the same skeleton under very different bodies, grouped by how much<br>of the loop each one actually runs. The partial ones are labelled as<br>partial; they teach the bar better than the complete ones do.</li>
+<li>When it earns it, dress the seats: <code>SPECIALISATION.md</code> covers binding<br>personas and spells to seats, and the Game of 42 station pattern for<br>growing a fleet without drifting.</li>
+</ol>
+<p>The lemma travels; the corpus stays home. Your harness path is a config, not<br>a fork.</p>
+</div>
+<div class="md"><h2>Layout</h2>
+<pre><code>TRUSTS.md          the constitution — read first
+GROUND_RULES.md    GR-1..GR-10, pasted into every seat at boot
+ADOPTION.md        why the duality is topic-free + the mapping procedure
+SEAT_CONTRACT.md   what a config provides
+SPECIALISATION.md  personas, spells, the Game of 42
+HARNESS_PATHS.md   eight real instances, and how the fleet syncs
+CLAUDE.md          one session, one seat — the boot protocol
+SKILL.md           this repo as a Claude Code skill
+engine/            the loop, its gate, and loop.test.mjs
+seats/             seven cards: the mandate of each seat
+templates/         ledgers + a blank config to copy
+tools/new_instance.mjs scaffold an instance, and say what is still missing
+tools/bundle.mjs   config + engine → one self-contained workflow file
+tools/render_run.mjs   one run directory → one static run.html projection
+tools/console.mjs  the workshop console — a live, GET-only localhost window
+tools/mint_artefact.mjs  seal a validated run into a κ-labelled artefact, at the door
+examples/          the runnable spar
+universe/          ONE PROJECT&#39;S CORPUS — delete it and nothing breaks
+</code></pre>
+<p>That last line is tested, not asserted. Clone the repo, <code>rm -rf universe</code>, and<br><code>node engine/conform.mjs</code>, the spar&#39;s gate, and <code>node engine/loop.test.mjs</code> all<br>still pass.</p>
+<p>Everything above <code>universe/</code> is domain-neutral and always will be. That<br>directory is the agentprivacy layer: a fleet plan, a cast, an admission rite,<br>and a harness whose target is the corpus itself. It is kept behind a seam so a<br>stranger building a compression loop never has to read a word of it.</p>
+<p>Apache-2.0. Origin: 0xagentprivacy · the Privacy-is-Value model (PVM V6) ·<br>agentprivacy.ai</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 the-dual-agent-harness</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-dual-agent-harness.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

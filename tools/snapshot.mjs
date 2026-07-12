@@ -36,6 +36,7 @@ const SITES = [
   { id: 'research',  label: 'Research',   glyph: '🧮', color: '#3d7c47', path: 'research',   group: 'federation', blurb: 'The privacy-value model V(π,t) and the conjecture register (C1–C96).' },
   { id: 'atlas',     label: 'Atlas',      glyph: '🌐', color: '#6a5acd', path: 'atlas',      group: 'federation', blurb: 'The knowledge graph — the backbone hyperlinking every site.' },
   { id: 'skill',     label: 'Skill',      glyph: '🗃️', color: '#2a7d8c', path: 'skill',      group: 'federation', blurb: '163 forkable skills — 42 personas + role / privacy-layer / meta.' },
+  { id: 'harness',   label: 'Harness',    glyph: '♻️', color: '#4a7c6a', path: 'harness',    group: 'federation', blurb: 'The dual-agent harness — the soulbis ⊥ soulbae loop, its seven seats, and the fleet of specialised instances (shor_mage · privacy-pools · lexon · and more).' },
   { id: 'city',      label: 'City of Mages', glyph: '🏛️', color: '#a23a3a', path: 'city', group: 'federation', blurb: 'The City of Mages — the Second Person Spellbook (“you”): the Tomes, its cast, and the City’s structural grimoire.' },
   { id: 'tomes',     label: 'Tomes',      glyph: '📖', color: '#a23a3a', path: 'city/tomes', group: 'federation', nested: 'city', blurb: 'The Second Person Spellbook (“you”) — City of Mages acts I–X (incl. IX the Horizon and X the Hearth) + cast + specs.' },
   { id: 'game42',    label: 'Game of 42', glyph: '🎲', color: '#c98a2a', path: 'game42',         group: 'sibling', blurb: 'The Game of 42 — its own wiki (sibling host).' },

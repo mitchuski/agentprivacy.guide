@@ -3,77 +3,77 @@
   "story": [
     {
       "type": "markdown",
-      "id": "044707c5b1f8085a",
+      "id": "14a980512701a695",
       "text": "# Protocol Schemas"
     },
     {
       "type": "markdown",
-      "id": "1d3d40019610b37d",
+      "id": "ea27200c617fc4e9",
       "text": "**Version:** 1.0\n**Date:** March 31, 2026\n**Source:** DUAL_TERRITORY_CEREMONY_SPEC_v1.md\n**Purpose:** Canonical TypeScript interfaces for ceremony channel, mana, and data structures\n\n---"
     },
     {
       "type": "markdown",
-      "id": "f437b44c9db6def0",
+      "id": "8e21337eabd69aeb",
       "text": "## Overview\n\nThese schemas define the message grammar and data structures for the dual-territory architecture. They are extracted from DUAL_TERRITORY_CEREMONY_SPEC_v1.md and serve as the implementation reference for both extension repositories.\n\n**Usage:** Copy these interfaces directly into extension codebases. Keep this document as the single source of truth.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "7e552c9e15979151",
+      "id": "a9de6335d0aff34f",
       "text": "## 1. Ceremony Messages\n\n### 1.1 Core Ceremony Message\n\n```typescript\ninterface CeremonyMessage {\n  type: 'INSCRIPTION';\n  source: 'swordsman_extension' | 'mage_extension' | 'agentprivacy';\n  payload: NodeAnnotation | CommunityEdge | ConstellationProjection | ProverbForge;\n  mana_cost: number;\n  mana_balance: number; // sender's remaining balance after deduction\n  signature: string;    // proof of mana ownership\n}\n```\n\n### 1.2 Inscription Payloads\n\n```typescript\ninterface NodeAnnotation {\n  kind: 'node_annotation';\n  target_node_id: string;\n  text: string;        // max 280 chars\n  mana_cost: 1;\n}\n\ninterface CommunityEdge {\n  kind: 'community_edge';\n  source_node_id: string;\n  target_node_id: string;\n  label?: string;\n  mana_cost: 2;\n}\n\ninterface ConstellationProjection {\n  kind: 'constellation_projection';\n  nodes: string[];     // node IDs\n  connections: Array<{ source: string; target: string }>;\n  name: string;\n  mana_cost: 3;\n}\n\ninterface ProverbForge {\n  kind: 'proverb_forge';\n  text: string;        // max 280 chars\n  source_constellation_hash: string;\n  mana_cost: 4;\n}\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "dba6f5653e397e3e",
+      "id": "544ed2c1574e8dff",
       "text": "## 2. Ceremony Channel Messages\n\n### 2.1 Swordsman → Mage\n\n```typescript\ntype SwordMessage =\n  | { type: 'SLASH'; domain: string; trackers_found: number }\n  | { type: 'WARD'; domain: string; myterms_asserted: boolean }\n  | { type: 'SWORD_POSITION'; x: number; y: number }\n  | { type: 'CEREMONY_READY'; ceremony_type: CeremonyType }\n  | { type: 'HOME_TERRITORY'; hostname: string };\n```\n\n### 2.2 Mage → Swordsman\n\n```typescript\ntype MageMessage =\n  | { type: 'INSCRIBE'; spell_node: SpellNode }\n  | { type: 'SCAN'; scan_result: PageScanResult }\n  | { type: 'MAGE_POSITION'; x: number; y: number }\n  | { type: 'CONSTELLATION_UPDATE'; constellation: Constellation }\n  | { type: 'DRAKE_EMERGE'; conditions: DrakeConditions }\n  | { type: 'HEXAGRAM_UPDATE'; hexagram: HexagramState };\n```\n\n### 2.3 Ceremony Types\n\n```typescript\ntype CeremonyType =\n  | 'dual_convergence'\n  | 'hexagram_cast'\n  | 'emoji_cast'\n  | 'constellation_wave'\n  | 'bilateral_exchange';\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "4c036d15335d807d",
+      "id": "d3794da4fd23e5f4",
       "text": "## 3. Data Structures\n\n### 3.1 Forged Blade\n\n```typescript\ninterface ForgedBlade {\n  id: string;                    // e.g., \"SPELL-YW5I59-1Q\"\n  name: string;                  // user-chosen\n  emoji: string;                 // tier icon\n  tier: 'light' | 'heavy' | 'dragon';\n  stratum: number;               // 0-6 (Hamming weight)\n  proof: SpellProof;\n  forgedAt: string;              // ISO timestamp\n  constellationNodes: number;\n  constellationMarks: ConstellationMark[];\n  constellationConnections: ConstellationConnection[];\n  inscribedSpell: string;        // emoji spell string\n  reflection: string;            // user's message\n}\n\ninterface SpellProof {\n  hash: string;\n  timestamp: number;\n  lapCount: number;\n  duration: number;              // seconds\n}\n\ninterface ConstellationMark {\n  nodeId: string;\n  timestamp: number;\n}\n\ninterface ConstellationConnection {\n  source: string;\n  target: string;\n}\n```\n\n### 3.2 Hexagram\n\n```typescript\ntype HexagramLine = 0 | 1;\ntype HexagramState = [HexagramLine, HexagramLine, HexagramLine,\n                      HexagramLine, HexagramLine, HexagramLine];\n\ninterface NodeDimensions {\n  d1Hide: number;       // 0.0 to 1.0\n  d2Commit: number;\n  d3Prove: number;\n  d4Connect: number;\n  d5Reflect: number;\n  d6Delegate: number;\n}\n\ninterface HexagramInfo {\n  lines: HexagramState;\n  bladeId: number;      // 0-63\n  layer: number;        // 0-6\n  layerName: string;    // \"Null\" through \"Dragon\"\n  yangCount: number;\n}\n```\n\n### 3.3 Mana\n\n```typescript\ninterface ManaBalance {\n  total_earned: number;\n  total_spent: number;\n  current: number;       // total_earned - total_spent\n  history: ManaEvent[];\n}\n\ninterface ManaEvent {\n  type: 'earn' | 'spend';\n  action: string;\n  amount: number;\n  timestamp: number;\n  domain?: string;\n  inscription_id?: string;\n}\n\ninterface ManaEarnEvent {\n  type: 'spell_cast' | 'ceremony_complete' | 'blade_forged' | 'evocation_cycle';\n  timestamp: number;\n  domain: string;\n  amount: number;        // in mana units\n}\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "98aa37b5d70d38b9",
+      "id": "24fdb7320619ac61",
       "text": "## 4. Page Analysis Structures\n\n### 4.1 Scan Result\n\n```typescript\ninterface PageScanResult {\n  domain: string;\n  timestamp: number;\n  trackers: TrackerInfo[];\n  cookies: CookieAnalysis;\n  consentUI: ConsentUIAnalysis;\n  thirdPartyScripts: number;\n  mytermsEndpoint: boolean;\n  privacyPosture: number;        // 0.0 to 1.0\n}\n\ninterface TrackerInfo {\n  name: string;\n  category: 'analytics' | 'advertising' | 'social' | 'fingerprinting' | 'unknown';\n  domain: string;\n}\n\ninterface CookieAnalysis {\n  firstParty: number;\n  thirdParty: number;\n  sessionOnly: number;\n  persistent: number;\n  jurisdictions: string[];       // detected cookie jurisdictions\n}\n\ninterface ConsentUIAnalysis {\n  present: boolean;\n  acceptRejectSymmetry: boolean; // true if equal prominence\n  darkPatterns: string[];        // detected dark pattern types\n}\n```\n\n### 4.2 Hexagram Line Computation (Extension)\n\nExtension hexagram lines are computed from page analysis, not graph node dimensions:\n\n| Line | Metric | Yang Condition |\n|------|--------|----------------|\n| Line 1 | Key custody | HTTPS + no mixed content |\n| Line 2 | Credential disclosure | Consent UI quality (accept/reject symmetry) |\n| Line 3 | Agent delegation | Third-party script count < 5 |\n| Line 4 | Data residency | Cookie jurisdictional analysis favourable |\n| Line 5 | Interaction mode | First-party > third-party interaction ratio |\n| Line 6 | Trust boundary | MyTerms endpoint exists |\n\n---"
     },
     {
       "type": "markdown",
-      "id": "0ca6e0a22324bc43",
+      "id": "51924464bde662bb",
       "text": "## 5. Drake/Dragon Structures\n\n### 5.1 Drake Conditions\n\n```typescript\ninterface DrakeConditions {\n  bothExtensionsActive: boolean;\n  spellNodesOnDomain: number;    // >= 10 required\n  ceremoniesOnDomain: number;    // >= 5 required\n  trackersDetected: number;      // >= 10 required (surveillance-heavy)\n  ready: boolean;                // all conditions met\n}\n```\n\n### 5.2 Dragon Conditions\n\n```typescript\ninterface DragonConditions {\n  domainsAsserted: number;       // >= 10 required\n  totalConstellationNodes: number; // >= 64 required\n  drakeSummonings: number;       // >= 3 required\n  aggregatePrivacyPosture: number; // >= 0.7 required\n  ready: boolean;\n}\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "681eb35ce4fab78e",
+      "id": "95219ea85cfef105",
       "text": "## 6. Constellation Structures\n\n```typescript\ninterface Constellation {\n  id: string;\n  name: string;\n  nodes: string[];               // node IDs in marking order\n  connections: ConstellationConnection[];\n  createdAt: string;             // ISO timestamp\n  hash: string;                  // deterministic hash of nodes + connections\n}\n\ninterface SpellNode {\n  id: string;\n  type: 'emoji' | 'proverb' | 'keyword' | 'shield';\n  content: string;\n  position: { x: number; y: number };\n  createdAt: number;\n  domain: string;\n}\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "39605b626617ed5b",
+      "id": "33c05e41191211bf",
       "text": "## 7. Training Threshold\n\n```typescript\ninterface TrainingThreshold {\n  spells_cast: number;           // >= 3\n  sections_visited: number;      // >= 3\n  convergences_witnessed: number; // >= 1\n}\n```\n\nUsed to gate `/path` page access on agentprivacy.ai.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "2f5cbab36f5d2cb5",
+      "id": "a6b070d51ffdb87d",
       "text": "## 8. Communication Patterns\n\n### 8.1 Extension Handshake\n\n```typescript\n// On page load, each extension sends:\ninterface HandshakeMessage {\n  type: 'HANDSHAKE';\n  extensionId: string;\n  version: string;\n}\n\n// Response:\ninterface HandshakeAck {\n  type: 'HANDSHAKE_ACK';\n  extensionId: string;\n  capabilities: string[];\n}\n\n// If no response within 2000ms, operate solo.\n```\n\n### 8.2 Position Sync\n\n```typescript\n// Rate: 30fps (~33ms interval)\n// Swordsman renders both orbs; Mage sends position only\n\ninterface PositionUpdate {\n  type: 'MAGE_POSITION' | 'SWORD_POSITION';\n  x: number;\n  y: number;\n  timestamp: number;\n}\n```\n\n---"
     },
     {
       "type": "markdown",
-      "id": "37fb8108a7f17900",
+      "id": "5725ef59f2056455",
       "text": "## Implementation Notes\n\n1. **Single Canvas Rule:** Swordsman extension owns the canvas overlay. Mage sends data, Swordsman renders.\n\n2. **Storage:**\n   - Extensions: `chrome.storage.local`\n   - Websites: `localStorage`\n   - Sync via Mana Bridge when on home territory\n\n3. **Message Validation:** Ceremony receivers should validate mana balance against inscription cost before rendering.\n\n4. **Anti-Spam:** Same-domain spell casts within 5 seconds don't earn mana.\n\n5. **Decay:** Community inscriptions fade over 30 days unless reinforced (0.5 mana).\n\n---\n\n*\"The grammar is the lore.\"*\n\n*(⚔️⊥⿻⊥🧙) 😊*"
     },
     {
       "type": "markdown",
-      "id": "a898aba0cfdbc85a",
+      "id": "35fad9344ce9fa4f",
       "text": "# Assets"
     },
     {
-      "id": "fa448ec836d47a6c",
+      "id": "bf095a6e0069a137",
       "type": "assets",
       "text": "spec-protocol-schemas"
     },
     {
       "type": "markdown",
-      "id": "ca1561b4e1ec425a",
+      "id": "ea8a2574eac644bb",
       "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
     }
   ],
@@ -85,82 +85,82 @@
         "story": [
           {
             "type": "markdown",
-            "id": "044707c5b1f8085a",
+            "id": "14a980512701a695",
             "text": "# Protocol Schemas"
           },
           {
             "type": "markdown",
-            "id": "1d3d40019610b37d",
+            "id": "ea27200c617fc4e9",
             "text": "**Version:** 1.0\n**Date:** March 31, 2026\n**Source:** DUAL_TERRITORY_CEREMONY_SPEC_v1.md\n**Purpose:** Canonical TypeScript interfaces for ceremony channel, mana, and data structures\n\n---"
           },
           {
             "type": "markdown",
-            "id": "f437b44c9db6def0",
+            "id": "8e21337eabd69aeb",
             "text": "## Overview\n\nThese schemas define the message grammar and data structures for the dual-territory architecture. They are extracted from DUAL_TERRITORY_CEREMONY_SPEC_v1.md and serve as the implementation reference for both extension repositories.\n\n**Usage:** Copy these interfaces directly into extension codebases. Keep this document as the single source of truth.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "7e552c9e15979151",
+            "id": "a9de6335d0aff34f",
             "text": "## 1. Ceremony Messages\n\n### 1.1 Core Ceremony Message\n\n```typescript\ninterface CeremonyMessage {\n  type: 'INSCRIPTION';\n  source: 'swordsman_extension' | 'mage_extension' | 'agentprivacy';\n  payload: NodeAnnotation | CommunityEdge | ConstellationProjection | ProverbForge;\n  mana_cost: number;\n  mana_balance: number; // sender's remaining balance after deduction\n  signature: string;    // proof of mana ownership\n}\n```\n\n### 1.2 Inscription Payloads\n\n```typescript\ninterface NodeAnnotation {\n  kind: 'node_annotation';\n  target_node_id: string;\n  text: string;        // max 280 chars\n  mana_cost: 1;\n}\n\ninterface CommunityEdge {\n  kind: 'community_edge';\n  source_node_id: string;\n  target_node_id: string;\n  label?: string;\n  mana_cost: 2;\n}\n\ninterface ConstellationProjection {\n  kind: 'constellation_projection';\n  nodes: string[];     // node IDs\n  connections: Array<{ source: string; target: string }>;\n  name: string;\n  mana_cost: 3;\n}\n\ninterface ProverbForge {\n  kind: 'proverb_forge';\n  text: string;        // max 280 chars\n  source_constellation_hash: string;\n  mana_cost: 4;\n}\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "dba6f5653e397e3e",
+            "id": "544ed2c1574e8dff",
             "text": "## 2. Ceremony Channel Messages\n\n### 2.1 Swordsman → Mage\n\n```typescript\ntype SwordMessage =\n  | { type: 'SLASH'; domain: string; trackers_found: number }\n  | { type: 'WARD'; domain: string; myterms_asserted: boolean }\n  | { type: 'SWORD_POSITION'; x: number; y: number }\n  | { type: 'CEREMONY_READY'; ceremony_type: CeremonyType }\n  | { type: 'HOME_TERRITORY'; hostname: string };\n```\n\n### 2.2 Mage → Swordsman\n\n```typescript\ntype MageMessage =\n  | { type: 'INSCRIBE'; spell_node: SpellNode }\n  | { type: 'SCAN'; scan_result: PageScanResult }\n  | { type: 'MAGE_POSITION'; x: number; y: number }\n  | { type: 'CONSTELLATION_UPDATE'; constellation: Constellation }\n  | { type: 'DRAKE_EMERGE'; conditions: DrakeConditions }\n  | { type: 'HEXAGRAM_UPDATE'; hexagram: HexagramState };\n```\n\n### 2.3 Ceremony Types\n\n```typescript\ntype CeremonyType =\n  | 'dual_convergence'\n  | 'hexagram_cast'\n  | 'emoji_cast'\n  | 'constellation_wave'\n  | 'bilateral_exchange';\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "4c036d15335d807d",
+            "id": "d3794da4fd23e5f4",
             "text": "## 3. Data Structures\n\n### 3.1 Forged Blade\n\n```typescript\ninterface ForgedBlade {\n  id: string;                    // e.g., \"SPELL-YW5I59-1Q\"\n  name: string;                  // user-chosen\n  emoji: string;                 // tier icon\n  tier: 'light' | 'heavy' | 'dragon';\n  stratum: number;               // 0-6 (Hamming weight)\n  proof: SpellProof;\n  forgedAt: string;              // ISO timestamp\n  constellationNodes: number;\n  constellationMarks: ConstellationMark[];\n  constellationConnections: ConstellationConnection[];\n  inscribedSpell: string;        // emoji spell string\n  reflection: string;            // user's message\n}\n\ninterface SpellProof {\n  hash: string;\n  timestamp: number;\n  lapCount: number;\n  duration: number;              // seconds\n}\n\ninterface ConstellationMark {\n  nodeId: string;\n  timestamp: number;\n}\n\ninterface ConstellationConnection {\n  source: string;\n  target: string;\n}\n```\n\n### 3.2 Hexagram\n\n```typescript\ntype HexagramLine = 0 | 1;\ntype HexagramState = [HexagramLine, HexagramLine, HexagramLine,\n                      HexagramLine, HexagramLine, HexagramLine];\n\ninterface NodeDimensions {\n  d1Hide: number;       // 0.0 to 1.0\n  d2Commit: number;\n  d3Prove: number;\n  d4Connect: number;\n  d5Reflect: number;\n  d6Delegate: number;\n}\n\ninterface HexagramInfo {\n  lines: HexagramState;\n  bladeId: number;      // 0-63\n  layer: number;        // 0-6\n  layerName: string;    // \"Null\" through \"Dragon\"\n  yangCount: number;\n}\n```\n\n### 3.3 Mana\n\n```typescript\ninterface ManaBalance {\n  total_earned: number;\n  total_spent: number;\n  current: number;       // total_earned - total_spent\n  history: ManaEvent[];\n}\n\ninterface ManaEvent {\n  type: 'earn' | 'spend';\n  action: string;\n  amount: number;\n  timestamp: number;\n  domain?: string;\n  inscription_id?: string;\n}\n\ninterface ManaEarnEvent {\n  type: 'spell_cast' | 'ceremony_complete' | 'blade_forged' | 'evocation_cycle';\n  timestamp: number;\n  domain: string;\n  amount: number;        // in mana units\n}\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "98aa37b5d70d38b9",
+            "id": "24fdb7320619ac61",
             "text": "## 4. Page Analysis Structures\n\n### 4.1 Scan Result\n\n```typescript\ninterface PageScanResult {\n  domain: string;\n  timestamp: number;\n  trackers: TrackerInfo[];\n  cookies: CookieAnalysis;\n  consentUI: ConsentUIAnalysis;\n  thirdPartyScripts: number;\n  mytermsEndpoint: boolean;\n  privacyPosture: number;        // 0.0 to 1.0\n}\n\ninterface TrackerInfo {\n  name: string;\n  category: 'analytics' | 'advertising' | 'social' | 'fingerprinting' | 'unknown';\n  domain: string;\n}\n\ninterface CookieAnalysis {\n  firstParty: number;\n  thirdParty: number;\n  sessionOnly: number;\n  persistent: number;\n  jurisdictions: string[];       // detected cookie jurisdictions\n}\n\ninterface ConsentUIAnalysis {\n  present: boolean;\n  acceptRejectSymmetry: boolean; // true if equal prominence\n  darkPatterns: string[];        // detected dark pattern types\n}\n```\n\n### 4.2 Hexagram Line Computation (Extension)\n\nExtension hexagram lines are computed from page analysis, not graph node dimensions:\n\n| Line | Metric | Yang Condition |\n|------|--------|----------------|\n| Line 1 | Key custody | HTTPS + no mixed content |\n| Line 2 | Credential disclosure | Consent UI quality (accept/reject symmetry) |\n| Line 3 | Agent delegation | Third-party script count < 5 |\n| Line 4 | Data residency | Cookie jurisdictional analysis favourable |\n| Line 5 | Interaction mode | First-party > third-party interaction ratio |\n| Line 6 | Trust boundary | MyTerms endpoint exists |\n\n---"
           },
           {
             "type": "markdown",
-            "id": "0ca6e0a22324bc43",
+            "id": "51924464bde662bb",
             "text": "## 5. Drake/Dragon Structures\n\n### 5.1 Drake Conditions\n\n```typescript\ninterface DrakeConditions {\n  bothExtensionsActive: boolean;\n  spellNodesOnDomain: number;    // >= 10 required\n  ceremoniesOnDomain: number;    // >= 5 required\n  trackersDetected: number;      // >= 10 required (surveillance-heavy)\n  ready: boolean;                // all conditions met\n}\n```\n\n### 5.2 Dragon Conditions\n\n```typescript\ninterface DragonConditions {\n  domainsAsserted: number;       // >= 10 required\n  totalConstellationNodes: number; // >= 64 required\n  drakeSummonings: number;       // >= 3 required\n  aggregatePrivacyPosture: number; // >= 0.7 required\n  ready: boolean;\n}\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "681eb35ce4fab78e",
+            "id": "95219ea85cfef105",
             "text": "## 6. Constellation Structures\n\n```typescript\ninterface Constellation {\n  id: string;\n  name: string;\n  nodes: string[];               // node IDs in marking order\n  connections: ConstellationConnection[];\n  createdAt: string;             // ISO timestamp\n  hash: string;                  // deterministic hash of nodes + connections\n}\n\ninterface SpellNode {\n  id: string;\n  type: 'emoji' | 'proverb' | 'keyword' | 'shield';\n  content: string;\n  position: { x: number; y: number };\n  createdAt: number;\n  domain: string;\n}\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "39605b626617ed5b",
+            "id": "33c05e41191211bf",
             "text": "## 7. Training Threshold\n\n```typescript\ninterface TrainingThreshold {\n  spells_cast: number;           // >= 3\n  sections_visited: number;      // >= 3\n  convergences_witnessed: number; // >= 1\n}\n```\n\nUsed to gate `/path` page access on agentprivacy.ai.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "2f5cbab36f5d2cb5",
+            "id": "a6b070d51ffdb87d",
             "text": "## 8. Communication Patterns\n\n### 8.1 Extension Handshake\n\n```typescript\n// On page load, each extension sends:\ninterface HandshakeMessage {\n  type: 'HANDSHAKE';\n  extensionId: string;\n  version: string;\n}\n\n// Response:\ninterface HandshakeAck {\n  type: 'HANDSHAKE_ACK';\n  extensionId: string;\n  capabilities: string[];\n}\n\n// If no response within 2000ms, operate solo.\n```\n\n### 8.2 Position Sync\n\n```typescript\n// Rate: 30fps (~33ms interval)\n// Swordsman renders both orbs; Mage sends position only\n\ninterface PositionUpdate {\n  type: 'MAGE_POSITION' | 'SWORD_POSITION';\n  x: number;\n  y: number;\n  timestamp: number;\n}\n```\n\n---"
           },
           {
             "type": "markdown",
-            "id": "37fb8108a7f17900",
+            "id": "5725ef59f2056455",
             "text": "## Implementation Notes\n\n1. **Single Canvas Rule:** Swordsman extension owns the canvas overlay. Mage sends data, Swordsman renders.\n\n2. **Storage:**\n   - Extensions: `chrome.storage.local`\n   - Websites: `localStorage`\n   - Sync via Mana Bridge when on home territory\n\n3. **Message Validation:** Ceremony receivers should validate mana balance against inscription cost before rendering.\n\n4. **Anti-Spam:** Same-domain spell casts within 5 seconds don't earn mana.\n\n5. **Decay:** Community inscriptions fade over 30 days unless reinforced (0.5 mana).\n\n---\n\n*\"The grammar is the lore.\"*\n\n*(⚔️⊥⿻⊥🧙) 😊*"
           },
           {
             "type": "markdown",
-            "id": "a898aba0cfdbc85a",
+            "id": "35fad9344ce9fa4f",
             "text": "# Assets"
           },
           {
-            "id": "fa448ec836d47a6c",
+            "id": "bf095a6e0069a137",
             "type": "assets",
             "text": "spec-protocol-schemas"
           },
           {
             "type": "markdown",
-            "id": "ca1561b4e1ec425a",
+            "id": "ea8a2574eac644bb",
             "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
           }
         ]
       },
-      "date": 1782602088927
+      "date": 1783100388145
     }
   ]
 }

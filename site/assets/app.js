@@ -14,7 +14,7 @@ if(q){q.addEventListener('focus',load);q.addEventListener('input',e=>run(e.targe
 (function(){var top=document.querySelector('.top');if(!top)return;top.classList.add('js-nav');
   var b=document.createElement('button');b.type='button';b.className='nav-toggle';
   b.setAttribute('aria-label','Toggle navigation menu');b.setAttribute('aria-expanded','false');
-  b.innerHTML='<span class="nt-bars">☰ menu</span><span class="nt-x">✕ close</span>';
+  b.innerHTML='<span class="nt-bars">\u2630 menu</span><span class="nt-x">\u2715 close</span>';
   var brand=top.querySelector('.brand');
   if(brand&&brand.nextSibling)top.insertBefore(b,brand.nextSibling);else top.appendChild(b);
   b.addEventListener('click',function(){var open=top.classList.toggle('nav-open');b.setAttribute('aria-expanded',open?'true':'false');});}());

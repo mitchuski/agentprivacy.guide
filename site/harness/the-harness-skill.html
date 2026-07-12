@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Harness Skill · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Harness Skill</span></div>
+  <article><div class="md"><h1>🗃️ The Harness Skill</h1>
+</div>
+<div class="md"><hr>
+<h2>name: dual-agent-harness<br>description: Build or run a soulbis ⚔️ ⊥ soulbae 🧙 dual-agent harness — a proposer and a prover held apart by a Fiat-Shamir Gap, so no result survives that the proposer could have tuned to. Use when setting up a rigorous optimization or autoresearch loop, when an agent keeps grading its own work, when you need held-out validation of AI-proposed changes, or when someone says &quot;dual agent harness&quot;, &quot;held-apart agents&quot;, &quot;soulbis/soulbae&quot;, &quot;autoresearch loop&quot;, &quot;the proposer is marking its own homework&quot;, or &quot;build my own harness path&quot;.<br>license: Apache-2.0<br>metadata:<br>  version: 1.0.0<br>  origin: 0xagentprivacy<br>  inscription: &quot;(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ&quot;<br>  proverb: &quot;The proposer that grades itself builds mirages; only what the Gap could not tune to is a result.&quot;<br>  spell: &quot;measure → propose(held-apart) → hunt → assay(held-out) → critic → accept-only-on-validated-product&quot;</h2>
+<h1>Dual-agent harness</h1>
+<p>A two-agent loop where the agent that proposes changes and the agent that<br>validates them are <strong>architecturally held apart</strong>. Between them sits the Gap:<br>verification witnesses are derived by hashing the proposal itself, so the<br>proposer cannot have optimised for them and the prover cannot be accused of<br>choosing them.</p>
+<p>Use it whenever a single agent would otherwise propose a change, run its own<br>check, and declare victory. That loop produces <strong>mirages</strong> — candidates that<br>pass the author&#39;s own probe and fail the real gate. This harness makes the<br>mirage a named verdict rather than a surprise.</p>
+</div>
+<div class="md"><h2>When to use</h2>
+<ul>
+<li>Setting up an optimization loop (make X smaller/faster/cheaper subject to a<br>constraint that must not break).</li>
+<li>Setting up an autoresearch loop (produce a claim, then prove it against<br>evidence the producer did not select).</li>
+<li>Any time an AI-proposed change needs held-out validation before a human<br>signs off.</li>
+</ul>
+</div>
+<div class="md"><h2>Build recipe</h2>
+<ol>
+<li><strong>Define the Gap first.</strong> If you cannot say how held-out witnesses derive<br>from a proposal by hashing, you do not have a harness yet — you have a<br>to-do list. Everything else follows from this.</li>
+<li><strong>Name the objective, the gate, and the hard constraint.</strong> The gate is a<br>factor in a product: any zero collapses the result at any score. The hard<br>constraint is validity no score can override.</li>
+<li><strong>Give the proposer at least two blind lenses.</strong> For a product objective,<br>one lens per factor, plus a cliff-watcher in the prover.</li>
+<li><strong>Copy <code>templates/harness.config.mjs</code></strong>, fill every TODO, bundle it with<br><code>tools/bundle.mjs</code>, run it.</li>
+<li><strong>Fold as the keystone</strong>, in the main session, with <code>conform.mjs</code> green<br>before and after.</li>
+</ol>
+</div>
+<div class="md"><h2>Hard rules</h2>
+<ul>
+<li>A candidate is not a result. Only a full-gate pass, hard constraint intact,<br>and a frontier beat is <code>VALIDATED</code>.</li>
+<li>Witnesses never come from the proposer. A validation on proposer-suggested<br>witnesses is void.</li>
+<li>A probe pass that fails the full gate is a <code>MIRAGE</code>. Name it; never soften<br>it.</li>
+<li>Negative results are filed as prominently as wins.</li>
+<li><strong>The door is the First Person&#39;s.</strong> Push, submit, publish, send — the<br>harness stops in front of these and lists them. It never opens them.</li>
+</ul>
+</div>
+<div class="md"><h2>Map</h2>
+<p><code>TRUSTS.md</code> (the constitution — six trusts, and where each one bites) ·<br><code>GROUND_RULES.md</code> (GR-1..GR-10) · <code>SEAT_CONTRACT.md</code> (the config interface) ·<br><code>seats/</code> (seven cards) · <code>engine/dual_agent_loop.mjs</code> (the loop) ·<br><code>engine/conform.mjs</code> (the gate that proves the algebra rather than asserting<br>it) · <code>examples/field-guide/</code> (a runnable spar) · <code>SPECIALISATION.md</code><br>(personas, spells, and the Game of 42 station pattern) · <code>HARNESS_PATHS.md</code><br>(eight real instances, grouped by how much of the loop each runs).</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 the-harness-skill</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-harness-skill.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

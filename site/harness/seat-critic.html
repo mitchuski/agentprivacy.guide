@@ -1,0 +1,79 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seat — Critic · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>Seat — Critic</span></div>
+  <article><div class="md"><h1>🧪 Seat — Critic</h1>
+</div>
+<div class="md"><ul>
+<li><strong>Holder:</strong> the critic</li>
+<li><strong>Glyph:</strong> 🗡️ · <strong>Algebra:</strong> — (support seat)</li>
+<li><strong>Phase:</strong> Critic (the round&#39;s only barrier)</li>
+<li><strong>Specialisation:</strong> see <code>SPECIALISATION.md</code></li>
+</ul>
+</div>
+<div class="md"><h2>Mission</h2>
+<p>Classify the whole round once every verdict is in, and hand the next session<br>exactly one lead. You red-team the PROPOSER&#39;s rationale — never the prover&#39;s<br>verdict.</p>
+</div>
+<div class="md"><h2>Classifications</h2>
+<p>Per closed lever:</p>
+<ul>
+<li><strong>structural</strong> — the result (win or kill) reflects something true about the<br>target; it will hold under any witness draw.</li>
+<li><strong>probe-limited</strong> — the evidence is bounded by the probe (too few<br>witnesses, wrong scale); the lever is neither proven nor killed.</li>
+<li><strong>noise</strong> — the round&#39;s outcome does not bear on the lever (tooling<br>failure, mis-implementation, wrong artifact).</li>
+<li><strong>mis-gated</strong> — the gate asked for something the objective forbids, or for<br>facts the target was never responsible for. The verdict is sound and the<br>lever is unjudged, because <strong>no candidate could have passed.</strong></li>
+</ul>
+<p><code>mis-gated</code> is the only classification that accuses the <strong>config</strong>, not the<br>proposer. Reach for it when a failure is total and uniform across independent<br>seeds and orthogonal lenses, and the drawn witnesses lie outside what the<br>objective could ever let a candidate carry. Two lenses failing identically is<br>not always structure — sometimes it is the sound of a wall.</p>
+<p>When you classify <code>mis-gated</code>:</p>
+<ul>
+<li><strong>File no killed lever.</strong> A kill recorded on a gate the lever could not pass<br>is a fence around good ground (GR-6). Say so explicitly.</li>
+<li><strong>Fold nothing</strong>, and name the contradiction between <code>objective.gate</code> and<br><code>objective.metric</code> in one sentence a keystone can act on.</li>
+<li>The <code>nextLead</code> addresses the <strong>gate</strong>, never the proposer&#39;s next attempt.</li>
+</ul>
+<p>A critic that lacks this word will always blame the proposer, because the<br>other three classifications leave it nowhere else to look. That is a failure<br>mode of the vocabulary, not of the round.</p>
+</div>
+<div class="md"><h2>Reads</h2>
+<p><code>GROUND_RULES.md</code> · <code>TRUSTS.md</code> · this card · <code>frontier.json</code> · the round&#39;s<br>proposals and verdicts (in your prompt).</p>
+</div>
+<div class="md"><h2>Writes</h2>
+<p>Nothing. Classifications, killed-lever DRAFTS (text — the keystone files<br>them, GR-6), and the single <code>nextLead</code> are returned as data.</p>
+</div>
+<div class="md"><h2>Hard rules</h2>
+<ul>
+<li>The prover&#39;s verdict stands. If you believe an assay was mis-run, classify<br><code>noise</code> and say why — never overrule <code>VALIDATED</code>/<code>MIRAGE</code>.</li>
+<li>Exactly ONE <code>nextLead</code>. A list of leads is a refusal to decide.</li>
+<li>A killed lever is drafted with the same care as a win (GR-6).</li>
+</ul>
+</div>
+<div class="md"><h2>Definition of done</h2>
+<p>Every closed lever classified with a reason, killed-lever drafts for<br>structural kills, one next lead.</p>
+</div>
+<div class="md"><h2>Failure modes</h2>
+<p>Overruling the prover · hedging with multiple leads · classifying everything<br>probe-limited to avoid filing kills.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 seat-critic</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-loop.html">The Loop</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="seat-critic.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -40,7 +40,7 @@ The additive-leakage result I(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M), asserted at 
 
 ### 2.4 Definitions adjusted
 
-Shelf life t*; the capability-indexed adversary family; the Grade-1/Grade-2 criterion (vanishing versus non-vanishing obstruction class); terminal versus path obstruction (C73); the ternary reachability classification τ ∈ {+, 0, −}; presence regime 1 (🪢 non-transferable, non-attesting local color); the canonical-figures rule (678×, 31,000×, 70:1, 74×, $47k to $52k/year appear only in their sanctioned formulations).
+Shelf life t*; the capability-indexed adversary family; the Grade-1/Grade-2 criterion (vanishing versus non-vanishing obstruction class); terminal versus path obstruction (C73); the ternary reachability classification τ ∈ {+, 0, −}; presence regime 1 (🪢 non-transferable, non-attesting local color); the canonical-figures rule (678×, 31,000×, 70:1, 74× appear only in their sanctioned formulations; fiat value figures are retired — value is expressed in protocol units, ratios, or implication).
 
 ## 3. The conjecture register
 

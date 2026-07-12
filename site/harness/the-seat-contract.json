@@ -1,0 +1,136 @@
+{
+  "title": "The Seat Contract",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "b03bf6b12748c705",
+      "text": "# 📋 The Seat Contract"
+    },
+    {
+      "type": "markdown",
+      "id": "7f5c3136743d767e",
+      "text": "The engine (`engine/dual_agent_loop.mjs`) is target-agnostic. A concrete\nharness is a **config object** that fills the seats for one domain. You\nshould never need to touch the engine; you write a config, bundle it with\n`tools/bundle.mjs`, and run it."
+    },
+    {
+      "type": "markdown",
+      "id": "4cd61b5bcc547315",
+      "text": "## The seven seats\n\n| seat id | holder | glyph | algebra | phase | permitted writes |\n|---|---|---|---|---|---|\n| `measure` | the assessor | 🧙💰 | — | Measure | nothing (numbers are returned, not written) |\n| `propose` | **soulbae** | 🧙 | `bnot` | Propose | nothing (plans only, never implements) |\n| `hold-apart` | **the Gap** | ⿻ | `xor` | Hold-apart | `runs/<id>/p<i>-*/gap.json` |\n| `assay` | **soulbis** | ⚔️ | `neg` | Assay | `runs/<id>/p<i>-*/` scratch + `verdict.json` |\n| `critic` | the critic | 🗡️ | — | Critic | nothing (classifications are returned) |\n| `chronicle` | the chronicler | 📚 | — | Chronicle | `runs/<id>/CHRONICLE_DRAFT.md` |\n| `keystone` | **soulbae ⊥ soulbis** | 🧙⚔️ | `succ` | between rounds, main session | `frontier.json` · `claims_register.md` · `manifest.yaml` · fold into the artifact |\n\nThe three algebra seats are the core: soulbae proposes (`bnot`, complement —\nreduce, reshape), the Gap separates (`xor`, the held-apart derivation),\nsoulbis proves (`neg`, negation — the verdict that does not flatter). Their\ncomposition is the successor: `neg(bnot(x)) = succ(x)`. The keystone is not a\nthird agent — it is the pair itself, operating in the main session where the\nledgers live, with the door (G4) always the First Person's."
+    },
+    {
+      "type": "markdown",
+      "id": "c3e6ad58f1bdba1e",
+      "text": "## The config shape\n\n```js\nexport default {\n  name: 'my-harness',\n\n  // objective — the first three required; the fourth is advised and will\n  // likely become required\n  objective: {\n    metric: 'what frontier.json tracks, lower is better (e.g. \"words\")',\n    gate: 'the held-out check that must fully pass — T5: zero collapses',\n    hardConstraint: 'validity no score can override — GR-3',\n    canary: 'an artifact that passes `gate` BY CONSTRUCTION, and why',\n  },\n\n  // trust literals — conform.mjs checks these\n  door: 'first-person',                       // T6, exact literal\n  heldApartRule: 'REQUIRED. Injected verbatim into every propose prompt. ' +\n    'State that the proposer never sees, chooses, or influences the ' +\n    'held-out witnesses, and that witnesses derive from the proposal ' +\n    'artifact by hashing.',                   // T2 / GR-4\n  keystoneOnlyWrites: ['frontier.json', 'claims_register.md', 'manifest.yaml'],\n\n  // finders — soulbae's parallel lenses, >= 2, blind to each other\n  finders: [\n    { lens: 'lens-a', hint: 'what this lens looks for' },\n    { lens: 'lens-b', hint: 'a genuinely different angle' },\n  ],\n\n  // prompt builders — strings; the engine prepends the boot preamble\n  prompts: {\n    measure:   (ctx) => '...',\n    propose:   (finder, measure, ctx) => '...',\n    holdApart: (proposal, i, ctx) => '...',\n    assay:     (proposal, gap, i, ctx) => '...',\n    critic:    (proposals, verdicts, ctx) => '...',\n    chronicle: (round, ctx) => '...',\n  },\n\n  // JSON Schemas forcing structured seat output — all five required\n  schemas: { measure, proposal, gap, verdict, critic },\n\n  // stopping\n  stop: { dryRounds: 2, maxRounds: 5 },\n\n  // predicates\n  isValidated:  (v, measure) => v.status === 'VALIDATED',  // must already\n      // conjoin gate-pass AND metric win inside the assay verdict (T5)\n  isStructural: (critic, leverId) =>\n      critic.classifications?.some(c => c.leverId === leverId && c.class === 'structural'),\n\n  // optional: extra numeric checks conform.mjs runs against frontier.json\n  conformChecks: [(frontier) => /* return array of error strings */ []],\n}\n```\n\n`ctx` is `{ root, repo, runId, runDir, config }` — paths already normalized.\n`repo` is the instance directory (frontier, artifact, runs); `root` is the\nskeleton clone holding `GROUND_RULES.md`, `TRUSTS.md`, and `seats/`, which\nevery seat boots from (T3). Pass `root` in the run args whenever the instance\nlives outside the skeleton and does not carry its own copies of those\ndocuments — it defaults to `repo`."
+    },
+    {
+      "type": "markdown",
+      "id": "a3189534dbbd555b",
+      "text": "## Recommended schema fields\n\nInstantiate these for your domain; the shapes below are what survived the\nsource harnesses.\n\n- **proposal**: the schema validates one FINDER's return, and the engine\n  expects the wrapper `{ proposals: Proposal[] }` (a lens may return more\n  than one lever). Each `Proposal` is `{ leverId, title, lens, rationale,\n  expectedMetric, hardConstraintNote, diffPlan, killedLeverCitations[] }` —\n  `leverId` is a short kebab id; `diffPlan` names real parts of the real\n  artifact; `killedLeverCitations` proves the proposer read\n  `notes/KILLED_LEVERS.md`.\n- **gap**: `{ seedHex, draw, transcript }` — the transcript must let a third\n  party re-derive the seed: the exact canonical serialization (sorted keys,\n  no whitespace), the exact hash command, the exact draw rule.\n- **verdict**: `{ leverId, status: 'VALIDATED'|'MIRAGE'|'BLOCKED', metric,\n  gateResult, evidence, scratchDir }` — evidence is run commands plus key\n  output lines. `MIRAGE` = passed the proposer's story, failed the full gate;\n  name the failing check. `BLOCKED` = could not run; name the missing piece.\n- **critic**: `{ classifications: [{leverId, class:\n  'structural'|'probe-limited'|'noise', why}], nextLead, killedLeverDrafts[] }`\n  — exactly one `nextLead`.\n\n### Optional: `mana` (advisory, display-only)\n\nA config MAY declare `mana: ['🌞', …]` (or a single string) — the instance's\ndeclared mana affinity from the workshop taxonomy of its universe. The engine\nignores it entirely; the conformance gate does not check it; the workshop\nconsole and the artefact mint carry it through as display chips and as\n`artefact.json.mana`. It is colour, not proof — *the mana is what you play\nwith; the VRC is what you prove with* — and an instance with no universe\nsimply omits it."
+    },
+    {
+      "type": "markdown",
+      "id": "d758f64cb27a57f3",
+      "text": "## The canary — and when NOT to build a harness\n\n**A gate with no artifact known to pass it cannot distinguish a bad candidate\nfrom an impossible gate.** Name one, in `objective.canary`.\n\nThe spar is safe by accident: its 8 questions are drawn *from* `GUIDE.md`, so\nthe uncompressed original answers all 8 by construction. The feasible set is\nprovably non-empty, and every `MIRAGE` is therefore the candidate's fault.\nTake the canary away and a total failure becomes ambiguous — which is exactly\nwhat happened to the `universe-builder` instance, where two blind lenses each\nscored 0/8 against a gate that *no* candidate could pass, and the critic,\nhaving no word for a bad gate, convicted the proposer on sound evidence.\n`conform.mjs` advises on a missing canary today.\n\nBefore you write any of this, ask whether you need a harness at all:\n\n> **The Gap earns its cost only where the claim space is too large to check.**\n\nshor_mage samples 9,024 witnesses because you cannot run every input. tigzkp\nsamples held-out points because R1CS equivalence cannot be enumerated. There,\nsampling is a necessity and hashing the proposal is what makes it honest.\n\nIf your claim space is **enumerable**, check all of it. Against an exhaustive\ncheck a mirage is impossible: there is nothing to tune to. You want an\n**auditor** — deterministic, total, cheap — not a prover. `universe/audit.mjs`\nis one, and `universe/retired/` is the harness it replaced, kept as a worked\nnegative result.\n\nThe complementary test, from Promise Theory: the split is warranted when a\nsingle agent would have to promise **two things it cannot independently\ncontrol**. If one agent can honestly promise the whole job — because anyone\nmay verify it completely, afterward — you do not need the pair."
+    },
+    {
+      "type": "markdown",
+      "id": "f14673b4410f7961",
+      "text": "## Product objectives — the complement pair\n\nIf your objective is a **product** of two factors (say `gates × qubits`),\ngive soulbae one finder per factor — Factor-A-minimiser ⊥ Factor-B-minimiser,\nblind to each other — and put a **cliff-watcher** clause in the assay prompt:\nscore Δ(product), and reject any move that wins one factor at the other's\nexpense past break-even. The constitutional basis is T5: any zero (or any\nnet-negative trade) collapses the whole. This pattern comes from the\nshor_mage instance, where the score is `avg executed Toffoli × peak qubits`.\n\nWhen one factor is a **binary gate** (pass/fail), the gate itself is the\ncliff-watcher: a fail is a zero, and a zero collapses the product. The spar\n(`examples/field-guide/`) uses this form."
+    },
+    {
+      "type": "markdown",
+      "id": "c2746df728675be9",
+      "text": "## The runtime adapter\n\nThe engine takes `rt = { agent, parallel, pipeline, phase, log }`:\n\n- `agent(prompt, opts) -> Promise<any>` — run a subagent; with\n  `opts.schema` (JSON Schema) it returns a validated object.\n- `parallel(thunks) -> Promise<any[]>` — barrier; failed thunks resolve null.\n- `pipeline(items, ...stages) -> Promise<any[]>` — per-item stages, no\n  barrier between stages; stage callbacks receive `(prev, item, index)`.\n- `phase(title)`, `log(msg)` — progress display.\n\n`runHarness` returns `{ status, rounds, tally, confirmed, best, detail,\nkeystoneTodo }`. **`status` is `'COMPLETE'` or `'INCOMPLETE'`.** A round that\nloses a seat to infrastructure — a dead agent, a killed session — is marked\n`FAILED`, does **not** count as a dry round, and stops the loop with an\n`aborted` block naming the dead seats. An outage is not an exhausted search,\nand `keystoneTodo` says **FOLD NOTHING** when the two are confused. A finder\nthat *returns* zero proposals is still a dry round: empty is evidence, dead is\nnot. `engine/loop.test.mjs` pins this.\n\nInside the Claude Code **Workflow tool** these five exist as globals and\n`import` is unavailable — which is why `tools/bundle.mjs` concatenates the\nengine and your config into one self-contained `.workflow.mjs`. Under the\nClaude Agent SDK or a plain node driver, implement the five functions\nyourself and call `runHarness(config, rt)` directly. Configs must therefore\nbe self-contained: no imports."
+    },
+    {
+      "type": "markdown",
+      "id": "8cec70ba84b9c380",
+      "text": "# Assets"
+    },
+    {
+      "id": "0b4006b33f35b1e8",
+      "type": "assets",
+      "text": "the-seat-contract"
+    },
+    {
+      "type": "markdown",
+      "id": "ddba8293e7b79094",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
+    },
+    {
+      "type": "markdown",
+      "id": "64d1b7ce879f4bcd",
+      "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "The Seat Contract",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "b03bf6b12748c705",
+            "text": "# 📋 The Seat Contract"
+          },
+          {
+            "type": "markdown",
+            "id": "7f5c3136743d767e",
+            "text": "The engine (`engine/dual_agent_loop.mjs`) is target-agnostic. A concrete\nharness is a **config object** that fills the seats for one domain. You\nshould never need to touch the engine; you write a config, bundle it with\n`tools/bundle.mjs`, and run it."
+          },
+          {
+            "type": "markdown",
+            "id": "4cd61b5bcc547315",
+            "text": "## The seven seats\n\n| seat id | holder | glyph | algebra | phase | permitted writes |\n|---|---|---|---|---|---|\n| `measure` | the assessor | 🧙💰 | — | Measure | nothing (numbers are returned, not written) |\n| `propose` | **soulbae** | 🧙 | `bnot` | Propose | nothing (plans only, never implements) |\n| `hold-apart` | **the Gap** | ⿻ | `xor` | Hold-apart | `runs/<id>/p<i>-*/gap.json` |\n| `assay` | **soulbis** | ⚔️ | `neg` | Assay | `runs/<id>/p<i>-*/` scratch + `verdict.json` |\n| `critic` | the critic | 🗡️ | — | Critic | nothing (classifications are returned) |\n| `chronicle` | the chronicler | 📚 | — | Chronicle | `runs/<id>/CHRONICLE_DRAFT.md` |\n| `keystone` | **soulbae ⊥ soulbis** | 🧙⚔️ | `succ` | between rounds, main session | `frontier.json` · `claims_register.md` · `manifest.yaml` · fold into the artifact |\n\nThe three algebra seats are the core: soulbae proposes (`bnot`, complement —\nreduce, reshape), the Gap separates (`xor`, the held-apart derivation),\nsoulbis proves (`neg`, negation — the verdict that does not flatter). Their\ncomposition is the successor: `neg(bnot(x)) = succ(x)`. The keystone is not a\nthird agent — it is the pair itself, operating in the main session where the\nledgers live, with the door (G4) always the First Person's."
+          },
+          {
+            "type": "markdown",
+            "id": "c3e6ad58f1bdba1e",
+            "text": "## The config shape\n\n```js\nexport default {\n  name: 'my-harness',\n\n  // objective — the first three required; the fourth is advised and will\n  // likely become required\n  objective: {\n    metric: 'what frontier.json tracks, lower is better (e.g. \"words\")',\n    gate: 'the held-out check that must fully pass — T5: zero collapses',\n    hardConstraint: 'validity no score can override — GR-3',\n    canary: 'an artifact that passes `gate` BY CONSTRUCTION, and why',\n  },\n\n  // trust literals — conform.mjs checks these\n  door: 'first-person',                       // T6, exact literal\n  heldApartRule: 'REQUIRED. Injected verbatim into every propose prompt. ' +\n    'State that the proposer never sees, chooses, or influences the ' +\n    'held-out witnesses, and that witnesses derive from the proposal ' +\n    'artifact by hashing.',                   // T2 / GR-4\n  keystoneOnlyWrites: ['frontier.json', 'claims_register.md', 'manifest.yaml'],\n\n  // finders — soulbae's parallel lenses, >= 2, blind to each other\n  finders: [\n    { lens: 'lens-a', hint: 'what this lens looks for' },\n    { lens: 'lens-b', hint: 'a genuinely different angle' },\n  ],\n\n  // prompt builders — strings; the engine prepends the boot preamble\n  prompts: {\n    measure:   (ctx) => '...',\n    propose:   (finder, measure, ctx) => '...',\n    holdApart: (proposal, i, ctx) => '...',\n    assay:     (proposal, gap, i, ctx) => '...',\n    critic:    (proposals, verdicts, ctx) => '...',\n    chronicle: (round, ctx) => '...',\n  },\n\n  // JSON Schemas forcing structured seat output — all five required\n  schemas: { measure, proposal, gap, verdict, critic },\n\n  // stopping\n  stop: { dryRounds: 2, maxRounds: 5 },\n\n  // predicates\n  isValidated:  (v, measure) => v.status === 'VALIDATED',  // must already\n      // conjoin gate-pass AND metric win inside the assay verdict (T5)\n  isStructural: (critic, leverId) =>\n      critic.classifications?.some(c => c.leverId === leverId && c.class === 'structural'),\n\n  // optional: extra numeric checks conform.mjs runs against frontier.json\n  conformChecks: [(frontier) => /* return array of error strings */ []],\n}\n```\n\n`ctx` is `{ root, repo, runId, runDir, config }` — paths already normalized.\n`repo` is the instance directory (frontier, artifact, runs); `root` is the\nskeleton clone holding `GROUND_RULES.md`, `TRUSTS.md`, and `seats/`, which\nevery seat boots from (T3). Pass `root` in the run args whenever the instance\nlives outside the skeleton and does not carry its own copies of those\ndocuments — it defaults to `repo`."
+          },
+          {
+            "type": "markdown",
+            "id": "a3189534dbbd555b",
+            "text": "## Recommended schema fields\n\nInstantiate these for your domain; the shapes below are what survived the\nsource harnesses.\n\n- **proposal**: the schema validates one FINDER's return, and the engine\n  expects the wrapper `{ proposals: Proposal[] }` (a lens may return more\n  than one lever). Each `Proposal` is `{ leverId, title, lens, rationale,\n  expectedMetric, hardConstraintNote, diffPlan, killedLeverCitations[] }` —\n  `leverId` is a short kebab id; `diffPlan` names real parts of the real\n  artifact; `killedLeverCitations` proves the proposer read\n  `notes/KILLED_LEVERS.md`.\n- **gap**: `{ seedHex, draw, transcript }` — the transcript must let a third\n  party re-derive the seed: the exact canonical serialization (sorted keys,\n  no whitespace), the exact hash command, the exact draw rule.\n- **verdict**: `{ leverId, status: 'VALIDATED'|'MIRAGE'|'BLOCKED', metric,\n  gateResult, evidence, scratchDir }` — evidence is run commands plus key\n  output lines. `MIRAGE` = passed the proposer's story, failed the full gate;\n  name the failing check. `BLOCKED` = could not run; name the missing piece.\n- **critic**: `{ classifications: [{leverId, class:\n  'structural'|'probe-limited'|'noise', why}], nextLead, killedLeverDrafts[] }`\n  — exactly one `nextLead`.\n\n### Optional: `mana` (advisory, display-only)\n\nA config MAY declare `mana: ['🌞', …]` (or a single string) — the instance's\ndeclared mana affinity from the workshop taxonomy of its universe. The engine\nignores it entirely; the conformance gate does not check it; the workshop\nconsole and the artefact mint carry it through as display chips and as\n`artefact.json.mana`. It is colour, not proof — *the mana is what you play\nwith; the VRC is what you prove with* — and an instance with no universe\nsimply omits it."
+          },
+          {
+            "type": "markdown",
+            "id": "d758f64cb27a57f3",
+            "text": "## The canary — and when NOT to build a harness\n\n**A gate with no artifact known to pass it cannot distinguish a bad candidate\nfrom an impossible gate.** Name one, in `objective.canary`.\n\nThe spar is safe by accident: its 8 questions are drawn *from* `GUIDE.md`, so\nthe uncompressed original answers all 8 by construction. The feasible set is\nprovably non-empty, and every `MIRAGE` is therefore the candidate's fault.\nTake the canary away and a total failure becomes ambiguous — which is exactly\nwhat happened to the `universe-builder` instance, where two blind lenses each\nscored 0/8 against a gate that *no* candidate could pass, and the critic,\nhaving no word for a bad gate, convicted the proposer on sound evidence.\n`conform.mjs` advises on a missing canary today.\n\nBefore you write any of this, ask whether you need a harness at all:\n\n> **The Gap earns its cost only where the claim space is too large to check.**\n\nshor_mage samples 9,024 witnesses because you cannot run every input. tigzkp\nsamples held-out points because R1CS equivalence cannot be enumerated. There,\nsampling is a necessity and hashing the proposal is what makes it honest.\n\nIf your claim space is **enumerable**, check all of it. Against an exhaustive\ncheck a mirage is impossible: there is nothing to tune to. You want an\n**auditor** — deterministic, total, cheap — not a prover. `universe/audit.mjs`\nis one, and `universe/retired/` is the harness it replaced, kept as a worked\nnegative result.\n\nThe complementary test, from Promise Theory: the split is warranted when a\nsingle agent would have to promise **two things it cannot independently\ncontrol**. If one agent can honestly promise the whole job — because anyone\nmay verify it completely, afterward — you do not need the pair."
+          },
+          {
+            "type": "markdown",
+            "id": "f14673b4410f7961",
+            "text": "## Product objectives — the complement pair\n\nIf your objective is a **product** of two factors (say `gates × qubits`),\ngive soulbae one finder per factor — Factor-A-minimiser ⊥ Factor-B-minimiser,\nblind to each other — and put a **cliff-watcher** clause in the assay prompt:\nscore Δ(product), and reject any move that wins one factor at the other's\nexpense past break-even. The constitutional basis is T5: any zero (or any\nnet-negative trade) collapses the whole. This pattern comes from the\nshor_mage instance, where the score is `avg executed Toffoli × peak qubits`.\n\nWhen one factor is a **binary gate** (pass/fail), the gate itself is the\ncliff-watcher: a fail is a zero, and a zero collapses the product. The spar\n(`examples/field-guide/`) uses this form."
+          },
+          {
+            "type": "markdown",
+            "id": "c2746df728675be9",
+            "text": "## The runtime adapter\n\nThe engine takes `rt = { agent, parallel, pipeline, phase, log }`:\n\n- `agent(prompt, opts) -> Promise<any>` — run a subagent; with\n  `opts.schema` (JSON Schema) it returns a validated object.\n- `parallel(thunks) -> Promise<any[]>` — barrier; failed thunks resolve null.\n- `pipeline(items, ...stages) -> Promise<any[]>` — per-item stages, no\n  barrier between stages; stage callbacks receive `(prev, item, index)`.\n- `phase(title)`, `log(msg)` — progress display.\n\n`runHarness` returns `{ status, rounds, tally, confirmed, best, detail,\nkeystoneTodo }`. **`status` is `'COMPLETE'` or `'INCOMPLETE'`.** A round that\nloses a seat to infrastructure — a dead agent, a killed session — is marked\n`FAILED`, does **not** count as a dry round, and stops the loop with an\n`aborted` block naming the dead seats. An outage is not an exhausted search,\nand `keystoneTodo` says **FOLD NOTHING** when the two are confused. A finder\nthat *returns* zero proposals is still a dry round: empty is evidence, dead is\nnot. `engine/loop.test.mjs` pins this.\n\nInside the Claude Code **Workflow tool** these five exist as globals and\n`import` is unavailable — which is why `tools/bundle.mjs` concatenates the\nengine and your config into one self-contained `.workflow.mjs`. Under the\nClaude Agent SDK or a plain node driver, implement the five functions\nyourself and call `runHarness(config, rt)` directly. Configs must therefore\nbe self-contained: no imports."
+          },
+          {
+            "type": "markdown",
+            "id": "8cec70ba84b9c380",
+            "text": "# Assets"
+          },
+          {
+            "id": "0b4006b33f35b1e8",
+            "type": "assets",
+            "text": "the-seat-contract"
+          },
+          {
+            "type": "markdown",
+            "id": "ddba8293e7b79094",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
+          },
+          {
+            "type": "markdown",
+            "id": "64d1b7ce879f4bcd",
+            "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+          }
+        ]
+      },
+      "date": 1783862592684
+    }
+  ]
+}

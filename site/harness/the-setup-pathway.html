@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Setup Pathway · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Setup Pathway</span></div>
+  <article><div class="md"><h1>🚪 The Setup Pathway — clone to your own harness</h1>
+</div>
+<div class="md"><p><strong>What this is.</strong> A verification harness for AI-agent work: one agent proposes, a second independently proves, and the tests that decide are derived by hashing the proposal itself — so neither agent could have chosen them. Config-driven, zero dependencies, every axiom checked at runtime. Full statement: <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a>.</p>
+<p><strong>Where it stands.</strong> Debugged by being run — seven defects found on execution, each fixed and pinned. The toy has a real advancing frontier (see <a class="wlink" href="the-field-guide-spar.html">The Field Guide Spar</a>, numbers cited live). Ten embodiments catalogued in <a class="wlink" href="the-harness-paths.html">The Harness Paths</a>. The skeleton is domain-neutral and stays that way.</p>
+<p><strong>Requirements.</strong> Node ≥ 18, nothing else. Multi-agent rounds need a seat driver — Claude Code&#39;s Workflow tool is the reference runtime; the engine also accepts any <code>rt = { agent, parallel, pipeline, phase, log }</code> you supply.</p>
+</div>
+<div class="md"><h2>The seven steps</h2>
+<ol>
+<li><strong>Prove the axioms</strong> — <code>node tools/check.mjs</code>: the ℤ/64ℤ algebra, the engine&#39;s failure-semantics tests, conformance of every instance, and the negative test that the blank template fails <em>for the right reasons</em>. See <a class="wlink" href="the-engine-and-its-gates.html">The Engine And Its Gates</a>.</li>
+<li><strong>Read the constitution</strong> — <a class="wlink" href="the-six-trusts.html">The Six Trusts</a>, then <a class="wlink" href="the-ten-ground-rules.html">The Ten Ground Rules</a>. These are the parts you should not change.</li>
+<li><strong>Run the toy</strong> — a real round against the field guide: Workflow tool, <code>scriptPath: examples/field-guide/harness.workflow.mjs</code>, <code>args: {repo, root, runId}</code>. All writes land in <code>runs/&lt;runId&gt;/</code>; the frontier does not move on its own. See <a class="wlink" href="the-field-guide-spar.html">The Field Guide Spar</a>.</li>
+<li><strong>Audit and view</strong> — <code>node tools/render_run.mjs examples/field-guide &lt;runId&gt;</code> re-derives every Gap seed from the saved proposal bytes; or <code>sha256sum proposal_canon.json</code> = <code>seedHex</code> by hand.</li>
+<li><strong>Fold as keystone</strong> — conform green → fold the validated-and-structural lever → frontier first, prose second → chronicle → conform green again. See <a class="wlink" href="seat-keystone.html">Seat — Keystone</a> and <a class="wlink" href="the-ledgers.html">The Ledgers</a>. Publishing anything is the First Person&#39;s alone (T6); where the claim space is enumerable, run the census first (what you can count, count).</li>
+<li><strong>Seal what survived</strong> — mint_artefact.mjs writes a κ-labelled artefact bundle (content-addressed, never trusted only re-derived) with an evidence hash-manifest and a DOOR.md of the actions software did NOT take; it refuses tampered seeds, red gates, and verdict-less runs. Bundles surface in <a class="wlink" href="the-workshop-console.html">The Workshop Console</a>.</li>
+<li><strong>Scaffold your own</strong> — <code>node tools/new_instance.mjs ../my-harness my-harness</code>, fill every TODO (gate and bundler both refuse a config still wearing them), bundle, run like the toy. <a class="wlink" href="the-seat-contract.html">The Seat Contract</a> is the interface and <a class="wlink" href="adopting-the-harness.html">Adopting The Harness</a> is the map — the harness-vs-auditor decision, the five answers that become your config, and six worked domain mappings. <strong>Define the Gap first</strong> — no hash-derived witnesses, no harness; you may want an auditor instead (<a class="wlink" href="harness-path-the-universe-builder-retired.html">Harness Path — The Universe Builder Retired</a>).</li>
+<li><strong>Specialise when it earns it</strong> — <a class="wlink" href="specialisation-the-game-of-42.html">Specialisation — The Game Of 42</a> and <a class="wlink" href="mage-and-swordsman.html">Mage And Swordsman</a>; <a class="wlink" href="the-harness-paths.html">The Harness Paths</a> shows ten real configs at every weight.</li>
+</ol>
+</div>
+<div class="md"><h2>Follow the story</h2>
+<p>The pathway has been walked end to end under its own gates: the spar&#39;s frontier records four audited folds — 730 → 573 → 526 → 472 words, every step at gate 8/8 on hash-drawn witnesses, the last two closed by exhaustive census — numbers cited live on <a class="wlink" href="the-field-guide-spar.html">The Field Guide Spar</a>. The loop found seven of its own defects by running; one round was watched live in <a class="wlink" href="the-workshop-console.html">The Workshop Console</a>; two κ-labelled artefacts sit PREPARED at the door; one seat is held open by invitation (<a class="wlink" href="harness-path-hearthold-the-open-slot.html">Harness Path — Hearthold The Open Slot</a>). The chronicles in the repo are the record, read them in date order — the wiki is the map.</p>
+<h2>The whole pathway in one sentence</h2>
+<p>Prove the axioms, read the trusts, run a round you can audit by hash, fold only what two separated agents agreed on, and only then make it yours — <em>your harness path is a config, not a fork.</em></p>
+</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a> · <a class="wlink" href="workflows-and-runtimes.html">Workflows And Runtimes</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-setup-pathway.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

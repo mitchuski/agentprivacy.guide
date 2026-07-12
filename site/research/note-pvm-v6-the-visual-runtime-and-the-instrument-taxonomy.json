@@ -1,0 +1,136 @@
+{
+  "title": "Note — PVM V6 · the visual runtime and the instrument taxonomy",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "d63c09a9cea6bfbe",
+      "text": "# PVM V6 · the visual runtime and the instrument taxonomy"
+    },
+    {
+      "type": "markdown",
+      "id": "b8ff4073aaecb280",
+      "text": "# PVM V6 · the visual runtime and the instrument taxonomy\n\n*A handoff note. The agentprivacy.ai/model page gained an interactive visual\nruntime (\"the Cartographer\"). This note records the findings as proposed\nadditions to V6, so a future agentprivacy-docs context can formalize them. The\nregister at head C89 remains the authority; nothing here re-numbers it.*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "fcfee7d524ae5e67",
+      "text": "## Why this note exists\n\nThe `/model` page is the math-atomic surface of the framework. It read as an\nopen path; it now also *walks* as one. The build (see the companion chronicle,\n`chronicles/2026-06-28_v6_visual_runtime_instruments.md`) added a small\ndata-driven runtime that binds one interactive instrument per term or\nconjecture and pulls each claim's honesty (confidence · status · home) **live**\nfrom the register mirror. The seed for the design was\n`research/limitative-theorems-and-privacy-is-value.md` and its companion\n`limitative-theorems-explorer.html`.\n\nThe runtime surfaced three things worth folding into V6.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "6aa8790296648c44",
+      "text": "## 1. The instrument taxonomy (a reusable unit, not a per-conjecture gallery)\n\nThe register does not need one bespoke visual per claim. It needs a small set of\n**reusable instrument kinds**; each conjecture is a *configuration* of a kind.\nSeven kinds cover most of the register:\n\n| kind | what it teaches | register targets (examples) |\n|---|---|---|\n| **trace** | two chains joined across a ⊥ seam; click a correspondence | C85 ARCH-1 bridge · the Gödel/Tarski mapping |\n| **gate** | a multiplicative product collapsing when any factor → 0 | **C7** three-axis (the falsification frontier) · whole V(π,t) |\n| **curve** | a value falling/rising against a parameter or time | **C81** existence-leak · **C82** moving ceiling · e^(−λt) · C30–C33 half-life |\n| **dial / inversion** | one parameter driving parallel meters to a shared collapse | C17 amnesia > policy · the completeness inversion |\n| **lattice / geometry** | the 64-vertex lattice, strata, bnot-pairs, the stella octangula | C14 dihedral · C53–C54 bnot-pairs · **C88** parity cube · **C89** octahedral gap |\n| **phase** | a trajectory through state space | C18–C21 Lorenz · T_∫(π) path integral |\n| **fold / compose** | accumulation and the exponential-to-linear gap | **C83** compositional leakage · C87 Key-as-accumulator (IVC) |\n\n*(Architectural. The taxonomy is the unit of build work, not the conjecture\ncount. Observation-only / reserved rows — e.g. C41, C57, C62 — get no\ninstrument; a visual earns its place only where a parameter can be moved or a\nstructure traced.)*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "12d3fe82c494f7c9",
+      "text": "## 2. The binding rule — honesty is read, never embedded\n\n**Every instrument binds to a register id and reads its honesty live.** The\nvisual owns its interaction and its *illustrative* model; the register owns the\nclaim. A curve never states a confidence — it asks the register for one. If the\nregister moves C81 from 70% to a higher stage, the existence-leak frame moves\nwith it, with no edit to the visual. This makes the existing rule (\"when a\nsurface and the register disagree, the register wins\") **mechanical** rather\nthan editorial.\n\nA load-bearing field rides on each instrument: `model_label ∈ {illustrative,\nstructural, proven}`. It forces every shape to declare whether it is the proven\nrelation or a chosen teaching model, and the frame marks it visibly. The\nexistence-leak curve's convex shape is `illustrative`; the three-axis gate's\nmultiplicativity is `structural`.\n\n*(Operational. Implemented as a manifest + a frame that calls the register\nmirror at render time.)*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "773129bf5b6472aa",
+      "text": "## 3. The drift correction (a concrete V6 erratum the runtime forced)\n\nThe seed explorer hard-coded its confidences. It rendered the existence-leak\ncurve at **~55%** and labelled it **~C40** — both inherited from a stale source.\nThe live register is **C81 at ~70%** (\"Existence-Leak: a ZK proof of\nfeasibility leaks an upper bound on reconstruction difficulty; I(feasibility;\nmethod) > 0\", PROMOTED Run 3 2026-06-10). The runtime binds the curve to **C81**\nand the frame reads ~70% live.\n\n**Proposed erratum for any prose still carrying the seed's numbers:** the\nexistence-leak instrument is **C81 (~70%)**, not ~C40 (~55%). C40 is the Zcash\ndual-ledger entry in the Bound Collection; the generic \"~C40\" the limitative\nnote used for existence-leak should be read as **C81** going forward. The\nlimitative note (`research/limitative-theorems-and-privacy-is-value.md`) already\ntouches C7, C14, C81, C85, C86 — this just fixes the existence-leak pointer.\n\n*(Operational — the drift was observed directly; the correction is a pointer\nfix, not a re-numbering.)*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "ba5dd3a0ac2e3c82",
+      "text": "## 4. The two-register tie — the Cartographer ⊥ the Chart Shop\n\nThe City already narrates this runtime in advance. The Navigation District at\n**V44** — the **Chart Shop**, Pleione's harbour — is described as an\n*attentional* shop holding pre-episodic constellations in suspension until the\nbearer chooses a release-direction (astrolabe + the Φ-gap-at-epistemic-register\nas primitives). That is a visualisation runtime narrated before it was built.\n\nSo the operational runtime is the Chart Shop's **math-atomic twin**. Proposed\nnaming: **the Cartographer** (the runtime) renders **charts** (the instruments),\nnarrated by the Chart Shop at V44. By the convergence rule, when a math term the\nChart Shop narrates gains a concrete movable instance, confidence rises on both\nsides. No such tie currently exists in the docs — this note opens it.\n\n*(Anticipated. The narrative anchor exists; this names the operational instance\nagainst it. A future context may want a city-register conjecture for the\nCartographer ⊥ Chart Shop convergence — candidate, not registered here.)*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "aa21bc96ba66c661",
+      "text": "## 5. Geometry is not greenfield (deferred, but mapped)\n\nThe geometry/phase instruments already exist as prototypes: `soulbis.com/star`\n(in `C:\\Users\\mitch\\star`) renders the stella octangula manifold with a live\nlattice console (ε separation depth, det(Σ) core scale, the ⚔️:🧙 ratio, n = 6\nazimuthal bits, the ∂M 96/64 boundary) and a **City Key import** that walks a\nreal artifact's path. The `/lattice`, `/sigil`, `/skye` siblings are the same\nfamily. Phase 3 of the runtime is **absorption + reconciliation (V5.4 → V6) +\nregister binding** (ε/det(Σ)/ratio → Φ_agent/C1; 96/64 → C6; neg·bnot·succ →\nC14; the star tetrahedron → C88/C89; the path walk → T_∫/C18–C21), not first\nbuild. The City Key import should generalize to a first-class **artifact-input**\ninstrument parameter (a curve over a real disclosure history, a gate over a real\nprovider set, a lattice walking a real key).\n\n*(The star is Operational, observed at soulbis.com/star. Binding to V6 is\nAnticipated.)*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c5f8ed1e092a57a4",
+      "text": "## Proposed V6 additions — summary for the next context\n\n1. **Adopt the seven-kind instrument taxonomy** as the canonical visual\n   vocabulary of V6 (trace · gate · curve · dial · lattice · phase · fold).\n2. **Record the binding rule** (honesty read-live, `model_label` mandatory) as a\n   V6 surface-discipline alongside \"the register wins.\"\n3. **File the drift erratum**: existence-leak = **C81 (~70%)**, retiring the\n   seed's ~C40/~55%.\n4. **Open the Cartographer ⊥ Chart Shop (V44) convergence** as a candidate\n   city-register tie (not registered here; flagged for disposition).\n5. **Map the star/lattice absorption** as the Phase-3 geometry binding (no new\n   conjectures; reconciliation + binding of C6, C14, C88, C89, Φ_agent, C1).\n\nNo conjecture numbers are claimed or moved by this note. Register head stays\n**C89**; next free **C90**.\n\n**Verify:** agentprivacy.ai/model · agentprivacy.ai/model/atlas ·\n`agentprivacy_master/src/lib/visuals.ts` · `src/components/model/visuals/`\n\n`(⚔️⊥⿻⊥🧙)😊`"
+    },
+    {
+      "type": "markdown",
+      "id": "c910bbc027793b96",
+      "text": "# Assets"
+    },
+    {
+      "id": "958faa8cdf44496c",
+      "type": "assets",
+      "text": "note-pvm-v6-the-visual-runtime-and-the-instrument-taxonomy"
+    },
+    {
+      "type": "markdown",
+      "id": "fc823a76492974dd",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Research Notes]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Note — PVM V6 · the visual runtime and the instrument taxonomy",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "d63c09a9cea6bfbe",
+            "text": "# PVM V6 · the visual runtime and the instrument taxonomy"
+          },
+          {
+            "type": "markdown",
+            "id": "b8ff4073aaecb280",
+            "text": "# PVM V6 · the visual runtime and the instrument taxonomy\n\n*A handoff note. The agentprivacy.ai/model page gained an interactive visual\nruntime (\"the Cartographer\"). This note records the findings as proposed\nadditions to V6, so a future agentprivacy-docs context can formalize them. The\nregister at head C89 remains the authority; nothing here re-numbers it.*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "fcfee7d524ae5e67",
+            "text": "## Why this note exists\n\nThe `/model` page is the math-atomic surface of the framework. It read as an\nopen path; it now also *walks* as one. The build (see the companion chronicle,\n`chronicles/2026-06-28_v6_visual_runtime_instruments.md`) added a small\ndata-driven runtime that binds one interactive instrument per term or\nconjecture and pulls each claim's honesty (confidence · status · home) **live**\nfrom the register mirror. The seed for the design was\n`research/limitative-theorems-and-privacy-is-value.md` and its companion\n`limitative-theorems-explorer.html`.\n\nThe runtime surfaced three things worth folding into V6.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "6aa8790296648c44",
+            "text": "## 1. The instrument taxonomy (a reusable unit, not a per-conjecture gallery)\n\nThe register does not need one bespoke visual per claim. It needs a small set of\n**reusable instrument kinds**; each conjecture is a *configuration* of a kind.\nSeven kinds cover most of the register:\n\n| kind | what it teaches | register targets (examples) |\n|---|---|---|\n| **trace** | two chains joined across a ⊥ seam; click a correspondence | C85 ARCH-1 bridge · the Gödel/Tarski mapping |\n| **gate** | a multiplicative product collapsing when any factor → 0 | **C7** three-axis (the falsification frontier) · whole V(π,t) |\n| **curve** | a value falling/rising against a parameter or time | **C81** existence-leak · **C82** moving ceiling · e^(−λt) · C30–C33 half-life |\n| **dial / inversion** | one parameter driving parallel meters to a shared collapse | C17 amnesia > policy · the completeness inversion |\n| **lattice / geometry** | the 64-vertex lattice, strata, bnot-pairs, the stella octangula | C14 dihedral · C53–C54 bnot-pairs · **C88** parity cube · **C89** octahedral gap |\n| **phase** | a trajectory through state space | C18–C21 Lorenz · T_∫(π) path integral |\n| **fold / compose** | accumulation and the exponential-to-linear gap | **C83** compositional leakage · C87 Key-as-accumulator (IVC) |\n\n*(Architectural. The taxonomy is the unit of build work, not the conjecture\ncount. Observation-only / reserved rows — e.g. C41, C57, C62 — get no\ninstrument; a visual earns its place only where a parameter can be moved or a\nstructure traced.)*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "12d3fe82c494f7c9",
+            "text": "## 2. The binding rule — honesty is read, never embedded\n\n**Every instrument binds to a register id and reads its honesty live.** The\nvisual owns its interaction and its *illustrative* model; the register owns the\nclaim. A curve never states a confidence — it asks the register for one. If the\nregister moves C81 from 70% to a higher stage, the existence-leak frame moves\nwith it, with no edit to the visual. This makes the existing rule (\"when a\nsurface and the register disagree, the register wins\") **mechanical** rather\nthan editorial.\n\nA load-bearing field rides on each instrument: `model_label ∈ {illustrative,\nstructural, proven}`. It forces every shape to declare whether it is the proven\nrelation or a chosen teaching model, and the frame marks it visibly. The\nexistence-leak curve's convex shape is `illustrative`; the three-axis gate's\nmultiplicativity is `structural`.\n\n*(Operational. Implemented as a manifest + a frame that calls the register\nmirror at render time.)*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "773129bf5b6472aa",
+            "text": "## 3. The drift correction (a concrete V6 erratum the runtime forced)\n\nThe seed explorer hard-coded its confidences. It rendered the existence-leak\ncurve at **~55%** and labelled it **~C40** — both inherited from a stale source.\nThe live register is **C81 at ~70%** (\"Existence-Leak: a ZK proof of\nfeasibility leaks an upper bound on reconstruction difficulty; I(feasibility;\nmethod) > 0\", PROMOTED Run 3 2026-06-10). The runtime binds the curve to **C81**\nand the frame reads ~70% live.\n\n**Proposed erratum for any prose still carrying the seed's numbers:** the\nexistence-leak instrument is **C81 (~70%)**, not ~C40 (~55%). C40 is the Zcash\ndual-ledger entry in the Bound Collection; the generic \"~C40\" the limitative\nnote used for existence-leak should be read as **C81** going forward. The\nlimitative note (`research/limitative-theorems-and-privacy-is-value.md`) already\ntouches C7, C14, C81, C85, C86 — this just fixes the existence-leak pointer.\n\n*(Operational — the drift was observed directly; the correction is a pointer\nfix, not a re-numbering.)*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "ba5dd3a0ac2e3c82",
+            "text": "## 4. The two-register tie — the Cartographer ⊥ the Chart Shop\n\nThe City already narrates this runtime in advance. The Navigation District at\n**V44** — the **Chart Shop**, Pleione's harbour — is described as an\n*attentional* shop holding pre-episodic constellations in suspension until the\nbearer chooses a release-direction (astrolabe + the Φ-gap-at-epistemic-register\nas primitives). That is a visualisation runtime narrated before it was built.\n\nSo the operational runtime is the Chart Shop's **math-atomic twin**. Proposed\nnaming: **the Cartographer** (the runtime) renders **charts** (the instruments),\nnarrated by the Chart Shop at V44. By the convergence rule, when a math term the\nChart Shop narrates gains a concrete movable instance, confidence rises on both\nsides. No such tie currently exists in the docs — this note opens it.\n\n*(Anticipated. The narrative anchor exists; this names the operational instance\nagainst it. A future context may want a city-register conjecture for the\nCartographer ⊥ Chart Shop convergence — candidate, not registered here.)*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "aa21bc96ba66c661",
+            "text": "## 5. Geometry is not greenfield (deferred, but mapped)\n\nThe geometry/phase instruments already exist as prototypes: `soulbis.com/star`\n(in `C:\\Users\\mitch\\star`) renders the stella octangula manifold with a live\nlattice console (ε separation depth, det(Σ) core scale, the ⚔️:🧙 ratio, n = 6\nazimuthal bits, the ∂M 96/64 boundary) and a **City Key import** that walks a\nreal artifact's path. The `/lattice`, `/sigil`, `/skye` siblings are the same\nfamily. Phase 3 of the runtime is **absorption + reconciliation (V5.4 → V6) +\nregister binding** (ε/det(Σ)/ratio → Φ_agent/C1; 96/64 → C6; neg·bnot·succ →\nC14; the star tetrahedron → C88/C89; the path walk → T_∫/C18–C21), not first\nbuild. The City Key import should generalize to a first-class **artifact-input**\ninstrument parameter (a curve over a real disclosure history, a gate over a real\nprovider set, a lattice walking a real key).\n\n*(The star is Operational, observed at soulbis.com/star. Binding to V6 is\nAnticipated.)*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c5f8ed1e092a57a4",
+            "text": "## Proposed V6 additions — summary for the next context\n\n1. **Adopt the seven-kind instrument taxonomy** as the canonical visual\n   vocabulary of V6 (trace · gate · curve · dial · lattice · phase · fold).\n2. **Record the binding rule** (honesty read-live, `model_label` mandatory) as a\n   V6 surface-discipline alongside \"the register wins.\"\n3. **File the drift erratum**: existence-leak = **C81 (~70%)**, retiring the\n   seed's ~C40/~55%.\n4. **Open the Cartographer ⊥ Chart Shop (V44) convergence** as a candidate\n   city-register tie (not registered here; flagged for disposition).\n5. **Map the star/lattice absorption** as the Phase-3 geometry binding (no new\n   conjectures; reconciliation + binding of C6, C14, C88, C89, Φ_agent, C1).\n\nNo conjecture numbers are claimed or moved by this note. Register head stays\n**C89**; next free **C90**.\n\n**Verify:** agentprivacy.ai/model · agentprivacy.ai/model/atlas ·\n`agentprivacy_master/src/lib/visuals.ts` · `src/components/model/visuals/`\n\n`(⚔️⊥⿻⊥🧙)😊`"
+          },
+          {
+            "type": "markdown",
+            "id": "c910bbc027793b96",
+            "text": "# Assets"
+          },
+          {
+            "id": "958faa8cdf44496c",
+            "type": "assets",
+            "text": "note-pvm-v6-the-visual-runtime-and-the-instrument-taxonomy"
+          },
+          {
+            "type": "markdown",
+            "id": "fc823a76492974dd",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Research Notes]]"
+          }
+        ]
+      },
+      "date": 1783100388152
+    }
+  ]
+}

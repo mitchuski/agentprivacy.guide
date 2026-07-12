@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Specialisation — The Game Of 42 · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>Specialisation — The Game Of 42</span></div>
+  <article><div class="md"><h1>🎲 Specialisation — The Game Of 42</h1>
+</div>
+<div class="md"><p>The core of this repo is deliberately plain: seven functional seats, six<br>trusts, ten ground rules. That is the shareable skeleton. This document is<br>the map for going further — how a harness instance takes on <strong>flesh</strong><br>(personas, skills, spells) and <strong>structure</strong> (the Game of 42 station<br>pattern), the way the working instances listed in <code>HARNESS_PATHS.md</code> did.<br>Everything here is optional; nothing here weakens a trust.</p>
+</div>
+<div class="md"><h2>1. Dressing seats with personas — the agentprivacy-skills corpus</h2>
+<p>The <strong>agentprivacy-skills</strong> corpus (0xagentprivacy, agentprivacy.ai; v5,<br>&quot;The Attachment Architecture&quot;) is a library of ~160 Agent Skills in five<br>categories: <code>meta/</code> (harness frameworks — including the dual-agent-harness<br>skill that mirrors this repo), <code>persona/</code> (42 casts: swordsman-aligned,<br>mage-aligned, balanced, cosmological), <code>privacy-layer/</code> (one skill per term<br>of the V(π,t) privacy-value equation), <code>role/</code> (domain knowledge), and<br><code>wikis/</code> (git-less federated distribution).</p>
+<p>A specialised instance dresses a seat by binding a persona to it:</p>
+<ul>
+<li>A persona&#39;s frontmatter declares a <strong>wing</strong> (<code>alignment</code>: swordsman ·<br>mage · balanced). Bind by the persona&#39;s <em>term and skills</em>, not by its wing:<br><strong>the wing is a skill affinity, not a seat constraint.</strong> The worked<br>reference seats a swordsman-aligned persona at <code>propose</code> and another at<br><code>assay</code>, and it is right to — <strong>the separation is carried by the Gap and<br>the algebra, never by the costume.</strong> An instance that trusts the costume has<br>a wing where it needs a Gap. (An earlier version of this document asserted<br>the opposite; see <code>universe/ERRATA.md</code> E-4.)</li>
+<li>The <strong>hold-apart</strong> seat takes a persona belonging to neither working side.<br>Canonically that is the one whose term <em>is</em> betweenness centrality — the<br>Gap&#39;s own formal definition.</li>
+<li>Each persona carries a <strong>proverb</strong> (its one-line law) and a <strong>spell</strong> — a<br><code>→</code>-chained pipeline that reads as the seat&#39;s procedure in miniature. A<br>good binding is one where the spell IS the seat&#39;s Definition of done said<br>faster. Example shape, from the horizon-gate skill:<br><code>state-the-waste → smallest-fix → confirm-or-reject-with-metrics → assay(held-out)</code>.</li>
+<li>Support seats (measure, critic, chronicle) take balanced or role personas;<br>the keystone is never dressed — it is the pair itself.</li>
+</ul>
+<p>Record bindings in a small registry JSON (seat → persona → skills → mandate)<br>and extend <code>engine/conform.mjs</code> to check that every seat&#39;s persona resolves<br>and no seat carries an empty mandate. The tigzkp instance (see<br><code>HARNESS_PATHS.md</code>) carries the worked reference in its own canon registry.</p>
+</div>
+<div class="md"><h2>2. The Game of 42 — fractal specialisation that follows structure</h2>
+<p>The station pattern is how instances multiply WITHOUT drifting: <strong>6 axes ×<br>7 stations = 42</strong>.</p>
+<ul>
+<li><strong>Axes.</strong> Each workshop instance sits on one axis of work (the tigzkp<br>instance holds the <em>compute</em> axis). Six axes bound a fleet; a new domain<br>claims a vertex on an axis rather than inventing a new shape.</li>
+<li><strong>Stations.</strong> Within a workshop, each of the seven seats takes a station:<br>a non-empty subset of the three faculties <strong>head = 1, heart = 2,<br>hands = 4</strong>. The seven non-empty subsets are the seven vertices 1..7 of<br>the faculty cube — exactly one seat per vertex, filled in order. The seat<br>that only thinks (head), the seat that only runs (hands), the seat that<br>holds the pair together (head+heart+hands = 7 — the keystone) all exist<br>because the cube says they must.</li>
+<li><strong>Anchors.</strong> A specialised instance names an anchor pair whose vertices<br>XOR to 63 — the complement law <code>bnot</code> made structural (the compute-axis<br>instance anchors V38 ⊕ V25 = 63).</li>
+<li><strong>Checked, not asserted.</strong> All of this extends the conformance gate:<br>faculty subsets cover the seven cube vertices exactly once, fill orders<br>are a permutation of 1..7, the anchor XOR holds. Structure you cannot<br>check is decoration; the Game of 42 is structure because <code>conform.mjs</code><br>can fail on it.</li>
+</ul>
+<p><strong>The fractal part.</strong> The same algebra recurs at every scale:</p>
+<ul>
+<li>Inside a seat: soulbae&#39;s parallel finders are little mages, blind to each<br>other — a propose seat is itself a (⊥) composition.</li>
+<li>Inside a workshop: the seven seats compose to one keystone step,<br><code>neg(bnot(x)) = succ(x)</code>.</li>
+<li>Across a fleet: workshops on different axes are held apart the same way<br>seats are — each publishes a frontier, none writes another&#39;s ledgers, and<br>what travels between them passes a gate it did not choose. The First<br>Person is the keystone of the fleet, exactly as the keystone is the pair<br>of the workshop.</li>
+</ul>
+<p>So specialisation &quot;follows structure&quot;: you never invent a new trust<br>topology, you re-instantiate the same one at the next scale, and the<br>conformance gate grows one more check instead of one more exception.</p>
+</div>
+<div class="md"><h2>3. The order of operations</h2>
+<ol>
+<li>Copy <code>templates/harness.config.mjs</code>, fill the seats — the instance works<br>plain. (Most instances should stop here for a while.)</li>
+<li>Bind personas/spells to seats in a registry JSON; extend conform.</li>
+<li>Claim an axis vertex and seat the stations when the instance joins a<br>fleet.</li>
+</ol>
+<p>Flesh after skeleton, structure before scale.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 specialisation-the-game-of-42</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="mage-and-swordsman.html">Mage And Swordsman</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="specialisation-the-game-of-42.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

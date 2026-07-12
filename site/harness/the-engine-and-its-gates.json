@@ -1,0 +1,96 @@
+{
+  "title": "The Engine And Its Gates",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "301547978e827406",
+      "text": "# ⚙️ The Engine And Its Gates"
+    },
+    {
+      "type": "markdown",
+      "id": "597e6f4c8817cfff",
+      "text": "Zero-dependency Node, three files, every claim checked rather than trusted. This page is the map; the code is the source of truth — read it in the repo."
+    },
+    {
+      "type": "markdown",
+      "id": "9169275a8e33bf5a",
+      "text": "## engine/dual_agent_loop.mjs — the loop\n\nThe generic six-phase engine: takes a `harness.config.mjs` (see [[The Seat Contract]]) plus `{repo, root, runId}` and runs Measure → Propose(∥) → Hold-apart → Assay → Critic → Chronicle. Propose→Assay is a pipeline with no barrier. It returns verdicts and drafts; it never folds, never writes ledgers. A round that loses a seat returns `status: INCOMPLETE` with `keystoneTodo: FOLD NOTHING` — **empty is evidence; dead is not.**"
+    },
+    {
+      "type": "markdown",
+      "id": "b3b73d121c10907b",
+      "text": "## engine/conform.mjs — the conformance gate\n\nProves the axioms hold before any work: the algebra `neg(bnot(x)) = succ(x)` on all of ℤ/64ℤ, the six trusts anchored, GR-1..10 present, seven seats carded, `door: 'first-person'` literal, instance config + frontier coherent. It keeps its OWN copy of the axioms and deliberately does not import them from the engine — both are checked against a third thing. It refuses a config still wearing its template TODOs: **a gate that passes an unfilled config is worth less than no gate, because it is believed.**"
+    },
+    {
+      "type": "markdown",
+      "id": "c59948f39068ebde",
+      "text": "## engine/loop.test.mjs — the failure semantics, pinned\n\nSix tests that exist because of real failures: an outage must never be reported as an exhausted search; a dead seat is not a dry round; the blank template must fail conform *for the right reasons* (asserted by mutation, not by hope)."
+    },
+    {
+      "type": "markdown",
+      "id": "f37249cc347a3e29",
+      "text": "## tools/check.mjs — one command, every gate\n\n`node tools/check.mjs` — proves the algebra, runs the engine tests, conforms every instance it discovers, asserts the template fails, audits `universe/` if present. If it exits non-zero, every line it printed is a command you can re-run yourself."
+    },
+    {
+      "type": "markdown",
+      "id": "7948bab5ea2752da",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]] · [[Workflows And Runtimes]]"
+    },
+    {
+      "type": "markdown",
+      "id": "c8edaa69d560d46c",
+      "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "The Engine And Its Gates",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "301547978e827406",
+            "text": "# ⚙️ The Engine And Its Gates"
+          },
+          {
+            "type": "markdown",
+            "id": "597e6f4c8817cfff",
+            "text": "Zero-dependency Node, three files, every claim checked rather than trusted. This page is the map; the code is the source of truth — read it in the repo."
+          },
+          {
+            "type": "markdown",
+            "id": "9169275a8e33bf5a",
+            "text": "## engine/dual_agent_loop.mjs — the loop\n\nThe generic six-phase engine: takes a `harness.config.mjs` (see [[The Seat Contract]]) plus `{repo, root, runId}` and runs Measure → Propose(∥) → Hold-apart → Assay → Critic → Chronicle. Propose→Assay is a pipeline with no barrier. It returns verdicts and drafts; it never folds, never writes ledgers. A round that loses a seat returns `status: INCOMPLETE` with `keystoneTodo: FOLD NOTHING` — **empty is evidence; dead is not.**"
+          },
+          {
+            "type": "markdown",
+            "id": "b3b73d121c10907b",
+            "text": "## engine/conform.mjs — the conformance gate\n\nProves the axioms hold before any work: the algebra `neg(bnot(x)) = succ(x)` on all of ℤ/64ℤ, the six trusts anchored, GR-1..10 present, seven seats carded, `door: 'first-person'` literal, instance config + frontier coherent. It keeps its OWN copy of the axioms and deliberately does not import them from the engine — both are checked against a third thing. It refuses a config still wearing its template TODOs: **a gate that passes an unfilled config is worth less than no gate, because it is believed.**"
+          },
+          {
+            "type": "markdown",
+            "id": "c59948f39068ebde",
+            "text": "## engine/loop.test.mjs — the failure semantics, pinned\n\nSix tests that exist because of real failures: an outage must never be reported as an exhausted search; a dead seat is not a dry round; the blank template must fail conform *for the right reasons* (asserted by mutation, not by hope)."
+          },
+          {
+            "type": "markdown",
+            "id": "f37249cc347a3e29",
+            "text": "## tools/check.mjs — one command, every gate\n\n`node tools/check.mjs` — proves the algebra, runs the engine tests, conforms every instance it discovers, asserts the template fails, audits `universe/` if present. If it exits non-zero, every line it printed is a command you can re-run yourself."
+          },
+          {
+            "type": "markdown",
+            "id": "7948bab5ea2752da",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]] · [[Workflows And Runtimes]]"
+          },
+          {
+            "type": "markdown",
+            "id": "c8edaa69d560d46c",
+            "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+          }
+        ]
+      },
+      "date": 1783862592688
+    }
+  ]
+}

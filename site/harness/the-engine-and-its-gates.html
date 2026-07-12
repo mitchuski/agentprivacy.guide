@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Engine And Its Gates · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Engine And Its Gates</span></div>
+  <article><div class="md"><h1>⚙️ The Engine And Its Gates</h1>
+</div>
+<div class="md"><p>Zero-dependency Node, three files, every claim checked rather than trusted. This page is the map; the code is the source of truth — read it in the repo.</p>
+</div>
+<div class="md"><h2>engine/dual_agent_loop.mjs — the loop</h2>
+<p>The generic six-phase engine: takes a <code>harness.config.mjs</code> (see <a class="wlink" href="the-seat-contract.html">The Seat Contract</a>) plus <code>{repo, root, runId}</code> and runs Measure → Propose(∥) → Hold-apart → Assay → Critic → Chronicle. Propose→Assay is a pipeline with no barrier. It returns verdicts and drafts; it never folds, never writes ledgers. A round that loses a seat returns <code>status: INCOMPLETE</code> with <code>keystoneTodo: FOLD NOTHING</code> — <strong>empty is evidence; dead is not.</strong></p>
+</div>
+<div class="md"><h2>engine/conform.mjs — the conformance gate</h2>
+<p>Proves the axioms hold before any work: the algebra <code>neg(bnot(x)) = succ(x)</code> on all of ℤ/64ℤ, the six trusts anchored, GR-1..10 present, seven seats carded, <code>door: &#39;first-person&#39;</code> literal, instance config + frontier coherent. It keeps its OWN copy of the axioms and deliberately does not import them from the engine — both are checked against a third thing. It refuses a config still wearing its template TODOs: <strong>a gate that passes an unfilled config is worth less than no gate, because it is believed.</strong></p>
+</div>
+<div class="md"><h2>engine/loop.test.mjs — the failure semantics, pinned</h2>
+<p>Six tests that exist because of real failures: an outage must never be reported as an exhausted search; a dead seat is not a dry round; the blank template must fail conform <em>for the right reasons</em> (asserted by mutation, not by hope).</p>
+</div>
+<div class="md"><h2>tools/check.mjs — one command, every gate</h2>
+<p><code>node tools/check.mjs</code> — proves the algebra, runs the engine tests, conforms every instance it discovers, asserts the template fails, audits <code>universe/</code> if present. If it exits non-zero, every line it printed is a command you can re-run yourself.</p>
+</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a> · <a class="wlink" href="workflows-and-runtimes.html">Workflows And Runtimes</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-engine-and-its-gates.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -85,7 +85,7 @@ As V5.4 §9. The time-dependent axes of §4's third boundary case point here; th
 
 I(S; M | FP) < ε* stands. V6 states what was implicit and re-grounds the provenance:
 
-**Precondition 1 (non-collusion).** The bound and the capacity sum of §11 hold when the two channels are conditionally independent given the First Person and no third channel carries the inter-agent residue: I(Y_S; Y_M | X) = 0. This is the regime the Amnesia Protocol exists to enforce, and only there does the arithmetic of §11 apply. The wiretap literature (Csiszár and Körner 1978; colluding-wiretapper extensions) shows the assumption is precisely what fails when observers combine; the 2026 multi-agent measurements (§26) show how badly.
+**Precondition 1 (non-collusion).** The bound, the additivity of the capacity sum of §11, and the error floor hold when the two channels are conditionally independent given the First Person and no third channel carries the inter-agent residue: I(Y_S; Y_M | X) = 0. This is the regime the Amnesia Protocol exists to enforce, and only there does the arithmetic of §11 apply; the strict ceiling of §11 requires in addition its capacity-deficit condition. The wiretap literature (Csiszár and Körner 1978; colluding-wiretapper extensions) shows the assumption is precisely what fails when observers combine; the 2026 multi-agent measurements (§26) show how badly.
 
 **Precondition 2 (fixed adversary class).** Capacities are evaluated against a stated adversary; §5 owns what happens when the class strengthens.
 
@@ -93,7 +93,7 @@ I(S; M | FP) < ε* stands. V6 states what was implicit and re-grounds the proven
 
 ## 11. The Reconstruction Ceiling · REVISED: Proven, conditional regime
 
-R_max = (C_S + C_M)/H(X) < 1 carries the label **Proven, conditional regime**: proven within Preconditions 1 and 2 of §10, an instance of the family cited there, and time-indexed per §5. The error floor P_e ≥ 1 − R_max (Fano converse) carries the same conditioning. Outside the regime, §26 governs.
+R_max = (C_S + C_M)/H(X) < 1 carries the label **Proven, conditional regime**, read as a decomposition: within Preconditions 1 and 2 of §10 the capacity sum is licensed and the error floor P_e ≥ 1 − R_max (Fano converse) is proven, an instance of the family cited there; the strict bound R_max < 1 holds when, additionally, the capacity-deficit condition C_S + C_M < H(X) holds, a measurable, declarable, numerical fact about a given system and adversary class, not a consequence of the architecture, and deliberately not a third precondition. The deficit condition, not the preconditions, is the time-indexed quantity per §5: R(t) can cross one with both preconditions intact, and what expires at t* is the deficit condition, not the architecture. Outside the regime, §26 governs.
 
 ## 12. Algebraic Foundation Z/(2⁶)Z · REVISED: the bridge lands
 
@@ -181,7 +181,7 @@ R(t), t* (§5) · Z_b' = Z_b − D(a) (§27) · τ: T → {+, 0, −} and orbit(
 
 ## 25. NEW · The Two Instances of 2026
 
-**Zcash Orchard.** A soundness flaw in `halo2_gadgets` (`ecc::chip::mul`: `assign_advice()` where `copy_advice()` was required), present since May 2022. Claude Opus 4.8 released 2026-05-28; Taylor Hornby found the flaw 2026-05-29 and, with the model's help, built a complete counterfeiting exploit in regtest; ZEC fell roughly 27 to 33% in 24 hours; fixed by the NU6.2 hard fork at block 3,364,600 on 2026-06-03. Four findable years, one found day: the decoder moved, the circuit did not.
+**Zcash Orchard.** A soundness flaw in `halo2_gadgets` (`ecc::chip::mul`: `assign_advice()` where `copy_advice()` was required), present since May 2022. Claude Opus 4.8 released 2026-05-28; Taylor Hornby found the flaw 2026-05-29 and, with the model's help, built a complete counterfeiting exploit in regtest; the market repriced sharply around disclosure (confounded by a concurrent institutional exit); fixed by the NU6.2 hard fork at block 3,364,600 on 2026-06-03. Four findable years, one found day: the decoder moved, the circuit did not.
 
 **The Schrottenloher rediscovery.** Google Quantum AI withheld a roughly 10x Shor optimization for secp256k1, publishing only a zero-knowledge proof of its existence. On 2026-06-02 André Schrottenloher published an independent rediscovery (eprint 2026/1128), roughly two months after the attestation. The proof of feasibility priced the search.
 
@@ -232,7 +232,6 @@ The stella octangula (Tome VIII Act 3) enters the formal lineage with its accoun
 | 31,000× | the accessible-volume value gap under full behavioural capture | essay v4 |
 | 70:1 | the compression ratio of the spellbook corpus | README lineage |
 | 74× | BRAID compression efficiency | V5 formal lineage |
-| $47k to $52k/year | indicative per-person annual value capture range | README lineage |
 
 ## 30. External Landscape and Standards Context
 

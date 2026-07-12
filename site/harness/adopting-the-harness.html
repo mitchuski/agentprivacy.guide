@@ -1,0 +1,184 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adopting The Harness · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>Adopting The Harness</span></div>
+  <article><div class="md"><h1>🧭 Adopting The Harness</h1>
+</div>
+<div class="md"><p>The skeleton in this repo was forged in one specific fight — taking back the<br><strong>seventh capital</strong>, privacy as value (PVM V6, C55: foundational, not<br>additive). But nothing in the mechanism mentions privacy, and nothing in it<br>mentions your domain either. This document makes that claim carefully — first<br><em>why</em> the fundamentals are topic-free, then <em>how</em> to adopt them — because a<br>generality claim that is merely asserted is exactly the kind of statement<br>this harness exists to refuse.</p>
+</div>
+<div class="md"><h2>Part I — why the duality works regardless of topic</h2>
+<h3>1. The failure it prevents is domain-general</h3>
+<p>An agent that proposes a change and then checks its own change will pass —<br>not by cheating, but because the check it invents is the check its change was<br>built to survive. That is Goodhart&#39;s law wearing an agent costume, and it<br>appears wherever a generator can influence its own test: code that passes the<br>tests its author wrote, a summary graded by its summarizer, a circuit probed<br>only where its designer worried. The <strong>mirage</strong> — passes the author&#39;s probe,<br>fails the real gate — is not a privacy problem or a compression problem. It<br>is a <em>self-reference</em> problem, and every domain that evaluates generated<br>artifacts has it.</p>
+<h3>2. The separation is information-theoretic, not semantic</h3>
+<p>The operational invariant is <code>I(Y_S ; Y_M | X) = 0</code> — given the target, the<br>prover&#39;s output carries no information about the proposer&#39;s output. Notice<br>what that sentence does <strong>not</strong> mention: the topic. Mutual information is a<br>statement about <em>routing</em>, not about <em>content</em>. The two agents never need to<br>share vocabulary, expertise, or even a domain — the guarantee is that<br>information was never sent, which is why the same bound holds for qubits,<br>constraint systems, prose, and consent terms without modification. You do not<br>adapt the invariant to your field. You route your field through the<br>invariant.</p>
+<h3>3. Fiat-Shamir removes the chooser — in any domain</h3>
+<p>The oldest attack on any verification scheme is to bribe whoever picks the<br>test. The Gap&#39;s answer is that <strong>nobody picks it</strong>: witnesses are a function<br>of the hash of the proposal&#39;s own canonical bytes. The proposal chooses its<br>own exam without ever seeing the syllabus, and any revision re-seeds the<br>draw. This construction needs exactly two things from a domain:</p>
+<ul>
+<li>a <strong>canonical serialization</strong> of proposals (JSON with sorted keys is enough), and</li>
+<li>a <strong>witness space derived from the reference</strong> — the original document&#39;s<br>facts, the circuit&#39;s input space, the spec&#39;s test points — that the<br>candidate is answerable to.</li>
+</ul>
+<p>Every domain that can state what a candidate is <em>answerable to</em> has both.<br>When the proposer cannot know which witnesses will be drawn, the only winning<br>strategy is to be <strong>genuinely general</strong> — preserve every fact, satisfy every<br>constraint — which is precisely the property you wanted and could not<br>directly ask for.</p>
+<h3>4. The gate is multiplicative, and multiplication is unit-free</h3>
+<p>T5: value is a product of factors and any zero collapses it. 7/8 on the<br>comprehension gate is a zero, not 87.5%; a constraint system whose witness<br>cannot be computed is not a smaller win, it is not a result. The<br>cliff-watcher that rejects a move winning one factor at the product&#39;s expense<br>does not care whether the factors are questions, qubits, or clauses —<br>multiplication doesn&#39;t ask for units.</p>
+<h3>5. The promises are about behaviour, not subject matter</h3>
+<p>Promise Theory&#39;s autonomy axiom — an agent can only promise its own<br>behaviour — is what makes the topology honest. The Swordsman promises<br>protection, the Mage promises delegation, the First Person promises<br>authorization, and the pair promise <em>nothing to each other</em> — the separation<br>lives in the promises they don&#39;t make, held open by a seat (the Gap) whose<br>only job is to derive what neither may choose. None of these four promises<br>mentions a domain. That is why <code>TRUSTS.md</code> transfers whole: it constrains<br><em>who may do what</em>, never <em>what the work is about</em>.</p>
+<h3>6. The algebra is the shape, not the subject</h3>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+<p>On Z/64Z: <code>neg(bnot(x)) = succ(x)</code> — two <em>different</em> inversions, composed,<br>produce the step forward. Neither alone does; <code>neg(neg(x)) = x</code> gets you<br>nowhere, and that is the theorem&#39;s teaching: <strong>a proposer checked by a copy<br>of itself is an identity operation.</strong> Progress requires the second agent to<br>be a genuinely different transformation, held apart. The theorem never asks<br>what <code>x</code> encodes. Your domain enters through the config — objective, gate,<br>hard constraint, Gap recipe — and only there. The skeleton is invariant;<br><code>engine/conform.mjs</code> re-proves it on all sixty-four values every run.</p>
+<h3>7. The evidence, and the honest boundary</h3>
+<p>Ten embodiments in <code>HARNESS_PATHS.md</code> wear this skeleton over bodies that<br>share nothing topically: quantum resource estimation, ZK constraint<br>reduction, research-document rehydration, a controlled grammar, consent<br>agreements, a publishing loop, a fleet-scale measure seat, a checked lattice<br>— and the spar in this repo, whose frontier moved under two independent draws<br>and an exhaustive census. Same trusts, same ground rules, same verdict<br>vocabulary, different configs.</p>
+<p>And one of the ten is a <strong>failure, kept on purpose</strong>: the universe-builder<br>spent ~1.4M tokens learning that a map making ~100 <em>enumerable</em> claims never<br>needed a harness — an auditor checks them all for free, and against an<br>exhaustive check a mirage is impossible. So the generality claim gates<br>itself: <strong>the duality works on any topic; it is <em>worth its cost</em> only where<br>the claim space is too large to check.</strong> A harness is for adversaries; an<br>auditor is for facts. Deciding which you have is the first design decision<br>(Part II, step 0).</p>
+<h3>The seventh capital, and other outcomes</h3>
+<p>In the origin fight, the artifact is your behavioural residue, the metric is<br>disclosure, the hard constraint is consent, and the door is sovereignty —<br>that mapping is the Privacy-is-Value model, and the harness is its<br>architecture made operational: the Swordsman guards the seventh capital, the<br>Mage spends only what is authorized, and nothing outward moves without the<br>First Person. Taking back the seventh capital <em>is</em> a harness instance — the<br>first one.</p>
+<p>But &quot;take back the seventh capital&quot; has the same shape as any outcome you<br>could bring: <strong>a thing that must get better by a number, a gate it must fully<br>pass, a line it must never cross, and a door only you open.</strong> Cheaper<br>circuits, denser lexicons, faithful rehydrations, honest agreements — the<br>fundamentals hold because they were never about privacy; privacy was the<br>first place they were needed badly enough to be found. The lemma travels; the<br>corpus stays home.</p>
+</div>
+<div class="md"><h2>Part II — how to adopt it: the mapping procedure</h2>
+<h3>Step 0 · Decide harness vs auditor</h3>
+<p>Count your claims. If everything the artifact asserts can be <strong>enumerated and<br>checked exhaustively</strong> at tolerable cost, write an auditor (a deterministic<br>script like <code>universe/audit.mjs</code>) and stop — you will get certainty for zero<br>tokens. Reach for the harness when the claim space is <strong>too large to check</strong><br>— you can only sample it — and generated candidates must survive<br><strong>adversarial</strong> scrutiny before a human commits to them.</p>
+<h3>Step 1 · The five answers</h3>
+<p>Fill these in one sitting, in writing. They become <code>harness.config.mjs</code>.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>question</th>
+<th>becomes</th>
+<th>test of a good answer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>What artifact gets better?</td>
+<td>the target</td>
+<td>one file/system, scratch-copyable (GR-10)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>By what single number?</td>
+<td><code>objective.metric</code> + a counting rule</td>
+<td>two strangers get the same count (GR-1)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>What must FULLY pass?</td>
+<td><code>objective.gate</code></td>
+<td>a partial pass is worth zero (T5)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>What may no score override?</td>
+<td><code>objective.hardConstraint</code></td>
+<td>violating it makes the result <em>not exist</em> (GR-3)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>What passes by construction?</td>
+<td><code>objective.canary</code></td>
+<td>proves the gate satisfiable — without it you cannot tell a bad candidate from an impossible gate</td>
+</tr>
+</tbody></table>
+<h3>Step 2 · Define the Gap (do this before anything else works)</h3>
+<p>State, in one paragraph: <em>witnesses are drawn from ⟨the reference⟩ by<br>⟨canonically serializing the proposal, sha256, then this draw rule⟩.</em> The<br>witness space comes from the <strong>reference</strong> (the original document, the spec,<br>the input domain) — never from the candidate, never from the proposer. If you<br>cannot write this paragraph, you do not have a harness yet; go back to<br>step 0. The spar&#39;s version: number the original&#39;s ~40 facts, hash the<br>proposal, draw 8 without replacement, demand 8/8.</p>
+<h3>Step 3 · Pick two lenses that cannot be each other</h3>
+<p><code>finders</code> needs ≥ 2 genuinely different angles on the same objective —<br>line-editor ⊥ restructurer, gate-minimiser ⊥ qubit-minimiser, grammar-forward<br>⊥ canon-forward. Blind to each other by construction (the engine routes them<br>nothing of each other). One lens is a proposer; two lenses are the beginning<br>of a search.</p>
+<h3>Step 4 · Scaffold, fill, refuse-until-filled</h3>
+<pre><code class="language-bash">node tools/new_instance.mjs ../my-harness my-harness
+</code></pre>
+<p>Fill every TODO — the conformance gate and the bundler both refuse a config<br>still wearing them, in the same words, because an unfilled harness runs,<br>grades nothing, and reports VALIDATED. Measure your baseline before you claim<br>a best; the templates ship both <code>null</code> on purpose.</p>
+<h3>Step 5 · Run, audit, fold, repeat</h3>
+<p>Bundle (<code>tools/bundle.mjs</code>), run a round (the Workflow tool or your own<br><code>rt</code> driver), audit the round by hash (<code>tools/render_run.mjs</code>, or<br><code>sha256sum proposal_canon.json</code> = <code>seedHex</code> by hand), and fold <strong>only</strong> what<br>is validated <em>and</em> structural, as keystone, conform-green before and after.<br>Nothing outward moves without you (T6) — the door is the one seat that never<br>delegates, whatever the topic.</p>
+<h3>Worked mappings — six domains, one config shape</h3>
+<table>
+<thead>
+<tr>
+<th>domain</th>
+<th>artifact</th>
+<th>metric ↓</th>
+<th>the Gap draws from</th>
+<th>hard constraint</th>
+<th>canary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>document compression (the spar)</td>
+<td>the guide</td>
+<td>words</td>
+<td>the ORIGINAL&#39;s numbered facts</td>
+<td>self-contained instructions</td>
+<td>the original itself</td>
+</tr>
+<tr>
+<td>quantum circuits (shor_mage)</td>
+<td>point-add circuit</td>
+<td>qubits × Toffoli</td>
+<td>witnesses hashed from the op stream</td>
+<td>full clean run, zero failures</td>
+<td>the unoptimized circuit</td>
+</tr>
+<tr>
+<td>ZK systems (tigzkp / pools_v2)</td>
+<td>R1CS system</td>
+<td>constraints</td>
+<td>held-out evaluation points per round</td>
+<td>witness-computability</td>
+<td>the reference circuit</td>
+</tr>
+<tr>
+<td>research docs (V6 pipeline)</td>
+<td>audience artifacts</td>
+<td>fidelity gaps</td>
+<td>an adversarial reviewer who never sees the canon</td>
+<td>no drift from canon</td>
+<td>the canon itself</td>
+</tr>
+<tr>
+<td>controlled grammar (lexon_pvm)</td>
+<td>the lexicon</td>
+<td>coverage-debt</td>
+<td>5 unseen census terms + 3 regressions, hashed from the recipe</td>
+<td>spec-checker round-trip</td>
+<td>an already-covered term</td>
+</tr>
+<tr>
+<td>consent agreements (MyTerms)</td>
+<td>the bilateral record</td>
+<td>Φ product</td>
+<td>registry + unlock lattice + constellation hash</td>
+<td>identical immutable copies</td>
+<td>the proffered baseline terms</td>
+</tr>
+</tbody></table>
+<p>Read a row, then read your own domain across the same columns. If every cell<br>fills, you have a harness path. If the &quot;draws from&quot; cell keeps coming up<br>empty, you have an auditor — build that instead, and be glad you found out in<br>a table instead of in tokens.</p>
+<hr>
+<p><em>The duality is the constant; the config is the variable. Whatever capital<br>you are taking back, the shape is the same: a number that must fall, a gate<br>that must not, a line that cannot move, and a door that is yours.</em></p>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 adopting-the-harness</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="adopting-the-harness.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

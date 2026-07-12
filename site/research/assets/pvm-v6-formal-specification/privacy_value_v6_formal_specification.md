@@ -8,7 +8,7 @@
 **Author:** privacymage (Mitchell · mage@agentprivacy.ai), with Claude Fable 5
 **License:** CC BY-SA 4.0
 **Lineage:** V1 through V4 (foundation) · V5/V5.4 (holographic bound, three-axis separation, Z/(2⁶)Z algebraic foundation, the Amnesia Protocol) · V5.5 (named sublayer of V5.4: the attachment architecture) · **V6 (this document)**
-**Conjecture authority:** `research/CONJECTURE_REGISTER_V6.md` · register head C89 at publication · when this document and the register disagree, the register wins
+**Conjecture authority:** `research/CONJECTURE_REGISTER_V6.md` · register head C89 at publication (2026-06-10), C93 after the Limitative Reading addendum (Band IX, §17.10, 2026-06-28) · when this document and the register disagree, the register wins
 **Suite labeling (G3 decision):** all canon papers carry the unified V6 label: this formal specification · the compressed Swordsman reading · the companion Mage reading · the research paper · the whitepaper V6 edition. One label, one current state of the model.
 
 **External Convergence:** UOR Foundation (https://github.com/UOR-Foundation)
@@ -235,7 +235,7 @@ The Moon is the highest-ρ agent: 4 billion revolutions maximise both behavioura
 
 $$R(d, \text{compression}, \rho) < 1 \quad \forall \text{ adversaries under budget constraints}$$
 
-This is not a conjecture. The ceiling follows from information-theoretic analysis via Fano's inequality. See §16 for the full proof status, and §10 to §11 for the preconditions under which it holds.
+This is not a conjecture. The ceiling follows from information-theoretic analysis via Fano's inequality, read as a decomposition: the preconditions of §10.5 yield the additive capacity sum and the error floor, and the budget constraint is the capacity-deficit condition C_S + C_M < H(X) of §11.1, the numerical condition that places the ceiling strictly below one. See §16 for the full proof status, and §10 to §11 for the preconditions and the capacity-deficit condition under which it holds.
 
 **External alignment:** The First Person Network whitepaper (2026) provides independent framing for this ceiling as "data dignity": the thesis that behavioural data is capital owned by the First Person, not resource extracted by observers. The reconstruction ceiling is the mathematical guarantee that makes data dignity enforceable.
 
@@ -423,9 +423,11 @@ See §14 for full treatment.
 
 V6 states what was implicit in the V5.4 bound and the capacity sum of §11.
 
-**Precondition 1 (non-collusion / channel independence).** The capacities C_S and C_M may be summed only if the two observation channels are conditionally independent given the First Person and are not combined by a single adversary beyond the stated capacities. Formally, the regime assumes I(Y_S; Y_M | X) = 0 and that no third channel carries the inter-agent residue. The wiretap literature shows exactly this assumption is what fails when observers combine: Csiszár and Körner (1978) and the colluding-wiretapper extensions. The empirical multi-agent literature now measures the failure: AgentLeak (El Yagoubi, Badu-Marfo, Al Mallah, arXiv:2602.11510) finds that multi-agent configurations reduce per-channel output leakage (27.2% versus 43.2% single-agent) while unmonitored inter-agent channels raise total system exposure to 68.9%. §14.7 and §26 treat this in full. Here it is the boundary condition: **the ceiling holds in the regime the Amnesia Protocol is designed to enforce, and only there.**
+**Precondition 1 (non-collusion / channel independence).** The capacities C_S and C_M may be summed only if the two observation channels are conditionally independent given the First Person and are not combined by a single adversary beyond the stated capacities. Formally, the regime assumes I(Y_S; Y_M | X) = 0 and that no third channel carries the inter-agent residue. The wiretap literature shows exactly this assumption is what fails when observers combine: Csiszár and Körner (1978) and the colluding-wiretapper extensions. The empirical multi-agent literature now measures the failure: AgentLeak (El Yagoubi, Badu-Marfo, Al Mallah, arXiv:2602.11510) finds that multi-agent configurations reduce per-channel output leakage (27.2% versus 43.2% single-agent) while unmonitored inter-agent channels raise total system exposure to 68.9%. §14.7 and §26 treat this in full. Here it is the boundary condition: **the additive capacity sum, and with it the error floor P_e ≥ 1 − R_max, hold in the regime the Amnesia Protocol is designed to enforce, and only there; the strict ceiling R_max < 1 requires in addition the capacity-deficit condition of §11.1.**
 
 **Precondition 2 (fixed adversary model).** C_S and C_M are channel capacities evaluated against a stated adversary class: its compute, its inference models, its correlation methods. The bound says nothing about a later, stronger class. This precondition is the door V6 walks through in §5.5.
+
+**The capacity-deficit condition (not a third precondition).** The two preconditions are architectural: attestable properties of the deployment. Neither constrains the sum C_S + C_M relative to H(X). What they buy is the additive leakage structure and the error floor P_e ≥ 1 − R_max; the strict bound R_max < 1 holds exactly when, additionally, C_S + C_M < H(X). That capacity deficit is a numerical fact about a given system and adversary class: measurable, declarable, and eroded over time as stronger classes arrive (§5.5). It is deliberately not listed as a third precondition, because two conditionally independent channels of sufficient combined capacity satisfy both preconditions with R_max at or above one; the deficit is the separate, system-specific fact a deployment measures and declares. §11 states the decomposition as the theorem's conditioning.
 
 ### 10.6 External Grounding (V6)
 
@@ -437,7 +439,7 @@ Within the conditional regime the ceiling is an instance of an established famil
 - The Bayes-capacity bound of quantitative information flow (the Miracle Theorem): a tight upper bound on leakage to any reconstruction adversary, which upper-bounds what any decoder extracts per observation.
 - Geiger and Kubin, relative information loss: a Fano-grounded lower bound on reconstruction error under lossy observation.
 
-This move costs nothing and buys defensibility: the claim is no longer "proven in our internal paper" but "an instance of a family of bounds the field already accepts, under named preconditions."
+This move costs nothing and buys defensibility: the claim is no longer "proven in our internal paper" but "an instance of a family of bounds the field already accepts, under named preconditions and a declared capacity-deficit condition."
 
 ---
 
@@ -449,13 +451,15 @@ $$R_{\max} = \frac{C_S + C_M}{H(X)} < 1$$
 
 where $C_S$ and $C_M$ are the information capacities of the Swordsman and Mage channels respectively, and $H(X)$ is the entropy of the First Person's private state.
 
-**Consequence:** Perfect reconstruction of the First Person's state is impossible.
+The theorem decomposes. The two preconditions of §10.5 license the capacity sum and yield the error floor of §11.2; they do not by themselves place $R_{\max}$ below one. The strict inequality is the **capacity-deficit condition** $C_S + C_M < H(X)$: a measurable, declarable, numerical fact about a given system and adversary class, not a consequence of the architecture (§10.5).
+
+**Consequence:** When the two preconditions and the capacity-deficit condition hold together, perfect reconstruction of the First Person's state is impossible against the stated adversary class.
 
 ### 11.2 Error Floor (Proven, conditional regime)
 
 $$P_e \geq 1 - R_{\max}$$
 
-The adversary is guaranteed to make errors. This follows from Fano's inequality.
+The adversary is guaranteed to make errors whenever the capacity-deficit condition of §11.1 holds. The floor itself follows from Fano's inequality and holds under the two preconditions of §10.5; at $R_{\max} \geq 1$ it is vacuous, which is exactly why the deficit condition must be declared alongside the preconditions.
 
 ### 11.3 Graceful Degradation (Proven, conditional regime)
 
@@ -473,7 +477,7 @@ Status: V6 conjecture (C18). Confidence: 25%.
 
 ### 11.5 Conditioning (V6)
 
-R_max = (C_S + C_M)/H(X) < 1 carries the label **Proven, conditional regime**: proven within Preconditions 1 and 2 of §10, an instance of the family cited there, and time-indexed per §5.5. The error floor P_e ≥ 1 − R_max (Fano converse) carries the same conditioning. Outside the regime, §26 governs.
+R_max = (C_S + C_M)/H(X) < 1 carries the label **Proven, conditional regime**, read as a decomposition: within Preconditions 1 and 2 of §10 the capacity sum is licensed and the error floor P_e ≥ 1 − R_max (Fano converse) is proven, an instance of the family cited there; the strict bound R_max < 1 holds when, additionally, the capacity-deficit condition C_S + C_M < H(X) of §11.1 holds. The deficit condition, not the preconditions, is the time-indexed quantity per §5.5: R(t) can cross one with both preconditions intact, because capability growth raises the effective capacities, and what expires at t* is the deficit condition, not the architecture. Outside the regime, §26 governs.
 
 ---
 
@@ -772,7 +776,7 @@ These results hold at 95% confidence. The proofs rely on standard information th
 | Result | Statement |
 |--------|-----------|
 | **Additive MI bounds** | Mutual information leakage from conditional independence is additive, not multiplicative: $I(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M)$ |
-| **Reconstruction ceiling** | $R_{\max} = (C_S + C_M)/H(X) < 1$ under budget constraints |
+| **Reconstruction ceiling** | $R_{\max} = (C_S + C_M)/H(X) < 1$ under budget constraints, read per §11: the §10.5 preconditions license the sum and yield the error floor; the budget constraint is the capacity-deficit condition $C_S + C_M < H(X)$ that places the ceiling below one |
 | **Error floor** | $P_e \geq 1 - R_{\max}$ via Fano's inequality |
 | **Graceful degradation** | Small $\varepsilon$ violations → small privacy losses |
 | **Ring algebra** | Z/(2⁶)Z substrate with five operations and critical identity |
@@ -927,7 +931,20 @@ Both source notes declared their numbering "provisional against the live registe
 | C88 | The Parity Cube: the stella octangula's two tetrahedra are the even/odd parity classes of the cube's vertices; the canonical seat of neg/bnot at 3-bit scale; {0,1}⁶ = {0,1}³ × {0,1}³ gives each agent a cube, with the C85 pair map as candidate factoring | ~30% | active · registered Run 5, 2026-06-10 | core | this document §28 |
 | C89 | The Octahedral Gap: the tetrahedra's intersection (volume 1/6 of the cube) is the geometric locus of the conditional-independence bound; the gap is β is the octahedron, three readings of one thing | ~30% | active · registered Run 5, 2026-06-10 · volume facts are theorems, the correspondence is the conjecture | core | this document §28 |
 
-### 17.10 Gate G1 Dispositions (Signed 2026-06-10)
+### 17.10 Band IX · The Limitative Reading (C90 to C93) · Addendum 2026-06-28
+
+*Post-publication addendum. This volume locked at head C89 on 2026-06-10; the Limitative Reading was registered at Gate G6 on 2026-06-28 (Run 8 of the autopath) and is reproduced here for completeness. Home note: `research/limitative-theorems-and-privacy-is-value.md`. These are framing conjectures: the V6 ceilings and the existence-leak law read as privacy-flavoured instances of Gödel and Tarski. Every join is structural framing (~80%), not a theorem-to-theorem reduction (~50%); the arithmetisation correspondence (Gödel numbering ↔ Z/(2⁶)Z) is intuition, not load-bearing.*
+
+| ID | Title / claim | Conf. | Status | Register | Home |
+|---|---|---|---|---|---|
+| C90 | The Limitative Inversion: completeness ⇒ Φ → 0 ⇒ collapse is the value-sign reversal of completeness ⇒ inconsistency ⇒ collapse; the unreconstructable remainder is load-bearing. C17 in limitative terms | ~90% as observation | observation · registered Run 8, 2026-06-28 · no reduction claimed | core | limitative-theorems note §1, §4 |
+| C91 | Gödel ↔ Φ_agent: zero-memory (Selene) is the Φ_agent instance of Gödel's first theorem; a witness real yet underivable from within, intrinsic to a single system; destroying it is structural separation | ~60% | active · registered Run 8, 2026-06-28 | core | limitative-theorems note §2, §3.3 |
+| C92 | Tarski ↔ Φ_inference: existence-leak is the Tarski-undefinability instance loading on Φ_inference; feasibility-truth escapes containment across systems; D(X) monotone non-increasing in corroborating systems; absorbs the Gödelian seed (existence as positive provability); rides on C81, cannot exceed its base | ~70% | active · registered Run 8, 2026-06-28 | core | limitative-theorems note §3 |
+| C93 | Content-addressed liveness leak: a live content-address is an existence claim about its content; deduplication/GUID liveness leaks existence, and existence bounds the search; the address does not leak content, its liveness leaks existence | ~55% | active · registered Run 8, 2026-06-28 | core | limitative-theorems note §3.5 |
+
+*Open seam (no number): does Φ_data have a limitative twin, or does it fail by degree (Φ_data = 1 − 1/|providers|) rather than undecidability? Left open at G6. Decides whether Φ_v5 stands on two limitative theorems plus a degree-of-freedom or on three.*
+
+### 17.11 Gate G1 Dispositions (Signed 2026-06-10)
 
 1. **C40.** Zcash dual-ledger KEEPS C40: it is resident in the formal spec and referenced by Tome V acts 2, 3, 4, 5, 8, 9. Existence-Leak, which proposed C40 from the Schrottenloher note without sight of the occupied slot, registers at C81. Note: this reverses the 2026-06 fresh-eyes review's default, on the ground that the spec-resident claim with act references is costlier to move than a one-week-old candidate.
 2. **C47.** Ages-progressively KEEPS C47: it is spec-resident with a dated reconciliation note (2026-05-09). The City's Triadic-Constraint Homology became CM-C47 and was promoted to a fresh bare number at Run 4, where it became the ARCH-1 bridge conjecture C85 of this document.
@@ -1109,7 +1126,7 @@ Both instances occurred within nine days of this document's assembly, and they a
 
 ### 25.1 Instance 1: Zcash Orchard
 
-A soundness flaw in `halo2_gadgets` (`ecc::chip::mul`, an under-constrained variable-base scalar multiplication arising from `assign_advice()` where the stricter `copy_advice()` was required) was present from Orchard's launch in May 2022. It was findable for roughly four years. Anthropic released Claude Opus 4.8 on 2026-05-28; Taylor Hornby found the flaw the next day, 2026-05-29, and with the model's help wrote a complete exploit generating unlimited, undetectable counterfeit ZEC in a regtest environment. ZEC fell roughly 27 to 33% in 24 hours after disclosure; the issue was fixed by the NU6.2 hard fork at block 3,364,600 on 2026-06-03. Reading in R(t) terms: the circuit's H(X) never changed; the decoder improved overnight; four findable years collapsed into one found day.
+A soundness flaw in `halo2_gadgets` (`ecc::chip::mul`, an under-constrained variable-base scalar multiplication arising from `assign_advice()` where the stricter `copy_advice()` was required) was present from Orchard's launch in May 2022. It was findable for roughly four years. Anthropic released Claude Opus 4.8 on 2026-05-28; Taylor Hornby found the flaw the next day, 2026-05-29, and with the model's help wrote a complete exploit generating unlimited, undetectable counterfeit ZEC in a regtest environment. The market repriced sharply in the days around disclosure, an effect confounded by a concurrent, prominent institutional exit and therefore not attributable to the flaw alone; the issue was fixed by the NU6.2 hard fork at block 3,364,600 on 2026-06-03. Reading in R(t) terms: the circuit's H(X) never changed; the decoder improved overnight; four findable years collapsed into one found day.
 
 ### 25.2 Instance 2: The Schrottenloher Rediscovery
 
@@ -1202,7 +1219,6 @@ One sanctioned formulation per figure; these appear in suite prose ONLY in these
 | 31,000× | the accessible-volume value gap under full behavioural capture | essay v4 |
 | 70:1 | the compression ratio of the spellbook corpus | README lineage |
 | 74× | BRAID compression efficiency | V5 formal lineage |
-| $47k to $52k/year | indicative per-person annual value capture range | README lineage |
 
 ---
 
@@ -1420,7 +1436,7 @@ Acts with direct formal spec relevance:
 privacymage (2026). "Privacy Value Model V6: Formal Specification.
 The Gathering Turn and the Moving Ceiling." Version 6.0.
 agentprivacy-docs, 2026-06-10. privacy_value_v6_formal_specification.md.
-CC BY-SA 4.0. Conjecture register: CONJECTURE_REGISTER_V6.md (head C89).
+CC BY-SA 4.0. Conjecture register: CONJECTURE_REGISTER_V6.md (head C89 at publication; C93 after the 2026-06-28 Limitative Reading addendum, §17.10).
 ```
 
 ---

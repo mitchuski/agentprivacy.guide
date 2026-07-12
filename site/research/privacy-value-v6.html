@@ -8,7 +8,7 @@
 </head><body data-site="research">
 <header class="top">
     <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
-    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
     <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
   </header>
 <main class="page">
@@ -87,12 +87,12 @@
 </div>
 <div class="md"><h2>10. The Separation Bound · REVISED: preconditions and provenance</h2>
 <p>I(S; M | FP) &lt; ε* stands. V6 states what was implicit and re-grounds the provenance:</p>
-<p><strong>Precondition 1 (non-collusion).</strong> The bound and the capacity sum of §11 hold when the two channels are conditionally independent given the First Person and no third channel carries the inter-agent residue: I(Y_S; Y_M | X) = 0. This is the regime the Amnesia Protocol exists to enforce, and only there does the arithmetic of §11 apply. The wiretap literature (Csiszár and Körner 1978; colluding-wiretapper extensions) shows the assumption is precisely what fails when observers combine; the 2026 multi-agent measurements (§26) show how badly.</p>
+<p><strong>Precondition 1 (non-collusion).</strong> The bound, the additivity of the capacity sum of §11, and the error floor hold when the two channels are conditionally independent given the First Person and no third channel carries the inter-agent residue: I(Y_S; Y_M | X) = 0. This is the regime the Amnesia Protocol exists to enforce, and only there does the arithmetic of §11 apply; the strict ceiling of §11 requires in addition its capacity-deficit condition. The wiretap literature (Csiszár and Körner 1978; colluding-wiretapper extensions) shows the assumption is precisely what fails when observers combine; the 2026 multi-agent measurements (§26) show how badly.</p>
 <p><strong>Precondition 2 (fixed adversary class).</strong> Capacities are evaluated against a stated adversary; §5 owns what happens when the class strengthens.</p>
 <p><strong>Provenance.</strong> The bound is an instance of an established family and is cited as such: Wyner (1975) wire-tap equivocation; Fano (1961) and Cover and Thomas for the converse; Leung-Yan-Cheong and Hellman (1978) for secrecy capacity as a difference of capacities; the Bayes-capacity bound of quantitative information flow; Geiger and Kubin for relative information loss. Internal papers are no longer the cited ground.</p>
 </div>
 <div class="md"><h2>11. The Reconstruction Ceiling · REVISED: Proven, conditional regime</h2>
-<p>R_max = (C_S + C_M)/H(X) &lt; 1 carries the label <strong>Proven, conditional regime</strong>: proven within Preconditions 1 and 2 of §10, an instance of the family cited there, and time-indexed per §5. The error floor P_e ≥ 1 − R_max (Fano converse) carries the same conditioning. Outside the regime, §26 governs.</p>
+<p>R_max = (C_S + C_M)/H(X) &lt; 1 carries the label <strong>Proven, conditional regime</strong>, read as a decomposition: within Preconditions 1 and 2 of §10 the capacity sum is licensed and the error floor P_e ≥ 1 − R_max (Fano converse) is proven, an instance of the family cited there; the strict bound R_max &lt; 1 holds when, additionally, the capacity-deficit condition C_S + C_M &lt; H(X) holds, a measurable, declarable, numerical fact about a given system and adversary class, not a consequence of the architecture, and deliberately not a third precondition. The deficit condition, not the preconditions, is the time-indexed quantity per §5: R(t) can cross one with both preconditions intact, and what expires at t* is the deficit condition, not the architecture. Outside the regime, §26 governs.</p>
 </div>
 <div class="md"><h2>12. Algebraic Foundation Z/(2⁶)Z · REVISED: the bridge lands</h2>
 <p>The V5.4 algebraic foundation stands in full (the lattice, the dihedral generators, neg ∘ bnot = succ, the UOR convergence). V6 adds the connective tissue both 2026-06 reviews flagged as missing:</p>
@@ -208,7 +208,7 @@
 <hr>
 </div>
 <div class="md"><h2>25. NEW · The Two Instances of 2026</h2>
-<p><strong>Zcash Orchard.</strong> A soundness flaw in <code>halo2_gadgets</code> (<code>ecc::chip::mul</code>: <code>assign_advice()</code> where <code>copy_advice()</code> was required), present since May 2022. Claude Opus 4.8 released 2026-05-28; Taylor Hornby found the flaw 2026-05-29 and, with the model&#39;s help, built a complete counterfeiting exploit in regtest; ZEC fell roughly 27 to 33% in 24 hours; fixed by the NU6.2 hard fork at block 3,364,600 on 2026-06-03. Four findable years, one found day: the decoder moved, the circuit did not.</p>
+<p><strong>Zcash Orchard.</strong> A soundness flaw in <code>halo2_gadgets</code> (<code>ecc::chip::mul</code>: <code>assign_advice()</code> where <code>copy_advice()</code> was required), present since May 2022. Claude Opus 4.8 released 2026-05-28; Taylor Hornby found the flaw 2026-05-29 and, with the model&#39;s help, built a complete counterfeiting exploit in regtest; the market repriced sharply around disclosure (confounded by a concurrent institutional exit); fixed by the NU6.2 hard fork at block 3,364,600 on 2026-06-03. Four findable years, one found day: the decoder moved, the circuit did not.</p>
 <p><strong>The Schrottenloher rediscovery.</strong> Google Quantum AI withheld a roughly 10x Shor optimization for secp256k1, publishing only a zero-knowledge proof of its existence. On 2026-06-02 André Schrottenloher published an independent rediscovery (eprint 2026/1128), roughly two months after the attestation. The proof of feasibility priced the search.</p>
 <p>One structure, two substrates: the capability term moved while the source term sat still. These are the worked instances of C82, and the second is simultaneously the worked instance of C81.</p>
 <p><strong>The Existence-Leak law (C81, promoted to 70%).</strong> A zero-knowledge proof of feasibility leaks an upper bound on reconstruction difficulty: I(feasibility; method) &gt; 0. Bracketed from below by the Garg-Jain-Sahai impossibility (leakage-resilient ZK with λ &lt; 1 is impossible: the leak cannot be zero) and from above by the instance (the leak is operationally large, time constant of weeks). Mechanism: Fiat-Shamir transferability makes attestation a broadcast. Scope fence: the law concerns capability claims; service claims (the model&#39;s own ZK usage) attest instances, not capabilities. Stage 2 stands: held at 70% until a second independent instance, ideally outside cryptography.</p>
@@ -269,11 +269,6 @@
 <td>74×</td>
 <td>BRAID compression efficiency</td>
 <td>V5 formal lineage</td>
-</tr>
-<tr>
-<td>$47k to $52k/year</td>
-<td>indicative per-person annual value capture range</td>
-<td>README lineage</td>
 </tr>
 </tbody></table>
 </div>
