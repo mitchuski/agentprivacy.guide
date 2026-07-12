@@ -1,0 +1,126 @@
+{
+  "title": "Reading The Language",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "3f25c36500b2edee",
+      "text": "# 📖 Reading The Language"
+    },
+    {
+      "type": "markdown",
+      "id": "ce56fb1553f76506",
+      "text": "*How to actually read a Lexon expression, a relation claim, a structured\nblock, and a constitution spell. Best used alongside the interactive\n**viewer** (viewer/index.html in the repo).*"
+    },
+    {
+      "type": "markdown",
+      "id": "fccbe8a22c493432",
+      "text": "## Reading a covered term\n\nEvery covered canon term lives in `artifact/LEXICON.lexon.md` in a fixed\nshape. Here is Entropy — the information-theory term H(X):\n\n```\n## LEXPVM-T-032 · Entropy H(X)\n- census: LEXPVM-T-032\n- register: glossary · conjectured expression of canonical term\n- cites: glossary-master-v4 § ### Entropy H(X)\n- relation: {\"type\":\"absence\",\"to\":\"Adversary\",\"what\":\"escrow-remainder\"}\n\n```lex\nLEX Entropy.\n\n\"First Person\" is a person.\n\"Adversary\" is a person.\n\"Swordsman\" is a person.\n\"Mage\" is a person.\n\"Gap\" is a person.\n\"Total Uncertainty\" is an amount.\n\"Sword Channel\" is an amount.\n\"Mage Channel\" is an amount.\n\"Observation Complete\" is a binary.\n\nThe First Person pays the Total Uncertainty into escrow, appoints the\nSwordsman, appoints the Mage, appoints the Gap, appoints the Adversary,\nfixes the Sword Channel, and fixes the Mage Channel.\n\nCLAUSE: Observe Swordsman.\nThe Adversary may pay from escrow the Sword Channel to themselves.\n\nCLAUSE: Observe Mage.\nThe Adversary may pay from escrow the Mage Channel to themselves.\n\nCLAUSE: Exhaust Observation.\nThe Adversary may declare Observation Complete.\n\nCLAUSE: Remain Unknowable.\nThe First Person may, if Observation Complete is declared: return the\nremainder of the escrow to the Gap.\n```\n\nNotes: the residual uncertainty survives any observation strategy...\n```\n\nHow to read it:\n\n- **The header** names the term and its census id.\n- **register** states the epistemic status honestly — this is a *conjectured\n  expression of* a canonical term, never claiming more certainty than the\n  source.\n- **cites** points to the exact canon anchor it comes from (trace-or-delete:\n  every entry is traceable to a source).\n- **relation** is the machine-checked claim. Here it is an **absence**: no\n  clause routes the escrow remainder to the Adversary.\n- **The lex block** is the expression itself. Read it as English: the\n  observer (Adversary) can drain the two channels it observes, but the\n  *remainder* — the residual uncertainty — only ever returns to the Gap. There\n  is no clause that sends it to the Adversary.\n\nThat absence *is* entropy's meaning in this register: no matter how the\nadversary observes, uncertainty remains, because the structure contains no\npath for it to be captured. And the mutation probe has proven that claim by\nshowing a version *with* such a path would break it."
+    },
+    {
+      "type": "markdown",
+      "id": "457c91c119067e61",
+      "text": "## Reading a relation claim\n\nThe `relation:` line is JSON in one of four shapes:\n\n- `{\"type\":\"gate\",\"clause\":\"X\",\"condition\":\"Y\"}` — clause X only fires when Y\n  is declared.\n- `{\"type\":\"ordering\",\"clause\":\"X\",\"sequence\":[\"verb:Object\", ...]}` — clause X\n  does these things in this order.\n- `{\"type\":\"conjunction\",\"predicate\":\"X\",\"conjuncts\":[\"A\",\"B\"]}` — X requires\n  all of A and B.\n- `{\"type\":\"absence\",\"to\":\"Role\",\"what\":\"Thing\"}` — nothing routes Thing to\n  Role. (Privacy guarantees are absences.)\n\nEach is verified against a mutated twin (see [[The Gate — How A Claim Gets Proven]]); a claim\nyou see in the lexicon has survived that test."
+    },
+    {
+      "type": "markdown",
+      "id": "bcf31037e6ea4b26",
+      "text": "## Reading a structured block\n\nThe same entry is also emitted as a portable **block** in `blocks/` — the unit\nmeant to travel into a public knowledge graph. A block is `{lex, triples,\npromise edges, relation, provenance}` as JSON, plus a `.cypher` rendering. The\nCypher for an absence claim ends with the constraint a graph reader re-runs:\n\n```cypher\n// claim (re-runnable): NOTHING routes escrow-remainder to Adversary\nMATCH (x)-[e]->(f {name: \"Adversary\"})\nWHERE e.object = \"escrow-remainder\"\nRETURN count(e) AS mustBeZero\n```\n\nThe graph does not trust the author's prose; it re-runs the query and expects\nzero rows. The block is an audit trail of the text, and the text is a\nrendering of the graph. This is the deterministic write-path proposed to\nbonfires-style shared graphs — see\n[[Structured Language Blocks]]."
+    },
+    {
+      "type": "markdown",
+      "id": "b95e1730ed5a3441",
+      "text": "## Reading a constitution spell\n\nThe harness's own trusts and seats live in `artifact/SPELLS/` as the same kind\nof expression. Here is the separation bound — the trust that keeps the two\nagents apart — as Lexon:\n\n```lex\nLEX The Separation Bound.\n\n\"First Person\" is a person.\n\"Swordsman\" is a person.\n\"Mage\" is a person.\n\"Gap\" is a person.\n\"Proposal\" is a text.\n\"Verdict\" is a text.\n\"Round Value\" is an amount.\n\nThe First Person pays the Round Value into escrow, appoints the Swordsman,\nappoints the Mage, and appoints the Gap.\n\nCLAUSE: Propose.\nThe Mage may send the Proposal to the Gap.\n\nCLAUSE: Relay.\nThe Gap may send the Proposal to the Swordsman.\n\nCLAUSE: Return Verdict.\nThe Swordsman may send the Verdict to the First Person.\n\nCLAUSE: Close Round.\nThe First Person may pay from escrow the Round Value to the Gap.\n```\n\nIts claim is `{\"type\":\"absence\",\"to\":\"Mage\"}`: the proposal reaches the prover\nonly *through* the Gap, and **no clause routes anything back to the Mage**. The\nseparation is not a promise either agent makes — it is a route that does not\nexist in the structure. \"Cannot, by design,\" written in the law of the\nharness, checkable by the harness. All thirteen spells verify together with\n`node tools/spells_check.mjs` (13/13)."
+    },
+    {
+      "type": "markdown",
+      "id": "54e4dbc5283ab109",
+      "text": "## The fastest way in\n\nOpen **`viewer/index.html`** (viewer/index.html in the repo). Filter to **absence** and\nread a few: each is a privacy guarantee expressed as an impossibility. That is\nthe whole idea of the project in a single afternoon of clicking."
+    },
+    {
+      "type": "markdown",
+      "id": "18adbb5dfdbc11d1",
+      "text": "# Assets"
+    },
+    {
+      "id": "9374da73a3f9b452",
+      "type": "assets",
+      "text": "reading-the-language"
+    },
+    {
+      "type": "markdown",
+      "id": "82cd972e91087603",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Grammar Workshop]]"
+    },
+    {
+      "type": "markdown",
+      "id": "5e5ec20371ebfc11",
+      "text": "---\n*the wiki is a projection; `github.com/mitchuski/lexon_pvm` (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the [[The Harness — The Model Turned On Itself]]*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Reading The Language",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "3f25c36500b2edee",
+            "text": "# 📖 Reading The Language"
+          },
+          {
+            "type": "markdown",
+            "id": "ce56fb1553f76506",
+            "text": "*How to actually read a Lexon expression, a relation claim, a structured\nblock, and a constitution spell. Best used alongside the interactive\n**viewer** (viewer/index.html in the repo).*"
+          },
+          {
+            "type": "markdown",
+            "id": "fccbe8a22c493432",
+            "text": "## Reading a covered term\n\nEvery covered canon term lives in `artifact/LEXICON.lexon.md` in a fixed\nshape. Here is Entropy — the information-theory term H(X):\n\n```\n## LEXPVM-T-032 · Entropy H(X)\n- census: LEXPVM-T-032\n- register: glossary · conjectured expression of canonical term\n- cites: glossary-master-v4 § ### Entropy H(X)\n- relation: {\"type\":\"absence\",\"to\":\"Adversary\",\"what\":\"escrow-remainder\"}\n\n```lex\nLEX Entropy.\n\n\"First Person\" is a person.\n\"Adversary\" is a person.\n\"Swordsman\" is a person.\n\"Mage\" is a person.\n\"Gap\" is a person.\n\"Total Uncertainty\" is an amount.\n\"Sword Channel\" is an amount.\n\"Mage Channel\" is an amount.\n\"Observation Complete\" is a binary.\n\nThe First Person pays the Total Uncertainty into escrow, appoints the\nSwordsman, appoints the Mage, appoints the Gap, appoints the Adversary,\nfixes the Sword Channel, and fixes the Mage Channel.\n\nCLAUSE: Observe Swordsman.\nThe Adversary may pay from escrow the Sword Channel to themselves.\n\nCLAUSE: Observe Mage.\nThe Adversary may pay from escrow the Mage Channel to themselves.\n\nCLAUSE: Exhaust Observation.\nThe Adversary may declare Observation Complete.\n\nCLAUSE: Remain Unknowable.\nThe First Person may, if Observation Complete is declared: return the\nremainder of the escrow to the Gap.\n```\n\nNotes: the residual uncertainty survives any observation strategy...\n```\n\nHow to read it:\n\n- **The header** names the term and its census id.\n- **register** states the epistemic status honestly — this is a *conjectured\n  expression of* a canonical term, never claiming more certainty than the\n  source.\n- **cites** points to the exact canon anchor it comes from (trace-or-delete:\n  every entry is traceable to a source).\n- **relation** is the machine-checked claim. Here it is an **absence**: no\n  clause routes the escrow remainder to the Adversary.\n- **The lex block** is the expression itself. Read it as English: the\n  observer (Adversary) can drain the two channels it observes, but the\n  *remainder* — the residual uncertainty — only ever returns to the Gap. There\n  is no clause that sends it to the Adversary.\n\nThat absence *is* entropy's meaning in this register: no matter how the\nadversary observes, uncertainty remains, because the structure contains no\npath for it to be captured. And the mutation probe has proven that claim by\nshowing a version *with* such a path would break it."
+          },
+          {
+            "type": "markdown",
+            "id": "457c91c119067e61",
+            "text": "## Reading a relation claim\n\nThe `relation:` line is JSON in one of four shapes:\n\n- `{\"type\":\"gate\",\"clause\":\"X\",\"condition\":\"Y\"}` — clause X only fires when Y\n  is declared.\n- `{\"type\":\"ordering\",\"clause\":\"X\",\"sequence\":[\"verb:Object\", ...]}` — clause X\n  does these things in this order.\n- `{\"type\":\"conjunction\",\"predicate\":\"X\",\"conjuncts\":[\"A\",\"B\"]}` — X requires\n  all of A and B.\n- `{\"type\":\"absence\",\"to\":\"Role\",\"what\":\"Thing\"}` — nothing routes Thing to\n  Role. (Privacy guarantees are absences.)\n\nEach is verified against a mutated twin (see [[The Gate — How A Claim Gets Proven]]); a claim\nyou see in the lexicon has survived that test."
+          },
+          {
+            "type": "markdown",
+            "id": "bcf31037e6ea4b26",
+            "text": "## Reading a structured block\n\nThe same entry is also emitted as a portable **block** in `blocks/` — the unit\nmeant to travel into a public knowledge graph. A block is `{lex, triples,\npromise edges, relation, provenance}` as JSON, plus a `.cypher` rendering. The\nCypher for an absence claim ends with the constraint a graph reader re-runs:\n\n```cypher\n// claim (re-runnable): NOTHING routes escrow-remainder to Adversary\nMATCH (x)-[e]->(f {name: \"Adversary\"})\nWHERE e.object = \"escrow-remainder\"\nRETURN count(e) AS mustBeZero\n```\n\nThe graph does not trust the author's prose; it re-runs the query and expects\nzero rows. The block is an audit trail of the text, and the text is a\nrendering of the graph. This is the deterministic write-path proposed to\nbonfires-style shared graphs — see\n[[Structured Language Blocks]]."
+          },
+          {
+            "type": "markdown",
+            "id": "b95e1730ed5a3441",
+            "text": "## Reading a constitution spell\n\nThe harness's own trusts and seats live in `artifact/SPELLS/` as the same kind\nof expression. Here is the separation bound — the trust that keeps the two\nagents apart — as Lexon:\n\n```lex\nLEX The Separation Bound.\n\n\"First Person\" is a person.\n\"Swordsman\" is a person.\n\"Mage\" is a person.\n\"Gap\" is a person.\n\"Proposal\" is a text.\n\"Verdict\" is a text.\n\"Round Value\" is an amount.\n\nThe First Person pays the Round Value into escrow, appoints the Swordsman,\nappoints the Mage, and appoints the Gap.\n\nCLAUSE: Propose.\nThe Mage may send the Proposal to the Gap.\n\nCLAUSE: Relay.\nThe Gap may send the Proposal to the Swordsman.\n\nCLAUSE: Return Verdict.\nThe Swordsman may send the Verdict to the First Person.\n\nCLAUSE: Close Round.\nThe First Person may pay from escrow the Round Value to the Gap.\n```\n\nIts claim is `{\"type\":\"absence\",\"to\":\"Mage\"}`: the proposal reaches the prover\nonly *through* the Gap, and **no clause routes anything back to the Mage**. The\nseparation is not a promise either agent makes — it is a route that does not\nexist in the structure. \"Cannot, by design,\" written in the law of the\nharness, checkable by the harness. All thirteen spells verify together with\n`node tools/spells_check.mjs` (13/13)."
+          },
+          {
+            "type": "markdown",
+            "id": "54e4dbc5283ab109",
+            "text": "## The fastest way in\n\nOpen **`viewer/index.html`** (viewer/index.html in the repo). Filter to **absence** and\nread a few: each is a privacy guarantee expressed as an impossibility. That is\nthe whole idea of the project in a single afternoon of clicking."
+          },
+          {
+            "type": "markdown",
+            "id": "18adbb5dfdbc11d1",
+            "text": "# Assets"
+          },
+          {
+            "id": "9374da73a3f9b452",
+            "type": "assets",
+            "text": "reading-the-language"
+          },
+          {
+            "type": "markdown",
+            "id": "82cd972e91087603",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Grammar Workshop]]"
+          },
+          {
+            "type": "markdown",
+            "id": "5e5ec20371ebfc11",
+            "text": "---\n*the wiki is a projection; `github.com/mitchuski/lexon_pvm` (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the [[The Harness — The Model Turned On Itself]]*"
+          }
+        ]
+      },
+      "date": 1783865927409
+    }
+  ]
+}

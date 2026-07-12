@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Harness — The Model Turned On Itself · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="lexon">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site on" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/lexon/welcome-visitors.html">Lexon</a> / <span>The Harness — The Model Turned On Itself</span></div>
+  <article><div class="md"><h1>⿻ The Harness — The Model Turned On Itself</h1>
+</div>
+<div class="md"><p><em>The work was not done by hand. It was done by a dual-agent research loop that<br>is the same architecture the Privacy Value Model describes — which is the<br>point.</em></p>
+</div>
+<div class="md"><h2>The idea</h2>
+<p>The PVM says: keep two agents separate, let one propose and one verify, and<br>hold them apart with a third seat so that neither can tune to the other. That<br>is not only a privacy design. It is also a recipe for <em>trustworthy research</em> —<br>because the thing that makes a research result believable is exactly that the<br>person checking it could not have rigged the check.</p>
+<p>So the project was run as a <strong>dual-agent harness</strong>: a generic skeleton<br>(shared across several of the author&#39;s projects) that was fitted to this<br>domain. The harness turns the privacy architecture into a research instrument<br>and points it at the privacy model. The harness that produced this work is<br>itself an instance of the pattern the work describes.</p>
+</div>
+<div class="md"><h2>The seven seats</h2>
+<p>Each run of the loop is played by seven roles (&quot;seats&quot;). No seat sees more<br>than its card allows — the separation is enforced, not requested.</p>
+<ul>
+<li><strong>Measure</strong> — opens the round with fresh, verified numbers. No advocacy.</li>
+<li><strong>Propose</strong> (the Mage 🧙) — proposes one <em>lever</em>: a reusable recipe for<br>expressing a family of canon terms, plus worked examples. It is blind to how<br>it will be tested.</li>
+<li><strong>Hold-apart</strong> (the Gap ⿻) — takes the finished proposal, serializes it,<br>hashes it, and from that hash draws the held-out terms the prover must<br>express. Because the draw comes from the proposal&#39;s own fingerprint, the<br>proposer provably could not have tuned to it.</li>
+<li><strong>Assay</strong> (the Swordsman ⚔️) — runs the <em>full</em> gate: expresses each drawn<br>term from the recipe alone, checks every claim, and returns a verdict. A<br>candidate that passes a cheap check but fails the full gate is a <strong>mirage</strong>,<br>named without softening.</li>
+<li><strong>Critic</strong> — classifies the whole round and hands the next round exactly one<br>lead. It red-teams the proposer&#39;s reasoning, never the prover&#39;s verdict.</li>
+<li><strong>Chronicle</strong> — writes the round&#39;s record so the next session can resume<br>cold.</li>
+<li><strong>Keystone</strong> — the pair itself, held apart, in the main session. It folds<br>validated results into the permanent lexicon, and it makes the door visible<br>without ever opening it.</li>
+</ul>
+</div>
+<div class="md"><h2>The six-phase loop</h2>
+<pre><code>Measure  →  Propose  →  Hold-apart  →  Assay  →  Critic  →  Chronicle
+ (numbers)  (Mage:      (Gap: hash     (Sword:   (classify) (record)
+             a recipe)   the proposal,  run the
+                         draw witnesses)full gate)
+</code></pre>
+<p>Then, between rounds, the <strong>keystone fold</strong>: verified expressions are written<br>into <code>artifact/LEXICON.lexon.md</code>, the metric is re-derived, and the frontier<br>advances. A run is several rounds until it goes dry or hits its cap.</p>
+</div>
+<div class="md"><h2>Why the Gap is the whole thing</h2>
+<p>The subtle part is the Gap. Notice what the model&#39;s separation trust does<br><em>not</em> say: it does not ask either agent to <em>promise</em> separation. Neither<br>can — an agent can only promise its own behavior, and &quot;I will not learn what<br>the other knows&quot; is not something either seat can enforce from the inside. The<br>separation lives in the promises they <em>don&#39;t</em> make to each other, held open by<br>a third seat whose only job is to derive what neither may choose.</p>
+<p>Concretely: the proposer never sees the test. The Gap hashes the proposal and<br>draws held-out terms from the digest. The prover must then express those terms<br><em>using only the proposer&#39;s recipe</em>. If the recipe is genuinely general, the<br>prover succeeds; if it only worked on the examples the proposer hand-picked,<br>it fails. This is a Fiat-Shamir construction — the same cryptographic idea<br>that makes a proof non-interactive — repurposed to make research honest.</p>
+</div>
+<div class="md"><h2>What the loop caught (and this is the evidence it works)</h2>
+<p>A believable instrument is one that catches its own mistakes. Over five runs<br>the loop named, and did not soften:</p>
+<ul>
+<li><strong>Two false self-certifications</strong> — proposals that claimed to be clean and<br>were not (one em dash out of place). Found by having the prover scan the<br>bytes rather than trust the claim.</li>
+<li><strong>A vacuity class</strong> — coverage bought by hiding content in name strings the<br>checker cannot inspect. Named, then made mechanical.</li>
+<li><strong>Template-stamping</strong> — one clause skeleton dressed up as many terms.</li>
+<li><strong>Lens convergence</strong> — the discovery that three supposedly different<br>approaches had become one method validated many times over, so the metric<br>was over-counting. The next run fixed it by construction.</li>
+<li><strong>A lever that killed itself</strong> — a recipe that honestly reported it could<br>not express a class of terms, citing a <em>previous</em> run&#39;s refusal as binding<br>precedent. Discipline had propagated into the agents&#39; own reasoning.</li>
+</ul>
+<p>Two structural kills were filed, each with a re-open condition, because a<br>killed idea is not an impossible one. This is the harness doing its job: the<br>wins and the kills are recorded with equal prominence.</p>
+</div>
+<div class="md"><h2>The reflexive turn</h2>
+<p>There is a pleasing loop-closure here. The harness expresses the PVM&#39;s canon<br>in Lexon; and the harness&#39;s own constitution — the trusts and seats that<br>govern it — is <em>also</em> expressed in Lexon, as thirteen verified spells (see<br><a class="wlink" href="the-results-five-runs-211-to-22.html">The Results — Five Runs, 211 To 22</a>). The instrument wrote its own law in the<br>language its own loop gates. That was the operator&#39;s stated goal from day one:<br>&quot;lexon your own dual agents.&quot;</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 the-harness-the-model-turned-on-itself</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-grammar-workshop.html">The Grammar Workshop</a> · <a class="wlink" href="the-gate-how-a-claim-gets-proven.html">The Gate — How A Claim Gets Proven</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>github.com/mitchuski/lexon_pvm</code> (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the <a class="wlink" href="the-harness-the-model-turned-on-itself.html">The Harness — The Model Turned On Itself</a></em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-harness-the-model-turned-on-itself.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

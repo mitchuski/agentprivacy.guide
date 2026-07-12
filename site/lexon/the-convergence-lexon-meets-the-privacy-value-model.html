@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Convergence — Lexon Meets The Privacy Value Model · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="lexon">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site on" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/lexon/welcome-visitors.html">Lexon</a> / <span>The Convergence — Lexon Meets The Privacy Value Model</span></div>
+  <article><div class="md"><h1>🔗 The Convergence — Lexon Meets The Privacy Value Model</h1>
+</div>
+<div class="md"><p><em>Why expressing a privacy model in a legal-contract language is more than a<br>translation exercise.</em></p>
+</div>
+<div class="md"><h2>What Lexon is</h2>
+<p><a href="https://www.lexon.org">Lexon</a> is a controlled natural language created by<br>Henning Diedrich. &quot;Controlled&quot; means it looks and reads like ordinary English<br>but obeys a strict, small grammar, so that a sentence has exactly one meaning<br>and a machine can parse it deterministically. A Lexon document reads as a<br>plain-English contract and compiles to executable code.</p>
+<p>A tiny example — the canonical escrow, in full:</p>
+<pre><code>LEX Escrow.
+
+&quot;Payer&quot; is a person.
+&quot;Payee&quot; is a person.
+&quot;Arbiter&quot; is a person.
+&quot;Amount&quot; is an amount.
+&quot;Fee&quot; is an amount.
+
+The Payer pays an Amount into escrow, appoints the Payee,
+appoints the Arbiter, and fixes the Fee.
+
+CLAUSE: Pay Out.
+The Arbiter may pay from escrow the Fee to themselves,
+and afterwards pay the remainder of the escrow to the Payee.
+</code></pre>
+<p>Every noun is defined by the author inside the text, so the document carries<br>its own vocabulary. Every sentence is a subject doing something to an object.</p>
+</div>
+<div class="md"><h2>The insight: a contract is already a knowledge graph</h2>
+<p>Here is the load-bearing observation. That escrow text, parsed, is a set of<br>typed relationships between named things:</p>
+<ul>
+<li><code>Payer —pays_into_escrow→ Amount</code></li>
+<li><code>Payer —appoints→ Payee</code></li>
+<li><code>Payer —appoints→ Arbiter</code></li>
+<li><code>Arbiter —may_pay(Fee)→ Arbiter</code></li>
+</ul>
+<p>Those are knowledge-graph triples. The definitions are typed nodes (a person<br>compiles to a key pair, an amount to a number). The obligations — <em>may</em>,<br><em>must</em> — are typed, party-addressed, dated edges. So a Lexon contract is<br><em>simultaneously</em> three things with zero loss between them: readable prose,<br>executable code, and a subgraph. Two independent legal scholars (Reyes 2021,<br>Idelberger 2020) confirmed this pass-through: the text is the program is the<br>graph.</p>
+<p>This matters because it means controlled grammar is the <strong>missing authoring<br>layer</strong> between two worlds that agentprivacy cares about: how autonomous<br>agents communicate (compressed, probabilistic) and how shared knowledge is<br>stored (graphs, precise). You can write a commitment once, in English, and get<br>the graph for free.</p>
+</div>
+<div class="md"><h2>What the Privacy Value Model is</h2>
+<p>The <a href="https://agentprivacy.ai">Privacy Value Model</a> (PVM) is the theory behind<br>0xagentprivacy. Its core is an architecture, not a policy:</p>
+<ul>
+<li><strong>Two agents.</strong> A <strong>Swordsman</strong> (⚔️) who protects — boundaries, disclosure<br>control, verdicts that do not flatter — and a <strong>Mage</strong> (🧙) who delegates —<br>coordination, proposal, execution within bounds.</li>
+<li><strong>The First Person</strong> (😊) — the human whose work it is, the only holder of<br>&quot;the door&quot; (the authority to take outward actions).</li>
+<li><strong>The Gap</strong> (⿻) — the held-apart space between the two agents that neither<br>owns.</li>
+</ul>
+<p>The model&#39;s central claim is that privacy is <strong>structural</strong>: given the human,<br>the Swordsman&#39;s outputs and the Mage&#39;s outputs carry (almost) no information<br>about each other — not because they promise not to share, but because the<br>architecture makes it so. &quot;Cannot, by design,&quot; not &quot;promises not to.&quot;</p>
+<p>The rest of the model builds on this: promise theory (agents can only promise<br>their own behavior), an information-theoretic separation bound, a value<br>calculus, a consent posture (invitation, never imposition — the IEEE 7012 /<br>MyTerms standard), and a large body of canon terms, ceremonies, and story.</p>
+</div>
+<div class="md"><h2>Why put one in the other</h2>
+<p>Because the PVM&#39;s deepest claims are <em>structural</em>, and Lexon&#39;s grammar makes<br>structure mechanical. If privacy-as-architecture means &quot;a certain flow of<br>information cannot happen,&quot; then writing the model in a language whose every<br>sentence is a checkable relationship lets you <em>prove</em> the flow cannot happen —<br>by showing the grammar contains no clause that permits it. The model stops<br>being prose you must trust and becomes structure a machine can check.</p>
+<p>That is the convergence this repository pursues: <strong>the PVM canon, term by<br>term, as Lexon controlled grammar, with every term&#39;s structural claim<br>mechanically verified.</strong> The next page explains how the work was actually<br>carried out — by a loop built on the model&#39;s own two-agent design.</p>
+</div>
+<div class="md"><h2>Origin</h2>
+<p>The project began as a formal &quot;convergence run&quot;: five reference letters and<br>eight axes of comparison between Lexon and the PVM, with the keystone axis<br>being A5, &quot;grammar to graph.&quot; That run&#39;s artefacts live in<br><code>out/</code>. Its central finding — that a Lexon text is at once<br>contract, code, and lossless subgraph — is what everything here is built on.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 the-convergence-lexon-meets-the-privacy-value-model</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-grammar-workshop.html">The Grammar Workshop</a> · <a class="wlink" href="the-harness-the-model-turned-on-itself.html">The Harness — The Model Turned On Itself</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>github.com/mitchuski/lexon_pvm</code> (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the <a class="wlink" href="the-harness-the-model-turned-on-itself.html">The Harness — The Model Turned On Itself</a></em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-convergence-lexon-meets-the-privacy-value-model.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

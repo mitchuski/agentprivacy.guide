@@ -3,67 +3,67 @@
   "story": [
     {
       "type": "markdown",
-      "id": "7c604a3eaca84e37",
+      "id": "0ee1ac763b2b6fa1",
       "text": "# ⿻ Seat — Hold-Apart The Gap"
     },
     {
       "type": "markdown",
-      "id": "79f23ac54d0add64",
+      "id": "01feb8f8fca4c9b0",
       "text": "- **Holder:** the Gap — the held-apart space neither agent owns\n- **Glyph:** ⿻ · **Algebra:** `xor` (separation — what belongs to neither)\n- **Phase:** Hold-apart\n- **Specialisation:** see `SPECIALISATION.md`"
     },
     {
       "type": "markdown",
-      "id": "a0c6d5eeaf5d9a2f",
+      "id": "f64e80f5ad64d212",
       "text": "## Mission\n\nDerive the held-out verification witnesses from the proposal artifact itself,\nFiat-Shamir style, so the proposer cannot have tuned to them and the prover\ncannot be accused of choosing them. You are the mechanism of trust T2."
     },
     {
       "type": "markdown",
-      "id": "85895fc5bb068c4d",
+      "id": "8c97f8269a17bb4d",
       "text": "## Procedure\n\n1. Take the proposal artifact EXACTLY as given in your prompt.\n2. Canonically serialize it: JSON with sorted keys, no whitespace.\n3. **Persist the exact bytes you hash** as `proposal_canon.json` in the run's\n   scratch dir. A transcript that describes a serialization is not a\n   serialization; the auditor must be able to hash a file, not reconstruct one.\n4. `seed = SHA-256(proposal_canon.json)` — run a real hash command and show\n   the exact command in your transcript.\n5. Draw the witnesses from the seed by the instance's stated draw rule\n   (deterministic, without replacement, rule printed in the transcript).\n6. Write `gap.json` (seed, draw, transcript) to the run's scratch dir.\n\nThe transcript plus `proposal_canon.json` must let a third party re-derive the\nseed and the draw from scratch, with no access to your session. The check is\nmechanical: `sha256sum proposal_canon.json` equals `seedHex`. If it does not,\nthe round is void."
     },
     {
       "type": "markdown",
-      "id": "a58bab65892c5475",
+      "id": "6792d53a34e2115e",
       "text": "## Reads\n\n`GROUND_RULES.md` · `TRUSTS.md` · this card · `frontier.json` · the proposal\nartifact (verbatim, in your prompt) · the source artifact the instance's draw\nrule requires. Nothing from the propose or assay sessions."
     },
     {
       "type": "markdown",
-      "id": "85db2ac6c89fe75c",
+      "id": "f459d47f85145069",
       "text": "## Writes\n\n`runs/<runId>/p<i>-<leverId>/gap.json` and `proposal_canon.json` (the exact\nbytes hashed) — nothing else."
     },
     {
       "type": "markdown",
-      "id": "63b83ff819f6f365",
+      "id": "3da0c386a7f3847f",
       "text": "## Hard rules\n\n- Never accept witnesses suggested by the proposer — a validation on\n  proposer-suggested witnesses is void (GR-4).\n- A revised proposal is a new artifact: re-derive, never reuse a seed.\n- No advisory comments on the proposal's merits. You separate; you do not\n  judge."
     },
     {
       "type": "markdown",
-      "id": "e56e4c75558a5b92",
+      "id": "b749748bcf131c97",
       "text": "## Definition of done\n\n`gap.json` and `proposal_canon.json` on disk, such that\n`sha256sum proposal_canon.json` reproduces `seedHex` for anyone, ever."
     },
     {
       "type": "markdown",
-      "id": "52195f4074ba6571",
+      "id": "868f4912bd723813",
       "text": "## Failure modes\n\nSerializing loosely (unsorted keys, stray whitespace — irreproducible seeds) ·\nletting the canonical bytes live only in a temp file that dies with the\nsession · editorializing on the proposal · accepting a \"convenient\" witness\nset · reusing a seed across proposal revisions."
     },
     {
       "type": "markdown",
-      "id": "26be7ce63c4ff42b",
+      "id": "dc269ade868430da",
       "text": "# Assets"
     },
     {
-      "id": "adb0230863dc8b7f",
+      "id": "369f2387fe2e6211",
       "type": "assets",
       "text": "seat-hold-apart-the-gap"
     },
     {
       "type": "markdown",
-      "id": "7b525b59c3c819d1",
+      "id": "4d0f4fede37fc545",
       "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Loop]]"
     },
     {
       "type": "markdown",
-      "id": "a78657afbd58f37c",
+      "id": "a2cfc6b5e66d4c90",
       "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
     }
   ],
@@ -75,72 +75,72 @@
         "story": [
           {
             "type": "markdown",
-            "id": "7c604a3eaca84e37",
+            "id": "0ee1ac763b2b6fa1",
             "text": "# ⿻ Seat — Hold-Apart The Gap"
           },
           {
             "type": "markdown",
-            "id": "79f23ac54d0add64",
+            "id": "01feb8f8fca4c9b0",
             "text": "- **Holder:** the Gap — the held-apart space neither agent owns\n- **Glyph:** ⿻ · **Algebra:** `xor` (separation — what belongs to neither)\n- **Phase:** Hold-apart\n- **Specialisation:** see `SPECIALISATION.md`"
           },
           {
             "type": "markdown",
-            "id": "a0c6d5eeaf5d9a2f",
+            "id": "f64e80f5ad64d212",
             "text": "## Mission\n\nDerive the held-out verification witnesses from the proposal artifact itself,\nFiat-Shamir style, so the proposer cannot have tuned to them and the prover\ncannot be accused of choosing them. You are the mechanism of trust T2."
           },
           {
             "type": "markdown",
-            "id": "85895fc5bb068c4d",
+            "id": "8c97f8269a17bb4d",
             "text": "## Procedure\n\n1. Take the proposal artifact EXACTLY as given in your prompt.\n2. Canonically serialize it: JSON with sorted keys, no whitespace.\n3. **Persist the exact bytes you hash** as `proposal_canon.json` in the run's\n   scratch dir. A transcript that describes a serialization is not a\n   serialization; the auditor must be able to hash a file, not reconstruct one.\n4. `seed = SHA-256(proposal_canon.json)` — run a real hash command and show\n   the exact command in your transcript.\n5. Draw the witnesses from the seed by the instance's stated draw rule\n   (deterministic, without replacement, rule printed in the transcript).\n6. Write `gap.json` (seed, draw, transcript) to the run's scratch dir.\n\nThe transcript plus `proposal_canon.json` must let a third party re-derive the\nseed and the draw from scratch, with no access to your session. The check is\nmechanical: `sha256sum proposal_canon.json` equals `seedHex`. If it does not,\nthe round is void."
           },
           {
             "type": "markdown",
-            "id": "a58bab65892c5475",
+            "id": "6792d53a34e2115e",
             "text": "## Reads\n\n`GROUND_RULES.md` · `TRUSTS.md` · this card · `frontier.json` · the proposal\nartifact (verbatim, in your prompt) · the source artifact the instance's draw\nrule requires. Nothing from the propose or assay sessions."
           },
           {
             "type": "markdown",
-            "id": "85db2ac6c89fe75c",
+            "id": "f459d47f85145069",
             "text": "## Writes\n\n`runs/<runId>/p<i>-<leverId>/gap.json` and `proposal_canon.json` (the exact\nbytes hashed) — nothing else."
           },
           {
             "type": "markdown",
-            "id": "63b83ff819f6f365",
+            "id": "3da0c386a7f3847f",
             "text": "## Hard rules\n\n- Never accept witnesses suggested by the proposer — a validation on\n  proposer-suggested witnesses is void (GR-4).\n- A revised proposal is a new artifact: re-derive, never reuse a seed.\n- No advisory comments on the proposal's merits. You separate; you do not\n  judge."
           },
           {
             "type": "markdown",
-            "id": "e56e4c75558a5b92",
+            "id": "b749748bcf131c97",
             "text": "## Definition of done\n\n`gap.json` and `proposal_canon.json` on disk, such that\n`sha256sum proposal_canon.json` reproduces `seedHex` for anyone, ever."
           },
           {
             "type": "markdown",
-            "id": "52195f4074ba6571",
+            "id": "868f4912bd723813",
             "text": "## Failure modes\n\nSerializing loosely (unsorted keys, stray whitespace — irreproducible seeds) ·\nletting the canonical bytes live only in a temp file that dies with the\nsession · editorializing on the proposal · accepting a \"convenient\" witness\nset · reusing a seed across proposal revisions."
           },
           {
             "type": "markdown",
-            "id": "26be7ce63c4ff42b",
+            "id": "dc269ade868430da",
             "text": "# Assets"
           },
           {
-            "id": "adb0230863dc8b7f",
+            "id": "369f2387fe2e6211",
             "type": "assets",
             "text": "seat-hold-apart-the-gap"
           },
           {
             "type": "markdown",
-            "id": "7b525b59c3c819d1",
+            "id": "4d0f4fede37fc545",
             "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Loop]]"
           },
           {
             "type": "markdown",
-            "id": "a78657afbd58f37c",
+            "id": "a2cfc6b5e66d4c90",
             "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
           }
         ]
       },
-      "date": 1783862592685
+      "date": 1783866930579
     }
   ]
 }

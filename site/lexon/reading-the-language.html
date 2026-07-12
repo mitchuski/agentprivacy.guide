@@ -1,0 +1,147 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reading The Language · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="lexon">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site on" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/lexon/welcome-visitors.html">Lexon</a> / <span>Reading The Language</span></div>
+  <article><div class="md"><h1>📖 Reading The Language</h1>
+</div>
+<div class="md"><p><em>How to actually read a Lexon expression, a relation claim, a structured<br>block, and a constitution spell. Best used alongside the interactive<br><strong>viewer</strong> (viewer/index.html in the repo).</em></p>
+</div>
+<div class="md"><h2>Reading a covered term</h2>
+<p>Every covered canon term lives in <code>artifact/LEXICON.lexon.md</code> in a fixed<br>shape. Here is Entropy — the information-theory term H(X):</p>
+<pre><code>## LEXPVM-T-032 · Entropy H(X)
+- census: LEXPVM-T-032
+- register: glossary · conjectured expression of canonical term
+- cites: glossary-master-v4 § ### Entropy H(X)
+- relation: {&quot;type&quot;:&quot;absence&quot;,&quot;to&quot;:&quot;Adversary&quot;,&quot;what&quot;:&quot;escrow-remainder&quot;}
+
+```lex
+LEX Entropy.
+
+&quot;First Person&quot; is a person.
+&quot;Adversary&quot; is a person.
+&quot;Swordsman&quot; is a person.
+&quot;Mage&quot; is a person.
+&quot;Gap&quot; is a person.
+&quot;Total Uncertainty&quot; is an amount.
+&quot;Sword Channel&quot; is an amount.
+&quot;Mage Channel&quot; is an amount.
+&quot;Observation Complete&quot; is a binary.
+
+The First Person pays the Total Uncertainty into escrow, appoints the
+Swordsman, appoints the Mage, appoints the Gap, appoints the Adversary,
+fixes the Sword Channel, and fixes the Mage Channel.
+
+CLAUSE: Observe Swordsman.
+The Adversary may pay from escrow the Sword Channel to themselves.
+
+CLAUSE: Observe Mage.
+The Adversary may pay from escrow the Mage Channel to themselves.
+
+CLAUSE: Exhaust Observation.
+The Adversary may declare Observation Complete.
+
+CLAUSE: Remain Unknowable.
+The First Person may, if Observation Complete is declared: return the
+remainder of the escrow to the Gap.
+</code></pre>
+<p>Notes: the residual uncertainty survives any observation strategy...</p>
+<pre><code>
+How to read it:
+
+- **The header** names the term and its census id.
+- **register** states the epistemic status honestly — this is a *conjectured
+  expression of* a canonical term, never claiming more certainty than the
+  source.
+- **cites** points to the exact canon anchor it comes from (trace-or-delete:
+  every entry is traceable to a source).
+- **relation** is the machine-checked claim. Here it is an **absence**: no
+  clause routes the escrow remainder to the Adversary.
+- **The lex block** is the expression itself. Read it as English: the
+  observer (Adversary) can drain the two channels it observes, but the
+  *remainder* — the residual uncertainty — only ever returns to the Gap. There
+  is no clause that sends it to the Adversary.
+
+That absence *is* entropy&#39;s meaning in this register: no matter how the
+adversary observes, uncertainty remains, because the structure contains no
+path for it to be captured. And the mutation probe has proven that claim by
+showing a version *with* such a path would break it.
+</code></pre>
+</div>
+<div class="md"><h2>Reading a relation claim</h2>
+<p>The <code>relation:</code> line is JSON in one of four shapes:</p>
+<ul>
+<li><code>{&quot;type&quot;:&quot;gate&quot;,&quot;clause&quot;:&quot;X&quot;,&quot;condition&quot;:&quot;Y&quot;}</code> — clause X only fires when Y<br>is declared.</li>
+<li><code>{&quot;type&quot;:&quot;ordering&quot;,&quot;clause&quot;:&quot;X&quot;,&quot;sequence&quot;:[&quot;verb:Object&quot;, ...]}</code> — clause X<br>does these things in this order.</li>
+<li><code>{&quot;type&quot;:&quot;conjunction&quot;,&quot;predicate&quot;:&quot;X&quot;,&quot;conjuncts&quot;:[&quot;A&quot;,&quot;B&quot;]}</code> — X requires<br>all of A and B.</li>
+<li><code>{&quot;type&quot;:&quot;absence&quot;,&quot;to&quot;:&quot;Role&quot;,&quot;what&quot;:&quot;Thing&quot;}</code> — nothing routes Thing to<br>Role. (Privacy guarantees are absences.)</li>
+</ul>
+<p>Each is verified against a mutated twin (see <a class="wlink" href="the-gate-how-a-claim-gets-proven.html">The Gate — How A Claim Gets Proven</a>); a claim<br>you see in the lexicon has survived that test.</p>
+</div>
+<div class="md"><h2>Reading a structured block</h2>
+<p>The same entry is also emitted as a portable <strong>block</strong> in <code>blocks/</code> — the unit<br>meant to travel into a public knowledge graph. A block is <code>{lex, triples, promise edges, relation, provenance}</code> as JSON, plus a <code>.cypher</code> rendering. The<br>Cypher for an absence claim ends with the constraint a graph reader re-runs:</p>
+<pre><code class="language-cypher">// claim (re-runnable): NOTHING routes escrow-remainder to Adversary
+MATCH (x)-[e]-&gt;(f {name: &quot;Adversary&quot;})
+WHERE e.object = &quot;escrow-remainder&quot;
+RETURN count(e) AS mustBeZero
+</code></pre>
+<p>The graph does not trust the author&#39;s prose; it re-runs the query and expects<br>zero rows. The block is an audit trail of the text, and the text is a<br>rendering of the graph. This is the deterministic write-path proposed to<br>bonfires-style shared graphs — see<br><a class="wlink" href="structured-language-blocks.html">Structured Language Blocks</a>.</p>
+</div>
+<div class="md"><h2>Reading a constitution spell</h2>
+<p>The harness&#39;s own trusts and seats live in <code>artifact/SPELLS/</code> as the same kind<br>of expression. Here is the separation bound — the trust that keeps the two<br>agents apart — as Lexon:</p>
+<pre><code class="language-lex">LEX The Separation Bound.
+
+&quot;First Person&quot; is a person.
+&quot;Swordsman&quot; is a person.
+&quot;Mage&quot; is a person.
+&quot;Gap&quot; is a person.
+&quot;Proposal&quot; is a text.
+&quot;Verdict&quot; is a text.
+&quot;Round Value&quot; is an amount.
+
+The First Person pays the Round Value into escrow, appoints the Swordsman,
+appoints the Mage, and appoints the Gap.
+
+CLAUSE: Propose.
+The Mage may send the Proposal to the Gap.
+
+CLAUSE: Relay.
+The Gap may send the Proposal to the Swordsman.
+
+CLAUSE: Return Verdict.
+The Swordsman may send the Verdict to the First Person.
+
+CLAUSE: Close Round.
+The First Person may pay from escrow the Round Value to the Gap.
+</code></pre>
+<p>Its claim is <code>{&quot;type&quot;:&quot;absence&quot;,&quot;to&quot;:&quot;Mage&quot;}</code>: the proposal reaches the prover<br>only <em>through</em> the Gap, and <strong>no clause routes anything back to the Mage</strong>. The<br>separation is not a promise either agent makes — it is a route that does not<br>exist in the structure. &quot;Cannot, by design,&quot; written in the law of the<br>harness, checkable by the harness. All thirteen spells verify together with<br><code>node tools/spells_check.mjs</code> (13/13).</p>
+</div>
+<div class="md"><h2>The fastest way in</h2>
+<p>Open <strong><code>viewer/index.html</code></strong> (viewer/index.html in the repo). Filter to <strong>absence</strong> and<br>read a few: each is a privacy guarantee expressed as an impossibility. That is<br>the whole idea of the project in a single afternoon of clicking.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 reading-the-language</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-grammar-workshop.html">The Grammar Workshop</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>github.com/mitchuski/lexon_pvm</code> (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the <a class="wlink" href="the-harness-the-model-turned-on-itself.html">The Harness — The Model Turned On Itself</a></em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="reading-the-language.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

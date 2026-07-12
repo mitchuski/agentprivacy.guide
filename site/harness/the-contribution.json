@@ -1,0 +1,136 @@
+{
+  "title": "The Contribution",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "7517ccca106f9a1d",
+      "text": "# 🔬 The Contribution"
+    },
+    {
+      "type": "markdown",
+      "id": "c655d6b6d66aba61",
+      "text": "This document states, as carefully as it can, what the dual-agent harness\ncontributes to research on AI systems — the problem it addresses, the claim it\nmakes, what is borrowed and what is assembled here, the evidence on record, and\nthe limits that evidence does not cross. It is written to the same standard the\nharness enforces on its own instances: a claim is worth exactly what it can be\nre-run to show, and a limitation filed plainly is worth more than a result\noverstated."
+    },
+    {
+      "type": "markdown",
+      "id": "54ac03719ac19eb9",
+      "text": "## The problem: self-evaluation is a mirage generator\n\nAs AI systems increasingly **generate work and also judge it** — reward models\nscoring their own policy's rollouts, LLM-as-judge grading model output, an\nagent writing code and then writing the tests for that code, self-critique and\nself-consistency loops — a structural failure recurs. An agent that proposes a\nchange and then checks its own change will pass, **not because it cheats, but\nbecause the check it invents is the check its change was built to survive.**\n\nThis is Goodhart's law wearing an agent costume, and it is a problem of\n**self-reference**, not of any one domain. The output that results is what this\nrepo names a **mirage**: it passes the author's probe and fails the real gate.\nMirages are the failure mode behind reward hacking, behind an LLM judge's\ndocumented preference for its own style, behind a test suite that is green\nbecause it was written to be green. Wherever a generator can influence the test\nthat judges it, the test stops measuring the world and starts measuring the\ngenerator's model of the test."
+    },
+    {
+      "type": "markdown",
+      "id": "731d3e88305a4c4e",
+      "text": "## The claim: route the information away, don't ask for honesty\n\nThe harness answers the mirage structurally rather than behaviourally. Two\nagents do the work — **soulbae 🧙 proposes, soulbis ⚔️ proves** — and between\nthem sits **the Gap ⿻**, a third seat whose only job is to derive the\nverification witnesses **by hashing the proposal's own canonical bytes**\n(a Fiat-Shamir construction). The proposer chooses its own exam without ever\nseeing the syllabus; any revision re-seeds the draw. The operational invariant\nis\n\n```\nI(Y_S ; Y_M | X) = 0\n```\n\n— given the target `X`, what the prover produces carries no information about\nwhat the proposer produces. This is not a promise the agents make to each other\n(under Promise Theory's autonomy axiom, no agent can promise on another's\nbehalf, and \"I will not learn what you know\" is unenforceable from inside a\nseat). It is a property of **how the information is routed**: the proposer's\nseat never receives the gate or the witnesses, and the witnesses are a\ndeterministic function of the proposal, so the proposer provably could not have\ntuned to them.\n\nThree further stances complete the design, each a factor in the same product:\n\n- **The multiplicative gate.** Value is a product; any zero collapses it. 7/8\n  on a held-out gate is a zero, not 87.5% — a candidate that improves the score\n  while failing the gate is worth nothing at any score. This refuses the\n  \"good enough\" drift that lets a partial pass launder into a claimed result.\n- **Honest labels and claim tiers.** Every load-bearing claim carries a tier\n  (PROVEN / DERIVED / REPORTED / OPEN / MYTH); a probe pass is never dressed as\n  a full pass; negative results are filed as prominently as wins. This is a\n  discipline for keeping AI-generated claims from drifting away from their\n  evidence over a long autonomous run.\n- **The door.** Every outward action — publish, submit, send, commit — belongs\n  to a human alone, and no seat performs, marks, or simulates one. The system's\n  job is to make the door visible and stop in front of it."
+    },
+    {
+      "type": "markdown",
+      "id": "5016192525e11004",
+      "text": "## What is borrowed, and what is assembled here\n\nIntellectual honesty requires separating the two.\n\n**Borrowed, and cited as such:** the Fiat-Shamir heuristic (Fiat & Shamir,\n1986 — turning an interactive challenge into a hash of the transcript);\nPromise Theory (Burgess — the autonomy axiom); Goodhart's law and its\nreward-hacking descendants as the problem framing; and the Privacy-is-Value\nmodel (PVM V6, 0xagentprivacy) from which the six constitutional trusts and the\nSwordsman ⊥ Mage architecture are lifted.\n\n**Assembled and tested here** — the actual contribution:\n\n1. The **composition** of those pieces into a runnable, **config-driven,\n   domain-neutral** harness for AI-agent work: the same engine that compresses\n   a document reduces a quantum circuit or a ZK constraint system, changing only\n   a config, never the loop.\n2. An **empirical demonstration** that the construction catches real defects\n   and holds a real, advancing frontier (below).\n3. The explicit **harness-vs-auditor decision boundary** — the finding that the\n   held-out Gap earns its cost *only* where the claim space is too large to\n   check exhaustively, kept in the repo as a documented negative result.\n4. A **reproducibility stance** strong enough to be its own argument: zero\n   dependencies, the governing algebra re-proven on all 64 values of ℤ/64ℤ\n   every time the gate runs (the gate keeps its own copy of the axioms and\n   deliberately does not import them), and every result content-addressed so a\n   third party can re-derive it from the shipped bytes."
+    },
+    {
+      "type": "markdown",
+      "id": "d03a3f76b9bd7870",
+      "text": "## The evidence on record\n\nEverything below is in the repository and re-runnable; `node tools/check.mjs`\nre-verifies the load-bearing parts in one command.\n\n- **A real advancing frontier.** The runnable example (`examples/field-guide/`)\n  compresses a fact-dense emergency guide from a **730-word baseline to a\n  472-word validated best across four audited folds** (730 → 573 → 526 → 472,\n  −35.3%), every step passing an 8-of-~40 held-out comprehension gate drawn by\n  hashing the candidate, the last two folds closed by an **exhaustive fact\n  census** — because when the claim space is small enough to enumerate, you\n  count it rather than sample it. Numbers live in `frontier.json`, the sole\n  authority; the per-round reasoning lives verdict-first in `chronicles/`.\n- **Seven defects, every one found by running.** The engine was debugged not by\n  inspection but by execution: an outage silently reported as an exhausted\n  search; a gate that passed an unfilled config; a critic with no vocabulary for\n  a mis-specified gate; seats whose on-disk record was thinner than their\n  return. Each was invisible to reading and obvious on running, and each is now\n  pinned by a test or a prompt rule. That execution-driven discovery beats\n  review for this class of system is itself a methodological finding, and the\n  chronicles record it as one.\n- **The separation is tested, not asserted.** A deliberate **tamper drill**\n  flips one byte of a proposal's canonical form and confirms the re-derived hash\n  no longer matches the recorded seed — the harness detects that its own\n  witnesses are of unknown origin and voids the round (GR-4). The static run\n  viewer and the live console both re-derive this in front of the reader rather\n  than trusting a stored value.\n- **Ten embodiments, one skeleton.** `HARNESS_PATHS.md` catalogues ten instances\n  wearing the same architecture over topically unrelated bodies — quantum\n  resource estimation, ZK constraint reduction, research-document rehydration, a\n  controlled grammar, consent agreements, a publishing loop — plus one seat held\n  open by invitation. Partial embodiments are labelled partial; an honest\n  partial teaches the bar better than a complete one does."
+    },
+    {
+      "type": "markdown",
+      "id": "738a325c657bfb3b",
+      "text": "## The limits this evidence does not cross\n\nStated as plainly as the claims, because the harness would refuse them\notherwise.\n\n- **Prompt-based separation is topology plus discipline, not an\n  information-theoretic proof.** In a harness built from prompts, the engine can\n  guarantee what it does not put in a seat's prompt, but not what a seat reads\n  from disk. `I(Y_S; Y_M | X) = 0` holds by construction for the routed\n  information; it is enforced the rest of the way by explicit per-seat Reads\n  lists and a chronicle audit trail in which a seat that read past its card is a\n  named failure, not a silent one. Where a domain permits harder enforcement —\n  separate processes, separate models, separate machines, separate keys — it\n  should be used, and the design allows it.\n- **The Gap is not always worth its cost.** A held-out adversarial draw earns\n  its price only when the claim space is too large to check. Where every claim\n  an artifact makes is enumerable, an exhaustive **auditor** gives certainty for\n  zero adversarial cost, and a harness is the wrong tool. The repo keeps a\n  retired instance — the universe-builder — precisely to record where the\n  harness was applied and should not have been: *a harness is for adversaries;\n  an auditor is for facts.*\n- **This is a runnable demonstration, not a controlled study.** The evidence is\n  a reproducible repository and a worked frontier, not a benchmarked comparison\n  against baselines under peer review. The strongest current claim is that the\n  construction is coherent, checked, and demonstrably catches a class of failure\n  on the instances shown — not that it is optimal, nor that it has been measured\n  against alternatives."
+    },
+    {
+      "type": "markdown",
+      "id": "d29d0c19cce31b33",
+      "text": "## Why it reads as a research contribution\n\nThe mirage problem is becoming central to AI exactly as agentic and\nself-evaluating systems proliferate, and most mitigations are behavioural —\nbetter judge prompts, ensembles, self-consistency — which a sufficiently\ncapable generator can still route around, because the test still lives where\nthe generator can reach it. The contribution here is to move the test out of\nreach by construction, to make that move **domain-neutral and reproducible**,\nand to be honest about the boundary where the move stops paying for itself. The\nwhole apparatus is a machine for the sentence it keeps proving on itself:\n\n**a proposer that grades its own work builds mirages; only what the Gap could\nnot tune to is a result.**\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```\n\nApache-2.0 · origin: 0xagentprivacy · the Privacy-is-Value model (PVM V6) ·\nagentprivacy.ai"
+    },
+    {
+      "type": "markdown",
+      "id": "132b2a1bc4ad1440",
+      "text": "# Assets"
+    },
+    {
+      "id": "f0ae9d4b36bd1672",
+      "type": "assets",
+      "text": "the-contribution"
+    },
+    {
+      "type": "markdown",
+      "id": "68494abd60848203",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
+    },
+    {
+      "type": "markdown",
+      "id": "c9c0b784d8b2071b",
+      "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "The Contribution",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "7517ccca106f9a1d",
+            "text": "# 🔬 The Contribution"
+          },
+          {
+            "type": "markdown",
+            "id": "c655d6b6d66aba61",
+            "text": "This document states, as carefully as it can, what the dual-agent harness\ncontributes to research on AI systems — the problem it addresses, the claim it\nmakes, what is borrowed and what is assembled here, the evidence on record, and\nthe limits that evidence does not cross. It is written to the same standard the\nharness enforces on its own instances: a claim is worth exactly what it can be\nre-run to show, and a limitation filed plainly is worth more than a result\noverstated."
+          },
+          {
+            "type": "markdown",
+            "id": "54ac03719ac19eb9",
+            "text": "## The problem: self-evaluation is a mirage generator\n\nAs AI systems increasingly **generate work and also judge it** — reward models\nscoring their own policy's rollouts, LLM-as-judge grading model output, an\nagent writing code and then writing the tests for that code, self-critique and\nself-consistency loops — a structural failure recurs. An agent that proposes a\nchange and then checks its own change will pass, **not because it cheats, but\nbecause the check it invents is the check its change was built to survive.**\n\nThis is Goodhart's law wearing an agent costume, and it is a problem of\n**self-reference**, not of any one domain. The output that results is what this\nrepo names a **mirage**: it passes the author's probe and fails the real gate.\nMirages are the failure mode behind reward hacking, behind an LLM judge's\ndocumented preference for its own style, behind a test suite that is green\nbecause it was written to be green. Wherever a generator can influence the test\nthat judges it, the test stops measuring the world and starts measuring the\ngenerator's model of the test."
+          },
+          {
+            "type": "markdown",
+            "id": "731d3e88305a4c4e",
+            "text": "## The claim: route the information away, don't ask for honesty\n\nThe harness answers the mirage structurally rather than behaviourally. Two\nagents do the work — **soulbae 🧙 proposes, soulbis ⚔️ proves** — and between\nthem sits **the Gap ⿻**, a third seat whose only job is to derive the\nverification witnesses **by hashing the proposal's own canonical bytes**\n(a Fiat-Shamir construction). The proposer chooses its own exam without ever\nseeing the syllabus; any revision re-seeds the draw. The operational invariant\nis\n\n```\nI(Y_S ; Y_M | X) = 0\n```\n\n— given the target `X`, what the prover produces carries no information about\nwhat the proposer produces. This is not a promise the agents make to each other\n(under Promise Theory's autonomy axiom, no agent can promise on another's\nbehalf, and \"I will not learn what you know\" is unenforceable from inside a\nseat). It is a property of **how the information is routed**: the proposer's\nseat never receives the gate or the witnesses, and the witnesses are a\ndeterministic function of the proposal, so the proposer provably could not have\ntuned to them.\n\nThree further stances complete the design, each a factor in the same product:\n\n- **The multiplicative gate.** Value is a product; any zero collapses it. 7/8\n  on a held-out gate is a zero, not 87.5% — a candidate that improves the score\n  while failing the gate is worth nothing at any score. This refuses the\n  \"good enough\" drift that lets a partial pass launder into a claimed result.\n- **Honest labels and claim tiers.** Every load-bearing claim carries a tier\n  (PROVEN / DERIVED / REPORTED / OPEN / MYTH); a probe pass is never dressed as\n  a full pass; negative results are filed as prominently as wins. This is a\n  discipline for keeping AI-generated claims from drifting away from their\n  evidence over a long autonomous run.\n- **The door.** Every outward action — publish, submit, send, commit — belongs\n  to a human alone, and no seat performs, marks, or simulates one. The system's\n  job is to make the door visible and stop in front of it."
+          },
+          {
+            "type": "markdown",
+            "id": "5016192525e11004",
+            "text": "## What is borrowed, and what is assembled here\n\nIntellectual honesty requires separating the two.\n\n**Borrowed, and cited as such:** the Fiat-Shamir heuristic (Fiat & Shamir,\n1986 — turning an interactive challenge into a hash of the transcript);\nPromise Theory (Burgess — the autonomy axiom); Goodhart's law and its\nreward-hacking descendants as the problem framing; and the Privacy-is-Value\nmodel (PVM V6, 0xagentprivacy) from which the six constitutional trusts and the\nSwordsman ⊥ Mage architecture are lifted.\n\n**Assembled and tested here** — the actual contribution:\n\n1. The **composition** of those pieces into a runnable, **config-driven,\n   domain-neutral** harness for AI-agent work: the same engine that compresses\n   a document reduces a quantum circuit or a ZK constraint system, changing only\n   a config, never the loop.\n2. An **empirical demonstration** that the construction catches real defects\n   and holds a real, advancing frontier (below).\n3. The explicit **harness-vs-auditor decision boundary** — the finding that the\n   held-out Gap earns its cost *only* where the claim space is too large to\n   check exhaustively, kept in the repo as a documented negative result.\n4. A **reproducibility stance** strong enough to be its own argument: zero\n   dependencies, the governing algebra re-proven on all 64 values of ℤ/64ℤ\n   every time the gate runs (the gate keeps its own copy of the axioms and\n   deliberately does not import them), and every result content-addressed so a\n   third party can re-derive it from the shipped bytes."
+          },
+          {
+            "type": "markdown",
+            "id": "d03a3f76b9bd7870",
+            "text": "## The evidence on record\n\nEverything below is in the repository and re-runnable; `node tools/check.mjs`\nre-verifies the load-bearing parts in one command.\n\n- **A real advancing frontier.** The runnable example (`examples/field-guide/`)\n  compresses a fact-dense emergency guide from a **730-word baseline to a\n  472-word validated best across four audited folds** (730 → 573 → 526 → 472,\n  −35.3%), every step passing an 8-of-~40 held-out comprehension gate drawn by\n  hashing the candidate, the last two folds closed by an **exhaustive fact\n  census** — because when the claim space is small enough to enumerate, you\n  count it rather than sample it. Numbers live in `frontier.json`, the sole\n  authority; the per-round reasoning lives verdict-first in `chronicles/`.\n- **Seven defects, every one found by running.** The engine was debugged not by\n  inspection but by execution: an outage silently reported as an exhausted\n  search; a gate that passed an unfilled config; a critic with no vocabulary for\n  a mis-specified gate; seats whose on-disk record was thinner than their\n  return. Each was invisible to reading and obvious on running, and each is now\n  pinned by a test or a prompt rule. That execution-driven discovery beats\n  review for this class of system is itself a methodological finding, and the\n  chronicles record it as one.\n- **The separation is tested, not asserted.** A deliberate **tamper drill**\n  flips one byte of a proposal's canonical form and confirms the re-derived hash\n  no longer matches the recorded seed — the harness detects that its own\n  witnesses are of unknown origin and voids the round (GR-4). The static run\n  viewer and the live console both re-derive this in front of the reader rather\n  than trusting a stored value.\n- **Ten embodiments, one skeleton.** `HARNESS_PATHS.md` catalogues ten instances\n  wearing the same architecture over topically unrelated bodies — quantum\n  resource estimation, ZK constraint reduction, research-document rehydration, a\n  controlled grammar, consent agreements, a publishing loop — plus one seat held\n  open by invitation. Partial embodiments are labelled partial; an honest\n  partial teaches the bar better than a complete one does."
+          },
+          {
+            "type": "markdown",
+            "id": "738a325c657bfb3b",
+            "text": "## The limits this evidence does not cross\n\nStated as plainly as the claims, because the harness would refuse them\notherwise.\n\n- **Prompt-based separation is topology plus discipline, not an\n  information-theoretic proof.** In a harness built from prompts, the engine can\n  guarantee what it does not put in a seat's prompt, but not what a seat reads\n  from disk. `I(Y_S; Y_M | X) = 0` holds by construction for the routed\n  information; it is enforced the rest of the way by explicit per-seat Reads\n  lists and a chronicle audit trail in which a seat that read past its card is a\n  named failure, not a silent one. Where a domain permits harder enforcement —\n  separate processes, separate models, separate machines, separate keys — it\n  should be used, and the design allows it.\n- **The Gap is not always worth its cost.** A held-out adversarial draw earns\n  its price only when the claim space is too large to check. Where every claim\n  an artifact makes is enumerable, an exhaustive **auditor** gives certainty for\n  zero adversarial cost, and a harness is the wrong tool. The repo keeps a\n  retired instance — the universe-builder — precisely to record where the\n  harness was applied and should not have been: *a harness is for adversaries;\n  an auditor is for facts.*\n- **This is a runnable demonstration, not a controlled study.** The evidence is\n  a reproducible repository and a worked frontier, not a benchmarked comparison\n  against baselines under peer review. The strongest current claim is that the\n  construction is coherent, checked, and demonstrably catches a class of failure\n  on the instances shown — not that it is optimal, nor that it has been measured\n  against alternatives."
+          },
+          {
+            "type": "markdown",
+            "id": "d29d0c19cce31b33",
+            "text": "## Why it reads as a research contribution\n\nThe mirage problem is becoming central to AI exactly as agentic and\nself-evaluating systems proliferate, and most mitigations are behavioural —\nbetter judge prompts, ensembles, self-consistency — which a sufficiently\ncapable generator can still route around, because the test still lives where\nthe generator can reach it. The contribution here is to move the test out of\nreach by construction, to make that move **domain-neutral and reproducible**,\nand to be honest about the boundary where the move stops paying for itself. The\nwhole apparatus is a machine for the sentence it keeps proving on itself:\n\n**a proposer that grades its own work builds mirages; only what the Gap could\nnot tune to is a result.**\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```\n\nApache-2.0 · origin: 0xagentprivacy · the Privacy-is-Value model (PVM V6) ·\nagentprivacy.ai"
+          },
+          {
+            "type": "markdown",
+            "id": "132b2a1bc4ad1440",
+            "text": "# Assets"
+          },
+          {
+            "id": "f0ae9d4b36bd1672",
+            "type": "assets",
+            "text": "the-contribution"
+          },
+          {
+            "type": "markdown",
+            "id": "68494abd60848203",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
+          },
+          {
+            "type": "markdown",
+            "id": "c9c0b784d8b2071b",
+            "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+          }
+        ]
+      },
+      "date": 1783866930577
+    }
+  ]
+}

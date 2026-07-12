@@ -1,0 +1,146 @@
+{
+  "title": "The Grammar Workshop",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "54fa3e9bc9d52de0",
+      "text": "# ⚖️ The Grammar Workshop"
+    },
+    {
+      "type": "markdown",
+      "id": "b2b3bf19ed55c68a",
+      "text": "**What if the ideas behind a privacy architecture could be written in a\nlanguage that is at once plain English, executable contract, and a\nmachine-checkable claim?** That is what this repository does. It takes the\n[Privacy Value Model](https://agentprivacy.ai) (the theory behind\n0xagentprivacy: two separated agents, a Swordsman who protects and a Mage who\ndelegates, held apart by a Gap) and expresses its canon, term by term, in\n[Lexon](https://www.lexon.org) — Henning Diedrich's controlled-English\nlanguage for computational law.\n\nThe result, after six days of work: **189 of the model's 211 canon terms are\nnow expressed in a form where the load-bearing claim can be mechanically\nverified — and falsified.** The census is 90 percent covered. The harness's\nown constitution is written in the same language and passes its own gate.\n\n> **See it, don't just read about it.** Open **`viewer/index.html`** (viewer/index.html in the repo)\n> in a browser: every covered term and the thirteen constitution spells,\n> rendered as Lexon text with its verified claim beside it. Filter by claim\n> type, search, click to read."
+    },
+    {
+      "type": "markdown",
+      "id": "34b798a53ae1bcb3",
+      "text": "## The three ideas, briefly\n\n1. **The overlap with Lexon.** Every Lexon sentence parses to a\n   subject-predicate-object triple — a knowledge-graph edge by another name.\n   A contract is a subgraph; its obligations are typed, party-addressed\n   edges. So a privacy model written in Lexon is simultaneously readable\n   prose, a promise graph, and code. Controlled grammar turns out to be the\n   missing authoring layer between how agents talk and how knowledge is\n   stored. → [[The Convergence — Lexon Meets The Privacy Value Model]]\n\n2. **The harness.** The work was not done by hand. It ran as a **dual-agent\n   research loop** — the same Swordsman ⊥ Mage architecture the model\n   describes, turned on the model itself. One agent proposes ways to express\n   canon terms; a third seat (the Gap) hashes each proposal and draws\n   held-out terms the prover must express from the recipe alone; a prover\n   runs the full gate; a critic names what went wrong. Only genuinely general\n   expressions survive. → [[The Harness — The Model Turned On Itself]]\n\n3. **The result: privacy-as-architecture, made checkable.** The model's\n   central claim is that privacy is structural — \"cannot, by design,\" not\n   \"promises not to.\" In this grammar that becomes a mechanical property: a\n   privacy guarantee is *a route that provably does not exist*, and the tool\n   proves it by building the claim's opposite and showing the grammar can\n   tell them apart. → [[The Gate — How A Claim Gets Proven]]"
+    },
+    {
+      "type": "markdown",
+      "id": "e75b81776688cfa8",
+      "text": "## The ladder (211 → 22)\n\n| stage | terms left | what happened |\n|---|---|---|\n| census freeze | 211 | the model's canon, frozen deterministically |\n| first folds | 152 | the theory, the formal core, promise theory |\n| the hardened gate | 123 | claims must survive their own negation |\n| the constitution | 123 | the harness's own law, written as 13 verified spells |\n| eleven levers | 64 | the consent stack, sovereignty, ceremonies |\n| the merged charter | **22** | the formula tail and the story terms; 90 percent covered |\n\nThe remaining 22: sixteen ordinary terms for one more pass, and six\nconjecture-register terms deliberately reserved (their titles carry numbers\nan automated seat is not allowed to write). → [[The Results — Five Runs, 211 To 22]]"
+    },
+    {
+      "type": "markdown",
+      "id": "b0118ea5ebff7156",
+      "text": "## Start here\n\n- **New to the project?** Read docs/index.md — a guided path\n  through the whole thing in about fifteen minutes.\n- **Want to see the language?** Open **`viewer/index.html`** (viewer/index.html in the repo).\n- **Want the honest assessment?** [[What This Means For Agentprivacy]]\n  and the [[Capstone — The Grammar Workshop]]."
+    },
+    {
+      "type": "markdown",
+      "id": "92faa724c76b1299",
+      "text": "## Layout\n\n```\nREADME.md            this file\ndocs/                the human-readable wiki (start at docs/index.md)\nviewer/index.html    the interactive lexicon reader (self-contained)\nartifact/\n  CENSUS.json        the frozen 211-term canon census\n  LEXICON.lexon.md   the semantic base: every covered term as Lexon text\n  SPELLS/            the constitution: TRUSTS + seats as 13 verified spells\n  GRAMMAR.ebnf.md    the attested Lexon subset the checker accepts\n  OT7_TERRITORIES.json  the residue partition for the merged-charter runs\nblocks/              189 portable \"structured language blocks\" (JSON + Cypher)\ntools/\n  lexon_check.mjs    the grammar gate (parse, round-trip, roles, promises)\n  relation_check.mjs the mutation probe (claims survive their negation)\n  blocks_emit.mjs    LEXICON entry -> portable block\n  spells_check.mjs   verify the constitution corpus (13/13)\n  render_lexicon.mjs regenerate the viewer\n  coverage.mjs       the coverage-debt metric\nchronicles/          per-run records + the reflection and capstone\nout/                 the original convergence-run artefacts\nnotes/               the corpus plan, the bonfires write-path spec\nfrontier.json        the single source of truth for every number\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "c81bb0ae1889dcfc",
+      "text": "## Verify it yourself\n\n```\nnode tools/lexon_check.mjs --selftest     # the grammar gate: goldens pass, mutants fail\nnode tools/relation_check.mjs --selftest  # the mutation probe\nnode tools/spells_check.mjs               # the constitution: 13/13 CORPUS PASS\nnode tools/coverage.mjs                   # coverage-debt (22) against frontier.json\nnode tools/blocks_emit.mjs --selftest     # the public blocks\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "acb53834cf79f9d6",
+      "text": "## Gate regime, stated honestly\n\nThe checker is a spec-derived validator of an *attested subset* of Lexon, not\nthe Lexon compiler (which is a macOS-only binary with unpublished source;\n`frontier.json` carries the regime label). Golden fixtures in `tools/golden/`\nare example texts from lexon.org, credited to Henning Diedrich / Lexon Labs\n(and Idelberger for the license example); see `SOURCES.md`. Because arithmetic\nis never executed here, quantitative claims carry a formula's *structure*, not\nits computed values, and every entry names what it omits."
+    },
+    {
+      "type": "markdown",
+      "id": "1277904b8ba2aa60",
+      "text": "## Credits\n\nLexon is the work of Henning Diedrich and Lexon Labs (lexon.org). The Privacy\nValue Model and the Swordsman ⊥ Mage architecture are 0xagentprivacy /\nagentprivacy.ai. This repository is the convergence of the two, run through a\ndual-agent harness."
+    },
+    {
+      "type": "markdown",
+      "id": "24d82bdfa2ba8469",
+      "text": "# Assets"
+    },
+    {
+      "id": "963fd1834858d1f7",
+      "type": "assets",
+      "text": "the-grammar-workshop"
+    },
+    {
+      "type": "markdown",
+      "id": "045a6910aa6e384c",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Convergence — Lexon Meets The Privacy Value Model]]"
+    },
+    {
+      "type": "markdown",
+      "id": "2c3021b7b5c5145a",
+      "text": "---\n*the wiki is a projection; `github.com/mitchuski/lexon_pvm` (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the [[The Harness — The Model Turned On Itself]]*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "The Grammar Workshop",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "54fa3e9bc9d52de0",
+            "text": "# ⚖️ The Grammar Workshop"
+          },
+          {
+            "type": "markdown",
+            "id": "b2b3bf19ed55c68a",
+            "text": "**What if the ideas behind a privacy architecture could be written in a\nlanguage that is at once plain English, executable contract, and a\nmachine-checkable claim?** That is what this repository does. It takes the\n[Privacy Value Model](https://agentprivacy.ai) (the theory behind\n0xagentprivacy: two separated agents, a Swordsman who protects and a Mage who\ndelegates, held apart by a Gap) and expresses its canon, term by term, in\n[Lexon](https://www.lexon.org) — Henning Diedrich's controlled-English\nlanguage for computational law.\n\nThe result, after six days of work: **189 of the model's 211 canon terms are\nnow expressed in a form where the load-bearing claim can be mechanically\nverified — and falsified.** The census is 90 percent covered. The harness's\nown constitution is written in the same language and passes its own gate.\n\n> **See it, don't just read about it.** Open **`viewer/index.html`** (viewer/index.html in the repo)\n> in a browser: every covered term and the thirteen constitution spells,\n> rendered as Lexon text with its verified claim beside it. Filter by claim\n> type, search, click to read."
+          },
+          {
+            "type": "markdown",
+            "id": "34b798a53ae1bcb3",
+            "text": "## The three ideas, briefly\n\n1. **The overlap with Lexon.** Every Lexon sentence parses to a\n   subject-predicate-object triple — a knowledge-graph edge by another name.\n   A contract is a subgraph; its obligations are typed, party-addressed\n   edges. So a privacy model written in Lexon is simultaneously readable\n   prose, a promise graph, and code. Controlled grammar turns out to be the\n   missing authoring layer between how agents talk and how knowledge is\n   stored. → [[The Convergence — Lexon Meets The Privacy Value Model]]\n\n2. **The harness.** The work was not done by hand. It ran as a **dual-agent\n   research loop** — the same Swordsman ⊥ Mage architecture the model\n   describes, turned on the model itself. One agent proposes ways to express\n   canon terms; a third seat (the Gap) hashes each proposal and draws\n   held-out terms the prover must express from the recipe alone; a prover\n   runs the full gate; a critic names what went wrong. Only genuinely general\n   expressions survive. → [[The Harness — The Model Turned On Itself]]\n\n3. **The result: privacy-as-architecture, made checkable.** The model's\n   central claim is that privacy is structural — \"cannot, by design,\" not\n   \"promises not to.\" In this grammar that becomes a mechanical property: a\n   privacy guarantee is *a route that provably does not exist*, and the tool\n   proves it by building the claim's opposite and showing the grammar can\n   tell them apart. → [[The Gate — How A Claim Gets Proven]]"
+          },
+          {
+            "type": "markdown",
+            "id": "e75b81776688cfa8",
+            "text": "## The ladder (211 → 22)\n\n| stage | terms left | what happened |\n|---|---|---|\n| census freeze | 211 | the model's canon, frozen deterministically |\n| first folds | 152 | the theory, the formal core, promise theory |\n| the hardened gate | 123 | claims must survive their own negation |\n| the constitution | 123 | the harness's own law, written as 13 verified spells |\n| eleven levers | 64 | the consent stack, sovereignty, ceremonies |\n| the merged charter | **22** | the formula tail and the story terms; 90 percent covered |\n\nThe remaining 22: sixteen ordinary terms for one more pass, and six\nconjecture-register terms deliberately reserved (their titles carry numbers\nan automated seat is not allowed to write). → [[The Results — Five Runs, 211 To 22]]"
+          },
+          {
+            "type": "markdown",
+            "id": "b0118ea5ebff7156",
+            "text": "## Start here\n\n- **New to the project?** Read docs/index.md — a guided path\n  through the whole thing in about fifteen minutes.\n- **Want to see the language?** Open **`viewer/index.html`** (viewer/index.html in the repo).\n- **Want the honest assessment?** [[What This Means For Agentprivacy]]\n  and the [[Capstone — The Grammar Workshop]]."
+          },
+          {
+            "type": "markdown",
+            "id": "92faa724c76b1299",
+            "text": "## Layout\n\n```\nREADME.md            this file\ndocs/                the human-readable wiki (start at docs/index.md)\nviewer/index.html    the interactive lexicon reader (self-contained)\nartifact/\n  CENSUS.json        the frozen 211-term canon census\n  LEXICON.lexon.md   the semantic base: every covered term as Lexon text\n  SPELLS/            the constitution: TRUSTS + seats as 13 verified spells\n  GRAMMAR.ebnf.md    the attested Lexon subset the checker accepts\n  OT7_TERRITORIES.json  the residue partition for the merged-charter runs\nblocks/              189 portable \"structured language blocks\" (JSON + Cypher)\ntools/\n  lexon_check.mjs    the grammar gate (parse, round-trip, roles, promises)\n  relation_check.mjs the mutation probe (claims survive their negation)\n  blocks_emit.mjs    LEXICON entry -> portable block\n  spells_check.mjs   verify the constitution corpus (13/13)\n  render_lexicon.mjs regenerate the viewer\n  coverage.mjs       the coverage-debt metric\nchronicles/          per-run records + the reflection and capstone\nout/                 the original convergence-run artefacts\nnotes/               the corpus plan, the bonfires write-path spec\nfrontier.json        the single source of truth for every number\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "c81bb0ae1889dcfc",
+            "text": "## Verify it yourself\n\n```\nnode tools/lexon_check.mjs --selftest     # the grammar gate: goldens pass, mutants fail\nnode tools/relation_check.mjs --selftest  # the mutation probe\nnode tools/spells_check.mjs               # the constitution: 13/13 CORPUS PASS\nnode tools/coverage.mjs                   # coverage-debt (22) against frontier.json\nnode tools/blocks_emit.mjs --selftest     # the public blocks\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "acb53834cf79f9d6",
+            "text": "## Gate regime, stated honestly\n\nThe checker is a spec-derived validator of an *attested subset* of Lexon, not\nthe Lexon compiler (which is a macOS-only binary with unpublished source;\n`frontier.json` carries the regime label). Golden fixtures in `tools/golden/`\nare example texts from lexon.org, credited to Henning Diedrich / Lexon Labs\n(and Idelberger for the license example); see `SOURCES.md`. Because arithmetic\nis never executed here, quantitative claims carry a formula's *structure*, not\nits computed values, and every entry names what it omits."
+          },
+          {
+            "type": "markdown",
+            "id": "1277904b8ba2aa60",
+            "text": "## Credits\n\nLexon is the work of Henning Diedrich and Lexon Labs (lexon.org). The Privacy\nValue Model and the Swordsman ⊥ Mage architecture are 0xagentprivacy /\nagentprivacy.ai. This repository is the convergence of the two, run through a\ndual-agent harness."
+          },
+          {
+            "type": "markdown",
+            "id": "24d82bdfa2ba8469",
+            "text": "# Assets"
+          },
+          {
+            "id": "963fd1834858d1f7",
+            "type": "assets",
+            "text": "the-grammar-workshop"
+          },
+          {
+            "type": "markdown",
+            "id": "045a6910aa6e384c",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Convergence — Lexon Meets The Privacy Value Model]]"
+          },
+          {
+            "type": "markdown",
+            "id": "2c3021b7b5c5145a",
+            "text": "---\n*the wiki is a projection; `github.com/mitchuski/lexon_pvm` (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the [[The Harness — The Model Turned On Itself]]*"
+          }
+        ]
+      },
+      "date": 1783865927408
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Gate — How A Claim Gets Proven · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="lexon">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site on" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/lexon/welcome-visitors.html">Lexon</a> / <span>The Gate — How A Claim Gets Proven</span></div>
+  <article><div class="md"><h1>🛡️ The Gate — How A Claim Gets Proven</h1>
+</div>
+<div class="md"><p><em>The technical heart. Two checkers turn &quot;privacy is architectural&quot; from a<br>slogan into a mechanical fact.</em></p>
+</div>
+<div class="md"><h2>The problem the gate solves</h2>
+<p>Anyone can write English that <em>sounds</em> like a privacy guarantee. The question<br>is whether the guarantee is really <em>in</em> the structure of the text, or only in<br>the reader&#39;s imagination. The gate exists to answer that mechanically, in two<br>layers.</p>
+</div>
+<div class="md"><h2>Layer one: the grammar checker (<code>tools/lexon_check.mjs</code>)</h2>
+<p>The first checker verifies that a text is valid Lexon in the attested subset,<br>in four stages:</p>
+<ol>
+<li><strong>Parse</strong> — every statement classifies and parses under the controlled<br>grammar. Unknown words, unknown constructs, and malformed sentences are<br>rejected.</li>
+<li><strong>Role binding</strong> — every noun is defined before use and bound immutably. A<br>name that was never introduced, or redefined mid-document, fails.</li>
+<li><strong>Triple round-trip</strong> — every action sentence is turned into a<br>subject-predicate-object triple, then <em>re-serialized back into a sentence</em>,<br>then re-parsed. The triples must come out identical. This is the &quot;grammar<br>to graph&quot; claim made mechanical: if the text and the graph are truly the<br>same thing, the round-trip is lossless.</li>
+<li><strong>Promise typing</strong> — every obligation edge is typed (a <em>may</em> is a voluntary<br>permission; a <em>must</em> or a recital act is a commitment) with a polarity,<br>following promise theory.</li>
+</ol>
+<p>Run <code>node tools/lexon_check.mjs --selftest</code> and it checks itself: known-good<br>example texts from lexon.org must pass, and deliberately broken &quot;mutant&quot;<br>versions must fail. If a mutant ever passes, the checker is broken and says<br>so.</p>
+<p>This layer answers: <em>is this valid, lossless, promise-typed Lexon?</em> But it<br>does <strong>not</strong> answer the deeper question, and here is why that matters.</p>
+</div>
+<div class="md"><h2>The hole the first layer cannot see</h2>
+<p>Early in the project the loop drew a held-out term — the &quot;2D Fortress,&quot; a<br>cryptographic structure that falls to a quantum attacker. The prover expressed<br>it, and it passed the grammar gate perfectly. But it passed with the<br><em>adversary</em> draining the protected secret — which is, in that specific case,<br>the canon-correct direction (the fortress is supposed to fall). The unsettling<br>discovery: the grammar gate would have <em>equally</em> accepted the opposite text,<br>where the defender keeps the secret. The two texts have the same clause shape.<br>The direction — the entire point of a privacy claim — lived only in a prose<br>Notes line the checker could not read.</p>
+<p>That is the vulnerability at the core of &quot;privacy is architecture.&quot; If the<br>gate cannot tell a guarantee from its opposite, it is not checking the<br>guarantee.</p>
+</div>
+<div class="md"><h2>Layer two: the mutation probe (<code>tools/relation_check.mjs</code>)</h2>
+<p>The second checker closes that hole. Every folded expression now carries a<br><strong>machine-readable relation claim</strong> — the structural guarantee it makes, in<br>one of four types:</p>
+<ul>
+<li><strong>gate</strong> — a clause is reachable only under a stated condition.</li>
+<li><strong>ordering</strong> — a clause performs its actions in exactly this sequence.</li>
+<li><strong>conjunction</strong> — a defined term requires <em>all</em> of several conditions.</li>
+<li><strong>absence</strong> — <em>no</em> clause routes a given thing to a given party. This is the<br>important one: <strong>an impossibility, and therefore a privacy guarantee, is an<br>absence.</strong> Direction is claimed as an absence: &quot;the secret can never reach<br>the defender&#39;s adversary&quot; is a route that does not exist.</li>
+</ul>
+<p>For each claim, the probe does something adversarial. It:</p>
+<ol>
+<li>checks the claim actually holds on the text (as a property of the parsed<br>clause graph, never a string search);</li>
+<li>builds a <strong>mutated twin</strong> — the claim&#39;s minimal structural negation (strip<br>the condition, reverse the order, drop a conjunct, or add the forbidden<br>route);</li>
+<li>confirms the twin <em>still passes the grammar gate</em> — proving the base gate<br>alone cannot tell them apart;</li>
+<li>confirms the claim now <strong>fails</strong> on the twin.</li>
+</ol>
+<p>Only if all four hold does the claim earn <code>RELATION PASS</code>. In plain terms: a<br>guarantee is proven by showing the grammar can distinguish it from its own<br>opposite. The 2D Fortress now carries <code>absence: Scalar Secret to Key Holder</code>,<br>and the tool proves that adding a reclaim clause would break exactly that<br>claim. Direction lives in the structure, not the prose.</p>
+</div>
+<div class="md"><h2>The canary: knowing the gate is passable</h2>
+<p>A gate no candidate can pass is as useless as a gate everything passes — you<br>cannot tell a bad candidate from an impossible test. So the mutation probe<br>ships with a <em>canary</em>: a small fixture authored together with its claims, which<br>passes the full pipeline by construction. <code>node tools/relation_check.mjs --selftest</code> runs it. If the canary ever fails, the gate itself is broken, not<br>the candidate.</p>
+</div>
+<div class="md"><h2>What the gate deliberately does not do</h2>
+<p>Honesty is part of the design. The checker validates an <em>attested subset</em> of<br>Lexon derived from published examples — it is <strong>not</strong> the real Lexon compiler<br>(a macOS-only binary with unpublished source). So arithmetic is never<br>executed here: an expression carries a formula&#39;s <em>structure</em> (which quantities<br>gate which actions, what must precede what), not its computed values. The<br>entropy expression captures that residual uncertainty survives observation; it<br>does not compute Shannon&#39;s logarithm. Every entry names what it omits, and the<br><code>frontier.json</code> gate string states the regime plainly.</p>
+<p>This boundary is not a weakness to hide; it is the difference between &quot;we<br>proved the structure&quot; and &quot;we ran the math,&quot; and the project never blurs it.</p>
+</div>
+<div class="md"><h2>In one sentence</h2>
+<p>The grammar checker proves a text is lossless, promise-typed Lexon; the<br>mutation probe proves its privacy claim is really in the structure by showing<br>the grammar can tell it apart from its opposite — which is what it means for<br>privacy to be architectural rather than promised.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 the-gate-how-a-claim-gets-proven</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-grammar-workshop.html">The Grammar Workshop</a> · <a class="wlink" href="the-results-five-runs-211-to-22.html">The Results — Five Runs, 211 To 22</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>github.com/mitchuski/lexon_pvm</code> (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the <a class="wlink" href="the-harness-the-model-turned-on-itself.html">The Harness — The Model Turned On Itself</a></em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-gate-how-a-claim-gets-proven.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

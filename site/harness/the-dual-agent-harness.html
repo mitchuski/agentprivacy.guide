@@ -8,7 +8,7 @@
 </head><body data-site="harness">
 <header class="top">
     <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
-    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
     <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
   </header>
 <main class="page">
@@ -21,6 +21,10 @@
 <pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
 </code></pre>
 <p>The Swordsman is negation, the Mage is complement, and composed across the<br>Gap they produce the successor — the step forward. On Z/64Z this is a<br>theorem, and <code>engine/conform.mjs</code> computes it for all sixty-four values every<br>time it runs rather than taking it on faith. A result exists only where the<br>two were genuinely held apart.</p>
+</div>
+<div class="md"><h2>Why this matters for AI</h2>
+<p>As AI systems increasingly <strong>generate work and also judge it</strong> — reward<br>models scoring their own rollouts, LLM-as-judge, an agent writing code and<br>then its own tests — one failure recurs: the check an agent invents is the<br>check its work was built to survive. That is Goodhart&#39;s law wearing an agent<br>costume, and it is the failure behind reward hacking, self-preferring judges,<br>and green-because-written-green test suites. This harness answers it<br><strong>structurally rather than behaviourally</strong>: the verification witnesses are<br>derived by hashing the proposal itself, so the proposer provably could not<br>have tuned to them, and the two agents share only their root — the<br>information that would let them collude was never routed. Then a<br>multiplicative gate refuses partial passes, honest claim-tiers keep results<br>from drifting from evidence, and the door keeps every outward action a<br>human&#39;s.</p>
+<p><code>RESEARCH.md</code> states the contribution in full — the problem, the precise<br>claim, what is borrowed (Fiat-Shamir, Promise Theory, the PVM model) versus<br>assembled here, the evidence on record, and the limits that evidence does not<br>cross. It is written to the standard the harness enforces on its instances: a<br>claim is worth what it can be re-run to show.</p>
 </div>
 <div class="md"><h2>Where it stands</h2>
 <p>This is not a sketch. The engine has been debugged <strong>by being run</strong> — seven<br>defects to date, every one invisible to inspection and obvious on execution,<br>each fixed and pinned by a test or a prompt rule (an outage reported as an<br>exhausted search; a gate that passed an unfilled config; a critic with no<br>word for a bad gate; seats whose disk record was thinner than their return).<br>The runnable spar has a real advancing frontier: its guide compressed from a<br>730-word baseline to a 472-word validated best across four audited folds,<br>each held to an 8/8 held-out gate on independent witness draws, the last two<br>closed by an exhaustive fact census<br>(<code>examples/field-guide/frontier.json</code> is the authority; its <code>chronicles/</code><br>tell the story). Ten real embodiments — quantum circuits, ZK constraint<br>systems, research pipelines, consent agreements, and one deliberate failure —<br>are catalogued in <code>HARNESS_PATHS.md</code>. The skeleton is domain-neutral and<br>stays that way.</p>
@@ -168,18 +172,19 @@ node tools/render_run.mjs examples/field-guide --all  # every run
 <li>Name the <strong>objective</strong> (what gets smaller), the <strong>gate</strong> (what must fully<br>pass), and the <strong>hard constraint</strong> (validity no score can override).</li>
 <li>Scaffold it — <code>node tools/new_instance.mjs ../my-harness my-harness</code> —<br>then fill every TODO in its <code>harness.config.mjs</code>. See <code>SEAT_CONTRACT.md</code><br>for the interface and the complement-pair pattern for product objectives.<br><strong>The gate and the bundler both refuse a config still wearing its TODOs</strong>,<br>and they refuse it in the same words: an unfilled harness runs, grades<br>nothing, and reports <code>VALIDATED</code>. Measure your baseline before you claim a<br>best — the template ships both <code>null</code> on purpose.</li>
 <li>Bundle and run: <code>node tools/bundle.mjs my/harness.config.mjs my/harness.workflow.mjs</code></li>
-<li>Read <code>HARNESS_PATHS.md</code> for eight real instances — quantum circuits, ZK<br>constraint systems, research papers, consent agreements, a publishing<br>loop — the same skeleton under very different bodies, grouped by how much<br>of the loop each one actually runs. The partial ones are labelled as<br>partial; they teach the bar better than the complete ones do.</li>
+<li>Read <code>HARNESS_PATHS.md</code> for ten real instances — quantum circuits, ZK<br>constraint systems, research papers, consent agreements, a publishing<br>loop — the same skeleton under very different bodies, grouped by how much<br>of the loop each one actually runs, plus one seat held open by invitation.<br>The partial ones are labelled as partial; they teach the bar better than<br>the complete ones do.</li>
 <li>When it earns it, dress the seats: <code>SPECIALISATION.md</code> covers binding<br>personas and spells to seats, and the Game of 42 station pattern for<br>growing a fleet without drifting.</li>
 </ol>
 <p>The lemma travels; the corpus stays home. Your harness path is a config, not<br>a fork.</p>
 </div>
 <div class="md"><h2>Layout</h2>
-<pre><code>TRUSTS.md          the constitution — read first
+<pre><code>RESEARCH.md        the contribution — the problem, the claim, the evidence, the limits
+TRUSTS.md          the constitution — read first
 GROUND_RULES.md    GR-1..GR-10, pasted into every seat at boot
 ADOPTION.md        why the duality is topic-free + the mapping procedure
 SEAT_CONTRACT.md   what a config provides
 SPECIALISATION.md  personas, spells, the Game of 42
-HARNESS_PATHS.md   eight real instances, and how the fleet syncs
+HARNESS_PATHS.md   ten real instances + one open seat, and how the fleet syncs
 CLAUDE.md          one session, one seat — the boot protocol
 SKILL.md           this repo as a Claude Code skill
 engine/            the loop, its gate, and loop.test.mjs

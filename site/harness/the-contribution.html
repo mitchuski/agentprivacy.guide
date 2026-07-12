@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Contribution · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Contribution</span></div>
+  <article><div class="md"><h1>🔬 The Contribution</h1>
+</div>
+<div class="md"><p>This document states, as carefully as it can, what the dual-agent harness<br>contributes to research on AI systems — the problem it addresses, the claim it<br>makes, what is borrowed and what is assembled here, the evidence on record, and<br>the limits that evidence does not cross. It is written to the same standard the<br>harness enforces on its own instances: a claim is worth exactly what it can be<br>re-run to show, and a limitation filed plainly is worth more than a result<br>overstated.</p>
+</div>
+<div class="md"><h2>The problem: self-evaluation is a mirage generator</h2>
+<p>As AI systems increasingly <strong>generate work and also judge it</strong> — reward models<br>scoring their own policy&#39;s rollouts, LLM-as-judge grading model output, an<br>agent writing code and then writing the tests for that code, self-critique and<br>self-consistency loops — a structural failure recurs. An agent that proposes a<br>change and then checks its own change will pass, <strong>not because it cheats, but<br>because the check it invents is the check its change was built to survive.</strong></p>
+<p>This is Goodhart&#39;s law wearing an agent costume, and it is a problem of<br><strong>self-reference</strong>, not of any one domain. The output that results is what this<br>repo names a <strong>mirage</strong>: it passes the author&#39;s probe and fails the real gate.<br>Mirages are the failure mode behind reward hacking, behind an LLM judge&#39;s<br>documented preference for its own style, behind a test suite that is green<br>because it was written to be green. Wherever a generator can influence the test<br>that judges it, the test stops measuring the world and starts measuring the<br>generator&#39;s model of the test.</p>
+</div>
+<div class="md"><h2>The claim: route the information away, don&#39;t ask for honesty</h2>
+<p>The harness answers the mirage structurally rather than behaviourally. Two<br>agents do the work — <strong>soulbae 🧙 proposes, soulbis ⚔️ proves</strong> — and between<br>them sits <strong>the Gap ⿻</strong>, a third seat whose only job is to derive the<br>verification witnesses <strong>by hashing the proposal&#39;s own canonical bytes</strong><br>(a Fiat-Shamir construction). The proposer chooses its own exam without ever<br>seeing the syllabus; any revision re-seeds the draw. The operational invariant<br>is</p>
+<pre><code>I(Y_S ; Y_M | X) = 0
+</code></pre>
+<p>— given the target <code>X</code>, what the prover produces carries no information about<br>what the proposer produces. This is not a promise the agents make to each other<br>(under Promise Theory&#39;s autonomy axiom, no agent can promise on another&#39;s<br>behalf, and &quot;I will not learn what you know&quot; is unenforceable from inside a<br>seat). It is a property of <strong>how the information is routed</strong>: the proposer&#39;s<br>seat never receives the gate or the witnesses, and the witnesses are a<br>deterministic function of the proposal, so the proposer provably could not have<br>tuned to them.</p>
+<p>Three further stances complete the design, each a factor in the same product:</p>
+<ul>
+<li><strong>The multiplicative gate.</strong> Value is a product; any zero collapses it. 7/8<br>on a held-out gate is a zero, not 87.5% — a candidate that improves the score<br>while failing the gate is worth nothing at any score. This refuses the<br>&quot;good enough&quot; drift that lets a partial pass launder into a claimed result.</li>
+<li><strong>Honest labels and claim tiers.</strong> Every load-bearing claim carries a tier<br>(PROVEN / DERIVED / REPORTED / OPEN / MYTH); a probe pass is never dressed as<br>a full pass; negative results are filed as prominently as wins. This is a<br>discipline for keeping AI-generated claims from drifting away from their<br>evidence over a long autonomous run.</li>
+<li><strong>The door.</strong> Every outward action — publish, submit, send, commit — belongs<br>to a human alone, and no seat performs, marks, or simulates one. The system&#39;s<br>job is to make the door visible and stop in front of it.</li>
+</ul>
+</div>
+<div class="md"><h2>What is borrowed, and what is assembled here</h2>
+<p>Intellectual honesty requires separating the two.</p>
+<p><strong>Borrowed, and cited as such:</strong> the Fiat-Shamir heuristic (Fiat &amp; Shamir,<br>1986 — turning an interactive challenge into a hash of the transcript);<br>Promise Theory (Burgess — the autonomy axiom); Goodhart&#39;s law and its<br>reward-hacking descendants as the problem framing; and the Privacy-is-Value<br>model (PVM V6, 0xagentprivacy) from which the six constitutional trusts and the<br>Swordsman ⊥ Mage architecture are lifted.</p>
+<p><strong>Assembled and tested here</strong> — the actual contribution:</p>
+<ol>
+<li>The <strong>composition</strong> of those pieces into a runnable, <strong>config-driven,<br>domain-neutral</strong> harness for AI-agent work: the same engine that compresses<br>a document reduces a quantum circuit or a ZK constraint system, changing only<br>a config, never the loop.</li>
+<li>An <strong>empirical demonstration</strong> that the construction catches real defects<br>and holds a real, advancing frontier (below).</li>
+<li>The explicit <strong>harness-vs-auditor decision boundary</strong> — the finding that the<br>held-out Gap earns its cost <em>only</em> where the claim space is too large to<br>check exhaustively, kept in the repo as a documented negative result.</li>
+<li>A <strong>reproducibility stance</strong> strong enough to be its own argument: zero<br>dependencies, the governing algebra re-proven on all 64 values of ℤ/64ℤ<br>every time the gate runs (the gate keeps its own copy of the axioms and<br>deliberately does not import them), and every result content-addressed so a<br>third party can re-derive it from the shipped bytes.</li>
+</ol>
+</div>
+<div class="md"><h2>The evidence on record</h2>
+<p>Everything below is in the repository and re-runnable; <code>node tools/check.mjs</code><br>re-verifies the load-bearing parts in one command.</p>
+<ul>
+<li><strong>A real advancing frontier.</strong> The runnable example (<code>examples/field-guide/</code>)<br>compresses a fact-dense emergency guide from a <strong>730-word baseline to a<br>472-word validated best across four audited folds</strong> (730 → 573 → 526 → 472,<br>−35.3%), every step passing an 8-of-~40 held-out comprehension gate drawn by<br>hashing the candidate, the last two folds closed by an <strong>exhaustive fact<br>census</strong> — because when the claim space is small enough to enumerate, you<br>count it rather than sample it. Numbers live in <code>frontier.json</code>, the sole<br>authority; the per-round reasoning lives verdict-first in <code>chronicles/</code>.</li>
+<li><strong>Seven defects, every one found by running.</strong> The engine was debugged not by<br>inspection but by execution: an outage silently reported as an exhausted<br>search; a gate that passed an unfilled config; a critic with no vocabulary for<br>a mis-specified gate; seats whose on-disk record was thinner than their<br>return. Each was invisible to reading and obvious on running, and each is now<br>pinned by a test or a prompt rule. That execution-driven discovery beats<br>review for this class of system is itself a methodological finding, and the<br>chronicles record it as one.</li>
+<li><strong>The separation is tested, not asserted.</strong> A deliberate <strong>tamper drill</strong><br>flips one byte of a proposal&#39;s canonical form and confirms the re-derived hash<br>no longer matches the recorded seed — the harness detects that its own<br>witnesses are of unknown origin and voids the round (GR-4). The static run<br>viewer and the live console both re-derive this in front of the reader rather<br>than trusting a stored value.</li>
+<li><strong>Ten embodiments, one skeleton.</strong> <code>HARNESS_PATHS.md</code> catalogues ten instances<br>wearing the same architecture over topically unrelated bodies — quantum<br>resource estimation, ZK constraint reduction, research-document rehydration, a<br>controlled grammar, consent agreements, a publishing loop — plus one seat held<br>open by invitation. Partial embodiments are labelled partial; an honest<br>partial teaches the bar better than a complete one does.</li>
+</ul>
+</div>
+<div class="md"><h2>The limits this evidence does not cross</h2>
+<p>Stated as plainly as the claims, because the harness would refuse them<br>otherwise.</p>
+<ul>
+<li><strong>Prompt-based separation is topology plus discipline, not an<br>information-theoretic proof.</strong> In a harness built from prompts, the engine can<br>guarantee what it does not put in a seat&#39;s prompt, but not what a seat reads<br>from disk. <code>I(Y_S; Y_M | X) = 0</code> holds by construction for the routed<br>information; it is enforced the rest of the way by explicit per-seat Reads<br>lists and a chronicle audit trail in which a seat that read past its card is a<br>named failure, not a silent one. Where a domain permits harder enforcement —<br>separate processes, separate models, separate machines, separate keys — it<br>should be used, and the design allows it.</li>
+<li><strong>The Gap is not always worth its cost.</strong> A held-out adversarial draw earns<br>its price only when the claim space is too large to check. Where every claim<br>an artifact makes is enumerable, an exhaustive <strong>auditor</strong> gives certainty for<br>zero adversarial cost, and a harness is the wrong tool. The repo keeps a<br>retired instance — the universe-builder — precisely to record where the<br>harness was applied and should not have been: <em>a harness is for adversaries;<br>an auditor is for facts.</em></li>
+<li><strong>This is a runnable demonstration, not a controlled study.</strong> The evidence is<br>a reproducible repository and a worked frontier, not a benchmarked comparison<br>against baselines under peer review. The strongest current claim is that the<br>construction is coherent, checked, and demonstrably catches a class of failure<br>on the instances shown — not that it is optimal, nor that it has been measured<br>against alternatives.</li>
+</ul>
+</div>
+<div class="md"><h2>Why it reads as a research contribution</h2>
+<p>The mirage problem is becoming central to AI exactly as agentic and<br>self-evaluating systems proliferate, and most mitigations are behavioural —<br>better judge prompts, ensembles, self-consistency — which a sufficiently<br>capable generator can still route around, because the test still lives where<br>the generator can reach it. The contribution here is to move the test out of<br>reach by construction, to make that move <strong>domain-neutral and reproducible</strong>,<br>and to be honest about the boundary where the move stops paying for itself. The<br>whole apparatus is a machine for the sentence it keeps proving on itself:</p>
+<p><strong>a proposer that grades its own work builds mirages; only what the Gap could<br>not tune to is a result.</strong></p>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+<p>Apache-2.0 · origin: 0xagentprivacy · the Privacy-is-Value model (PVM V6) ·<br>agentprivacy.ai</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-note">📎 the-contribution</div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-contribution.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

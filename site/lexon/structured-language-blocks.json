@@ -1,0 +1,146 @@
+{
+  "title": "Structured Language Blocks",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "9f3f2f5ed3b5b244",
+      "text": "# 🧱 Structured Language Blocks"
+    },
+    {
+      "type": "markdown",
+      "id": "5bb04c14164b5634",
+      "text": "Companion to `out/BONFIRES_NOTE.md` (the adoption note, frozen at the\nconvergence run) and `notes/LEXON_YOUR_OWN_AGENTS.md` (the three-way sync).\nThat note argued the write-path; this one specifies the UNIT that travels it,\nbecause the unit now exists: the harness has folded 59 gate-passing LEXICON\nentries and every future entry carries a machine-checkable relation claim\n(CR-13, the mutation probe)."
+    },
+    {
+      "type": "markdown",
+      "id": "c4271b5be59e68cf",
+      "text": "## The boundary, stated first\n\nThe bonfires projection is NOT assumed anywhere in the agentprivacy grammar.\nNothing in the census, the checker, the relation claims, or the loop depends\non a public knowledge graph existing. The dependency points one way only: a\nshared public graph is a natural RENDERING surface for coherent\nmachine-legal-language paths, and these blocks are built so that rendering\ncosts an emitter, not a research program. Private pole: the agentprivacy\nharness, where claims are gated and folded. Public pole: the Bonfire graph,\nwhere communities hold shared memory. Membrane: the hitchhikers community and\nits values, which decide what crosses. Any actual contact with bonfires.ai is\nthe operator's door (T6)."
+    },
+    {
+      "type": "markdown",
+      "id": "cf60037da014f2bb",
+      "text": "## The unit: a structured language block\n\nOne block is one census term expressed as one self-carrying package:\n\n```\nblock = {\n  lex:        the controlled-grammar text (passes tools/lexon_check.mjs:\n              parse, triple round-trip, role binding, promise typing)\n  triples:    the typed subject-predicate-object edges the checker derives\n  promises:   the promise/commitment typing per edge (may = promise,\n              must/recital = commitment, polarity +)\n  relation:   the machine-readable structural claim(s), tools/relation_check.mjs\n              grammar (gate | ordering | conjunction | absence), each proven\n              distinguishable from its mutated twin\n  provenance: census id, source slug, register tag (epistemic status,\n              never upgraded)\n}\n```\n\nThe block is deterministic all the way down: the text IS the triples (round\ntrip is checked, not hoped), the claims are clause-graph properties (not\nprose), and the provenance is trace-or-delete. Everything the adoption note\npromised about zero extraction loss is now demonstrated at 59 entries of\nscale, not one escrow example."
+    },
+    {
+      "type": "markdown",
+      "id": "99c7f126a95a29ce",
+      "text": "## Projection semantics (block to graph)\n\nThe adoption note's escrow mapping covers definitions to nodes and triples to\nedges. The relation-claim layer adds the piece a shared graph actually needs:\n**claims that readers can re-check against the subgraph mechanically.**\n\n| claim type | graph rendering | reader's check |\n|---|---|---|\n| absence | a pattern that MUST match zero rows | run the pattern; any row falsifies the block |\n| gate | every action edge in the clause carries the condition property | filter the clause's edges; an unconditioned edge falsifies it |\n| ordering | monotone step properties on the clause's edges | sort by step; a violation falsifies it |\n| conjunction | the defined predicate as a node with REQUIRES edges to each conjunct | count the REQUIRES edges |\n\nImpossibility as absence is the one to notice: a privacy guarantee in this\ngrammar is a ROUTE THAT DOES NOT EXIST, and in a graph that is a query\nreturning empty. The claim ships WITH the block, so a Bonfire does not trust\nthe author's prose; it re-runs the check."
+    },
+    {
+      "type": "markdown",
+      "id": "2d06b1de83a500b9",
+      "text": "## Worked example: the Entropy block\n\nFrom the folded LEXICON (LEXPVM-T-032, glossary-master-v4 anchor Entropy\nH(X)). The lex text expresses the formula's structure: observation channels\ndrain what they can, and residual uncertainty survives to the Gap.\n\nClaim: `{ \"type\": \"absence\", \"to\": \"Adversary\", \"what\": \"escrow-remainder\" }`\n(RELATION PASS 2026-07-11: the twin with the remainder rerouted to the\nAdversary still passes the base gate, and the tool tells them apart).\n\n```cypher\n// nodes from definitions\nMERGE (c:LexContract {name: \"Entropy\", census: \"LEXPVM-T-032\",\n       cites: \"glossary-master-v4\", register: \"conjectured expression of canonical term\"})\nMERGE (fp:Person {role: \"First Person\", contract: c.name})\nMERGE (adv:Person {role: \"Adversary\", contract: c.name})\nMERGE (gap:Person {role: \"Gap\", contract: c.name})\n\n// deontic edges (the observation drains, each a 'may')\nCREATE (adv)-[:MAY_PAY {object: \"Sword Channel\", from: \"escrow\",\n        clause: \"Observe Swordsman\", aspect: \"deontic\"}]->(adv)\nCREATE (adv)-[:MAY_PAY {object: \"Mage Channel\", from: \"escrow\",\n        clause: \"Observe Mage\", aspect: \"deontic\"}]->(adv)\nCREATE (fp)-[:MAY_RETURN {object: \"escrow-remainder\",\n        clause: \"Remain Unknowable\", condition: \"Observation Complete\",\n        aspect: \"deontic\"}]->(gap)\n\n// the relation claim, as the constraint a reader re-runs:\n// residual uncertainty NEVER routes to the Adversary\nMATCH (x)-[e]->(a:Person {role: \"Adversary\"})\nWHERE e.object = \"escrow-remainder\"\nRETURN count(e) AS mustBeZero\n```\n\nOne authoring act, three renderings (prose, triples, checkable constraint),\nand the constraint is the part the community will actually dispute later."
+    },
+    {
+      "type": "markdown",
+      "id": "b1b8c6dbc18b7b61",
+      "text": "## Why this is bonfires-shaped without being bonfires-dependent\n\nA Bonfire runs Graphiti over Neo4j with a probabilistic extraction door. The\nblock enters through the deterministic door the adoption note proposed (a\nlexon episode type), and the relation claims land as the audit layer that\ndoor was missing. But the same block renders to RDF, to a triple store, to a\nplain JSON ledger, or to nothing at all: the harness's own gate already\nconsumed it. The public graph gains coherent machine-legal-language paths;\nthe grammar gains nothing and needs nothing back. That asymmetry is the\ndesign, and it is why the boundary at the top of this note holds."
+    },
+    {
+      "type": "markdown",
+      "id": "807799b589234b2d",
+      "text": "## What crosses the membrane, and what never does\n\n- Crosses: blocks (lex text, triples, claims, cites slug, register tag).\n  Everything in a block is already public-shaped: the cites slug names a\n  source, not a private path.\n- Never crosses: the census freeze and coverage metric (harness internals),\n  the canon documents themselves (bonfires gets pointers, not the corpus),\n  register-tag epistemics beyond the tag string, and anything C-series.\n- The spell-grammar register (lexr3, in flight as this is written) is the\n  natural first cargo: seat cards and skills as promise bundles are exactly\n  the agent-behavior contracts a multi-agent community graph wants, and they\n  are the operator's own structures, clean to share."
+    },
+    {
+      "type": "markdown",
+      "id": "33a8363cc12b2e00",
+      "text": "## Standing next steps (all behind the door)\n\n1. When lexr3's spell-grammar entries fold, cut 2 or 3 of them as complete\n   worked blocks (lex + triples + claims + Cypher) into an updated adoption\n   packet alongside out/BONFIRES_NOTE.md.\n2. A `blocks emitter` (LEXICON entry to block JSON) is a small tools/ script,\n   keystone-buildable on request; it reuses check() and probeRelation()\n   outputs directly.\n3. Contact with bonfires.ai, like the Diedrich brief, waits at the door."
+    },
+    {
+      "type": "markdown",
+      "id": "426f4eeec88a4220",
+      "text": "# Assets"
+    },
+    {
+      "id": "30450e2970873f61",
+      "type": "assets",
+      "text": "structured-language-blocks"
+    },
+    {
+      "type": "markdown",
+      "id": "8960db4a09909b90",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Grammar Workshop]] · [[Reading The Language]]"
+    },
+    {
+      "type": "markdown",
+      "id": "a3a788cb53b93ebc",
+      "text": "---\n*the wiki is a projection; `github.com/mitchuski/lexon_pvm` (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the [[The Harness — The Model Turned On Itself]]*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Structured Language Blocks",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "9f3f2f5ed3b5b244",
+            "text": "# 🧱 Structured Language Blocks"
+          },
+          {
+            "type": "markdown",
+            "id": "5bb04c14164b5634",
+            "text": "Companion to `out/BONFIRES_NOTE.md` (the adoption note, frozen at the\nconvergence run) and `notes/LEXON_YOUR_OWN_AGENTS.md` (the three-way sync).\nThat note argued the write-path; this one specifies the UNIT that travels it,\nbecause the unit now exists: the harness has folded 59 gate-passing LEXICON\nentries and every future entry carries a machine-checkable relation claim\n(CR-13, the mutation probe)."
+          },
+          {
+            "type": "markdown",
+            "id": "c4271b5be59e68cf",
+            "text": "## The boundary, stated first\n\nThe bonfires projection is NOT assumed anywhere in the agentprivacy grammar.\nNothing in the census, the checker, the relation claims, or the loop depends\non a public knowledge graph existing. The dependency points one way only: a\nshared public graph is a natural RENDERING surface for coherent\nmachine-legal-language paths, and these blocks are built so that rendering\ncosts an emitter, not a research program. Private pole: the agentprivacy\nharness, where claims are gated and folded. Public pole: the Bonfire graph,\nwhere communities hold shared memory. Membrane: the hitchhikers community and\nits values, which decide what crosses. Any actual contact with bonfires.ai is\nthe operator's door (T6)."
+          },
+          {
+            "type": "markdown",
+            "id": "cf60037da014f2bb",
+            "text": "## The unit: a structured language block\n\nOne block is one census term expressed as one self-carrying package:\n\n```\nblock = {\n  lex:        the controlled-grammar text (passes tools/lexon_check.mjs:\n              parse, triple round-trip, role binding, promise typing)\n  triples:    the typed subject-predicate-object edges the checker derives\n  promises:   the promise/commitment typing per edge (may = promise,\n              must/recital = commitment, polarity +)\n  relation:   the machine-readable structural claim(s), tools/relation_check.mjs\n              grammar (gate | ordering | conjunction | absence), each proven\n              distinguishable from its mutated twin\n  provenance: census id, source slug, register tag (epistemic status,\n              never upgraded)\n}\n```\n\nThe block is deterministic all the way down: the text IS the triples (round\ntrip is checked, not hoped), the claims are clause-graph properties (not\nprose), and the provenance is trace-or-delete. Everything the adoption note\npromised about zero extraction loss is now demonstrated at 59 entries of\nscale, not one escrow example."
+          },
+          {
+            "type": "markdown",
+            "id": "99c7f126a95a29ce",
+            "text": "## Projection semantics (block to graph)\n\nThe adoption note's escrow mapping covers definitions to nodes and triples to\nedges. The relation-claim layer adds the piece a shared graph actually needs:\n**claims that readers can re-check against the subgraph mechanically.**\n\n| claim type | graph rendering | reader's check |\n|---|---|---|\n| absence | a pattern that MUST match zero rows | run the pattern; any row falsifies the block |\n| gate | every action edge in the clause carries the condition property | filter the clause's edges; an unconditioned edge falsifies it |\n| ordering | monotone step properties on the clause's edges | sort by step; a violation falsifies it |\n| conjunction | the defined predicate as a node with REQUIRES edges to each conjunct | count the REQUIRES edges |\n\nImpossibility as absence is the one to notice: a privacy guarantee in this\ngrammar is a ROUTE THAT DOES NOT EXIST, and in a graph that is a query\nreturning empty. The claim ships WITH the block, so a Bonfire does not trust\nthe author's prose; it re-runs the check."
+          },
+          {
+            "type": "markdown",
+            "id": "2d06b1de83a500b9",
+            "text": "## Worked example: the Entropy block\n\nFrom the folded LEXICON (LEXPVM-T-032, glossary-master-v4 anchor Entropy\nH(X)). The lex text expresses the formula's structure: observation channels\ndrain what they can, and residual uncertainty survives to the Gap.\n\nClaim: `{ \"type\": \"absence\", \"to\": \"Adversary\", \"what\": \"escrow-remainder\" }`\n(RELATION PASS 2026-07-11: the twin with the remainder rerouted to the\nAdversary still passes the base gate, and the tool tells them apart).\n\n```cypher\n// nodes from definitions\nMERGE (c:LexContract {name: \"Entropy\", census: \"LEXPVM-T-032\",\n       cites: \"glossary-master-v4\", register: \"conjectured expression of canonical term\"})\nMERGE (fp:Person {role: \"First Person\", contract: c.name})\nMERGE (adv:Person {role: \"Adversary\", contract: c.name})\nMERGE (gap:Person {role: \"Gap\", contract: c.name})\n\n// deontic edges (the observation drains, each a 'may')\nCREATE (adv)-[:MAY_PAY {object: \"Sword Channel\", from: \"escrow\",\n        clause: \"Observe Swordsman\", aspect: \"deontic\"}]->(adv)\nCREATE (adv)-[:MAY_PAY {object: \"Mage Channel\", from: \"escrow\",\n        clause: \"Observe Mage\", aspect: \"deontic\"}]->(adv)\nCREATE (fp)-[:MAY_RETURN {object: \"escrow-remainder\",\n        clause: \"Remain Unknowable\", condition: \"Observation Complete\",\n        aspect: \"deontic\"}]->(gap)\n\n// the relation claim, as the constraint a reader re-runs:\n// residual uncertainty NEVER routes to the Adversary\nMATCH (x)-[e]->(a:Person {role: \"Adversary\"})\nWHERE e.object = \"escrow-remainder\"\nRETURN count(e) AS mustBeZero\n```\n\nOne authoring act, three renderings (prose, triples, checkable constraint),\nand the constraint is the part the community will actually dispute later."
+          },
+          {
+            "type": "markdown",
+            "id": "b1b8c6dbc18b7b61",
+            "text": "## Why this is bonfires-shaped without being bonfires-dependent\n\nA Bonfire runs Graphiti over Neo4j with a probabilistic extraction door. The\nblock enters through the deterministic door the adoption note proposed (a\nlexon episode type), and the relation claims land as the audit layer that\ndoor was missing. But the same block renders to RDF, to a triple store, to a\nplain JSON ledger, or to nothing at all: the harness's own gate already\nconsumed it. The public graph gains coherent machine-legal-language paths;\nthe grammar gains nothing and needs nothing back. That asymmetry is the\ndesign, and it is why the boundary at the top of this note holds."
+          },
+          {
+            "type": "markdown",
+            "id": "807799b589234b2d",
+            "text": "## What crosses the membrane, and what never does\n\n- Crosses: blocks (lex text, triples, claims, cites slug, register tag).\n  Everything in a block is already public-shaped: the cites slug names a\n  source, not a private path.\n- Never crosses: the census freeze and coverage metric (harness internals),\n  the canon documents themselves (bonfires gets pointers, not the corpus),\n  register-tag epistemics beyond the tag string, and anything C-series.\n- The spell-grammar register (lexr3, in flight as this is written) is the\n  natural first cargo: seat cards and skills as promise bundles are exactly\n  the agent-behavior contracts a multi-agent community graph wants, and they\n  are the operator's own structures, clean to share."
+          },
+          {
+            "type": "markdown",
+            "id": "33a8363cc12b2e00",
+            "text": "## Standing next steps (all behind the door)\n\n1. When lexr3's spell-grammar entries fold, cut 2 or 3 of them as complete\n   worked blocks (lex + triples + claims + Cypher) into an updated adoption\n   packet alongside out/BONFIRES_NOTE.md.\n2. A `blocks emitter` (LEXICON entry to block JSON) is a small tools/ script,\n   keystone-buildable on request; it reuses check() and probeRelation()\n   outputs directly.\n3. Contact with bonfires.ai, like the Diedrich brief, waits at the door."
+          },
+          {
+            "type": "markdown",
+            "id": "426f4eeec88a4220",
+            "text": "# Assets"
+          },
+          {
+            "id": "30450e2970873f61",
+            "type": "assets",
+            "text": "structured-language-blocks"
+          },
+          {
+            "type": "markdown",
+            "id": "8960db4a09909b90",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Grammar Workshop]] · [[Reading The Language]]"
+          },
+          {
+            "type": "markdown",
+            "id": "a3a788cb53b93ebc",
+            "text": "---\n*the wiki is a projection; `github.com/mitchuski/lexon_pvm` (git) is the source of truth · a Lexon x Privacy Value Model workshop, run through the [[The Harness — The Model Turned On Itself]]*"
+          }
+        ]
+      },
+      "date": 1783865927410
+    }
+  ]
+}

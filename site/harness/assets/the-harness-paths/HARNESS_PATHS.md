@@ -210,8 +210,20 @@ precedent — plus a second em-dash self-certification catch). The critics'
 round-level finding: the three lenses have converged on ONE claim-derivation
 charter validated eleven times, so the next round merges to a single charter
 with round-level disjointness binding. Coverage-debt 123 → 64 (the census 70%
-covered, 147 public blocks, 91 carrying verified claims). Instance head
-`10dad55`.
+covered, 147 public blocks, 91 carrying verified claims). Then two keystone
+checker extensions landed (a numeric layer: number/account types, initial
+literals, comparative predicates, all 0.7-attested; and a send-probe closing
+the checker-shaped absence typing), and lexr5 ran the merged charter over
+three DISJOINT territories: 8 levers VALIDATED, 1 MIRAGE (K-3, an em-dash
+death on already-swept ground). The numeric layer cleared the formula tail
+and the universal cast rule (a section naming no actor takes the First Person
+as holder) cleared the zero-party tail and closed K-2, both proven in the
+field; the disjoint partition made per-lever metrics additive with no
+cross-lever arbitration, dissolving the convergence problem by construction.
+Coverage-debt fell to 22, the census 90% covered, 189 blocks, with a readable
+viewer (viewer/index.html) rendering every term and the 13 constitution
+spells as Lexon text. Residue 22 = 16 terms for one more sweep + 6 C-series
+ids reserved for the operator. Instance head `3a92544`.
 
 > **At a glance** —
 > **objective:** coverage-debt — frozen census terms not yet expressed as gate-passing controlled-grammar entries, ↓ · **gate:** the spec-checker — parse → triple round-trip → role binding → promise typing (regime label honest: the real compiler is unpublished) — plus the mutation probe: every entry's relation claim must survive its mutated twin · **hard constraint:** every entry passes the checker built from attested lexon.org samples
