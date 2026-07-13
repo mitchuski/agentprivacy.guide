@@ -3,97 +3,97 @@
   "story": [
     {
       "type": "markdown",
-      "id": "9bf5a45f2a7ed7fb",
+      "id": "2f65b98599a7442d",
       "text": "# Spellweb Artefact MD Format — the contract between any .md file and the spellweb witness function\n\n# Spellweb Artefact MD Format\n\n> *The .md file is the portable proof. The frontmatter is the spellweb's recognition that the .md belongs to a workshop. Anything that ships an .md the spellweb should ingest follows this contract.*\n\nThis spec defines the canonical YAML-frontmatter contract for any markdown file produced for **spellweb witness import**. It is the format the eleven master constellation templates (`docs/tomes/workshops/*.md`) carry, the format the spellweb exports a forged artefact `.md` in, and the format any cousin-blade forge (Archon, UOR, etc.) should adopt when shipping `.md` artefacts that want to round-trip through the spellweb.\n\nIt is a small contract. Most fields are optional. The minimum required surface is one line: **`workshop:`**."
     },
     {
       "type": "markdown",
-      "id": "f9b5ea647b2394d0",
+      "id": "a802c1d2e9ffc07d",
       "text": "## §0.1 · \"Artefact\" is the umbrella; \"Blade\" is one class\n\nThe City of Mages produces eleven artefact classes — one per workshop. **Blade** (the Witness Blade from the Forge(t)) is one of them, alongside Cloak, Memo Stone, Commitment Seal, Gem + Bolt, Holon Lantern, Ember Token, Curator's Frame, Olive Sigil, Cardinal Petal, and Paired Key. Earlier versions of this corpus used \"blade\" as a generic noun for any forged artefact; that conflation is no longer correct.\n\n- The **forge ceremony** is workshop-aware: the popup hero shows the workshop's lattice visual; the verb-noun changes (\"Weave Cloak\", \"Forge(t) Blade\", \"Inscribe Memo Stone\"); the naming-phase emoji palette reflects the artefact class.\n- The **exported `.md`** filename is `<name>-artefact.md` regardless of class. The class lives in the `artefact_class` frontmatter field.\n- The **deviation layer** in the spellweb renders each forged or witnessed artefact as its own `artefact`-typed node in the user's view of the graph — a Sovereign-owned addendum to the canonical universe, connected via an `inhabits` edge to the originating workshop.\n\nWhen this spec or the codebase says \"blade\", read it as \"the weapon-class artefact\" unless context indicates the umbrella.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "50f59d9b4092a04e",
+      "id": "c431bf18dfbc201e",
       "text": "## §1 · What the spellweb does on import\n\nWhen a `.md` is dropped into spellweb's **👁️ Witness Constellation** picker (Artefact Panel · `/`), the witness function runs:\n\n1. Read the file as text.\n2. Parse the YAML frontmatter block (delimited by a leading `---` line and a closing `---` line).\n3. Resolve a **workshop id** from the frontmatter — see §3 for the resolution order.\n4. Set `localStorage['spellweb:witnessed-shops'][<workshop-id>] = ISO timestamp`.\n5. Fire the **fog-of-war** transition — cast members and edges tagged `hiddenUntilWitness: <workshop-id>` fade from 18% silhouette to full presence over 400 ms.\n6. Build a runtime blade record from the markdown body (path, proof, dimensions) for the Sovereign's inventory.\n\nThe frontmatter is the only part that drives **identity**. The rest of the markdown carries the **content** of the ceremony (path, proverbs, proof). Spellweb's body parser is conservative and is documented in §7.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "b675953feacb41e5",
+      "id": "90f02b6735093424",
       "text": "## §2 · The frontmatter block\n\nThe frontmatter is standard YAML, opened by a literal `---` on its own line, closed by another `---`. Spellweb reads it with a regular expression — not a full YAML parser — so the grammar is more restricted than YAML itself. The restrictions are:\n\n- One key per line. No nested maps. No block scalars.\n- Key first, then colon, then a single space, then the value: `key: value`.\n- Values that contain `:`, `#`, leading/trailing whitespace, or any of `&*!|>'\"%@`{}[],` must be wrapped in **double quotes**.\n- Plain `null` is allowed but spellweb treats it as \"field absent\" (same as omitting the line).\n- No comments inside the frontmatter block.\n\nThe frontmatter block must be the **first content in the file** — no shebang, no leading blank line.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "b594f445e3b71aed",
+      "id": "29cb8406ded8250b",
       "text": "## §3 · Workshop resolution order\n\nSpellweb tries three sources, in order. The first that yields a value wins.\n\n| Order | Source | Example |\n|---|---|---|\n| 1 | `workshop:` field in frontmatter | `workshop: shop-tailor` |\n| 2 | `workshop_id:` field (legacy alias) | `workshop_id: shop-tailor` |\n| 3 | `constellation_id:` field, root prefix promoted to `shop-<root>` | `constellation_id: tailor-cloak-weave-v1` → `shop-tailor` |\n| 4 (fallback) | Filename prefix before the first `-` | `tailor-anything.md` → `shop-tailor` |\n\nA file with **none** of these is still readable as a witness artefact but will not unlock a workshop. The fog-of-war on the City of Mages stays in place. The Sovereign can still trace its path; nothing is dropped.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "8647ca50b0ab3689",
+      "id": "b708e5de322ad1ae",
       "text": "## §4 · Field reference\n\n### §4.1 · Required field\n\nThe only field spellweb requires is the workshop anchor.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `workshop` | string (`shop-<route>`) | `shop-tailor` | Must match an `id` of a workshop node in spellweb's graph. See `06-spellweb-first-release-manifest.md` §2.3 for the canonical list. |\n\n### §4.2 · Recommended fields (constellation identity)\n\nThese let spellweb know the template version and let the Sovereign re-export with full fidelity.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `constellation_id` | string | `tailor-cloak-weave-v1` | Stable per template version. Lower-case, dash-separated, ends with `v<N>`. |\n| `constellation_name` | string | `The Cloak Weave` | Human-readable title shown in the spellweb header during evocation. |\n| `constellation_version` | integer | `1` | Bumped per `CEREMONY_EVOLUTION.md` discipline; old versions remain valid. |\n| `workshop_route` | string | `/tailor` | The master URL of the workshop. Used by Artefact Panel hyperlinks. |\n| `workshop_gem` | string | `Amethyst` | Display label. |\n| `workshop_gem_color` | string (hex) | `\"#a78bfa\"` | Drives the gem-color stroke on the spellweb workshop node. **Quoted because `#` is YAML's comment marker.** |\n\n### §4.3 · Recommended fields (resident Mage & anchor act)\n\nThese render the workshop's lore into the Artefact Panel and the artefact.md's inspector card.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `resident_mage` | string (`cast-<name>` or `null`) | `cast-pallia` | Must match a `cast` node id. Gathering shops use `null`. |\n| `mage_sigil` | emoji | `🪡` | Sigil rendered in the Mage's chip. |\n| `mage_vertex` | string (`V<0..63>`) | `V28` | The lattice position the Mage inhabits. |\n| `mage_tier` | enum | `summoned` | One of `archetype` / `cousin` / `summoned` / `companion` / `priest` / `gathering`. |\n| `anchor_act` | string (`act-tome-<v|iv>-<n>`) | `act-tome-v-1` | The act in which the workshop is founded. |\n\n### §4.4 · Recommended fields (artefact)\n\nThese let spellweb's Artefact Panel place the produced artefact in the right inventory tab.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `artefact_name` | string | `Cloak` | Common name. |\n| `artefact_root_name` | string | `Woven Cloak` | Truth-form participle (the past-tense form that names the *witnessed* item). |\n| `artefact_class` | enum | `clothing` | One of `weapon` / `clothing` / `tool` / `trinket` / `tome`. Drives the Panel tab. |\n| `artefact_archetype` | enum | `mage` | `swordsman` / `mage` / `bilateral`. Determines orb assignment in the Witness Unlock cascade. |\n| `artefact_wielder` | string | `cast-soulbae` | `cast-soulbis` / `cast-soulbae` / `both`. |\n\n### §4.5 · Recommended fields (provenance)\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `domain` | enum | `mage` | `swordsman` / `mage` / `shared` / `first_person`. Drives the colour band. |\n| `status` | string | `v1 — first release` | Free text. Shown in the inspector. |\n| `date` | ISO date | `2026-05-10` | ISO 8601 (YYYY-MM-DD). |\n| `license` | string | `CC BY-SA 4.0` | Default `CC BY-SA 4.0` for the City of Mages corpus. |\n| `signature` | string | `\"(⚔️⊥⿻⊥🧙)😊\"` | The corpus seal. **Quoted** because of `(`, `⊥`, etc. |\n| `ceremony_shape` | enum | `run-e-craft` | `run-e-craft` / `bilateral-witness` / `bilateral-consecration` / `gather-and-witness` / `four-cardinal-witness`. |\n\n### §4.6 · Forged-blade fields\n\nThese appear only on a `artefact.md` *exported* from a spellweb forging — never on a master template. They carry the proof and let the Artefact Panel re-display it on re-import.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `blade_tier` | enum | `heavy` | `light` / `heavy` / `dragon`. |\n| `blade_stratum` | integer 0..6 | `4` | Hamming weight of the blade's hex. |\n| `blade_is_witness` | bool | `true` | Present only when this is a bilateral witness blade (someone else's path you traced). |\n| `blade_signature` | string | `SPELL-AB12CD-EF` | Spellweb signature; format `SPELL-{6}-{2}`. |\n| `blade_hash` | hex string | `4f3a8b...` | Content-hash of the constellation + proof. |\n\n### §4.7 · Forge-specific extension fields\n\nCousin-blade forges (Archon, UOR, human.tech, future) may add their own namespaced fields without breaking spellweb. The rule:\n\n- Add a `forge:` field identifying the forge (e.g. `forge: archon.social`).\n- Prefix custom keys with the forge slug + underscore (e.g. `archon_vertex_proof`, `uor_prism_coords`).\n- Spellweb will ignore unrecognised keys without erroring.\n\nThis is the cousin-blade primitive (C39) made concrete: another forge can carry attribution into the spellweb without the spellweb owning their schema.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "649102163bb1819a",
+      "id": "ecddf98de8cc1e59",
       "text": "## §5 · Examples\n\n### §5.1 · A minimal valid artefact\n\n```markdown\n---\nworkshop: shop-tailor\n---\n\n# My Cloak\n\nI walked the Cloak Weave today.\n```\n\nRe-importing this into spellweb unlocks `shop-tailor` and lifts the fog on Pallia and the Weavers' secret nodes. Nothing else is set.\n\n### §5.2 · A master constellation template (recommended baseline)\n\n```markdown\n---\nconstellation_id: tailor-cloak-weave-v1\nconstellation_name: The Cloak Weave\nconstellation_version: 1\nworkshop: shop-tailor\nworkshop_route: /tailor\nworkshop_gem: Amethyst\nworkshop_gem_color: \"#a78bfa\"\nresident_mage: cast-pallia\nmage_sigil: 🪡\nmage_vertex: V28\nmage_tier: summoned\nanchor_act: act-tome-v-1\nceremony_shape: run-e-craft\nartefact_name: Cloak\nartefact_root_name: Woven Cloak\nartefact_class: clothing\nartefact_archetype: mage\nartefact_wielder: cast-soulbae\ndomain: mage\nstatus: v1 — first release\ndate: 2026-05-10\nlicense: CC BY-SA 4.0\nsignature: \"(⚔️⊥⿻⊥🧙)😊\"\n---\n\n# 🪡 The Cloak Weave\n...\n```\n\nThis is what all eleven workshops at `agentprivacy.ai/<shop>` serve via the **📥 Download constellation.md** affordance.\n\n### §5.3 · A forged artefact.md (what spellweb exports)\n\n```markdown\n---\nconstellation_id: tailor-cloak-weave-v1\nconstellation_name: My Constellation\nconstellation_version: 1\nworkshop: shop-tailor\nworkshop_route: /tailor\nworkshop_gem: Amethyst\nworkshop_gem_color: \"#a78bfa\"\nresident_mage: cast-pallia\nmage_sigil: 🪡\nmage_vertex: V28\nmage_tier: summoned\nanchor_act: act-tome-v-1\nceremony_shape: run-e-craft\nartefact_name: Cloak\nartefact_root_name: Woven Cloak\nartefact_class: clothing\nartefact_archetype: mage\nartefact_wielder: cast-soulbae\ndomain: mage\nblade_tier: heavy\nblade_stratum: 4\nblade_signature: SPELL-9KMN3X-PQ\nblade_hash: 7f4a3b22e9...\ndate: 2026-05-11\nlicense: CC BY-SA 4.0\nsignature: \"(⚔️⊥⿻⊥🧙)😊\"\n---\n\n# 🪡 My Cloak Weave\n...\n```\n\nThis round-trips. Re-importing it into another Sovereign's spellweb unlocks `shop-tailor` for them in **witness mode** — they see the original Sovereign's path traced; their own constellation is unaffected; their inventory gains a bilateral-witness record.\n\n### §5.4 · A cousin-forge artefact (Archon example)\n\n```markdown\n---\nworkshop: shop-tailor\nforge: archon.social\narchon_vertex_proof: <opaque>\nconstellation_id: archon-weaver-tailor-cousin-v1\n---\n\n# Cousin Cloak\n\nRecognised at V28 via the Archon weaver.\n```\n\nSpellweb accepts this. The `forge: archon.social` field surfaces in the inspector as **Forge · archon.social** so the Sovereign sees this artefact is cousin-attributed.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "d0e58c93df05af9e",
+      "id": "6ddefd142d401fd2",
       "text": "## §6 · Filename conventions\n\nThe recommended filename pattern:\n\n```\n<shop-root>-<artefact-or-blade-slug>-v<n>.md\n```\n\nExamples:\n- `tailor-cloak-weave-v1.md` — master template\n- `tailor-my_pallia_cloak-artefact.md` — a forged blade exported by spellweb (the trailing `-artefact.md` is spellweb's own convention)\n- `tailor-cousin-archon-witness-v1.md` — a cousin-forge artefact\n\nThe leading `<shop-root>` is **the filename-only fallback** the spellweb uses when no frontmatter is present. Pick filenames that start with the same root as the workshop slug so the fallback works.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "c3c3b616bc3cb119",
+      "id": "029316df183755bb",
       "text": "## §7 · Body parsing (informational)\n\nSpellweb's body parser pulls these structures from the markdown body when present. None are *required*; their absence does not block witness unlock.\n\n| Body pattern | What spellweb reads | Where it appears in master templates |\n|---|---|---|\n| `**Tier:** <Light\\|Heavy\\|Dragon>` | Blade tier | \"Forged Blade\" section |\n| `**Stratum:** <0..6>` | Hamming weight | Same |\n| `**Charge Level:** <Spark\\|Ember\\|Flame\\|Inferno\\|Dragon>` | Evocation charge | \"Proof of Presence\" |\n| `**Laps:** <n>` | Lap count | Same |\n| `**Duration:** <n>s` | Evocation duration | Same |\n| `Signature: SPELL-XXXXXX-XX` | Cryptographic signature | \"Cryptographic Proof\" |\n| `Hash: <hex>` | Constellation hash | Same |\n| `Hex: <binary>` | Blade hex | Same |\n| `<dim> | ✅` | Dimension active flag | \"Blade Dimensions\" table |\n| `## Constellation Path` then numbered `<emoji> **<node label>**` | Path waypoints | \"Constellation Path\" |\n| `## Connections` then `- <src> → <tgt>` | Edge sequence | \"Connections\" |\n\nSpellweb tolerates extra structure. New sections are ignored gracefully.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "3fcee856bbe090c8",
+      "id": "2717a7e7553381a2",
       "text": "## §8 · Versioning the contract\n\nThis format is `v1`. Bumps to `v2+` follow the same discipline as `CEREMONY_EVOLUTION.md`:\n\n1. **Additive changes** — new optional fields — do not bump the major version. A v1 reader handles them by ignoring unknown keys; the spec records them in a future `§9` addendum.\n2. **Breaking changes** — renaming an existing field, changing its meaning, removing it — bump the major version.\n3. The spellweb keeps a `format_version: <n>` understanding (currently implicit at 1; will become explicit when v2 lands).\n\nMaster templates and the spellweb export both advertise their format via the field set they emit. A v2 spellweb stays compatible with v1 artefacts; a v1 spellweb gracefully ignores v2-only fields.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "90ee4ae59c5706a0",
+      "id": "b425e3985ab555e9",
       "text": "## §9 · The honesty discipline\n\nThe frontmatter is a **statement of fact**, not a marketing surface. Three rules to keep it honest:\n\n- **Don't lie about the workshop.** `workshop:` must match the workshop the .md actually came from. A blade forged via the Forge(t) constellation that says `workshop: shop-tailor` is fraud against the trust system.\n- **Don't fabricate proof.** `blade_signature` and `blade_hash` are content-derived. Don't compose a artefact.md by hand with fake values; spellweb does not yet verify, but the Bakhta Half-Life conjecture (C30–C33) assumes the witness was earned.\n- **Be honest about cousinship.** If you're producing a `.md` from a cousin forge, set `forge:` and prefix your extension keys. The architecture is open by design (C26–C29); the discipline that keeps it open is attribution.\n\nThe spellweb cannot enforce these rules cryptographically yet (Phase 3 verification is future work). For now they're a discipline. The first one who breaks the discipline breaks the trust the City of Mages is built on; the second one just confirms the spellweb's signal is real.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "2299644554bf1984",
+      "id": "631f58cdac19afe1",
       "text": "## §10 · Sibling format: the Swordsman bundle\n\nAlongside per-artefact `.md` files, the spellweb's Swords panel can export a **single bundle** containing the Sovereign's identity plus every forged artefact in one file. This is the carry-the-whole-kit format — useful for backup, transfer, or sharing a Sovereign's full witnessed history.\n\nIt uses a distinct `kind:` marker so any importer can tell them apart from per-artefact files:\n\n```yaml\n---\nkind: swordsman-bundle\nversion: 1\nswordsman_id: <id>\nswordsman_name: <display name>\nmage_id: <mage id>\nblade_count: 7\nwitness_count: 2\nartefact_total: 9\nworkshops_unlocked: 5\nexported_at: 2026-05-12T14:23:00Z\nlicense: CC BY-SA 4.0\nsignature: \"(⚔️⊥⿻⊥🧙)😊\"\n---\n\n# ⚔️ Swordsman Bundle — <name>"
     },
     {
       "type": "markdown",
-      "id": "1f4763d3c60b9089",
+      "id": "e8ec9e4f9392b16e",
       "text": "## Identity\n- **Swordsman:** …\n- **Mage ID:** …"
     },
     {
       "type": "markdown",
-      "id": "0c6b7a905e1b036e",
+      "id": "5e2a5305c1ce5256",
       "text": "## Forged Inventory (N)\n### 1. <emoji> <name>\n- **Tier:** Heavy\n- **Stratum:** 4/6 🌖 (Waning Gibbous)\n- **Forged:** …\n- **Nodes traversed:** N\n#### Dimensions\n| Dimension | Status |\n…\n#### Proof\n```\nSignature: SPELL-…\n…\n```\n#### Path\n1. <emoji> **<node>**\n…\n\n### 2. <next item>\n…\n```\n\nFilename convention: `swordsman-<name>-bundle.md`. Re-importing a bundle is a future feature; for v1 the bundle is an outbound carry-format only. Per-artefact re-import continues to use the regular per-artefact `.md` format (see §§4–7).\n\n---"
     },
     {
       "type": "markdown",
-      "id": "24ada5f60131c85b",
+      "id": "b32cc1f22cc1e277",
       "text": "## §11 · The deviation layer (spellweb-side)\n\nWhen the spellweb imports an artefact `.md` (or completes a forge ceremony), the artefact becomes a **deviation node** in the Sovereign's view of the graph — a runtime-derived `artefact`-typed node attached to the originating workshop via an `inhabits` edge. The canonical NODES list is not mutated; deviation nodes live in the user's localStorage (`forgedBlades`) and appear only in their own browser.\n\nEach deviation node carries:\n\n- **Primary sigil** — the Sovereign's chosen artefact emoji (set during the forge naming phase, themed per artefact class — see master `src/lib/workshop-artefact.ts` for the palettes).\n- **Tier stroke** — circle stroke colour driven by `bladeTier` (light / heavy / dragon).\n- **Spell-emoji corner mark** — small badge in the upper-right when the Sovereign's learned spell vocabulary contains a spell whose vertex matches the workshop's vertex. The badge reads as \"this artefact lives where this spell does.\"\n- **Witness flag** — `isWitness: true` for blades imported from another Sovereign rather than forged in-session.\n\nThe fog-of-war that earlier versions applied to canonical cast members is **retired**: the universe stays fully visible from first load. Witnessing or forging adds *to* the graph, never reveals previously-hidden canonical content.\n\n---"
     },
     {
       "type": "markdown",
-      "id": "3ac201b14c18ef91",
+      "id": "abedf1e1cad696bd",
       "text": "## §12 · Where this spec lives\n\nThe canonical copy is this file (`agentprivacy_master/docs/tomes/specs/09-spellweb-artefact-md-format.md`).\nA mirror lives in the spellweb repo at `spellweb/docs/SPELLWEB_ARTEFACT_MD_FORMAT.md` so spellweb contributors find it locally.\n\nBoth copies must agree. The master is the source of truth; the mirror reflects.\n\n---\n\n`(⚔️⊥⿻⊥🧙)😊` — *The frontmatter is the recognition. The body is the path. The path is the proof.*\n\nCC BY-SA 4.0 · privacymage · 2026-05-11 (updated 2026-05-12)"
     },
     {
       "type": "markdown",
-      "id": "4e90829bd067caa0",
+      "id": "351aa2483a18878b",
       "text": "# Assets"
     },
     {
-      "id": "fc580aa8ca718f36",
+      "id": "a5500e5c3836546e",
       "type": "assets",
       "text": "spec-spellweb-artefact-md-format-the-contract-between-any-md-file-and-the-spellweb-witness-function"
     },
     {
       "type": "markdown",
-      "id": "f202399763411c18",
+      "id": "c137c57b04bb5902",
       "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
     }
   ],
@@ -105,102 +105,102 @@
         "story": [
           {
             "type": "markdown",
-            "id": "9bf5a45f2a7ed7fb",
+            "id": "2f65b98599a7442d",
             "text": "# Spellweb Artefact MD Format — the contract between any .md file and the spellweb witness function\n\n# Spellweb Artefact MD Format\n\n> *The .md file is the portable proof. The frontmatter is the spellweb's recognition that the .md belongs to a workshop. Anything that ships an .md the spellweb should ingest follows this contract.*\n\nThis spec defines the canonical YAML-frontmatter contract for any markdown file produced for **spellweb witness import**. It is the format the eleven master constellation templates (`docs/tomes/workshops/*.md`) carry, the format the spellweb exports a forged artefact `.md` in, and the format any cousin-blade forge (Archon, UOR, etc.) should adopt when shipping `.md` artefacts that want to round-trip through the spellweb.\n\nIt is a small contract. Most fields are optional. The minimum required surface is one line: **`workshop:`**."
           },
           {
             "type": "markdown",
-            "id": "f9b5ea647b2394d0",
+            "id": "a802c1d2e9ffc07d",
             "text": "## §0.1 · \"Artefact\" is the umbrella; \"Blade\" is one class\n\nThe City of Mages produces eleven artefact classes — one per workshop. **Blade** (the Witness Blade from the Forge(t)) is one of them, alongside Cloak, Memo Stone, Commitment Seal, Gem + Bolt, Holon Lantern, Ember Token, Curator's Frame, Olive Sigil, Cardinal Petal, and Paired Key. Earlier versions of this corpus used \"blade\" as a generic noun for any forged artefact; that conflation is no longer correct.\n\n- The **forge ceremony** is workshop-aware: the popup hero shows the workshop's lattice visual; the verb-noun changes (\"Weave Cloak\", \"Forge(t) Blade\", \"Inscribe Memo Stone\"); the naming-phase emoji palette reflects the artefact class.\n- The **exported `.md`** filename is `<name>-artefact.md` regardless of class. The class lives in the `artefact_class` frontmatter field.\n- The **deviation layer** in the spellweb renders each forged or witnessed artefact as its own `artefact`-typed node in the user's view of the graph — a Sovereign-owned addendum to the canonical universe, connected via an `inhabits` edge to the originating workshop.\n\nWhen this spec or the codebase says \"blade\", read it as \"the weapon-class artefact\" unless context indicates the umbrella.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "50f59d9b4092a04e",
+            "id": "c431bf18dfbc201e",
             "text": "## §1 · What the spellweb does on import\n\nWhen a `.md` is dropped into spellweb's **👁️ Witness Constellation** picker (Artefact Panel · `/`), the witness function runs:\n\n1. Read the file as text.\n2. Parse the YAML frontmatter block (delimited by a leading `---` line and a closing `---` line).\n3. Resolve a **workshop id** from the frontmatter — see §3 for the resolution order.\n4. Set `localStorage['spellweb:witnessed-shops'][<workshop-id>] = ISO timestamp`.\n5. Fire the **fog-of-war** transition — cast members and edges tagged `hiddenUntilWitness: <workshop-id>` fade from 18% silhouette to full presence over 400 ms.\n6. Build a runtime blade record from the markdown body (path, proof, dimensions) for the Sovereign's inventory.\n\nThe frontmatter is the only part that drives **identity**. The rest of the markdown carries the **content** of the ceremony (path, proverbs, proof). Spellweb's body parser is conservative and is documented in §7.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "b675953feacb41e5",
+            "id": "90f02b6735093424",
             "text": "## §2 · The frontmatter block\n\nThe frontmatter is standard YAML, opened by a literal `---` on its own line, closed by another `---`. Spellweb reads it with a regular expression — not a full YAML parser — so the grammar is more restricted than YAML itself. The restrictions are:\n\n- One key per line. No nested maps. No block scalars.\n- Key first, then colon, then a single space, then the value: `key: value`.\n- Values that contain `:`, `#`, leading/trailing whitespace, or any of `&*!|>'\"%@`{}[],` must be wrapped in **double quotes**.\n- Plain `null` is allowed but spellweb treats it as \"field absent\" (same as omitting the line).\n- No comments inside the frontmatter block.\n\nThe frontmatter block must be the **first content in the file** — no shebang, no leading blank line.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "b594f445e3b71aed",
+            "id": "29cb8406ded8250b",
             "text": "## §3 · Workshop resolution order\n\nSpellweb tries three sources, in order. The first that yields a value wins.\n\n| Order | Source | Example |\n|---|---|---|\n| 1 | `workshop:` field in frontmatter | `workshop: shop-tailor` |\n| 2 | `workshop_id:` field (legacy alias) | `workshop_id: shop-tailor` |\n| 3 | `constellation_id:` field, root prefix promoted to `shop-<root>` | `constellation_id: tailor-cloak-weave-v1` → `shop-tailor` |\n| 4 (fallback) | Filename prefix before the first `-` | `tailor-anything.md` → `shop-tailor` |\n\nA file with **none** of these is still readable as a witness artefact but will not unlock a workshop. The fog-of-war on the City of Mages stays in place. The Sovereign can still trace its path; nothing is dropped.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "8647ca50b0ab3689",
+            "id": "b708e5de322ad1ae",
             "text": "## §4 · Field reference\n\n### §4.1 · Required field\n\nThe only field spellweb requires is the workshop anchor.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `workshop` | string (`shop-<route>`) | `shop-tailor` | Must match an `id` of a workshop node in spellweb's graph. See `06-spellweb-first-release-manifest.md` §2.3 for the canonical list. |\n\n### §4.2 · Recommended fields (constellation identity)\n\nThese let spellweb know the template version and let the Sovereign re-export with full fidelity.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `constellation_id` | string | `tailor-cloak-weave-v1` | Stable per template version. Lower-case, dash-separated, ends with `v<N>`. |\n| `constellation_name` | string | `The Cloak Weave` | Human-readable title shown in the spellweb header during evocation. |\n| `constellation_version` | integer | `1` | Bumped per `CEREMONY_EVOLUTION.md` discipline; old versions remain valid. |\n| `workshop_route` | string | `/tailor` | The master URL of the workshop. Used by Artefact Panel hyperlinks. |\n| `workshop_gem` | string | `Amethyst` | Display label. |\n| `workshop_gem_color` | string (hex) | `\"#a78bfa\"` | Drives the gem-color stroke on the spellweb workshop node. **Quoted because `#` is YAML's comment marker.** |\n\n### §4.3 · Recommended fields (resident Mage & anchor act)\n\nThese render the workshop's lore into the Artefact Panel and the artefact.md's inspector card.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `resident_mage` | string (`cast-<name>` or `null`) | `cast-pallia` | Must match a `cast` node id. Gathering shops use `null`. |\n| `mage_sigil` | emoji | `🪡` | Sigil rendered in the Mage's chip. |\n| `mage_vertex` | string (`V<0..63>`) | `V28` | The lattice position the Mage inhabits. |\n| `mage_tier` | enum | `summoned` | One of `archetype` / `cousin` / `summoned` / `companion` / `priest` / `gathering`. |\n| `anchor_act` | string (`act-tome-<v|iv>-<n>`) | `act-tome-v-1` | The act in which the workshop is founded. |\n\n### §4.4 · Recommended fields (artefact)\n\nThese let spellweb's Artefact Panel place the produced artefact in the right inventory tab.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `artefact_name` | string | `Cloak` | Common name. |\n| `artefact_root_name` | string | `Woven Cloak` | Truth-form participle (the past-tense form that names the *witnessed* item). |\n| `artefact_class` | enum | `clothing` | One of `weapon` / `clothing` / `tool` / `trinket` / `tome`. Drives the Panel tab. |\n| `artefact_archetype` | enum | `mage` | `swordsman` / `mage` / `bilateral`. Determines orb assignment in the Witness Unlock cascade. |\n| `artefact_wielder` | string | `cast-soulbae` | `cast-soulbis` / `cast-soulbae` / `both`. |\n\n### §4.5 · Recommended fields (provenance)\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `domain` | enum | `mage` | `swordsman` / `mage` / `shared` / `first_person`. Drives the colour band. |\n| `status` | string | `v1 — first release` | Free text. Shown in the inspector. |\n| `date` | ISO date | `2026-05-10` | ISO 8601 (YYYY-MM-DD). |\n| `license` | string | `CC BY-SA 4.0` | Default `CC BY-SA 4.0` for the City of Mages corpus. |\n| `signature` | string | `\"(⚔️⊥⿻⊥🧙)😊\"` | The corpus seal. **Quoted** because of `(`, `⊥`, etc. |\n| `ceremony_shape` | enum | `run-e-craft` | `run-e-craft` / `bilateral-witness` / `bilateral-consecration` / `gather-and-witness` / `four-cardinal-witness`. |\n\n### §4.6 · Forged-blade fields\n\nThese appear only on a `artefact.md` *exported* from a spellweb forging — never on a master template. They carry the proof and let the Artefact Panel re-display it on re-import.\n\n| Field | Type | Example | Notes |\n|---|---|---|---|\n| `blade_tier` | enum | `heavy` | `light` / `heavy` / `dragon`. |\n| `blade_stratum` | integer 0..6 | `4` | Hamming weight of the blade's hex. |\n| `blade_is_witness` | bool | `true` | Present only when this is a bilateral witness blade (someone else's path you traced). |\n| `blade_signature` | string | `SPELL-AB12CD-EF` | Spellweb signature; format `SPELL-{6}-{2}`. |\n| `blade_hash` | hex string | `4f3a8b...` | Content-hash of the constellation + proof. |\n\n### §4.7 · Forge-specific extension fields\n\nCousin-blade forges (Archon, UOR, human.tech, future) may add their own namespaced fields without breaking spellweb. The rule:\n\n- Add a `forge:` field identifying the forge (e.g. `forge: archon.social`).\n- Prefix custom keys with the forge slug + underscore (e.g. `archon_vertex_proof`, `uor_prism_coords`).\n- Spellweb will ignore unrecognised keys without erroring.\n\nThis is the cousin-blade primitive (C39) made concrete: another forge can carry attribution into the spellweb without the spellweb owning their schema.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "649102163bb1819a",
+            "id": "ecddf98de8cc1e59",
             "text": "## §5 · Examples\n\n### §5.1 · A minimal valid artefact\n\n```markdown\n---\nworkshop: shop-tailor\n---\n\n# My Cloak\n\nI walked the Cloak Weave today.\n```\n\nRe-importing this into spellweb unlocks `shop-tailor` and lifts the fog on Pallia and the Weavers' secret nodes. Nothing else is set.\n\n### §5.2 · A master constellation template (recommended baseline)\n\n```markdown\n---\nconstellation_id: tailor-cloak-weave-v1\nconstellation_name: The Cloak Weave\nconstellation_version: 1\nworkshop: shop-tailor\nworkshop_route: /tailor\nworkshop_gem: Amethyst\nworkshop_gem_color: \"#a78bfa\"\nresident_mage: cast-pallia\nmage_sigil: 🪡\nmage_vertex: V28\nmage_tier: summoned\nanchor_act: act-tome-v-1\nceremony_shape: run-e-craft\nartefact_name: Cloak\nartefact_root_name: Woven Cloak\nartefact_class: clothing\nartefact_archetype: mage\nartefact_wielder: cast-soulbae\ndomain: mage\nstatus: v1 — first release\ndate: 2026-05-10\nlicense: CC BY-SA 4.0\nsignature: \"(⚔️⊥⿻⊥🧙)😊\"\n---\n\n# 🪡 The Cloak Weave\n...\n```\n\nThis is what all eleven workshops at `agentprivacy.ai/<shop>` serve via the **📥 Download constellation.md** affordance.\n\n### §5.3 · A forged artefact.md (what spellweb exports)\n\n```markdown\n---\nconstellation_id: tailor-cloak-weave-v1\nconstellation_name: My Constellation\nconstellation_version: 1\nworkshop: shop-tailor\nworkshop_route: /tailor\nworkshop_gem: Amethyst\nworkshop_gem_color: \"#a78bfa\"\nresident_mage: cast-pallia\nmage_sigil: 🪡\nmage_vertex: V28\nmage_tier: summoned\nanchor_act: act-tome-v-1\nceremony_shape: run-e-craft\nartefact_name: Cloak\nartefact_root_name: Woven Cloak\nartefact_class: clothing\nartefact_archetype: mage\nartefact_wielder: cast-soulbae\ndomain: mage\nblade_tier: heavy\nblade_stratum: 4\nblade_signature: SPELL-9KMN3X-PQ\nblade_hash: 7f4a3b22e9...\ndate: 2026-05-11\nlicense: CC BY-SA 4.0\nsignature: \"(⚔️⊥⿻⊥🧙)😊\"\n---\n\n# 🪡 My Cloak Weave\n...\n```\n\nThis round-trips. Re-importing it into another Sovereign's spellweb unlocks `shop-tailor` for them in **witness mode** — they see the original Sovereign's path traced; their own constellation is unaffected; their inventory gains a bilateral-witness record.\n\n### §5.4 · A cousin-forge artefact (Archon example)\n\n```markdown\n---\nworkshop: shop-tailor\nforge: archon.social\narchon_vertex_proof: <opaque>\nconstellation_id: archon-weaver-tailor-cousin-v1\n---\n\n# Cousin Cloak\n\nRecognised at V28 via the Archon weaver.\n```\n\nSpellweb accepts this. The `forge: archon.social` field surfaces in the inspector as **Forge · archon.social** so the Sovereign sees this artefact is cousin-attributed.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "d0e58c93df05af9e",
+            "id": "6ddefd142d401fd2",
             "text": "## §6 · Filename conventions\n\nThe recommended filename pattern:\n\n```\n<shop-root>-<artefact-or-blade-slug>-v<n>.md\n```\n\nExamples:\n- `tailor-cloak-weave-v1.md` — master template\n- `tailor-my_pallia_cloak-artefact.md` — a forged blade exported by spellweb (the trailing `-artefact.md` is spellweb's own convention)\n- `tailor-cousin-archon-witness-v1.md` — a cousin-forge artefact\n\nThe leading `<shop-root>` is **the filename-only fallback** the spellweb uses when no frontmatter is present. Pick filenames that start with the same root as the workshop slug so the fallback works.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "c3c3b616bc3cb119",
+            "id": "029316df183755bb",
             "text": "## §7 · Body parsing (informational)\n\nSpellweb's body parser pulls these structures from the markdown body when present. None are *required*; their absence does not block witness unlock.\n\n| Body pattern | What spellweb reads | Where it appears in master templates |\n|---|---|---|\n| `**Tier:** <Light\\|Heavy\\|Dragon>` | Blade tier | \"Forged Blade\" section |\n| `**Stratum:** <0..6>` | Hamming weight | Same |\n| `**Charge Level:** <Spark\\|Ember\\|Flame\\|Inferno\\|Dragon>` | Evocation charge | \"Proof of Presence\" |\n| `**Laps:** <n>` | Lap count | Same |\n| `**Duration:** <n>s` | Evocation duration | Same |\n| `Signature: SPELL-XXXXXX-XX` | Cryptographic signature | \"Cryptographic Proof\" |\n| `Hash: <hex>` | Constellation hash | Same |\n| `Hex: <binary>` | Blade hex | Same |\n| `<dim> | ✅` | Dimension active flag | \"Blade Dimensions\" table |\n| `## Constellation Path` then numbered `<emoji> **<node label>**` | Path waypoints | \"Constellation Path\" |\n| `## Connections` then `- <src> → <tgt>` | Edge sequence | \"Connections\" |\n\nSpellweb tolerates extra structure. New sections are ignored gracefully.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "3fcee856bbe090c8",
+            "id": "2717a7e7553381a2",
             "text": "## §8 · Versioning the contract\n\nThis format is `v1`. Bumps to `v2+` follow the same discipline as `CEREMONY_EVOLUTION.md`:\n\n1. **Additive changes** — new optional fields — do not bump the major version. A v1 reader handles them by ignoring unknown keys; the spec records them in a future `§9` addendum.\n2. **Breaking changes** — renaming an existing field, changing its meaning, removing it — bump the major version.\n3. The spellweb keeps a `format_version: <n>` understanding (currently implicit at 1; will become explicit when v2 lands).\n\nMaster templates and the spellweb export both advertise their format via the field set they emit. A v2 spellweb stays compatible with v1 artefacts; a v1 spellweb gracefully ignores v2-only fields.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "90ee4ae59c5706a0",
+            "id": "b425e3985ab555e9",
             "text": "## §9 · The honesty discipline\n\nThe frontmatter is a **statement of fact**, not a marketing surface. Three rules to keep it honest:\n\n- **Don't lie about the workshop.** `workshop:` must match the workshop the .md actually came from. A blade forged via the Forge(t) constellation that says `workshop: shop-tailor` is fraud against the trust system.\n- **Don't fabricate proof.** `blade_signature` and `blade_hash` are content-derived. Don't compose a artefact.md by hand with fake values; spellweb does not yet verify, but the Bakhta Half-Life conjecture (C30–C33) assumes the witness was earned.\n- **Be honest about cousinship.** If you're producing a `.md` from a cousin forge, set `forge:` and prefix your extension keys. The architecture is open by design (C26–C29); the discipline that keeps it open is attribution.\n\nThe spellweb cannot enforce these rules cryptographically yet (Phase 3 verification is future work). For now they're a discipline. The first one who breaks the discipline breaks the trust the City of Mages is built on; the second one just confirms the spellweb's signal is real.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "2299644554bf1984",
+            "id": "631f58cdac19afe1",
             "text": "## §10 · Sibling format: the Swordsman bundle\n\nAlongside per-artefact `.md` files, the spellweb's Swords panel can export a **single bundle** containing the Sovereign's identity plus every forged artefact in one file. This is the carry-the-whole-kit format — useful for backup, transfer, or sharing a Sovereign's full witnessed history.\n\nIt uses a distinct `kind:` marker so any importer can tell them apart from per-artefact files:\n\n```yaml\n---\nkind: swordsman-bundle\nversion: 1\nswordsman_id: <id>\nswordsman_name: <display name>\nmage_id: <mage id>\nblade_count: 7\nwitness_count: 2\nartefact_total: 9\nworkshops_unlocked: 5\nexported_at: 2026-05-12T14:23:00Z\nlicense: CC BY-SA 4.0\nsignature: \"(⚔️⊥⿻⊥🧙)😊\"\n---\n\n# ⚔️ Swordsman Bundle — <name>"
           },
           {
             "type": "markdown",
-            "id": "1f4763d3c60b9089",
+            "id": "e8ec9e4f9392b16e",
             "text": "## Identity\n- **Swordsman:** …\n- **Mage ID:** …"
           },
           {
             "type": "markdown",
-            "id": "0c6b7a905e1b036e",
+            "id": "5e2a5305c1ce5256",
             "text": "## Forged Inventory (N)\n### 1. <emoji> <name>\n- **Tier:** Heavy\n- **Stratum:** 4/6 🌖 (Waning Gibbous)\n- **Forged:** …\n- **Nodes traversed:** N\n#### Dimensions\n| Dimension | Status |\n…\n#### Proof\n```\nSignature: SPELL-…\n…\n```\n#### Path\n1. <emoji> **<node>**\n…\n\n### 2. <next item>\n…\n```\n\nFilename convention: `swordsman-<name>-bundle.md`. Re-importing a bundle is a future feature; for v1 the bundle is an outbound carry-format only. Per-artefact re-import continues to use the regular per-artefact `.md` format (see §§4–7).\n\n---"
           },
           {
             "type": "markdown",
-            "id": "24ada5f60131c85b",
+            "id": "b32cc1f22cc1e277",
             "text": "## §11 · The deviation layer (spellweb-side)\n\nWhen the spellweb imports an artefact `.md` (or completes a forge ceremony), the artefact becomes a **deviation node** in the Sovereign's view of the graph — a runtime-derived `artefact`-typed node attached to the originating workshop via an `inhabits` edge. The canonical NODES list is not mutated; deviation nodes live in the user's localStorage (`forgedBlades`) and appear only in their own browser.\n\nEach deviation node carries:\n\n- **Primary sigil** — the Sovereign's chosen artefact emoji (set during the forge naming phase, themed per artefact class — see master `src/lib/workshop-artefact.ts` for the palettes).\n- **Tier stroke** — circle stroke colour driven by `bladeTier` (light / heavy / dragon).\n- **Spell-emoji corner mark** — small badge in the upper-right when the Sovereign's learned spell vocabulary contains a spell whose vertex matches the workshop's vertex. The badge reads as \"this artefact lives where this spell does.\"\n- **Witness flag** — `isWitness: true` for blades imported from another Sovereign rather than forged in-session.\n\nThe fog-of-war that earlier versions applied to canonical cast members is **retired**: the universe stays fully visible from first load. Witnessing or forging adds *to* the graph, never reveals previously-hidden canonical content.\n\n---"
           },
           {
             "type": "markdown",
-            "id": "3ac201b14c18ef91",
+            "id": "abedf1e1cad696bd",
             "text": "## §12 · Where this spec lives\n\nThe canonical copy is this file (`agentprivacy_master/docs/tomes/specs/09-spellweb-artefact-md-format.md`).\nA mirror lives in the spellweb repo at `spellweb/docs/SPELLWEB_ARTEFACT_MD_FORMAT.md` so spellweb contributors find it locally.\n\nBoth copies must agree. The master is the source of truth; the mirror reflects.\n\n---\n\n`(⚔️⊥⿻⊥🧙)😊` — *The frontmatter is the recognition. The body is the path. The path is the proof.*\n\nCC BY-SA 4.0 · privacymage · 2026-05-11 (updated 2026-05-12)"
           },
           {
             "type": "markdown",
-            "id": "4e90829bd067caa0",
+            "id": "351aa2483a18878b",
             "text": "# Assets"
           },
           {
-            "id": "fc580aa8ca718f36",
+            "id": "a5500e5c3836546e",
             "type": "assets",
             "text": "spec-spellweb-artefact-md-format-the-contract-between-any-md-file-and-the-spellweb-witness-function"
           },
           {
             "type": "markdown",
-            "id": "f202399763411c18",
+            "id": "c137c57b04bb5902",
             "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
           }
         ]
       },
-      "date": 1783867806903
+      "date": 1783905156735
     }
   ]
 }

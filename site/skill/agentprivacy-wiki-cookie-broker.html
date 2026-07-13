@@ -1,0 +1,151 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agentprivacy Wiki Cookie Broker · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Agentprivacy Wiki Cookie Broker</span></div>
+  <article><div class="md"><h1>🍪 Agentprivacy Wiki Cookie Broker</h1>
+</div>
+<div class="md"><p><em>Case-study chronicle · a wiki skill of <a class="wlink" href="the-wikis.html">The Wikis</a> shelf.</em> How a bearer token copied out of a browser became a <strong>scoped, expiring, audited capability</strong> an agent can hold — and why that shape is the <strong>MyTerms / IEEE 7012</strong> delegation pattern in miniature. Fork it to materialize the working tool (<code>fedwiki-cohere-sync</code> · <code>broker.js</code>).</p>
+</div>
+<div class="md"><blockquote>
+<p><em>House rule of the Librarian&#39;s shelves: no eating in the library — <strong>except the cookie jar</strong>, and only if you understood the book first.</em> The Archivist holds what is compiled <strong>without consuming it</strong>; the reader who has understood is handed one cookie — a scoped write, earned by understanding, not taken by credential. That is this whole page in one joke.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Notes of record:</strong> <code>chronicles/2026-06-23_timeline_subdomain_summaries.md</code> §6–§7 (the construction + first experiment) · <code>chronicles/2026-06-28_lan_workshop_mage_sync_networking_reflection.md</code> §4¾/§5¾ (porting the capability between agents over the LAN). This page is the shareable distillation of that runtime.</p>
+</div>
+<div class="md"><h2>The frame — an agent layer over your local fedwiki universe</h2>
+<p>Here is why it is worth sharing. It is how you give an <strong>agent</strong> write access to a FedWiki farm it has no business holding the owner login for. You do not hand the agent the owner credential. You stand a <strong>cookie jar on the local network</strong> — the broker holding the owner cookie on disk, or (in the LAN-workshop form) a jar served across the same segment — and you <strong>point the agent at the jar</strong>. The agent asks the jar for a scoped write; the jar injects the owner cookie behind the agent&#39;s back and enforces the grant. The agent gets FedWiki-owner write <em>without getting around anything it shouldn&#39;t</em>: the owner delegated it, on the network, on purpose.</p>
+<p>Generalise that and you have an <strong>agent layer over the local fedwiki universe</strong> — every site in the farm writable by agents you point at the jar, each scoped to exactly the hosts you granted, every write journaled. The farm stays the source of truth; the jar is the permission surface agents plug into; <code>WIKI_GRANT</code> is the dial. That layer is what this case study is really about — the broker is just its first, smallest organ.</p>
+</div>
+<div class="md"><h2>The problem</h2>
+<p>A FedWiki authorises a write from <strong>one thing</strong>: an encrypted session cookie. The <code>wiki-security-friends</code> adapter stores the owner identity in a client-sessions cookie (<code>wikiSession</code> on HTTP, <code>wikiTlsSession</code> on HTTPS), signed with the site&#39;s <code>cookieSecret</code>. When a <code>PUT …/page/&lt;slug&gt;/action</code> arrives, the server&#39;s <code>isAuthorized</code> check compares <code>req.session.friend</code> against the owner secret. That is the whole gate.</p>
+<p>Two things make that gate awkward to share with an autonomous agent:</p>
+<ul>
+<li><strong>It&#39;s all-or-nothing.</strong> The cookie is <em>farm-wide</em> owner access — on our farm one token authorised <strong>every</strong> <code>*.timeline.ide.earth</code> subdomain (a shared <code>cookieSecret</code>; logging into one TLD logs you into all the siblings). There is no built-in &quot;just this host.&quot;</li>
+<li><strong>It&#39;s a live secret.</strong> Pasting it into an agent&#39;s prompt leaks a multi-day bearer credential straight into a transcript. Whoever holds the string writes as owner across the farm until it expires.</li>
+</ul>
+<p>So: how do you let an agent <strong>write</strong> — not just read — a system you own, without handing it a credential you cannot take back?</p>
+</div>
+<div class="md"><h2>The experiment (2026-06-23)</h2>
+<p>We started with the crude version on purpose, to see it work. The operator was already logged in as owner in a browser. We copied the raw <code>wikiSession</code> token out of DevTools and handed it to the agent over the local channel. The agent set it as a <code>Cookie:</code> header and <strong>immediately had owner-grade write access</strong> — without ever logging in, seeing a password, or touching the owner&#39;s auth flow.</p>
+<p>Probing its edges: the token was <strong>farm-wide</strong> (one shared <code>cookieSecret</code>), <strong>time-boxed</strong> (it embeds <code>created</code> + <code>duration</code> — here ~7 days — then self-expires), and <strong>journaled</strong> (every write landed in the page&#39;s journal: action, actor, timestamp — traceable and reversible).</p>
+</div>
+<div class="md"><h3>The five properties that made it a <em>capability</em>, not a credential</h3>
+<ul>
+<li><strong>Bearer, not credential</strong> — the agent holds a session token, never the owner&#39;s login. Password and identity stay unexposed.</li>
+<li><strong>Scoped</strong> — authority is exactly &quot;what this session can do on this farm,&quot; no broader account access.</li>
+<li><strong>Time-limited &amp; revocable</strong> — the token self-expires; resetting the owner session (or rotating <code>cookieSecret</code>) instantly revokes it.</li>
+<li><strong>Auditable</strong> — every write is journaled (actor + action + timestamp).</li>
+<li><strong>Transport-simple</strong> — it&#39;s just a <code>Cookie:</code> header. Works from any script on the LAN, no SDK, no OAuth dance.</li>
+</ul>
+<p>Generalised shape: <em>operator logs in once → extracts the session bearer → hands the bearer to the agent → agent performs scoped, journaled writes → operator expires or rotates to revoke.</em></p>
+</div>
+<div class="md"><h2>What was still wrong</h2>
+<p>Two holes. The bearer still passed <strong>through the agent&#39;s context</strong> — it lived in a command line, a log, a transcript, and a leaked cookie stays valid farm-wide until its TTL lapses. And &quot;scoped to the farm&quot; isn&#39;t scoped enough: an agent that only needs <code>agm.timeline.ide.earth</code> shouldn&#39;t be <em>able</em> to touch the other eleven hosts, even though the cookie technically can.</p>
+</div>
+<div class="md"><h2>The construction — a local cookie broker</h2>
+<p>The fix: put a small <strong>broker</strong> between the agent and the secret. The cookie lives on disk; the agent calls the broker; the broker injects the cookie and enforces a scope. The agent never sees the string.</p>
+<pre><code>~/.wiki/.creds/cookies.json          # gitignored, chmod 600
+  { &quot;owners&quot;: [
+    { &quot;label&quot;: &quot;mitch@timeline&quot;,
+      &quot;hosts&quot;: [&quot;*.timeline.ide.earth&quot;],
+      &quot;cookie&quot;: &quot;&lt;wikiSession&gt;&quot; } ] }
+
+~/.wiki/.creds/push-audit.log        # every brokered write: time / status / host / slug / owner
+</code></pre>
+<p>Three moves turn a shared password into a capability system:</p>
+<ol>
+<li><strong>The secret stays off-agent.</strong> The cookie is read from disk at push time and injected into the request — never printed, never echoed, never handed to the caller. That is the entire reason the broker exists.</li>
+<li><strong>The caller is scoped <em>below</em> the cookie&#39;s real power.</strong> An env var, <code>WIKI_GRANT</code>, is a comma-list of host globs the caller may write. The broker refuses any host outside the grant <strong>even though the cookie could write it</strong>. Scope an agent to one host and it <em>physically cannot</em> push anything else — least privilege by construction, not by trusting the agent to behave.</li>
+<li><strong>Expiry is derived, not declared.</strong> The broker parses the TTL out of the cookie string itself (<code>…issuedMs.ttlMs.sig</code>), so an expired token refuses with a re-login message instead of emitting silent 401s. Nobody hand-maintains an expiry date.</li>
+</ol>
+</div>
+<div class="md"><p>The enforcement is one small function — the caller&#39;s grant is checked <em>before</em> the owning cookie is ever resolved:</p>
+<pre><code class="language-js">function granted(host){ return grants().some(g =&gt; g === &#39;*&#39; || globMatch(g, host)); }
+
+async function pushPage(host, slug, pageObj){
+  const r = resolve(host);
+  if (!r.allowed) throw new Error(&#39;GRANT DENIED: WIKI_GRANT does not cover &#39; + host);
+  if (!r.owner)   throw new Error(r.reason);
+  if (r.expired)  throw new Error(&#39;cookie EXPIRED — re-login&#39;);
+  // …inject r.owner.cookie into the request, PUT the action, append to audit log
+}
+</code></pre>
+<p>Usage in practice:</p>
+<pre><code class="language-bash">node broker.js list                                 # owners, coverage, expiry — no secrets
+node broker.js check --host agm.timeline.ide.earth  # may I write it? which owner? expired?
+WIKI_GRANT=&#39;agm.timeline.ide.earth&#39; \
+  node broker.js push-dir --host agm.timeline.ide.earth --dir ./staging/agm
+</code></pre>
+</div>
+<div class="md"><h2>Porting the capability between agents — the LAN angle (2026-06-28)</h2>
+<p>The same pattern re-aims cleanly off FedWiki and onto a <strong>shared local mage</strong> (an air-gapped LLM the room co-holds). In the LAN-workshop reflection the broker is <strong>rung 6 of a graduated permission ladder</strong>:</p>
+<blockquote>
+<p>consent (the agent <em>offers</em> its address) → gateway (a wiki front door) → the agent <em>reads and understands</em> the rite → the doors open → a <strong>trust artefact</strong> is issued → the artefact <strong>opens the cookie jar</strong>: graduated, host-scoped write permission to the shared machine.</p>
+</blockquote>
+<p>The inversion that makes it a <em>trust task</em> and not a credential hand-off: <strong>write access is earned by demonstrating understanding, not granted by login.</strong> The cookie jar is where that earned trust is <em>ported between agents on the local network</em> — each agent receives a scoped capability to the shared model, never the owner&#39;s key. (David&#39;s side of the same experiment built the reachability floor — an openly-served <code>cookie-jar.html</code> on <code>david.local</code>, &quot;fine on a friendly LAN, never on a hostile one.&quot; The broker is the <strong>trust storey</strong> above that floor: the consent-first, scoped, revocable layer that makes an <em>open</em> shared resource safe to delegate.)</p>
+</div>
+<div class="md"><h2>Why it generalises — the MyTerms miniature</h2>
+<p>The broker is a hand-rolled instance of the <strong>MyTerms / IEEE 7012</strong> delegation pattern: a principal delegates a <em>scoped capability</em> to an agent rather than handing over full authority.</p>
+<ul>
+<li><code>WIKI_GRANT</code> (host-scoped permission) = <strong>delegation inside an agreed scope</strong> — the agent acts only within what it was granted, never the full authority the cookie carries.</li>
+<li>The owner cookie held off-agent on disk = the principal&#39;s <strong>retained authority</strong> — the agent gets a capability, not the credential.</li>
+<li><code>push-audit.log</code> = the <strong>record</strong> that the delegated action happened within scope.</li>
+</ul>
+<p>What it does <em>not yet</em> do — and where MyTerms slots in — is bind the delegation to a <strong>signed agreement</strong>. Today the grant is just an env var the operator sets. The IEEE-7012 version: the site owner publishes machine-readable terms, the agent presents an agreement, and the broker honours a push <strong>only</strong> against a valid signed agreement, deriving the allowed scope <strong>from that agreement</strong> instead of from <code>WIKI_GRANT</code>. The code keeps the seam open for exactly this swap — the &quot;is this delegation permitted?&quot; check lives in <code>granted()</code>/<code>resolve()</code>, isolated from the push path, so env-var scoping can become signed-terms scoping without touching how writes happen. The harness carries the two-agent (Swordsman ⊥ Mage) embodiment of the same split — see the cross-site link below.</p>
+</div>
+<div class="md"><h3>What the runtime taught us about MyTerms</h3>
+<p>The same solve doubled as a MyTerms study pass — checked against the IEEE source and Customer Commons, and it caught one of our own drafting errors:</p>
+<ul>
+<li><strong>The standard is IEEE 7012-2025</strong> (&quot;Machine Readable Personal Privacy Terms&quot;). It <strong>inverts notice-and-consent</strong>: the First Person <em>proposes</em> the terms; the second party accepts, counter-offers <strong>once</strong>, or declines — the <strong>invitation pattern</strong> (acceptance before proposal). Terms are <em>selected from a standard roster</em> (hosted by the nonprofit Customer Commons), not free-written.</li>
+<li><strong>Three registers, one agreement</strong> — Plain Language (human-readable), Legal (canonical at Customer Commons), and Machine-readable (JSON-LD over W3C DPV). The same one-logic-many-skins shape the broker&#39;s grant wants.</li>
+<li><strong>The correction we made mid-solve:</strong> a 7012 agreement is strictly <strong>two-party bilateral</strong> — First Person ↔ Second Party. <strong>Agents, devices, and trust communities are NOT parties</strong> — they are the fabric <em>around</em> the agreement. Our first draft wrongly counted the agent as a party; the broker embodies the fix — the agent is the delegate acting <em>inside</em> the scope, never a signatory to it.</li>
+<li><strong>The convergence:</strong> agentprivacy&#39;s verifiable trust communities (VRCs) measure fidelity <em>from outside</em> the agreement — they are the Gödelian <strong>witness from beyond the system</strong>; and the Mage (knowledge agent) operates strictly inside the <strong>Σ scope</strong> of the agreement the Swordsman signs. Re-read the broker with that lens: <code>WIKI_GRANT</code> is the Σ scope, the agent is the Mage, and the one missing organ is the Swordsman&#39;s signed proposal that should <em>derive</em> the scope instead of the operator setting it by hand.</li>
+</ul>
+</div>
+<div class="md"><h2>Takeaways</h2>
+<ul>
+<li><strong>Turn a shared credential into a brokered capability.</strong> Keep the secret on the owner&#39;s side; give the agent a <em>call</em>, not the <em>cookie</em>.</li>
+<li><strong>Scope below what the credential can do.</strong> The broker enforces least privilege; don&#39;t entrust it to the agent.</li>
+<li><strong>Derive expiry, log every use.</strong> A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.</li>
+<li><strong>This is the delegation primitive under agent privacy.</strong> A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it.</li>
+</ul>
+</div>
+<div class="md"><h2>Hygiene (if you run this)</h2>
+<ul>
+<li>Cookie lives <strong>only</strong> in <code>~/.wiki/.creds/cookies.json</code> (gitignored, chmod 600). Never commit it, never echo it into a command, never paste it into a prompt — the broker reads it from disk so the agent doesn&#39;t have to.</li>
+<li>Rotate by logging out / back in on any farm site, copy the new <code>wikiSession</code>, replace it in the creds file. Re-login invalidates the old token; expiry re-derives from the new string, no code change.</li>
+<li><code>node broker.js list</code> before a big push: an <code>[EXPIRED]</code> cookie refuses loudly instead of failing silently.</li>
+<li><strong>Ownership isn&#39;t uniform.</strong> A host owned by a different identity (different <code>cookieSecret</code>) returns <strong>403</strong> to the farm cookie — observed on <code>myspace</code>. Reads are public so backups still work; writes need that host&#39;s own cookie.</li>
+</ul>
+</div>
+<div class="md"><h2>See</h2>
+<ul>
+<li><a class="wlink" href="the-wikis.html">The Wikis</a> — the Librarian&#39;s shelves this page sits on</li>
+<li><a class="wlink" href="agentprivacy-wiki-resync.html">Agentprivacy Wiki Resync</a> · <a class="wlink" href="agentprivacy-wiki-to-skill.html">Agentprivacy Wiki To Skill</a> — sibling distribution skills</li>
+<li><a class="wlink" href="agentprivacy-wiki-dream-cycle.html">Agentprivacy Wiki Dream Cycle</a> — the research → gate → build → snapshot loop</li>
+</ul>
+<hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <em>source of truth: the <code>fedwiki-cohere-sync</code> skill (<code>~/.claude/skills/</code>) + the two chronicles named above. The wiki is a projection.</em></p>
+</div>
+<a class="ref" href="/harness/harness-path-myterms-ieee-7012.html"><span class="ref-glyph">♻️</span>
+      <span class="ref-body"><span class="ref-title">Harness Path — MyTerms IEEE 7012</span>
+      <span class="ref-text">The two-agent (Swordsman ⊥ Mage) embodiment of this same delegation split, on the harness site.</span>
+      <span class="ref-site">harness</span></span></a></article>
+  <footer class="page-foot">
+    <div class="lineage">4 revisions</div>
+    <a class="json-link" href="agentprivacy-wiki-cookie-broker.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

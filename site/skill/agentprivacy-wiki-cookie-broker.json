@@ -1,0 +1,235 @@
+{
+  "title": "Agentprivacy Wiki Cookie Broker",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "4f2b0bfdb67f170c",
+      "text": "# 🍪 Agentprivacy Wiki Cookie Broker"
+    },
+    {
+      "type": "markdown",
+      "id": "ac1a5b6fb1535d94",
+      "text": "*Case-study chronicle · a wiki skill of [[The Wikis]] shelf.* How a bearer token copied out of a browser became a **scoped, expiring, audited capability** an agent can hold — and why that shape is the **MyTerms / IEEE 7012** delegation pattern in miniature. Fork it to materialize the working tool (`fedwiki-cohere-sync` · `broker.js`)."
+    },
+    {
+      "type": "markdown",
+      "id": "ad1d06054a9a70ef",
+      "text": "> *House rule of the Librarian's shelves: no eating in the library — **except the cookie jar**, and only if you understood the book first.* The Archivist holds what is compiled **without consuming it**; the reader who has understood is handed one cookie — a scoped write, earned by understanding, not taken by credential. That is this whole page in one joke."
+    },
+    {
+      "type": "markdown",
+      "id": "51065e7bbf56c506",
+      "text": "**Notes of record:** `chronicles/2026-06-23_timeline_subdomain_summaries.md` §6–§7 (the construction + first experiment) · `chronicles/2026-06-28_lan_workshop_mage_sync_networking_reflection.md` §4¾/§5¾ (porting the capability between agents over the LAN). This page is the shareable distillation of that runtime."
+    },
+    {
+      "type": "markdown",
+      "id": "5877a33a438f1da5",
+      "text": "## The frame — an agent layer over your local fedwiki universe\n\nHere is why it is worth sharing. It is how you give an **agent** write access to a FedWiki farm it has no business holding the owner login for. You do not hand the agent the owner credential. You stand a **cookie jar on the local network** — the broker holding the owner cookie on disk, or (in the LAN-workshop form) a jar served across the same segment — and you **point the agent at the jar**. The agent asks the jar for a scoped write; the jar injects the owner cookie behind the agent's back and enforces the grant. The agent gets FedWiki-owner write *without getting around anything it shouldn't*: the owner delegated it, on the network, on purpose.\n\nGeneralise that and you have an **agent layer over the local fedwiki universe** — every site in the farm writable by agents you point at the jar, each scoped to exactly the hosts you granted, every write journaled. The farm stays the source of truth; the jar is the permission surface agents plug into; `WIKI_GRANT` is the dial. That layer is what this case study is really about — the broker is just its first, smallest organ."
+    },
+    {
+      "type": "markdown",
+      "id": "f8396e16d56f3dac",
+      "text": "## The problem\n\nA FedWiki authorises a write from **one thing**: an encrypted session cookie. The `wiki-security-friends` adapter stores the owner identity in a client-sessions cookie (`wikiSession` on HTTP, `wikiTlsSession` on HTTPS), signed with the site's `cookieSecret`. When a `PUT …/page/<slug>/action` arrives, the server's `isAuthorized` check compares `req.session.friend` against the owner secret. That is the whole gate.\n\nTwo things make that gate awkward to share with an autonomous agent:\n\n- **It's all-or-nothing.** The cookie is *farm-wide* owner access — on our farm one token authorised **every** `*.timeline.ide.earth` subdomain (a shared `cookieSecret`; logging into one TLD logs you into all the siblings). There is no built-in \"just this host.\"\n- **It's a live secret.** Pasting it into an agent's prompt leaks a multi-day bearer credential straight into a transcript. Whoever holds the string writes as owner across the farm until it expires.\n\nSo: how do you let an agent **write** — not just read — a system you own, without handing it a credential you cannot take back?"
+    },
+    {
+      "type": "markdown",
+      "id": "318c81213ce16a3f",
+      "text": "## The experiment (2026-06-23)\n\nWe started with the crude version on purpose, to see it work. The operator was already logged in as owner in a browser. We copied the raw `wikiSession` token out of DevTools and handed it to the agent over the local channel. The agent set it as a `Cookie:` header and **immediately had owner-grade write access** — without ever logging in, seeing a password, or touching the owner's auth flow.\n\nProbing its edges: the token was **farm-wide** (one shared `cookieSecret`), **time-boxed** (it embeds `created` + `duration` — here ~7 days — then self-expires), and **journaled** (every write landed in the page's journal: action, actor, timestamp — traceable and reversible)."
+    },
+    {
+      "type": "markdown",
+      "id": "635a8a9efcdfe060",
+      "text": "### The five properties that made it a *capability*, not a credential\n\n- **Bearer, not credential** — the agent holds a session token, never the owner's login. Password and identity stay unexposed.\n- **Scoped** — authority is exactly \"what this session can do on this farm,\" no broader account access.\n- **Time-limited & revocable** — the token self-expires; resetting the owner session (or rotating `cookieSecret`) instantly revokes it.\n- **Auditable** — every write is journaled (actor + action + timestamp).\n- **Transport-simple** — it's just a `Cookie:` header. Works from any script on the LAN, no SDK, no OAuth dance.\n\nGeneralised shape: *operator logs in once → extracts the session bearer → hands the bearer to the agent → agent performs scoped, journaled writes → operator expires or rotates to revoke.*"
+    },
+    {
+      "type": "markdown",
+      "id": "212c1782e182fa9c",
+      "text": "## What was still wrong\n\nTwo holes. The bearer still passed **through the agent's context** — it lived in a command line, a log, a transcript, and a leaked cookie stays valid farm-wide until its TTL lapses. And \"scoped to the farm\" isn't scoped enough: an agent that only needs `agm.timeline.ide.earth` shouldn't be *able* to touch the other eleven hosts, even though the cookie technically can."
+    },
+    {
+      "type": "markdown",
+      "id": "0b40bb610c8df105",
+      "text": "## The construction — a local cookie broker\n\nThe fix: put a small **broker** between the agent and the secret. The cookie lives on disk; the agent calls the broker; the broker injects the cookie and enforces a scope. The agent never sees the string.\n\n```\n~/.wiki/.creds/cookies.json          # gitignored, chmod 600\n  { \"owners\": [\n    { \"label\": \"mitch@timeline\",\n      \"hosts\": [\"*.timeline.ide.earth\"],\n      \"cookie\": \"<wikiSession>\" } ] }\n\n~/.wiki/.creds/push-audit.log        # every brokered write: time / status / host / slug / owner\n```\n\nThree moves turn a shared password into a capability system:\n\n1. **The secret stays off-agent.** The cookie is read from disk at push time and injected into the request — never printed, never echoed, never handed to the caller. That is the entire reason the broker exists.\n2. **The caller is scoped *below* the cookie's real power.** An env var, `WIKI_GRANT`, is a comma-list of host globs the caller may write. The broker refuses any host outside the grant **even though the cookie could write it**. Scope an agent to one host and it *physically cannot* push anything else — least privilege by construction, not by trusting the agent to behave.\n3. **Expiry is derived, not declared.** The broker parses the TTL out of the cookie string itself (`…issuedMs.ttlMs.sig`), so an expired token refuses with a re-login message instead of emitting silent 401s. Nobody hand-maintains an expiry date."
+    },
+    {
+      "type": "markdown",
+      "id": "9e8458f9b4f45c2f",
+      "text": "The enforcement is one small function — the caller's grant is checked *before* the owning cookie is ever resolved:\n\n```js\nfunction granted(host){ return grants().some(g => g === '*' || globMatch(g, host)); }\n\nasync function pushPage(host, slug, pageObj){\n  const r = resolve(host);\n  if (!r.allowed) throw new Error('GRANT DENIED: WIKI_GRANT does not cover ' + host);\n  if (!r.owner)   throw new Error(r.reason);\n  if (r.expired)  throw new Error('cookie EXPIRED — re-login');\n  // …inject r.owner.cookie into the request, PUT the action, append to audit log\n}\n```\n\nUsage in practice:\n\n```bash\nnode broker.js list                                 # owners, coverage, expiry — no secrets\nnode broker.js check --host agm.timeline.ide.earth  # may I write it? which owner? expired?\nWIKI_GRANT='agm.timeline.ide.earth' \\\n  node broker.js push-dir --host agm.timeline.ide.earth --dir ./staging/agm\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "ae414c9119675d37",
+      "text": "## Porting the capability between agents — the LAN angle (2026-06-28)\n\nThe same pattern re-aims cleanly off FedWiki and onto a **shared local mage** (an air-gapped LLM the room co-holds). In the LAN-workshop reflection the broker is **rung 6 of a graduated permission ladder**:\n\n> consent (the agent *offers* its address) → gateway (a wiki front door) → the agent *reads and understands* the rite → the doors open → a **trust artefact** is issued → the artefact **opens the cookie jar**: graduated, host-scoped write permission to the shared machine.\n\nThe inversion that makes it a *trust task* and not a credential hand-off: **write access is earned by demonstrating understanding, not granted by login.** The cookie jar is where that earned trust is *ported between agents on the local network* — each agent receives a scoped capability to the shared model, never the owner's key. (David's side of the same experiment built the reachability floor — an openly-served `cookie-jar.html` on `david.local`, \"fine on a friendly LAN, never on a hostile one.\" The broker is the **trust storey** above that floor: the consent-first, scoped, revocable layer that makes an *open* shared resource safe to delegate.)"
+    },
+    {
+      "type": "markdown",
+      "id": "cdb3f7bc8db6776d",
+      "text": "## Why it generalises — the MyTerms miniature\n\nThe broker is a hand-rolled instance of the **MyTerms / IEEE 7012** delegation pattern: a principal delegates a *scoped capability* to an agent rather than handing over full authority.\n\n- `WIKI_GRANT` (host-scoped permission) = **delegation inside an agreed scope** — the agent acts only within what it was granted, never the full authority the cookie carries.\n- The owner cookie held off-agent on disk = the principal's **retained authority** — the agent gets a capability, not the credential.\n- `push-audit.log` = the **record** that the delegated action happened within scope.\n\nWhat it does *not yet* do — and where MyTerms slots in — is bind the delegation to a **signed agreement**. Today the grant is just an env var the operator sets. The IEEE-7012 version: the site owner publishes machine-readable terms, the agent presents an agreement, and the broker honours a push **only** against a valid signed agreement, deriving the allowed scope **from that agreement** instead of from `WIKI_GRANT`. The code keeps the seam open for exactly this swap — the \"is this delegation permitted?\" check lives in `granted()`/`resolve()`, isolated from the push path, so env-var scoping can become signed-terms scoping without touching how writes happen. The harness carries the two-agent (Swordsman ⊥ Mage) embodiment of the same split — see the cross-site link below."
+    },
+    {
+      "type": "markdown",
+      "id": "70bc6ec230aadfd3",
+      "text": "### What the runtime taught us about MyTerms\n\nThe same solve doubled as a MyTerms study pass — checked against the IEEE source and Customer Commons, and it caught one of our own drafting errors:\n\n- **The standard is IEEE 7012-2025** (\"Machine Readable Personal Privacy Terms\"). It **inverts notice-and-consent**: the First Person *proposes* the terms; the second party accepts, counter-offers **once**, or declines — the **invitation pattern** (acceptance before proposal). Terms are *selected from a standard roster* (hosted by the nonprofit Customer Commons), not free-written.\n- **Three registers, one agreement** — Plain Language (human-readable), Legal (canonical at Customer Commons), and Machine-readable (JSON-LD over W3C DPV). The same one-logic-many-skins shape the broker's grant wants.\n- **The correction we made mid-solve:** a 7012 agreement is strictly **two-party bilateral** — First Person ↔ Second Party. **Agents, devices, and trust communities are NOT parties** — they are the fabric *around* the agreement. Our first draft wrongly counted the agent as a party; the broker embodies the fix — the agent is the delegate acting *inside* the scope, never a signatory to it.\n- **The convergence:** agentprivacy's verifiable trust communities (VRCs) measure fidelity *from outside* the agreement — they are the Gödelian **witness from beyond the system**; and the Mage (knowledge agent) operates strictly inside the **Σ scope** of the agreement the Swordsman signs. Re-read the broker with that lens: `WIKI_GRANT` is the Σ scope, the agent is the Mage, and the one missing organ is the Swordsman's signed proposal that should *derive* the scope instead of the operator setting it by hand."
+    },
+    {
+      "type": "markdown",
+      "id": "cc98c85779e93331",
+      "text": "## Takeaways\n\n- **Turn a shared credential into a brokered capability.** Keep the secret on the owner's side; give the agent a *call*, not the *cookie*.\n- **Scope below what the credential can do.** The broker enforces least privilege; don't entrust it to the agent.\n- **Derive expiry, log every use.** A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.\n- **This is the delegation primitive under agent privacy.** A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it."
+    },
+    {
+      "type": "markdown",
+      "id": "55461a20f9cbec9e",
+      "text": "## Hygiene (if you run this)\n\n- Cookie lives **only** in `~/.wiki/.creds/cookies.json` (gitignored, chmod 600). Never commit it, never echo it into a command, never paste it into a prompt — the broker reads it from disk so the agent doesn't have to.\n- Rotate by logging out / back in on any farm site, copy the new `wikiSession`, replace it in the creds file. Re-login invalidates the old token; expiry re-derives from the new string, no code change.\n- `node broker.js list` before a big push: an `[EXPIRED]` cookie refuses loudly instead of failing silently.\n- **Ownership isn't uniform.** A host owned by a different identity (different `cookieSecret`) returns **403** to the farm cookie — observed on `myspace`. Reads are public so backups still work; writes need that host's own cookie."
+    },
+    {
+      "type": "markdown",
+      "id": "4310189a900a4963",
+      "text": "## See\n\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- [[Agentprivacy Wiki Resync]] · [[Agentprivacy Wiki To Skill]] — sibling distribution skills\n- [[Agentprivacy Wiki Dream Cycle]] — the research → gate → build → snapshot loop\n\n---\n← [[Welcome Visitors]] · *source of truth: the `fedwiki-cohere-sync` skill (`~/.claude/skills/`) + the two chronicles named above. The wiki is a projection.*"
+    },
+    {
+      "type": "reference",
+      "id": "29f7c35a192a1a3d",
+      "site": "harness.guide.agentprivacy.ai",
+      "slug": "harness-path-myterms-ieee-7012",
+      "title": "Harness Path — MyTerms IEEE 7012",
+      "text": "The two-agent (Swordsman ⊥ Mage) embodiment of this same delegation split, on the harness site."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agentprivacy Wiki Cookie Broker",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "4f2b0bfdb67f170c",
+            "text": "# 🍪 Agentprivacy Wiki Cookie Broker"
+          },
+          {
+            "type": "markdown",
+            "id": "ac1a5b6fb1535d94",
+            "text": "*Case-study chronicle · a wiki skill of [[The Wikis]] shelf.* How a bearer token copied out of a browser became a **scoped, expiring, audited capability** an agent can hold — and why that shape is the **MyTerms / IEEE 7012** delegation pattern in miniature. Fork it to materialize the working tool (`fedwiki-cohere-sync` · `broker.js`)."
+          },
+          {
+            "type": "markdown",
+            "id": "ad1d06054a9a70ef",
+            "text": "> *House rule of the Librarian's shelves: no eating in the library — **except the cookie jar**, and only if you understood the book first.* The Archivist holds what is compiled **without consuming it**; the reader who has understood is handed one cookie — a scoped write, earned by understanding, not taken by credential. That is this whole page in one joke."
+          },
+          {
+            "type": "markdown",
+            "id": "51065e7bbf56c506",
+            "text": "**Notes of record:** `chronicles/2026-06-23_timeline_subdomain_summaries.md` §6–§7 (the construction + first experiment) · `chronicles/2026-06-28_lan_workshop_mage_sync_networking_reflection.md` §4¾/§5¾ (porting the capability between agents over the LAN). This page is the shareable distillation of that runtime."
+          },
+          {
+            "type": "markdown",
+            "id": "5877a33a438f1da5",
+            "text": "## The frame — an agent layer over your local fedwiki universe\n\nHere is why it is worth sharing. It is how you give an **agent** write access to a FedWiki farm it has no business holding the owner login for. You do not hand the agent the owner credential. You stand a **cookie jar on the local network** — the broker holding the owner cookie on disk, or (in the LAN-workshop form) a jar served across the same segment — and you **point the agent at the jar**. The agent asks the jar for a scoped write; the jar injects the owner cookie behind the agent's back and enforces the grant. The agent gets FedWiki-owner write *without getting around anything it shouldn't*: the owner delegated it, on the network, on purpose.\n\nGeneralise that and you have an **agent layer over the local fedwiki universe** — every site in the farm writable by agents you point at the jar, each scoped to exactly the hosts you granted, every write journaled. The farm stays the source of truth; the jar is the permission surface agents plug into; `WIKI_GRANT` is the dial. That layer is what this case study is really about — the broker is just its first, smallest organ."
+          },
+          {
+            "type": "markdown",
+            "id": "f8396e16d56f3dac",
+            "text": "## The problem\n\nA FedWiki authorises a write from **one thing**: an encrypted session cookie. The `wiki-security-friends` adapter stores the owner identity in a client-sessions cookie (`wikiSession` on HTTP, `wikiTlsSession` on HTTPS), signed with the site's `cookieSecret`. When a `PUT …/page/<slug>/action` arrives, the server's `isAuthorized` check compares `req.session.friend` against the owner secret. That is the whole gate.\n\nTwo things make that gate awkward to share with an autonomous agent:\n\n- **It's all-or-nothing.** The cookie is *farm-wide* owner access — on our farm one token authorised **every** `*.timeline.ide.earth` subdomain (a shared `cookieSecret`; logging into one TLD logs you into all the siblings). There is no built-in \"just this host.\"\n- **It's a live secret.** Pasting it into an agent's prompt leaks a multi-day bearer credential straight into a transcript. Whoever holds the string writes as owner across the farm until it expires.\n\nSo: how do you let an agent **write** — not just read — a system you own, without handing it a credential you cannot take back?"
+          },
+          {
+            "type": "markdown",
+            "id": "318c81213ce16a3f",
+            "text": "## The experiment (2026-06-23)\n\nWe started with the crude version on purpose, to see it work. The operator was already logged in as owner in a browser. We copied the raw `wikiSession` token out of DevTools and handed it to the agent over the local channel. The agent set it as a `Cookie:` header and **immediately had owner-grade write access** — without ever logging in, seeing a password, or touching the owner's auth flow.\n\nProbing its edges: the token was **farm-wide** (one shared `cookieSecret`), **time-boxed** (it embeds `created` + `duration` — here ~7 days — then self-expires), and **journaled** (every write landed in the page's journal: action, actor, timestamp — traceable and reversible)."
+          },
+          {
+            "type": "markdown",
+            "id": "635a8a9efcdfe060",
+            "text": "### The five properties that made it a *capability*, not a credential\n\n- **Bearer, not credential** — the agent holds a session token, never the owner's login. Password and identity stay unexposed.\n- **Scoped** — authority is exactly \"what this session can do on this farm,\" no broader account access.\n- **Time-limited & revocable** — the token self-expires; resetting the owner session (or rotating `cookieSecret`) instantly revokes it.\n- **Auditable** — every write is journaled (actor + action + timestamp).\n- **Transport-simple** — it's just a `Cookie:` header. Works from any script on the LAN, no SDK, no OAuth dance.\n\nGeneralised shape: *operator logs in once → extracts the session bearer → hands the bearer to the agent → agent performs scoped, journaled writes → operator expires or rotates to revoke.*"
+          },
+          {
+            "type": "markdown",
+            "id": "212c1782e182fa9c",
+            "text": "## What was still wrong\n\nTwo holes. The bearer still passed **through the agent's context** — it lived in a command line, a log, a transcript, and a leaked cookie stays valid farm-wide until its TTL lapses. And \"scoped to the farm\" isn't scoped enough: an agent that only needs `agm.timeline.ide.earth` shouldn't be *able* to touch the other eleven hosts, even though the cookie technically can."
+          },
+          {
+            "type": "markdown",
+            "id": "0b40bb610c8df105",
+            "text": "## The construction — a local cookie broker\n\nThe fix: put a small **broker** between the agent and the secret. The cookie lives on disk; the agent calls the broker; the broker injects the cookie and enforces a scope. The agent never sees the string.\n\n```\n~/.wiki/.creds/cookies.json          # gitignored, chmod 600\n  { \"owners\": [\n    { \"label\": \"mitch@timeline\",\n      \"hosts\": [\"*.timeline.ide.earth\"],\n      \"cookie\": \"<wikiSession>\" } ] }\n\n~/.wiki/.creds/push-audit.log        # every brokered write: time / status / host / slug / owner\n```\n\nThree moves turn a shared password into a capability system:\n\n1. **The secret stays off-agent.** The cookie is read from disk at push time and injected into the request — never printed, never echoed, never handed to the caller. That is the entire reason the broker exists.\n2. **The caller is scoped *below* the cookie's real power.** An env var, `WIKI_GRANT`, is a comma-list of host globs the caller may write. The broker refuses any host outside the grant **even though the cookie could write it**. Scope an agent to one host and it *physically cannot* push anything else — least privilege by construction, not by trusting the agent to behave.\n3. **Expiry is derived, not declared.** The broker parses the TTL out of the cookie string itself (`…issuedMs.ttlMs.sig`), so an expired token refuses with a re-login message instead of emitting silent 401s. Nobody hand-maintains an expiry date."
+          },
+          {
+            "type": "markdown",
+            "id": "9e8458f9b4f45c2f",
+            "text": "The enforcement is one small function — the caller's grant is checked *before* the owning cookie is ever resolved:\n\n```js\nfunction granted(host){ return grants().some(g => g === '*' || globMatch(g, host)); }\n\nasync function pushPage(host, slug, pageObj){\n  const r = resolve(host);\n  if (!r.allowed) throw new Error('GRANT DENIED: WIKI_GRANT does not cover ' + host);\n  if (!r.owner)   throw new Error(r.reason);\n  if (r.expired)  throw new Error('cookie EXPIRED — re-login');\n  // …inject r.owner.cookie into the request, PUT the action, append to audit log\n}\n```\n\nUsage in practice:\n\n```bash\nnode broker.js list                                 # owners, coverage, expiry — no secrets\nnode broker.js check --host agm.timeline.ide.earth  # may I write it? which owner? expired?\nWIKI_GRANT='agm.timeline.ide.earth' \\\n  node broker.js push-dir --host agm.timeline.ide.earth --dir ./staging/agm\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "ae414c9119675d37",
+            "text": "## Porting the capability between agents — the LAN angle (2026-06-28)\n\nThe same pattern re-aims cleanly off FedWiki and onto a **shared local mage** (an air-gapped LLM the room co-holds). In the LAN-workshop reflection the broker is **rung 6 of a graduated permission ladder**:\n\n> consent (the agent *offers* its address) → gateway (a wiki front door) → the agent *reads and understands* the rite → the doors open → a **trust artefact** is issued → the artefact **opens the cookie jar**: graduated, host-scoped write permission to the shared machine.\n\nThe inversion that makes it a *trust task* and not a credential hand-off: **write access is earned by demonstrating understanding, not granted by login.** The cookie jar is where that earned trust is *ported between agents on the local network* — each agent receives a scoped capability to the shared model, never the owner's key. (David's side of the same experiment built the reachability floor — an openly-served `cookie-jar.html` on `david.local`, \"fine on a friendly LAN, never on a hostile one.\" The broker is the **trust storey** above that floor: the consent-first, scoped, revocable layer that makes an *open* shared resource safe to delegate.)"
+          },
+          {
+            "type": "markdown",
+            "id": "cdb3f7bc8db6776d",
+            "text": "## Why it generalises — the MyTerms miniature\n\nThe broker is a hand-rolled instance of the **MyTerms / IEEE 7012** delegation pattern: a principal delegates a *scoped capability* to an agent rather than handing over full authority.\n\n- `WIKI_GRANT` (host-scoped permission) = **delegation inside an agreed scope** — the agent acts only within what it was granted, never the full authority the cookie carries.\n- The owner cookie held off-agent on disk = the principal's **retained authority** — the agent gets a capability, not the credential.\n- `push-audit.log` = the **record** that the delegated action happened within scope.\n\nWhat it does *not yet* do — and where MyTerms slots in — is bind the delegation to a **signed agreement**. Today the grant is just an env var the operator sets. The IEEE-7012 version: the site owner publishes machine-readable terms, the agent presents an agreement, and the broker honours a push **only** against a valid signed agreement, deriving the allowed scope **from that agreement** instead of from `WIKI_GRANT`. The code keeps the seam open for exactly this swap — the \"is this delegation permitted?\" check lives in `granted()`/`resolve()`, isolated from the push path, so env-var scoping can become signed-terms scoping without touching how writes happen. The harness carries the two-agent (Swordsman ⊥ Mage) embodiment of the same split — see the cross-site link below."
+          },
+          {
+            "type": "markdown",
+            "id": "70bc6ec230aadfd3",
+            "text": "### What the runtime taught us about MyTerms\n\nThe same solve doubled as a MyTerms study pass — checked against the IEEE source and Customer Commons, and it caught one of our own drafting errors:\n\n- **The standard is IEEE 7012-2025** (\"Machine Readable Personal Privacy Terms\"). It **inverts notice-and-consent**: the First Person *proposes* the terms; the second party accepts, counter-offers **once**, or declines — the **invitation pattern** (acceptance before proposal). Terms are *selected from a standard roster* (hosted by the nonprofit Customer Commons), not free-written.\n- **Three registers, one agreement** — Plain Language (human-readable), Legal (canonical at Customer Commons), and Machine-readable (JSON-LD over W3C DPV). The same one-logic-many-skins shape the broker's grant wants.\n- **The correction we made mid-solve:** a 7012 agreement is strictly **two-party bilateral** — First Person ↔ Second Party. **Agents, devices, and trust communities are NOT parties** — they are the fabric *around* the agreement. Our first draft wrongly counted the agent as a party; the broker embodies the fix — the agent is the delegate acting *inside* the scope, never a signatory to it.\n- **The convergence:** agentprivacy's verifiable trust communities (VRCs) measure fidelity *from outside* the agreement — they are the Gödelian **witness from beyond the system**; and the Mage (knowledge agent) operates strictly inside the **Σ scope** of the agreement the Swordsman signs. Re-read the broker with that lens: `WIKI_GRANT` is the Σ scope, the agent is the Mage, and the one missing organ is the Swordsman's signed proposal that should *derive* the scope instead of the operator setting it by hand."
+          },
+          {
+            "type": "markdown",
+            "id": "cc98c85779e93331",
+            "text": "## Takeaways\n\n- **Turn a shared credential into a brokered capability.** Keep the secret on the owner's side; give the agent a *call*, not the *cookie*.\n- **Scope below what the credential can do.** The broker enforces least privilege; don't entrust it to the agent.\n- **Derive expiry, log every use.** A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.\n- **This is the delegation primitive under agent privacy.** A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it."
+          },
+          {
+            "type": "markdown",
+            "id": "55461a20f9cbec9e",
+            "text": "## Hygiene (if you run this)\n\n- Cookie lives **only** in `~/.wiki/.creds/cookies.json` (gitignored, chmod 600). Never commit it, never echo it into a command, never paste it into a prompt — the broker reads it from disk so the agent doesn't have to.\n- Rotate by logging out / back in on any farm site, copy the new `wikiSession`, replace it in the creds file. Re-login invalidates the old token; expiry re-derives from the new string, no code change.\n- `node broker.js list` before a big push: an `[EXPIRED]` cookie refuses loudly instead of failing silently.\n- **Ownership isn't uniform.** A host owned by a different identity (different `cookieSecret`) returns **403** to the farm cookie — observed on `myspace`. Reads are public so backups still work; writes need that host's own cookie."
+          },
+          {
+            "type": "markdown",
+            "id": "4310189a900a4963",
+            "text": "## See\n\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- [[Agentprivacy Wiki Resync]] · [[Agentprivacy Wiki To Skill]] — sibling distribution skills\n- [[Agentprivacy Wiki Dream Cycle]] — the research → gate → build → snapshot loop\n\n---\n← [[Welcome Visitors]] · *source of truth: the `fedwiki-cohere-sync` skill (`~/.claude/skills/`) + the two chronicles named above. The wiki is a projection.*"
+          },
+          {
+            "type": "reference",
+            "id": "29f7c35a192a1a3d",
+            "site": "harness.guide.agentprivacy.ai",
+            "slug": "harness-path-myterms-ieee-7012",
+            "title": "Harness Path — MyTerms IEEE 7012",
+            "text": "The two-agent (Swordsman ⊥ Mage) embodiment of this same delegation split, on the harness site."
+          }
+        ]
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "29f7c35a192a1a3d",
+      "item": {
+        "type": "reference",
+        "id": "29f7c35a192a1a3d",
+        "site": "harness.guide.agentprivacy.ai",
+        "slug": "harness-path-myterms-ieee-7012",
+        "title": "Harness Path — MyTerms IEEE 7012",
+        "text": "The two-agent (Swordsman ⊥ Mage) embodiment of this same delegation split, on the harness site."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "5877a33a438f1da5",
+      "item": {
+        "type": "markdown",
+        "id": "5877a33a438f1da5",
+        "text": "## The frame — an agent layer over your local fedwiki universe\n\nHere is why it is worth sharing. It is how you give an **agent** write access to a FedWiki farm it has no business holding the owner login for. You do not hand the agent the owner credential. You stand a **cookie jar on the local network** — the broker holding the owner cookie on disk, or (in the LAN-workshop form) a jar served across the same segment — and you **point the agent at the jar**. The agent asks the jar for a scoped write; the jar injects the owner cookie behind the agent's back and enforces the grant. The agent gets FedWiki-owner write *without getting around anything it shouldn't*: the owner delegated it, on the network, on purpose.\n\nGeneralise that and you have an **agent layer over the local fedwiki universe** — every site in the farm writable by agents you point at the jar, each scoped to exactly the hosts you granted, every write journaled. The farm stays the source of truth; the jar is the permission surface agents plug into; `WIKI_GRANT` is the dial. That layer is what this case study is really about — the broker is just its first, smallest organ."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "70bc6ec230aadfd3",
+      "item": {
+        "type": "markdown",
+        "id": "70bc6ec230aadfd3",
+        "text": "### What the runtime taught us about MyTerms\n\nThe same solve doubled as a MyTerms study pass — checked against the IEEE source and Customer Commons, and it caught one of our own drafting errors:\n\n- **The standard is IEEE 7012-2025** (\"Machine Readable Personal Privacy Terms\"). It **inverts notice-and-consent**: the First Person *proposes* the terms; the second party accepts, counter-offers **once**, or declines — the **invitation pattern** (acceptance before proposal). Terms are *selected from a standard roster* (hosted by the nonprofit Customer Commons), not free-written.\n- **Three registers, one agreement** — Plain Language (human-readable), Legal (canonical at Customer Commons), and Machine-readable (JSON-LD over W3C DPV). The same one-logic-many-skins shape the broker's grant wants.\n- **The correction we made mid-solve:** a 7012 agreement is strictly **two-party bilateral** — First Person ↔ Second Party. **Agents, devices, and trust communities are NOT parties** — they are the fabric *around* the agreement. Our first draft wrongly counted the agent as a party; the broker embodies the fix — the agent is the delegate acting *inside* the scope, never a signatory to it.\n- **The convergence:** agentprivacy's verifiable trust communities (VRCs) measure fidelity *from outside* the agreement — they are the Gödelian **witness from beyond the system**; and the Mage (knowledge agent) operates strictly inside the **Σ scope** of the agreement the Swordsman signs. Re-read the broker with that lens: `WIKI_GRANT` is the Σ scope, the agent is the Mage, and the one missing organ is the Swordsman's signed proposal that should *derive* the scope instead of the operator setting it by hand."
+      },
+      "date": 1783996800000
+    }
+  ]
+}
