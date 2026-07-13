@@ -1,0 +1,111 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agentprivacy Wiki Gatehouse · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Agentprivacy Wiki Gatehouse</span></div>
+  <article><div class="md"><h1>🚪 Agentprivacy Wiki Gatehouse</h1>
+</div>
+<div class="md"><p><em>Case-study chronicle · a wiki skill of <a class="wlink" href="the-wikis.html">The Wikis</a> shelf.</em> The <strong>static-side companion</strong> to <a class="wlink" href="agentprivacy-wiki-cookie-broker.html">Agentprivacy Wiki Cookie Broker</a>. That page answered <em>permission on the live, writable farm</em> (delegated write). This one answers its opposite: <strong>permission when there is no server at all</strong> — how you gate a document sealed inside a read-only static site, and how you might even give such a gate an <strong>expiry</strong>.</p>
+</div>
+<div class="md"><blockquote>
+<p>The pair, in one line: the <strong>live</strong> farm asks <em>&quot;did we agree, and to what?&quot;</em> and lets a signed grant authorise; the <strong>static</strong> snapshot asks <em>&quot;did you understand?&quot;</em> and lets understanding decrypt. The Gatehouse is the second question, made real. The Swordsman guards the gate; the visitor is the mage who casts the spell to open it.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Notes of record:</strong> <code>agentprivacy.guide/GATES.md</code> (plan + public register) · the <code>agentprivacy-guide-gatehouse</code> skill · chronicle <code>~/.wiki/chronicles/2026-07-02_gatehouse_sigil_gates.md</code>. Live door: <code>guide.agentprivacy.ai/gates/</code>.</p>
+</div>
+<div class="md"><h2>The problem — gating a document with no server</h2>
+<p><code>guide.agentprivacy.ai</code> is a <strong>static snapshot</strong>: HTML + JSON served by an edge Worker, no application server, no session, no database. So the trick the cookie broker leans on — <em>the server checks who you are before it acts</em> — is unavailable. There is nobody at the door to check a credential.</p>
+<p>And yet some documents want a threshold: a letter meant for one recipient, a mageletter sent but not broadcast, meeting prep shared with the people in the room. On a static site you cannot <em>withhold</em> a file you are serving — anyone can fetch the bytes. The only move left is to serve <strong>ciphertext</strong> and put the key somewhere the site never holds: in the reader&#39;s <strong>understanding</strong>.</p>
+</div>
+<div class="md"><h2>The design in three lines</h2>
+<ul>
+<li><strong>sigil</strong> — an emoji string that is <em>address + entropy</em>. <code>id = hex(SHA-256(sigilNorm))[:12]</code> names the sealed blob and salts its key. The sigil is <em>where the door is</em> and <em>part of how it opens</em>.</li>
+<li><strong>proverb</strong> — a real line of the canon: <em>proof of reading</em>.</li>
+<li><strong>key</strong> = <code>PBKDF2-SHA256(sigilNorm + &quot;\n&quot; + proverbNorm, salt = &quot;gatehouse:&quot;+id, 310000 iters)</code> → <strong>AES-256-GCM</strong>. Neither token opens anything alone; the gate is the <em>pair</em>.</li>
+</ul>
+<p>Both tokens are <strong>normalised identically in the builder and the door</strong> (never fork it): the sigil is NFC-folded, stripped of whitespace and variation selectors (<code>U+FE0F</code>), ZWJ kept; the proverb is NFC-folded, lowercased, and collapsed so that case, punctuation and spacing can never fork the key. The published blob is just <code>{v, id, iv, ct}</code> — version, blob id, GCM iv, ciphertext. No plaintext, no hint of the key.</p>
+</div>
+<div class="md"><h2>How an unlock actually works — the door flow</h2>
+<p>Everything happens <strong>client-side</strong> in the visitor&#39;s browser, in self-contained inline WebCrypto:</p>
+<ol>
+<li>The visitor opens <code>/gates/</code>, reads the <strong>public hint</strong> (which points at <em>where the tokens live</em> without containing them), and types the sigil + proverb.</li>
+<li>The door normalises both the same way the builder did, computes <code>id = hex(SHA-256(sigil))[:12]</code>, and fetches <code>/gates/&lt;id&gt;.json</code> — the sealed blob. (A wrong sigil computes the wrong id and simply finds no door.)</li>
+<li>It derives the AES-GCM key with PBKDF2 (310k iterations — this is what <em>prices</em> each guess) and attempts to decrypt <code>ct</code> with <code>iv</code>.</li>
+<li><strong>GCM is authenticated</strong>, so a wrong key doesn&#39;t yield garbage — it <em>throws</em>. Success means the tag verified: the Swordsman stood aside. The plaintext (rendered from markdown at build time) is injected into the page.</li>
+</ol>
+<p>The voice is dual-agent by design: fail and <em>&quot;the Swordsman does not stir&quot;</em>; succeed and <em>&quot;the Swordsman stood aside.&quot;</em> The refusal is the pedagogy — the first door into the canon is one you can only pass by having read it.</p>
+</div>
+<div class="md"><h2>Two gate classes</h2>
+<p>Declare one per gate; they trade secrecy for reach:</p>
+<ul>
+<li><strong>letter-keyed</strong> — the tokens travel <em>only</em> inside sent documents (a letter&#39;s epigraph sigil + proverb above the salutation). This is <strong>proof of receipt</strong>, and genuinely strong: the sigil is unguessable without the artefact in hand.</li>
+<li><strong>canon-keyed</strong> — both tokens sit in the <strong>open</strong> canon (e.g. a mageletter&#39;s closing seal + a five-word cosmological line). <strong>Zero secrecy by design</strong> — it is a <em>reading rite</em>, proof of having read the City&#39;s record. Never seal anything behind a canon-keyed gate you would mind a diligent stranger reading.</li>
+</ul>
+</div>
+<div class="md"><h2>Honest limits</h2>
+<p>State these whenever someone asks <em>&quot;is it secure?&quot;</em></p>
+<ul>
+<li>The encryption is real (live blobs carry no plaintext fragments; entropy ~7.999 bits/byte), but <strong>the wall is token entropy</strong>. The blobs are public, so an attacker can guess offline and GCM will <em>confirm</em> a hit; PBKDF2 only makes each guess expensive. A low-entropy canon-keyed gate is a reading rite, not a vault.</li>
+<li><strong>Deferred-public:</strong> an opened plaintext is re-shareable, and the blob&#39;s size leaks the document&#39;s length.</li>
+<li><strong>No unlock telemetry</strong> exists — a static site cannot watch. If a gate needs a <em>witness</em>, that is the MyTerms arc, not analytics.</li>
+<li><strong>Never</strong> put credential- or cookie-class material behind a gate (that belongs in the broker, off-artefact).</li>
+</ul>
+</div>
+<div class="md"><h2>Adding expiry to unlockable static pages</h2>
+<p>The most interesting extension — and the sharpest way to feel the static/live divide. On the <strong>live</strong> farm, expiry is free: the cookie broker derives a TTL from the token and the <strong>server refuses</strong> an expired write. A static page has <strong>no server and no trusted clock</strong>, so <em>&quot;expires after T&quot;</em> is genuinely hard — and it pays to be precise about why.</p>
+<p><strong>The asymmetry to name first:</strong> client-side crypto can enforce <em>&quot;not <strong>before</strong> T&quot;</em> (a time-lock — publish now, opens later) but <strong>not</strong> <em>&quot;not <strong>after</strong> T&quot;</em> on its own. Two reasons: once a blob decrypts you cannot <strong>un-give</strong> the knowledge, and the client&#39;s clock is <strong>attacker-controlled</strong> (roll it back, or just keep the already-downloaded plaintext). So real expiry needs a party that can <em>stop vouching</em>, or a <em>trusted clock</em>. Here is the ladder, weakest to strongest:</p>
+<ol>
+<li><p><strong>Soft expiry (embedded <code>validUntil</code>, client clock).</strong> Seal an expiry timestamp <em>inside</em> the payload; the door refuses to render if <code>Date.now() &gt; validUntil</code>. Slots exactly where the planned <em>between-decrypt-and-render</em> step sits. Cost ~0. Guarantee: <strong>courtesy only</strong> — the plaintext already decrypted, and a rolled-back clock or a saved copy defeats it. Good for <em>&quot;this is stale, fetch the current one,&quot;</em> never for secrecy.</p>
+</li>
+<li><p><strong>Expiry by rotation — enforced at the operator&#39;s snapshot runtime.</strong> The strongest thing that stays <strong>pure-static</strong>, and the direct mirror of the broker&#39;s <em>rotate-to-revoke</em>. The key realisation: <strong>the snapshot -&gt; gate -&gt; verify -&gt; push runtime is itself the expiry engine.</strong> Fold a <strong>period</strong> into the key derivation (<code>salt = &quot;gatehouse:&quot;+id+&quot;:&quot;+epoch</code>) and give each gate a window in <code>flow/gates.local.json</code>; then every time the operator re-snapshots, <code>gate.mjs</code> re-seals each live gate under the <em>current</em> epoch and <strong>omits any gate past its window</strong> — the old blob is overwritten or dropped, so its tokens open nothing. A gate&#39;s validity is therefore exactly <em>&quot;as long as the operator keeps re-publishing it&quot;</em>: the periodic snapshot is the <strong>heartbeat of vouching</strong>, and letting a gate lapse from the build <strong>is</strong> its expiry. The <em>operator&#39;s runtime</em>, not the visitor&#39;s clock, is the trusted party. Honest limit: this expires <strong>future</strong> access, not <strong>past</strong> copies already decrypted (deferred-public still applies).</p>
+</li>
+<li><p><strong>Time-boxed tokens (expiring sigils/proverbs).</strong> Push the same non-renewal one layer up: mint tokens that only <em>exist</em> for a window — a per-period proverb published only during that period, or a <strong>per-recipient sigil</strong> retired on schedule (ties to the planned per-recipient-sigil arc). Expiry becomes <em>&quot;the token stops being handed out.&quot;</em></p>
+</li>
+<li><p><strong>Signed time beacon (one tiny dynamic endpoint).</strong> The robust version — and cheap here, because <strong>the guide is already a Cloudflare Worker, not truly static</strong>. Add a minimal route that returns a <strong>signed</strong> current-epoch token (e.g. Ed25519 over <code>{epoch, iat}</code>); the door fetches it, verifies the signature against a public key baked into the door, and refuses to even <em>derive</em> the key unless the beacon&#39;s epoch is inside the gate&#39;s window. Now the clock is <strong>server-signed, not client-trusted</strong>, and expiry is enforced <strong>before</strong> decryption. Cost: one Worker route + a keypair. This is also exactly where <strong>MyTerms</strong> re-enters: the beacon is the natural place to require a <em>signed agreement</em>, not just a signed time — decrypt gated on <em>&quot;current, and agreed.&quot;</em></p>
+</li>
+</ol>
+<p><strong>Wrong direction, named so nobody reaches for it:</strong> time-lock puzzles / VDFs give <em>&quot;cannot open <strong>before</strong> T&quot;</em> — publish-then-reveal, not expiry. The crypto naturally does unlock-<em>after</em>; expiry-<em>after</em> is the part that needs a witness.</p>
+<p><strong>The lesson (same as the broker&#39;s):</strong> a capability should be able to <strong>stop</strong>. On the live side the server is the witness that enforces a TTL for free; on the static side you must either <strong>rotate</strong> (the operator becomes the witness) or <strong>carry a signed clock</strong> (a beacon becomes the witness). Expiry is where static permission finally has to borrow a little bit of <em>live</em>.</p>
+</div>
+<div class="md"><h2>Why it belongs beside the cookie broker</h2>
+<p>The two case studies are one idea on two substrates — the shared question of <em>sharing agent work across the local fedwiki universe</em> is always <strong>&quot;who may do what, and how is that granted without a master key?&quot;</strong></p>
+<ul>
+<li><strong>Live farm → <a class="wlink" href="agentprivacy-wiki-cookie-broker.html">Agentprivacy Wiki Cookie Broker</a>:</strong> delegated, scoped, revocable <strong>write</strong>; a server checks the grant; MyTerms is the agreement that should derive the scope.</li>
+<li><strong>Static snapshot → the Gatehouse (this page):</strong> proof-of-<strong>understanding read</strong>; no server, so the key lives in the reader; expiry must be rotated in or beaconed in.</li>
+</ul>
+<p>Both end in the same place — <em>trust earned, not assumed</em> — and both point at MyTerms as the layer that turns an ad-hoc token (a <code>WIKI_GRANT</code>, a proverb) into a signed, mutual agreement.</p>
+</div>
+<div class="md"><h2>Takeaways</h2>
+<ul>
+<li><strong>No server ≠ no permission.</strong> Serve ciphertext and keep the key in the reader&#39;s understanding; the boundary becomes pedagogy.</li>
+<li><strong>Know your gate class.</strong> letter-keyed = proof of receipt (strong); canon-keyed = proof of reading (a rite, zero secrecy). Never vault-grade material either way.</li>
+<li><strong>Static expiry is a witness problem.</strong> Pure crypto does <em>not-before</em>, not <em>not-after</em>. Get <em>not-after</em> by <strong>rotation</strong> — the operator&#39;s snapshot runtime re-seals live gates under the current epoch and drops lapsed ones, so re-publishing <em>is</em> vouching — or by a <strong>signed time beacon</strong> (borrow a trusted clock). Soft <code>validUntil</code> is courtesy only.</li>
+<li><strong>The Worker is the seam.</strong> Because the guide is a Worker, the strong options — signed-time beacon, a MyTerms agreement step between decrypt and render — are a single route away, without abandoning the static model.</li>
+</ul>
+</div>
+<div class="md"><h2>See</h2>
+<ul>
+<li><a class="wlink" href="agentprivacy-wiki-cookie-broker.html">Agentprivacy Wiki Cookie Broker</a> — the live-farm companion (delegated write; the static/live pair)</li>
+<li><a class="wlink" href="the-wikis.html">The Wikis</a> — the Librarian&#39;s shelves this page sits on</li>
+<li><strong>The live door</strong> — <code>guide.agentprivacy.ai/gates/</code></li>
+</ul>
+<hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <em>source of truth: <code>agentprivacy.guide/GATES.md</code> + the <code>agentprivacy-guide-gatehouse</code> skill + the 2026-07-02 chronicle. The wiki is a projection; no sigil or proverb token ever appears here.</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agentprivacy-wiki-gatehouse.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -112,7 +112,7 @@ WIKI_GRANT=&#39;agm.timeline.ide.earth&#39; \
 </div>
 <div class="md"><h2>Static vs live — two permission regimes</h2>
 <p>Permission over shared fedwiki work has two regimes, because the farm has two faces.</p>
-<p><strong>Static — the published snapshot (the Gatehouse).</strong> <code>guide.agentprivacy.ai</code> is read-only HTML + JSON; there is no server to check a cookie, so permission has to live <em>inside the artefact</em>. The <strong>Gatehouse</strong> does exactly that: it encrypts a document into the static site and gates it behind a <strong>sigil</strong> (an emoji string — address + entropy) and a <strong>proverb</strong> (proof-of-reading). The two are stretched with PBKDF2-SHA256 into an AES-GCM key, and the blob decrypts <strong>client-side</strong> only when you supply both — nothing sensitive is ever served. Permission here is <strong>proof-of-understanding</strong>: the key is <em>knowing the canon</em> (canon-keyed gates) or <em>having received the letter</em> (letter-keyed gates). It is the right tool when there is no server to trust — the reader&#39;s understanding is the credential. (Live door: <code>guide.agentprivacy.ai/gates/</code>.)</p>
+<p><strong>Static — the published snapshot (the Gatehouse).</strong> <code>guide.agentprivacy.ai</code> is read-only HTML + JSON; there is no server to check a cookie, so permission has to live <em>inside the artefact</em>. The <strong>Gatehouse</strong> (<a class="wlink" href="agentprivacy-wiki-gatehouse.html">Agentprivacy Wiki Gatehouse</a>) does exactly that: it encrypts a document into the static site and gates it behind a <strong>sigil</strong> (an emoji string — address + entropy) and a <strong>proverb</strong> (proof-of-reading). The two are stretched with PBKDF2-SHA256 into an AES-GCM key, and the blob decrypts <strong>client-side</strong> only when you supply both — nothing sensitive is ever served. Permission here is <strong>proof-of-understanding</strong>: the key is <em>knowing the canon</em> (canon-keyed gates) or <em>having received the letter</em> (letter-keyed gates). It is the right tool when there is no server to trust — the reader&#39;s understanding is the credential. (Live door: <code>guide.agentprivacy.ai/gates/</code>.)</p>
 <p><strong>Live — the writable farm (delegation, heading to MyTerms).</strong> A running FedWiki <em>does</em> have a server and an owner, so permission becomes <strong>delegation of write</strong>: the cookie broker of this case study — scoped by <code>WIKI_GRANT</code>, journaled, centrally revocable. This is where <strong>MyTerms</strong> upgrades the hand-rolled grant into a <strong>signed bilateral agreement</strong>: the owner (First Person) proposes machine-readable terms; the agent accepts, counter-offers once, or declines (the invitation pattern); both hold identical immutable copies; and the broker derives the allowed scope <em>from that agreement</em> instead of from an env var.</p>
 <p>The two regimes ask different questions. Static asks <strong>&quot;did you understand?&quot;</strong> and lets understanding decrypt. Live asks <strong>&quot;did we agree, and to what?&quot;</strong> and lets the agreement authorise — and MyTerms is the agreement half. The proverb gate and the signed grant are the same instinct — <em>trust earned, not assumed</em> — worked out against two different substrates.</p>
 </div>
@@ -161,7 +161,7 @@ WIKI_GRANT=&#39;agm.timeline.ide.earth&#39; \
 <li><a class="wlink" href="the-wikis.html">The Wikis</a> — the Librarian&#39;s shelves this page sits on</li>
 <li><a class="wlink" href="agentprivacy-wiki-resync.html">Agentprivacy Wiki Resync</a> · <a class="wlink" href="agentprivacy-wiki-to-skill.html">Agentprivacy Wiki To Skill</a> — sibling distribution skills</li>
 <li><a class="wlink" href="agentprivacy-wiki-dream-cycle.html">Agentprivacy Wiki Dream Cycle</a> — the research → gate → build → snapshot loop</li>
-<li><strong>The Gatehouse</strong> — proof-of-understanding gates on the static snapshot: <code>guide.agentprivacy.ai/gates/</code></li>
+<li><a class="wlink" href="agentprivacy-wiki-gatehouse.html">Agentprivacy Wiki Gatehouse</a> — the static-side companion: proof-of-understanding gates (+ expiry design) on the published snapshot · live door <code>guide.agentprivacy.ai/gates/</code></li>
 </ul>
 <hr>
 <p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <em>source of truth: the <code>fedwiki-cohere-sync</code> skill (<code>~/.claude/skills/</code>) + the two chronicles named above. The wiki is a projection.</em></p>
@@ -175,7 +175,7 @@ WIKI_GRANT=&#39;agm.timeline.ide.earth&#39; \
       <span class="ref-text">The two-agent (Swordsman ⊥ Mage) embodiment of this same delegation split, on the harness site.</span>
       <span class="ref-site">harness</span></span></a></article>
   <footer class="page-foot">
-    <div class="lineage">11 revisions</div>
+    <div class="lineage">12 revisions</div>
     <a class="json-link" href="agentprivacy-wiki-cookie-broker.json">view page JSON · forkable into any wiki ↗</a>
   </footer>
 </main>

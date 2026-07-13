@@ -1,0 +1,146 @@
+{
+  "title": "Agentprivacy Wiki Gatehouse",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "2334061d7d4f6efe",
+      "text": "# 🚪 Agentprivacy Wiki Gatehouse"
+    },
+    {
+      "type": "markdown",
+      "id": "998819f730d1361f",
+      "text": "*Case-study chronicle · a wiki skill of [[The Wikis]] shelf.* The **static-side companion** to [[Agentprivacy Wiki Cookie Broker]]. That page answered *permission on the live, writable farm* (delegated write). This one answers its opposite: **permission when there is no server at all** — how you gate a document sealed inside a read-only static site, and how you might even give such a gate an **expiry**."
+    },
+    {
+      "type": "markdown",
+      "id": "7e07bfdc91a834ec",
+      "text": "> The pair, in one line: the **live** farm asks *\"did we agree, and to what?\"* and lets a signed grant authorise; the **static** snapshot asks *\"did you understand?\"* and lets understanding decrypt. The Gatehouse is the second question, made real. The Swordsman guards the gate; the visitor is the mage who casts the spell to open it."
+    },
+    {
+      "type": "markdown",
+      "id": "eb1c93b1fde0c06a",
+      "text": "**Notes of record:** `agentprivacy.guide/GATES.md` (plan + public register) · the `agentprivacy-guide-gatehouse` skill · chronicle `~/.wiki/chronicles/2026-07-02_gatehouse_sigil_gates.md`. Live door: `guide.agentprivacy.ai/gates/`."
+    },
+    {
+      "type": "markdown",
+      "id": "78134a3ebdd8a554",
+      "text": "## The problem — gating a document with no server\n\n`guide.agentprivacy.ai` is a **static snapshot**: HTML + JSON served by an edge Worker, no application server, no session, no database. So the trick the cookie broker leans on — *the server checks who you are before it acts* — is unavailable. There is nobody at the door to check a credential.\n\nAnd yet some documents want a threshold: a letter meant for one recipient, a mageletter sent but not broadcast, meeting prep shared with the people in the room. On a static site you cannot *withhold* a file you are serving — anyone can fetch the bytes. The only move left is to serve **ciphertext** and put the key somewhere the site never holds: in the reader's **understanding**."
+    },
+    {
+      "type": "markdown",
+      "id": "57705445df2a9433",
+      "text": "## The design in three lines\n\n- **sigil** — an emoji string that is *address + entropy*. `id = hex(SHA-256(sigilNorm))[:12]` names the sealed blob and salts its key. The sigil is *where the door is* and *part of how it opens*.\n- **proverb** — a real line of the canon: *proof of reading*.\n- **key** = `PBKDF2-SHA256(sigilNorm + \"\\n\" + proverbNorm, salt = \"gatehouse:\"+id, 310000 iters)` → **AES-256-GCM**. Neither token opens anything alone; the gate is the *pair*.\n\nBoth tokens are **normalised identically in the builder and the door** (never fork it): the sigil is NFC-folded, stripped of whitespace and variation selectors (`U+FE0F`), ZWJ kept; the proverb is NFC-folded, lowercased, and collapsed so that case, punctuation and spacing can never fork the key. The published blob is just `{v, id, iv, ct}` — version, blob id, GCM iv, ciphertext. No plaintext, no hint of the key."
+    },
+    {
+      "type": "markdown",
+      "id": "d19ad4df00fe671f",
+      "text": "## How an unlock actually works — the door flow\n\nEverything happens **client-side** in the visitor's browser, in self-contained inline WebCrypto:\n\n1. The visitor opens `/gates/`, reads the **public hint** (which points at *where the tokens live* without containing them), and types the sigil + proverb.\n2. The door normalises both the same way the builder did, computes `id = hex(SHA-256(sigil))[:12]`, and fetches `/gates/<id>.json` — the sealed blob. (A wrong sigil computes the wrong id and simply finds no door.)\n3. It derives the AES-GCM key with PBKDF2 (310k iterations — this is what *prices* each guess) and attempts to decrypt `ct` with `iv`.\n4. **GCM is authenticated**, so a wrong key doesn't yield garbage — it *throws*. Success means the tag verified: the Swordsman stood aside. The plaintext (rendered from markdown at build time) is injected into the page.\n\nThe voice is dual-agent by design: fail and *\"the Swordsman does not stir\"*; succeed and *\"the Swordsman stood aside.\"* The refusal is the pedagogy — the first door into the canon is one you can only pass by having read it."
+    },
+    {
+      "type": "markdown",
+      "id": "bb91930102073cc6",
+      "text": "## Two gate classes\n\nDeclare one per gate; they trade secrecy for reach:\n\n- **letter-keyed** — the tokens travel *only* inside sent documents (a letter's epigraph sigil + proverb above the salutation). This is **proof of receipt**, and genuinely strong: the sigil is unguessable without the artefact in hand.\n- **canon-keyed** — both tokens sit in the **open** canon (e.g. a mageletter's closing seal + a five-word cosmological line). **Zero secrecy by design** — it is a *reading rite*, proof of having read the City's record. Never seal anything behind a canon-keyed gate you would mind a diligent stranger reading."
+    },
+    {
+      "type": "markdown",
+      "id": "afe210a01f5dd55c",
+      "text": "## Honest limits\n\nState these whenever someone asks *\"is it secure?\"*\n\n- The encryption is real (live blobs carry no plaintext fragments; entropy ~7.999 bits/byte), but **the wall is token entropy**. The blobs are public, so an attacker can guess offline and GCM will *confirm* a hit; PBKDF2 only makes each guess expensive. A low-entropy canon-keyed gate is a reading rite, not a vault.\n- **Deferred-public:** an opened plaintext is re-shareable, and the blob's size leaks the document's length.\n- **No unlock telemetry** exists — a static site cannot watch. If a gate needs a *witness*, that is the MyTerms arc, not analytics.\n- **Never** put credential- or cookie-class material behind a gate (that belongs in the broker, off-artefact)."
+    },
+    {
+      "type": "markdown",
+      "id": "54386301903e5004",
+      "text": "## Adding expiry to unlockable static pages\n\nThe most interesting extension — and the sharpest way to feel the static/live divide. On the **live** farm, expiry is free: the cookie broker derives a TTL from the token and the **server refuses** an expired write. A static page has **no server and no trusted clock**, so *\"expires after T\"* is genuinely hard — and it pays to be precise about why.\n\n**The asymmetry to name first:** client-side crypto can enforce *\"not **before** T\"* (a time-lock — publish now, opens later) but **not** *\"not **after** T\"* on its own. Two reasons: once a blob decrypts you cannot **un-give** the knowledge, and the client's clock is **attacker-controlled** (roll it back, or just keep the already-downloaded plaintext). So real expiry needs a party that can *stop vouching*, or a *trusted clock*. Here is the ladder, weakest to strongest:\n\n1. **Soft expiry (embedded `validUntil`, client clock).** Seal an expiry timestamp *inside* the payload; the door refuses to render if `Date.now() > validUntil`. Slots exactly where the planned *between-decrypt-and-render* step sits. Cost ~0. Guarantee: **courtesy only** — the plaintext already decrypted, and a rolled-back clock or a saved copy defeats it. Good for *\"this is stale, fetch the current one,\"* never for secrecy.\n\n2. **Expiry by rotation — enforced at the operator's snapshot runtime.** The strongest thing that stays **pure-static**, and the direct mirror of the broker's *rotate-to-revoke*. The key realisation: **the snapshot -> gate -> verify -> push runtime is itself the expiry engine.** Fold a **period** into the key derivation (`salt = \"gatehouse:\"+id+\":\"+epoch`) and give each gate a window in `flow/gates.local.json`; then every time the operator re-snapshots, `gate.mjs` re-seals each live gate under the *current* epoch and **omits any gate past its window** — the old blob is overwritten or dropped, so its tokens open nothing. A gate's validity is therefore exactly *\"as long as the operator keeps re-publishing it\"*: the periodic snapshot is the **heartbeat of vouching**, and letting a gate lapse from the build **is** its expiry. The *operator's runtime*, not the visitor's clock, is the trusted party. Honest limit: this expires **future** access, not **past** copies already decrypted (deferred-public still applies).\n\n3. **Time-boxed tokens (expiring sigils/proverbs).** Push the same non-renewal one layer up: mint tokens that only *exist* for a window — a per-period proverb published only during that period, or a **per-recipient sigil** retired on schedule (ties to the planned per-recipient-sigil arc). Expiry becomes *\"the token stops being handed out.\"*\n\n4. **Signed time beacon (one tiny dynamic endpoint).** The robust version — and cheap here, because **the guide is already a Cloudflare Worker, not truly static**. Add a minimal route that returns a **signed** current-epoch token (e.g. Ed25519 over `{epoch, iat}`); the door fetches it, verifies the signature against a public key baked into the door, and refuses to even *derive* the key unless the beacon's epoch is inside the gate's window. Now the clock is **server-signed, not client-trusted**, and expiry is enforced **before** decryption. Cost: one Worker route + a keypair. This is also exactly where **MyTerms** re-enters: the beacon is the natural place to require a *signed agreement*, not just a signed time — decrypt gated on *\"current, and agreed.\"*\n\n**Wrong direction, named so nobody reaches for it:** time-lock puzzles / VDFs give *\"cannot open **before** T\"* — publish-then-reveal, not expiry. The crypto naturally does unlock-*after*; expiry-*after* is the part that needs a witness.\n\n**The lesson (same as the broker's):** a capability should be able to **stop**. On the live side the server is the witness that enforces a TTL for free; on the static side you must either **rotate** (the operator becomes the witness) or **carry a signed clock** (a beacon becomes the witness). Expiry is where static permission finally has to borrow a little bit of *live*."
+    },
+    {
+      "type": "markdown",
+      "id": "9f2ca7b4a3da06fc",
+      "text": "## Why it belongs beside the cookie broker\n\nThe two case studies are one idea on two substrates — the shared question of *sharing agent work across the local fedwiki universe* is always **\"who may do what, and how is that granted without a master key?\"**\n\n- **Live farm → [[Agentprivacy Wiki Cookie Broker]]:** delegated, scoped, revocable **write**; a server checks the grant; MyTerms is the agreement that should derive the scope.\n- **Static snapshot → the Gatehouse (this page):** proof-of-**understanding read**; no server, so the key lives in the reader; expiry must be rotated in or beaconed in.\n\nBoth end in the same place — *trust earned, not assumed* — and both point at MyTerms as the layer that turns an ad-hoc token (a `WIKI_GRANT`, a proverb) into a signed, mutual agreement."
+    },
+    {
+      "type": "markdown",
+      "id": "98122375e9a5cfe4",
+      "text": "## Takeaways\n\n- **No server ≠ no permission.** Serve ciphertext and keep the key in the reader's understanding; the boundary becomes pedagogy.\n- **Know your gate class.** letter-keyed = proof of receipt (strong); canon-keyed = proof of reading (a rite, zero secrecy). Never vault-grade material either way.\n- **Static expiry is a witness problem.** Pure crypto does *not-before*, not *not-after*. Get *not-after* by **rotation** — the operator's snapshot runtime re-seals live gates under the current epoch and drops lapsed ones, so re-publishing *is* vouching — or by a **signed time beacon** (borrow a trusted clock). Soft `validUntil` is courtesy only.\n- **The Worker is the seam.** Because the guide is a Worker, the strong options — signed-time beacon, a MyTerms agreement step between decrypt and render — are a single route away, without abandoning the static model."
+    },
+    {
+      "type": "markdown",
+      "id": "9c49a9641a774bb1",
+      "text": "## See\n\n- [[Agentprivacy Wiki Cookie Broker]] — the live-farm companion (delegated write; the static/live pair)\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- **The live door** — `guide.agentprivacy.ai/gates/`\n\n---\n← [[Welcome Visitors]] · *source of truth: `agentprivacy.guide/GATES.md` + the `agentprivacy-guide-gatehouse` skill + the 2026-07-02 chronicle. The wiki is a projection; no sigil or proverb token ever appears here.*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agentprivacy Wiki Gatehouse",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "2334061d7d4f6efe",
+            "text": "# 🚪 Agentprivacy Wiki Gatehouse"
+          },
+          {
+            "type": "markdown",
+            "id": "998819f730d1361f",
+            "text": "*Case-study chronicle · a wiki skill of [[The Wikis]] shelf.* The **static-side companion** to [[Agentprivacy Wiki Cookie Broker]]. That page answered *permission on the live, writable farm* (delegated write). This one answers its opposite: **permission when there is no server at all** — how you gate a document sealed inside a read-only static site, and how you might even give such a gate an **expiry**."
+          },
+          {
+            "type": "markdown",
+            "id": "7e07bfdc91a834ec",
+            "text": "> The pair, in one line: the **live** farm asks *\"did we agree, and to what?\"* and lets a signed grant authorise; the **static** snapshot asks *\"did you understand?\"* and lets understanding decrypt. The Gatehouse is the second question, made real. The Swordsman guards the gate; the visitor is the mage who casts the spell to open it."
+          },
+          {
+            "type": "markdown",
+            "id": "eb1c93b1fde0c06a",
+            "text": "**Notes of record:** `agentprivacy.guide/GATES.md` (plan + public register) · the `agentprivacy-guide-gatehouse` skill · chronicle `~/.wiki/chronicles/2026-07-02_gatehouse_sigil_gates.md`. Live door: `guide.agentprivacy.ai/gates/`."
+          },
+          {
+            "type": "markdown",
+            "id": "78134a3ebdd8a554",
+            "text": "## The problem — gating a document with no server\n\n`guide.agentprivacy.ai` is a **static snapshot**: HTML + JSON served by an edge Worker, no application server, no session, no database. So the trick the cookie broker leans on — *the server checks who you are before it acts* — is unavailable. There is nobody at the door to check a credential.\n\nAnd yet some documents want a threshold: a letter meant for one recipient, a mageletter sent but not broadcast, meeting prep shared with the people in the room. On a static site you cannot *withhold* a file you are serving — anyone can fetch the bytes. The only move left is to serve **ciphertext** and put the key somewhere the site never holds: in the reader's **understanding**."
+          },
+          {
+            "type": "markdown",
+            "id": "57705445df2a9433",
+            "text": "## The design in three lines\n\n- **sigil** — an emoji string that is *address + entropy*. `id = hex(SHA-256(sigilNorm))[:12]` names the sealed blob and salts its key. The sigil is *where the door is* and *part of how it opens*.\n- **proverb** — a real line of the canon: *proof of reading*.\n- **key** = `PBKDF2-SHA256(sigilNorm + \"\\n\" + proverbNorm, salt = \"gatehouse:\"+id, 310000 iters)` → **AES-256-GCM**. Neither token opens anything alone; the gate is the *pair*.\n\nBoth tokens are **normalised identically in the builder and the door** (never fork it): the sigil is NFC-folded, stripped of whitespace and variation selectors (`U+FE0F`), ZWJ kept; the proverb is NFC-folded, lowercased, and collapsed so that case, punctuation and spacing can never fork the key. The published blob is just `{v, id, iv, ct}` — version, blob id, GCM iv, ciphertext. No plaintext, no hint of the key."
+          },
+          {
+            "type": "markdown",
+            "id": "d19ad4df00fe671f",
+            "text": "## How an unlock actually works — the door flow\n\nEverything happens **client-side** in the visitor's browser, in self-contained inline WebCrypto:\n\n1. The visitor opens `/gates/`, reads the **public hint** (which points at *where the tokens live* without containing them), and types the sigil + proverb.\n2. The door normalises both the same way the builder did, computes `id = hex(SHA-256(sigil))[:12]`, and fetches `/gates/<id>.json` — the sealed blob. (A wrong sigil computes the wrong id and simply finds no door.)\n3. It derives the AES-GCM key with PBKDF2 (310k iterations — this is what *prices* each guess) and attempts to decrypt `ct` with `iv`.\n4. **GCM is authenticated**, so a wrong key doesn't yield garbage — it *throws*. Success means the tag verified: the Swordsman stood aside. The plaintext (rendered from markdown at build time) is injected into the page.\n\nThe voice is dual-agent by design: fail and *\"the Swordsman does not stir\"*; succeed and *\"the Swordsman stood aside.\"* The refusal is the pedagogy — the first door into the canon is one you can only pass by having read it."
+          },
+          {
+            "type": "markdown",
+            "id": "bb91930102073cc6",
+            "text": "## Two gate classes\n\nDeclare one per gate; they trade secrecy for reach:\n\n- **letter-keyed** — the tokens travel *only* inside sent documents (a letter's epigraph sigil + proverb above the salutation). This is **proof of receipt**, and genuinely strong: the sigil is unguessable without the artefact in hand.\n- **canon-keyed** — both tokens sit in the **open** canon (e.g. a mageletter's closing seal + a five-word cosmological line). **Zero secrecy by design** — it is a *reading rite*, proof of having read the City's record. Never seal anything behind a canon-keyed gate you would mind a diligent stranger reading."
+          },
+          {
+            "type": "markdown",
+            "id": "afe210a01f5dd55c",
+            "text": "## Honest limits\n\nState these whenever someone asks *\"is it secure?\"*\n\n- The encryption is real (live blobs carry no plaintext fragments; entropy ~7.999 bits/byte), but **the wall is token entropy**. The blobs are public, so an attacker can guess offline and GCM will *confirm* a hit; PBKDF2 only makes each guess expensive. A low-entropy canon-keyed gate is a reading rite, not a vault.\n- **Deferred-public:** an opened plaintext is re-shareable, and the blob's size leaks the document's length.\n- **No unlock telemetry** exists — a static site cannot watch. If a gate needs a *witness*, that is the MyTerms arc, not analytics.\n- **Never** put credential- or cookie-class material behind a gate (that belongs in the broker, off-artefact)."
+          },
+          {
+            "type": "markdown",
+            "id": "54386301903e5004",
+            "text": "## Adding expiry to unlockable static pages\n\nThe most interesting extension — and the sharpest way to feel the static/live divide. On the **live** farm, expiry is free: the cookie broker derives a TTL from the token and the **server refuses** an expired write. A static page has **no server and no trusted clock**, so *\"expires after T\"* is genuinely hard — and it pays to be precise about why.\n\n**The asymmetry to name first:** client-side crypto can enforce *\"not **before** T\"* (a time-lock — publish now, opens later) but **not** *\"not **after** T\"* on its own. Two reasons: once a blob decrypts you cannot **un-give** the knowledge, and the client's clock is **attacker-controlled** (roll it back, or just keep the already-downloaded plaintext). So real expiry needs a party that can *stop vouching*, or a *trusted clock*. Here is the ladder, weakest to strongest:\n\n1. **Soft expiry (embedded `validUntil`, client clock).** Seal an expiry timestamp *inside* the payload; the door refuses to render if `Date.now() > validUntil`. Slots exactly where the planned *between-decrypt-and-render* step sits. Cost ~0. Guarantee: **courtesy only** — the plaintext already decrypted, and a rolled-back clock or a saved copy defeats it. Good for *\"this is stale, fetch the current one,\"* never for secrecy.\n\n2. **Expiry by rotation — enforced at the operator's snapshot runtime.** The strongest thing that stays **pure-static**, and the direct mirror of the broker's *rotate-to-revoke*. The key realisation: **the snapshot -> gate -> verify -> push runtime is itself the expiry engine.** Fold a **period** into the key derivation (`salt = \"gatehouse:\"+id+\":\"+epoch`) and give each gate a window in `flow/gates.local.json`; then every time the operator re-snapshots, `gate.mjs` re-seals each live gate under the *current* epoch and **omits any gate past its window** — the old blob is overwritten or dropped, so its tokens open nothing. A gate's validity is therefore exactly *\"as long as the operator keeps re-publishing it\"*: the periodic snapshot is the **heartbeat of vouching**, and letting a gate lapse from the build **is** its expiry. The *operator's runtime*, not the visitor's clock, is the trusted party. Honest limit: this expires **future** access, not **past** copies already decrypted (deferred-public still applies).\n\n3. **Time-boxed tokens (expiring sigils/proverbs).** Push the same non-renewal one layer up: mint tokens that only *exist* for a window — a per-period proverb published only during that period, or a **per-recipient sigil** retired on schedule (ties to the planned per-recipient-sigil arc). Expiry becomes *\"the token stops being handed out.\"*\n\n4. **Signed time beacon (one tiny dynamic endpoint).** The robust version — and cheap here, because **the guide is already a Cloudflare Worker, not truly static**. Add a minimal route that returns a **signed** current-epoch token (e.g. Ed25519 over `{epoch, iat}`); the door fetches it, verifies the signature against a public key baked into the door, and refuses to even *derive* the key unless the beacon's epoch is inside the gate's window. Now the clock is **server-signed, not client-trusted**, and expiry is enforced **before** decryption. Cost: one Worker route + a keypair. This is also exactly where **MyTerms** re-enters: the beacon is the natural place to require a *signed agreement*, not just a signed time — decrypt gated on *\"current, and agreed.\"*\n\n**Wrong direction, named so nobody reaches for it:** time-lock puzzles / VDFs give *\"cannot open **before** T\"* — publish-then-reveal, not expiry. The crypto naturally does unlock-*after*; expiry-*after* is the part that needs a witness.\n\n**The lesson (same as the broker's):** a capability should be able to **stop**. On the live side the server is the witness that enforces a TTL for free; on the static side you must either **rotate** (the operator becomes the witness) or **carry a signed clock** (a beacon becomes the witness). Expiry is where static permission finally has to borrow a little bit of *live*."
+          },
+          {
+            "type": "markdown",
+            "id": "9f2ca7b4a3da06fc",
+            "text": "## Why it belongs beside the cookie broker\n\nThe two case studies are one idea on two substrates — the shared question of *sharing agent work across the local fedwiki universe* is always **\"who may do what, and how is that granted without a master key?\"**\n\n- **Live farm → [[Agentprivacy Wiki Cookie Broker]]:** delegated, scoped, revocable **write**; a server checks the grant; MyTerms is the agreement that should derive the scope.\n- **Static snapshot → the Gatehouse (this page):** proof-of-**understanding read**; no server, so the key lives in the reader; expiry must be rotated in or beaconed in.\n\nBoth end in the same place — *trust earned, not assumed* — and both point at MyTerms as the layer that turns an ad-hoc token (a `WIKI_GRANT`, a proverb) into a signed, mutual agreement."
+          },
+          {
+            "type": "markdown",
+            "id": "98122375e9a5cfe4",
+            "text": "## Takeaways\n\n- **No server ≠ no permission.** Serve ciphertext and keep the key in the reader's understanding; the boundary becomes pedagogy.\n- **Know your gate class.** letter-keyed = proof of receipt (strong); canon-keyed = proof of reading (a rite, zero secrecy). Never vault-grade material either way.\n- **Static expiry is a witness problem.** Pure crypto does *not-before*, not *not-after*. Get *not-after* by **rotation** — the operator's snapshot runtime re-seals live gates under the current epoch and drops lapsed ones, so re-publishing *is* vouching — or by a **signed time beacon** (borrow a trusted clock). Soft `validUntil` is courtesy only.\n- **The Worker is the seam.** Because the guide is a Worker, the strong options — signed-time beacon, a MyTerms agreement step between decrypt and render — are a single route away, without abandoning the static model."
+          },
+          {
+            "type": "markdown",
+            "id": "9c49a9641a774bb1",
+            "text": "## See\n\n- [[Agentprivacy Wiki Cookie Broker]] — the live-farm companion (delegated write; the static/live pair)\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- **The live door** — `guide.agentprivacy.ai/gates/`\n\n---\n← [[Welcome Visitors]] · *source of truth: `agentprivacy.guide/GATES.md` + the `agentprivacy-guide-gatehouse` skill + the 2026-07-02 chronicle. The wiki is a projection; no sigil or proverb token ever appears here.*"
+          }
+        ]
+      },
+      "date": 1783996800000
+    }
+  ]
+}
