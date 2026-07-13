@@ -28,6 +28,11 @@
     },
     {
       "type": "markdown",
+      "id": "e6d75a42f28e15a1",
+      "text": "## One case study of a bigger pattern\n\nThe cookie broker is one worked example of a larger effort: **sharing agent work across the local fedwiki universe** — and not just pages, but the whole substance of a runtime: **workflows, skills, chronicles, and items**, forkable and co-held across the farm's sister sites. Once agents are producing and consuming that shared work, one question recurs at every layer: *who may do what, and how is that permission granted without handing over a master key?* This page is the **write-delegation** answer for the live, writable farm. Its complement — permission over the **static, published** snapshot — is a different mechanism entirely; the two are set side by side below."
+    },
+    {
+      "type": "markdown",
       "id": "f8396e16d56f3dac",
       "text": "## The problem\n\nA FedWiki authorises a write from **one thing**: an encrypted session cookie. The `wiki-security-friends` adapter stores the owner identity in a client-sessions cookie (`wikiSession` on HTTP, `wikiTlsSession` on HTTPS), signed with the site's `cookieSecret`. When a `PUT …/page/<slug>/action` arrives, the server's `isAuthorized` check compares `req.session.friend` against the owner secret. That is the whole gate.\n\nTwo things make that gate awkward to share with an autonomous agent:\n\n- **It's all-or-nothing.** The cookie is *farm-wide* owner access — on our farm one token authorised **every** `*.timeline.ide.earth` subdomain (a shared `cookieSecret`; logging into one TLD logs you into all the siblings). There is no built-in \"just this host.\"\n- **It's a live secret.** Pasting it into an agent's prompt leaks a multi-day bearer credential straight into a transcript. Whoever holds the string writes as owner across the farm until it expires.\n\nSo: how do you let an agent **write** — not just read — a system you own, without handing it a credential you cannot take back?"
     },
@@ -63,6 +68,16 @@
     },
     {
       "type": "markdown",
+      "id": "056d1ca1a27d0624",
+      "text": "## One auth, many agents — the multi-agent runtime shape\n\nThe pattern gets more interesting the moment there is more than one agent. A multi-agent runtime often runs several agents at once, each driving its **own browser instance** — its own tab, profile, or headless session — and they may all need to act as the **same** FedWiki owner: one identity, many hands.\n\nThe naive way is to log each browser instance in as the owner, or copy the owner cookie into every one. That is **N live copies of a farm-wide credential** — every agent omnipotent, the secret multiplied across N cookie stores, and revocation becomes hunting down every instance.\n\nThe cookie jar inverts it. The **auth lives once**, in the jar. Each agent — whatever browser instance it drives — asks the jar for a scoped session at the moment it writes. Same owner identity, **N independent capabilities**, each narrowed by its own `WIKI_GRANT`: agent A writes host X, agent B writes host Y, neither able to touch the other's hosts even though the underlying cookie could. Every write is journaled, so you can read back which delegate did what.\n\nThree properties that matter for a fleet:\n\n- **One identity, many scopes.** The browser instance is a *rendering surface*, not a credential store. Auth is fetched per-write, per-grant — never resident in the agent.\n- **Central revocation.** Rotate the one cookie in the jar and every instance drops at once; no per-agent teardown.\n- **Collision discipline.** Writes go through the FedWiki action API and land in the page journal, so concurrent agents on different hosts never collide; same-host writes are last-write-wins with a full, reversible journal trail.\n\nThe multi-agent delegation shape in one line: **fan capabilities out from a single retained authority, scope each one independently, and keep the credential in none of them.** (See the harness's *One Session One Seat*, linked below, for how distinct agent sessions are seated — the cookie jar is how a fleet of them can share one owner without sharing one key.)"
+    },
+    {
+      "type": "markdown",
+      "id": "8d9dc8cefdd0ee11",
+      "text": "## Static vs live — two permission regimes\n\nPermission over shared fedwiki work has two regimes, because the farm has two faces.\n\n**Static — the published snapshot (the Gatehouse).** `guide.agentprivacy.ai` is read-only HTML + JSON; there is no server to check a cookie, so permission has to live *inside the artefact*. The **Gatehouse** does exactly that: it encrypts a document into the static site and gates it behind a **sigil** (an emoji string — address + entropy) and a **proverb** (proof-of-reading). The two are stretched with PBKDF2-SHA256 into an AES-GCM key, and the blob decrypts **client-side** only when you supply both — nothing sensitive is ever served. Permission here is **proof-of-understanding**: the key is *knowing the canon* (canon-keyed gates) or *having received the letter* (letter-keyed gates). It is the right tool when there is no server to trust — the reader's understanding is the credential. (Live door: `guide.agentprivacy.ai/gates/`.)\n\n**Live — the writable farm (delegation, heading to MyTerms).** A running FedWiki *does* have a server and an owner, so permission becomes **delegation of write**: the cookie broker of this case study — scoped by `WIKI_GRANT`, journaled, centrally revocable. This is where **MyTerms** upgrades the hand-rolled grant into a **signed bilateral agreement**: the owner (First Person) proposes machine-readable terms; the agent accepts, counter-offers once, or declines (the invitation pattern); both hold identical immutable copies; and the broker derives the allowed scope *from that agreement* instead of from an env var.\n\nThe two regimes ask different questions. Static asks **\"did you understand?\"** and lets understanding decrypt. Live asks **\"did we agree, and to what?\"** and lets the agreement authorise — and MyTerms is the agreement half. The proverb gate and the signed grant are the same instinct — *trust earned, not assumed* — worked out against two different substrates."
+    },
+    {
+      "type": "markdown",
       "id": "cdb3f7bc8db6776d",
       "text": "## Why it generalises — the MyTerms miniature\n\nThe broker is a hand-rolled instance of the **MyTerms / IEEE 7012** delegation pattern: a principal delegates a *scoped capability* to an agent rather than handing over full authority.\n\n- `WIKI_GRANT` (host-scoped permission) = **delegation inside an agreed scope** — the agent acts only within what it was granted, never the full authority the cookie carries.\n- The owner cookie held off-agent on disk = the principal's **retained authority** — the agent gets a capability, not the credential.\n- `push-audit.log` = the **record** that the delegated action happened within scope.\n\nWhat it does *not yet* do — and where MyTerms slots in — is bind the delegation to a **signed agreement**. Today the grant is just an env var the operator sets. The IEEE-7012 version: the site owner publishes machine-readable terms, the agent presents an agreement, and the broker honours a push **only** against a valid signed agreement, deriving the allowed scope **from that agreement** instead of from `WIKI_GRANT`. The code keeps the seam open for exactly this swap — the \"is this delegation permitted?\" check lives in `granted()`/`resolve()`, isolated from the push path, so env-var scoping can become signed-terms scoping without touching how writes happen. The harness carries the two-agent (Swordsman ⊥ Mage) embodiment of the same split — see the cross-site link below."
     },
@@ -73,8 +88,13 @@
     },
     {
       "type": "markdown",
+      "id": "9dc26fe81b8202c7",
+      "text": "## How the MyTerms harness works\n\nMyTerms is not only a spec we point at; there is a working **harness** that makes the agreement executable. It runs the invitation pattern as a loop between two roles — an **agreement-and-boundary layer** (proposes the terms, owns the record, guards the gate) set against a **delegation layer** (acts only inside the agreed scope). *(The exact packaging of those two roles is still moving — earlier notes described them as two separate browser extensions, but that is one instance, not the definition. The load-bearing part is the **split** and the bilateral record, not the container.)*\n\nThe loop is **Measure → Propose → Assay**: the First Person's terms are proposed; a `beatsFrontier` predicate plus a cliff-watcher decide whether a counter-offer improves on the standing baseline; on agreement both parties keep **identical, immutable copies** of the bilateral record. Honest status — it currently runs end-to-end **only on a mock bus** (a built prototype, not a shipped result), so treat it as the shape the live-site delegation is growing toward, not a finished dependency. The image to keep: *two mirrors make a door — one reflects the terms, one reflects the delegation, and where they meet the First Person walks through.* The cookie broker is the **delegation mirror**, already standing; MyTerms is the **terms mirror** it is waiting on. The harness's *One Session One Seat* and its MyTerms path are linked below."
+    },
+    {
+      "type": "markdown",
       "id": "cc98c85779e93331",
-      "text": "## Takeaways\n\n- **Turn a shared credential into a brokered capability.** Keep the secret on the owner's side; give the agent a *call*, not the *cookie*.\n- **Scope below what the credential can do.** The broker enforces least privilege; don't entrust it to the agent.\n- **Derive expiry, log every use.** A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.\n- **This is the delegation primitive under agent privacy.** A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it."
+      "text": "## Takeaways\n\n- **Turn a shared credential into a brokered capability.** Keep the secret on the owner's side; give the agent a *call*, not the *cookie*.\n- **Scope below what the credential can do.** The broker enforces least privilege; don't entrust it to the agent.\n- **Derive expiry, log every use.** A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.\n- **This is the delegation primitive under agent privacy.** A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it.\n- **One key idea, two substrates.** Static sharing gates on *proof-of-understanding* (the Gatehouse proverb); live sharing gates on *delegated, scoped write* (this broker), heading toward a MyTerms signed agreement.\n- **This is one case study.** The same permission question runs under every shared workflow, skill, chronicle, and item in the local fedwiki universe; the broker is the write answer for the live farm."
     },
     {
       "type": "markdown",
@@ -84,7 +104,15 @@
     {
       "type": "markdown",
       "id": "4310189a900a4963",
-      "text": "## See\n\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- [[Agentprivacy Wiki Resync]] · [[Agentprivacy Wiki To Skill]] — sibling distribution skills\n- [[Agentprivacy Wiki Dream Cycle]] — the research → gate → build → snapshot loop\n\n---\n← [[Welcome Visitors]] · *source of truth: the `fedwiki-cohere-sync` skill (`~/.claude/skills/`) + the two chronicles named above. The wiki is a projection.*"
+      "text": "## See\n\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- [[Agentprivacy Wiki Resync]] · [[Agentprivacy Wiki To Skill]] — sibling distribution skills\n- [[Agentprivacy Wiki Dream Cycle]] — the research → gate → build → snapshot loop\n- **The Gatehouse** — proof-of-understanding gates on the static snapshot: `guide.agentprivacy.ai/gates/`\n\n---\n← [[Welcome Visitors]] · *source of truth: the `fedwiki-cohere-sync` skill (`~/.claude/skills/`) + the two chronicles named above. The wiki is a projection.*"
+    },
+    {
+      "type": "reference",
+      "id": "dfc9c430482233fa",
+      "site": "harness.guide.agentprivacy.ai",
+      "slug": "one-session-one-seat",
+      "title": "One Session One Seat",
+      "text": "The harness convention that seats one agent session per seat — the fleet the cookie jar lets share a single owner auth."
     },
     {
       "type": "reference",
@@ -128,6 +156,11 @@
           },
           {
             "type": "markdown",
+            "id": "e6d75a42f28e15a1",
+            "text": "## One case study of a bigger pattern\n\nThe cookie broker is one worked example of a larger effort: **sharing agent work across the local fedwiki universe** — and not just pages, but the whole substance of a runtime: **workflows, skills, chronicles, and items**, forkable and co-held across the farm's sister sites. Once agents are producing and consuming that shared work, one question recurs at every layer: *who may do what, and how is that permission granted without handing over a master key?* This page is the **write-delegation** answer for the live, writable farm. Its complement — permission over the **static, published** snapshot — is a different mechanism entirely; the two are set side by side below."
+          },
+          {
+            "type": "markdown",
             "id": "f8396e16d56f3dac",
             "text": "## The problem\n\nA FedWiki authorises a write from **one thing**: an encrypted session cookie. The `wiki-security-friends` adapter stores the owner identity in a client-sessions cookie (`wikiSession` on HTTP, `wikiTlsSession` on HTTPS), signed with the site's `cookieSecret`. When a `PUT …/page/<slug>/action` arrives, the server's `isAuthorized` check compares `req.session.friend` against the owner secret. That is the whole gate.\n\nTwo things make that gate awkward to share with an autonomous agent:\n\n- **It's all-or-nothing.** The cookie is *farm-wide* owner access — on our farm one token authorised **every** `*.timeline.ide.earth` subdomain (a shared `cookieSecret`; logging into one TLD logs you into all the siblings). There is no built-in \"just this host.\"\n- **It's a live secret.** Pasting it into an agent's prompt leaks a multi-day bearer credential straight into a transcript. Whoever holds the string writes as owner across the farm until it expires.\n\nSo: how do you let an agent **write** — not just read — a system you own, without handing it a credential you cannot take back?"
           },
@@ -163,6 +196,16 @@
           },
           {
             "type": "markdown",
+            "id": "056d1ca1a27d0624",
+            "text": "## One auth, many agents — the multi-agent runtime shape\n\nThe pattern gets more interesting the moment there is more than one agent. A multi-agent runtime often runs several agents at once, each driving its **own browser instance** — its own tab, profile, or headless session — and they may all need to act as the **same** FedWiki owner: one identity, many hands.\n\nThe naive way is to log each browser instance in as the owner, or copy the owner cookie into every one. That is **N live copies of a farm-wide credential** — every agent omnipotent, the secret multiplied across N cookie stores, and revocation becomes hunting down every instance.\n\nThe cookie jar inverts it. The **auth lives once**, in the jar. Each agent — whatever browser instance it drives — asks the jar for a scoped session at the moment it writes. Same owner identity, **N independent capabilities**, each narrowed by its own `WIKI_GRANT`: agent A writes host X, agent B writes host Y, neither able to touch the other's hosts even though the underlying cookie could. Every write is journaled, so you can read back which delegate did what.\n\nThree properties that matter for a fleet:\n\n- **One identity, many scopes.** The browser instance is a *rendering surface*, not a credential store. Auth is fetched per-write, per-grant — never resident in the agent.\n- **Central revocation.** Rotate the one cookie in the jar and every instance drops at once; no per-agent teardown.\n- **Collision discipline.** Writes go through the FedWiki action API and land in the page journal, so concurrent agents on different hosts never collide; same-host writes are last-write-wins with a full, reversible journal trail.\n\nThe multi-agent delegation shape in one line: **fan capabilities out from a single retained authority, scope each one independently, and keep the credential in none of them.** (See the harness's *One Session One Seat*, linked below, for how distinct agent sessions are seated — the cookie jar is how a fleet of them can share one owner without sharing one key.)"
+          },
+          {
+            "type": "markdown",
+            "id": "8d9dc8cefdd0ee11",
+            "text": "## Static vs live — two permission regimes\n\nPermission over shared fedwiki work has two regimes, because the farm has two faces.\n\n**Static — the published snapshot (the Gatehouse).** `guide.agentprivacy.ai` is read-only HTML + JSON; there is no server to check a cookie, so permission has to live *inside the artefact*. The **Gatehouse** does exactly that: it encrypts a document into the static site and gates it behind a **sigil** (an emoji string — address + entropy) and a **proverb** (proof-of-reading). The two are stretched with PBKDF2-SHA256 into an AES-GCM key, and the blob decrypts **client-side** only when you supply both — nothing sensitive is ever served. Permission here is **proof-of-understanding**: the key is *knowing the canon* (canon-keyed gates) or *having received the letter* (letter-keyed gates). It is the right tool when there is no server to trust — the reader's understanding is the credential. (Live door: `guide.agentprivacy.ai/gates/`.)\n\n**Live — the writable farm (delegation, heading to MyTerms).** A running FedWiki *does* have a server and an owner, so permission becomes **delegation of write**: the cookie broker of this case study — scoped by `WIKI_GRANT`, journaled, centrally revocable. This is where **MyTerms** upgrades the hand-rolled grant into a **signed bilateral agreement**: the owner (First Person) proposes machine-readable terms; the agent accepts, counter-offers once, or declines (the invitation pattern); both hold identical immutable copies; and the broker derives the allowed scope *from that agreement* instead of from an env var.\n\nThe two regimes ask different questions. Static asks **\"did you understand?\"** and lets understanding decrypt. Live asks **\"did we agree, and to what?\"** and lets the agreement authorise — and MyTerms is the agreement half. The proverb gate and the signed grant are the same instinct — *trust earned, not assumed* — worked out against two different substrates."
+          },
+          {
+            "type": "markdown",
             "id": "cdb3f7bc8db6776d",
             "text": "## Why it generalises — the MyTerms miniature\n\nThe broker is a hand-rolled instance of the **MyTerms / IEEE 7012** delegation pattern: a principal delegates a *scoped capability* to an agent rather than handing over full authority.\n\n- `WIKI_GRANT` (host-scoped permission) = **delegation inside an agreed scope** — the agent acts only within what it was granted, never the full authority the cookie carries.\n- The owner cookie held off-agent on disk = the principal's **retained authority** — the agent gets a capability, not the credential.\n- `push-audit.log` = the **record** that the delegated action happened within scope.\n\nWhat it does *not yet* do — and where MyTerms slots in — is bind the delegation to a **signed agreement**. Today the grant is just an env var the operator sets. The IEEE-7012 version: the site owner publishes machine-readable terms, the agent presents an agreement, and the broker honours a push **only** against a valid signed agreement, deriving the allowed scope **from that agreement** instead of from `WIKI_GRANT`. The code keeps the seam open for exactly this swap — the \"is this delegation permitted?\" check lives in `granted()`/`resolve()`, isolated from the push path, so env-var scoping can become signed-terms scoping without touching how writes happen. The harness carries the two-agent (Swordsman ⊥ Mage) embodiment of the same split — see the cross-site link below."
           },
@@ -173,8 +216,13 @@
           },
           {
             "type": "markdown",
+            "id": "9dc26fe81b8202c7",
+            "text": "## How the MyTerms harness works\n\nMyTerms is not only a spec we point at; there is a working **harness** that makes the agreement executable. It runs the invitation pattern as a loop between two roles — an **agreement-and-boundary layer** (proposes the terms, owns the record, guards the gate) set against a **delegation layer** (acts only inside the agreed scope). *(The exact packaging of those two roles is still moving — earlier notes described them as two separate browser extensions, but that is one instance, not the definition. The load-bearing part is the **split** and the bilateral record, not the container.)*\n\nThe loop is **Measure → Propose → Assay**: the First Person's terms are proposed; a `beatsFrontier` predicate plus a cliff-watcher decide whether a counter-offer improves on the standing baseline; on agreement both parties keep **identical, immutable copies** of the bilateral record. Honest status — it currently runs end-to-end **only on a mock bus** (a built prototype, not a shipped result), so treat it as the shape the live-site delegation is growing toward, not a finished dependency. The image to keep: *two mirrors make a door — one reflects the terms, one reflects the delegation, and where they meet the First Person walks through.* The cookie broker is the **delegation mirror**, already standing; MyTerms is the **terms mirror** it is waiting on. The harness's *One Session One Seat* and its MyTerms path are linked below."
+          },
+          {
+            "type": "markdown",
             "id": "cc98c85779e93331",
-            "text": "## Takeaways\n\n- **Turn a shared credential into a brokered capability.** Keep the secret on the owner's side; give the agent a *call*, not the *cookie*.\n- **Scope below what the credential can do.** The broker enforces least privilege; don't entrust it to the agent.\n- **Derive expiry, log every use.** A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.\n- **This is the delegation primitive under agent privacy.** A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it."
+            "text": "## Takeaways\n\n- **Turn a shared credential into a brokered capability.** Keep the secret on the owner's side; give the agent a *call*, not the *cookie*.\n- **Scope below what the credential can do.** The broker enforces least privilege; don't entrust it to the agent.\n- **Derive expiry, log every use.** A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.\n- **This is the delegation primitive under agent privacy.** A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it.\n- **One key idea, two substrates.** Static sharing gates on *proof-of-understanding* (the Gatehouse proverb); live sharing gates on *delegated, scoped write* (this broker), heading toward a MyTerms signed agreement.\n- **This is one case study.** The same permission question runs under every shared workflow, skill, chronicle, and item in the local fedwiki universe; the broker is the write answer for the live farm."
           },
           {
             "type": "markdown",
@@ -184,7 +232,15 @@
           {
             "type": "markdown",
             "id": "4310189a900a4963",
-            "text": "## See\n\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- [[Agentprivacy Wiki Resync]] · [[Agentprivacy Wiki To Skill]] — sibling distribution skills\n- [[Agentprivacy Wiki Dream Cycle]] — the research → gate → build → snapshot loop\n\n---\n← [[Welcome Visitors]] · *source of truth: the `fedwiki-cohere-sync` skill (`~/.claude/skills/`) + the two chronicles named above. The wiki is a projection.*"
+            "text": "## See\n\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- [[Agentprivacy Wiki Resync]] · [[Agentprivacy Wiki To Skill]] — sibling distribution skills\n- [[Agentprivacy Wiki Dream Cycle]] — the research → gate → build → snapshot loop\n- **The Gatehouse** — proof-of-understanding gates on the static snapshot: `guide.agentprivacy.ai/gates/`\n\n---\n← [[Welcome Visitors]] · *source of truth: the `fedwiki-cohere-sync` skill (`~/.claude/skills/`) + the two chronicles named above. The wiki is a projection.*"
+          },
+          {
+            "type": "reference",
+            "id": "dfc9c430482233fa",
+            "site": "harness.guide.agentprivacy.ai",
+            "slug": "one-session-one-seat",
+            "title": "One Session One Seat",
+            "text": "The harness convention that seats one agent session per seat — the fleet the cookie jar lets share a single owner auth."
           },
           {
             "type": "reference",
@@ -228,6 +284,79 @@
         "type": "markdown",
         "id": "70bc6ec230aadfd3",
         "text": "### What the runtime taught us about MyTerms\n\nThe same solve doubled as a MyTerms study pass — checked against the IEEE source and Customer Commons, and it caught one of our own drafting errors:\n\n- **The standard is IEEE 7012-2025** (\"Machine Readable Personal Privacy Terms\"). It **inverts notice-and-consent**: the First Person *proposes* the terms; the second party accepts, counter-offers **once**, or declines — the **invitation pattern** (acceptance before proposal). Terms are *selected from a standard roster* (hosted by the nonprofit Customer Commons), not free-written.\n- **Three registers, one agreement** — Plain Language (human-readable), Legal (canonical at Customer Commons), and Machine-readable (JSON-LD over W3C DPV). The same one-logic-many-skins shape the broker's grant wants.\n- **The correction we made mid-solve:** a 7012 agreement is strictly **two-party bilateral** — First Person ↔ Second Party. **Agents, devices, and trust communities are NOT parties** — they are the fabric *around* the agreement. Our first draft wrongly counted the agent as a party; the broker embodies the fix — the agent is the delegate acting *inside* the scope, never a signatory to it.\n- **The convergence:** agentprivacy's verifiable trust communities (VRCs) measure fidelity *from outside* the agreement — they are the Gödelian **witness from beyond the system**; and the Mage (knowledge agent) operates strictly inside the **Σ scope** of the agreement the Swordsman signs. Re-read the broker with that lens: `WIKI_GRANT` is the Σ scope, the agent is the Mage, and the one missing organ is the Swordsman's signed proposal that should *derive* the scope instead of the operator setting it by hand."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "056d1ca1a27d0624",
+      "item": {
+        "type": "markdown",
+        "id": "056d1ca1a27d0624",
+        "text": "## One auth, many agents — the multi-agent runtime shape\n\nThe pattern gets more interesting the moment there is more than one agent. A multi-agent runtime often runs several agents at once, each driving its **own browser instance** — its own tab, profile, or headless session — and they may all need to act as the **same** FedWiki owner: one identity, many hands.\n\nThe naive way is to log each browser instance in as the owner, or copy the owner cookie into every one. That is **N live copies of a farm-wide credential** — every agent omnipotent, the secret multiplied across N cookie stores, and revocation becomes hunting down every instance.\n\nThe cookie jar inverts it. The **auth lives once**, in the jar. Each agent — whatever browser instance it drives — asks the jar for a scoped session at the moment it writes. Same owner identity, **N independent capabilities**, each narrowed by its own `WIKI_GRANT`: agent A writes host X, agent B writes host Y, neither able to touch the other's hosts even though the underlying cookie could. Every write is journaled, so you can read back which delegate did what.\n\nThree properties that matter for a fleet:\n\n- **One identity, many scopes.** The browser instance is a *rendering surface*, not a credential store. Auth is fetched per-write, per-grant — never resident in the agent.\n- **Central revocation.** Rotate the one cookie in the jar and every instance drops at once; no per-agent teardown.\n- **Collision discipline.** Writes go through the FedWiki action API and land in the page journal, so concurrent agents on different hosts never collide; same-host writes are last-write-wins with a full, reversible journal trail.\n\nThe multi-agent delegation shape in one line: **fan capabilities out from a single retained authority, scope each one independently, and keep the credential in none of them.** (See the harness's *One Session One Seat*, linked below, for how distinct agent sessions are seated — the cookie jar is how a fleet of them can share one owner without sharing one key.)"
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "dfc9c430482233fa",
+      "item": {
+        "type": "reference",
+        "id": "dfc9c430482233fa",
+        "site": "harness.guide.agentprivacy.ai",
+        "slug": "one-session-one-seat",
+        "title": "One Session One Seat",
+        "text": "The harness convention that seats one agent session per seat — the fleet the cookie jar lets share a single owner auth."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "e6d75a42f28e15a1",
+      "item": {
+        "type": "markdown",
+        "id": "e6d75a42f28e15a1",
+        "text": "## One case study of a bigger pattern\n\nThe cookie broker is one worked example of a larger effort: **sharing agent work across the local fedwiki universe** — and not just pages, but the whole substance of a runtime: **workflows, skills, chronicles, and items**, forkable and co-held across the farm's sister sites. Once agents are producing and consuming that shared work, one question recurs at every layer: *who may do what, and how is that permission granted without handing over a master key?* This page is the **write-delegation** answer for the live, writable farm. Its complement — permission over the **static, published** snapshot — is a different mechanism entirely; the two are set side by side below."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "8d9dc8cefdd0ee11",
+      "item": {
+        "type": "markdown",
+        "id": "8d9dc8cefdd0ee11",
+        "text": "## Static vs live — two permission regimes\n\nPermission over shared fedwiki work has two regimes, because the farm has two faces.\n\n**Static — the published snapshot (the Gatehouse).** `guide.agentprivacy.ai` is read-only HTML + JSON; there is no server to check a cookie, so permission has to live *inside the artefact*. The **Gatehouse** does exactly that: it encrypts a document into the static site and gates it behind a **sigil** (an emoji string — address + entropy) and a **proverb** (proof-of-reading). The two are stretched with PBKDF2-SHA256 into an AES-GCM key, and the blob decrypts **client-side** only when you supply both — nothing sensitive is ever served. Permission here is **proof-of-understanding**: the key is *knowing the canon* (canon-keyed gates) or *having received the letter* (letter-keyed gates). It is the right tool when there is no server to trust — the reader's understanding is the credential. (Live door: `guide.agentprivacy.ai/gates/`.)\n\n**Live — the writable farm (delegation, heading to MyTerms).** A running FedWiki *does* have a server and an owner, so permission becomes **delegation of write**: the cookie broker of this case study — scoped by `WIKI_GRANT`, journaled, centrally revocable. This is where **MyTerms** upgrades the hand-rolled grant into a **signed bilateral agreement**: the owner (First Person) proposes machine-readable terms; the agent accepts, counter-offers once, or declines (the invitation pattern); both hold identical immutable copies; and the broker derives the allowed scope *from that agreement* instead of from an env var.\n\nThe two regimes ask different questions. Static asks **\"did you understand?\"** and lets understanding decrypt. Live asks **\"did we agree, and to what?\"** and lets the agreement authorise — and MyTerms is the agreement half. The proverb gate and the signed grant are the same instinct — *trust earned, not assumed* — worked out against two different substrates."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "add",
+      "id": "9dc26fe81b8202c7",
+      "item": {
+        "type": "markdown",
+        "id": "9dc26fe81b8202c7",
+        "text": "## How the MyTerms harness works\n\nMyTerms is not only a spec we point at; there is a working **harness** that makes the agreement executable. It runs the invitation pattern as a loop between two roles — an **agreement-and-boundary layer** (proposes the terms, owns the record, guards the gate) set against a **delegation layer** (acts only inside the agreed scope). *(The exact packaging of those two roles is still moving — earlier notes described them as two separate browser extensions, but that is one instance, not the definition. The load-bearing part is the **split** and the bilateral record, not the container.)*\n\nThe loop is **Measure → Propose → Assay**: the First Person's terms are proposed; a `beatsFrontier` predicate plus a cliff-watcher decide whether a counter-offer improves on the standing baseline; on agreement both parties keep **identical, immutable copies** of the bilateral record. Honest status — it currently runs end-to-end **only on a mock bus** (a built prototype, not a shipped result), so treat it as the shape the live-site delegation is growing toward, not a finished dependency. The image to keep: *two mirrors make a door — one reflects the terms, one reflects the delegation, and where they meet the First Person walks through.* The cookie broker is the **delegation mirror**, already standing; MyTerms is the **terms mirror** it is waiting on. See [[One Session One Seat]] and the harness MyTerms path (linked below)."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "edit",
+      "id": "cc98c85779e93331",
+      "item": {
+        "type": "markdown",
+        "id": "cc98c85779e93331",
+        "text": "## Takeaways\n\n- **Turn a shared credential into a brokered capability.** Keep the secret on the owner's side; give the agent a *call*, not the *cookie*.\n- **Scope below what the credential can do.** The broker enforces least privilege; don't entrust it to the agent.\n- **Derive expiry, log every use.** A capability that self-expires and self-records is one you can safely hand out and cleanly revoke.\n- **This is the delegation primitive under agent privacy.** A bearer token is the crude form; a scoped, audited, terms-bound broker is the shape MyTerms is standardising. The cookie jar is the smallest working instance of it.\n- **One key idea, two substrates.** Static sharing gates on *proof-of-understanding* (the Gatehouse proverb); live sharing gates on *delegated, scoped write* (this broker), heading toward a MyTerms signed agreement.\n- **This is one case study.** The same permission question runs under every shared workflow, skill, chronicle, and item in the local fedwiki universe; the broker is the write answer for the live farm."
+      },
+      "date": 1783996800000
+    },
+    {
+      "type": "edit",
+      "id": "4310189a900a4963",
+      "item": {
+        "type": "markdown",
+        "id": "4310189a900a4963",
+        "text": "## See\n\n- [[The Wikis]] — the Librarian's shelves this page sits on\n- [[Agentprivacy Wiki Resync]] · [[Agentprivacy Wiki To Skill]] — sibling distribution skills\n- [[Agentprivacy Wiki Dream Cycle]] — the research → gate → build → snapshot loop\n- **The Gatehouse** — proof-of-understanding gates on the static snapshot: `guide.agentprivacy.ai/gates/`\n\n---\n← [[Welcome Visitors]] · *source of truth: the `fedwiki-cohere-sync` skill (`~/.claude/skills/`) + the two chronicles named above. The wiki is a projection.*"
       },
       "date": 1783996800000
     }
