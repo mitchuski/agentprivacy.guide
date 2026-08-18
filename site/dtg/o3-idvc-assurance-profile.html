@@ -1,0 +1,107 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O3 — IDVC Assurance Profile · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>O3 — IDVC Assurance Profile</span></div>
+  <article><div class="md"><h1>O3 — The IDVC as the MLP&#39;s qualifying attestation</h1>
+<p><em>&quot;Valid IDVC at assurance ≥ L from a registry-listed IDVP&quot; — the standard liveness input contract, now<br>shaped by PR-LIV and the attestation-schema discipline.</em></p>
+<p><strong>Register:</strong> O3 · leverage 🟠 · <strong>Ladder:</strong> design doc<br><strong>Anchor (cred-spec):</strong> <strong>IDVC</strong> — any W3C VC satisfying VTC/VTN identity-proofing; named issuers<br>Veriff/Jumio/Yoti/Onfido/ID.me/Socure/Trulioo. Not a DTG credential subtype.<br><strong>Anchor (decision doc):</strong> <strong>PR-LIV</strong> (§10) · MLP (§7.1) · §18 attestation schema as the shared boundary<br>determinant · §8 assurance allocation.</p>
+<hr>
+</div>
+<div class="md"><h2>What changed with the decision doc</h2>
+<p>The original register entry proposed inventing an &quot;IDVC assurance-level predicate profile.&quot; The decision doc<br>has now <em>built the frame for it</em>: PR-LIV is exactly that predicate, stated with its negative meaning, and<br>the MLP is the profile it ships in. What remains for this exploration is the <strong>binding</strong>: mapping the<br>cred-spec&#39;s IDVC onto the decision doc&#39;s attestation-schema requirements so a biometric provider knows<br>precisely what to sign.</p>
+<p>The controlling insight (§18): <strong>the issuer attestation schema determines both boundaries at once.</strong> A<br>field added for assurance (policy version, assurance class, accreditation reference) is simultaneously a<br>correlation surface. The IDVC profile is therefore a schema-governance exercise, not just a predicate.</p>
+</div>
+<div class="md"><h2>The statement (PR-LIV, instantiated for IDVCs)</h2>
+<p>The prover possesses an IDVC that: was signed by an IDVP accepted under the relying policy (via the trust<br>registry — O4); asserts a liveness/identity-proofing outcome satisfying the requested predicate; was issued<br>under an accepted policy id+version; carries an <strong>assurance class ≥ L</strong>; is within validity; is not revoked<br>per the profile&#39;s status semantics; is bound to the holder secret; and is bound to the current canonical<br>transcript (§15).</p>
+<p><strong>Negative meaning, carried verbatim</strong> (§10.2): not that the biometric determination was correct; not that<br>the sensor was uncompromised; not civil identity; not global uniqueness; not non-transfer of the key; not<br>consent or comprehension. The issuer stays accountable for the determination (§8, §10.5) — the proof carries<br>possession + predicates, never correctness.</p>
+</div>
+<div class="md"><h2>Schema mapping (IDVC fields → §18.2 field classes)</h2>
+<table>
+<thead>
+<tr>
+<th>IDVC content</th>
+<th>§18.2 field class</th>
+<th>Disclosure treatment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IDVP identity</td>
+<td>issuer accreditation reference</td>
+<td>set-membership proof (concealment within registry set) or explicit — profile-specific (§12.3)</td>
+</tr>
+<tr>
+<td>assurance level L</td>
+<td>assurance class</td>
+<td>disclose the <em>threshold met</em>, minimise cardinality — rare classes fingerprint (§10.4)</td>
+</tr>
+<tr>
+<td>identity-proofing policy</td>
+<td>policy identifier/version</td>
+<td>prove accepted value or coarse class</td>
+</tr>
+<tr>
+<td>issuance/expiry</td>
+<td>validity bounds</td>
+<td>interval-membership proof, never exact timestamps (§18.3)</td>
+</tr>
+<tr>
+<td>subject binding</td>
+<td>holder-binding commitment</td>
+<td>hidden witness</td>
+</tr>
+<tr>
+<td>determination result</td>
+<td>determination result</td>
+<td>hidden; only the predicate disclosed</td>
+</tr>
+<tr>
+<td>status entry</td>
+<td>status reference</td>
+<td>privacy-preserving status / bounded cache (→ O4 revocation patterns)</td>
+</tr>
+</tbody></table>
+<p>Prohibited (§18.3): stable issuer-local identifiers, raw biometrics, reversible templates, exact timestamps,<br>unique status indices. <strong>The no-biometric-honeypot stance is now a schema rule, not just a design stance.</strong></p>
+</div>
+<div class="md"><h2>Why this is the Chair&#39;s boundary object</h2>
+<p>The MLP is deliberately shippable without the Sybil/unlinkability trade (§7.1) — it is the profile a<br>biometric provider (Realeyes included) can implement and benchmark first. This exploration gives the<br>provider side one page: <em>what your attestation must contain, what treatment each field gets, what the<br>verifier may rely on, and what you remain accountable for.</em> The assurance-class enumeration needs a<br>registry field — coordinate with the Credentials TF (§27.1: credential fields can defeat context separation<br>even when the proof is sound).</p>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li>rt 02 STUB (ZKP of a valid issuer signature over a hidden attestation) — the construction seat.</li>
+<li>The decision doc&#39;s PR-LIV boundary analysis (§10) — the assurance side, done.</li>
+<li>The named-IDVP ecosystem in the cred-spec — the real-world issuer set.</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — schema profile draft:</strong> the field table above as a versioned attestation-schema profile with the<br>§18.1 per-field register (purpose, disclosure mode, cardinality, stability, correlation risk, lifecycle).</li>
+<li><strong>M2 — disclosure-boundary record</strong> for PR-LIV-over-IDVC (§10.3/§10.4 instantiated: which correlators an<br>actual IDVP schema introduces — rare assurance classes, proving-time fingerprints, status patterns).</li>
+<li><strong>M3 — rt 02 reference model:</strong> signature-in-circuit over a mock IDVC with the M1 schema; negative tests<br>from §26.1 (expired/revoked accepted attestation must fail; output implying biometric correctness must be<br>rejected as a <em>claim</em>).</li>
+<li><strong>M4 — provider one-pager</strong> for TF review with the Chair.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Signature scheme reality: named IDVPs sign classical W3C VCs (ECDSA/EdDSA) — signature-in-circuit cost vs<br>issuer re-signing in a ZK-friendly scheme vs format-level selective disclosure (BBS+/SD-JWT) as the<br>carrier with our predicate layered on. §25&#39;s evaluation list decides.</li>
+<li>Assurance-class vocabulary: whose enumeration — ours, the registry&#39;s, or an external framework<br>(NIST IAL/…)? Cardinality-minimisation (§18.2) argues for a small mapped set.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="o3-idvc-assurance-profile.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

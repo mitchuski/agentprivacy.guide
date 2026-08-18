@@ -1,0 +1,170 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Operators Loop · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=harness" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Operators Loop</span></div>
+  <article><div class="md"><h1>🧰 The Operators Loop</h1>
+</div>
+<div class="md"><p>This is the harness as an <strong>operational autoresearch instrument</strong>: one loop<br>you can run end to end on a small local machine, six paths that grow out of<br>it, and a set of stable read surfaces that let you bring your own interface<br>— your own UX — without ever touching a ledger. <code>node tools/adventure.mjs</code><br>prints this map from inside the repo, with your local state filled in.</p>
+</div>
+<div class="md"><h2>One machine, one loop</h2>
+<p><strong>Requirements:</strong> Node ≥ 18. Nothing else — zero npm dependencies, no<br>network, no accounts. The multi-agent rounds need <em>a</em> model driver, and any<br>of these works: Claude Code&#39;s Workflow tool (the reference), the Agent SDK,<br>or an Ollama-class <strong>local model</strong> — hh_workshop ran every seat on a local<br>12B, air-gapped, hashes computed code-side so the seat physically cannot<br>see the salt (<code>HARNESS_PATHS.md</code> §12). A laptop is enough; a Pi serves the<br>wiki wall.</p>
+<p>The loop, end to end:</p>
+<pre><code class="language-bash">node tools/check.mjs                                   # 1 · prove the axioms — every gate
+node tools/adventure.mjs                               # 2 · see your paths
+node tools/new_instance.mjs ../my-harness my-harness   # 3 · scaffold (the wizard)
+#    fill every TODO in harness.config.mjs — ADOPTION.md, five answers, Gap first
+node engine/conform.mjs ../my-harness                  # 4 · the gate accepts your config
+node tools/bundle.mjs ../my-harness/harness.config.mjs ../my-harness/harness.workflow.mjs
+#    run the workflow (your driver) → runs/&lt;runId&gt;/    # 5 · a round: propose ⊥ prove
+node tools/render_run.mjs ../my-harness r1             # 6 · audit — every seed re-derived
+#    fold as keystone: frontier first, chronicle, conform green again (README step 5)
+node tools/mint_artefact.mjs ../my-harness r1          # 7 · seal what survived (κ)
+node tools/wiki_install.mjs ../my-harness --farm ~/.wiki   # 8 · observe — the wall updates
+</code></pre>
+<p>Step 8 closes the cycle: the round&#39;s story is pages a person can fork, a<br>graph an agent can fetch, and a star seating on the lattice — all derived<br>from the ledgers, so none of it can drift. Then the loop goes round again:<br>what the wall shows becomes the next round&#39;s measure.</p>
+</div>
+<div class="md"><h2>Choose your adventure</h2>
+<p>The corpus this harness came from runs the same model at every register,<br>from formal papers to narrative myth — and the harness carries that whole<br>span, because the discipline is register-invariant: <strong>many tellings, one<br>invariant, and a gate that catches them drifting.</strong></p>
+<table>
+<thead>
+<tr>
+<th>register</th>
+<th>path</th>
+<th>what you run</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>most academic 🎓</td>
+<td><strong>autoresearch</strong> — claims that survive an adversary</td>
+<td>the litreview pattern: sweep ⊥ refute ⊥ judge, refuters blind to the prover; absence is never novelty; an all-clear run indicts itself (<code>HARNESS_PATHS.md</code> §15, <code>RESEARCH.md</code>)</td>
+</tr>
+<tr>
+<td>operational 🤺</td>
+<td><strong>the spar → your own instance</strong></td>
+<td>the loop above — the wizard, the Gap, the census</td>
+</tr>
+<tr>
+<td>interop 🔗</td>
+<td><strong>acceptance &amp; registries</strong></td>
+<td>the DTG pattern: digest-manifest match, human gates, disclosure (§14); the descendant-lane pattern: inherit the constitution whole (§16)</td>
+</tr>
+<tr>
+<td>federated 🕸️</td>
+<td><strong>the Observe lane</strong></td>
+<td><code>WIKI.md</code> — wikis auto-populated per instance, <code>examples/wiki-farm/</code> in the box</td>
+</tr>
+<tr>
+<td>geometric ⭐</td>
+<td><strong>the lattice</strong></td>
+<td><code>star.mjs</code> (vertex ⊥ anchor, results at κ mod 64) · <code>spellweb.mjs --workshop</code> · <code>emit_feed.mjs</code> → /star, game42</td>
+</tr>
+<tr>
+<td>most myth 📖</td>
+<td><strong>spells &amp; chronicles</strong></td>
+<td><code>SPECIALISATION.md</code> personas and spells; chronicles read in date order — the same truths as the papers, told as story</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>BYO interface, BYO experience</h2>
+<p>Every surface below is a <strong>stable, derived, read-only projection</strong>. Build<br>any UI you like against them — a terminal, a game, a gallery, a voice — and<br>you inherit the discipline for free, because interfaces read projections and<br><strong>never write ledgers</strong>. The write path stays what it always was: seats<br>write runs, the keystone folds, the First Person opens doors.</p>
+<table>
+<thead>
+<tr>
+<th>surface</th>
+<th>shape</th>
+<th>derived by</th>
+<th>feeds</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>frontier.json</code></td>
+<td>the numbers — sole authority (GR-1)</td>
+<td>the keystone, by hand</td>
+<td>anything that shows progress</td>
+</tr>
+<tr>
+<td><code>runs/&lt;id&gt;/</code></td>
+<td>proposal_canon · gap · verdict, per lever</td>
+<td>the loop</td>
+<td>audit UIs, replays — every seed re-derivable from bytes</td>
+</tr>
+<tr>
+<td><code>graph.json</code></td>
+<td>node <code>{id,type,label,domain,layer,desc}</code> · edge <code>{source,target,type}</code></td>
+<td><code>spellweb.mjs</code></td>
+<td>knowledge-graph UIs, agent memory</td>
+</tr>
+<tr>
+<td><code>star.json</code> (<code>star.v1</code>)</td>
+<td>vertex ⊥ anchor + results at κ mod 64</td>
+<td><code>star.mjs</code></td>
+<td>lattice UIs, game42, City-Key work</td>
+</tr>
+<tr>
+<td><code>runtime-feed.v1</code></td>
+<td>moving ceiling R(t) · lattice · κ artefacts</td>
+<td><code>emit_feed.mjs</code></td>
+<td>/star instruments, dashboards</td>
+</tr>
+<tr>
+<td>wiki pages</td>
+<td>FedWiki page JSON, slug-bijective</td>
+<td><code>wiki_emit.mjs</code></td>
+<td>any FedWiki client; fork-based federation</td>
+</tr>
+<tr>
+<td>artefact bundles</td>
+<td>κ-addressed, evidence hash-manifest, <code>DOOR.md</code></td>
+<td><code>mint_artefact.mjs</code></td>
+<td>anything that carries results across a boundary</td>
+</tr>
+<tr>
+<td>VRC edges</td>
+<td>ed25519-signed κ→κ, signer <code>did:key</code></td>
+<td><code>vrc.mjs</code></td>
+<td>cross-party trust graphs</td>
+</tr>
+</tbody></table>
+<p>Two rules keep a BYO UI honest: cite numbers from <code>frontier.json</code>, never<br>restate them (GR-1); and render doors as doors — a UI may show the<br>publish/serve/submit action, never perform it (T6).</p>
+</div>
+<div class="md"><h2>Interoperability — how the work leaves home</h2>
+<ul>
+<li><strong>κ / UOR</strong> — every sealed result is content-addressed by one κ law<br>(<code>tools/kappa.mjs</code>, <code>HOLONS.md</code>). κ&#39;s lineage is <em>from</em> UOR, so a<br>κ-address meets the UOR/kappa-registry substrate as shared lineage — the<br>uor_kappa lane (§16) is that meeting, run as research.</li>
+<li><strong>VRC / credential specs</strong> — <em>a reference proposes; a signature mints.</em><br>A signed κ→κ edge with a <code>did:key</code> signer is the shape verifiable-<br>credential ecosystems already speak; the DTG cred-spec work maps onto it,<br>and <code>did:cid</code> identity is this layer named for people (hearthold, §11).</li>
+<li><strong>FedWiki / OASIS</strong> — federation by forking: every page carries its<br>journal, every site can fork any page it can reach, and cross-site links<br>are explicit references. The OASIS pattern (consented pages spooling to a<br>shared federation) rides the same rails — outward legs at the door.</li>
+<li><strong>Acceptance flows</strong> — when a counterparty must trust a result they<br>didn&#39;t watch happen: pin a manifest, re-run, byte-match, human-gate the<br>admission and the publication, disclose the agent (§14).</li>
+</ul>
+</div>
+<div class="md"><h2>The small-machine promise</h2>
+<p>Everything in this table runs offline on modest hardware: the engine and<br>every gate (<code>check.mjs</code>), the data projections (<code>spellweb</code>, <code>star</code>,<br><code>emit_feed</code> — data only, views live with the consumer; <code>render_run</code> — one<br>static audit page, no CDN), the wiki farm (one Node process; a Raspberry Pi<br>serves a federation), and the loop itself under a local model driver. The<br>only thing that ever needs the network is the door — and that is exactly<br>where a person is standing.</p>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 the-operators-loop</span><a class="asset-file" href="/harness/assets/the-operators-loop/WORKFLOW.md" download>WORKFLOW.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-operators-loop.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

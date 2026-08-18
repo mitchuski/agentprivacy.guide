@@ -1,0 +1,107 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — 07-trust-graph-formation · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — 07-trust-graph-formation</span></div>
+  <article><div class="md"><h1>07 — Trust-graph formation (the dream-agent cycle) — notes</h1>
+<p><strong>What this runtime is.</strong> An agentprivacy-harness runtime that models <em>how the DTG trust graph forms</em>, run as<br>a <strong>dream-agent cycle</strong> (Mage proposes ⊥ Swordsman proves, across the Gap). It is the bridge runtime: it takes<br>the personhood anchor from runtime 01 and shows the graph growing on top of it, with every object named in<br>both the <strong>agentprivacy framework</strong> and the <strong>DTG Credentials Core Spec</strong>. Reference model, not a circuit —<br>like runtime 01 it demonstrates the <em>relations</em> a ZK trust-graph would prove, zero-dep and offline.</p>
+<p><strong>Run:</strong> <code>node test.mjs</code> → 11/11 (see below). <strong>Reuses:</strong> <code>../01-uniqueness-nullifier</code> (enrol + nullifier).</p>
+<hr>
+</div>
+<div class="md"><h2>The spec: how the graph forms, one collision at a time</h2>
+<p>The spellweb grammar states it in five words — <strong>collision → edge → propagation</strong> — &quot;the trust graph grows one<br>collision at a time.&quot; This runtime makes each arrow mechanical and names it on both sides:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Framework (agentprivacy)</th>
+<th>Cred-spec (DTG)</th>
+<th>In this runtime</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Node</strong></td>
+<td>personhood-anchored member; three-layer identity&#39;s <em>principal</em> + <em>data</em> layers</td>
+<td>member of a <strong>VTC</strong> with an <strong>M-DID</strong>; personhood via the <strong>PHC</strong> rule</td>
+<td><code>joinCommunity()</code> → <code>member = nullifier(secret, community)</code>; one node per human per community</td>
+</tr>
+<tr>
+<td><strong>Collision</strong></td>
+<td>an <em>encounter</em> producing a <em>matching compression</em> (proverb/spell match)</td>
+<td>the out-of-band event a <strong>VRC</strong> attests</td>
+<td><code>encounter()</code> → a shared value only the two parties can derive</td>
+</tr>
+<tr>
+<td><strong>Edge</strong></td>
+<td>a <strong>VRC</strong> (relationship layer): bilateral commitment, &quot;proof of bilateral comprehension without central authority&quot;</td>
+<td>a <strong>VRC</strong> between two fresh <strong>R-DIDs</strong>; the pairwise construction</td>
+<td><code>Mage.propose()</code> → candidate carrying each side&#39;s <code>rdid()</code> + consent</td>
+</tr>
+<tr>
+<td><strong>Consent gate</strong></td>
+<td>the shared graph grows only on mutual consent (SPELLWEB spec §6B)</td>
+<td>holder MUST present unaltered; bilateral issuance</td>
+<td>Swordsman rejects <code>unilateral-no-mutual-consent</code></td>
+</tr>
+<tr>
+<td><strong>Propagation</strong></td>
+<td>trust reaches transitively; value lives in the Gap (max betweenness)</td>
+<td><strong>community-anchored</strong> ZKP: two members of one <strong>VTC</strong> prove relationship existence</td>
+<td><code>TrustGraph.connected()</code> (BFS reachability)</td>
+</tr>
+</tbody></table>
+<p>The two <strong>cred-spec ZK constructions</strong> appear exactly here: <strong>pairwise (VRC-based)</strong> is the single edge; the<br><strong>community-anchored (VMC-based)</strong> is propagation within a shared C-DID. See <code>../CRED-SPEC-COHERENCE.md</code>.</p>
+</div>
+<div class="md"><h2>The dream-agent cycle (why it is a harness runtime, not just a graph)</h2>
+<p>The graph does not grow by fiat — it grows through the harness&#39;s dual-agent fold, which is the anti-Sybil<br>discipline made structural:</p>
+<ul>
+<li><strong>Mage (proposer, <code>bnot</code>)</strong> — proposes the <em>smallest</em> edge: &quot;these two members share a matching compression;<br>here is the candidate VRC.&quot; Conceal/reduce: it asserts, minimally.</li>
+<li><strong>Swordsman (prover, <code>neg</code>)</strong> — proves before signing: both endpoints personhood-anchored (PHC), no self-edge<br>(self-Sybil), mutual consent, fresh per-counterparty R-DIDs, and — <strong>across the Gap</strong> — it <em>recomputes</em> the<br>VRC commitment from the candidate&#39;s own public parts rather than trusting the Mage&#39;s claim (Fiat-Shamir<br>reseed, non-collusion). Signs only a validated edge; names and rejects every mirage.</li>
+<li><strong>The Gap (<code>⊕</code>)</strong> — the proposal and the proof are held apart. <code>neg(bnot(x)) = succ(x)</code>: the graph advances<br>by exactly one edge only when a <em>reduction</em> (the Mage&#39;s minimal proposal) is signed by a <em>proof</em> (the<br>Swordsman) that did not collude with it. A bare proposal never touches the graph (property G5a).</li>
+</ul>
+<p>This is the same algebra as the shareable dual-agent harness; here the &quot;artifact being made cheaper&quot; is the<br>trust graph itself, and the &quot;held-out gate&quot; is edge validity.</p>
+</div>
+<div class="md"><h2>Properties verified by <code>test.mjs</code> (11/11)</h2>
+<ul>
+<li><strong>G1</strong> bilateral consent (unilateral rejected; mutual forms the edge).</li>
+<li><strong>G2</strong> personhood anchor required (a non-member endpoint is rejected — PHC/VMC gate).</li>
+<li><strong>G3</strong> no self-edge (self-Sybil forbidden).</li>
+<li><strong>G4</strong> R-DID uniqueness — one node&#39;s R-DID differs per counterparty (unlinkable, cred-spec R-DID rule).</li>
+<li><strong>G5</strong> the fold advances only on a signature (a bare Mage proposal does not grow the graph).</li>
+<li><strong>G6</strong> one VRC per pair (duplicate edge rejected, idempotent).</li>
+<li><strong>G7</strong> the Gap catches a forged VRC commitment (prover recomputes, never trusts the proposer).</li>
+<li><strong>G8</strong> community-anchored propagation (trust reaches transitively; an edgeless member stays unreachable).</li>
+</ul>
+</div>
+<div class="md"><h2>Feedback to the strawman / cred-spec (candidate notes)</h2>
+<ol>
+<li><strong>Trust-graph formation is where our two ZK constructions get their operational definition.</strong> The cred-spec<br>names pairwise and community-anchored ZKP but does not say <em>when</em> an edge may be minted. This runtime&#39;s<br>Swordsman checks (personhood + mutual consent + fresh R-DIDs + non-collusion recompute) are a candidate<br><strong>edge-admissibility rule</strong> for the &quot;registry-ZK interaction&quot; the spec defers — worth raising as a profile.</li>
+<li><strong>The consent gate is a normative requirement, not a UX detail.</strong> G1 shows the shared graph must not grow on<br>unilateral action. Suggest the spec state bilateral-consent-to-edge explicitly (it currently implies it via<br>two-sided VRC issuance).</li>
+<li><strong>A VWC slots straight in.</strong> A third party witnessing an encounter is a <strong>VWC</strong> (taskContext-bound); adding a<br>witness channel to the cycle is the natural next extension (a Swordsman that also accepts a witness&#39;s<br>signed attestation of the collision). Not built here; flagged.</li>
+</ol>
+</div>
+<div class="md"><h2>Next steps for this runtime</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Add a <strong>witness (VWC)</strong> channel: an optional third-party attestation of the encounter, taskContext-bound.</li>
+<li><input disabled="" type="checkbox"> Add <strong>VPC/P-DID personas</strong> (runtime 04) so a node can present different personas per edge.</li>
+<li><input disabled="" type="checkbox"> Port the edge-admissibility statement to the circom gadget once 01/03 land (Poseidon nullifier + Merkle<br>membership prove the endpoints without revealing the members).</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-07-trust-graph-formation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

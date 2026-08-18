@@ -1,0 +1,802 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MyTerms Technical Integration · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="myterms">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site on" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=myterms" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/myterms/welcome-visitors.html">MyTerms</a> / <span>MyTerms Technical Integration</span></div>
+  <article><div class="md"><h1>MyTerms Technical Integration Plan</h1>
+</div>
+<div class="md"><h2>Swordsman Browser Agent × IEEE 7012-2025</h2>
+<p><strong>Document Type:</strong> Supporting Material for MyTerms Alliance Application<br><strong>Author:</strong> privacymage / agentprivacy<br><strong>Date:</strong> February 1, 2026 (refreshed April 22, 2026 against IEEE 7012 Integration Plan V2)<br><strong>Standard Reference:</strong> IEEE Std 7012™-2025 (Approved 4 November 2025; Published 20 January 2026)</p>
+<blockquote>
+<p><strong>V6 note (2026-06-10).</strong> Read R(d) as R(t) per PVM V6 §5 (the moving ceiling; every static reconstruction guarantee has a shelf life t*). One addition relevant to the Γ axis: the Existence-Leak law (C81, ~70%): a public feasibility attestation is itself a disclosure event, I(feasibility; method) &gt; 0, with the planning corollary C84 (every attestation discounts the migration horizon). The compounding-leakage results (policy separation compounds toward (2^N − 1)ε; amnesia caps at Nε, C83) strengthen this package&#39;s core claim that the agreement layer is not the enforcement layer.</p>
+</blockquote>
+<hr>
+</div>
+<div class="md"><h2>Overview</h2>
+<p>This document specifies how agentprivacy&#39;s Swordsman browser agent implements IEEE 7012-2025, the Standard for Machine Readable Personal Privacy Terms. The standard is treated as <strong>the agreement layer</strong> — the bilateral protocol on which enforcement is built, not the enforcement itself. IEEE 7012 is a thin waist (§1.1): it specifies person-to-entity agreement routines and intentionally leaves delegation, Σ separation, cryptographic substrate, and trust accumulation to the implementer.</p>
+<p>The Swordsman sits within a tetrahedral architecture (Swordsman, Mage, Reflect, Connect) where the protocol between agents is a communication substrate. That substrate enables guild-based secret languages — communities developing their own vocabulary on top of a shared waist (IEEE 7012 + W3C DPV + ODRL) — while IEEE 7012 supplies the agreement primitive that gives the Swordsman&#39;s blade meaning beyond single sessions.</p>
+<h3>What IEEE 7012 is <em>not</em></h3>
+<p>To prevent the common misread that the standard does more than it does:</p>
+<ul>
+<li><strong>Not an enforcement specification.</strong> A signed <code>SD-BASE</code> can still be violated in practice without ZK or TEE backing. Enforcement is the implementer&#39;s job.</li>
+<li><strong>Not an agent-separation specification.</strong> A single-agent monolith can be IEEE 7012-compliant and score Σ ≈ 0 on the Privacy Value Model. Σ lives in architecture, not in the agreement.</li>
+<li><strong>Not a multi-turn negotiation protocol.</strong> §A.1 and Figure A.1 cap negotiation at one round (accept / one counter-offer / decline). Richer negotiation is out of scope.</li>
+<li><strong>Not an inference-control specification.</strong> Inference over released data (Γ) is out of scope entirely.</li>
+<li><strong>Not a universal ontology.</strong> Annex D expects reconciliation with existing domain vocabularies (HL7 is the worked example) via ISO 23903 — community vocabularies live <em>above</em> the standard.</li>
+</ul>
+<h3>PVM V5.4 axis mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>IEEE 7012 contribution</th>
+<th>What IEEE 7012 does not provide</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Σ (agent)</td>
+<td>Role boundary between person-agent and entity-agent; makes separation testable via the agreement artifact</td>
+<td>The information-theoretic bound <code>I(S;M|FP) &lt; ε*</code></td>
+</tr>
+<tr>
+<td>Δ (data)</td>
+<td>Coarse-grained policy lattice via <code>SD-BASE-*</code> and <code>PDC-*</code></td>
+<td>Cryptographic enforcement — ZK/TEE backing lives below</td>
+</tr>
+<tr>
+<td>Γ (inference)</td>
+<td><code>SD-BASE-ATP</code> addresses second-party profiling as an agreement variable</td>
+<td>Inference over published data — out of scope</td>
+</tr>
+</tbody></table>
+<p>IEEE 7012 is a <strong>necessary but not sufficient</strong> condition for the Σ axis being measurable at all. Compliance with the standard is a precondition; the Swordsman + Mage + ZK substrate together close the loop.</p>
+<hr>
+</div>
+<div class="md"><h2>Architecture Alignment</h2>
+<h3>IEEE 7012 Components → Swordsman Implementation</h3>
+<table>
+<thead>
+<tr>
+<th>IEEE 7012 Specification</th>
+<th>Swordsman Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Individual&#39;s Agent</strong> (§5.2.1)</td>
+<td>Swordsman browser extension</td>
+</tr>
+<tr>
+<td><strong>Agreement-Chooser</strong> (§5.2.1.2)</td>
+<td>MyTerms configuration UI</td>
+</tr>
+<tr>
+<td><strong>Proposer</strong> (§5.2.1.3)</td>
+<td>Automatic terms presentation on site visit</td>
+</tr>
+<tr>
+<td><strong>Recorder</strong> (§5.2.4)</td>
+<td>Chronicle system with bilateral storage</td>
+</tr>
+<tr>
+<td><strong>Auditor</strong> (§5.2.5)</td>
+<td>Verification and dispute documentation</td>
+</tr>
+<tr>
+<td><strong>Entity&#39;s Agent</strong> (§5.3)</td>
+<td>Site-side responder (standard compliance)</td>
+</tr>
+</tbody></table>
+<h3>The P7012 Protocol Flow</h3>
+<pre><code>┌─────────────┐                              ┌─────────────┐
+│   FIRST     │                              │   ENTITY    │
+│   PERSON    │                              │   (SITE)    │
+└──────┬──────┘                              └──────┬──────┘
+       │                                            │
+       │  [Configure preferred terms]               │
+       ▼                                            │
+┌──────────────┐                              ┌─────────────┐
+│  SWORDSMAN   │                              │   ENTITY    │
+│    AGENT     │                              │    AGENT    │
+└──────┬───────┘                              └──────┬──────┘
+       │                                            │
+       │ ──── &quot;Do you support P7012 protocol?&quot; ────▶│
+       │                                            │
+       │ ◀──── &quot;P7012: SUPPORTED&quot; ─────────────────│
+       │                                            │
+       │ ──── &quot;SD-BASE as defined in registry?&quot; ──▶│
+       │                                            │
+       │        [Entity evaluates terms]            │
+       │                                            │
+       │ ◀──── &quot;SD-BASE: ACCEPTED&quot; ────────────────│
+       │         OR                                 │
+       │ ◀──── &quot;COUNTER-OFFER: SD-BASE-A&quot; ─────────│  (§A.1: ONE round only)
+       │         OR                                 │
+       │ ◀──── &quot;DECLINED&quot; ─────────────────────────│
+       │                                            │
+       │  Negotiation is capped at one round.       │
+       │  The First Person accepts the counter,     │
+       │  or the conversation ends.                 │
+       │                                            │
+       │        [If acceptable to First Person]     │
+       │                                            │
+       │ ──── [Signed Agreement] ──────────────────▶│
+       │ ◀──── [Counter-Signed Agreement] ─────────│
+       │                                            │
+       ▼                                            ▼
+┌──────────────┐                              ┌─────────────┐
+│  CHRONICLE   │                              │   ENTITY    │
+│   (RECORD)   │                              │   RECORD    │
+└──────────────┘                              └─────────────┘
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Agreement Implementation</h2>
+<h3>Tier 1: Service Delivery Agreements</h3>
+<p><strong>SD-BASE</strong> (Default)</p>
+<pre><code class="language-javascript">const SD_BASE = {
+  id: &quot;SD-BASE&quot;,
+  version: &quot;1.0&quot;,
+  registry: &quot;https://customercommons.org/agreements/&quot;,
+  permissions: {
+    serviceDelivery: true
+  },
+  prohibitions: {
+    analytics2P: true,
+    tracking2P: true,
+    profiling2P: true,
+    sharingAnonymized3P: true
+  },
+  obligations: {
+    dataPortability: &quot;optional&quot;
+  }
+};
+</code></pre>
+<p><strong>SD-BASE-DP</strong> (With Data Portability)</p>
+<pre><code class="language-javascript">const SD_BASE_DP = {
+  ...SD_BASE,
+  id: &quot;SD-BASE-DP&quot;,
+  obligations: {
+    dataPortability: &quot;required&quot;
+  }
+};
+</code></pre>
+<p><strong>Progressive Permissions</strong> (SD-BASE-A through SD-BASE-ATP-S3P)</p>
+<table>
+<thead>
+<tr>
+<th>Agreement</th>
+<th>Analytics 2P</th>
+<th>Tracking 2P</th>
+<th>Profiling 2P</th>
+<th>Share 3P</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SD-BASE</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>SD-BASE-A</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>SD-BASE-AT</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>SD-BASE-ATP</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>SD-BASE-ATP-S3P</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody></table>
+<h3>Tier 2: Data Contribution Agreements</h3>
+<p><strong>PDC-INTENT</strong> (Intentcasting)</p>
+<pre><code class="language-javascript">const PDC_INTENT = {
+  id: &quot;PDC-INTENT&quot;,
+  type: &quot;contribution&quot;,
+  purpose: &quot;intentcasting&quot;,
+  scope: &quot;specified_intent_data&quot;,
+  permissions: {
+    receiveQualifiedResponses: true
+  },
+  prohibitions: {
+    broadcastToUnqualified: true,
+    retainBeyondSession: true
+  },
+  obligations: {
+    dataPortability: &quot;required&quot;
+  }
+};
+</code></pre>
+<p><strong>PDC-AI</strong> (AI Training Contribution)</p>
+<pre><code class="language-javascript">const PDC_AI = {
+  id: &quot;PDC-AI&quot;,
+  type: &quot;contribution&quot;,
+  purpose: &quot;ai_training_operation&quot;,
+  scope: &quot;specified_data_categories&quot;,
+  // Terms for AI training data contribution
+};
+</code></pre>
+<p><strong>PDC-GOOD</strong> (Public Good Contribution)</p>
+<pre><code class="language-javascript">const PDC_GOOD = {
+  id: &quot;PDC-GOOD&quot;,
+  type: &quot;contribution&quot;,
+  purpose: &quot;public_good_research&quot;,
+  scope: &quot;specified_data_categories&quot;,
+  // Terms for data-for-good projects
+};
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Sticker System — MyTerms Action Tokens</h2>
+<p>The <strong>Sticker System</strong> is the First-Person-side UX layer that sits <em>above</em> the signed IEEE 7012 agreement and <em>below</em> the enforcement layer. Stickers are cast-able content items (emoji, proverb, or keyword) that express which subset of the signed agreement&#39;s permissions the First Person wants the Swordsman and Mage to express on a given site.</p>
+<p>They do <strong>not</strong> replace Customer Commons agreement IDs and they do <strong>not</strong> mint new <code>SD-BASE-*</code> variants. They are agentprivacy-local UX primitives that compose <em>with</em> signed agreements.</p>
+<h3>Schema</h3>
+<pre><code class="language-typescript">type MyTermsSticker = {
+  id: string;                            // stable identifier, e.g. &#39;emoji_shield&#39;
+  type: &#39;emoji&#39; | &#39;proverb&#39; | &#39;keyword&#39;;
+  content: string;                       // &#39;🛡️&#39;, &#39;The gap is where you live&#39;, &#39;DO_NOT_TRACK&#39;
+  emoji: string;                         // visual representation
+  myTermsMapping: MyTermsAction;         // enforcement verb emitted when cast
+  weight: 2 | 3;                         // contributes to hex convergence scoring
+  yangYin: &#39;yang&#39; | &#39;yin&#39;;               // outward assertion vs inward concealment
+  source: &#39;story&#39; | &#39;canon&#39; | &#39;zk&#39;;      // narrative provenance
+};
+
+type MyTermsAction =
+  | &#39;DO_NOT_TRACK&#39;
+  | &#39;TRUST_EXTENSION&#39;
+  | &#39;DATA_MINIMISATION&#39;
+  | &#39;SELECTIVE_DISCLOSURE&#39;
+  | &#39;EPHEMERAL_SESSION&#39;
+  | &#39;DO_NOT_SELL&#39;
+  | &#39;ANONYMIZE&#39;;
+</code></pre>
+<h3>The Canonical Eight</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Type</th>
+<th>Content</th>
+<th>MyTerms mapping</th>
+<th>Weight</th>
+<th>Axis</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>emoji_shield</code></td>
+<td>emoji</td>
+<td>🛡️</td>
+<td><code>DO_NOT_TRACK</code></td>
+<td>2</td>
+<td>yang</td>
+<td>story</td>
+</tr>
+<tr>
+<td><code>emoji_dragon</code></td>
+<td>emoji</td>
+<td>🐉</td>
+<td><code>TRUST_EXTENSION</code></td>
+<td>3</td>
+<td>yang</td>
+<td>story</td>
+</tr>
+<tr>
+<td><code>proverb_gap</code></td>
+<td>proverb</td>
+<td>&quot;The gap is where you live&quot;</td>
+<td><code>DATA_MINIMISATION</code></td>
+<td>3</td>
+<td>yang</td>
+<td>story</td>
+</tr>
+<tr>
+<td><code>keyword_dnt</code></td>
+<td>keyword</td>
+<td><code>DO_NOT_TRACK</code></td>
+<td><code>DO_NOT_TRACK</code></td>
+<td>2</td>
+<td>yang</td>
+<td>canon</td>
+</tr>
+<tr>
+<td><code>emoji_crystal</code></td>
+<td>emoji</td>
+<td>🔮</td>
+<td><code>SELECTIVE_DISCLOSURE</code></td>
+<td>2</td>
+<td>yang</td>
+<td>zk</td>
+</tr>
+<tr>
+<td><code>proverb_weather</code></td>
+<td>proverb</td>
+<td>&quot;Build weather, not monuments&quot;</td>
+<td><code>EPHEMERAL_SESSION</code></td>
+<td>2</td>
+<td>yin</td>
+<td>story</td>
+</tr>
+<tr>
+<td><code>keyword_dns</code></td>
+<td>keyword</td>
+<td><code>DO_NOT_SELL</code></td>
+<td><code>DO_NOT_SELL</code></td>
+<td>2</td>
+<td>yin</td>
+<td>canon</td>
+</tr>
+<tr>
+<td><code>emoji_cloak</code></td>
+<td>emoji</td>
+<td>👻</td>
+<td><code>ANONYMIZE</code></td>
+<td>2</td>
+<td>yin</td>
+<td>zk</td>
+</tr>
+</tbody></table>
+<p>Five yang stickers (outward assertion — Swordsman energy, boundary-making), three yin stickers (inward concealment — Mage energy, Γ-aware posture).</p>
+<h3>Hex Loadout Mechanic</h3>
+<p>Six stickers are active in the hex at any time; two are benched. Default active set is three-yang + three-yin:</p>
+<pre><code class="language-javascript">const DEFAULT_ACTIVE_HEX_IDS = [
+  &#39;emoji_shield&#39;, &#39;emoji_dragon&#39;, &#39;proverb_gap&#39;,    // yang
+  &#39;emoji_crystal&#39;, &#39;proverb_weather&#39;, &#39;keyword_dns&#39; // yin
+];
+</code></pre>
+<p>The First Person swaps stickers via right-click on the Sword Orb. State is persisted per-browser under the <code>localStorage</code> key <code>agentprivacy:active-hex-spells</code> and broadcast to extensions via a <code>agentprivacy:hex-spells-changed</code> <code>CustomEvent</code>.</p>
+<pre><code class="language-javascript">// Swap a benched sticker into the active hex
+function swapHexSpell(activeId, benchedId) {
+  const current = getActiveHexSpellIds();
+  const idx = current.indexOf(activeId);
+  if (idx === -1) return;
+  const next = [...current];
+  next[idx] = benchedId;
+  localStorage.setItem(
+    &#39;agentprivacy:active-hex-spells&#39;,
+    JSON.stringify(next)
+  );
+  window.dispatchEvent(
+    new CustomEvent(&#39;agentprivacy:hex-spells-changed&#39;)
+  );
+}
+</code></pre>
+<h3>Composition with IEEE 7012 Agreements</h3>
+<p>The signed agreement is the ceiling of what is permitted (Δ axis); active stickers are which subset of that ceiling the First Person chooses to express in a given session.</p>
+<pre><code class="language-javascript">// Composing a signed SD-BASE with an active sticker loadout
+const session = {
+  agreement: SD_BASE,                     // signed per §5.2.4
+  activeStickers: [
+    &#39;emoji_shield&#39;,                       // → DO_NOT_TRACK enforcement
+    &#39;emoji_cloak&#39;,                        // → ANONYMIZE (Γ-aware Mage posture)
+    &#39;proverb_gap&#39;                         // → DATA_MINIMISATION
+  ],
+  resolvedPolicy: resolveStickerPolicy(
+    SD_BASE,
+    [&#39;emoji_shield&#39;, &#39;emoji_cloak&#39;, &#39;proverb_gap&#39;]
+  )
+};
+</code></pre>
+<p>A signed <code>SD-BASE</code> with <code>emoji_cloak</code> active means: <em>&quot;service delivery only, and my Mage should operate in anonymising mode on this site.&quot;</em> The agreement is the contract with the Entity; the stickers configure how agentprivacy expresses itself within that contract.</p>
+<h3>What the Sticker System is NOT</h3>
+<ul>
+<li><strong>Not a replacement for the Customer Commons agreement registry.</strong> <code>myTermsMapping</code> values are agentprivacy-local action verbs, not IEEE 7012 agreement IDs. Agreement IDs come from Customer Commons; stickers come from the sovereignty training journey.</li>
+<li><strong>Not visible to the Entity.</strong> Per §5.2.4, the bilateral record contains the signed agreement. Sticker state is First-Person-side UX and does not leak cross-party.</li>
+<li><strong>Not a negotiation input.</strong> §A.1 caps negotiation at one round. Stickers do not reopen negotiation — they configure expression <em>within</em> an already-signed agreement.</li>
+<li><strong>Not minting new agreement IDs.</strong> A site that wants stricter-than-<code>SD-BASE</code> behaviour still uses the existing <code>SD-BASE-*</code> or <code>PDC-*</code> lattice. Stickers never appear as wire-level agreement identifiers.</li>
+</ul>
+<h3>Extension Integration</h3>
+<p><code>syncRepertoireToExtensions()</code> broadcasts active sticker state to both the Swordsman and Mage extensions:</p>
+<ul>
+<li><strong>Swordsman</strong> (agreement-layer agent) reads active stickers to refine resource classification inside the envelope set by the signed agreement. <code>emoji_shield</code> active on a site with <code>SD-BASE-A</code> signed will tighten third-party-analytics blocking without changing the signed agreement.</li>
+<li><strong>Mage</strong> (delegation inside Σ scope) reads active stickers to inform operational posture — <code>emoji_cloak</code> active triggers Γ-aware output rewriting before the Mage takes actions on the First Person&#39;s behalf. The Mage never signs; the stickers shape <em>how</em> the Mage acts inside the Swordsman-signed agreement.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>HTTP Protocol Implementation (MRPAZ)</h2>
+<h3>Request Headers</h3>
+<pre><code class="language-http">GET /resource HTTP/1.1
+Host: example.com
+MRPAZ-A: org.CuCo
+MRPAZ-V: V1.0
+MRPAZ-T: GEN
+MRPAZ-R: USA
+MTPAZ-1: SD-BASE
+</code></pre>
+<h3>Header Definitions</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Purpose</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MRPAZ-A</code></td>
+<td>Authority namespace</td>
+<td><code>org.CuCo</code> (Customer Commons)</td>
+</tr>
+<tr>
+<td><code>MRPAZ-V</code></td>
+<td>Protocol version</td>
+<td><code>V1.0</code></td>
+</tr>
+<tr>
+<td><code>MRPAZ-T</code></td>
+<td>Terms type</td>
+<td><code>GEN</code> (Generic), domain-specific</td>
+</tr>
+<tr>
+<td><code>MRPAZ-R</code></td>
+<td>Regional legal framework</td>
+<td><code>USA</code>, <code>EU</code>, <code>GLOBAL</code></td>
+</tr>
+<tr>
+<td><code>MTPAZ-1</code></td>
+<td>Agreement identifier</td>
+<td><code>SD-BASE</code>, <code>SD-BASE-DP</code>, etc.</td>
+</tr>
+</tbody></table>
+<h3>CONTRACT ZONE (Bitwise Encoding)</h3>
+<p>For efficient agent-to-agent communication:</p>
+<pre><code>Bit Layout (6 bits):
+┌───┬───┬───┬───┬───┬───┐
+│ 5 │ 4 │ 3 │ 2 │ 1 │ 0 │
+└───┴───┴───┴───┴───┴───┘
+  │   │   │   └───┴───┘
+  │   │   │       └── ATP Level (00=none, 01=A, 10=AT, 11=ATP)
+  │   │   └────────── Third-party sharing (0=no, 1=yes)
+  │   └────────────── Data portability (0=optional, 1=required)
+  └────────────────── Reserved/Extended purposes
+
+Examples:
+0b000000 = SD-BASE (nothing permitted beyond service)
+0b000001 = SD-BASE-A (Analytics permitted)
+0b000010 = SD-BASE-AT (Analytics + Tracking)
+0b000011 = SD-BASE-ATP (Full 2P surveillance)
+0b000111 = SD-BASE-ATP-S3P (Plus 3P sharing)
+0b010000 = SD-BASE-DP (Data portability required)
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Machine-Readable Formats</h2>
+<h3>JSON-LD (Linked Data)</h3>
+<pre><code class="language-json">{
+  &quot;@context&quot;: {
+    &quot;dpv&quot;: &quot;https://w3id.org/dpv#&quot;,
+    &quot;p7012&quot;: &quot;https://w3id.org/dpv/standards/p7012#&quot;,
+    &quot;odrl&quot;: &quot;http://www.w3.org/ns/odrl/2/&quot;
+  },
+  &quot;@id&quot;: &quot;https://customercommons.org/agreements/SD-BASE&quot;,
+  &quot;@type&quot;: [&quot;p7012:Agreement&quot;, &quot;odrl:Offer&quot;],
+  &quot;dpv:hasObligation&quot;: {&quot;@id&quot;: &quot;p7012:ServiceDeliveryRequired&quot;},
+  &quot;dpv:hasProhibition&quot;: [
+    {&quot;@id&quot;: &quot;p7012:Analytics2PDisallowed&quot;},
+    {&quot;@id&quot;: &quot;p7012:Tracking2PDisallowed&quot;},
+    {&quot;@id&quot;: &quot;p7012:ProfilingDisallowed&quot;},
+    {&quot;@id&quot;: &quot;p7012:DataSharingDisallowed&quot;}
+  ],
+  &quot;p7012:hasHumanReadableFormat&quot;: &quot;https://customercommons.org/human/SD-BASE&quot;,
+  &quot;p7012:hasLegalReadableFormat&quot;: &quot;https://customercommons.org/legal/SD-BASE&quot;
+}
+</code></pre>
+<h3>RDF/Turtle</h3>
+<pre><code class="language-turtle">@prefix p7012: &lt;https://w3id.org/dpv/standards/p7012#&gt; .
+@prefix dpv: &lt;https://w3id.org/dpv#&gt; .
+@prefix odrl: &lt;http://www.w3.org/ns/odrl/2/&gt; .
+
+&lt;https://customercommons.org/agreements/SD-BASE&gt;
+  a p7012:Agreement, odrl:Offer ;
+  dpv:hasObligation p7012:ServiceDeliveryRequired ;
+  dpv:hasProhibition p7012:Analytics2PDisallowed,
+                     p7012:Tracking2PDisallowed,
+                     p7012:ProfilingDisallowed,
+                     p7012:DataSharingDisallowed .
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Enforcement Architecture</h2>
+<h3>Cookie/Tracker Classification</h3>
+<p>When agreement is signed, Swordsman classifies all site resources:</p>
+<pre><code class="language-javascript">function classifyResource(resource, agreement) {
+  const classification = {
+    permitted: [],     // Allowed under agreement
+    forbidden: [],     // Prohibited under agreement  
+    unknown: []        // Requires analysis
+  };
+  
+  if (agreement.permissions.analytics2P) {
+    // First-party analytics permitted
+    classification.permitted.push(...firstPartyAnalytics);
+  } else {
+    classification.forbidden.push(...firstPartyAnalytics);
+  }
+  
+  // Third-party resources always evaluated against agreement
+  thirdPartyResources.forEach(resource =&gt; {
+    if (agreement.prohibitions.sharingAnonymized3P) {
+      classification.forbidden.push(resource);
+    }
+  });
+  
+  return classification;
+}
+</code></pre>
+<h3>Selective Enforcement</h3>
+<pre><code class="language-javascript">function enforce(classification) {
+  // Slash forbidden resources
+  classification.forbidden.forEach(resource =&gt; {
+    blockResource(resource);
+    chronicle.log(&#39;BLOCKED&#39;, resource, agreement.id);
+  });
+  
+  // Permit allowed resources
+  classification.permitted.forEach(resource =&gt; {
+    allowResource(resource);
+    chronicle.log(&#39;PERMITTED&#39;, resource, agreement.id);
+  });
+}
+</code></pre>
+<h3>Visual Feedback (Cursor State)</h3>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Cursor</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>No agreement</td>
+<td>Default</td>
+<td>Site doesn&#39;t support P7012</td>
+</tr>
+<tr>
+<td>Agreement pending</td>
+<td>⚔️</td>
+<td>Negotiation in progress</td>
+</tr>
+<tr>
+<td>Agreement signed</td>
+<td>⚔️✍️</td>
+<td>Contract bound, enforcing</td>
+</tr>
+<tr>
+<td>Agreement violated</td>
+<td>⚔️⚠️</td>
+<td>Breach detected, logging</td>
+</tr>
+<tr>
+<td>Custom (positive site)</td>
+<td>[Custom]</td>
+<td>User-selected cursor for trusted sites</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Chronicle System (Bilateral Records)</h2>
+<h3>Record Structure</h3>
+<pre><code class="language-javascript">const chronicleEntry = {
+  id: &quot;uuid-v4&quot;,
+  timestamp: &quot;2026-01-28T12:00:00Z&quot;,
+  agreement: {
+    id: &quot;SD-BASE&quot;,
+    version: &quot;1.0&quot;,
+    registry: &quot;https://customercommons.org/agreements/&quot;
+  },
+  parties: {
+    firstParty: {
+      identifier: &quot;pseudonymous-id&quot;,  // No PII required
+      signature: &quot;cryptographic-signature&quot;
+    },
+    secondParty: {
+      domain: &quot;example.com&quot;,
+      identifier: &quot;entity-id&quot;,
+      signature: &quot;cryptographic-signature&quot;
+    }
+  },
+  enforcement: {
+    resourcesBlocked: 47,
+    resourcesPermitted: 26,
+    violations: []
+  },
+  status: &quot;BOUND&quot;
+};
+</code></pre>
+<h3>Storage Architecture</h3>
+<pre><code>First Person Storage (Sovereign)
+├── /agreements/
+│   ├── example.com.json
+│   ├── news-site.com.json
+│   └── ...
+├── /chronicles/
+│   ├── 2026-01-28/
+│   │   ├── example.com.log
+│   │   └── ...
+│   └── ...
+└── /disputes/
+    └── (if any violations documented)
+
+Entity Storage (Their Compliance Records)
+├── Identical agreement copy
+├── Compliance audit trail
+└── (Their responsibility to maintain)
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Integration Points</h2>
+<h3>With Mage Agent (Delegation)</h3>
+<p>The Swordsman establishes boundaries; the Mage operates within them:</p>
+<pre><code>First Person authorizes delegation scope
+    ↓
+Swordsman negotiates MyTerms with service
+    ↓
+Agreement defines permitted data flows
+    ↓
+Mage operates within permitted scope only
+    ↓
+Chronicle records all actions
+    ↓
+Violations trigger Swordsman enforcement
+</code></pre>
+<h3>With Privacy Pools (x402)</h3>
+<p>For financial privacy integration:</p>
+<pre><code>MyTerms Agreement (SD-BASE-DP) establishes relationship
+    ↓
+x402 payment header attached to request
+    ↓
+Privacy Pool membership proven via ZK
+    ↓
+Payment flows through shielded channel
+    ↓
+Service delivery under MyTerms obligations
+    ↓
+Data portability returns transaction records
+</code></pre>
+<h3>With VRCs (Verifiable Relationship Credentials)</h3>
+<p>Signed MyTerms agreements become the basis for VRCs:</p>
+<pre><code>MyTerms Agreement signed
+    ↓
+Both parties have bilateral proof
+    ↓
+Consistent behavior over time
+    ↓
+VRC formed from accumulated trust evidence
+    ↓
+VRC portable across contexts
+    ↓
+Reputation without surveillance
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Implementation Roadmap</h2>
+<h3>Phase 1: Core Protocol (Q1 2026)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> P7012 protocol negotiation</li>
+<li><input disabled="" type="checkbox"> SD-BASE / SD-BASE-DP implementation</li>
+<li><input disabled="" type="checkbox"> HTTP header support (MRPAZ)</li>
+<li><input disabled="" type="checkbox"> Basic chronicle recording</li>
+<li><input disabled="" type="checkbox"> Cursor state feedback</li>
+</ul>
+<h3>Phase 2: Full Agreement Suite (Q2 2026)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> SD-BASE-A through SD-BASE-ATP-S3P</li>
+<li><input disabled="" type="checkbox"> PDC-INTENT integration</li>
+<li><input disabled="" type="checkbox"> JSON-LD format generation</li>
+<li><input disabled="" type="checkbox"> CONTRACT ZONE bitwise encoding</li>
+<li><input disabled="" type="checkbox"> Advanced enforcement classification</li>
+</ul>
+<h3>Phase 3: Ecosystem Integration (Q3 2026)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> PDC-AI, PDC-GOOD agreements</li>
+<li><input disabled="" type="checkbox"> Mage agent coordination</li>
+<li><input disabled="" type="checkbox"> Privacy Pools integration</li>
+<li><input disabled="" type="checkbox"> VRC generation from agreements</li>
+<li><input disabled="" type="checkbox"> Dispute documentation system</li>
+</ul>
+<h3>Phase 4: Advanced Features (Q4 2026+)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Cross-site agreement coordination</li>
+<li><input disabled="" type="checkbox"> Agreement template marketplace</li>
+<li><input disabled="" type="checkbox"> Automated violation detection</li>
+<li><input disabled="" type="checkbox"> Regulatory reporting support</li>
+<li><input disabled="" type="checkbox"> Progressive decentralization of chronicle storage</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Compliance Notes</h2>
+<h3>GDPR Alignment</h3>
+<p>IEEE 7012 supports GDPR compliance through:</p>
+<ul>
+<li>Consent recorded bilaterally (Article 7)</li>
+<li>Purpose limitation enforced (Article 5)</li>
+<li>Data portability enabled (Article 20)</li>
+<li>Audit trail for accountability (Article 5)</li>
+</ul>
+<h3>CCPA Alignment</h3>
+<p>Supports CCPA through:</p>
+<ul>
+<li>&quot;Do Not Sell&quot; enforced via agreement prohibitions</li>
+<li>Opt-out recorded with bilateral proof</li>
+<li>Access requests supported via data portability</li>
+</ul>
+<h3>Standard Compliance</h3>
+<p>All implementations will be validated against:</p>
+<ul>
+<li>IEEE 7012-2025 normative requirements</li>
+<li>Customer Commons agreement definitions</li>
+<li>W3C Data Privacy Vocabulary semantics</li>
+<li>ODRL expression compatibility</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Conclusion</h2>
+<p>This technical integration plan demonstrates that agentprivacy&#39;s Swordsman agent is designed around IEEE 7012 as the <strong>agreement layer</strong>. The standard specifies what is agreed between the First Person and the Entity; the Swordsman, Mage, and ZK substrate together specify what is <em>enforced</em>. IEEE 7012 compliance is a precondition for the PVM Σ axis being measurable, not a substitute for the architecture that makes Σ ≈ 1 achievable.</p>
+<p>The blade enforces what the contract establishes — and only what the contract establishes.</p>
+<h3>Defensible headline claim</h3>
+<blockquote>
+<p>IEEE 7012-2025 provides the agreement layer agentprivacy&#39;s dual-agent architecture requires. Compliance with the standard is a precondition for the Σ (agent) axis being measurable, and enables bilateral chronicles that can serve as evidentiary basis for VRCs. Standard compliance alone is not equivalent to the full agentprivacy architecture; the standard specifies agreement, not enforcement.</p>
+</blockquote>
+<hr>
+<p><em>Technical specifications subject to evolution based on implementation experience and standard clarifications.</em></p>
+<p><strong>⚔️📜✍️🔐</strong></p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>myterms/C_technical_integration.md</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 myterms-technical-integration</span><a class="asset-file" href="/myterms/assets/myterms-technical-integration/C_technical_integration.md" download>C_technical_integration.md</a></div>
+<a class="ref" href="/research/reference-0xagentprivacy-visual-architecture-guide.html"><span class="ref-glyph">🧮</span>
+      <span class="ref-body"><span class="ref-title">Reference — Visual Architecture Guide</span>
+      <span class="ref-text">the diagrammatic treatment — the IEEE 7012-2025 protocol flow, the negotiation sequence, contract-creates-persistence.</span>
+      <span class="ref-site">research</span></span></a>
+<a class="ref" href="/research/spec-protocol-schemas.html"><span class="ref-glyph">🧮</span>
+      <span class="ref-body"><span class="ref-title">Spec — Protocol Schemas</span>
+      <span class="ref-text">the protocol wire types this integration writes to.</span>
+      <span class="ref-site">research</span></span></a>
+<a class="ref" href="/research/ceremony-the-ceremony-engine-technical-specification.html"><span class="ref-glyph">🧮</span>
+      <span class="ref-body"><span class="ref-title">Ceremony Engine — Technical Specification</span>
+      <span class="ref-text">bilateral exchange — for when sites implement MyTerms endpoints.</span>
+      <span class="ref-site">research</span></span></a>
+<div class="md"><hr>
+<p><em>upstream: <code>github.com/mitchuski/myterms</code> · the git repo is the source of truth; this page is a projection that records its origin · sigil ⚔️📜✍️🔐 · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="myterms-technical-integration.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

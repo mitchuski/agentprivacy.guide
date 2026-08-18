@@ -1,0 +1,146 @@
+{
+  "title": "Agent Admission Revoke",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "63fdd910e562bdc9",
+      "text": "# Agent Admission — Revoke"
+    },
+    {
+      "type": "markdown",
+      "id": "effd3f970de47735",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "49177be995a6a50f",
+      "text": "**Proposed slug:** `agent-admission/revoke` · **version** 0.1 · **status** draft\n\n> A supervisor revokes an admitted agent's relationship credential; the gate authority records the revocation, and mirrors a revocation mark to every external registry the outcome was anchored on, so on-chain and off-chain relying parties converge on refusal."
+    },
+    {
+      "type": "markdown",
+      "id": "cf55e0895ab109f2",
+      "text": "## Abstract\n\nThe **Agent Admission — Revoke** Trust Task ends an admitted agent's standing.\nBecause an admission outcome may have been anchored on external registries as\ndiscoverable evidence, revocation is not complete until a revocation mark is\nmirrored to **the same registries** — otherwise off-chain relying parties refuse\nthe agent while on-chain ones keep trusting the stale anchor. Anchors are\nevidence, never authority: the revocation's authority is this signed task and\nthe gate authority's record; the mirrors only make it discoverable everywhere\nthe issuance was."
+    },
+    {
+      "type": "markdown",
+      "id": "5d67d35dd1c040d6",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "6629e755e4b6ac97",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the supervisor) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/revoke/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof`.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` and that the `issuer` is a supervisor it recognises for this credential's policy (`permissionDenied` otherwise).\n2. Record the revocation and append the event to the content-addressed audit ledger **before** attempting any mirror — the local record is the authority; mirrors follow it.\n3. Post a revocation mark to every registry named in the credential's anchor set, and report per-anchor convergence in the `#response`. Partial mirror failure is `mirrorFailed` (retryable); the revocation itself is never rolled back for a failed mirror.\n4. Refuse further delegated authority derived from this credential immediately upon recording, without waiting for mirrors."
+    },
+    {
+      "type": "markdown",
+      "id": "4ab3ccf62a1e697e",
+      "text": "## Payload\n\n`payload.credentialId` (REQUIRED) — the credential being revoked (its digest or ceremony identifier).\n`payload.agent` (REQUIRED) — VID of the agent whose standing ends.\n`payload.reason` (REQUIRED) — recorded, durable free text.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "658594e96fcde41e",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:9f5ea3b8-c2d6-4be4-a6f7-809102132435\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/revoke/0.1\",\n  \"issuer\": \"did:key:z6MkSupervisorExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T14:00:00Z\",\n  \"payload\": {\n    \"credentialId\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"reason\": \"Deployment scope exceeded during batch run; standing withdrawn pending re-assessment.\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T14:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkSupervisorExample#z6MkSupervisorExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionRevoke\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "e2bfa3e15c4f26d1",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:a06fb4c9-d3e7-4cf5-b708-9102132435460\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/revoke/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkSupervisorExample\",\n  \"threadId\": \"urn:uuid:9f5ea3b8-c2d6-4be4-a6f7-809102132435\",\n  \"issuedAt\": \"2026-07-18T14:00:03Z\",\n  \"payload\": {\n    \"credentialId\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"revoked\": true,\n    \"revokedAt\": \"2026-07-18T14:00:03Z\",\n    \"mirroredAnchors\": [\n      { \"namespace\": \"org.erc8004.validation\", \"ref\": \"0x5a…e21f\" }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T14:00:03Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionRevokeResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "abecbd0607caf41e",
+      "text": "## Security & Privacy\n\nThe `reason` is durable and, where anchors exist, its *existence* (not its\ntext) becomes publicly discoverable; supervisors SHOULD keep reasons free of\nthird-party personal data, and mirrors MUST carry only the revocation mark and\ncredential digest — never the reason text. Revocation timing is itself a\nsignal: a relying party watching an anchor registry learns *when* an agent lost\nstanding. That is the intended disclosure — convergence beats confidentiality\nhere, which is why the mirror is mandatory rather than best-effort. The window\nbetween local recording and mirror convergence is the residual risk; relying\nparties that can reach the gate authority SHOULD prefer\n[`agent-admission/status`](../../status/0.1/spec.md) over anchor reads."
+    },
+    {
+      "type": "markdown",
+      "id": "9b4b8c73b5918f06",
+      "text": "# Assets\n\nSource: `specs/agent-admission/revoke/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "0a3d5d9085722d21",
+      "type": "assets",
+      "text": "agent-admission-revoke"
+    },
+    {
+      "type": "markdown",
+      "id": "38c79b150c393e13",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agent Admission Revoke",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "63fdd910e562bdc9",
+            "text": "# Agent Admission — Revoke"
+          },
+          {
+            "type": "markdown",
+            "id": "effd3f970de47735",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "49177be995a6a50f",
+            "text": "**Proposed slug:** `agent-admission/revoke` · **version** 0.1 · **status** draft\n\n> A supervisor revokes an admitted agent's relationship credential; the gate authority records the revocation, and mirrors a revocation mark to every external registry the outcome was anchored on, so on-chain and off-chain relying parties converge on refusal."
+          },
+          {
+            "type": "markdown",
+            "id": "cf55e0895ab109f2",
+            "text": "## Abstract\n\nThe **Agent Admission — Revoke** Trust Task ends an admitted agent's standing.\nBecause an admission outcome may have been anchored on external registries as\ndiscoverable evidence, revocation is not complete until a revocation mark is\nmirrored to **the same registries** — otherwise off-chain relying parties refuse\nthe agent while on-chain ones keep trusting the stale anchor. Anchors are\nevidence, never authority: the revocation's authority is this signed task and\nthe gate authority's record; the mirrors only make it discoverable everywhere\nthe issuance was."
+          },
+          {
+            "type": "markdown",
+            "id": "5d67d35dd1c040d6",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "6629e755e4b6ac97",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the supervisor) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/revoke/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof`.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` and that the `issuer` is a supervisor it recognises for this credential's policy (`permissionDenied` otherwise).\n2. Record the revocation and append the event to the content-addressed audit ledger **before** attempting any mirror — the local record is the authority; mirrors follow it.\n3. Post a revocation mark to every registry named in the credential's anchor set, and report per-anchor convergence in the `#response`. Partial mirror failure is `mirrorFailed` (retryable); the revocation itself is never rolled back for a failed mirror.\n4. Refuse further delegated authority derived from this credential immediately upon recording, without waiting for mirrors."
+          },
+          {
+            "type": "markdown",
+            "id": "4ab3ccf62a1e697e",
+            "text": "## Payload\n\n`payload.credentialId` (REQUIRED) — the credential being revoked (its digest or ceremony identifier).\n`payload.agent` (REQUIRED) — VID of the agent whose standing ends.\n`payload.reason` (REQUIRED) — recorded, durable free text.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "658594e96fcde41e",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:9f5ea3b8-c2d6-4be4-a6f7-809102132435\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/revoke/0.1\",\n  \"issuer\": \"did:key:z6MkSupervisorExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T14:00:00Z\",\n  \"payload\": {\n    \"credentialId\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"reason\": \"Deployment scope exceeded during batch run; standing withdrawn pending re-assessment.\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T14:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkSupervisorExample#z6MkSupervisorExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionRevoke\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "e2bfa3e15c4f26d1",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:a06fb4c9-d3e7-4cf5-b708-9102132435460\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/revoke/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkSupervisorExample\",\n  \"threadId\": \"urn:uuid:9f5ea3b8-c2d6-4be4-a6f7-809102132435\",\n  \"issuedAt\": \"2026-07-18T14:00:03Z\",\n  \"payload\": {\n    \"credentialId\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"revoked\": true,\n    \"revokedAt\": \"2026-07-18T14:00:03Z\",\n    \"mirroredAnchors\": [\n      { \"namespace\": \"org.erc8004.validation\", \"ref\": \"0x5a…e21f\" }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T14:00:03Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionRevokeResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "abecbd0607caf41e",
+            "text": "## Security & Privacy\n\nThe `reason` is durable and, where anchors exist, its *existence* (not its\ntext) becomes publicly discoverable; supervisors SHOULD keep reasons free of\nthird-party personal data, and mirrors MUST carry only the revocation mark and\ncredential digest — never the reason text. Revocation timing is itself a\nsignal: a relying party watching an anchor registry learns *when* an agent lost\nstanding. That is the intended disclosure — convergence beats confidentiality\nhere, which is why the mirror is mandatory rather than best-effort. The window\nbetween local recording and mirror convergence is the residual risk; relying\nparties that can reach the gate authority SHOULD prefer\n[`agent-admission/status`](../../status/0.1/spec.md) over anchor reads."
+          },
+          {
+            "type": "markdown",
+            "id": "9b4b8c73b5918f06",
+            "text": "# Assets\n\nSource: `specs/agent-admission/revoke/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "0a3d5d9085722d21",
+            "type": "assets",
+            "text": "agent-admission-revoke"
+          },
+          {
+            "type": "markdown",
+            "id": "38c79b150c393e13",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229500
+    }
+  ]
+}

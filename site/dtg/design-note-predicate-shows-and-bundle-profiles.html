@@ -1,0 +1,108 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Design Note Predicate Shows and Bundle Profiles · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Design Note Predicate Shows and Bundle Profiles</span></div>
+  <article><div class="md"><h1>Predicate shows and bundle profiles — composing zero-knowledge presentations inside Trust Tasks</h1>
+</div>
+<div class="md"><blockquote>
+<p><em>Design note — not a specification; no slugs are claimed here.</em></p>
+</blockquote>
+</div>
+<div class="md"><p><em>A design note from the DTG ZKP Task Force side of the table. It addresses the seam the<br>ZKP TF&#39;s decision baseline names but assigns jointly: &quot;Trust tasks compose predicates and<br>determine request semantics. The transcript, purpose, scope, and multi-proof composition<br>model require joint definition. Bundled proofs that are individually sound may leak<br>jointly.&quot; This note proposes the joint model: the show as one atomic transcript, a<br>show-level disclosure record, and governed bundle profiles in place of à-la-carte<br>predicate requests.</em></p>
+<p><strong>Status:</strong> design note, not a specification. Nothing here is normative. It is written to<br>be discussed in the Decentralized Trust Graph Working Group, alongside the Trust Tasks<br>framework (SPEC.md 0.2, working draft) whose conventions it deliberately reuses.</p>
+<p><strong>Author:</strong> Mitch (co-chair, DTG ZKP Task Force).</p>
+<hr>
+</div>
+<div class="md"><h2>1. The problem</h2>
+<p>A growing class of Trust Tasks will not carry data; they will carry <em>requests for proof</em>.<br>A verifier asks a holder to demonstrate a set of predicates — credential validity from an<br>accepted issuer set, holder liveness, per-context uniqueness, freshness within a window —<br>and the holder answers with zero-knowledge presentations rather than disclosed attributes.</p>
+<p>A real task never requests one predicate. It requests several at once — call the composed<br>presentation a <strong>show</strong>. And composition is where individually sound proofs go wrong:</p>
+<ol>
+<li><strong>Intersection narrowing.</strong> Each predicate&#39;s derived disclosure (assurance class,<br>policy version, issuer-set choice, epoch, proof shape) is a population filter; the show<br>intersects the filters. Fields that are non-identifying separately can be identifying<br>together — the standard schema-field rule, applied unchanged to composed predicates.</li>
+<li><strong>Request-pattern leakage.</strong> The predicate set requested is itself an observable event.<br>A rare combination — an unusual delegation predicate, a narrow range proof — fingerprints<br>the vertical, the verifier&#39;s risk posture, and hence the holder&#39;s activity, before any<br>proof is transmitted.</li>
+<li><strong>Cross-show correlation.</strong> Two shows in different contexts sharing <em>no</em> identifiers<br>still present a correlatable pair (bundle shape, proof sizes, timing, retry pattern) to<br>a network observer or colluding verifiers. Context separation can be defeated by bundle<br>shape alone.</li>
+</ol>
+<p>The consequence: <strong>a show&#39;s disclosure boundary is a property of the predicate set, and it<br>is strictly wider than the union of the per-predicate boundaries.</strong> Any consent surface,<br>policy engine, or audit trail that reasons per-predicate is reasoning about the wrong unit.</p>
+</div>
+<div class="md"><h2>2. The show is one transcript</h2>
+<p>The remedy begins by naming the unit. A show binds ONE canonical transcript:</p>
+<ul>
+<li><strong>Atomicity.</strong> A show verifies as a whole or fails as a whole. No partial acceptance —<br>a verifier MUST NOT accept three of four member proofs and act on the subset.</li>
+<li><strong>No transplanting.</strong> A member proof MUST NOT verify inside any transcript other than<br>the one it was produced for. Replay of a member across transcripts is a named rejection,<br>not a soft failure.</li>
+<li><strong>The request is part of the transcript.</strong> The requested predicate set is a required<br>transcript field, so the show — not the predicate — is the unit of freshness, binding,<br>and audit.</li>
+</ul>
+<p>In Trust Tasks terms this maps cleanly: the show is one task exchange, correlated by<br><code>threadId</code>; the proof-request payload enumerates the bundle; the response carries the<br>composed presentation; <code>trust-task-error</code> carries the named rejections (candidate codes:<br>partial acceptance, member transplant, bundle-not-registered).</p>
+</div>
+<div class="md"><h2>3. The show-level disclosure record</h2>
+<p>Per-predicate boundary analyses exist on the ZKP side (each predicate in the task force&#39;s<br>register carries one). A composed show additionally needs a <strong>joint disclosure record</strong>,<br>stated in three-parameter form:</p>
+<ul>
+<li><strong>against whom</strong> — the observer classes that can see the show (verifier, colluding<br>verifiers, network observer, registry operator), per bundle;</li>
+<li><strong>for how long</strong> — the longest-lived member linkage dominates (a per-context uniqueness<br>predicate&#39;s epoch outlives a freshness nonce);</li>
+<li><strong>alongside what</strong> — the other members, explicitly enumerated, because they narrow the<br>anonymity set jointly.</li>
+</ul>
+<p>This is descriptive, not prescriptive — the same doctrine this registry already applies to<br><code>sideEffects</code> and <code>exposure</code>: the record states what a show discloses; whether that is<br>acceptable is the consumer&#39;s policy, derived locally, never delegated to the registry.</p>
+</div>
+<div class="md"><h2>4. Governed bundle profiles</h2>
+<p>The constructive remedy for mechanisms 2 and 3 is to remove the à-la-carte request layer.<br>Instead of verifiers composing predicate sets freely, a governed registry names <strong>bundle<br>profiles</strong>: named, versioned predicate bundles — a baseline profile (validity + liveness +<br>holder binding + freshness), a uniqueness-extended profile (baseline ∪ per-context<br>uniqueness), delegation variants — exactly as cipher suites replaced à-la-carte algorithm<br>negotiation in TLS.</p>
+<p>Properties this buys:</p>
+<ul>
+<li><strong>Large anonymity sets per request shape.</strong> A small governed vocabulary means every<br>request looks like one of a few well-populated shapes, not a fingerprint.</li>
+<li><strong>A rejection surface.</strong> A request outside the registry is a named rejection. The<br>consent surface can render &quot;this verifier requests the standard baseline bundle&quot; instead<br>of a bespoke predicate list no human can evaluate.</li>
+<li><strong>Change control where it belongs.</strong> Adding a bundle is a deliberate registry PR with<br>review, not a typo in one verifier&#39;s config — the same closed-enum instinct that made<br>this registry&#39;s category taxonomy a schema rather than a convention.</li>
+</ul>
+<p>Mechanically, a bundle-profile registry fits the conventions already present here: shared<br>schemas pinned by version, MAJOR.MINOR lifecycle, descriptive metadata, codegen into the<br>client libraries. Whether it lives as a Trust Tasks shared schema, a ZKP TF deliverable, or<br>a jointly governed object is an open question (§6) — the registries interlock either way,<br>since a context or task descriptor may need to name its admissible bundles.</p>
+</div>
+<div class="md"><h2>5. The credential/artifact wall — a framework consideration</h2>
+<p>One rule from the ZKP TF baseline deserves framework-level visibility because it bounds<br>what any proof-carrying task may claim:</p>
+<blockquote>
+<p>A valid show does not establish that any task was performed, completed, or performed<br>well.</p>
+</blockquote>
+<p>A show may <em>include</em> a ceremony-bound credential (one whose issuance context is bound into<br>it), but the show&#39;s established statement never crosses into task completion. Completion<br>evidence is the Trust Task side&#39;s object: the outcome artifact, <code>threadId</code>-correlated with<br>the exchange that produced it. Stated as a wall: <strong>credentials prove standing; artifacts<br>prove outcomes; a show is never a receipt.</strong></p>
+<p>The framework already classifies tasks along two descriptive axes (<code>sideEffects</code>,<br><code>exposure</code>). This note suggests the working group consider whether a third descriptive<br>axis is warranted — call it <em>evidence class</em>: what a successful <code>#response</code> may be relied<br>on to establish, and for how long. Like the existing axes it would be descriptive, with<br>consumers deriving the authoritative answer from their own verification, but it would give<br>consent surfaces and auditors a vocabulary for the difference between &quot;this proved a<br>predicate held at presentation time&quot; and &quot;this is a durable receipt of completed work.&quot;</p>
+</div>
+<div class="md"><h2>6. Fit with the existing registry surface</h2>
+<ul>
+<li><code>policy/evaluate</code> returns <code>requireConsent</code>; the delegated-execution design note binds<br><em>what executes</em> to <em>what was approved</em>. This note binds <em>what is proven</em> to <em>one<br>transcript</em> and governs <em>what may be requested</em>. Same instinct — closed vocabularies<br>against composition — on either side of the request/proof boundary.</li>
+<li><code>registry/authorization</code> already carries TRQP authorization queries; a bundle-profile<br>lookup is a structurally similar governed read.</li>
+<li>A future <code>proof-request</code> / <code>proof-response</code> task family would reference bundle profiles<br>by identifier in its payload, keeping payload schemas closed while the bundle vocabulary<br>evolves under its own change control.</li>
+</ul>
+</div>
+<div class="md"><h2>7. Status and provenance</h2>
+<p>The composition model is not paper-only. A reference model in the ZKP Task Force&#39;s lab<br>binds shows to single transcripts and enforces the named rejections — atomicity (partial<br>acceptance rejected), member transplant across transcripts rejected, bundle-outside-<br>registry rejected, credential-as-completion-evidence rejected — as passing property tests<br>(10/10), alongside a v0 bundle registry with five named profiles. The joint-disclosure<br>worksheet for a representative four-predicate show is in progress on the ZKP TF side.</p>
+<p>This note is the ZKP TF half of a deliverable both groups&#39; documents already assign<br>jointly. The Trust Tasks side owns request semantics and outcome artifacts; the ZKP side<br>owns transcript binding and the disclosure calculus; the bundle-profile registry is the<br>shared object.</p>
+</div>
+<div class="md"><h2>8. Open questions</h2>
+<ol>
+<li><strong>Registry authority.</strong> Context authority, Trust Task TF, or a shared body? The<br>registries interlock — a context descriptor may need to name its admissible bundles.</li>
+<li><strong>Uniformity vs honesty.</strong> Padding proof sizes and coarsening timing shrinks bundle<br>fingerprints but costs constrained provers (mobile wallets). Where is the floor?</li>
+<li><strong>Recursive composition.</strong> If proof folding collapses an n-predicate show into one<br>proof, bundle shape collapses to one size. Does that solve fingerprinting or move it<br>into proving-time side channels?</li>
+<li><strong>Linkage budgets.</strong> Should a profile state how many shows per context per epoch it<br>tolerates before intersection narrowing defeats its anonymity-set claim?</li>
+<li><strong>Evidence class.</strong> Does the framework want the third descriptive axis of §5, or is<br>the wall better held per-spec in Security &amp; Privacy prose?</li>
+</ol>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>docs/design-notes/predicate-shows-and-bundle-profiles.md</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 design-note-predicate-shows-and-bundle-profiles</span><a class="asset-file" href="/dtg/assets/design-note-predicate-shows-and-bundle-profiles/predicate-shows-and-bundle-profiles.md" download>predicate-shows-and-bundle-profiles.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="design-note-predicate-shows-and-bundle-profiles.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

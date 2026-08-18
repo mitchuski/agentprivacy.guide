@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fedwiki Transcribe · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Fedwiki Transcribe</span></div>
+  <article><div class="md"><h1>FedWiki video transcription</h1>
+</div>
+<div class="md"><blockquote>
+<p>Transcribe video/audio assets hosted on a FedWiki (Smallest Federated Wiki) page using local whisper.</p>
+</blockquote>
+</div>
+<div class="md"><h1>FedWiki video transcription</h1>
+<p>End-to-end flow: <strong>FedWiki assets folder → list files → stream audio (ffmpeg) → transcribe (whisper.cpp) → .txt/.srt/.vtt</strong>.</p>
+</div>
+<div class="md"><h2>When to use</h2>
+<p>The user references a FedWiki page or assets folder hosting videos and wants transcripts. FedWiki URLs look like <code>http://&lt;host&gt;/view/&lt;page&gt;/view/&lt;page&gt;</code>; the videos live in an <strong>assets</strong> story item that names a folder (e.g. <code>workshop-videos</code>).</p>
+</div>
+<div class="md"><h2>Prerequisites (already installed on this machine)</h2>
+<ul>
+<li><strong>whisper.cpp</strong> built: <code>C:\Users\mitch\whisper.cpp-master\build\bin\Release\whisper-cli.exe</code></li>
+<li><strong>Model</strong>: <code>C:\Users\mitch\whisper.cpp-master\models\ggml-large-v3-turbo-q5_0.bin</code> (high accuracy, multilingual)</li>
+<li><strong>ffmpeg</strong>: <code>...\WinGet\Packages\Gyan.FFmpeg_*\ffmpeg-*-full_build\bin\ffmpeg.exe</code></li>
+</ul>
+<p>If building whisper.cpp fresh: it needs CMake + a C++ compiler. VS Build Tools 2019 bundles both —<br><code>cmake -B build -G &quot;Visual Studio 16 2019&quot; -A x64</code> then <code>cmake --build build --config Release</code>.<br>(CMake is at <code>...\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe</code>.)</p>
+</div>
+<div class="md"><h2>How enumeration works (the key trick)</h2>
+<p>FedWiki&#39;s assets plugin renders the file list <strong>client-side</strong>, so the folder URL just returns the SPA<br>shell. The real listing endpoint — discovered from <code>/plugins/assets/assets.js</code> — is:</p>
+<pre><code>GET {WikiBase}/plugin/assets/list?assets={folder}   -&gt;   {&quot;error&quot;:null,&quot;files&quot;:[ ... ]}
+</code></pre>
+<p>Individual files are served (no auth) at <code>{WikiBase}/assets/{folder}/{filename}</code>. Filenames may contain<br>spaces/apostrophes (<code>Groundhog Day.mov</code>, <code>don&#39;t-panic.mov</code>) so URL-encode each segment.</p>
+<p>Note: the wiki may print asset URLs with hostname <code>public</code> (only resolves on the host machine).<br>Substitute the host you can actually reach (e.g. <code>david.local</code>).</p>
+</div>
+<div class="md"><h2>Run it</h2>
+<pre><code class="language-powershell">&amp; &quot;C:\Users\mitch\.claude\skills\fedwiki-transcribe\transcribe-assets.ps1&quot; `
+    -WikiBase &quot;http://david.local&quot; `
+    -AssetsFolder &quot;workshop-videos&quot;
+</code></pre>
+<p>Useful params: <code>-OutDir</code> (default <code>C:\Users\mitch\transcripts</code>), <code>-Exclude @(&quot;file.mov&quot;)</code>,<br><code>-KeepWav</code>, <code>-Language en|auto</code>, <code>-Model &lt;path&gt;</code>, <code>-Threads 16</code>.</p>
+<p>The script is <strong>idempotent</strong>: a video whose <code>&lt;base&gt;.txt</code> already exists is skipped, so it can be<br>resumed after interruption. It streams audio (does not save the multi-GB video), deletes the temp WAV<br>on success, and logs to <code>&lt;OutDir&gt;\_batch_log.txt</code>. Run it in the background for large batches and tail<br>the log — transcription is CPU-bound (no GPU here), roughly real-time per video with the large model.</p>
+</div>
+<div class="md"><h2>Manual single-file equivalent</h2>
+<pre><code class="language-powershell">$ff=&quot;...\ffmpeg.exe&quot;; $cli=&quot;...\whisper-cli.exe&quot;; $m=&quot;...\ggml-large-v3-turbo-q5_0.bin&quot;
+&amp; $ff -y -i &quot;http://david.local/assets/workshop-videos/max_timeline_01.mov&quot; -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav
+&amp; $cli -m $m -f out.wav -t 16 -otxt -osrt -ovtt -of out
+</code></pre>
+</div>
+<div class="md"><h2>Notes / gotchas</h2>
+<ul>
+<li>whisper.cpp&#39;s built-in miniaudio decodes WAV/MP3 directly but <strong>not video containers</strong> — hence ffmpeg.</li>
+<li>whisper wants 16 kHz mono PCM; the ffmpeg flags above produce exactly that.</li>
+<li>For non-English audio, pass <code>-Language auto</code> (the turbo model is multilingual).</li>
+<li>To speed up a large batch at some accuracy cost, point <code>-Model</code> at <code>ggml-base.en.bin</code> or a <code>small</code> model.</li>
+</ul>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="fedwiki-transcribe.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

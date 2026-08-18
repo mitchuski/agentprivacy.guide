@@ -1,0 +1,388 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — circom-gadget · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — circom-gadget</span></div>
+  <article><div class="md"><h1>circom-gadget — the shared nullifier + membership circuit — notes</h1>
+<p><strong>What this is:</strong> the lab&#39;s first real circuit — the SHARED GADGET that O2 (PHC-by-nullifier,<br>its <strong>M3</strong>), O4 (registry membership), multi-issuer (k-of-n seat), and guardian-recovery (set<br>membership) all converge on. Groth16 over bn128, circom 2.2.3 + circomlib Poseidon, proofs<br>generated and verified for real by <code>test.mjs</code> (10/10).</p>
+</div>
+<div class="md"><h2>The statement (exactly as proved)</h2>
+<pre><code>public:   context          — the §6.2 canonical descriptor digest, reduced to a BN254
+                             field element (never an opaque string)
+          root             — Merkle root of the accredited enrolment set (Poseidon, depth 20)
+          nullifier        — claimed per-context pseudonym
+          transcriptDigest — the §15.2 canonical transcript digest, reduced mod p
+                             (proof binding only — NOT in the nullifier preimage)
+private:  secret s, blinding r, pathElements[20], pathIndices[20]
+statement: Poseidon(s, r) ∈ root   ∧   nullifier = Poseidon(DOMAIN_TAG, s, context)
+         ∧ transcriptSquare = transcriptDigest²   (dummy-square binding, 1 constraint)
+</code></pre>
+<p><strong>Public signal order</strong> (groth16 <code>publicSignals</code>, declaration order):<br><code>[context, root, nullifier, transcriptDigest]</code>. This layout is offered for TF ratification —<br>the lab applies; the group ratifies.</p>
+<p>A verifier learns the nullifier and that it was produced by <em>some</em> enrolled member for this<br>context — never which member, never <code>s</code>. Same secret + same context ⇒ same nullifier (the<br>registry-side duplicate check, test Z4); different context ⇒ unlinkable nullifier (Z3).<br>The claim stays PR-UNQ-narrow (§13.1/§13.2): scoped reuse detection, <strong>not</strong> unique-human.</p>
+</div>
+<div class="md"><h2>Hash pinning (rt01 NOTES item 2, now concrete)</h2>
+<p>The reference model (runtime 01) uses SHA-256; this circuit uses <strong>Poseidon over the BN254<br>scalar field, circomlib parameters</strong>. Nullifier values <strong>differ by hash</strong>, so the spec MUST pin<br>the hash + parameters + the versioned domain tag — otherwise two conformant implementations<br>produce incompatible nullifiers. This gadget&#39;s pin is:</p>
+<ul>
+<li>Hash: Poseidon (circomlib 2.0.5 constants), arity 2 for commitment/tree, arity 3 for the<br>nullifier.</li>
+<li>Domain tag (field constant, hardcoded in the circuit and re-derived + asserted in<br><code>harness.mjs</code>):<pre><code>tag        = &#39;dtg-zkp/nullifier/v0&#39;          (same versioned tag as runtime 01)
+sha256(tag)= a4bcf045cf5929f088f9c19edf3d60c208f8278f931511df6336864b02fea8b8
+DOMAIN_TAG = sha256(tag) mod p
+           = 8848404101512072295265332932144711420998576661229779766032777478684075272373
+p          = 21888242871839275222246405745257275088548364400416034343698204186575808495617
+</code></pre>
+</li>
+<li>nullifier = Poseidon(DOMAIN_TAG, secret, context); commitment = Poseidon(secret, blinding);<br>tree nodes = Poseidon(left, right); zero leaf = 0, zeros[i+1] = Poseidon(zeros[i], zeros[i]).</li>
+</ul>
+</div>
+<div class="md"><h2>Context input (closes rt01 NOTES item 3 via the canonical module)</h2>
+<p><code>context</code> is <strong>not</strong> chosen here — it is <code>descriptorDigest(descriptor)</code> from<br><code>../canonical/canonical.mjs</code> (the §6.2 canonical context descriptor: 11 required fields,<br>sorted-key canonical JSON, domain-separated SHA-256), reduced mod p. Two verifiers that govern<br>different contexts derive different field elements (Z3/Z7); one verifier derives a stable one<br>(Z4). The circuit and the canonical module are now one loop: change the descriptor encoding<br>and every nullifier moves — which is exactly why §6.2 makes the encoding a conformance object.</p>
+<h3>§13.4 binding list — what is in vs. out of the context digest</h3>
+<p>§13.4 says the nullifier MUST bind: enrolment-root id, context descriptor, scope, purpose,<br>epoch, versions, recovery domain. Status here:</p>
+<table>
+<thead>
+<tr>
+<th>§13.4 input</th>
+<th>status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>context descriptor</td>
+<td><strong>in</strong> — it <em>is</em> the <code>context</code> input</td>
+</tr>
+<tr>
+<td>scope, purpose</td>
+<td><strong>in</strong> the digest (<code>scope</code>, <code>purpose</code> fields)</td>
+</tr>
+<tr>
+<td>epoch</td>
+<td><strong>in</strong> the digest (<code>epoch</code> + <code>epochPolicy</code> fields) — but as a digest field, not a separate circuit input; epoch rollover today means a new descriptor digest. A separate public <code>epoch</code> field input (so registries can enforce §22.2 bounded cryptoperiods without re-issuing descriptors) is a candidate v1 change.</td>
+</tr>
+<tr>
+<td>versions (protocol/profile/nullifier)</td>
+<td><strong>in</strong> the digest (<code>protocol</code>, <code>profile</code>, <code>nullifierVersion</code>)</td>
+</tr>
+<tr>
+<td>enrolment-root id</td>
+<td><strong>partially</strong> — the root is a public input of the <em>same proof</em> (so the statement binds it), but it is <strong>not</strong> an input to the nullifier hash itself: a secret enrolled under two roots yields the same nullifier in one context. Whether that is desired (common-root semantics, §13.3) or the root-id should enter the Poseidon preimage is an open decision — <strong>out</strong> for now.</td>
+</tr>
+<tr>
+<td>recovery domain</td>
+<td><strong>out</strong> — deferred to the rotation/guardian-recovery work; no recovery-domain input yet.</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Transcript binding (2026-07-18)</h2>
+<p>The <strong>Semaphore v4 cross-check</strong> (O2 M5, <a class="wlink" href="semaphore-v4-crosscheck.html">Semaphore v4 Crosscheck</a> in the<br>research root) found exactly one <strong>accidental</strong> gap in this gadget (its divergence 7 /<br>recommendation 4): no in-circuit transcript/message binding. Semaphore binds a public<br><code>message</code> via <code>signal dummySquare &lt;== message * message</code> (1 constraint); we had nothing —<br>so a captured proof could be replayed under a different §15.2 transcript within the same<br>context/epoch, stopped only registry-side once the nullifier was recorded.</p>
+<p><strong>Fix applied</strong> (same dummy-square idiom): the circuit gains a public <code>transcriptDigest</code><br>input (the §15.2 canonical transcript digest via <code>transcriptField</code> in <code>harness.mjs</code>,<br>mirroring <code>contextField</code>) bound by <code>signal transcriptSquare &lt;== transcriptDigest * transcriptDigest;</code> — measured cost <strong>exactly +1 constraint</strong> (11,522 → 11,523).</p>
+<p><strong>The binding distinction, said plainly:</strong></p>
+<ul>
+<li>The <strong>transcript binds the PROOF, not the nullifier.</strong> The nullifier preimage is<br><strong>unchanged</strong> — still <code>Poseidon(3)([DOMAIN_TAG, secret, context])</code> — so the nullifier<br>stays stable per context across presentations. That is its job: scoped reuse detection<br>(test Z10 asserts two proofs under different transcripts in the same context carry the<br>SAME nullifier, both verifying).</li>
+<li>The <strong>proof becomes single-presentation</strong>: verifying against a different public<br>transcriptDigest fails cryptographically (test Z9) — the §15.1/§26.1<br>replay-cross-transcript rejection is now enforced by the verifier equation, not only by<br>registry bookkeeping.</li>
+</ul>
+<p><strong>The dual circuit needs no equivalent fix — recorded as a deliberate asymmetry:</strong> the<br>dual-issuer circuit&#39;s nullifiers already bind the show-transcript digest <strong>in their<br>preimages</strong> (<code>nullifier_i = Poseidon(ISSUER_TAG, secret_i, showContext)</code> where<br><code>showContext</code> IS the §15.2 transcript digest). Single gadget: the transcript binds the<br>proof only, because the nullifier must stay stable across presentations within a context.<br>Dual gadget: the transcript sits in the nullifier preimage, because the show IS the scope<br>— issuer distinctness is a per-show property. Same governed object, two deliberately<br>different bindings. (Informative note: <code>build/o2-ref/</code> still holds the pre-binding --O2<br>reference r1cs (5,358) used by the dual measurement ratio; deleting <code>build/</code> regenerates<br>it at the post-binding count.)</p>
+<p><strong>TF ratification:</strong> the public-input layout <code>[context, root, nullifier, transcriptDigest]</code><br>is applied here as the lab&#39;s proposal; the input layout is offered to the Task Force for<br>ratification (the lab applies; the group ratifies).</p>
+</div>
+<div class="md"><h2>Measurements (test Z8, this machine — Windows 11, Node 22)</h2>
+<table>
+<thead>
+<tr>
+<th>metric</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>constraints (r1cs)</td>
+<td><strong>11,523</strong> (5,428 non-linear + 6,095 linear; 11,548 wires) — was 11,522 pre-transcript-binding (<strong>+1</strong> for the dummy-square)</td>
+</tr>
+<tr>
+<td>tree depth</td>
+<td>20 (≈1M enrolment capacity)</td>
+</tr>
+<tr>
+<td>powers-of-tau</td>
+<td>2^14, local (cache REUSED across the transcript-binding rebuild — ptau is circuit-independent)</td>
+</tr>
+<tr>
+<td>proving time</td>
+<td><strong>~630 ms</strong> (snarkjs groth16 fullProve, wasm witness)</td>
+</tr>
+<tr>
+<td>verification time</td>
+<td><strong>~8 ms</strong></td>
+</tr>
+<tr>
+<td>proof size</td>
+<td>725 bytes (JSON)</td>
+</tr>
+<tr>
+<td>verification key</td>
+<td>3,473 bytes (JSON — 4 public inputs now)</td>
+</tr>
+<tr>
+<td>proving key (zkey)</td>
+<td>~5.0 MB · witness wasm ~2.1 MB</td>
+</tr>
+</tbody></table>
+<p>These are the §25 performance-envelope / strawman §9 Q4 numbers: sub-second proving on a<br>consumer machine leaves generous headroom in any realistic claim-ceiling-per-presentation<br>budget; the ~5 MB proving key is the artifact a wallet must hold per circuit.</p>
+</div>
+<div class="md"><h2>What this unlocks</h2>
+<ul>
+<li><strong>O2 M3 done</strong>; M4 (cost data) is captured in the table above as a first datapoint.</li>
+<li>The <strong>membership leg is now portable</strong>: O4 registry membership, the multi-issuer k-of-n<br>seat, and guardian-recovery set membership are the <em>same</em> MerkleInclusion template with a<br>different set semantics — only the nullifier leg&#39;s domain tag / context changes per use.</li>
+<li>rt01&#39;s P4 self-Sybil property now holds <strong>in ZK</strong> (Z4/Z5), not just in the reference model.</li>
+</ul>
+</div>
+<div class="md"><h2>Deferred</h2>
+<ul>
+<li><del><strong>Semaphore v4 cross-check = O2 M5</strong></del> — <strong>DONE 2026-07-18</strong><br>(<a class="wlink" href="semaphore-v4-crosscheck.html">Semaphore v4 Crosscheck</a>, research root); its one accidental-gap finding<br>(no in-circuit transcript binding) is fixed above.</li>
+<li><strong>§13.4 leftovers</strong> — separate epoch field input; root-id-in-preimage decision; recovery/<br>rotation domain (see table above).</li>
+<li><strong>Failure/redress semantics (§13.6)</strong> — a repeated nullifier may be a retry, race, recovery,<br>or epoch disagreement; that logic lives registry-side, above this circuit.</li>
+</ul>
+</div>
+<div class="md"><h2>Deviations + caveats</h2>
+<ul>
+<li><strong>npm deviation (recorded per lab rule):</strong> the lab&#39;s reference models are zero-dep; a<br>circuit build legitimately needs npm deps — <code>circomlib</code> (Poseidon circuits), <code>circomlibjs</code><br>(JS-side Poseidon mirror), <code>snarkjs</code> (prove/verify). All of it is confined to<br><a class="wlink" href="lab-circom-gadget.html">Lab — circom-gadget</a> (own <code>package.json</code>, own <code>node_modules/</code>); everything else in the<br>lab stays zero-dep. The harness <em>reads</em> <code>../canonical/canonical.mjs</code> (zero-dep) unmodified.</li>
+<li><strong>Trusted-setup caveat, said plainly:</strong> <code>setup.mjs</code> runs a <em>local</em> powers-of-tau ceremony<br>and a single zkey contribution with a fixed entropy string (<code>dtg-zkp-lab-entropy-v0</code>). That<br>is a lab measurement rig, <strong>NOT a production ceremony</strong>. Anyone holding this setup&#39;s toxic<br>waste could forge proofs; a real deployment needs a multi-party ceremony or a well-known<br>audited ptau (e.g. the Hermez/perpetual-powers-of-tau files) plus a public phase-2.</li>
+<li><strong>Caching:</strong> artifacts live in <code>build/</code> and every pipeline step is check-then-skip; a fresh<br>clone rebuilds identically apart from proof randomness (and snarkjs&#39;s internal contribution<br>randomness). Delete <code>build/</code> to force a full rebuild. Since 2026-07-18 <code>setup.mjs</code> is also<br>staleness-aware: a circuit source newer than the cached r1cs invalidates r1cs/wasm/zkey/vkey<br>automatically — the ptau files are circuit-independent and are never invalidated.</li>
+<li>Test Z5 intentionally triggers a witness-generation constraint failure; snarkjs prints an<br><code>ERROR ... line: 111</code> (the <code>mt.root === root</code> constraint) — expected, and labelled in the<br>test output.</li>
+<li><strong>Setup-artifact determinism: REFUTED empirically (2026-08-11).</strong> A full fresh rebuild of<br>all three circuits in a second directory <em>on the same machine</em> (same lockfile, same fixed<br>entropy string) produced <strong>byte-identical r1cs and wasm</strong> but <strong>divergent <code>pot14_final.ptau</code>,<br>both zkeys, and vkeys</strong> — <code>snarkjs powersoftau contribute</code> and <code>zkey contribute</code> mix their<br>own CSPRNG randomness into every contribution regardless of the <code>-e</code> string (which is,<br>incidentally, correct ceremony hygiene on snarkjs&#39;s part: a contribution SHOULD never be<br>fully attacker-predictable). Consequence for independent verification (X10 lane 1): the<br>byte-exact claim holds for the <strong>compiled circuit only</strong> (r1cs digest + wasm digest +<br>constraint counts, <code>acceptance: required</code> in <code>artifacts.manifest.json</code>); the setup chain is<br>machine-local (<code>acceptance: advisory</code> — divergence is recorded, not fatal), and the<br>proving-system evidence is the volunteer&#39;s own suites running green against their own build.<br>Earlier &quot;any two machines build byte-identical artifacts&quot; phrasing (CIRCUITS.md, call<br>companion) was an overclaim and is corrected to circuit-level byte-exactness.</li>
+</ul>
+</div>
+<div class="md"><h2>Files</h2>
+<ul>
+<li><code>circuits/nullifier_membership.circom</code> — the gadget (MerkleInclusion + NullifierMembership).</li>
+<li><code>harness.mjs</code> — deterministic JS mirror: <code>enrolField</code>, <code>buildTree</code>, <code>contextField</code>,<br><code>transcriptField</code>, <code>nullifierField</code>, <code>makeInput</code>.</li>
+<li><code>setup.mjs</code> — compile + ptau + groth16 setup pipeline (cached + staleness-aware;<br>standalone or imported).</li>
+<li><code>test.mjs</code> — Z1–Z10; run <code>node test.mjs</code> (first run builds everything, ~2–3 min).</li>
+</ul>
+</div>
+<div class="md"><h2>Sibling circuit: dual-issuer (X8 k=2)</h2>
+<p><strong>What it is:</strong> the first sibling of the shared gadget — <code>circuits/dual_issuer.circom</code> realizes<br>X8&#39;s k=2 tier IN-CIRCUIT: <em>two pairwise-distinct members of the accepted issuer set at one named<br>root each contribute to this show, without revealing which members</em> (§12.5 / X8 ZK-realization).<br>New files only (<code>setup-dual.mjs</code>, <code>harness-dual.mjs</code>, <code>test-dual.mjs</code> — D1–D7, 7/7); the single<br>gadget and its artifacts were untouched at the time (re-verified 8/8; since the 2026-07-18<br>transcript-binding change the single suite is 10/10 and dual remains 7/7 — the dual circuit<br>needs no equivalent fix, see the Transcript binding section).</p>
+<h3>The statement (exactly as proved)</h3>
+<pre><code>public:   showContext — the §15.2 canonical show-TRANSCRIPT digest mod p (the show is the
+                        scope, per X8 — NOT the §6.2 descriptor digest the single gadget uses;
+                        matches the multi-issuer reference&#39;s issuerShowNullifier input)
+          root        — ONE accepted-issuer-set Merkle root for BOTH legs (§12.4: mixed
+                        snapshots are a §26.1 rejection — here they are simply unprovable)
+          nullifier1, nullifier2 — per-issuer per-show distinctness pseudonyms
+private:  secret_i, blinding_i, pathElements_i[20], pathIndices_i[20]   (i ∈ {1,2})
+statement: Poseidon(secret_i, blinding_i) ∈ root                         (both i)
+         ∧ nullifier_i = Poseidon(ISSUER_TAG, secret_i, showContext)     (both i)
+         ∧ nullifier1 ≠ nullifier2                                       (in-circuit)
+</code></pre>
+<h3>ISSUER_TAG derivation (same sha256-mod-p pattern as DOMAIN_TAG)</h3>
+<pre><code>tag        = &#39;dtg-zkp/issuer-show-nullifier/v0&#39;   (SAME string as the multi-issuer
+             reference model&#39;s DOMAIN_ISSUER_SHOW_NULLIFIER — one governed name, two
+             hash pins: SHA-256 there, Poseidon here)
+sha256(tag)= 790b4d621ed2069a7dc95786678c4a3ed0a5e86ae4b100a9a2c585f5de5d0c77
+ISSUER_TAG = sha256(tag) mod p
+           = 10973338332398489381181448044177053429928920939795168163925594436592914467957
+</code></pre>
+<p>Hardcoded in the circuit, re-derived + asserted in <code>harness-dual.mjs</code>.</p>
+<h3>The in-circuit distinctness trick</h3>
+<p>Distinctness (X8 assumption A3) is one constraint: witness <code>inv = 1/(nullifier1 − nullifier2)</code><br>(hint: <code>inv &lt;-- diff != 0 ? 1/diff : 0</code>) and constrain <code>diff * inv === 1</code>. If the same issuer<br>secret drives both legs, the difference is 0, zero has no inverse, and the constraint is<br><strong>unsatisfiable — a duplicate issuer cannot even produce a witness</strong> (test D3 asserts the<br>witness-generation failure at that constraint).</p>
+<h3>Measurements (test D7, same machine)</h3>
+<table>
+<thead>
+<tr>
+<th>metric</th>
+<th>dual (--O2)</th>
+<th>single</th>
+<th>ratio</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>constraints (r1cs)</td>
+<td><strong>10,717</strong></td>
+<td>5,358 (--O2 like-for-like)</td>
+<td><strong>2.000×</strong></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>11,522 (--O1, as shipped above)</td>
+<td>0.930×</td>
+</tr>
+<tr>
+<td>distinctness overhead</td>
+<td><strong>+1 constraint</strong> over 2× the O2 single</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>proving time</td>
+<td>~1,110 ms</td>
+<td>~640 ms</td>
+<td>~1.7×</td>
+</tr>
+<tr>
+<td>verification time</td>
+<td>~16 ms</td>
+<td>~10 ms</td>
+<td></td>
+</tr>
+<tr>
+<td>proof size</td>
+<td>725 bytes</td>
+<td>722 bytes</td>
+<td>flat (groth16)</td>
+</tr>
+<tr>
+<td>zkey</td>
+<td>~6.1 MB · wasm ~2.2 MB</td>
+<td>~5.0 MB · ~2.1 MB</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Compile-flag note:</strong> the dual circuit is compiled <code>--O2</code>. Under the default <code>--O1</code> the doubled<br>circuit would be ~23k total constraints and overflow the cached 2^14 ptau (16,384 cap); <code>--O2</code><br>substitutes the linear constraints away and the non-linear core (2×5,358 + 1) fits, so the<br>cached <code>build/pot14_final.ptau</code> is REUSED unchanged. For the honest ratio, <code>setup-dual.mjs</code><br>also compiles an <code>--O2</code> reference r1cs of the single gadget into <code>build/o2-ref/</code> (informative<br>only; the shipped O1 artifacts are not regenerated).</p>
+<h3>What this demonstrates for X8</h3>
+<ul>
+<li><strong>The k=2 tier of X8&#39;s governed vocabulary (k ∈ {1,2,3}) is realizable in-circuit</strong> at ~2×<br>the single gadget&#39;s cost plus one constraint, with sub-second-order proving and flat<br>groth16 proof size. <strong>k=3 is the same pattern</strong>: three legs + pairwise distinctness<br>(3 inverse constraints); cost extrapolates linearly in k, C(k,2) in distinctness.</li>
+<li><strong>Threshold hiding is still future work</strong> — k is public here (k IS the disclosure, X8):<br>hiding k, or proving k-of-m held, needs a different circuit shape, not more legs.</li>
+<li>The multi-issuer reference&#39;s <code>&#39;duplicate-issuer-in-show&#39;</code> rejection now has a<br><strong>circuit-level counterpart with a different failure shape</strong>: the reference verifier sees a<br>nullifier collision and returns a NAMED rejection after the fact; the circuit makes the<br>duplicate <strong>unsatisfiable</strong> — there is no artifact to reject and no name attached. For the<br>X1 fixture story this matters: reference-model negative fixtures carry rejection codes,<br>circuit negative fixtures can only carry &quot;no valid proof exists for these inputs&quot; — a<br>fixture format for circuit negatives has to encode unprovability, not a code.</li>
+<li>What the circuit does NOT carry (stays registry-side, per the reference model): the<br>independence register / effectiveK collapse, ε staleness, tier enforcement, and A4<br>same-proposition binding — the circuit proves distinct set-members, the register decides<br>how many factors actually multiply.</li>
+</ul>
+<h3>Sibling files</h3>
+<ul>
+<li><code>circuits/dual_issuer.circom</code> — IssuerLeg ×2 + inverse-distinctness (MerkleInclusion<br>re-declared verbatim; the original file ends in its own <code>component main</code>, so it cannot be<br><code>include</code>d).</li>
+<li><code>harness-dual.mjs</code> — issuer enrolment, <code>showContextField</code> (transcript digest),<br><code>issuerNullifierField</code>, <code>makeDualInput</code>; reuses <code>harness.mjs</code> helpers read-only.</li>
+<li><code>setup-dual.mjs</code> — compile (<code>--O2</code>) + groth16 setup, ptau cache reused; <code>build/o2-ref/</code>.</li>
+<li><code>test-dual.mjs</code> — D1–D7; run <code>node setup-dual.mjs</code> then <code>node test-dual.mjs</code>.</li>
+</ul>
+</div>
+<div class="md"><h2>Third circuit: guardian threshold (X9 t-of-n)</h2>
+<p><strong>What it is:</strong> <code>circuits/guardian_threshold.circom</code> realizes X9&#39;s threshold-recovery mitigation<br>IN-CIRCUIT for t=3: <em>three pairwise-distinct guardians from the committed guardian set each<br>attest THIS continuity claim in THIS recovery context — without revealing which guardians</em> (X9<br>&quot;guardian-set commitments&quot; + &quot;k-out-of-n distinctness discipline&quot;; the circuit leg the<br>guardian-recovery reference model <code>runtimes/guardian-recovery/guardians.mjs</code> deferred by name).<br>New files only (<code>setup-guardian.mjs</code>, <code>harness-guardian.mjs</code>, <code>test-guardian.mjs</code> — G1c–G8c,<br>8/8); single (10/10) and dual (7/7) re-verified untouched.</p>
+<h3>The statement (exactly as proved)</h3>
+<pre><code>public:   recoveryContext — the §6.2 RECOVERY-DOMAIN descriptor digest mod p; the guardian
+                            EPOCH lives INSIDE the descriptor (its `epoch` field) — epoch
+                            rollover = new digest = fresh seat nullifiers (§22.2 behaviour)
+          guardianRoot    — Merkle root over guardian commitments Poseidon(secret, blinding):
+                            the COMMITTED set. ONE root for all three legs.
+          claimDigest     — the continuity claim (newCommitment + revokedRef + §15.2 ceremony
+                            transcript, hashed harness-side under &#39;dtg-zkp/recovery-claim/v0&#39;,
+                            reduced mod p)
+          nullifiers[3]   — per-guardian recovery-seat pseudonyms
+private:  secret_i, blinding_i, pathElements_i[20], pathIndices_i[20]   (i ∈ {1..3})
+statement: Poseidon(secret_i, blinding_i) ∈ guardianRoot                       (all i)
+         ∧ nullifier_i = Poseidon(GUARDIAN_TAG, secret_i, recoveryContext)     (all i)
+         ∧ nullifier_i ≠ nullifier_j  ∀ i&lt;j     (C(3,2)=3 inverse constraints, in-circuit)
+         ∧ claimSquare = claimDigest²           (dummy-square binding, 1 constraint)
+</code></pre>
+<p><strong>Public signal order:</strong> <code>[recoveryContext, guardianRoot, claimDigest, nullifiers[0..2]]</code><br>(asserted in G4c). Template is <code>GuardianThreshold(depth, t)</code> with<br><code>main = GuardianThreshold(20, 3)</code> — t is FIXED at 3 in this artifact; the parameter shows the<br>generalization (legs scale linearly in t, distinctness as C(t,2)).</p>
+<h3>GUARDIAN_TAG derivation (same sha256-mod-p pattern as DOMAIN_TAG / ISSUER_TAG)</h3>
+<pre><code>tag         = &#39;dtg-zkp/guardian-seat-nullifier/v0&#39;
+sha256(tag) = 73b6cd8dbb162c686520d25d94d5b3daf378f4e32d817fabd0de983f2517339b
+GUARDIAN_TAG= sha256(tag) mod p
+            = 8562476688242842477897907163240902665687518953395242745930442724180399436697
+</code></pre>
+<p>Hardcoded in the circuit, re-derived + asserted in <code>harness-guardian.mjs</code>. This is the<br><strong>circuit-level pin of the reference model&#39;s string-domain convention</strong> — guardians.mjs scopes<br>the seat as <code>nullifier(secret, &#39;guardian/&#39; + descriptorDigest + &#39;/&#39; + epoch)</code>; here the same<br>governed scope (recovery context + epoch) enters a Poseidon preimage as<br><code>(GUARDIAN_TAG, secret, recoveryContext)</code> with the epoch inside the descriptor digest. One<br>governed name, two hash pins (SHA-256 string domain there, Poseidon field preimage here) —<br>the same move as ISSUER_TAG / rt01 NOTES item 2.</p>
+<h3>The two bindings, kept distinct (the seat property)</h3>
+<ul>
+<li><strong>Seat nullifier binds the RECOVERY CONTEXT</strong> — claim-independent: the same guardian in the<br>same recovery context+epoch produces the SAME nullifier under two rival claims (G4c), so<br>double-vouching across competing replacement commitments is DETECTABLE registry-side (§6.5<br>intentional in-context linkage; feeds the reference model&#39;s contested-recovery path). Across<br>recovery contexts the nullifiers are unrelated (G6c, §6.6).</li>
+<li><strong>claimDigest binds the PROOF</strong> (dummy-square, the ratified pattern) — a guardian bundle<br>proved for claim A fails verification against public claim B in both directions (G5c): the<br>bundle cannot be transplanted to authorize a different replacement.</li>
+</ul>
+<h3>Signer-set hiding, said precisely</h3>
+<p>The verifier of a threshold proof learns: the committed set (by <code>guardianRoot</code>), that t=3<br>distinct members of it signed (by the circuit shape + 3 distinct nullifiers), the recovery<br>context (with epoch), and the continuity claim — <strong>never which guardians signed</strong>, never a<br>guardian secret or commitment. The seat nullifiers are pseudonyms scoped to the recovery<br>context: they expose reuse WITHIN the context, nothing across contexts, and no leaf position.<br>This is the circuit-grade version of the reference model&#39;s <code>auditSignerSetHidden</code> (which is<br>structural: it checks guardian material is absent from the authorization object; here the<br>hiding is cryptographic).</p>
+<h3>What stays OUT of the circuit (reference-model / promote-lane territory)</h3>
+<ul>
+<li><strong>Set commitment vs Merkle root — two representations, unreconciled.</strong> guardians.mjs commits<br>the set as a FLAT hash (<code>setCommitment</code> = H over sorted commitments + descriptor + epoch +<br>t + n); the circuit needs provable inclusion, so it uses a Merkle root over the same guardian<br>commitments. A verifier holding a reference-model <code>setCommitment</code> cannot check it against<br>this circuit&#39;s <code>guardianRoot</code> without the registry publishing both against one enrolment<br>event. <strong>Reconciling the two representations (or replacing the flat hash with the root) is<br>the promote-lane task.</strong></li>
+<li><strong>Epoch lapse checking</strong> — the circuit proves against whatever descriptor digest it is<br>handed; that the epoch inside it is the LIVE guardian epoch (<code>guardian-epoch-lapsed</code>) is a<br>registry-side check against the live clock (guardians.mjs steps 0/2, GUARDIAN_CLOCKS/§22.2).</li>
+<li><strong>Personhood-gating of guardians at set-commit time</strong> — the rt01 leg<br>(<code>guardian-not-personhood-anchored</code>): the Sybil-self-guardian kill happens when the set is<br>COMMITTED, not when the proof is made. Reference model&#39;s job.</li>
+<li><strong>Contest/freeze semantics</strong> — rival claims in one epoch (<code>contested-recovery</code>, the ceremony<br>freeze, §13.6 challenge route) are registry state above the proof; the circuit&#39;s contribution<br>is that the seat nullifiers make rival-claim double-vouching visible (G4c).</li>
+<li><strong>t as a profile parameter</strong> — fixed 3 in this artifact; who sets t/n and whether a<br>below-floor t is a conformance failure stays a §6.7/profile question (X9 open questions).</li>
+<li>Also inherited from the reference model: threshold-met-is-not-completion (the issuer&#39;s<br>re-issuance record is the outcome artifact), and n (the committed-set size) — the circuit<br>exposes t, never n.</li>
+</ul>
+<h3>Measurements (test G8c, same machine)</h3>
+<table>
+<thead>
+<tr>
+<th>metric</th>
+<th>guardian (--O2)</th>
+<th>vs</th>
+<th>ratio</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>constraints (r1cs)</td>
+<td><strong>16,078</strong> (16,145 vars, 6 public)</td>
+<td>5,358 single --O2</td>
+<td><strong>3.001×</strong></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>11,523 single --O1 (as shipped)</td>
+<td>1.395×</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>10,717 dual --O2</td>
+<td>1.500×</td>
+</tr>
+<tr>
+<td>overhead</td>
+<td><strong>+4 constraints</strong> over 3× the O2 single (3 distinctness + 1 claim binding — exactly as designed)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ptau headroom</td>
+<td>306 constraints under the 2^14 cap (16,384)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>proving time</td>
+<td>~790 ms</td>
+<td>single ~640 ms</td>
+<td>~1.2×</td>
+</tr>
+<tr>
+<td>verification time</td>
+<td>~11 ms</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>proof size</td>
+<td>723 bytes (flat, groth16)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>zkey</td>
+<td>~8.6 MB · wasm ~2.2 MB</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Compile-flag note:</strong> compiled <code>--O2</code> like dual — under <code>--O1</code> the tripled circuit would be<br><del>34k constraints and overflow the cached 2^14 ptau; at <code>--O2</code> the non-linear core<br>(3×5,358 + 3 + 1 = 16,078) fits with <strong>306 constraints of headroom</strong>, so <code>build/pot14_final.ptau</code><br>is REUSED unchanged. This is the ceiling: <strong>t=4 at depth 20 does NOT fit 2^14</strong> (</del>21.4k) — a<br>larger t (or a deeper tree) needs a pot15 ceremony, which is the natural break point at which<br>t stops being &quot;add a leg&quot; and becomes a real profile/setup decision.</p>
+<h3>The fixture-story note (same pattern as dual, one hop over)</h3>
+<p>The reference model refuses a duplicate guardian BY NAME (<code>&#39;duplicate-guardian-seat&#39;</code>, a<br>checker-side rejection with a code); the circuit makes the duplicate <strong>UNSATISFIABLE</strong> — with<br>two legs on one guardian secret some nullifier difference is 0, zero has no inverse, and<br><code>diff * inv === 1</code> cannot be witnessed (G2c asserts the witness-generation throw). There is no<br>artifact to reject and no name attached. Circuit negative fixtures must therefore encode<br><strong>unprovability</strong> (&quot;no valid proof exists for these inputs&quot;), not a rejection code — the same<br>X1 fixture-format consequence the dual circuit recorded for <code>&#39;duplicate-issuer-in-show&#39;</code>.</p>
+<h3>Guardian files</h3>
+<ul>
+<li><code>circuits/guardian_threshold.circom</code> — GuardianLeg ×3 + pairwise inverse-distinctness +<br>claim dummy-square (MerkleInclusion re-declared verbatim; the originals end in their own<br><code>component main</code>, so they cannot be <code>include</code>d).</li>
+<li><code>harness-guardian.mjs</code> — guardian enrolment, <code>recoveryContextField</code> (descriptor digest,<br>epoch inside), <code>claimDigestField</code>, <code>guardianNullifierField</code>, <code>makeGuardianInput</code>; reuses<br><code>harness.mjs</code> helpers read-only.</li>
+<li><code>setup-guardian.mjs</code> — compile (<code>--O2</code>) + groth16 setup, staleness-aware like <code>setup.mjs</code>;<br>ptau cache reused.</li>
+<li><code>test-guardian.mjs</code> — G1c–G8c; run <code>node setup-guardian.mjs</code> then <code>node test-guardian.mjs</code>.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-circom-gadget.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

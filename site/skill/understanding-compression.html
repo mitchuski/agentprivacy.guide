@@ -1,0 +1,84 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Compression · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Understanding Compression</span></div>
+  <article><div class="md"><h1>understanding-compression</h1>
+</div>
+<div class="md"><blockquote>
+<p>Take a unified semantic core (e.</p>
+</blockquote>
+</div>
+<div class="md"><h1>understanding-compression</h1>
+<p>One meaning, many tellings, provably the same. This skill formalises a recursion:</p>
+<pre><code>            COMPRESS  -&gt;  maths | principles | actions      (strip to the invariant)
+  INVARIANT
+            EXPAND    -&gt;  markets | plurality | intents     (re-tell for audiences)
+</code></pre>
+<ul>
+<li><strong>Compressions</strong> discard audience and surface; they keep only what is invariant -<br>expressed as a <em>number/formula</em> (maths), a <em>law/axiom</em> (principles), or a <em>minimal doable</em><br>(actions).</li>
+<li><strong>Expansions</strong> add audience back: a <em>value/incentive</em> framing (markets), a set of<br><em>community-specific tellings</em> (plurality, &gt;=2), and the <em>goals/why</em> (intents).</li>
+<li>The loop <strong>closes</strong> with a re-compression check: take one expansion, compress it again,<br>and assert the recovered invariant matches the original. That round-trip IS the coherence<br>test for meaning - the semantic sibling of <code>fedwiki-cohere-sync</code>&#39;s page-level checker.</li>
+</ul>
+</div>
+<div class="md"><h2>Workflow</h2>
+<ol>
+<li><strong>seed</strong> - build blank &quot;understanding cards&quot; from a <code>wiki-to-pdf</code> <code>model.json</code>. Each card<br>is pre-seeded with <code>invariant_seed</code> (the milestone&#39;s five In-briefs).<pre><code>python understanding.py seed                       # -&gt; cards.json
+</code></pre>
+</li>
+<li><strong>author</strong> (the judgement step - you, guided by this file): for each card, distill the<br><code>invariant</code> to ONE sentence that survives every re-telling, then fill the three<br>compressions and three expansions. Keep the same invariant across all plurality tellings;<br>only the surface changes. Finish each card&#39;s <code>recheck</code>: pick one expansion (<code>from</code>),<br>compress it back to a <code>recovered_invariant</code>, set <code>matches: true</code> only if it really matches.</li>
+<li><strong>cohere</strong> - gate the work (non-zero exit blocks):<pre><code>python understanding.py cohere --cards cards.json
+</code></pre>
+Fails on: empty invariant/axis, &lt;2 plurality communities, missing recheck, or round-trip<br>drift (recovered invariant shares &lt;25% of the invariant&#39;s key terms).</li>
+<li><strong>render</strong> - formal PDF (purple &quot;understanding&quot; layer), per milestone: Invariant -&gt;<br>Compressions table -&gt; Expansions (plurality fanned by community) -&gt; round-trip line.<pre><code>python understanding.py render --cards cards.json    # -&gt; out/understanding.pdf
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="md"><h2>Authoring guidance</h2>
+<ul>
+<li><strong>Invariant</strong>: the thing a developer, a funder and an artist would all agree is <em>the same<br>claim</em>, with all framing removed. If two communities would dispute it, it&#39;s not invariant -<br>push more surface into the expansions.</li>
+<li><strong>maths</strong>: prefer real quantities/relations from the source (counts, rates, prizes, dates),<br>not decoration. A formula or an inequality is ideal.</li>
+<li><strong>principles</strong>: a one-line law (&quot;X compounds Y&quot;). Should read as true beyond this milestone.</li>
+<li><strong>actions</strong>: what someone does on Monday. Minimal, concrete, checkable.</li>
+<li><strong>markets</strong>: who pays/earns/exchanges what; the incentive that makes it self-sustaining.</li>
+<li><strong>plurality</strong>: &gt;=2 audiences, each told in <em>their</em> language and stakes - same invariant.</li>
+<li><strong>intents</strong>: the underlying goal; why it&#39;s worth doing at all.</li>
+<li><strong>recheck</strong>: be honest. If compressing an expansion doesn&#39;t recover the invariant, the<br>expansion drifted (or the invariant was too narrow). Fix one of them - that&#39;s the recursion.</li>
+</ul>
+</div>
+<div class="md"><h2>Demo</h2>
+<p><code>agm-demo.json</code> is a fully-authored card for AGM 2027 (passes cohere; rendered to<br><code>out/understanding-agm-demo.pdf</code>). Use it as the worked example of the format.</p>
+</div>
+<div class="md"><h2>Pipeline</h2>
+<ul>
+<li>Upstream: <code>wiki-to-pdf</code> produces <code>model.json</code> + the dossier&#39;s <strong>Unified Summary</strong> (the core).</li>
+<li>This skill expands that core per community and proves the round-trip.</li>
+<li>Sibling: <code>fedwiki-cohere-sync</code> checks coherence at the <em>page</em> level; this checks it at the<br><em>meaning</em> level.</li>
+</ul>
+</div>
+<div class="md"><h2>Dependencies</h2>
+<p>Python 3 + <code>reportlab</code> (render only). seed/cohere are pure-stdlib.</p>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="understanding-compression.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

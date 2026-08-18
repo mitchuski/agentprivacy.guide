@@ -1,0 +1,210 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — Runtimes · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — Runtimes</span></div>
+  <article><div class="md"><h1>DTG ZKP — Local Runtime Prototypes</h1>
+<p><strong>Status:</strong> Local experimental lab. <strong>Not</strong> part of the upstream <code>trustoverip/dtgwg-zkp-tf</code> repo — excluded via <code>.git/info/exclude</code>, never pushed. Spec-doc edits go upstream via PR; this directory stays here.</p>
+<p><strong>Sibling spec:</strong> these predicates prove things <em>about</em> the credentials in the <span class="deadlink" title="reference (not a live page)">DTG Credentials Core Specification</span> (VRC/VMC/VIC/VPC/VEC/VWC, R/M/C/P-DID). That spec is format-agnostic on ZK and defers the ZK layer to us; <code>./CRED-SPEC-COHERENCE.md</code> maps each predicate to its credential anchor.</p>
+<p><strong>Workbench ↔ research root (2026-07-17):</strong> this clone is <strong>the workbench</strong> — Mitch&#39;s direct ToIP WG<br>work: this evidence lab (excluded), plus PR-shaped spec edits in the tracked tree; the only path to<br>upstream. The <strong>research root</strong> is <code>~/dtgwg-cred-spec-main_mage</code> — the vendored cred-spec, the<br>Predicate &amp; Assurance-Boundary Decision Document (working draft), and <code>explorations/</code> (the expansion<br>ideas as buildable design docs). Ideas iterate there and <em>promote</em> here when they become TF work<br>(runtime code lands in this lab; review-ready drafts land in the tracked tree at their upstream path).<br>The loop is written down in <a class="wlink" href="workflow-workbench-and-research-root.html">Workflow — Workbench and Research Root</a>.</p>
+<p><strong>Purpose:</strong> turn Section 4 of <code>../proof-of-liveness-requirements.md</code> — <em>&quot;which ZK proof type(s) to use per predicate&quot;</em>, the task force&#39;s <strong>first substantive decision</strong> — from prose candidates into <strong>runnable reference constructions</strong>. A co-chair showing up with working code per predicate lets the group converge on that decision against behaviour, not just intuition.</p>
+<p>Each runtime answers one question for one predicate: <em>does this construction actually give the properties the strawman claims, and what does it cost?</em></p>
+</div>
+<div class="md"><h2>The six predicates (Section 4)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Predicate</th>
+<th>Candidate construction</th>
+<th>Anchor (cred-spec)</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td><strong>Uniqueness within a context</strong></td>
+<td>Nullifier / Semaphore-style deterministic per-context pseudonym</td>
+<td>R-DID uniqueness + PHC &quot;one-per-person&quot;</td>
+<td>🟢 reference + property tests</td>
+</tr>
+<tr>
+<td>02</td>
+<td><strong>Liveness attestation</strong></td>
+<td>ZKP of a valid issuer signature over a hidden attestation</td>
+<td>IDVC (identity-verification credential)</td>
+<td>⚪ stub</td>
+</tr>
+<tr>
+<td>03</td>
+<td><strong>Personhood / accredited issuer</strong></td>
+<td>One-of-many (set-membership) over an accredited issuer set</td>
+<td>VMC from a recognized VTC · trust registry</td>
+<td>⚪ stub</td>
+</tr>
+<tr>
+<td>04</td>
+<td><strong>Holder / agent binding</strong></td>
+<td>PoK of holder key, bound to the session</td>
+<td>VPC / P-DID · VTA presenter</td>
+<td>⚪ stub</td>
+</tr>
+<tr>
+<td>05</td>
+<td><strong>Freshness</strong></td>
+<td>Binding to a verifier challenge / nonce / transcript</td>
+<td>taskContext + outcome-interpretability</td>
+<td>⚪ stub</td>
+</tr>
+<tr>
+<td>06</td>
+<td><strong>Demographic range</strong> (if in scope)</td>
+<td>Range proof over an attested attribute</td>
+<td>VEC attribute · selective-disclosure predicate</td>
+<td>⚪ stub</td>
+</tr>
+<tr>
+<td>07</td>
+<td><strong>Trust-graph formation</strong> (dream-agent cycle)</td>
+<td>Mage⊥Swordsman fold minting VRC edges on personhood + mutual consent</td>
+<td>VRC edge · community-anchored propagation</td>
+<td>🟢 reference + property tests</td>
+</tr>
+</tbody></table>
+<p>The stack decision is still made <strong>per predicate</strong> as each runtime is built, not committed globally up front (see each <code>NOTES.md</code>/<code>STUB.md</code>). The <strong>Anchor</strong> column names the DTG Credentials Core Spec object each proof operates over — the full mapping, the two constructions each rides, and the &quot;accredited set → trust registry&quot; reconciliation are in <code>./CRED-SPEC-COHERENCE.md</code>.</p>
+<p>Runtime <strong>07</strong> is not a Section-4 predicate but a <strong>bridge runtime</strong>: it composes 01&#39;s personhood anchor into <em>how the trust graph forms</em> — an agentprivacy-harness dream-agent cycle (Mage⊥Swordsman across the Gap) minting VRC edges on personhood + mutual consent. It is where the spec&#39;s two ZK constructions (pairwise edge, community-anchored propagation) get an operational edge-admissibility rule.</p>
+</div>
+<div class="md"><h2>Cross-cutting instruments (X-series promotions, 2026-07-17)</h2>
+<p>Named (non-numbered) dirs = instruments that serve every predicate, promoted from the research root&#39;s<br>X-series design docs (<code>~/dtgwg-cred-spec-main_mage/explorations/</code>) via the WORKFLOW promote lane:</p>
+<table>
+<thead>
+<tr>
+<th>Dir</th>
+<th>From</th>
+<th>What it is</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>canonical/</code></td>
+<td>shared spine</td>
+<td>§6.2 context-descriptor + §15.2 canonical-transcript encodings &amp; digests (&quot;a bare nonce is insufficient&quot; as a failing test)</td>
+<td>🟢 11/11</td>
+</tr>
+<tr>
+<td><code>fixtures/</code></td>
+<td>X1</td>
+<td>conformance-fixture format: rejection-reason register <strong>v2 (66 exact + 29 families = 95 entries — one vocabulary across all six instruments, every addition triggered live)</strong>, vector schema (accept/reject/<strong>lint</strong>), extraction, consumer harness, §26.1 coverage <strong>11/11 — 0 gaps</strong></td>
+<td>🟢 13/13 + 40 vectors</td>
+</tr>
+<tr>
+<td><code>context-card/</code></td>
+<td>X2</td>
+<td><code>render(descriptor) → card</code>: the §6.8 six questions derived from the descriptor itself, legibility conformance checks, expansion-visible diffs, narrow-language enforcement</td>
+<td>🟢 13/13</td>
+</tr>
+<tr>
+<td><code>show-composition/</code></td>
+<td>X3</td>
+<td>the atomic show: bundle-profile registry v0 (5 governed bundles), one transcript binding all members, transplant/partial/à-la-carte/taskContext-as-outcome rejections by name, §2.4 joint-disclosure records as data</td>
+<td>🟢 10/10</td>
+</tr>
+<tr>
+<td><code>quiet-presentation/</code></td>
+<td>X4</td>
+<td>§19 per-observer leakage budget as data (§2.4 claim form per row), quiet-vs-naive deployments over logical-tick traces, 5 tier checks (schedule independence, uniform error surface, constant shape, on-grid retries), log-field register + prohibited list, structural residue — undetectability unclaimable</td>
+<td>🟢 8/8</td>
+</tr>
+<tr>
+<td><code>rotation/</code></td>
+<td>X5</td>
+<td>the two-case split runnable: routine epoch derivation (never touches enrolment; descent check without the master), issuer-blind recovery (structural no-old→new-pair audit), rate-limited recovery-domain nullifier over a governed §6.2 descriptor, reform-vs-continue edge rekey over rt 07</td>
+<td>🟢 10/10</td>
+</tr>
+<tr>
+<td><code>erosion-record/</code></td>
+<td>X6</td>
+<td>the ten-clock sort (closed list, certification/erosion families) + the erosion-aware residual-risk record (<code>basis:&#39;measured&#39;</code> structurally banned; rate-not-cliff enforced) + PR-UNQ worked example</td>
+<td>🟢 8/8</td>
+</tr>
+<tr>
+<td><code>mediator/</code></td>
+<td>X7</td>
+<td>§21 as mechanism: T0/T1 jobs (T2 honeypot unbuildable), P-ISOLATE/P-FORGET state checks against a frozen audit list, per-context mediator pseudonyms (§6.6), four-exit §21.3 downgrade machine — silent transitions unconstructable, de-listed mediator fails closed <em>visibly</em></td>
+<td>🟢 9/9</td>
+</tr>
+<tr>
+<td><code>multi-issuer/</code></td>
+<td>X8</td>
+<td>§12.5 executable: issuer registry with ε + dependency classes, independence collapse (connected components, always weakens the bound), per-show distinctness nullifiers, k-tier vocabulary at build AND verify, statement reports effectiveK never raw k, corrupted-issuer degradation</td>
+<td>🟢 10/10</td>
+</tr>
+<tr>
+<td><code>guardian-recovery/</code></td>
+<td>X9</td>
+<td>t-of-n recovery over committed guardian sets: personhood-gated seats (Sybil-self-guardian killed), seat nullifiers per recovery context+epoch, expiring guardianship (§22.2), contest-freeze with issuer state provably untouched, authorization ≠ completion, rt07 trust-graph candidates</td>
+<td>🟢 12/12</td>
+</tr>
+<tr>
+<td><code>circom-gadget/</code></td>
+<td>O2 M3 (the shared spine, in circuit form)</td>
+<td><strong>the lab&#39;s first real circuit</strong>: Poseidon commitment + depth-20 Merkle inclusion + domain-tagged nullifier over BN254; context input = §6.2 descriptor digest as field; <strong>in-circuit transcript binding added 2026-07-18</strong> (the cross-check&#39;s one accidental gap, closed: public <code>transcriptDigest</code> + dummy-square, <strong>exactly +1 constraint → 11,523</strong>; proof binds transcript, nullifier binds context — Z9/Z10; signal order offered for TF ratification); groth16 end-to-end with local (lab-only) setup; ~630 ms prove · ~8 ms verify · 725 B proof. npm deps confined to this dir. <strong>+ dual-issuer sibling (X8 k=2): 10,717 constraints = 2× + 1 distinctness; duplicate issuer cannot produce a witness; needs no transcript fix — its nullifiers already bind the show transcript (deliberate asymmetry, documented). + guardian-threshold (X9 t=3): 16,078 constraints = 3 legs + 3 distinctness + 1 claim binding, duplicate seat unsatisfiable, seat nullifiers claim-independent/context-scoped, 306 constraints of ptau-2^14 headroom (t=4 → pot15)</strong></td>
+<td>🟢 10/10 + 7/7 + 8/8</td>
+</tr>
+<tr>
+<td><code>witness-seat/</code></td>
+<td>VWC seat (the 07-16 dream cycle&#39;s oldest thread, closed)</td>
+<td>the third seat: personhood-anchored witness attests the collision, transcript-bound via canonical §15.2; separation enforced attestation-after-Swordsman (a witness can never mint or unlock an edge); never-sees-the-secret = triple structural guard + lifetime-view scan; rt07 imported untouched, its 11/11 run as an executable regression gate (W7)</td>
+<td>🟢 15/15</td>
+</tr>
+<tr>
+<td><code>consumer-py/</code></td>
+<td>X1 M5 (the interop existence proof)</td>
+<td>stdlib-only <strong>Python</strong> consumer, zero shared code with the JS: all 39 vectors consumed with matching outcomes + byte-identical reason codes; <strong>29/29 embedded canonical digests re-derived byte-exactly cross-language</strong>; register parsed from reasons.mjs as text, never executed; zero JS↔data divergences. The fixtures carry the decisions, not the JavaScript</td>
+<td>🟢 6/6</td>
+</tr>
+</tbody></table>
+<p>Seam (closed 2026-07-18, extended at v2): show-composition&#39;s seven rejection strings were absorbed<br>byte-exactly at register v1 (F9); register <strong>v2</strong> then absorbed ALL six instrument builds — 40 new<br>exact codes + 29 parameterized families, every addition triggered live from its emitting module (F10),<br>with convergences recorded rather than duplicated (F11: silent-fallback, unknown-enrolment, the shared<br>clock families). One rejection vocabulary across the whole lab; fixtures also consume context-card&#39;s<br><code>diffCards</code> for the context-expansion vectors — the instruments feed the fixture suite by construction.</p>
+</div>
+<div class="md"><h2>Design stance (inherited from the strawman)</h2>
+<ul>
+<li><strong>Vendor-neutral.</strong> Reference constructions, not a product.</li>
+<li><strong>User-as-adversary.</strong> The presenter is often the adversary; the proof must be hard for the <em>presenter</em> to game, not only a third party. Property tests must include a self-Sybil attack, not just a happy path.</li>
+<li><strong>No biometric honeypot.</strong> Binding artefacts must not be reversible to a template.</li>
+<li><strong>Unlinkable</strong> across presentations and across verifiers.</li>
+<li><strong>Pre-quantum acceptable for v1</strong>, with a documented PQ path.</li>
+</ul>
+</div>
+<div class="md"><h2>Toolchain present on this machine</h2>
+<ul>
+<li>Node <code>v22.20.0</code>, npm <code>10.9.3</code></li>
+<li>circom <code>2.2.3</code> (Semaphore-style circuits available when we move past the reference model)</li>
+<li>Noir/<code>nargo</code>: not installed (install later if a predicate wants it)</li>
+</ul>
+</div>
+<div class="md"><h2>Run</h2>
+<p>Each runtime is self-contained and dependency-free where possible so it runs offline:</p>
+<pre><code>cd runtimes/01-uniqueness-nullifier &amp;&amp; node test.mjs
+</code></pre>
+</div>
+<div class="md"><h2>Map back to the spec</h2>
+<p>Every runtime&#39;s <code>NOTES.md</code> records what it demonstrated and what it means for the Section 4 mapping — that feedback is what turns into proposed edits to <code>proof-of-liveness-requirements.md</code> (the only thing that goes upstream).</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-runtimes.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

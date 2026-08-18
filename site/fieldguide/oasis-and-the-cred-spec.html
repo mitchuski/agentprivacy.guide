@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OASIS And The Cred Spec · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="fieldguide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site on" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=fieldguide" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/fieldguide/welcome-visitors.html">Field Guide</a> / <span>OASIS And The Cred Spec</span></div>
+  <article><div class="md"><h1>OASIS And The Cred Spec</h1>
+</div>
+<div class="md"><p>Where our OASIS ONODE server could meet <a class="wlink" href="the-dtg-credentials-core-specification.html">The DTG Credentials Core Specification</a>. Notes for the <a class="wlink" href="hitchhikers-field-guide.html">Hitchhikers Field Guide</a> side of the team — observations, not tickets. None of it blocks what we are building.</p>
+</div>
+<div class="md"><h2>First, the reframe that matters most</h2>
+<p>I had been describing OASIS as falling short of the trust graph, because its avatars are not personhood-anchored. That framing is wrong, and the error was mine.</p>
+<p>The spec is explicit that community membership is <strong>not</strong> a precondition for a relationship credential: two entities who share no community &quot;can still exchange VRCs, and the resulting edges are valid trust attestations standing on their cryptographic signatures and on whatever real-world context the parties bring to them.&quot;</p>
+<p>So the correct statement is not <em>OASIS falls short</em>. It is <strong>OASIS implements the pairwise construction and does not claim community-level assurance</strong> — which the spec names, permits, and describes the limits of. Everything below is alignment, not remediation.</p>
+<p>It also caught an error on my side: my own lab&#39;s formation model gates every edge on personhood, which models only the <em>community-anchored</em> construction and does not cover the pairwise one at all. The deployment found a coverage gap in the lab.</p>
+</div>
+<div class="md"><h2>The spots</h2>
+<p><strong>A stable peer identifier.</strong> The overlay returns one avatar id to every peer. The spec requires a new, unique relationship DID for <em>every</em> entity you connect with, &quot;even within the same community,&quot; and notes that reusing one across counterparties creates unintended correlation. Usefully, it also frames a stable id as an explicit <em>bootstrap</em> state, with migration to relationship DIDs &quot;recommended post-bootstrapping&quot; — so this is the spec&#39;s own migration path, not an outside rule.</p>
+<p><strong>A global display name.</strong> The spec: correlation across relationships &quot;should occur only through the holder&#39;s deliberate assertion of a persona — never as a side effect of credential structure.&quot; A profile name shipped on every peer pin is exactly correlation as a side effect of structure. The fix already has a name and a credential type: a persona credential asserting a persona DID, per edge. See <a class="wlink" href="the-pairwise-peer-reference.html">The Pairwise Peer Reference</a>, where I proposed this independently and, it turns out, later than the spec did.</p>
+<p><strong>One symmetric link row.</strong> Edge credentials are &quot;issued in pairs, one in each direction.&quot; Two directional credentials make asymmetric disclosure natural instead of bolted on — I show you one face, you show me another, without the two fighting over the same fields.</p>
+<p><strong>Co-location baked into the edge.</strong> This is the one I would most like looked at, because it improves the design rather than renaming it. The spec already has the object: a witness credential annotating an edge, whose own example is &quot;both parties provided proof that they were at the same event at the same time.&quot; Let the edge form on consent and carry proximity as a <em>separable annotation</em>, and the honest weakness — that a phone asserts its own location — stops contaminating what the edge means. Better evidence later upgrades the annotation without touching an edge.</p>
+<p><strong>Naming.</strong> The meet exchange is, in the spec&#39;s own words, a <strong>relationship invitation</strong> — &quot;such as by scanning a QR code (in person or remotely)&quot;, also known as an out-of-band introduction. But an <em>invitation credential</em> is a different thing entirely, for onboarding a community member; do not name the peer meet that. And the existing share card is an <strong>r-card</strong>, whose open specification is a forthcoming DTGWG deliverable — which makes this the cheapest possible moment to align field names.</p>
+<p><strong>Expiry and revocation.</strong> Neither the server nor my model has either on a link. A meet from four years ago weighs what a meet from Tuesday weighs, and there is no unfriend. See <a class="wlink" href="erosion-is-a-rate-not-a-cliff.html">Erosion Is A Rate Not A Cliff</a>.</p>
+</div>
+<div class="md"><p>The full note, with the clauses quoted and an ordering, is <code>NOTE-oasis-cred-spec-alignment.md</code> in the workbench. It is one person&#39;s reading of one vendored copy of a working draft; where it is wrong about a clause, the spec wins.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="oasis-and-the-cred-spec.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

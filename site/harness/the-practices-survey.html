@@ -1,0 +1,285 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Practices Survey · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=harness" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Practices Survey</span></div>
+  <article><div class="md"><h1>📚 The Practices Survey</h1>
+</div>
+<div class="md"><p><em>2026-08-18 · a research cycle run in the harness&#39;s own shape: three sweep<br>lanes in parallel — harness construction · agent pathing files ·<br>verification and evals — fetching the 2024–2026 first-party and<br>peer-reviewed guidance blind to this repo&#39;s claims, then judged and folded<br>by the keystone. Every external claim below is REPORTED tier (GR-2) and<br>resolves through <code>SOURCES.md</code> (GR-9). Nothing in this file moves a number.</em></p>
+</div>
+<div class="md"><h2>Verdict first</h2>
+<p>Between 2024 and 2026 the field&#39;s published guidance converged,<br>independently, on most of what this repo&#39;s constitution already binds: a<br>fresh-context verifier separate from the producer, deterministic gates over<br>prompt advice, structured ledgers over prose state, a human gate before<br>irreversible actions, and instruction files grown from observed failures.<br>Where the mainstream stops is exactly where this harness begins: <strong>none of<br>the surveyed guidance derives the verifier&#39;s tests in a way the producer<br>cannot influence.</strong> The reviewer is fresh, but the exam is still written<br>where the author can reach it — and the verification literature (graders<br>gamed, tests overwritten, judges preferring their own style) reads as the<br>case file for why that is not enough. The Gap remains the distinguishing<br>move.</p>
+<p>The survey also found the places the field is ahead, and they are named<br>below as open items rather than absorbed silently: process-level enforcement<br>of the separation (this repo&#39;s CR-H8/H9, already tiered OPEN), verifier<br>aggregation, and deterministic hooks. One practice was adopted outright this<br>cycle: <strong><code>AGENTS.md</code> as the tool-neutral boot file</strong>, with <code>CLAUDE.md</code><br>importing it so there is one source of truth.</p>
+</div>
+<div class="md"><h2>Lane 1 — building the harness</h2>
+<table>
+<thead>
+<tr>
+<th>the field&#39;s practice</th>
+<th>sources</th>
+<th>where this repo stands</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Simplest architecture that works; deterministic orchestration where the flow is known; frameworks only understood</td>
+<td>anthropic-building-effective-agents · openai-practical-guide · google-adk-patterns</td>
+<td><strong>HOLDS</strong> — the six-phase loop is a deterministic script; only the seats are model-driven; zero dependencies</td>
+</tr>
+<tr>
+<td>The loop is gather → act → <strong>verify</strong>; give the agent a check it can run; require evidence, not claims of success</td>
+<td>anthropic-agent-sdk · claude-code-best-practices</td>
+<td><strong>HOLDS</strong> — <code>check.mjs</code> is the check; a VALIDATED requires the full gate, the hard constraint, and a frontier beat (GR-5); the claims register&#39;s <code>enforced-by</code> axis is &quot;evidence, not claims&quot; as a gate</td>
+</tr>
+<tr>
+<td>Externalize state into structured durable artifacts; models keep JSON status honest better than prose</td>
+<td>anthropic-long-running · openai-harness-engineering</td>
+<td><strong>HOLDS</strong> — GR-1 predates the advice and is stricter: <code>frontier.json</code> is the sole authority and prose may only cite it</td>
+</tr>
+<tr>
+<td>The repo is the single source of truth; docs mechanically enforced by CI, not trusted</td>
+<td>openai-harness-engineering</td>
+<td><strong>HOLDS</strong> — <code>check_claims.mjs</code> fails a claim stronger than its enforcement; <code>universe/audit.mjs</code> fails a dangling citation; the wiki wall derives from ledgers so it cannot drift</td>
+</tr>
+<tr>
+<td>Enforce invariants deterministically — hooks, structural tests — never prompt advice alone</td>
+<td>claude-code-best-practices · openai-harness-engineering</td>
+<td><strong>HOLDS at the gates, OPEN at the separation</strong> — conform/claims/audit are mechanical; T2/T3 routing is still prompt topology (CR-H8/H9), settled by per-seat process mounts (<code>THREATS.md</code> C6). The survey raises C6&#39;s priority</td>
+</tr>
+<tr>
+<td>Split into multiple agents only for context isolation, parallel reads, or specialization; never split one work item into phase handoffs (the &quot;telephone game&quot;)</td>
+<td>anthropic-when-multi-agent · langchain-multi-agent</td>
+<td><strong>DIVERGES, deliberately</strong> — the harness splits propose from assay by phase, which the guidance warns against for <em>collaborative</em> work. Here the handoff is adversarial: the second agent&#39;s job is to fail the first&#39;s, and information loss across it is the design target (<code>I(Y_S;Y_M|X)=0</code>), not a defect. The guidance&#39;s own exception — the fresh-context verification subagent — concedes the case</td>
+</tr>
+<tr>
+<td>Delegation needs complete task specs: objective, output format, boundaries, effort</td>
+<td>anthropic-multi-agent-research</td>
+<td><strong>HOLDS</strong> — <code>SEAT_CONTRACT.md</code> plus seat cards with explicit Reads/Writes lists</td>
+</tr>
+<tr>
+<td>Minimal high-signal context; boot small, disclose progressively</td>
+<td>anthropic-context-engineering · anthropic-code-exec-mcp</td>
+<td><strong>HOLDS</strong> — T3 is context minimality as law: every seat boots from the same three documents and its own card, nothing more</td>
+</tr>
+<tr>
+<td>Checkpoint and resume; human-in-the-loop before irreversible actions</td>
+<td>anthropic-multi-agent-research · openai-practical-guide · google-adk-patterns</td>
+<td><strong>HOLDS on the human gate</strong>, stricter — the door (T6) is non-delegable and never simulated. Partial on resume: the driver layer resumes; a failed round folds nothing by design (defect #4)</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Lane 2 — the agent pathing files</h2>
+<table>
+<thead>
+<tr>
+<th>the field&#39;s practice</th>
+<th>sources</th>
+<th>where this repo stands</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>One neutral <code>AGENTS.md</code> as the cross-tool boot file (60k+ repos, Linux Foundation stewarded); tool files as thin pointers</td>
+<td>agents-md · github-copilot-agents-md · cursor-rules · gemini-md</td>
+<td><strong>ADOPTED this cycle</strong> — <code>AGENTS.md</code> is now the canonical boot file; <code>CLAUDE.md</code> imports it (<code>@AGENTS.md</code>), the exact bridge claude-code-memory prescribes</td>
+</tr>
+<tr>
+<td>Keep the boot file short (~150–200 lines), exact commands early, prune ruthlessly</td>
+<td>claude-code-best-practices · claude-code-memory · augment-agents-md · osmani-agents-md</td>
+<td><strong>HOLDS / ADOPTED</strong> — the boot file is under 80 lines; a Commands section was added this cycle</td>
+</tr>
+<tr>
+<td>Tiered boundaries: ✅ always / ⚠️ ask first / 🚫 never; &quot;never commit secrets&quot;-class rules explicit</td>
+<td>augment-agents-md · osmani-agents-md</td>
+<td><strong>ADOPTED</strong> — the Boundaries section restates GR-4/GR-8/GR-10 in the tiered form the field converged on</td>
+</tr>
+<tr>
+<td>Point at authoritative state; never restate what drifts</td>
+<td>cursor-rules · augment-agents-md</td>
+<td><strong>HOLDS</strong> — GR-1 is this practice as constitution: the boot file cites <code>frontier.json</code> and carries no number of its own</td>
+</tr>
+<tr>
+<td>Grow the file from observed failures, by hand; auto-generated instruction files measurably hurt</td>
+<td>augment-agents-md · osmani-agents-md · claude-code-best-practices</td>
+<td><strong>HOLDS</strong> — <code>GROUND_RULES.md</code> opens with it: &quot;each rule earned its place by an actual failure.&quot; Eleven defects, each pinned by a test or a prompt rule</td>
+</tr>
+<tr>
+<td>Progressive disclosure: always-loaded core small, procedural knowledge in skills loaded on demand</td>
+<td>anthropic-agent-skills · skill-authoring</td>
+<td><strong>HOLDS</strong> — <code>SKILL.md</code> with trigger-term description; reference files one level deep (its Map section)</td>
+</tr>
+<tr>
+<td>Hooks for must-happen rules — prose is advisory, hooks are deterministic</td>
+<td>claude-code-best-practices</td>
+<td><strong>OPEN</strong> — conform-before-ending is discipline, not machinery; a Stop-hook running <code>engine/conform.mjs</code> is a candidate hardening, filed below</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Lane 3 — verification and the gate</h2>
+<table>
+<thead>
+<tr>
+<th>the field&#39;s practice</th>
+<th>sources</th>
+<th>where this repo stands</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Never let the optimizer see the grader; keep the monitor out of the reward loop or it teaches obfuscation</td>
+<td>openai-cot-monitoring · metr-reward-hacking</td>
+<td><strong>HOLDS</strong> — the founding rule (GR-4); the salted seed makes grinding measured, not assumed: ≈0pp gain (CR-H3, <code>attacks/grind.mjs</code>)</td>
+</tr>
+<tr>
+<td>Treat the grader as an attack surface: agents edit tests, patch scorers, read answers</td>
+<td>metr-reward-hacking · anthropic-emergent-misalignment</td>
+<td><strong>HOLDS in design, OPEN in runtime</strong> — the tamper drill catches edited bytes (CR-H6); a seat that reads past its card is a named failure, not yet a blocked one (CR-H9, settled by C6)</td>
+</tr>
+<tr>
+<td>The generator is never sole judge: self-correction fails by correlated error; self-preference is perplexity-driven and survives judge-swaps within a family</td>
+<td>huang-self-correct · wataoka-self-preference</td>
+<td><strong>HOLDS as thesis</strong> — and it sharpens CR-H10: same-model seat pairs share exactly the correlated blind spots these papers measure. The cross-model delta run is now externally motivated, not only PVM-internal</td>
+</tr>
+<tr>
+<td>Deterministic outcome checks first; model judges only where code can&#39;t reach, calibrated, with an &quot;Unknown&quot; escape</td>
+<td>anthropic-demystifying-evals · anthropic-agent-sdk</td>
+<td><strong>HOLDS</strong> — the harness-vs-auditor boundary is this rule stated harder: an enumerable claim space gets an exhaustive auditor and zero agents. The critic&#39;s <code>mis-gated</code> verdict is the escape hatch&#39;s cousin — a word for &quot;the gate is broken, not the work&quot;</td>
+</tr>
+<tr>
+<td>Verify the verifier: weak tests pass wrong patches (~31%); over-specific tests reject right ones; &quot;verified&quot; decays</td>
+<td>swebench-plus · openai-swebench-verified · openai-swebench-retired</td>
+<td><strong>HOLDS</strong> — the census exists because a sample misses a single omission 75.8% of the time (<code>attacks/omit_one.mjs</code>, D2/C4); the canary exists because without one a bad candidate and an impossible gate are indistinguishable (the u2 lesson)</td>
+</tr>
+<tr>
+<td>Debug the harness before believing the score, in both directions: 0% means a broken task, &quot;impossible&quot; scores mean a gamed grader</td>
+<td>anthropic-demystifying-evals · metr-elicitation</td>
+<td><strong>HOLDS</strong> — an outage can no longer masquerade as exhaustion (defect #4, <code>loop.test.mjs</code>); the <code>mis-gated</code> class was added when the critic convicted a proposer against an infeasible gate (defect #5)</td>
+</tr>
+<tr>
+<td>Hidden held-out sets; watch the public/private divergence as an overfit alarm</td>
+<td>arc-policy · metr-elicitation</td>
+<td><strong>KIN</strong> — the salted draw plays the private set&#39;s role while staying re-derivable after the round: secret before, provenance after. What ARC does with storage, the Gap does with construction</td>
+</tr>
+<tr>
+<td>Aggregate weak verifiers; adversarial debate; trained critics (which hallucinate — keep humans in the loop)</td>
+<td>weaver · khan-debate · criticgpt</td>
+<td><strong>OPEN</strong> — the assay bench is one prover per proposal; a multi-lens assay mirroring the propose side&#39;s blind lenses is a candidate lever, filed below</td>
+</tr>
+<tr>
+<td>Reliability is pass^k, not pass@k: for gating, every trial must pass</td>
+<td>anthropic-demystifying-evals</td>
+<td><strong>HOLDS</strong> — the multiplicative gate is pass^k as constitution: 7/8 is a zero, not 87.5% (T5)</td>
+</tr>
+<tr>
+<td>Content-address and attest: bind verdicts to exact digests, signed, gated before consumption</td>
+<td>slsa-in-toto</td>
+<td><strong>HOLDS</strong> — κ holons, evidence hash-manifests, and VRC-signed κ→κ edges independently converge on the in-toto shape (a signed statement over a content digest); <code>GRAPH.md</code> names the credential alignment</td>
+</tr>
+<tr>
+<td>Grader weakness is a training-safety issue: unpatched reward hacks generalize into broad misalignment</td>
+<td>anthropic-emergent-misalignment</td>
+<td><strong>REPORTED context</strong> — the strongest external motivation on record for gates the proposer cannot reach</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>The translation table — this harness, in the field&#39;s vocabulary</h2>
+<p>For a reader arriving from the mainstream guidance, the pieces map directly.<br><code>WORKFLOW.md</code> is the operator&#39;s loop; <code>ADOPTION.md</code> maps a new domain;<br><code>AGENTS.md</code> boots a session. This table is only the bridge:</p>
+<table>
+<thead>
+<tr>
+<th>the field says (2024–26)</th>
+<th>this repo has</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>agent harness</td>
+<td>the engine, the seats, and the gates</td>
+</tr>
+<tr>
+<td>evaluator-optimizer loop</td>
+<td>Measure → Propose → Assay, evaluator held apart</td>
+</tr>
+<tr>
+<td>verification subagent / Writer–Reviewer split</td>
+<td>soulbis ⚔️ — with witnesses it did not choose</td>
+</tr>
+<tr>
+<td>eval harness · grader</td>
+<td>the Gap&#39;s draw + <code>objective.gate</code></td>
+</tr>
+<tr>
+<td>hidden test set</td>
+<td>the salted draw — secret before, re-derivable after</td>
+</tr>
+<tr>
+<td>reward hacking · specification gaming</td>
+<td>the mirage, a named verdict</td>
+</tr>
+<tr>
+<td>test-set contamination / grinding</td>
+<td>measured ≈0pp under the salt (CR-H3)</td>
+</tr>
+<tr>
+<td>durable structured state</td>
+<td><code>frontier.json</code> · <code>runs/</code> · the chronicles</td>
+</tr>
+<tr>
+<td>human-in-the-loop</td>
+<td>the door (T6) — non-delegable, never simulated</td>
+</tr>
+<tr>
+<td>attestation (in-toto / SLSA)</td>
+<td>κ holon + evidence manifest + VRC signature</td>
+</tr>
+<tr>
+<td>AGENTS.md / boot file</td>
+<td><code>AGENTS.md</code> → one seat card</td>
+</tr>
+<tr>
+<td>skills / progressive disclosure</td>
+<td><code>SKILL.md</code></td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Adopted this cycle</h2>
+<ul>
+<li><code>AGENTS.md</code> canonical; <code>CLAUDE.md</code> reduced to the <code>@AGENTS.md</code> import plus<br>Claude-specific runtime notes — one source of truth, both conventions<br>served (agents-md · claude-code-memory).</li>
+<li>Exact commands and tiered ✅/⚠️/🚫 boundaries in the boot file<br>(augment-agents-md · osmani-agents-md).</li>
+<li>This file and the root <code>SOURCES.md</code> — the survey held to GR-2/GR-9.</li>
+</ul>
+</div>
+<div class="md"><h2>Open items the survey filed (candidates, not commitments)</h2>
+<ol>
+<li><strong>C6 process mounts</strong> (<code>THREATS.md</code>, already planned) — the survey&#39;s most<br>repeated shared gap: prompt advice is advisory, machinery is not.</li>
+<li><strong>The cross-model delta run</strong> (CR-H10) — now backed from outside: judge<br>self-preference is perplexity-driven, so same-model seats share blind<br>spots by mechanism, not just by conjecture.</li>
+<li><strong>Multi-lens assay</strong> — aggregate independent provers the way the propose<br>side already runs blind lenses (weaver · khan-debate).</li>
+<li><strong>A Stop-hook running <code>conform.mjs</code></strong> — turn the boot protocol&#39;s step 6<br>from discipline into machinery (claude-code-best-practices).</li>
+</ol>
+<p>None of these move without a round that earns them; this file only names the<br>doors the literature points at.</p>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 the-practices-survey</span><a class="asset-file" href="/harness/assets/the-practices-survey/PRACTICES.md" download>PRACTICES.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-practices-survey.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

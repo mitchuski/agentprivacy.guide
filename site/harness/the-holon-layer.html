@@ -1,0 +1,112 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Holon Layer · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=harness" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Holon Layer</span></div>
+  <article><div class="md"><h1>🪩 The Holon Layer</h1>
+</div>
+<div class="md"><p>This is the plan and the contract for the holon layer: how the results this<br>harness produces become <strong>interoperable, verifiable units</strong> that other systems<br>— the model instruments, the graph, <code>hologram-technologies</code> — can each speak,<br>carry, and check without trusting anyone.</p>
+<p>It is written to the repo&#39;s own standard. In particular it makes, up front, the<br>call that <code>ADOPTION.md</code> demands: <strong>is this a harness or an auditor?</strong> — and<br>answers <em>auditor</em>, with the reason.</p>
+</div>
+<div class="md"><h2>What a holon is</h2>
+<p>A <strong>holon</strong> is a whole that is also a part: a self-contained record that can<br>stand alone <em>and</em> compose into a larger mesh. Here, a holon is any object that<br>carries a <strong>κ-label</strong>:</p>
+<pre><code>κ = &quot;sha256:&quot; + sha256( canonicalJson( object with the κ field removed ) )
+</code></pre>
+<p>where <code>canonicalJson</code> is JSON with recursively sorted keys and no whitespace.<br>This is the City Key / sigil <strong>Law L5</strong> convention, unchanged: <em>a κ-label is<br>never trusted, only re-derived.</em> The label is excluded from its own preimage so<br>the object can carry its own address.</p>
+<p>The harness already mints holons. Every one of these is a κ-addressed holon<br>today:</p>
+<ul>
+<li>an <strong>artefact</strong> (<code>artefact.v1</code>) — a sealed, evidence-bearing result;</li>
+<li>a <strong>runtime feed</strong> (<code>runtime-feed.v1</code>) — a workshop&#39;s produced math;</li>
+<li>anything else a producer stamps with <code>kappaOf(...)</code> from <code>tools/kappa.mjs</code>.</li>
+</ul>
+<p><code>tools/kappa.mjs</code> is the single reference implementation of the κ law. It is a<br><strong>shared primitive</strong>, not a redundant auditor: content-addressing requires that<br>every producer compute the <em>identical</em> κ, so the mint, the feed, the console,<br>and the auditor all import one function. (This is the opposite of the<br>independent-copy idiom used for <em>gate</em> logic, where divergence is a feature —<br>there, two auditors catch each other; here, two κ functions would just break<br>addressing. The independent check for κ lives in the test layer and in the<br>language-agnostic spec, which has been cross-derived in a second language.)</p>
+</div>
+<div class="md"><h2>Edges: how holons compose</h2>
+<p>A holon references another <strong>by κ</strong>. Two kinds of edge:</p>
+<ul>
+<li><p><strong>Content edges</strong> — a hash reference to bytes. An artefact&#39;s<br><code>evidenceManifest</code> is exactly this: each entry maps a path to the sha256 of<br>its bytes. A content edge is <em>verified by re-hashing</em>; it needs no signature,<br>because the content is its own witness.</p>
+</li>
+<li><p><strong>Relational edges (VRC)</strong> — a κ→κ reference between holons, possibly across<br>parties. Governed by the edge rule already in <code>universe/</code>:</p>
+<blockquote>
+<p><em>A validated round proposes an edge. Only the counterparty&#39;s signature mints<br>it.</em> An unsigned edge is a candidate, not a result — a mirage at the social<br>layer.</p>
+</blockquote>
+<p><strong>IMPLEMENTED</strong> (<code>tools/vrc.mjs</code>): an edge is <code>{ target: &lt;κ&gt;, relation, by: &lt;did:key&gt;, sig }</code>. The signature is real <strong>ed25519</strong> (<code>node:crypto</code>, zero<br>dependencies) over the exact tuple <code>(source κ, target κ, relation)</code> — move any<br>of the three and it no longer verifies. The signer is content-addressed too:<br>an ed25519 public key encoded as a proper <code>did:key:z6Mk…</code> (multicodec<br><code>0xed01</code> + base58btc), so the whole edge is self-certifying and interoperates<br>with the DID ecosystem. Keys are ephemeral by design (the amnesia protocol):<br>sign once, keep the signature and the public <code>did:key</code>, discard the private<br>key — the signature outlives the key.</p>
+</li>
+</ul>
+<p>A relational edge is verified in two deterministic steps: both κ endpoints<br>re-derive, and the signature checks against the signer&#39;s <code>did:key</code>. A valid<br>signature <strong>mints</strong> the edge; no signature is a <strong>proposal</strong>; a signature that<br>does not verify is a <strong>failure</strong>. All three are facts, not judgements.</p>
+<p><strong>Edges are relations, not identity.</strong> A holon&#39;s <code>edges</code> field is excluded from<br>its own κ preimage (<code>tools/kappa.mjs</code>), so a holon&#39;s address stays stable as it<br>accrues signed edges — otherwise signing an edge whose source is this holon&#39;s κ<br>would change that very κ.</p>
+<h3>The identity application</h3>
+<p>A signed relational edge is exactly a <strong>delegation between agents</strong>, and that is<br>the substrate the House of Archon identity runtime seats on (<code>../hearthold_mage/ SLOT.md</code>): a <code>did:cid</code> identity is a holon (content-addressed), a <code>did:key</code> is<br>its signer, and a delegation — <em>this agent may act for that one</em> — is a signed<br>κ→κ edge the mesh auditor mints or rejects. <code>did:cid</code> = a κ-address; the VRC =<br>the delegation. The identity runtime is this layer, named for people.</p>
+</div>
+<div class="md"><h2>The call: this layer is an AUDITOR, not a harness</h2>
+<p><code>ADOPTION.md</code> step 0: <em>count your claims.</em> If everything a thing asserts can be<br>enumerated and checked exhaustively, write an auditor and stop — you get<br>certainty for zero adversarial cost. Reach for a harness only when the claim<br>space is too large to check and generated candidates must survive <em>adversarial</em><br>scrutiny.</p>
+<p>A holon&#39;s <strong>interoperability claims are all enumerable</strong>:</p>
+<ul>
+<li>does its κ re-derive from its bytes? — one hash.</li>
+<li>do its content edges resolve and re-hash? — one hash each.</li>
+<li>do its relational edges&#39; endpoints re-derive and signatures check? — bounded.</li>
+</ul>
+<p>There is nothing to <em>tune to</em>: you cannot craft a holon whose κ re-derives to a<br>value it does not have. So the mesh verifier is a deterministic, agent-free<br><strong>auditor</strong> — <code>tools/holon_audit.mjs</code> — exactly as <code>universe/audit.mjs</code> is. A<br>harness here would spend real tokens sampling a space you can check in full for<br>free; it is the universe-builder mistake, and this document exists partly to not<br>repeat it.</p>
+<p><strong>Where the harness still lives:</strong> a holon&#39;s <em>substantive</em> claim — &quot;this<br>circuit is 40% smaller and still correct&quot;, &quot;this guide lost no fact&quot; — is large<br>and adversarial, and <em>that</em> is verified by the harness that <strong>minted</strong> the<br>holon. So the division is clean and total:</p>
+<blockquote>
+<p><strong>the harness mints the holons; the auditor verifies the mesh.</strong></p>
+</blockquote>
+</div>
+<div class="md"><h2><code>tools/holon_audit.mjs</code> — the mesh auditor</h2>
+<pre><code>node tools/holon_audit.mjs &lt;dir&gt;
+</code></pre>
+<p>Walks a directory for holon records, and for each one deterministically:</p>
+<ol>
+<li><strong>κ integrity</strong> — re-derives <code>kappaOf(holon)</code> and asserts it equals the<br>stored κ. A mismatch is a tampered or mis-addressed holon; the run fails.</li>
+<li><strong>content edges</strong> — for every <code>evidenceManifest</code> entry, resolves the file<br>and re-hashes it, asserting the bytes still carry the recorded hash.</li>
+<li><strong>relational edges</strong> — for every κ→κ reference, asserts the target κ is<br>present in the mesh (or flagged external) and re-derives; reports signed<br>(minted) vs unsigned (proposed) per the edge rule.</li>
+</ol>
+<p>It prints <code>HOLON AUDIT PASS</code> with a census, or names every corpse and exits<br>non-zero. Zero dependencies, zero agents. <code>tools/check.mjs</code> runs it over every<br>instance that has minted holons, so the whole shipped mesh is re-verified in one<br>command.</p>
+</div>
+<div class="md"><h2>The path to <code>hologram-technologies</code></h2>
+<p>The site is the <em>application</em> and a separate property (its door is yours). It<br>does not need a copy of the harness — it needs the <strong>contract</strong>: this file, plus<br><code>tools/kappa.mjs</code> and <code>tools/holon_audit.mjs</code>, vendored or imported. A holon<br>minted here re-derives there byte-for-byte, because both compute one κ. That is<br>the interoperability, and it is why the primitives stay in one repo while the<br>sites multiply.</p>
+</div>
+<div class="md"><h2>Order of work</h2>
+<p><strong>Done — the κ law is baked into the runtime:</strong></p>
+<ol>
+<li><code>tools/kappa.mjs</code> — the single κ primitive. The mint, feed, and console all<br>import it; the three drifting copies are gone, and the refactor kept every<br>existing κ byte-identical.</li>
+<li><code>tools/holon_audit.mjs</code> — the mesh auditor. Wired into <code>check.mjs</code> over every<br>instance&#39;s minted holons and pinned by a tamper test (flip one evidence byte,<br>the mesh no longer re-derives).</li>
+<li><strong>κ as state, first cut</strong> — the runtime feed self-addresses: <code>buildFeed</code><br>stamps <code>κ = kappaOf(feed)</code>, so a state snapshot is a verifiable holon. And<br>the universe head carries a <code>holon_layer</code> section (<code>universe/universe.json</code>),<br>so the corpus knows κ is the interoperability substrate.</li>
+<li>This spec.</li>
+</ol>
+<p><strong>Next — κ as the <em>whole</em> runtime state, and across the corpus:</strong></p>
+<ol start="5">
+<li><strong>Every runtime object a holon.</strong> <code>frontier.json</code>, each <code>verdict</code>, each<br><code>gap</code> gains its own κ, so an entire run is a mesh of content-addressed holons<br>the auditor verifies end to end. Because <code>kappa.mjs</code> lives in the shared core,<br>this reaches <strong>every instance — lexon, the pools, hearthold — the moment it<br>re-bundles</strong>: one κ, computed the same everywhere, as the state.</li>
+<li><strong>Relational edges with real signatures</strong> (the VRC) — <strong>DONE</strong> (<code>tools/vrc.mjs</code>):<br>ed25519 signed κ→κ edges, signer as <code>did:key</code>, verified by the mesh auditor<br>(mint / propose / fail), pinned by a forge-detection test. Cross-party holon<br>interop is now verifiable, not just single-party integrity — and this is the<br><code>did:cid</code> delegation substrate the hearthold identity runtime seats on.</li>
+<li><strong>Map the layer across the corpus</strong> — a κ / holon node and edges in the<br>spellweb graph, a reference in the docs, and the skill, so the corpus speaks<br>one content-addressing law. (Cross-repo; the First Person&#39;s door.)</li>
+</ol>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 the-holon-layer</span><a class="asset-file" href="/harness/assets/the-holon-layer/HOLONS.md" download>HOLONS.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-holon-layer.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

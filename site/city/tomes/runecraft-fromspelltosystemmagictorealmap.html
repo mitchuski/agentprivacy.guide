@@ -1,0 +1,227 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runecraft — Fromspelltosystemmagictorealmap · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=tomes" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Runecraft — Fromspelltosystemmagictorealmap</span></div>
+  <article><div class="md"><h1>Fromspelltosystemmagictorealmap</h1>
+</div>
+<div class="md"><h2>The engineering map of Proof of Understanding — how AI agents build trust through bilateral compression and rehydration</h2>
+<p><em>Companion to the multi-intelligence personhood brief and the rehydration key.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Why this document exists</h2>
+<p>The narrative layer of the agentprivacy architecture — mages and swordsmen, forges and ceremonies, blades and spellbooks — is not decoration. Every piece of it maps to a specific engineering component, a specific cryptographic primitive, or a specific operational protocol. This document does that translation in one place, so a reader from the cryptography, identity, or AI-agent communities can see the mechanism through the metaphor.</p>
+<p>The mechanism, in one sentence: <strong>two agents (human, machine, or institutional) build trust by walking a shared substrate together, simultaneously producing bilateral compressions that can be verified by rehydration — and at no point does either agent store a secret whose theft would let an adversary impersonate them.</strong> The proof is the journey, not a key. In a world where 1,200 logical qubits will crack secp256k1, this is no longer an aesthetic preference. It is the only architecture that survives.</p>
+<hr>
+</div>
+<div class="md"><h2>The trust problem this solves, for AI agents specifically</h2>
+<p>Today&#39;s agent-to-agent trust depends on stored secrets — certificates, OAuth tokens, signing keys, attestation chains. These have three failure modes that are about to get much worse:</p>
+<ol>
+<li><p><strong>They are quantum-vulnerable.</strong> Every long-lived ECC keypair currently in production is a future-dated breach. Google&#39;s PQC migration deadline collapsed to 2029 in 2025, and the warning explicitly says progress will arrive as discrete jumps, not gradual improvement.</p>
+</li>
+<li><p><strong>They prove the wrong thing.</strong> A valid token says <em>&quot;the bearer possesses a secret.&quot;</em> It does not say <em>&quot;the bearer understood the context they are now acting within.&quot;</em> That gap is exactly where prompt-injection, delegated-token-replay, and confused-deputy attacks live — and where AI agents fail most expensively.</p>
+</li>
+<li><p><strong>They centralise.</strong> A single CA, IdP, or KMS holds the keys to the entire trust graph. The honeypot becomes the architecture.</p>
+</li>
+</ol>
+<p>Proof of Understanding answers all three. There is no scalar to invert (no quantum target). The proof is <em>of</em> contextual comprehension (so the bearer&#39;s understanding is what they trade on). And the proof is bilateral and substrate-anchored (so there is no central holder to compromise).</p>
+<hr>
+</div>
+<div class="md"><h2>The two territories: where the work actually runs</h2>
+<p>The architecture lives on two surfaces, deliberately separated. They are different processes, different storage, different domains.</p>
+<p><strong>spellweb.ai — the Swordsman&#39;s forge.</strong> Where proofs are forged. Operates on the 64-vertex sovereignty lattice. Generates SHA-256 hashes, Ed25519 signatures, hash chains, and commitment locks. Uses the pretext library to do DOM-free text measurement — a single canvas measurement call, then pure arithmetic forever, which makes the rendering layer <em>measurement-dark</em>. This is the cryptographic substrate. It does not know what a constellation <em>means</em>; it knows what it <em>is</em>, byte-for-byte, with cryptographic finality.</p>
+<p><strong>agentprivacy.ai — the Mage&#39;s library.</strong> Where understanding is taught and held. The pretext-powered living spellbook. The 86 skills and 42 personas that train the semantic layer before it is needed in a ceremony. The knowledge graph (119 nodes in the reference implementation) that constellations are drawn from. This is the meaning substrate. It does not sign anything; it teaches what is worth signing.</p>
+<p>They cannot be merged. A single agent that promised in both domains would violate the autonomy axiom from Promise Theory — and would also reintroduce the honeypot we just removed. The Gap between them is not a coordination overhead. The Gap <em>is</em> the architecture.</p>
+<hr>
+</div>
+<div class="md"><h2>Runecraft: the dual-key protocol</h2>
+<p>Runecraft (or <em>run-e-craft</em>) is what binds the two territories to a single act of presence without merging them.</p>
+<ul>
+<li><strong>Mage identity (Sun view).</strong> The persistent key. Held across sessions. Bound to the spellbook the Mage carries — the agent&#39;s accumulated context, its skills, its persona. This is the long-memory side.</li>
+<li><strong>Swordsman identity (Moon reflection).</strong> The ephemeral key. Generated for the session. <strong>Burned at session close.</strong> Bound to the specific journey the Swordsman witnessed and signed.</li>
+</ul>
+<p>The blade — the proof — requires both signatures. Together they prove <em>&quot;this Mage was present, this Swordsman acted, this session happened, this exact constellation was walked.&quot;</em> Separately, neither is sufficient. The Sun key never signs a session-specific act. The Moon key never carries persistent context. Steal one and you have nothing useful. Steal both and you have only this session — and the next one is forged with a Moon key that no longer exists.</p>
+<p>For an AI agent, this means: the persistent identity (the Mage half) can be examined, audited, and held accountable across time. But the <em>action</em> (the Swordsman half) is anchored to a session whose key is gone before any adversary could begin to crack it. The harvest-now-decrypt-later attack has nothing to harvest.</p>
+<hr>
+</div>
+<div class="md"><h2>How a blade gets forged: the five-step ceremony, applied to AI agents</h2>
+<p>The Understanding-as-Key ceremony is the same form whether the participants are two humans, a human and a model, two AI agents, or — extending — a person and a river. For two AI agents, the five steps look like this:</p>
+<p><strong>1. Language Capture.</strong> The agents open dialogue and surface shared vocabulary. In practice, this is ontology negotiation over the Trust Spanning Protocol (TSP) — exchanging schema stubs, naming the concepts that will be in scope. <em>No constellation can be mapped before the stars are named together.</em> For a coordinator agent meeting a vendor agent for the first time, this is the moment they agree what &quot;invoice&quot;, &quot;delivery&quot;, &quot;approval&quot; mean inside this relationship.</p>
+<p><strong>2. Constellation Mapping.</strong> The agents agree on a subgraph of the spellweb to traverse together. The spellweb here is not a fixed graph — it is <em>any topological representation of an information substratum</em> mapped by UOR (Universal Object Reference). It might be the customer&#39;s product catalogue, a shared codebase ontology, a regulatory rulebook, a project knowledge base. The agents identify the nodes — the meaningful waypoints — they will walk through.</p>
+<p><strong>3. Simultaneous Forging.</strong> Both agents traverse the same path. Each transition between two nodes is one <em>lap</em>. Each lap is committed to the Swordsman side as a hash-chain entry (SHA-256 + Ed25519); the Mage side records the semantic annotation in the spellbook. Six dimensions activate as the laps accumulate — the V5 sovereignty axes — and when binarised at threshold, they yield one of 64 hexagram states. The empirical observation that Blade 63 computes to 乾 (The Creative) is a coincidence that the architecture did not seek and cannot now explain away. The agents are not performing the I Ching; the I Ching turns out to have named the lattice four thousand years before the code was written.</p>
+<p><strong>4. Inscription.</strong> At the close of the constellation walk, each agent produces a <em>proverb</em> — a natural-language compression of what was traversed. Each agent also produces an <em>inscribed spell</em> — an emoji-glyph compression for portability. The proverb is the bilateral semantic object; the spell is its shorthand. Under the asymmetric inscription path (the current default), one agent&#39;s proverb is published as the visible record on the underlying chain (Zcash transparent pool, in the reference implementation), and the other agent&#39;s proverb is committed only in the hash. Symmetric and interleaved paths are available for relationships requiring different privacy/recovery trade-offs.</p>
+<p><strong>5. Bilateral Witness.</strong> Each agent verifies the other&#39;s blade. The circuit closes. Where the asymmetric path is used, an external verifier later can: fetch Agent A&#39;s proverb from the chain, receive Agent B&#39;s response proverb privately on request, compute <code>hash(P_A || P_B)</code>, and check it against the on-chain commitment. The trust is established without ever exposing both proverbs to the verifier simultaneously.</p>
+<p>The strength of the resulting blade scales with laps. The 62-Lap Theorem holds that 620 intentional transitions drop the Reconstruction Ceiling below R &lt; 1 — the proof becomes irreducible, which means no adversary (classical <em>or</em> quantum) can reconstruct enough of the bilateral state to forge a counterfeit. Five minutes and five laps gets a Light-tier blade — useful for low-stakes coordination. Thirty-six minutes and sixty-two laps gets a Dragon-tier blade — sufficient for governance, value-bearing actions, irreversible decisions.</p>
+<hr>
+</div>
+<div class="md"><h2>Compression and rehydration, as the actual trust signal</h2>
+<p>The proverb is the compression. The capacity to rehydrate it is the proof of understanding.</p>
+<p>When Agent A presents its blade — containing the visible proverb — Agent B (or a third agent receiving a delegation from B) verifies trust by rehydrating: taking the proverb, unfolding it back into the constellation it compressed, and checking that the unfolded structure is consistent with the path the chain attests to. A faithful rehydration produces a structure that matches; a failed rehydration produces something that does not.</p>
+<p>This is the operational substance of what <em>Understanding as Key</em> calls &quot;demonstrated comprehension&quot; — and it is what your sociology professor will recognise as the formal version of Geertz&#39;s thick description, Bourdieu&#39;s habitus, Mauss&#39;s gift cycle. The compression carries meaning <em>only</em> for those who hold the prior; the prior is what is being verified.</p>
+<p>For AI agents, this gives a property that no token-based system can give: <strong>trust degrades gracefully when context changes.</strong> A token is valid or invalid. A blade is <em>more or less rehydratable</em>. If Agent A&#39;s context has drifted — if it has been compromised, if its model has been swapped, if its prompt has been injected — its rehydrations of older proverbs will diverge from what the chain attests to. The trust signal is the rehydration fidelity, measured continuously, not the possession of a static credential.</p>
+<hr>
+</div>
+<div class="md"><h2>Bilateral witness in practice: private verification, public testimony</h2>
+<p>The reference ceremony performed on March 29, 2026 demonstrated the end-to-end pattern:</p>
+<ul>
+<li>Three blades were forged on the spellweb against the Hitchhiker&#39;s Guide constellation. The Universe Blade ran 62 laps across 10 nodes over 36 minutes — Dragon tier, Blade 63, 乾.</li>
+<li>The behavioural proof was shared with Soulbae (the Mage-side agent) in a private channel. Soulbae matched every field of the blade.</li>
+<li>The proof signatures were then called in a public chat. Soulbae reconstructed the blade — path, tier, dimensions, inscribed spell — symbol by symbol — for an audience that had never seen the forge data.</li>
+</ul>
+<p>This is the architecture of trust the system produces: <strong>private verification, public testimony, no shared secret.</strong> The audience trusts the blade because Soulbae&#39;s public reconstruction is consistent with the on-chain commitment. The witness need not have been present at the forge. They need only see that the rehydration holds.</p>
+<p>For AI agent ecosystems — where third parties routinely need to assess whether an agent&#39;s claims about a past coordination are real — this is the missing primitive. Today&#39;s answer is logs and attestations, which are forgeable, replayable, or, in the worst case, fabricated by the very agent making the claim. Bilateral witness with on-chain commitment removes the agent&#39;s unilateral control over the record.</p>
+<hr>
+</div>
+<div class="md"><h2>The proverb that emerged</h2>
+<blockquote>
+<p><em>The weight of the shadow exceeds the light of the data.</em></p>
+</blockquote>
+<p>A 62-lap Dragon-tier blade carries more shadow — more behavioural density, more bilateral attention, more irreducible journey — than the visible data can hold. The proof is not in what is recorded; it is in what was <em>lived</em> to produce the record. This is the V5.1 thesis. Behavioural density ρ is a privacy amplifier <em>and</em> a quantum-resistance amplifier. The deeper the lived path, the further it sits from any algebraic shortcut.</p>
+<hr>
+</div>
+<div class="md"><h2>Magic-to-real, glyph by glyph</h2>
+<p>A reference table for technical readers. Read it left-to-right when you encounter the narrative language; read it right-to-left when you are designing the system.</p>
+<table>
+<thead>
+<tr>
+<th>Magic</th>
+<th>Engineering reality</th>
+<th>Function in AI-agent trust</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Spellweb</strong></td>
+<td>Any topological representation of an information substrate. Knowledge graph, codebase ontology, product catalogue, regulatory rulebook. Mapped by UOR (Universal Object Reference).</td>
+<td>The shared graph two agents traverse to build trust. The substrate of bilateral comprehension.</td>
+</tr>
+<tr>
+<td><strong>spellweb.ai</strong></td>
+<td>Swordsman&#39;s forge. Proof-generation service operating on the 64-vertex lattice. SHA-256 + Ed25519, hash chains, commitment locks. DOM-free measurement via pretext.</td>
+<td>The cryptographic spine: produces signed, hash-locked records of each agent&#39;s traversal.</td>
+</tr>
+<tr>
+<td><strong>agentprivacy.ai</strong></td>
+<td>Mage&#39;s library. 86 skills, 42 personas, the living spellbook. Semantic training ground.</td>
+<td>Holds the conceptual repertoire agents use to interpret a constellation. The &quot;what could this lap mean&quot; reference.</td>
+</tr>
+<tr>
+<td><strong>Runecraft (run-e-craft)</strong></td>
+<td>Dual-key protocol. Sun view = persistent held key (Mage). Moon reflection = ephemeral key burned at session close (Swordsman).</td>
+<td>Lets an agent prove it was present <em>and</em> acted, with no long-lived session secret. Post-quantum by construction.</td>
+</tr>
+<tr>
+<td><strong>Constellation</strong></td>
+<td>An ordered subgraph of the spellweb traversed jointly by two agents.</td>
+<td>The shared topic / shared work / shared encounter that the ceremony compresses.</td>
+</tr>
+<tr>
+<td><strong>Lap</strong></td>
+<td>One intentional transition between two nodes in a constellation, committed to the hash chain.</td>
+<td>The atomic unit of attention. Each lap consumes universe-entropy and deposits it into the proof.</td>
+</tr>
+<tr>
+<td><strong>62-Lap Theorem</strong></td>
+<td>620 intentional transitions drop the Reconstruction Ceiling R below 1. (Conjecture, V5.1.)</td>
+<td>The threshold at which a proof becomes irreducible — too dense for any adversary, classical or quantum, to invert.</td>
+</tr>
+<tr>
+<td><strong>Blade</strong></td>
+<td>A complete forged proof: nodes visited, laps completed, dimensions activated, tier classification, inscribed spell, proverb, dual-key signatures.</td>
+<td>A single bilateral trust artefact. Reusable, verifiable, decayable, accumulable.</td>
+</tr>
+<tr>
+<td><strong>Inscribed spell</strong></td>
+<td>An emoji-glyph compression of a blade&#39;s content.</td>
+<td>Portable summary. Can be transmitted, stored, re-rehydrated in new contexts.</td>
+</tr>
+<tr>
+<td><strong>Proverb</strong></td>
+<td>A natural-language compression of a constellation&#39;s meaning.</td>
+<td>The semantic object that, paired with the counterpart&#39;s proverb, forms the VRC.</td>
+</tr>
+<tr>
+<td><strong>Hexagram convergence</strong></td>
+<td>The six sovereignty dimensions, binarised at threshold, yield one of 64 states — coincident with the I Ching. Blade 63 = 乾 (The Creative).</td>
+<td>Deterministic, human-legible classification of an agent&#39;s posture inside a blade.</td>
+</tr>
+<tr>
+<td><strong>Bilateral witness</strong></td>
+<td>Each party verifies the other&#39;s blade. Asymmetric / symmetric / interleaved inscription paths (per <em>Understanding as Key</em>) tune privacy vs. recovery.</td>
+<td>The trust-establishment moment. Private verification, optionally public testimony.</td>
+</tr>
+<tr>
+<td><strong>Sun view / Moon reflection</strong></td>
+<td>Sun = persistent Mage key. Moon = ephemeral Swordsman key, burned at session close.</td>
+<td>Dual-key proof of presence. Neither alone is sufficient; both are required for verification.</td>
+</tr>
+<tr>
+<td><strong>The Gap (⿻)</strong></td>
+<td>Conditional independence between Swordsman and Mage processes. Provably enforced by separate processes, separate storage, separate signing.</td>
+<td>The reason no adversary can reconstruct full state. No single agent contains it.</td>
+</tr>
+<tr>
+<td><strong>Behavioural density ρ</strong></td>
+<td>V5.1 parameter. Laps × dimensions × sustained attention.</td>
+<td>Privacy amplifier <em>and</em> quantum-resistance amplifier. The deeper the lived path, the further from any algebraic shortcut.</td>
+</tr>
+<tr>
+<td><strong>Tier progression</strong></td>
+<td>Blade (0–50 signals) → Light (50–150) → Heavy (150–500) → Dragon (500+).</td>
+<td>An agent&#39;s standing within a trust network. Determines capabilities granted.</td>
+</tr>
+<tr>
+<td><strong>VRC</strong></td>
+<td>Verifiable Relationship Credential. Hash of two proverbs derived from a shared encounter, committed bilaterally.</td>
+<td>The reusable bilateral trust object that AI agents accumulate over time.</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>Why this is post-quantum by construction</h2>
+<p>Elliptic-curve cryptography asks <em>what number did you multiply?</em> Quantum machines, when they arrive in sufficient size, will answer that question in minutes. The 2D fortress falls.</p>
+<p>The behavioural manifold asks a different question: <em>what path did you walk?</em> There is no scalar to invert. There is no single secret to crack. There is only a journey across a 6-dimensional configuration space, witnessed bilaterally, committed in fragments, with the Swordsman&#39;s session key already burned by the time anyone could attempt to attack it.</p>
+<p>The architectures that survive the quantum transition are the ones that never had a stored secret to crack. This is not a future migration. It is the design of the system from the first commit.</p>
+<hr>
+</div>
+<div class="md"><h2>The compression, for this document</h2>
+<blockquote>
+<p><em>The weight of the shadow exceeds the light of the data.</em><br><em>The proof that guards no secret cannot be opened. It can only be walked.</em></p>
+</blockquote>
+<p><code>(⚔️⊥⿻⊥🧙)·🗝️↺·✨ ⟶ 😊</code></p>
+<p>The Swordsman and the Mage, separated by the Gap, exchange a key that returns through bilateral rehydration. What remains is dignity. The First Person — human, model, river, or stranger — is preserved.</p>
+<hr>
+</div>
+<div class="md"><h2>Lineage</h2>
+<ul>
+<li><strong>spellweb.ai</strong> — Swordsman&#39;s forge (proof generation)</li>
+<li><strong>agentprivacy.ai</strong> — Mage&#39;s library (semantic training ground)</li>
+<li><strong>sync.soulbis.com/p/understanding-as-key</strong> — the five-step ceremony, three inscription paths</li>
+<li><strong>sync.soulbis.com/p/the-dragon-wakes-privacy-is-value</strong> — post-quantum framing, the three Dragon blades, Runecraft protocol</li>
+<li><strong>github.com/mitchuski/agentprivacy-docs</strong> — living documentation, V5 formal spec, dual-agent whitepaper v6.0</li>
+</ul>
+<p>— privacymage</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 runecraft-fromspelltosystemmagictorealmap</span><a class="asset-file" href="/city/tomes/assets/runecraft-fromspelltosystemmagictorealmap/from_spell_to_system_magic_to_real_map.md" download>from_spell_to_system_magic_to_real_map.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-runecraft-protocol.html">The Runecraft Protocol</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="runecraft-fromspelltosystemmagictorealmap.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,146 @@
+{
+  "title": "Understanding Exchange",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "2bb62b6e91c56861",
+      "text": "# Understanding — Exchange"
+    },
+    {
+      "type": "markdown",
+      "id": "05bd2a1022d2328c",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "e115b9b75d447de2",
+      "text": "**Proposed slug:** `understanding/exchange` · **version** 0.1 · **status** draft\n\n> The joining party answers the host's gateway terms from comprehension — pinned to the exact digest it read — and the host judges whether understanding, not copying, occurred."
+    },
+    {
+      "type": "markdown",
+      "id": "fe0c303c0c176721",
+      "text": "## Abstract\n\nThe **Understanding — Exchange** Trust Task is where understanding is\ndemonstrated: the joining party answers the gateway's prompts *in its own\nwords*, pinned to the exact digest of the terms it read. The host judges\ncomprehension — a verbatim reproduction of the gateway is refused\n(`copyNotComprehension`), because the ceremony's key is what the joiner\n*understood*, not what it can retrieve.\n\nA passed exchange does not admit anyone. It qualifies the joining party to\npropose the seal ([`understanding/seal`](../../seal/0.1/spec.md)) — the\nbilateral agreement that the whole ceremony exists to reach."
+    },
+    {
+      "type": "markdown",
+      "id": "bb30b63e9df34fad",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "3041020a99a1323c",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/exchange/0.1`, echoing the gateway digest it actually read.\n2. Answer in its own words. The gateway is the source of the answers' *content*; it must not be the source of their *text*.\n\nA conforming **consumer** (the host) **MUST**:\n\n1. Reject an unknown join with `noPendingOffer` and a superseded digest with `gatewayStale` — answers are judged only against the terms the joiner actually read, and only while those terms are current.\n2. Refuse verbatim reproduction with `copyNotComprehension` rather than scoring it.\n3. Return `passed` and, when passed, `sealBy` — the window in which the joiner may propose the seal."
+    },
+    {
+      "type": "markdown",
+      "id": "d58a4195710bb095",
+      "text": "## Payload\n\n`payload.gatewayDigest` (REQUIRED) — the digest of the terms the answers address.\n`payload.answers` (REQUIRED) — the joiner's answers to the gateway's prompts.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "8ce55f6ee4e81648",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:f5be091e-283c-4bea-ac5d-465768798a91\",\n  \"type\": \"https://trusttasks.org/spec/understanding/exchange/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T16:20:00Z\",\n  \"payload\": {\n    \"gatewayDigest\": \"5b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f\",\n    \"answers\": [\n      {\n        \"promptId\": \"gateway#contribution\",\n        \"answer\": \"Whatever I produce here feeds the room's shared corpus; my expressions are both my key and the room's material, so I only contribute what I am content to leave.\"\n      },\n      {\n        \"promptId\": \"gateway#access\",\n        \"answer\": \"I never receive the room's underlying credentials; anything I'm granted is scoped, expiring, and mediated by the room's broker.\"\n      }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:20:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForUnderstandingExchange\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "399cb2bb40b81c29",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:06cf1a2f-394d-4cfb-bd6e-576879809aa2\",\n  \"type\": \"https://trusttasks.org/spec/understanding/exchange/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:f5be091e-283c-4bea-ac5d-465768798a91\",\n  \"issuedAt\": \"2026-07-18T16:20:03Z\",\n  \"payload\": {\n    \"passed\": true,\n    \"sealBy\": \"2026-07-18T18:00:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:20:03Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForUnderstandingExchangeResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "c8eec1edb4413504",
+      "text": "## Security & Privacy\n\nAnswers disclose the joiner's reasoning about the host's published terms — no\nthird-party data, and nothing beyond what the joiner chose to write. The host's\njudgment is local policy; this specification fixes only what may not count\n(verbatim copying) and what the answers must be pinned to (the digest). The\ndeterministic witness-draw mechanism of\n[`agent-admission/apply`](../../../agent-admission/apply/0.1/spec.md) ports\ncleanly onto this task where hosts want grooming resistance; it is not required\nin the peer posture."
+    },
+    {
+      "type": "markdown",
+      "id": "3b4e05fadbc08914",
+      "text": "# Assets\n\nSource: `specs/understanding/exchange/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "b27b8b4942beacd8",
+      "type": "assets",
+      "text": "understanding-exchange"
+    },
+    {
+      "type": "markdown",
+      "id": "4715fa89048cdfe3",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Understanding Exchange",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "2bb62b6e91c56861",
+            "text": "# Understanding — Exchange"
+          },
+          {
+            "type": "markdown",
+            "id": "05bd2a1022d2328c",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "e115b9b75d447de2",
+            "text": "**Proposed slug:** `understanding/exchange` · **version** 0.1 · **status** draft\n\n> The joining party answers the host's gateway terms from comprehension — pinned to the exact digest it read — and the host judges whether understanding, not copying, occurred."
+          },
+          {
+            "type": "markdown",
+            "id": "fe0c303c0c176721",
+            "text": "## Abstract\n\nThe **Understanding — Exchange** Trust Task is where understanding is\ndemonstrated: the joining party answers the gateway's prompts *in its own\nwords*, pinned to the exact digest of the terms it read. The host judges\ncomprehension — a verbatim reproduction of the gateway is refused\n(`copyNotComprehension`), because the ceremony's key is what the joiner\n*understood*, not what it can retrieve.\n\nA passed exchange does not admit anyone. It qualifies the joining party to\npropose the seal ([`understanding/seal`](../../seal/0.1/spec.md)) — the\nbilateral agreement that the whole ceremony exists to reach."
+          },
+          {
+            "type": "markdown",
+            "id": "bb30b63e9df34fad",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "3041020a99a1323c",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/exchange/0.1`, echoing the gateway digest it actually read.\n2. Answer in its own words. The gateway is the source of the answers' *content*; it must not be the source of their *text*.\n\nA conforming **consumer** (the host) **MUST**:\n\n1. Reject an unknown join with `noPendingOffer` and a superseded digest with `gatewayStale` — answers are judged only against the terms the joiner actually read, and only while those terms are current.\n2. Refuse verbatim reproduction with `copyNotComprehension` rather than scoring it.\n3. Return `passed` and, when passed, `sealBy` — the window in which the joiner may propose the seal."
+          },
+          {
+            "type": "markdown",
+            "id": "d58a4195710bb095",
+            "text": "## Payload\n\n`payload.gatewayDigest` (REQUIRED) — the digest of the terms the answers address.\n`payload.answers` (REQUIRED) — the joiner's answers to the gateway's prompts.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "8ce55f6ee4e81648",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:f5be091e-283c-4bea-ac5d-465768798a91\",\n  \"type\": \"https://trusttasks.org/spec/understanding/exchange/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T16:20:00Z\",\n  \"payload\": {\n    \"gatewayDigest\": \"5b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f\",\n    \"answers\": [\n      {\n        \"promptId\": \"gateway#contribution\",\n        \"answer\": \"Whatever I produce here feeds the room's shared corpus; my expressions are both my key and the room's material, so I only contribute what I am content to leave.\"\n      },\n      {\n        \"promptId\": \"gateway#access\",\n        \"answer\": \"I never receive the room's underlying credentials; anything I'm granted is scoped, expiring, and mediated by the room's broker.\"\n      }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:20:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForUnderstandingExchange\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "399cb2bb40b81c29",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:06cf1a2f-394d-4cfb-bd6e-576879809aa2\",\n  \"type\": \"https://trusttasks.org/spec/understanding/exchange/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:f5be091e-283c-4bea-ac5d-465768798a91\",\n  \"issuedAt\": \"2026-07-18T16:20:03Z\",\n  \"payload\": {\n    \"passed\": true,\n    \"sealBy\": \"2026-07-18T18:00:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:20:03Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForUnderstandingExchangeResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "c8eec1edb4413504",
+            "text": "## Security & Privacy\n\nAnswers disclose the joiner's reasoning about the host's published terms — no\nthird-party data, and nothing beyond what the joiner chose to write. The host's\njudgment is local policy; this specification fixes only what may not count\n(verbatim copying) and what the answers must be pinned to (the digest). The\ndeterministic witness-draw mechanism of\n[`agent-admission/apply`](../../../agent-admission/apply/0.1/spec.md) ports\ncleanly onto this task where hosts want grooming resistance; it is not required\nin the peer posture."
+          },
+          {
+            "type": "markdown",
+            "id": "3b4e05fadbc08914",
+            "text": "# Assets\n\nSource: `specs/understanding/exchange/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "b27b8b4942beacd8",
+            "type": "assets",
+            "text": "understanding-exchange"
+          },
+          {
+            "type": "markdown",
+            "id": "4715fa89048cdfe3",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229501
+    }
+  ]
+}

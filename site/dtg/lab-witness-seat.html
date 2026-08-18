@@ -1,0 +1,99 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — witness-seat · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — witness-seat</span></div>
+  <article><div class="md"><h1>Witness seat — notes</h1>
+<p><em>The third seat on the dream cycle: a VWC (Verifiable Witness Credential) attesting the<br>collision, transcript-bound, optional, and never a substitute for consent.</em></p>
+<p>Source design: <a class="wlink" href="vwc-witness-seat.html">VWC — Witness Seat</a>. This build<br>closes the oldest open thread in the lab — runtime 07&#39;s &quot;next steps&quot; item 1 / candidate-note 3<br>(&quot;a VWC slots straight in&quot;), flagged in the 2026-07-16 dream-cycle chronicle.</p>
+</div>
+<div class="md"><h2>What it demonstrates</h2>
+<p>Runtime 07 grows the trust graph in two seats: 🧙 the Mage proposes the smallest edge, ⚔️ the<br>Swordsman proves it across the Gap. This runtime seats the third role the cred-spec provides<br>but the cycle didn&#39;t hold: a <strong>witness</strong> — a registry-anchored third party who sees THAT a<br>meeting happened, never what it meant. The witness receives only the collision&#39;s public<br>commitment (the candidate&#39;s VRC commitment), the two fresh R-DIDs, and the §15.2 canonical<br>transcript; it signs an attestation binding those four together in its own<br>personhood-anchored name.</p>
+<p>The seat upgrades edge <strong>evidence</strong> without touching edge <strong>admissibility</strong>:</p>
+<ul>
+<li>a witnessed edge carries independent corroboration of the collision, re-verifiable later<br>from the stored edge + the retained transcript + the witness registry alone (W1);</li>
+<li>an unwitnessed edge forms exactly as rt07 forms it today — the unwitnessed path is<br>byte-for-byte rt07&#39;s path (W2);</li>
+<li><strong>W4 is the separation property</strong>: the attestation is never consulted before, or instead<br>of, the Swordsman&#39;s verdict. A witness holding a perfectly valid attestation cannot move an<br>unconsented candidate past the consent gate, and cannot forge a proposal (it never holds<br>the parties&#39; secrets, so it cannot mint their fresh per-counterparty R-DIDs). Witness ≠<br>consent ≠ proposal — the seat must not collapse into a third signing authority. This is the<br>same separation discipline X9&#39;s guardian doc states one level up (guardians attest<br>recovery, they do not authorize identity), inherited here at the edge-formation level.</li>
+</ul>
+</div>
+<div class="md"><h2>Boundary notes (recap from the design doc)</h2>
+<p><strong>Assurance boundary</strong> — a verifier of a witnessed edge may rely on: <em>a registry-anchored<br>third party signed a statement binding this collision commitment to this transcript.</em> It<br>must NOT infer: that the collision&#39;s <em>content</em> was as claimed (the witness saw an encounter,<br>not the shared secret); that the witness was honest; that a witnessed edge is more<br><em>consensual</em> than an unwitnessed one. Accountability: the witness for its attestation; the<br>context authority for who may witness.</p>
+<p><strong>Disclosure boundary</strong> — the witness is a <strong>§19 observer</strong> (the observer list gains a row):<br>it learns that two R-DIDs collided at a time, under a context. It must not learn the shared<br>secret or either party&#39;s M-DID — enforced structurally here (W5: view whitelist + canonical<br>transcript schema + lifetime-view scan). Witness <em>patterns</em> (who witnesses whom, how often)<br>are themselves correlatable — a busy witness becomes a traffic-analysis hub; retention rules<br>for witness logs belong in the profile (§20 minimisation applies).</p>
+</div>
+<div class="md"><h2>Named failure codes (fixture-register v3 candidates)</h2>
+<p>Checked in this order; append-only candidates for <code>../fixtures/reasons.mjs</code> v3:</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>witness-not-personhood-anchored</code></td>
+<td>membership ref does not resolve in the witness registry (W6)</td>
+</tr>
+<tr>
+<td><code>witness-signature-invalid</code></td>
+<td>signature does not verify over the canonicalized attestation body (W3)</td>
+</tr>
+<tr>
+<td><code>witness-transcript-mismatch</code></td>
+<td>attestation made under a different session/context — §15.1 replay discipline applied to witnesses (W3)</td>
+</tr>
+<tr>
+<td><code>witness-rdid-mismatch</code></td>
+<td>attestation names different R-DIDs than the candidate&#39;s fresh per-counterparty ones (W3)</td>
+</tr>
+<tr>
+<td><code>witness-collision-mismatch</code></td>
+<td>attestation binds a different collision commitment than the edge&#39;s recomputed VRC</td>
+</tr>
+<tr>
+<td><code>witness-view-violation:&lt;key&gt;</code></td>
+<td>thrown (not returned): an encounter secret was offered to the witness — refused before the view is touched (W5)</td>
+</tr>
+</tbody></table>
+<p>Design note: an <em>invalid</em> attestation rejects the witnessed-edge operation by name (an<br>active forgery is a mirage, like a forged VRC commitment — the Swordsman&#39;s posture), while an<br><em>absent</em> attestation changes nothing (W2). Absence ≠ forgery.</p>
+</div>
+<div class="md"><h2>The additive refinement</h2>
+<p>The exploration&#39;s M1 wording (&quot;implement the witness channel in rt 07&quot;) is refined to<br><strong>own-directory-importing</strong>: runtime 07 is a byte-stability dependency of the fixtures suite<br>(its rejection strings are pinned in the reasons register, byte-for-byte), so this build<br>lives in <a class="wlink" href="lab-witness-seat.html">Lab — witness-seat</a>, imports rt07&#39;s <code>joinCommunity</code> / <code>Swordsman</code> / <code>Mage</code> /<br><code>encounter</code> and calls <code>Swordsman.prove</code> UNCHANGED — the lab&#39;s established precedent<br>(show-composition, quiet-presentation, guardian-recovery all wrap rather than edit). W7 makes<br>the byte-stability contract executable: rt07&#39;s own <code>test.mjs</code> runs in a subprocess and must<br>still report 11/11.</p>
+<p>Other deliberate model choices:</p>
+<ul>
+<li><strong>Signature model</strong>: H-based MAC-style signature (<code>H(domain, key, canonicalize(body))</code>),<br>same modelling honesty as rt07&#39;s <code>roster</code> holding node secrets — the witness registry holds<br>the verification key; the circuit swaps a real signature scheme, the binding argument is<br>identical.</li>
+<li><strong>Collision commitment</strong> = the candidate&#39;s public VRC commitment (<code>claimedVrc</code>), which the<br>wrapper cross-checks against the Swordsman&#39;s independently recomputed <code>vrc</code> — the witness<br>binds to the recomputed value, never to the Mage&#39;s bare claim.</li>
+<li><strong>Transcript</strong> = the shared <code>canonical/canonical.mjs</code> §15.2 implementation (the design<br>doc&#39;s M2: one mechanism, shared with the freshness harness — a bare nonce is insufficient).</li>
+</ul>
+</div>
+<div class="md"><h2>Deferred (parked per the design doc)</h2>
+<ul>
+<li><strong>Same-VTC-witness question</strong>: must a witness hold a VMC in the <em>same</em> VTC as the parties,<br>or is any registry-anchored witness acceptable? Same-community witnessing is stronger for<br>the community-anchored construction but shrinks the witness pool and increases<br>intra-community traffic analysis. (This build anchors the witness in a community via<br>rt07&#39;s <code>joinCommunity</code> but does not require it to be the <em>parties&#39;</em> community.)</li>
+<li><strong>Weighted propagation</strong>: does a witnessed edge earn different weight? Weight semantics<br>belong to trust-task protocols, not the formation layer — parked, noted.</li>
+</ul>
+</div>
+<div class="md"><h2>Pointers</h2>
+<ul>
+<li>Design doc: <a class="wlink" href="vwc-witness-seat.html">VWC — Witness Seat</a> (M1–M4; this<br>build = M1 + M2, boundary recap above = M3 draft carried; M4 = the upstream candidate-note<br>feed, now backed by a runnable reference + W4 stated as a property).</li>
+<li>Thread closed: rt07 <code>NOTES.md</code> &quot;next steps&quot; item 1 + candidate-note 3, flagged in the<br>2026-07-16 dream-cycle chronicle.</li>
+<li>Decision doc anchors: §15/§15.1/§15.2 (canonical transcript, replay), §17.2/§7.3<br>(separation discipline — attestation ≠ authority), §19 (observer analysis), §20<br>(minimisation of witness logs).</li>
+<li>Tests: <code>node test.mjs</code> → 15/15 (W1–W7; W7 = rt07 regression subprocess).</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-witness-seat.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

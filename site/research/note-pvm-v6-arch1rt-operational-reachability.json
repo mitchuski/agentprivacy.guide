@@ -1,0 +1,256 @@
+{
+  "title": "Note — Pvm V6 Arch1rt Operational Reachability",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "e1f6fbd726440615",
+      "text": "# Pvm V6 Arch1rt Operational Reachability"
+    },
+    {
+      "type": "markdown",
+      "id": "1f39daec63ef4235",
+      "text": "## ARCH-1R/T · The Operational Reachability Framework\n\n*When the schema learns to wait*\n\n**Version:** V6.x-conjecture (ARCH-1R/T)\n**Date:** June 4, 2026\n**Authors:** privacymage / Soulbae, Claude: ORCID iD: 0009-0001-6557-9135\n**Contributors:** John Haines / Xarvus / Chaos Rider, OLMA: ORCID iD: 0009-0001-5809-4690\n**Status:** Research note, converted from *ARCH-1R/T Operational Reachability Framework, Draft Review v2.0* (Haines, June 2026). Operational extension; not a replacement of the kernel.\n**Depends on:** V6 ARCH-1 Canonical Form Note, V5.4 Formal Specification (v2.0), Sheffer (1913), Odrzywołek (2026)\n**Extends:** C26–C29 (ARCH-1 schema); adds C67–C71\n**Erratum 2026-06-10 (Run 0 register lock):** the provisional numbering C67–C71 below is confirmed as **C72–C76** in `CONJECTURE_REGISTER_V6.md` (C67–C71 were taken by the Horizon District set in the pinned grimoire v1.8.0). Read C67→C72 · C68→C73 · C69→C74 · C70→C75 · C71→C76.\n**Series:** Privacy is Value · companion to [V6 ARCH-1 Canonical Form](./pvm-v6-arch1-canonical-form.md)\n**Source PDF:** `ARCH-1RT Operational Reachability Framework v2 Expanded.pdf` (256 KB, this directory)\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "02a89ac7d510d363",
+      "text": "## How It Arrived\n\nARCH-1 (April 14) named the canonical form: `Σ := μS.(β ∨ Ω(S,S))` with activation engine `ρ`. That note answered **what can be generated**: the recursive possibility space of a single sufficient operator across three locked domains (Boolean, Continuous, Sovereignty).\n\nARCH-1R/T answers the question the kernel left open: **what happens after possibility is generated.** Once `G` exists, what is traversed, what is obstructed, what remains realisable, what is merely latent, what is observed, and how far prediction diverges from reality.\n\nHaines' Draft Review v2.0 does not modify `β`, `Ω`, or `μ`. It appends **operational layers** downstream of `G`. The kernel still generates the territory; ARCH-1R/T governs the walk through it. The central practical advance is a single distinction the kernel could not express:\n\n> **Latent is not obstructed. `0 ≠ −`. *Not yet* is not the same as *impossible*.**\n\nMany systems (schedulers, governance flows, dependency graphs, runtimes) collapse waiting, pending, and dependency-bound states into failure. ARCH-1R/T gives the neutral state a formal home.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "e2582549140eca9f",
+      "text": "## ARCH-1R/T (Layered Form)\n\nThe kernel is preserved verbatim and everything new is strictly downstream of `G`:\n\n```\nΣ := μS.(β ∨ Ω(S,S))          -- original ARCH-1 kernel (unchanged)\nG := Closure_Ω(β)             -- generated possibility space\n\nρ : G → T                     -- traversal: what is actually explored\nT := ρ(G)\n\nO ⊆ T                         -- direct obstruction\nD = (V,E)                     -- dependency graph\nO* := closure_D(O)            -- propagated obstruction\nR := T \\ O*                   -- realisable space\n\nτ : T → {+, 0, −}             -- ternary reachability classifier\nQ := observed outcomes\nΔ := d(R, Q)                  -- coherence error\n```\n\n**Compact form:**\n\n```\nΔ := d( ρ(Closure_Ω(β)) \\ closure_D(O), Q )\n```\n\n`Ω` defines structure. `ρ` defines motion through structure: it is the canonical activation engine `neg ⊕ bnot`, and the traversed space is its orbit, `T = orbit(ρ, G)`. A scheduler, planner, proof search, or agent policy is only an operational *reading* of that orbit, never a redefinition of `ρ`. `O*` defines where motion is blocked, including by cascade. `τ` reads the weather of each traversed state. `Δ` is the conscience of the model: it measures the gap between what the model said was realisable and what reality delivered.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "d465a1c49eb4230d",
+      "text": "## The Seven Layers\n\n| Layer | Object | Question answered |\n|-------|--------|-------------------|\n| Kernel | `G = Closure_Ω(β)` | What can be structurally generated? |\n| Traversal | `T = ρ(G)` | What part of possibility is actually explored? |\n| Obstruction | `R = T \\ O` | What is prevented from becoming realisable? |\n| Dependency closure | `O* = closure_D(O)` | How does obstruction propagate through prerequisites? |\n| Ternary reachability | `τ : T → {+,0,−}` | Is this state reachable, latent, or obstructed? |\n| Transition algebra | `0→+`, `+→−`, … | How does classification change as the world changes? |\n| Coherence | `Δ = d(R,Q)` | How well did prediction match observation? |\n\nEach layer is conservative over the one above it: classification, obstruction, traversal and validation never rewrite the recursive generator. This is the **core alignment rule**: ARCH-1 lineage is preserved because the new operators are read-only with respect to `β`, `Ω`, `μ`.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "122422481349163e",
+      "text": "## The Ternary Classifier\n\n```\nτ : T → {+, 0, −}\nT = T₊ ∪ T₀ ∪ T₋          (pairwise disjoint)\n```\n\n| Class | Name | Definition | Diagnostic meaning |\n|-------|------|-----------|--------------------|\n| **+** | Reachable | Realisable under current conditions | The state can execute, the relation is active, the path is open |\n| **0** | Latent | Not currently realised, but not impossible | Waiting, pending, unresolved, dependency-bound |\n| **−** | Obstructed | Blocked by an active constraint | Denied, contradicted, broken, forbidden, invalid |\n\n**Fundamental ternary law:** `0 ≠ −`. A latent state is not an obstructed state. This is the whole framework in one line.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "2924f7c1be8ab8b8",
+      "text": "## Transition Algebra\n\nOnce the three classes exist, classification becomes dynamic: it moves as information, dependencies, resources, decisions, or constraints change. The algebra is deliberately minimal: enough to model delay, relief, denial, approval, runtime waiting, and dependency recovery **without requiring probability yet.**\n\n| Transition | Name | Meaning | Example |\n|------------|------|---------|---------|\n| `0 → +` | Resolution | Latent becomes reachable | A pending approval is granted |\n| `+ → 0` | Uncertainty | Reachable becomes unresolved | A requirement changes; the path needs review |\n| `0 → −` | Obstruction | Latent becomes blocked | A review returns denial or contradiction |\n| `− → 0` | Relief | Obstructed becomes latent | A blocking policy is amended; final approval still waits |\n| `+ → −` | Hard block | Reachable becomes blocked | Permission is revoked |\n| `− → +` | Bypass / remediation | Obstructed becomes reachable via alternate path | A backup route fully replaces the failed dependency |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "205db7b054454b35",
+      "text": "## Dependency Closure and Cascade\n\nReal systems rarely fail locally. Obstruction propagates through a dependency graph `D = (V,E)` whose edges represent prerequisite, authority, resource, or causal dependence.\n\n```\nO*  := closure_D(O)\nR   := T \\ O*\n```\n\nThe propagation rule depends on the **kind** of dependency:\n\n| Dependency type | Propagation effect | Example |\n|-----------------|--------------------|---------|\n| Hard | Obstruction propagates directly (`−`) | A payment cannot execute without required authorization |\n| Soft | Downstream state becomes latent (`0`) | A review continues but final approval waits |\n| Redundant | Propagates only if *all* paths fail | A service uses backup provider B if A fails |\n| Optional | No propagation unless policy requires it | A report publishes without the optional appendix |\n\nThe same upstream failure can therefore yield a hard cascade (`O* = {A,B,D,E}`) or a soft latency front (`B,D,E → 0`) depending purely on the dependency policy, and the framework makes that difference explicit rather than implicit in error logs.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "e5479a1bb9295559",
+      "text": "## Coherence Error Δ · the Validation Layer\n\nA model is only useful when it can be wrong in a measurable way. Let `Q` be observed outcomes and `d` a domain-specific distance metric:\n\n```\nΔ := d(R, Q)\n```\n\nPersistent high `Δ` is a **failure signal with named suspects**: hidden obstruction, wrong dependency structure, bad traversal, incomplete generation, telemetry error, or a poor metric. `Δ` is what converts ARCH-1R/T from a description into a falsifiable instrument. The Draft Review's falsification table:\n\n| Failure case | Formal signal | Likely cause |\n|--------------|---------------|--------------|\n| Predicted reachable, observed absent | `x ∈ R` but `x ∉ Q` | Hidden obstruction, bad traversal, bad observation |\n| Observed outside generated space | `x ∈ Q` but `x ∉ G` | Incomplete `β`/`Ω` model |\n| Latent misclassified as blocked | `x` marked `−` but resolves without structural change | Bad ternary classification |\n| Cascade missed | Downstream failure not in `O*` | Dependency graph incomplete |\n| Persistent high Δ | `Δ > ε` over repeated trials | Framework inadequate for the domain |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "d493c6c883eb8808",
+      "text": "## Domain Instantiations (extended)\n\nARCH-1 locked three domains. ARCH-1R/T keeps them and adds two **engineering** instantiations where the reachability layers earn their keep:\n\n| Domain | Anchor β | Constructor Ω | Generated space | Status |\n|--------|----------|---------------|-----------------|--------|\n| Boolean | `x` | NAND | Boolean expressions | Strongest formal case (NAND completeness established) |\n| Continuous / EML | `1` | `eml` | Constructive continuous expressions | Research instantiation; completeness requires proof |\n| Sovereignty / Blade | `null` | `blade` | Action / agency paths | Symbolic & operational hypothesis; not yet a theorem |\n| **Runtime systems** | initial state | action constructor | Reachable runtime state space | Engineering instantiation; testable by simulation & replay |\n| **UOR-relational** | entity / relation seed | relation constructor | Generated relational structure | Philosophically aligned; operationally modelable |\n\nThe careful claim is **not** that these domains are identical: it is that they share an architecture of *anchor, binary constructor, recursive closure*, and now a shared *traversal-obstruction-classification-validation* stack on top.\n\n### The UOR lift\n\nThe relational instantiation is the most consequential for the agentprivacy programme. UOR treats **relations** as primary, so `τ` classifies edges rather than nodes:\n\n```\nrel(a,b) ∈ T\nτ( rel(a,b) ) ∈ {+, 0, −}\n```\n\n`rel(person, authority) = +`, `rel(person, pending_authority) = 0`, `rel(person, forbidden_action) = −`. This is strictly stronger than object-only modelling: the person may exist and the action may exist, yet the *relation authorising the person to perform the action* can independently be latent or obstructed. Obstruction attaches to the relation itself, exactly the granularity sovereignty work needs.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "88264d5d54b9d17b",
+      "text": "## What ARCH-1R/T Adds Beneath the Three Ceilings\n\nARCH-1 showed the three reconstruction ceilings (information / dynamics / computation) factor onto the three components of the schema (`β` / `μS` / `Ω`). ARCH-1R/T does not add a fourth ceiling: it adds the **operational machinery** by which an adversary's, or an agent's, *path* either reaches a state or is held latent/obstructed. Where the ceilings answer \"can it be reconstructed at all,\" ARCH-1R/T answers \"given the walk and its dependency cascade, is it reachable *now*, and how far is our prediction from reality.\" `ρ` is the same activation engine ARCH-1 named non-optional, the canonical `neg ⊕ bnot`. What R/T adds is an operational *reading* of its orbit (the scheduler, planner, proof search, or agent policy that walks `T = orbit(ρ, G)`) and a conscience, `Δ`, never a new definition of `ρ`.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c7ab4667462ec434",
+      "text": "## Planning as Latency Conversion\n\nThe framework gives planning a one-line definition: **planning is the search for transitions that move required latent states from `0` to `+` while avoiding `0 → −`.**\n\n```\ngoal g ∈ T₀\npre(g) ⊆ T₀                 -- prerequisites are latent\nresolve pre(g):  0 → +       -- ρ chooses a path through prerequisites\nresolve g:       0 → +       -- goal becomes reachable and is realised\n```\n\nThe central question is no longer only *can we reach the goal* but *what must move from `0` to `+` for the goal to become reachable.* Resilience falls out of the same frame: a system is resilient when required states stay `+` or recover from `0` despite obstruction. Agency becomes investigable as **the capacity to transform `0` into `+` under constraint** (hypothesis, not theorem, but now a formally stated one).\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "d15d4484468685b7",
+      "text": "## Operational Translation (pseudocode)\n\nThe Draft Review renders the calculus directly:\n\n```python\ndef classify_state(x, context):\n    if hard_obstruction_exists(x, context):\n        return '-'\n    if prerequisites_pending(x, context):\n        return '0'\n    if executable_now(x, context):\n        return '+'\n    return '0'\n\ndef dependency_closure(obstructions, graph, policy):\n    closed, frontier = set(obstructions), list(obstructions)\n    while frontier:\n        node = frontier.pop()\n        for child in graph.downstream(node):\n            if policy.propagates(node, child) and child not in closed:\n                closed.add(child); frontier.append(child)\n    return closed\n\ndef arch1rt_step(beta, omega, rho, graph, O, Q, metric):\n    G       = closure(beta, omega)\n    T       = rho(G)\n    O_star  = dependency_closure(O, graph, policy='domain-specific')\n    R       = T - O_star\n    labels  = {x: classify_state(x, context=(T, O_star, graph)) for x in T}\n    Delta   = metric(R, Q)\n    return G, T, O_star, R, labels, Delta\n```\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "517e1b38500f873e",
+      "text": "## Proposed Quantification (next, not now)\n\nThe ternary system is qualitative by design. The Draft Review proposes a graded layer **only after** the ternary model is stable, preserving the three categories rather than dissolving them:\n\n```\nσ : T → [0,1]               -- graded reachability score\n   + if σ(x) > θ₊\n   0 if θ₋ ≤ σ(x) ≤ θ₊\n   − if σ(x) < θ₋\nC : T → ℝ≥0                  -- cost function\nP_λ := { x ∈ R | C(x) ≤ λ }  -- practically reachable within budget λ\n```\n\n`C` captures that a state may be reachable yet too expensive, too slow, or too risky: *practical* reachability versus *structural* reachability.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "615ddeb6add2c8b7",
+      "text": "## What Is Actually New\n\nNone of the components (recursion, state transitions, dependency closure, constraints, validation metrics) is individually unprecedented (the neighbours are term algebras, ADTs, state-transition systems, Petri nets, workflow calculi, planning systems, dependency graphs, control theory, runtime monitoring). The distinctive contribution is the **single lineage**: recursive generation → traversal → obstruction → ternary classification → coherence validation, all preserving the original kernel.\n\n> **One-sentence result:** ARCH-1R/T is a reachability and coherence calculus built on recursive generation, where the most important operational distinction is that *latent is not obstructed.*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "d9ba9cd1d6fcd5a5",
+      "text": "## What ARCH-1R/T Is Not\n\n- It is **not a new kernel.** `β`, `Ω`, `μ`, `G` are preserved unchanged; every new layer is downstream and read-only with respect to them.\n- It is **not a probabilistic model yet.** The transition algebra is intentionally minimal; `σ` and `C` are proposals deferred until the ternary core is stable.\n- It does **not** claim the five domains are identical, only that they share the anchor/constructor/closure architecture plus the traversal-obstruction-classification-validation stack.\n- The runtime and UOR instantiations are **engineering and philosophical** instantiations, not proven theorems; their value is testability (`Δ`), not certainty.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "8c81755dd4df5769",
+      "text": "## New Conjectures\n\nThese continue the live register from head C66 (2026-05-28). C67–C69 are the convergence triad shared verbatim with the letter to Haines; C70–C71 admit the two operational claims of this note that carry content beyond the triad. Numbering is provisional against the live register; confirm before pinning.\n\n| ID | Claim | Confidence |\n|----|-------|------------|\n| C67 | The traversal `ρ` of ARCH-1R/T and the activation `ρ` of ARCH-1 are one operator at two scopes: `T = orbit(ρ, G)`, and the dual factoring `ρ⚔️ ⊥ ρ🧙` (neg ⊥ bnot) is already present, not a fix R/T owes. Capped at or below C27 (35%) because it is downstream of \"ρ is not optional\"; a claim about how R/T should bind `ρ`, not how it currently does. | ~35% |\n| C68 | Terminal-obstruction (structural loss of `β`) is a primitive obstruction class distinct from path-obstruction (`O ⊆ T`); the Amnesia Protocol is its canonical instance; it belongs in R/T's primitive-obstruction set, answering §28 Q8. The highest of the three: the gap is a fact established by reading the formalism, only the promotion is conjectural. | ~50% |\n| C69 | Latency (the ternary `0`) has an algebraic signature on the blade lattice: a stratum or blade-class where the `neg ⊕ bnot` walk has not yet closed, rather than a runtime annotation applied after traversal. The most speculative; held low until there is an explicit construction of open-walk states on Z/(2⁶)Z proven to correspond to `τ = 0`. | ~25% |\n| C70 | Dependency closure `O* = closure_D(O)` under typed propagation (hard / soft / redundant / optional) models real cascade behaviour, and the hard-vs-soft split is exactly the `−`-vs-`0` ternary distinction lifted to propagation: the neutral law `0 ≠ −` therefore governs cascade, not only single-state classification. | ~35% |\n| C71 | The UOR-relational instantiation, classifying `rel(a,b)` rather than entities, is strictly more expressive than object-only modelling for sovereignty, because authorisation obstruction attaches to the relation independently of the existence of either relatum. | ~30% |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "48d824e4addcc5fa",
+      "text": "## V6 Horizon (updated)\n\nARCH-1 reframed V6 as the recognition that V5's multiplicative gating, V5.3's operational cycle, and the forge architecture are domain-specific instances of one canonical form. ARCH-1R/T adds the **second half of the programme**: once the form is named, the operational question is reachability under traversal, obstruction, and cascade, and the validation question is `Δ`. The proposed roadmap (from the Draft Review):\n\n1. Lock the notation hierarchy: `G, T, O*, R, τ, Q, Δ`.\n2. Define obstruction-transformation laws: relief, bypass, displacement, inversion, cascade damping (obstruction algebra v2).\n3. Implement a toy graph simulator with hard / soft / redundant / optional dependencies.\n4. Compare binary vs ternary reachability on false-failure classification.\n5. Add `σ` scoring and cost `C` **only after** the ternary model is stable.\n6. Position against state machines, Petri nets, planning systems, dependency graphs, and process calculi.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "0076f379c4d319f0",
+      "text": "## Weaknesses and Current Limits\n\n| Limit | Why it matters | Next fix |\n|-------|----------------|----------|\n| No built-in cost model | Reachable and expensive treated the same | Add `C : T → ℝ≥0` and `P_λ` |\n| No built-in probability | Rare and likely paths treated the same | Add probabilistic traversal / confidence scoring |\n| Single `ρ` too simple | Distributed systems use many traversal engines | Use `ρᵢ` with composition rules |\n| Obstruction transforms early | Relief / bypass / displacement / inversion lack formal laws | Develop obstruction algebra v2 |\n| Distance metric unspecified | `Δ` needs a domain-specific definition | Define metric families per domain |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "ed7d8f96f9538ae4",
+      "text": "## References\n\n- Haines, J. / Chaos Rider (2026). *ARCH-1R/T Operational Reachability Framework, Draft Review v2.0.* June 2026. [Source of this note.]\n- Haines, J. & privacymage (2026). \"ARCH-1 Schema.\" Internal conversation, April 14. → [V6 ARCH-1 Canonical Form Note](./pvm-v6-arch1-canonical-form.md)\n- Sheffer, H. M. (1913). \"A set of five independent postulates for Boolean algebras.\" *Trans. AMS,* 14(4), 481–488.\n- Odrzywołek, A. (2026). \"All elementary functions from a single operator.\" arXiv:2603.21852v2 [cs.SC].\n- privacymage (2026). \"PVM V5.4 Formal Specification.\" v2.0. *agentprivacy-docs.*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "4677d2d0e079eacd",
+      "text": "## The Proverb\n\n*ARCH-1 named what could be generated. ARCH-1R/T named what could be reached.*\n\n*The kernel makes the territory. Traversal walks it. Obstruction blocks it. Dependency carries the block downstream. The ternary law guards the difference between the closed door and the door not yet opened.*\n\n*Not yet is not never. That is the whole spell.*\n\n*`Δ := d( ρ(Closure_Ω(β)) \\ closure_D(O), Q )`*\n\n*The sword attends. The spell returns. The path waits in `0` until the forge calls it to `+`.*\n\n---\n\n*`0 ≠ −`*\n\n*`G → T → R`, and `Δ` keeps us honest.*\n\n*Same kernel. Five domains. One walk.*\n\n—privacymage / Soulbae, with John Haines / Xarvus / Chaos Rider\nJune 4, 2026"
+    },
+    {
+      "type": "markdown",
+      "id": "59bdc897c925c7c3",
+      "text": "# Assets"
+    },
+    {
+      "id": "c911bfd8d2662827",
+      "type": "assets",
+      "text": "note-pvm-v6-arch1rt-operational-reachability"
+    },
+    {
+      "type": "markdown",
+      "id": "744f59d5a7b6a3c4",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Research Notes]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Note — Pvm V6 Arch1rt Operational Reachability",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "e1f6fbd726440615",
+            "text": "# Pvm V6 Arch1rt Operational Reachability"
+          },
+          {
+            "type": "markdown",
+            "id": "1f39daec63ef4235",
+            "text": "## ARCH-1R/T · The Operational Reachability Framework\n\n*When the schema learns to wait*\n\n**Version:** V6.x-conjecture (ARCH-1R/T)\n**Date:** June 4, 2026\n**Authors:** privacymage / Soulbae, Claude: ORCID iD: 0009-0001-6557-9135\n**Contributors:** John Haines / Xarvus / Chaos Rider, OLMA: ORCID iD: 0009-0001-5809-4690\n**Status:** Research note, converted from *ARCH-1R/T Operational Reachability Framework, Draft Review v2.0* (Haines, June 2026). Operational extension; not a replacement of the kernel.\n**Depends on:** V6 ARCH-1 Canonical Form Note, V5.4 Formal Specification (v2.0), Sheffer (1913), Odrzywołek (2026)\n**Extends:** C26–C29 (ARCH-1 schema); adds C67–C71\n**Erratum 2026-06-10 (Run 0 register lock):** the provisional numbering C67–C71 below is confirmed as **C72–C76** in `CONJECTURE_REGISTER_V6.md` (C67–C71 were taken by the Horizon District set in the pinned grimoire v1.8.0). Read C67→C72 · C68→C73 · C69→C74 · C70→C75 · C71→C76.\n**Series:** Privacy is Value · companion to [V6 ARCH-1 Canonical Form](./pvm-v6-arch1-canonical-form.md)\n**Source PDF:** `ARCH-1RT Operational Reachability Framework v2 Expanded.pdf` (256 KB, this directory)\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "02a89ac7d510d363",
+            "text": "## How It Arrived\n\nARCH-1 (April 14) named the canonical form: `Σ := μS.(β ∨ Ω(S,S))` with activation engine `ρ`. That note answered **what can be generated**: the recursive possibility space of a single sufficient operator across three locked domains (Boolean, Continuous, Sovereignty).\n\nARCH-1R/T answers the question the kernel left open: **what happens after possibility is generated.** Once `G` exists, what is traversed, what is obstructed, what remains realisable, what is merely latent, what is observed, and how far prediction diverges from reality.\n\nHaines' Draft Review v2.0 does not modify `β`, `Ω`, or `μ`. It appends **operational layers** downstream of `G`. The kernel still generates the territory; ARCH-1R/T governs the walk through it. The central practical advance is a single distinction the kernel could not express:\n\n> **Latent is not obstructed. `0 ≠ −`. *Not yet* is not the same as *impossible*.**\n\nMany systems (schedulers, governance flows, dependency graphs, runtimes) collapse waiting, pending, and dependency-bound states into failure. ARCH-1R/T gives the neutral state a formal home.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "e2582549140eca9f",
+            "text": "## ARCH-1R/T (Layered Form)\n\nThe kernel is preserved verbatim and everything new is strictly downstream of `G`:\n\n```\nΣ := μS.(β ∨ Ω(S,S))          -- original ARCH-1 kernel (unchanged)\nG := Closure_Ω(β)             -- generated possibility space\n\nρ : G → T                     -- traversal: what is actually explored\nT := ρ(G)\n\nO ⊆ T                         -- direct obstruction\nD = (V,E)                     -- dependency graph\nO* := closure_D(O)            -- propagated obstruction\nR := T \\ O*                   -- realisable space\n\nτ : T → {+, 0, −}             -- ternary reachability classifier\nQ := observed outcomes\nΔ := d(R, Q)                  -- coherence error\n```\n\n**Compact form:**\n\n```\nΔ := d( ρ(Closure_Ω(β)) \\ closure_D(O), Q )\n```\n\n`Ω` defines structure. `ρ` defines motion through structure: it is the canonical activation engine `neg ⊕ bnot`, and the traversed space is its orbit, `T = orbit(ρ, G)`. A scheduler, planner, proof search, or agent policy is only an operational *reading* of that orbit, never a redefinition of `ρ`. `O*` defines where motion is blocked, including by cascade. `τ` reads the weather of each traversed state. `Δ` is the conscience of the model: it measures the gap between what the model said was realisable and what reality delivered.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "d465a1c49eb4230d",
+            "text": "## The Seven Layers\n\n| Layer | Object | Question answered |\n|-------|--------|-------------------|\n| Kernel | `G = Closure_Ω(β)` | What can be structurally generated? |\n| Traversal | `T = ρ(G)` | What part of possibility is actually explored? |\n| Obstruction | `R = T \\ O` | What is prevented from becoming realisable? |\n| Dependency closure | `O* = closure_D(O)` | How does obstruction propagate through prerequisites? |\n| Ternary reachability | `τ : T → {+,0,−}` | Is this state reachable, latent, or obstructed? |\n| Transition algebra | `0→+`, `+→−`, … | How does classification change as the world changes? |\n| Coherence | `Δ = d(R,Q)` | How well did prediction match observation? |\n\nEach layer is conservative over the one above it: classification, obstruction, traversal and validation never rewrite the recursive generator. This is the **core alignment rule**: ARCH-1 lineage is preserved because the new operators are read-only with respect to `β`, `Ω`, `μ`.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "122422481349163e",
+            "text": "## The Ternary Classifier\n\n```\nτ : T → {+, 0, −}\nT = T₊ ∪ T₀ ∪ T₋          (pairwise disjoint)\n```\n\n| Class | Name | Definition | Diagnostic meaning |\n|-------|------|-----------|--------------------|\n| **+** | Reachable | Realisable under current conditions | The state can execute, the relation is active, the path is open |\n| **0** | Latent | Not currently realised, but not impossible | Waiting, pending, unresolved, dependency-bound |\n| **−** | Obstructed | Blocked by an active constraint | Denied, contradicted, broken, forbidden, invalid |\n\n**Fundamental ternary law:** `0 ≠ −`. A latent state is not an obstructed state. This is the whole framework in one line.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "2924f7c1be8ab8b8",
+            "text": "## Transition Algebra\n\nOnce the three classes exist, classification becomes dynamic: it moves as information, dependencies, resources, decisions, or constraints change. The algebra is deliberately minimal: enough to model delay, relief, denial, approval, runtime waiting, and dependency recovery **without requiring probability yet.**\n\n| Transition | Name | Meaning | Example |\n|------------|------|---------|---------|\n| `0 → +` | Resolution | Latent becomes reachable | A pending approval is granted |\n| `+ → 0` | Uncertainty | Reachable becomes unresolved | A requirement changes; the path needs review |\n| `0 → −` | Obstruction | Latent becomes blocked | A review returns denial or contradiction |\n| `− → 0` | Relief | Obstructed becomes latent | A blocking policy is amended; final approval still waits |\n| `+ → −` | Hard block | Reachable becomes blocked | Permission is revoked |\n| `− → +` | Bypass / remediation | Obstructed becomes reachable via alternate path | A backup route fully replaces the failed dependency |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "205db7b054454b35",
+            "text": "## Dependency Closure and Cascade\n\nReal systems rarely fail locally. Obstruction propagates through a dependency graph `D = (V,E)` whose edges represent prerequisite, authority, resource, or causal dependence.\n\n```\nO*  := closure_D(O)\nR   := T \\ O*\n```\n\nThe propagation rule depends on the **kind** of dependency:\n\n| Dependency type | Propagation effect | Example |\n|-----------------|--------------------|---------|\n| Hard | Obstruction propagates directly (`−`) | A payment cannot execute without required authorization |\n| Soft | Downstream state becomes latent (`0`) | A review continues but final approval waits |\n| Redundant | Propagates only if *all* paths fail | A service uses backup provider B if A fails |\n| Optional | No propagation unless policy requires it | A report publishes without the optional appendix |\n\nThe same upstream failure can therefore yield a hard cascade (`O* = {A,B,D,E}`) or a soft latency front (`B,D,E → 0`) depending purely on the dependency policy, and the framework makes that difference explicit rather than implicit in error logs.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "e5479a1bb9295559",
+            "text": "## Coherence Error Δ · the Validation Layer\n\nA model is only useful when it can be wrong in a measurable way. Let `Q` be observed outcomes and `d` a domain-specific distance metric:\n\n```\nΔ := d(R, Q)\n```\n\nPersistent high `Δ` is a **failure signal with named suspects**: hidden obstruction, wrong dependency structure, bad traversal, incomplete generation, telemetry error, or a poor metric. `Δ` is what converts ARCH-1R/T from a description into a falsifiable instrument. The Draft Review's falsification table:\n\n| Failure case | Formal signal | Likely cause |\n|--------------|---------------|--------------|\n| Predicted reachable, observed absent | `x ∈ R` but `x ∉ Q` | Hidden obstruction, bad traversal, bad observation |\n| Observed outside generated space | `x ∈ Q` but `x ∉ G` | Incomplete `β`/`Ω` model |\n| Latent misclassified as blocked | `x` marked `−` but resolves without structural change | Bad ternary classification |\n| Cascade missed | Downstream failure not in `O*` | Dependency graph incomplete |\n| Persistent high Δ | `Δ > ε` over repeated trials | Framework inadequate for the domain |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "d493c6c883eb8808",
+            "text": "## Domain Instantiations (extended)\n\nARCH-1 locked three domains. ARCH-1R/T keeps them and adds two **engineering** instantiations where the reachability layers earn their keep:\n\n| Domain | Anchor β | Constructor Ω | Generated space | Status |\n|--------|----------|---------------|-----------------|--------|\n| Boolean | `x` | NAND | Boolean expressions | Strongest formal case (NAND completeness established) |\n| Continuous / EML | `1` | `eml` | Constructive continuous expressions | Research instantiation; completeness requires proof |\n| Sovereignty / Blade | `null` | `blade` | Action / agency paths | Symbolic & operational hypothesis; not yet a theorem |\n| **Runtime systems** | initial state | action constructor | Reachable runtime state space | Engineering instantiation; testable by simulation & replay |\n| **UOR-relational** | entity / relation seed | relation constructor | Generated relational structure | Philosophically aligned; operationally modelable |\n\nThe careful claim is **not** that these domains are identical: it is that they share an architecture of *anchor, binary constructor, recursive closure*, and now a shared *traversal-obstruction-classification-validation* stack on top.\n\n### The UOR lift\n\nThe relational instantiation is the most consequential for the agentprivacy programme. UOR treats **relations** as primary, so `τ` classifies edges rather than nodes:\n\n```\nrel(a,b) ∈ T\nτ( rel(a,b) ) ∈ {+, 0, −}\n```\n\n`rel(person, authority) = +`, `rel(person, pending_authority) = 0`, `rel(person, forbidden_action) = −`. This is strictly stronger than object-only modelling: the person may exist and the action may exist, yet the *relation authorising the person to perform the action* can independently be latent or obstructed. Obstruction attaches to the relation itself, exactly the granularity sovereignty work needs.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "88264d5d54b9d17b",
+            "text": "## What ARCH-1R/T Adds Beneath the Three Ceilings\n\nARCH-1 showed the three reconstruction ceilings (information / dynamics / computation) factor onto the three components of the schema (`β` / `μS` / `Ω`). ARCH-1R/T does not add a fourth ceiling: it adds the **operational machinery** by which an adversary's, or an agent's, *path* either reaches a state or is held latent/obstructed. Where the ceilings answer \"can it be reconstructed at all,\" ARCH-1R/T answers \"given the walk and its dependency cascade, is it reachable *now*, and how far is our prediction from reality.\" `ρ` is the same activation engine ARCH-1 named non-optional, the canonical `neg ⊕ bnot`. What R/T adds is an operational *reading* of its orbit (the scheduler, planner, proof search, or agent policy that walks `T = orbit(ρ, G)`) and a conscience, `Δ`, never a new definition of `ρ`.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c7ab4667462ec434",
+            "text": "## Planning as Latency Conversion\n\nThe framework gives planning a one-line definition: **planning is the search for transitions that move required latent states from `0` to `+` while avoiding `0 → −`.**\n\n```\ngoal g ∈ T₀\npre(g) ⊆ T₀                 -- prerequisites are latent\nresolve pre(g):  0 → +       -- ρ chooses a path through prerequisites\nresolve g:       0 → +       -- goal becomes reachable and is realised\n```\n\nThe central question is no longer only *can we reach the goal* but *what must move from `0` to `+` for the goal to become reachable.* Resilience falls out of the same frame: a system is resilient when required states stay `+` or recover from `0` despite obstruction. Agency becomes investigable as **the capacity to transform `0` into `+` under constraint** (hypothesis, not theorem, but now a formally stated one).\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "d15d4484468685b7",
+            "text": "## Operational Translation (pseudocode)\n\nThe Draft Review renders the calculus directly:\n\n```python\ndef classify_state(x, context):\n    if hard_obstruction_exists(x, context):\n        return '-'\n    if prerequisites_pending(x, context):\n        return '0'\n    if executable_now(x, context):\n        return '+'\n    return '0'\n\ndef dependency_closure(obstructions, graph, policy):\n    closed, frontier = set(obstructions), list(obstructions)\n    while frontier:\n        node = frontier.pop()\n        for child in graph.downstream(node):\n            if policy.propagates(node, child) and child not in closed:\n                closed.add(child); frontier.append(child)\n    return closed\n\ndef arch1rt_step(beta, omega, rho, graph, O, Q, metric):\n    G       = closure(beta, omega)\n    T       = rho(G)\n    O_star  = dependency_closure(O, graph, policy='domain-specific')\n    R       = T - O_star\n    labels  = {x: classify_state(x, context=(T, O_star, graph)) for x in T}\n    Delta   = metric(R, Q)\n    return G, T, O_star, R, labels, Delta\n```\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "517e1b38500f873e",
+            "text": "## Proposed Quantification (next, not now)\n\nThe ternary system is qualitative by design. The Draft Review proposes a graded layer **only after** the ternary model is stable, preserving the three categories rather than dissolving them:\n\n```\nσ : T → [0,1]               -- graded reachability score\n   + if σ(x) > θ₊\n   0 if θ₋ ≤ σ(x) ≤ θ₊\n   − if σ(x) < θ₋\nC : T → ℝ≥0                  -- cost function\nP_λ := { x ∈ R | C(x) ≤ λ }  -- practically reachable within budget λ\n```\n\n`C` captures that a state may be reachable yet too expensive, too slow, or too risky: *practical* reachability versus *structural* reachability.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "615ddeb6add2c8b7",
+            "text": "## What Is Actually New\n\nNone of the components (recursion, state transitions, dependency closure, constraints, validation metrics) is individually unprecedented (the neighbours are term algebras, ADTs, state-transition systems, Petri nets, workflow calculi, planning systems, dependency graphs, control theory, runtime monitoring). The distinctive contribution is the **single lineage**: recursive generation → traversal → obstruction → ternary classification → coherence validation, all preserving the original kernel.\n\n> **One-sentence result:** ARCH-1R/T is a reachability and coherence calculus built on recursive generation, where the most important operational distinction is that *latent is not obstructed.*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "d9ba9cd1d6fcd5a5",
+            "text": "## What ARCH-1R/T Is Not\n\n- It is **not a new kernel.** `β`, `Ω`, `μ`, `G` are preserved unchanged; every new layer is downstream and read-only with respect to them.\n- It is **not a probabilistic model yet.** The transition algebra is intentionally minimal; `σ` and `C` are proposals deferred until the ternary core is stable.\n- It does **not** claim the five domains are identical, only that they share the anchor/constructor/closure architecture plus the traversal-obstruction-classification-validation stack.\n- The runtime and UOR instantiations are **engineering and philosophical** instantiations, not proven theorems; their value is testability (`Δ`), not certainty.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "8c81755dd4df5769",
+            "text": "## New Conjectures\n\nThese continue the live register from head C66 (2026-05-28). C67–C69 are the convergence triad shared verbatim with the letter to Haines; C70–C71 admit the two operational claims of this note that carry content beyond the triad. Numbering is provisional against the live register; confirm before pinning.\n\n| ID | Claim | Confidence |\n|----|-------|------------|\n| C67 | The traversal `ρ` of ARCH-1R/T and the activation `ρ` of ARCH-1 are one operator at two scopes: `T = orbit(ρ, G)`, and the dual factoring `ρ⚔️ ⊥ ρ🧙` (neg ⊥ bnot) is already present, not a fix R/T owes. Capped at or below C27 (35%) because it is downstream of \"ρ is not optional\"; a claim about how R/T should bind `ρ`, not how it currently does. | ~35% |\n| C68 | Terminal-obstruction (structural loss of `β`) is a primitive obstruction class distinct from path-obstruction (`O ⊆ T`); the Amnesia Protocol is its canonical instance; it belongs in R/T's primitive-obstruction set, answering §28 Q8. The highest of the three: the gap is a fact established by reading the formalism, only the promotion is conjectural. | ~50% |\n| C69 | Latency (the ternary `0`) has an algebraic signature on the blade lattice: a stratum or blade-class where the `neg ⊕ bnot` walk has not yet closed, rather than a runtime annotation applied after traversal. The most speculative; held low until there is an explicit construction of open-walk states on Z/(2⁶)Z proven to correspond to `τ = 0`. | ~25% |\n| C70 | Dependency closure `O* = closure_D(O)` under typed propagation (hard / soft / redundant / optional) models real cascade behaviour, and the hard-vs-soft split is exactly the `−`-vs-`0` ternary distinction lifted to propagation: the neutral law `0 ≠ −` therefore governs cascade, not only single-state classification. | ~35% |\n| C71 | The UOR-relational instantiation, classifying `rel(a,b)` rather than entities, is strictly more expressive than object-only modelling for sovereignty, because authorisation obstruction attaches to the relation independently of the existence of either relatum. | ~30% |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "48d824e4addcc5fa",
+            "text": "## V6 Horizon (updated)\n\nARCH-1 reframed V6 as the recognition that V5's multiplicative gating, V5.3's operational cycle, and the forge architecture are domain-specific instances of one canonical form. ARCH-1R/T adds the **second half of the programme**: once the form is named, the operational question is reachability under traversal, obstruction, and cascade, and the validation question is `Δ`. The proposed roadmap (from the Draft Review):\n\n1. Lock the notation hierarchy: `G, T, O*, R, τ, Q, Δ`.\n2. Define obstruction-transformation laws: relief, bypass, displacement, inversion, cascade damping (obstruction algebra v2).\n3. Implement a toy graph simulator with hard / soft / redundant / optional dependencies.\n4. Compare binary vs ternary reachability on false-failure classification.\n5. Add `σ` scoring and cost `C` **only after** the ternary model is stable.\n6. Position against state machines, Petri nets, planning systems, dependency graphs, and process calculi.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "0076f379c4d319f0",
+            "text": "## Weaknesses and Current Limits\n\n| Limit | Why it matters | Next fix |\n|-------|----------------|----------|\n| No built-in cost model | Reachable and expensive treated the same | Add `C : T → ℝ≥0` and `P_λ` |\n| No built-in probability | Rare and likely paths treated the same | Add probabilistic traversal / confidence scoring |\n| Single `ρ` too simple | Distributed systems use many traversal engines | Use `ρᵢ` with composition rules |\n| Obstruction transforms early | Relief / bypass / displacement / inversion lack formal laws | Develop obstruction algebra v2 |\n| Distance metric unspecified | `Δ` needs a domain-specific definition | Define metric families per domain |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "ed7d8f96f9538ae4",
+            "text": "## References\n\n- Haines, J. / Chaos Rider (2026). *ARCH-1R/T Operational Reachability Framework, Draft Review v2.0.* June 2026. [Source of this note.]\n- Haines, J. & privacymage (2026). \"ARCH-1 Schema.\" Internal conversation, April 14. → [V6 ARCH-1 Canonical Form Note](./pvm-v6-arch1-canonical-form.md)\n- Sheffer, H. M. (1913). \"A set of five independent postulates for Boolean algebras.\" *Trans. AMS,* 14(4), 481–488.\n- Odrzywołek, A. (2026). \"All elementary functions from a single operator.\" arXiv:2603.21852v2 [cs.SC].\n- privacymage (2026). \"PVM V5.4 Formal Specification.\" v2.0. *agentprivacy-docs.*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "4677d2d0e079eacd",
+            "text": "## The Proverb\n\n*ARCH-1 named what could be generated. ARCH-1R/T named what could be reached.*\n\n*The kernel makes the territory. Traversal walks it. Obstruction blocks it. Dependency carries the block downstream. The ternary law guards the difference between the closed door and the door not yet opened.*\n\n*Not yet is not never. That is the whole spell.*\n\n*`Δ := d( ρ(Closure_Ω(β)) \\ closure_D(O), Q )`*\n\n*The sword attends. The spell returns. The path waits in `0` until the forge calls it to `+`.*\n\n---\n\n*`0 ≠ −`*\n\n*`G → T → R`, and `Δ` keeps us honest.*\n\n*Same kernel. Five domains. One walk.*\n\n—privacymage / Soulbae, with John Haines / Xarvus / Chaos Rider\nJune 4, 2026"
+          },
+          {
+            "type": "markdown",
+            "id": "59bdc897c925c7c3",
+            "text": "# Assets"
+          },
+          {
+            "id": "c911bfd8d2662827",
+            "type": "assets",
+            "text": "note-pvm-v6-arch1rt-operational-reachability"
+          },
+          {
+            "type": "markdown",
+            "id": "744f59d5a7b6a3c4",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Research Notes]]"
+          }
+        ]
+      },
+      "date": 1787079756407
+    }
+  ]
+}

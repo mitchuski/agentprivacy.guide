@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — context-card · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — context-card</span></div>
+  <article><div class="md"><h1>context-card — the §6.8 human-legibility instrument (X2)</h1>
+<p><strong>What this is.</strong> The decision document&#39;s six-question human-legibility test (§6.8) made runnable:<br>a <em>context card</em> generated from the §6.2 canonical context descriptor itself, so the user-facing<br>description provably matches the cryptographic configuration. The §26 requirement — &quot;evidence that<br>user-facing context descriptions match the cryptographic domain&quot; (§6.7 last authority duty) — becomes<br>a <strong>derivation, not an audit</strong>: the card carries the descriptor digest, the §15.2 transcript binds the<br>same digest, and a mismatch is a named build failure (<code>digest-mismatch</code>), not a finding.</p>
+<p><strong>Run:</strong> <code>node test.mjs</code> → 13/13 · <code>node demo.mjs</code> → the rt 07 trust-graph-formation community-vote<br>context rendered end-to-end (X2 M4 worked example; the MyTerms term↔field table stays in the design doc).<br><strong>Reuses:</strong> <code>../canonical/canonical.mjs</code> (§6.2 encoding + digest — one encoding, shared).</p>
+</div>
+<div class="md"><h2>The field → question map (X2 design point 2)</h2>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>§6.8 question</th>
+<th>§6.2 descriptor inputs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>q1</td>
+<td>What activity is this proof for?</td>
+<td><code>purpose</code> · <code>scope</code></td>
+</tr>
+<tr>
+<td>q2</td>
+<td>Who can recognise repeat use?</td>
+<td><code>verifierSet</code> · <code>contextAuthority</code></td>
+</tr>
+<tr>
+<td>q3</td>
+<td>For how long is repeat use linkable?</td>
+<td><code>epoch</code> · <code>epochPolicy</code> · <code>retentionPolicy</code></td>
+</tr>
+<tr>
+<td>q4</td>
+<td>What happens when the epoch changes?</td>
+<td><code>epochPolicy</code> · <code>nullifierVersion</code></td>
+</tr>
+<tr>
+<td>q5</td>
+<td>Does fallback change who observes?</td>
+<td><code>provingMode</code> render <em>option</em> (§21.2) — not a §6.2 field; absent ⇒ &quot;local proving only — no additional observer&quot;</td>
+</tr>
+<tr>
+<td>q6</td>
+<td>How do I challenge a decision?</td>
+<td><code>contextAuthority</code> (§6.7 correction/appeal/challenge route)</td>
+</tr>
+</tbody></table>
+<p><code>protocol</code>, <code>profile</code>, <code>contextPolicy</code> (and optional <code>registryDomain</code>) carry recorded<br>non-materiality justifications instead: version/identifier pins whose operational content is already<br>rendered through q1–q6, surfaced via the digest (§6.8: internals need not be exposed — but the<br>omission is recorded, never silent). <code>checkLegibility</code> re-verifies coverage from the card <em>text</em><br>(each mapped field&#39;s value must appear in its question), so a stripped mapping fails by name<br>(<code>unrendered-field:&lt;name&gt;</code>).</p>
+<p><strong>Narrow language (§5.12).</strong> The repeat-use answers use the mandatory phrase verbatim — verifiers<br>&quot;recognise repeat use (scoped reuse detection)&quot; — and the checker sweeps all card text for the<br>forbidden broad-personhood phrasing as a named failure.</p>
+<p><strong>Expansion made visible (§6.6/§6.7).</strong> <code>diffCards</code> versions the card by digest and flags<br><code>expansion=true</code> when q2 (recognition set — conservatively, any change: opaque identifiers can&#39;t<br>prove a subset) or q3 (linkability window — duration-compared; a shrink is a delta, not an<br>expansion) widened. What silent expansion looks like to a person is a card that didn&#39;t change when<br>the domain did — which the derivation makes impossible.</p>
+</div>
+<div class="md"><h2>Boundary notes (recap from X2)</h2>
+<p>A person relying on a card may rely on: <em>this rendering was derived from the same canonical<br>descriptor the proof transcript binds</em>. They must <strong>not</strong> infer that verifiers <em>behave</em> within the<br>described boundary — <strong>the card states the governed domain, not runtime compliance</strong> — nor that the<br>authority&#39;s policy is fair, nor that an accurate card implies informed consent. The card is itself a<br>surface: serve from the wallet or cache-bundled, never as a per-presentation remote lookup (§20).</p>
+</div>
+<div class="md"><h2>Pointers</h2>
+<ul>
+<li>Design doc: <a class="wlink" href="x2-context-legibility-instrument.html">X2 — Context Legibility Instrument</a> (research root — M1–M4 here, M5 pending).</li>
+<li>Candidate upstream surface: a §27.4 Human Experience workstream note — &quot;the §6.8 test as a<br>derivation instrument,&quot; with this checker as evidence.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-context-card.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

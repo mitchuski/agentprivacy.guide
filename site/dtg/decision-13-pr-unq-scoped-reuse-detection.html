@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decision §13 — PR-UNQ: scoped reuse detection · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Decision §13 — PR-UNQ: scoped reuse detection</span></div>
+  <article><div class="md"><h2>13. PR-UNQ: scoped reuse detection</h2>
+<h3>13.1 Statement established</h3>
+<p>For a specified enrolled secret, context, scope, purpose, and epoch, the proof derives a deterministic nullifier such that a verifier or governed verifier set can detect a repeated accepted action within that domain.</p>
+<p>The narrow assurance statement is:</p>
+<blockquote>
+<p>The same enrolled secret cannot produce two accepted actions in the same context, scope, purpose, and epoch without producing the same nullifier, assuming correct enrolment binding and construction implementation.</p>
+</blockquote>
+<h3>13.2 Negative meaning</h3>
+<p>PR-UNQ does not establish:</p>
+<ul>
+<li>one unique human globally;</li>
+<li>one enrolment per issuer or ecosystem;</li>
+<li>that the biometric commitment cannot be duplicated or fraudulently issued;</li>
+<li>that two different secrets cannot belong to the same natural person;</li>
+<li>that one secret cannot be controlled by multiple people;</li>
+<li>cross-context identity;</li>
+<li>absence of coercion or account sharing.</li>
+</ul>
+<h3>13.3 Assurance dependencies</h3>
+<p>The strength of the uniqueness claim depends on:</p>
+<ul>
+<li>biometric match and deduplication quality;</li>
+<li>resistance to re-enrolment;</li>
+<li>recovery, rotation, and exception rules;</li>
+<li>issuer coordination and common-root semantics;</li>
+<li>binding between the committed secret and enrolment root;</li>
+<li>nullifier domain separation;</li>
+<li>epoch authority and rollover;</li>
+<li>verifier acceptance and state consistency;</li>
+<li>compromise and collusion assumptions.</li>
+</ul>
+<p>Only scoped reuse detection is primarily cryptographic. One enrolment per issuer or ecosystem is a biometric and governance property. One natural person globally is outside the default V1 claim.</p>
+<h3>13.4 Nullifier input requirements</h3>
+<p>The nullifier statement MUST unambiguously bind:</p>
+<ul>
+<li>enrolment-root or population commitment identifier;</li>
+<li>canonical context descriptor;</li>
+<li>scope identifier;</li>
+<li>purpose identifier;</li>
+<li>epoch identifier;</li>
+<li>profile and construction version;</li>
+<li>recovery or rotation domain where applicable;</li>
+<li>holder or enrolment secret.</li>
+</ul>
+<h3>13.5 Disclosure</h3>
+<p>The verifier learns a stable pseudonymous value within the defined domain. This intentionally enables within-domain linkage. The profile MUST state who retains the nullifier, for how long, and whether multiple verifiers share the same state.</p>
+<p>The nullifier MUST be unlinkable across contexts to the degree asserted by the declared adversary model. Schema fields, status traffic, issuer-held data, network identifiers, and exact timing may weaken that claim and MUST be evaluated together.</p>
+<h3>13.6 Failure handling and redress</h3>
+<p>A repeated nullifier may result from legitimate retry, race conditions, recovery, epoch disagreement, verifier duplication, or malicious reuse. The profile MUST define deterministic error semantics and a challenge route. A person MUST NOT be permanently excluded by an opaque uniqueness result without correction and appeal mechanisms.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="decision-13-pr-unq-scoped-reuse-detection.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

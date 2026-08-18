@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X5 — Recovery and Rotation · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X5 — Recovery and Rotation</span></div>
+  <article><div class="md"><h1>X5 — Recovery and rotation without correlators</h1>
+<p><em>Enrolled secrets get lost, compromised, and time-bounded — §22.2 makes rotation mandatory, not<br>exceptional. But naive recovery (re-enrol via biometric → issuer links old and new) creates exactly the<br>reusable enrolment-root correlator §6.6 prohibits. This doc separates the cases and states the trades.</em></p>
+<p><strong>Register:</strong> §29 research item (&quot;biometric-derived secret rotation&quot;) · O2 open question · leverage 🔴<br><strong>Ladder:</strong> reference built 2026-07-18 — <a class="wlink" href="lab-rotation.html">Lab — rotation</a> 10/10: routine<br>derivation + descent check, issuer-blind recovery with structural no-old→new audit, rate-limited<br>recovery-domain nullifier, reform-vs-continue edge rekey over rt 07. Built ADDITIVE (rt 01 imported,<br>never modified — its byte-stability is a fixtures dependency). Guardian recovery + PQ migration<br>deferred. See its NOTES.md<br><strong>Anchor (cred-spec):</strong> PHC/VMC enrolment lifecycle · R-DID per-counterparty freshness (rotation must not<br>break it).<br><strong>Anchor (decision doc):</strong> §29 · §22 lifecycle (§22.2 unbounded prohibited, §22.3 migration) · §13.3<br>(&quot;recovery, rotation, and exception rules&quot;) · §13.4 (&quot;recovery or rotation domain&quot; nullifier input) ·<br>§13.6 failure/redress · §5.11 enrolment root · §6.6 prohibited cross-context linkage.</p>
+<hr>
+</div>
+<div class="md"><h2>The tension (decision-doc language, adopted verbatim)</h2>
+<p>Recovery requires <em>some</em> continuity: the issuer must know a new enrolment replaces an old one, or the<br>person walks away holding two live PHCs — a Sybil the nullifier cannot see, because a nullifier is &quot;a<br>deterministic, domain-separated value used to detect repeated use of the same enrolled secret&quot; (§5.12) and<br>a recovered person holds a <em>different</em> secret. But continuity is a correlator: a stored old→new link is &quot;a<br>reusable enrolment-root identifier&quot; in issuer hands, prohibited at the verifier surface (§6.6) and a §2.4<br>claim-killer under issuer-verifier collusion (§6.4). The claim to design for:</p>
+<blockquote>
+<p>Rotation and recovery preserve the PR-UNQ guarantee (§13.1) across the secret change, without giving any<br>party a persistent identifier that links pre- and post-event presentations across contexts.</p>
+</blockquote>
+<p>§22.2 sets the stakes: an enrolment root without a cryptoperiod is non-conformant, so <em>every</em> conformant<br>deployment rotates — this is lifecycle, not an edge case.</p>
+</div>
+<div class="md"><h2>First cut: two cases that must never share a mechanism</h2>
+<ul>
+<li><strong>Routine epoch rotation (holder-side, no enrolment contact).</strong> Derive epoch keys from a master secret by<br>one-way, domain-separated derivation (pools-lineage discipline): <code>s_epoch = H_domain(s_master, epoch-id)</code>,<br>with the commitment scheme proving consistent descent from the enrolled commitment. Epoch rollover (§5.8,<br>§22.1&#39;s separate clocks) then <em>never</em> touches the issuer or the biometric. The enrolment-root cryptoperiod<br>(§5.10) and the nullifier epoch rotate on different clocks by construction.</li>
+<li><strong>Catastrophic loss/compromise (enrolment-level recovery).</strong> Only when the master secret itself is lost or<br>compromised does anyone re-enter enrolment. Patterns below are for this case alone. A profile that routes<br>routine rotation through re-enrolment has built a periodic biometric correlator into its lifecycle.</li>
+</ul>
+</div>
+<div class="md"><h2>Recovery patterns and their trade positions</h2>
+<ol>
+<li><strong>Issuer-blind replacement.</strong> Holder revokes the old credential (status change, §10.1 semantics), then<br>fresh-enrols; the biometric deduplication — not a stored link — is what prevents the person holding two<br>live enrolments. The issuer learns &quot;someone re-enrolled&quot; but not who replaced whom. Trade: the whole<br>anti-duplication burden shifts onto dedup quality and resistance to re-enrolment — exactly §13.3&#39;s<br>assurance-dependency list — and revocation-then-enrolment timing correlation at the issuer must be<br>assessed (§19: issuer as observer; coarse timing per §20).</li>
+<li><strong>Recovery-domain nullifiers.</strong> §13.4 already requires the nullifier statement to bind a &quot;recovery or<br>rotation domain where applicable.&quot; Scope a nullifier to the <em>recovery event itself</em>: same enrolled<br>biometric commitment, context = the governed recovery domain, so repeated recovery is reuse-detected and<br>rate-limited (§6.5: rate/count thresholds are intentional in-context linkage) without any persistent<br>old→new link. This bounds pattern 1&#39;s dedup dependency: even if dedup misses, the recovery domain catches<br>high-frequency abuse. Retention of the recovery nullifier is epoch-bounded like any other (§22.2).</li>
+<li><strong>Social/threshold recovery.</strong> Guardians attest continuity (&quot;this new commitment belongs to the person<br>we knew under the old one&quot;); the biometric is never re-touched. The correlator does not vanish — it moves<br>from issuer to guardian set. Stated in §2.4 form: <em>against whom</em> — resistant to issuer and verifier, not<br>to t-of-n colluding guardians; <em>for how long</em> — the guardian set&#39;s memory, unbounded unless the<br>attestation is epoch-scoped; <em>alongside what</em> — guardian-selection metadata (who guards whom is itself a<br>social graph). Fits the cred-spec&#39;s community-anchored construction; the guardian attestation is<br>structured evidence, kept separate from holder-key control (§7.3 discipline).</li>
+<li><strong>Edge continuity vs edge re-formation (standing VRCs/VMCs).</strong> Rotation changes what counterparties see.<br>Two honest options: (a) <em>re-formation</em> — old edges die with the old secret and trust is re-established;<br>costly but leak-free. (b) <em>continuity</em> — a bridging proof (&quot;new secret descends from / replaces the<br>enrolment behind the old edge&quot;) re-keys the edge; but the counterparty then learns &quot;same person, new<br>key,&quot; which is precisely a cross-epoch link, tolerable only <em>within</em> the edge&#39;s own governed context<br>(§6.5), never exportable across contexts (§6.6). A profile MUST pick per edge type and state it; silent<br>continuity is a silent context expansion (§6.7).</li>
+</ol>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li>Runtime 01 (<a class="wlink" href="lab-01-uniqueness-nullifier.html">Lab — 01-uniqueness-nullifier</a>) — the construction being recovered:<br><code>enrol → (s, r, commitment)</code>, nullifier <code>H_domain(s, ctx)</code>, 9/9 properties. No rotation story yet; P4<br>(self-Sybil) is the property recovery must <em>preserve</em>.</li>
+<li>O2&#39;s statement already carries the §13.4 recovery-domain input as an explicit nullifier binding — unfilled.</li>
+<li>Pools lineage (O6 in <a class="wlink" href="o5-o6-o8-supporting-notes.html">O5 O6 O8 — Supporting Notes</a>): one-way domain-separated key derivation for rotation is<br>proven discipline there; the mapping onto §29 was flagged as O2&#39;s open question and is this doc.</li>
+<li>§13.6 gives the redress frame: a repeated nullifier &quot;may result from … recovery&quot; — recovery must be a<br>named, deterministic error-semantics branch, not an anomaly (§26.1 negative-test material).</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — lifecycle record.</strong> Draft the §22.1 clock table for rt 01: nullifier epoch vs enrolment-root<br>cryptoperiod vs recovery-domain retention; state which clock each pattern touches.</li>
+<li><strong>M2 — hierarchical derivation in the reference model.</strong> Add <code>s_epoch = H_domain(s_master, epoch)</code> to<br>runtime 01 with two new properties: rotation preserves P4 within the new epoch; pre/post-rotation<br>nullifiers are unlinkable across epochs (extends P2).</li>
+<li><strong>M3 — recovery-domain nullifier.</strong> Model the recovery context as a governed §6.2 descriptor; property:<br>k recoveries in one recovery epoch are reuse-detected; recovery leaves no old→new value in issuer state.</li>
+<li><strong>M4 — boundary pair for the recovery event.</strong> Assurance + disclosure records (§26) for &quot;credential<br>replaced&quot;: against whom, for how long, alongside what — including the issuer&#39;s revocation/enrolment<br>timing view and the guardian-set variant.</li>
+<li><strong>M5 — edge-rekey note.</strong> With rt 07 (trust-graph formation): what a VRC counterparty observes under<br>re-formation vs continuity; feed the per-edge-type decision into O9&#39;s schema extension discussion.</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<ul>
+<li>A direct contribution to §29&#39;s open research item: the case split (routine rotation never touches<br>enrolment; only catastrophic loss does) plus the recovery-domain nullifier turn &quot;open question&quot; into a<br>decidable profile choice with stated trades.</li>
+<li>Fills the §13.4 &quot;recovery or rotation domain&quot; input with concrete semantics and a fixture.</li>
+<li>Feeds §13.6: recovery as a named cause of repeated nullifiers, with deterministic error semantics and a<br>challenge route.</li>
+<li>To the Credentials TF: rotation must not break R-DID per-counterparty freshness — the edge-rekey analysis<br>(pattern 4) is the shared surface.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Can descent-from-enrolment be proved <em>without</em> the issuer learning rotation cadence (proof shape or<br>status traffic may fingerprint rotators — §10.4/§20 class leakage)?</li>
+<li>Guardian-set attestations: do they need their own epoch/cryptoperiod under §22.2, and who is the §6.7<br>authority for the recovery context?</li>
+<li>Compromise (attacker holds the old secret) vs loss (nobody does): does the old-secret-revocation race in<br>pattern 1 need a freshness rule of its own, and what does the attacker&#39;s window look like in §2.4 terms?</li>
+<li>Post-quantum migration (§22.3, §29): is enrolment-level recovery the natural vehicle for migrating<br>long-lived enrolment artefacts, or must migration be holder-side like routine rotation?</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x5-recovery-and-rotation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,106 @@
+{
+  "title": "Understanding Compression",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "e8ba4c4c0495a836",
+      "text": "# understanding-compression"
+    },
+    {
+      "type": "markdown",
+      "id": "6c3184291b4d8476",
+      "text": "> Take a unified semantic core (e."
+    },
+    {
+      "type": "markdown",
+      "id": "4a86176cb572fe9d",
+      "text": "# understanding-compression\n\nOne meaning, many tellings, provably the same. This skill formalises a recursion:\n\n```\n            COMPRESS  ->  maths | principles | actions      (strip to the invariant)\n  INVARIANT\n            EXPAND    ->  markets | plurality | intents     (re-tell for audiences)\n```\n\n- **Compressions** discard audience and surface; they keep only what is invariant -\n  expressed as a *number/formula* (maths), a *law/axiom* (principles), or a *minimal doable*\n  (actions).\n- **Expansions** add audience back: a *value/incentive* framing (markets), a set of\n  *community-specific tellings* (plurality, >=2), and the *goals/why* (intents).\n- The loop **closes** with a re-compression check: take one expansion, compress it again,\n  and assert the recovered invariant matches the original. That round-trip IS the coherence\n  test for meaning - the semantic sibling of `fedwiki-cohere-sync`'s page-level checker."
+    },
+    {
+      "type": "markdown",
+      "id": "75f0fa7b5667d430",
+      "text": "## Workflow\n1. **seed** - build blank \"understanding cards\" from a `wiki-to-pdf` `model.json`. Each card\n   is pre-seeded with `invariant_seed` (the milestone's five In-briefs).\n   ```\n   python understanding.py seed                       # -> cards.json\n   ```\n2. **author** (the judgement step - you, guided by this file): for each card, distill the\n   `invariant` to ONE sentence that survives every re-telling, then fill the three\n   compressions and three expansions. Keep the same invariant across all plurality tellings;\n   only the surface changes. Finish each card's `recheck`: pick one expansion (`from`),\n   compress it back to a `recovered_invariant`, set `matches: true` only if it really matches.\n3. **cohere** - gate the work (non-zero exit blocks):\n   ```\n   python understanding.py cohere --cards cards.json\n   ```\n   Fails on: empty invariant/axis, <2 plurality communities, missing recheck, or round-trip\n   drift (recovered invariant shares <25% of the invariant's key terms).\n4. **render** - formal PDF (purple \"understanding\" layer), per milestone: Invariant ->\n   Compressions table -> Expansions (plurality fanned by community) -> round-trip line.\n   ```\n   python understanding.py render --cards cards.json    # -> out/understanding.pdf\n   ```"
+    },
+    {
+      "type": "markdown",
+      "id": "37371aec4ba190d0",
+      "text": "## Authoring guidance\n- **Invariant**: the thing a developer, a funder and an artist would all agree is *the same\n  claim*, with all framing removed. If two communities would dispute it, it's not invariant -\n  push more surface into the expansions.\n- **maths**: prefer real quantities/relations from the source (counts, rates, prizes, dates),\n  not decoration. A formula or an inequality is ideal.\n- **principles**: a one-line law (\"X compounds Y\"). Should read as true beyond this milestone.\n- **actions**: what someone does on Monday. Minimal, concrete, checkable.\n- **markets**: who pays/earns/exchanges what; the incentive that makes it self-sustaining.\n- **plurality**: >=2 audiences, each told in *their* language and stakes - same invariant.\n- **intents**: the underlying goal; why it's worth doing at all.\n- **recheck**: be honest. If compressing an expansion doesn't recover the invariant, the\n  expansion drifted (or the invariant was too narrow). Fix one of them - that's the recursion."
+    },
+    {
+      "type": "markdown",
+      "id": "f18b8fed6ee8344b",
+      "text": "## Demo\n`agm-demo.json` is a fully-authored card for AGM 2027 (passes cohere; rendered to\n`out/understanding-agm-demo.pdf`). Use it as the worked example of the format."
+    },
+    {
+      "type": "markdown",
+      "id": "3ba33ba230aeeb53",
+      "text": "## Pipeline\n- Upstream: `wiki-to-pdf` produces `model.json` + the dossier's **Unified Summary** (the core).\n- This skill expands that core per community and proves the round-trip.\n- Sibling: `fedwiki-cohere-sync` checks coherence at the *page* level; this checks it at the\n  *meaning* level."
+    },
+    {
+      "type": "markdown",
+      "id": "1c763a18edacfa19",
+      "text": "## Dependencies\nPython 3 + `reportlab` (render only). seed/cohere are pure-stdlib."
+    },
+    {
+      "type": "markdown",
+      "id": "6c88b29f4c58ac57",
+      "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Understanding Compression",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "e8ba4c4c0495a836",
+            "text": "# understanding-compression"
+          },
+          {
+            "type": "markdown",
+            "id": "6c3184291b4d8476",
+            "text": "> Take a unified semantic core (e."
+          },
+          {
+            "type": "markdown",
+            "id": "4a86176cb572fe9d",
+            "text": "# understanding-compression\n\nOne meaning, many tellings, provably the same. This skill formalises a recursion:\n\n```\n            COMPRESS  ->  maths | principles | actions      (strip to the invariant)\n  INVARIANT\n            EXPAND    ->  markets | plurality | intents     (re-tell for audiences)\n```\n\n- **Compressions** discard audience and surface; they keep only what is invariant -\n  expressed as a *number/formula* (maths), a *law/axiom* (principles), or a *minimal doable*\n  (actions).\n- **Expansions** add audience back: a *value/incentive* framing (markets), a set of\n  *community-specific tellings* (plurality, >=2), and the *goals/why* (intents).\n- The loop **closes** with a re-compression check: take one expansion, compress it again,\n  and assert the recovered invariant matches the original. That round-trip IS the coherence\n  test for meaning - the semantic sibling of `fedwiki-cohere-sync`'s page-level checker."
+          },
+          {
+            "type": "markdown",
+            "id": "75f0fa7b5667d430",
+            "text": "## Workflow\n1. **seed** - build blank \"understanding cards\" from a `wiki-to-pdf` `model.json`. Each card\n   is pre-seeded with `invariant_seed` (the milestone's five In-briefs).\n   ```\n   python understanding.py seed                       # -> cards.json\n   ```\n2. **author** (the judgement step - you, guided by this file): for each card, distill the\n   `invariant` to ONE sentence that survives every re-telling, then fill the three\n   compressions and three expansions. Keep the same invariant across all plurality tellings;\n   only the surface changes. Finish each card's `recheck`: pick one expansion (`from`),\n   compress it back to a `recovered_invariant`, set `matches: true` only if it really matches.\n3. **cohere** - gate the work (non-zero exit blocks):\n   ```\n   python understanding.py cohere --cards cards.json\n   ```\n   Fails on: empty invariant/axis, <2 plurality communities, missing recheck, or round-trip\n   drift (recovered invariant shares <25% of the invariant's key terms).\n4. **render** - formal PDF (purple \"understanding\" layer), per milestone: Invariant ->\n   Compressions table -> Expansions (plurality fanned by community) -> round-trip line.\n   ```\n   python understanding.py render --cards cards.json    # -> out/understanding.pdf\n   ```"
+          },
+          {
+            "type": "markdown",
+            "id": "37371aec4ba190d0",
+            "text": "## Authoring guidance\n- **Invariant**: the thing a developer, a funder and an artist would all agree is *the same\n  claim*, with all framing removed. If two communities would dispute it, it's not invariant -\n  push more surface into the expansions.\n- **maths**: prefer real quantities/relations from the source (counts, rates, prizes, dates),\n  not decoration. A formula or an inequality is ideal.\n- **principles**: a one-line law (\"X compounds Y\"). Should read as true beyond this milestone.\n- **actions**: what someone does on Monday. Minimal, concrete, checkable.\n- **markets**: who pays/earns/exchanges what; the incentive that makes it self-sustaining.\n- **plurality**: >=2 audiences, each told in *their* language and stakes - same invariant.\n- **intents**: the underlying goal; why it's worth doing at all.\n- **recheck**: be honest. If compressing an expansion doesn't recover the invariant, the\n  expansion drifted (or the invariant was too narrow). Fix one of them - that's the recursion."
+          },
+          {
+            "type": "markdown",
+            "id": "f18b8fed6ee8344b",
+            "text": "## Demo\n`agm-demo.json` is a fully-authored card for AGM 2027 (passes cohere; rendered to\n`out/understanding-agm-demo.pdf`). Use it as the worked example of the format."
+          },
+          {
+            "type": "markdown",
+            "id": "3ba33ba230aeeb53",
+            "text": "## Pipeline\n- Upstream: `wiki-to-pdf` produces `model.json` + the dossier's **Unified Summary** (the core).\n- This skill expands that core per community and proves the round-trip.\n- Sibling: `fedwiki-cohere-sync` checks coherence at the *page* level; this checks it at the\n  *meaning* level."
+          },
+          {
+            "type": "markdown",
+            "id": "1c763a18edacfa19",
+            "text": "## Dependencies\nPython 3 + `reportlab` (render only). seed/cohere are pure-stdlib."
+          },
+          {
+            "type": "markdown",
+            "id": "6c88b29f4c58ac57",
+            "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847280972
+    }
+  ]
+}

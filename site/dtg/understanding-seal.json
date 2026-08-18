@@ -1,0 +1,146 @@
+{
+  "title": "Understanding Seal",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "fc5da37cb24f139b",
+      "text": "# Understanding — Seal"
+    },
+    {
+      "type": "markdown",
+      "id": "0a4e1ff59930ff70",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "a6fa752dc4e3dc63",
+      "text": "**Proposed slug:** `understanding/seal` · **version** 0.1 · **status** draft\n\n> The joining party proposes the bilateral agreement — machine-readable personal privacy terms per IEEE 7012, selected from a standard roster — and the host's signed acceptance seals it, with a content-addressed witness record outside both parties."
+    },
+    {
+      "type": "markdown",
+      "id": "7c3c06bed5083438",
+      "text": "## Abstract\n\nThe **Understanding — Seal** Trust Task reaches the object the ceremony exists\nfor: a **bilateral agreement** between exactly two parties. The direction of\nproposal is the point — the *joining party proposes* the terms, selected from a\nstandard roster, and the host accepts or declines. This is the\nmachine-readable-personal-privacy-terms pattern of **IEEE Std 7012-2025**: the\nindividual proposes; acceptance precedes any further relationship; the\nagreement is strictly two-party (agents, devices, and credentials are the\nfabric around it, never parties to it); and the terms keep three registers in\ncorrespondence — plain language, legal, and machine-readable.\n\nOne structural rule guards the seal: it is never self-issued, and it SHOULD be\nwitnessed from outside. A content-addressed **witness record** — resolvable by\ndigest by either party or a third — attests that the ceremony happened without\nbecoming an authority over what it means. An agreement complete enough to need\nno one outside it has either stopped listening or begun to lie."
+    },
+    {
+      "type": "markdown",
+      "id": "277fccf11fb6d4cf",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "a233fb708a4fe65d",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/seal/0.1`, carrying a verifiable `proof` — this signed proposal is the joiner's half of the seal.\n2. Propose terms by roster and term identifier, pinned by digest, so the three registers of the term are fixed rather than paraphrased.\n\nA conforming **consumer** (the host) **MUST**:\n\n1. Refuse a proposal without a passed exchange (`exchangeNotPassed`) — understanding precedes agreement, in that order, always.\n2. Refuse a proposal where proposer and acceptor are, or resolve to, the same controller (`selfIssuedSeal`).\n3. Accept only roster terms it recognises (`termNotInRoster`); a counter-proposal is a new `understanding/seal` in the opposite direction, never an edit of this one.\n4. On acceptance, sign the `#response` (the host's half of the seal), emit the witness record, and return its digest. The pair of signed halves, correlated by `threadId`, IS the agreement."
+    },
+    {
+      "type": "markdown",
+      "id": "63468d7ea63032d7",
+      "text": "## Payload\n\n`payload.agreement` (REQUIRED) — roster, term, and digest of the proposed terms.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "7d98be7837a863ce",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:17d02b30-4a5e-4d0c-ce7f-6879809ab2c3\",\n  \"type\": \"https://trusttasks.org/spec/understanding/seal/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T16:40:00Z\",\n  \"payload\": {\n    \"agreement\": {\n      \"roster\": \"https://customercommons.org/roster\",\n      \"term\": \"SD-BASE\",\n      \"termsDigest\": \"6c7d8e9f2021324354e6c7d8e9f2021324354e6c7d8e9f2021324354e6c7d8e9\",\n      \"termsRef\": \"https://customercommons.org/roster/SD-BASE\"\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:40:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProposalHalfOfTheSeal\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "30ef701aec23d2e0",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:28e13c41-5b6f-4e1d-df80-79809ab2c3d4\",\n  \"type\": \"https://trusttasks.org/spec/understanding/seal/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:17d02b30-4a5e-4d0c-ce7f-6879809ab2c3\",\n  \"issuedAt\": \"2026-07-18T16:40:04Z\",\n  \"payload\": {\n    \"accepted\": true,\n    \"agreementId\": \"seal-17d02b30\",\n    \"sealedAt\": \"2026-07-18T16:40:04Z\",\n    \"witnessRef\": {\n      \"digest\": \"7d8e9f202132435465f7d8e9f202132435465f7d8e9f202132435465f7d8e9f2\",\n      \"uri\": \"https://host.example.com/witness/seal-17d02b30\"\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:40:04Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleAcceptanceHalfOfTheSeal\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "5fa664b5b03a079f",
+      "text": "## Security & Privacy\n\nThe seal discloses which roster term the parties agreed — metadata by\nconstruction, since roster terms are published. The witness record MUST carry\ndigests and party VIDs only, never the exchange answers or any negotiated\ncontent; it exists so either party (or a relying party the agreement concerns)\ncan later prove the ceremony happened, not to disclose its content. Because\nthe proposal direction is the individual's, a host MUST NOT pre-fill or\nrequire a specific term as a condition of the ceremony beyond declining and\nletting the joiner re-propose — acceptance pressure inverts the pattern the\nseal encodes."
+    },
+    {
+      "type": "markdown",
+      "id": "2364769e4f80df1e",
+      "text": "# Assets\n\nSource: `specs/understanding/seal/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "40414d59f7ffe927",
+      "type": "assets",
+      "text": "understanding-seal"
+    },
+    {
+      "type": "markdown",
+      "id": "340a6b0092147fe4",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Understanding Seal",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "fc5da37cb24f139b",
+            "text": "# Understanding — Seal"
+          },
+          {
+            "type": "markdown",
+            "id": "0a4e1ff59930ff70",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "a6fa752dc4e3dc63",
+            "text": "**Proposed slug:** `understanding/seal` · **version** 0.1 · **status** draft\n\n> The joining party proposes the bilateral agreement — machine-readable personal privacy terms per IEEE 7012, selected from a standard roster — and the host's signed acceptance seals it, with a content-addressed witness record outside both parties."
+          },
+          {
+            "type": "markdown",
+            "id": "7c3c06bed5083438",
+            "text": "## Abstract\n\nThe **Understanding — Seal** Trust Task reaches the object the ceremony exists\nfor: a **bilateral agreement** between exactly two parties. The direction of\nproposal is the point — the *joining party proposes* the terms, selected from a\nstandard roster, and the host accepts or declines. This is the\nmachine-readable-personal-privacy-terms pattern of **IEEE Std 7012-2025**: the\nindividual proposes; acceptance precedes any further relationship; the\nagreement is strictly two-party (agents, devices, and credentials are the\nfabric around it, never parties to it); and the terms keep three registers in\ncorrespondence — plain language, legal, and machine-readable.\n\nOne structural rule guards the seal: it is never self-issued, and it SHOULD be\nwitnessed from outside. A content-addressed **witness record** — resolvable by\ndigest by either party or a third — attests that the ceremony happened without\nbecoming an authority over what it means. An agreement complete enough to need\nno one outside it has either stopped listening or begun to lie."
+          },
+          {
+            "type": "markdown",
+            "id": "277fccf11fb6d4cf",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "a233fb708a4fe65d",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/seal/0.1`, carrying a verifiable `proof` — this signed proposal is the joiner's half of the seal.\n2. Propose terms by roster and term identifier, pinned by digest, so the three registers of the term are fixed rather than paraphrased.\n\nA conforming **consumer** (the host) **MUST**:\n\n1. Refuse a proposal without a passed exchange (`exchangeNotPassed`) — understanding precedes agreement, in that order, always.\n2. Refuse a proposal where proposer and acceptor are, or resolve to, the same controller (`selfIssuedSeal`).\n3. Accept only roster terms it recognises (`termNotInRoster`); a counter-proposal is a new `understanding/seal` in the opposite direction, never an edit of this one.\n4. On acceptance, sign the `#response` (the host's half of the seal), emit the witness record, and return its digest. The pair of signed halves, correlated by `threadId`, IS the agreement."
+          },
+          {
+            "type": "markdown",
+            "id": "63468d7ea63032d7",
+            "text": "## Payload\n\n`payload.agreement` (REQUIRED) — roster, term, and digest of the proposed terms.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "7d98be7837a863ce",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:17d02b30-4a5e-4d0c-ce7f-6879809ab2c3\",\n  \"type\": \"https://trusttasks.org/spec/understanding/seal/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T16:40:00Z\",\n  \"payload\": {\n    \"agreement\": {\n      \"roster\": \"https://customercommons.org/roster\",\n      \"term\": \"SD-BASE\",\n      \"termsDigest\": \"6c7d8e9f2021324354e6c7d8e9f2021324354e6c7d8e9f2021324354e6c7d8e9\",\n      \"termsRef\": \"https://customercommons.org/roster/SD-BASE\"\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:40:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProposalHalfOfTheSeal\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "30ef701aec23d2e0",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:28e13c41-5b6f-4e1d-df80-79809ab2c3d4\",\n  \"type\": \"https://trusttasks.org/spec/understanding/seal/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:17d02b30-4a5e-4d0c-ce7f-6879809ab2c3\",\n  \"issuedAt\": \"2026-07-18T16:40:04Z\",\n  \"payload\": {\n    \"accepted\": true,\n    \"agreementId\": \"seal-17d02b30\",\n    \"sealedAt\": \"2026-07-18T16:40:04Z\",\n    \"witnessRef\": {\n      \"digest\": \"7d8e9f202132435465f7d8e9f202132435465f7d8e9f202132435465f7d8e9f2\",\n      \"uri\": \"https://host.example.com/witness/seal-17d02b30\"\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:40:04Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleAcceptanceHalfOfTheSeal\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "5fa664b5b03a079f",
+            "text": "## Security & Privacy\n\nThe seal discloses which roster term the parties agreed — metadata by\nconstruction, since roster terms are published. The witness record MUST carry\ndigests and party VIDs only, never the exchange answers or any negotiated\ncontent; it exists so either party (or a relying party the agreement concerns)\ncan later prove the ceremony happened, not to disclose its content. Because\nthe proposal direction is the individual's, a host MUST NOT pre-fill or\nrequire a specific term as a condition of the ceremony beyond declining and\nletting the joiner re-propose — acceptance pressure inverts the pattern the\nseal encodes."
+          },
+          {
+            "type": "markdown",
+            "id": "2364769e4f80df1e",
+            "text": "# Assets\n\nSource: `specs/understanding/seal/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "40414d59f7ffe927",
+            "type": "assets",
+            "text": "understanding-seal"
+          },
+          {
+            "type": "markdown",
+            "id": "340a6b0092147fe4",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229503
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fedwiki Cohere Sync · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Fedwiki Cohere Sync</span></div>
+  <article><div class="md"><h1>FedWiki coherence-checked sync + cookie broker</h1>
+</div>
+<div class="md"><blockquote>
+<p>Sync per-session answer pages from a source-of-truth FedWiki out to milestone subdomains with a coherence check, and broker owner cookies so agents get delegated, host-scoped write permission without ever seeing the raw credential.</p>
+</blockquote>
+</div>
+<div class="md"><h1>FedWiki coherence-checked sync + cookie broker</h1>
+<p>Two cooperating pieces:</p>
+<ul>
+<li><strong><code>sync.js</code></strong> — the <em>what</em>: rewrite source-of-truth answer pages into the canonical per-subdomain shape, <strong>coherence-check every page</strong>, and push (or stage).</li>
+<li><strong><code>broker.js</code></strong> — the <em>how it&#39;s allowed</em>: hold owner cookies on disk, hand agents <strong>scoped</strong> write access per host, keep the secret out of agent context.</li>
+</ul>
+</div>
+<div class="md"><h2>The model</h2>
+<p>A FedWiki has no folders; a page&#39;s only address is its slug. In this federation the <strong>source of truth</strong> is one local farm host (<code>~/.wiki/mitch.vision/pages/</code>) holding compact answer pages named <code>&lt;card&gt;-&lt;session&gt;</code> (e.g. <code>who-cares-agm-2027</code>). Each <strong>milestone subdomain</strong> (<code>agm.timeline.ide.earth</code>, …) is &quot;where the real wiki lives per session&quot; and should carry that one session&#39;s five answers under the <strong>canonical hub slugs</strong> (<code>who-cares</code>, <code>who-is-involved</code>, <code>what-changes</code>, <code>proof--realness</code>, <code>becoming-real</code>) plus its video page and <code>welcome-visitors</code> hub.</p>
+<p><code>sync.js</code> transforms each source page into the subdomain shape:</p>
+<pre><code>[intro]      &lt;label&gt; &lt;verb&gt; &lt;session video&gt;? Below we summarise the discussion:
+[## In brief] quote-free clarifying summary (optional — from ~/.wiki/_summaries.json)
+[body]       the two slots, VERBATIM from the source (header stripped)
+[# See]      links the 5 hubs + the session video + transcript
+</code></pre>
+<p><strong>In brief:</strong> keyed <code>&quot;&lt;card.src&gt;-&lt;session-slug&gt;&quot;</code> in <code>~/.wiki/_summaries.json</code> (override with <code>SUMMARIES_FILE</code>). Inserted right under the intro so the concrete answer leads the detailed prose. Optional + back-compatible: missing file/key → page builds without it (a WARN, not a FAIL). All text is <strong>ASCII-normalised</strong> (<code>asciify</code>) before push — the action endpoint mojibakes UTF-8 multibyte chars (em-dash/accents), so they are folded to ASCII.</p>
+</div>
+<div class="md"><h2>Coherence check (FAIL blocks the push)</h2>
+<p>Catches the rot that creeps in when pages are hand-forked between sites:</p>
+<ul>
+<li><strong>foreign session label</strong> — page references another session&#39;s video (the real <code>tour</code> → &quot;Deep Thought Realized&quot; bug)</li>
+<li><strong>missing slot marker</strong> — one of the two per-card slots absent (markers are defined per card in <code>CARDS</code>)</li>
+<li><strong>leftover hub list</strong> — a <code>## Answers across the timeline</code> block that belongs only on the source hub, not a per-session page (the real <code>deep/becoming-real</code> bug)</li>
+<li>title mismatch / missing video link → FAIL; incomplete See block or thin body → WARN</li>
+</ul>
+</div>
+<div class="md"><h2>Usage</h2>
+<pre><code class="language-bash">cd ~/.claude/skills/fedwiki-cohere-sync
+
+# 1. dry-run: generate + check + stage (no auth). Inspect ~/.wiki/_sync_staging/&lt;sub&gt;/
+SESSION=&#39;AGM 2027&#39; node sync.js
+SESSION=all node sync.js
+
+# 2a. push directly (cookie on the command line — ad-hoc only)
+WIKI_SESSION=&#39;&lt;wikiSession&gt;&#39; SESSION=&#39;AGM 2027&#39; PUSH=1 node sync.js
+
+# 2b. push via broker (PREFERRED — cookie stays on disk, host-scoped)
+BROKER=1 PUSH=1 SESSION=all node sync.js
+</code></pre>
+</div>
+<div class="md"><h2>The cookie broker (delegated permission)</h2>
+<p><strong>Why:</strong> a FedWiki <code>wikiSession</code> is <em>farm-wide owner access</em>, all-or-nothing. Pasting it into an agent&#39;s prompt leaks a live, multi-day credential. The broker keeps the cookie on disk and exposes only a scoped push.</p>
+<p><strong>Setup (once):</strong> copy <code>cookies.example.json</code> to <code>~/.wiki/.creds/cookies.json</code> (gitignored, chmod 600) and paste the <code>wikiSession</code> value(s). Expiry is <strong>derived from the cookie string</strong> (<code>…issuedMs.ttlMs.sig</code>), never hand-entered. Get the value from DevTools → Application → Cookies → <code>wikiSession</code>.</p>
+<p><strong>Grant an agent a scope</strong> with <code>WIKI_GRANT</code> (comma list of host globs). The broker refuses any host outside the grant <em>even though the cookie could write it</em>:</p>
+<pre><code class="language-bash">node broker.js list                                    # owners, coverage, expiry — no secrets
+node broker.js check --host agm.timeline.ide.earth     # may I write it? which owner? expired?
+WIKI_GRANT=&#39;agm.timeline.ide.earth&#39; node broker.js push --host agm.timeline.ide.earth --slug who-cares --file page.json
+WIKI_GRANT=&#39;agm.timeline.ide.earth&#39; node broker.js push-dir --host agm.timeline.ide.earth --dir ~/.wiki/_sync_staging/agm
+</code></pre>
+<p>Every brokered push appends host/slug/owner/time to <code>~/.wiki/.creds/push-audit.log</code>. Expired cookies refuse with a re-login message instead of silent 401s.</p>
+<p><strong>Owner reality on this farm:</strong> federated identity — any one owner cookie writes the whole <code>*.timeline.ide.earth</code> farm (logging into one TLD logs into the siblings). So one <code>mitch@timeline</code> entry covers all subdomains; scope per-agent with <code>WIKI_GRANT</code>, not with separate cookies.</p>
+</div>
+<div class="md"><h2>Cookie rotation &amp; hygiene</h2>
+<p>A <code>wikiSession</code> is a bearer credential: whoever holds it has full owner write across the farm until it expires (TTL is in the cookie itself, e.g. <code>…604800000</code> = 7 days). Treat it like a password.</p>
+<ul>
+<li><strong>Storage:</strong> only in <code>~/.wiki/.creds/cookies.json</code> (gitignored, chmod 600). Never commit it, never echo it into a command where it lands in shell history or a transcript, never paste it into an agent prompt — that&#39;s the whole reason the broker exists (the broker reads it from disk; agents call the broker).</li>
+<li><strong>When to rotate:</strong> if the value was ever exposed in plaintext (a chat transcript, a log, a screen-share), or on a routine cadence. Rotation is at the owner&#39;s discretion — exposure doesn&#39;t force it, but a leaked cookie stays valid farm-wide until its TTL lapses.</li>
+<li><strong>How to rotate:</strong> log out / log back in on any <code>*.timeline.ide.earth</code> site in the browser (DevTools → Application → Cookies → <code>wikiSession</code>), copy the new value, replace <code>cookie</code> in <code>~/.wiki/.creds/cookies.json</code>. The old token is invalidated by re-login. Confirm with <code>node broker.js list</code> (shows the new <code>expires=</code> with no secret printed). No code changes needed — the broker derives expiry from the new string.</li>
+<li><strong>Check before a big push:</strong> <code>node broker.js list</code> — if a cookie shows <code>[EXPIRED]</code>, the broker refuses with a re-login message rather than emitting silent 401s.</li>
+</ul>
+</div>
+<div class="md"><h2>Faithful backup — <code>pull.js</code> (the inverse of sync)</h2>
+<p>Once the subdomains are seeded and editing happens <strong>live on the timeline sites</strong> (they become the source of truth), <code>pull.js</code> mirrors each subdomain DOWN into a local farm twin so the local side is an exact, browsable backup. Read-only on the remote (public GET) — no cookie/broker needed.</p>
+<pre><code class="language-bash">node pull.js                    # back up every subdomain + the base roster -&gt; ~/.wiki/&lt;sub&gt;.timeline/pages/
+SUBS=web,myspace node pull.js   # only these
+NOBASE=1 node pull.js           # skip the base timeline.ide.earth roster
+</code></pre>
+<p>Direction matters: <code>sync.js</code> pushes local→timeline (overwrites, for seeding); once timeline is truth, <strong>stop running <code>sync.js</code> against pages edited live</strong> (it would clobber them) and use <code>pull.js</code> to keep the backup current.</p>
+<p><strong>Ownership caveat:</strong> the farm is not necessarily one owner. A given subdomain can be owned by a different identity (different <code>cookieSecret</code>) and will return <strong>403</strong> to a cookie that writes the rest of the farm — observed with <code>myspace.timeline.ide.earth</code>. <code>pull.js</code> still backs it up (reads are public); writing it needs that subdomain&#39;s own cookie.</p>
+</div>
+<div class="md"><h2>Retargeting to another project</h2>
+<p>Edit the CONFIG block at the top of <code>sync.js</code>: <code>SRC_HOST</code> (source farm host), <code>MAP</code> (session → subdomain + video title), <code>DOMAIN</code>, and <code>CARDS</code> (source prefix → slug/title/intro-verb/slot markers). The push mechanics, checks, and broker are project-agnostic.</p>
+</div>
+<div class="md"><h2>Slug rules (FedWiki asSlug)</h2>
+<p><code>title.replace(/\s/g,&#39;-&#39;).replace(/[^A-Za-z0-9-]/g,&#39;&#39;).toLowerCase()</code> — whitespace → hyphen, everything else deleted. <code>&amp;</code> drops leaving a double hyphen (&quot;Proof &amp; Realness&quot; → <code>proof--realness</code>); <code>?:&#39;</code>drop entirely.</p>
+</div>
+<div class="md"><h2>Related</h2>
+<ul>
+<li><code>fedwiki-transcribe</code> — upstream: video → transcript → AI summary → the source answer pages this skill distributes.</li>
+<li>Source generators in <code>~/.wiki/</code>: <code>_gen_cards.js</code> (hubs), <code>_sync_subdomains.js</code> (the original project-specific instance of this sync).</li>
+</ul>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="fedwiki-cohere-sync.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

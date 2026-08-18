@@ -1,0 +1,119 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X7 — Mediated Proving Profile · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X7 — Mediated Proving Profile</span></div>
+  <article><div class="md"><h1>X7 — The mediated-proving profile</h1>
+<p><em>§21 permits mediated proving only as an explicit, separately assessed path: &quot;A profile MAY support<br>mediated proving when a holder device cannot generate the required proof, but the mediated path MUST be<br>explicit and separately assessed&quot; (§21.1). This doc designs that profile — the mediator taxonomy, the<br>declared-downgrade state machine, and the mediator&#39;s observer row made testable — so the §21.2 control<br>list stops being a checklist and becomes a mechanism.</em></p>
+<p><strong>Register:</strong> new (X-series; completes X4&#39;s deferred budget row — <a class="wlink" href="lab-quiet-presentation.html">Lab — quiet-presentation</a> tier<br>property 6 defers the mediated path here) · leverage 🟠 · <strong>Ladder:</strong> reference built 2026-07-18 —<br><a class="wlink" href="lab-mediator.html">Lab — mediator</a> 9/9: T2 unbuildable at the constructor, P-ISOLATE/P-FORGET<br>state checks, per-context mediator pseudonyms, four-exit machine with silent transitions<br>unconstructable. M1 skeleton + M4 assurance table remain design-doc work. See its NOTES.md<br><strong>Anchor (decision doc):</strong> §21 mediated proving · §19 mediated-prover observer · §20 behavioural leakage ·<br>§6.6 &quot;common fallback or mediated-prover identifiers&quot; · §23 silent-fallback redress row · §24 prohibitions.<br><strong>Anchor (cred-spec):</strong> VTA local/cloud split — the local VTA is the holder-device prover; the cloud VTA<br>is the natural mediator seat; the trust registry is where approved mediators get listed.</p>
+<hr>
+</div>
+<div class="md"><h2>What the decision doc rules and leaves open</h2>
+<p>§21.1 rules that mediation is admissible only as an explicit path. §21.2 lists eleven things a<br>mediated-proving profile MUST define — data sent; whether the mediator sees witnesses, biometrics,<br>commitments, or credentials; non-retention and deletion; session/tenant isolation; authentication;<br>transcript binding; audit; context-linkage capability; user-visible indication; assurance semantics;<br>failure behaviour — and closes with the hard floor: &quot;A mediated prover MUST NOT become the biometric or<br>credential honeypot the privacy architecture was intended to avoid.&quot; §24 makes the same floor a<br>prohibited construction (&quot;permit mediated proving without non-retention and correlation controls&quot;).<br>§21.3 bans the silent step-down. What no section supplies is the <em>design</em>: which mediator shapes exist,<br>which controls each shape satisfies structurally vs operationally, and how the downgrade is surfaced.<br>This doc supplies that layer.</p>
+</div>
+<div class="md"><h2>The mediator taxonomy</h2>
+<p>Three levels, ordered by what the mediator sees — each level answers §21.2&#39;s second item by construction.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Sees</th>
+<th>§21.2 items satisfied structurally</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>T0 blind mediator</strong></td>
+<td>a prepared, witness-free proving job: blinded/committed circuit inputs + public statement; never witnesses, biometrics, credentials, or raw attributes</td>
+<td>data-sent (minimal), sees-what (none of the four), non-retention (nothing sensitive to retain), context-linkage (only via job metadata — see §6.6 section)</td>
+<td>preferred</td>
+</tr>
+<tr>
+<td><strong>T1 semi-trusted mediator</strong></td>
+<td>commitments and the public statement; never witnesses or biometrics</td>
+<td>sees-what (commitments only); non-retention, isolation, audit become <em>operational</em> controls that must be attested and tested</td>
+<td>admissible with full §21.2 controls</td>
+</tr>
+<tr>
+<td><strong>T2 honeypot</strong></td>
+<td>witnesses, biometrics, raw credentials</td>
+<td>none — this is the construction §21.2&#39;s closing sentence and §24 prohibit</td>
+<td><strong>prohibited</strong></td>
+</tr>
+</tbody></table>
+<p>The remaining §21.2 items (authentication, transcript binding, user-visible indication, assurance<br>semantics, failure behaviour) bind at every admissible level: the proving job carries the same canonical<br>transcript binding as local proving (§15), so a mediator cannot re-target a proof to another verifier or<br>session.</p>
+</div>
+<div class="md"><h2>The declared-downgrade state machine (§21.3)</h2>
+<p>&quot;When the preferred proof cannot be produced, the system MUST NOT silently step down. It MUST either<br>fail, invoke an explicitly identified lower-assurance profile, use a governed mediator, or switch channel<br>according to a relying policy visible to the person and verifier.&quot; (§21.3) — rendered as a state machine<br>with exactly four exits from <code>LOCAL-PROVING-FAILED</code>:</p>
+<pre><code>LOCAL-PROVING-FAILED ──1──▶ FAIL                      (deterministic error, §13.6-style redress route)
+                     ──2──▶ NAMED-LOWER-PROFILE        (profile identifier disclosed to person + verifier)
+                     ──3──▶ GOVERNED-MEDIATOR          (T0/T1, registry-listed; mediation indicated to person + verifier)
+                     ──4──▶ CHANNEL-SWITCH             (per relying policy, visible to both parties)
+</code></pre>
+<p>Every transition is EXPLICIT: it names its target (a profile identifier, a mediator identifier class, a<br>channel), and both the person and the verifier can observe which transition fired. This is X2&#39;s context<br>card q5 — &quot;Does fallback change who observes?&quot; — answered mechanically: transition 3 adds the mediated<br>prover to the §19 observer list, and the §21.2 &quot;user-visible indication&quot; is the card&#39;s q5 answer changing<br>in front of the person. Silent-downgrade accountability is already assigned: §23&#39;s row makes the verifier<br>and wallet/operator primarily accountable, mediator supporting, remedy &quot;disclose, re-run under correct<br>profile, remediate affected decisions.&quot; X4&#39;s M-RETRY rule composes here: the switch is never silent, but<br>its <em>external</em> observability is minimised to the parties the relying policy requires.</p>
+</div>
+<div class="md"><h2>The mediator&#39;s §19 observer row, made testable</h2>
+<p>Per job, even a T0 mediator learns: that a proving job occurred; its timing; the requesting context<br>(unless verifier-blinded); the public transcript fields it computes over; retry count. That is the<br>irreducible residue. The §21.2 controls become two testable properties over a reference mediator model:</p>
+<ul>
+<li><strong>P-ISOLATE (session/tenant isolation):</strong> two jobs from different holders share no derivable state —<br>no common cache keys, session tokens, or timing-correlated storage. Test: run jobs A and B, diff the<br>mediator&#39;s reachable state; nothing in B&#39;s execution is a function of A&#39;s inputs.</li>
+<li><strong>P-FORGET (non-retention):</strong> mediator state after job completion contains nothing derivable from the<br>job&#39;s inputs beyond the audit record the profile declares. Test: post-job state snapshot equals<br>pre-job snapshot modulo the declared audit fields — which themselves obey X4&#39;s log-field register<br>(no mediator session identifiers that outlive the session).</li>
+</ul>
+<p>Claim form (§2.4): a completed job is uninformative about the holder&#39;s witnesses and credentials —<br>against the mediator and mediator-colluding-with-verifier, for the mediator&#39;s declared retention window<br>(target: zero beyond audit fields), alongside the job metadata, network traffic (§10.4&#39;s<br>&quot;mediated-prover network traffic&quot;), and audit log the profile declares.</p>
+</div>
+<div class="md"><h2>The mediator as correlation hub (§6.6)</h2>
+<p>A shared mediator sees jobs from many contexts; §6.6 prohibits &quot;common fallback or mediated-prover<br>identifiers.&quot; Rule: the holder authenticates to the mediator under a <strong>per-context mediator-facing<br>pseudonym</strong> — the R-DID discipline (unique identifier per counterparty) applied with the mediator as<br>counterparty <em>per context</em>, never one account across contexts. Claim: two jobs from one holder in<br>different contexts are unlinkable at the mediator — against the mediator and any log processor, for the<br>context epoch, alongside network metadata (which therefore also needs decorrelation: X4&#39;s M-BATCH/M-SHAPE<br>apply to the holder↔mediator channel, not only holder↔verifier).</p>
+</div>
+<div class="md"><h2>Does mediation change what the verifier may rely on?</h2>
+<p>Honestly: it can. PR-HLD establishes &quot;knowledge or control of the holder secret bound to the attestation<br>and the current transcript&quot; (§14.1), and §14.3 already flags that mediated proving &quot;may reveal additional<br>information and require separate analysis.&quot; The profile&#39;s honest split: <strong>witness preparation stays<br>holder-side</strong> (the holder derives commitments/blinded inputs using the holder secret and binds the<br>canonical transcript); <strong>the mediator computes the proof over prepared inputs it cannot open</strong>. Under<br>that split PR-HLD&#39;s statement survives, because the secret never leaves the holder. Where the circuit<br>cannot be split this way, T0 is not achievable and the profile MUST declare &quot;equivalent or downgraded<br>assurance semantics&quot; (§21.2) — the verifier is told it is relying on T1 operational controls, not<br>cryptography. Fully blind delegated proving for arbitrary circuits (collaborative/MPC-assisted SNARK<br>proving, witness-encrypted proving jobs) is a live research area — this doc flags it as a §29-class<br>research item and claims only what the prepared-input split actually gives.</p>
+</div>
+<div class="md"><h2>VTA mapping and mediator governance</h2>
+<p>The cred-spec&#39;s local VTA (edge device, PNM) is the preferred prover; the cloud VTA — &quot;highly available<br>... routing private channel messages and other trust tasks&quot; — is the natural <strong>governed mediator</strong> seat,<br>already present in personal VTA networks. Governance reuses PR-ISS&#39;s shape (§12): the trust registry<br>lists approved mediators with accreditation state and effective times; &quot;governed mediator&quot; in §21.3<br>means <em>registry-listed under the relying policy&#39;s mediator class</em>, with snapshot semantics (§12.4) so a<br>de-listed mediator fails closed. The mediator&#39;s registry lookups inherit O4&#39;s leakage discipline.</p>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li><a class="wlink" href="lab-quiet-presentation.html">Lab — quiet-presentation</a> (8/8) — tier property 6 (&quot;mediated path, where<br>supported, satisfies §21.2 and adds no cross-context identifier&quot;) deferred to a budget row; this doc<br>is that row&#39;s design. X4&#39;s §19 mediated-prover budget line is the starting observer row.</li>
+<li>X2&#39;s context card q5 slot — the user-visible-indication surface already has a home.</li>
+<li>Cred-spec VTA term definitions (local/cloud/PNM/personal VTA network) — the deployment vocabulary.</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — profile skeleton:</strong> the eleven §21.2 items answered per taxonomy level, as a fill-in profile<br>document; T2 marked prohibited with §24 citation.</li>
+<li><strong>M2 — reference mediator model:</strong> zero-dep runtime with P-ISOLATE and P-FORGET as property tests,<br>plus the four-exit downgrade machine with transition-visibility assertions (fixture: silent transition<br>= test failure, mapped to §26.1 negative tests).</li>
+<li><strong>M3 — correlation fixtures:</strong> per-context mediator pseudonym model; two-context linkage test at the<br>mediator (extends rt 01&#39;s nullifier discipline to mediator-facing identifiers).</li>
+<li><strong>M4 — assurance-semantics table:</strong> per predicate (PR-LIV, PR-UNQ, PR-HLD, PR-FRE), what T0 vs T1<br>mediation preserves or downgrades — input to the §25 gate&#39;s boundary records.</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<ul>
+<li>The §21 profile text the TF will need: the taxonomy table, the four-exit downgrade machine, and the<br>P-ISOLATE/P-FORGET conformance properties — offered as the &quot;explicit profile&quot; §21.1 requires.</li>
+<li>Joint seam with Human Experience (§27.4): the §21.2 &quot;user-visible indication&quot; is a shared deliverable —<br>this doc supplies what must be indicated (which transition fired, who now observes); HX owns how.</li>
+<li>To the Credentials TF: an informative note seating the cloud VTA as the governed-mediator deployment<br>class, with registry listing as the governance mechanism.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Can T0 be achieved for the shared Poseidon/Merkle gadget (O2/O4) specifically — is the prepared-input<br>split implementable there today, making T0 concrete rather than aspirational for the charter core?</li>
+<li>Does transition 3 need its own clock in §22.1&#39;s list (mediator-session lifetime vs challenge/session<br>lifetime), and does the audit-record retention window get a §22.2-style bound?</li>
+<li>Verifier-blinding at the mediator (mediator learns <em>that</em> a job ran but not <em>for whom it verifies</em>) —<br>worth the routing cost, or declared residue like X4&#39;s co-resident-app row?</li>
+<li>When a lower-assurance profile (exit 2) and a governed mediator (exit 3) are both available, who<br>ranks them — relying policy, context authority (§6.7), or the person?</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x7-mediated-proving-profile.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

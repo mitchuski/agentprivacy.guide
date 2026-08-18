@@ -1,0 +1,47 @@
+# Hitchhikers Field Guide
+
+Our client, and the reason any of the rest of these pages exist. Written up here from the handoff pack in my own words, so the graph side of the team can see what the map side is actually building — which means the details below are mine to get wrong. Max and the ARWorld side are the authority; corrections straight into this page, please.
+
+## What it is
+
+A walking AR client. Players do not share a game room; they share the **physical world** and an OASIS avatar. "Multiplayer" means you witness a place, that fact lands in Knowledge, Promise decides what a peer may see, and Trust decides whose Knowledge you may query. The map then shows a quiet overlay — *Maya was here* — rather than live avatars running around.
+
+Unity 2021.3, in an ARWorld tree originally from Kashif, with the Field Guide package layered on it. The server side is OASIS ONODE, deployed on Railway.
+
+## The idea I would steal
+
+> **Discovery is not seeing a pin. Discovery is a witnessed connection with a place.**
+
+Map density from OpenStreetMap is the **floor**. Discovery is an **act** — in radius, then a rite: hold-to-Witness at a desk, camera Fetch on a phone, a seal at a parish pin, a banish for an omen. Peeking a card is an *encounter*, not a discovery. Walking past a placeholder pub is *presence*, not a discovery.
+
+That three-layer distinction — presence, encounter, discovery — is the sharpest thing in the pack, and it is what let the whole trust model fall out cleanly. It is also, structurally, the same distinction the trust graph makes between a proposal and a signed edge. Max got there from a game design problem; the lab got there from an anti-Sybil one.
+
+## What is already built
+
+* the Witness payload contract, and `POST /poi/witness` — idempotent per avatar and place, live on Railway
+* the Unity write client, firing after check-in, fire-and-forget
+* City Attraction witnessing using the same rite as quest pins
+* `GET /poi/nearby` returning your own trail plus a peer overlay — gold ring for a peer, teal for yourself, capped at twelve, distance first
+* a share flow after the first Witness of a session, opening a card
+
+And the honest gap they flagged themselves: the peers in that overlay are a fixture. Phase 5 — a real meet — was specced and not built.
+
+## The rules already set, which I did not have to argue with
+
+Most of the good constraints here were decided on the map side before the graph side arrived:
+
+* one avatar root; no second profile store, no friends database, no live-presence layer
+* no central trust score, and no map score standing in for one
+* one rite, two skins — the desk and the camera must not become two meanings of discovery
+* distance first; trust must never pull Greenwich onto an Islington viewport
+* multi-hop friend-of-friend is out of scope
+* the wiki is lore, not the place database, and nothing scrapes it
+* partners join as claimed local businesses, not by relabelling map data as official
+
+The counter-spec adds to that list. It overturns none of it — which is the useful thing to be able to say after a week of poking.
+
+## What came back down the other strand
+
+[[The Meet Rite]] for the missing edge · [[Audience Is Granted Not Computed]] and [[The Pairwise Peer Reference]] for the disclosure layer · [[Erosion Is A Rate Not A Cliff]] for their open question about recency · [[A Wiki Fork Is Not An Audience]] for the lore seam · [[Shared Quest Is Not Consent]] where I disagree with them · and [[OASIS And The Cred Spec]] for where our server could meet the standard, with [[Could This Be Zero Knowledge]] for where it could go after that.
+
+The day itself is [[2026-08-15 The Predicate Walks To Islington]].

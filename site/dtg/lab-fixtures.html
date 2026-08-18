@@ -1,0 +1,789 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — fixtures · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — fixtures</span></div>
+  <article><div class="md"><h1>Conformance fixtures — X1 as a runnable reference</h1>
+<p>Implements the X1 exploration (<a class="wlink" href="x1-conformance-fixtures.html">X1 — Conformance Fixtures</a>)<br>at milestones <strong>M1</strong> (reason register, now <strong>v2</strong>), <strong>M2</strong> (fixture schema), <strong>M3</strong> (extraction +<br>consumer), and <strong>M4</strong> (the missing negative vectors — closed 2026-07-18: §26.1 coverage is 11/11,<br>using the show-composition and context-card instruments as levers). <strong>M5</strong> (second-language<br>consumer) remains open.</p>
+</div>
+<div class="md"><h2>What this demonstrates</h2>
+<p>§26 makes fixtures mandatory but defines no format. This lab freezes the property tests of<br>runtimes 01 and 07 <strong>as data</strong>: canonically encoded inputs (§6.2 descriptors, §15.2<br>transcripts — the context fed to <code>nullifier()</code> <em>is</em> a descriptor digest, never an opaque<br>label), an expected outcome, and a named reason from a versioned register. The consumer<br>(<code>consume.mjs</code>) re-derives every digest, re-runs the constructions, and demands the same<br>outcome <strong>and the same reason code</strong> — the X1 claim that two implementations passing the<br>same suite instantiate the same §25-gated decisions, independent of language or hash.<br>Extraction is byte-deterministic across processes (no clocks, no randomness), which is the<br>§25 &quot;deterministic test-vector support&quot; criterion made checkable.</p>
+<p>Three vector classes: <strong>accept</strong>, <strong>reject</strong>, and <strong>lint</strong> — the third tests §9&#39;s<br>&quot;verifier must not infer&quot; column as claim-language linting of verifier outputs (§26.1<br>already mandates rejecting &quot;a verifier output implying biometric correctness&quot;).</p>
+</div>
+<div class="md"><h2>Files</h2>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th>role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>reasons.mjs</code></td>
+<td>M1 — rejection-reason register <strong>v2 (66 exact codes + 29 parameterized families)</strong>: the v1 stratum byte-identical (26) + the six instrument builds absorbed byte-exactly (F10) + <code>REASON_FAMILIES</code> + <code>CONVERGENCES</code></td>
+</tr>
+<tr>
+<td><code>schema.mjs</code></td>
+<td>M2 — vector shape + validation (incl. mandatory §2.4 claimParams); reason validation accepts family matches via <code>isKnownReason</code></td>
+</tr>
+<tr>
+<td><code>extract.mjs</code></td>
+<td>M3/M4 — runs rt 01/07 <strong>+ show-composition + context-card + canonical</strong>, asserts each verdict, emits <code>vectors/</code> + manifest</td>
+</tr>
+<tr>
+<td><code>lint.mjs</code></td>
+<td>prohibited-pattern list (§9 / §24) + <code>lintVerifierOutput</code> — now incl. collusion-claim + disclosure-claim classes</td>
+</tr>
+<tr>
+<td><code>consume.mjs</code></td>
+<td>consumer harness: re-runs every vector against the real constructions</td>
+</tr>
+<tr>
+<td><code>test.mjs</code></td>
+<td>F1–F11 suite properties; prints the §26.1 coverage report; F10 = the v2 absorption harness, F11 = convergences</td>
+</tr>
+<tr>
+<td><code>vectors/</code></td>
+<td>the emitted suite: <strong>40 vectors across 9 families</strong> (PR-UNQ, PR-TGF, PR-LIV, PR-PER, PR-HLD, PR-SHW, PR-CTX, PR-FLB, PR-EPO) + <code>manifest.json</code> (<code>reasonRegister: &quot;v2&quot;</code>)</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Reason register v2 (2026-07-18 — append-only over v1)</h2>
+<p>v2 absorbs the named failure codes of the <strong>six instrument builds</strong> that landed after v1:<br>context-card (X2), quiet-presentation (X4), rotation (X5), erosion-record (X6), mediator (X7),<br>multi-issuer (X8), guardian-recovery (X9). Every string was read from the emitting module&#39;s<br>SOURCE and absorbed byte-exactly; test <strong>F10</strong> triggers every one of them LIVE from the<br>emitting module (drives the failing path, captures the emitted string, compares bytes) — <strong>all<br>69 v2 additions are method <code>triggered</code>; 0 fell back to source-text scanning.</strong></p>
+<p><strong>Counts:</strong> v1 = 26 exact codes. v2 = 26 + <strong>40 new exact codes</strong> = <strong>66 exact</strong>, plus<br><strong>29 parameterized families</strong> = <strong>95 register entries</strong>. All v1 entries byte-identical<br>(append-only; F9 re-verifies the v0+show-composition strata every run).</p>
+<h3>The family mechanism</h3>
+<p>A code with a <code>:&lt;param&gt;</code> suffix (<code>retention-violation:transcriptDigest</code>,<br><code>stale-epsilon:issuer-x</code>, <code>incomplete-claim-form:verifier:forHowLong</code>) names ONE failure<br>class with a parameter — it registers once, in <code>REASON_FAMILIES</code>, as<br><code>{ prefix, parameterized: true, source, decisionDocRef, retryAmbiguous }</code>.<br><code>isKnownReason(code)</code> matches exact codes exactly, and a family iff<br><code>code = prefix + &lt;non-empty param&gt;</code> (prefixes always end in <code>:</code>). Schema validation flows<br>through <code>isKnownReason</code>, so a vector may carry a parameterized reason and remain a<br>conformance vector. F10 asserts the two strata are disjoint: no family prefix is a prefix<br>of any other registered code (note <code>unknown-clock:</code> vs <code>unknown-clock-family:</code> — the <code>:</code><br>boundary keeps them distinct).</p>
+<h3>Convergences (one entry, dual sources — never a duplicate)</h3>
+<ul>
+<li><strong><code>silent-fallback</code></strong> — already in v1 as the §26.1-bullet-8 mandated code; the<br>mediator/downgrade.mjs <code>validateTransition</code> now EMITS the same byte string for a<br>transition not visible to both parties. Verified (F11): the emitted bytes equal the v1<br>register key; the v1 entry is untouched (append-only), and the second source is recorded<br>in the <code>CONVERGENCES</code> export, not by editing the entry. <strong>Result: converged, one entry.</strong></li>
+<li><strong><code>unknown-enrolment</code></strong> — rotation <code>recover</code> + guardian-recovery<br><code>recoverWithGuardians</code>/<code>reissue</code> (guardians reuses rotation&#39;s code byte-exact by design).<br>F11 triggers both emitters and byte-compares.</li>
+<li><strong><code>unbounded-clock:</code></strong>, <strong><code>unknown-clock-family:</code></strong>, <strong><code>unknown-clock-toucher:</code></strong><br>(families) — emitted by both rotation <code>validateClocks</code> and guardian-recovery<br><code>validateGuardianClocks</code>. F11 checks the family match from both.</li>
+</ul>
+<h3>§13.6 retry-ambiguity judgments taken at v2 (8 additions marked)</h3>
+<ul>
+<li><code>recovery-rate-exceeded</code> — a k-th recovery in one recovery epoch may be legitimate repeated<br>catastrophic loss or a retry after a partially-failed ceremony, not credential farming.</li>
+<li><code>guardian-epoch-lapsed</code> — a lapsed guardian epoch may be an overdue re-affirmation ceremony<br>(usability lapse, must be surfaced per §6.8) vs an attacker replaying stale attestations.</li>
+<li><code>mediator-not-governed</code> — absence from the verifier-held snapshot may be registry lag<br>(freshly accredited / snapshot not propagated) vs a rogue mediator; fail closed, but §13.6<br>forbids reading the refusal as proof of malice.</li>
+<li><code>unknown-enrolment</code> — a retried recovery after a SUCCESSFUL one presents a now-revoked<br>reference; retry/race vs fabricated-reference attack are indistinguishable observably.</li>
+<li><code>duplicate-live-enrolment</code> — the duplicate-human-in-context class: a person who lost a<br>device may re-enrol not knowing the old enrolment is live; recovery/race/Sybil converge.</li>
+<li><code>duplicate-guardian-seat</code> — the duplicate-edge parallel: a duplicated attestation in a<br>bundle may be assembly error or re-submission race, not seat forgery.</li>
+<li><code>contested-recovery</code> — by design: the freeze exists BECAUSE honest holder and attacker are<br>observably indistinguishable; adjudication decides, the rejection never does.</li>
+<li><code>stale-epsilon:</code> (family) — the stale-registry-snapshot shape one layer up: a re-audit may<br>be scheduled but not landed — an accreditation refresh race.</li>
+</ul>
+<h3>Absorption table (code | source | method | retry-ambiguous)</h3>
+<p>All methods are <strong>triggered</strong> (F10 drives the emitting module&#39;s failing path and<br>byte-compares). Families are marked <code>(family)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>source</th>
+<th>method</th>
+<th>retry-amb.</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>digest-mismatch</code></td>
+<td>context-card <code>checkLegibility</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unrendered-field:</code> (family)</td>
+<td>context-card <code>checkLegibility</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>missing-narrow-language:</code> (family)</td>
+<td>context-card <code>checkLegibility</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>broad-personhood-language:</code> (family)</td>
+<td>context-card <code>checkLegibility</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>status-correlated-with-presentation</code></td>
+<td>quiet-presentation <code>checkQuietTier</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>per-show-authority-contact</code></td>
+<td>quiet-presentation <code>checkQuietTier</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>error-surface-nonuniform</code></td>
+<td>quiet-presentation <code>checkQuietTier</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>shape-fingerprint</code></td>
+<td>quiet-presentation <code>checkQuietTier</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>retry-off-grid</code></td>
+<td>quiet-presentation <code>checkQuietTier</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>retry-over-budget</code></td>
+<td>quiet-presentation <code>checkQuietTier</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-internal-reason:</code> (family)</td>
+<td>quiet-presentation <code>checkQuietTier</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>prohibited-log-field:</code> (family)</td>
+<td>quiet-presentation <code>validateLogSchema</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unregistered-log-field:</code> (family)</td>
+<td>quiet-presentation <code>validateLogSchema</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>missing-observer-row:</code> (family)</td>
+<td>quiet-presentation <code>validateBudget</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-observer:</code> (family)</td>
+<td>quiet-presentation <code>validateBudget</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>incomplete-claim-form:</code> (family, param <code>&lt;observer&gt;:&lt;parameter&gt;</code>)</td>
+<td>quiet-presentation <code>validateBudget</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>empty-sees-claims-undetectability:</code> (family)</td>
+<td>quiet-presentation <code>validateBudget</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>recovery-rate-exceeded</code></td>
+<td>rotation <code>recover</code></td>
+<td>triggered</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>duplicate-live-enrolment</code></td>
+<td>rotation <code>issuerEnrol</code></td>
+<td>triggered</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>epoch-descent-mismatch</code></td>
+<td>rotation <code>checkDescent</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-enrolment</code></td>
+<td>rotation <code>recover</code> <strong>+</strong> guardian-recovery (convergence)</td>
+<td>triggered ×2</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>unbounded-clock:</code> (family)</td>
+<td>rotation <strong>+</strong> guardian-recovery clock validators (convergence)</td>
+<td>triggered ×2</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-clock-family:</code> (family)</td>
+<td>rotation <strong>+</strong> guardian-recovery clock validators</td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-clock-toucher:</code> (family)</td>
+<td>rotation <strong>+</strong> guardian-recovery clock validators</td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>missing-clock:</code> (family)</td>
+<td>erosion-record <code>validateSort</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unsorted-clock:</code> (family)</td>
+<td>erosion-record <code>validateSort</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-clock:</code> (family)</td>
+<td>erosion-record <code>validateSort</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>erosion-clock-unwatched</code></td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>overclaimed-measurement</code></td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>cliff-only-erosion-claim</code></td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>claim-missing-parameter:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>invalid-horizon-basis:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>missing-field:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>missing-clock-family:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>erosion-missing-observables:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>erosion-missing-monitoring-signal:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>erosion-missing-horizon:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>invalid-erosion-entry:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>invalid-record:</code> (family)</td>
+<td>erosion-record <code>validateRecord</code>/<code>serializeRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>honeypot-prohibited</code></td>
+<td>mediator <code>makeProvingJob</code>/<code>executeJob</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>missing-holder-secret</code></td>
+<td>mediator <code>makeProvingJob</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>descriptor-transcript-mismatch</code></td>
+<td>mediator <code>makeProvingJob</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>missing-epoch</code></td>
+<td>mediator <code>executeJob</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-mediator-level:</code> (family)</td>
+<td>mediator <code>makeProvingJob</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>retention-violation:</code> (family)</td>
+<td>mediator <code>checkForget</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>job-transcript-mismatch</code></td>
+<td>mediator <code>verifyProofRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>proof-invalid</code></td>
+<td>mediator <code>verifyProofRecord</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>silent-fallback</code></td>
+<td>§26.1 b8 (v1) <strong>+</strong> downgrade <code>validateTransition</code> (convergence)</td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unnamed-target</code></td>
+<td>downgrade <code>makeTransition</code>/<code>validateTransition</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>mediator-not-governed</code></td>
+<td>downgrade <code>attemptProof</code></td>
+<td>triggered</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>unnamed-lower-profile</code></td>
+<td>downgrade <code>attemptProof</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unnamed-channel</code></td>
+<td>downgrade <code>attemptProof</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unknown-exit:</code> (family)</td>
+<td>downgrade <code>attemptProof</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>duplicate-issuer-in-show</code></td>
+<td>multi-issuer <code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>mixed-registry-roots</code></td>
+<td>multi-issuer <code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>k-outside-tier</code></td>
+<td>multi-issuer <code>makeAggregatedShow</code>/<code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>k-member-mismatch</code></td>
+<td>multi-issuer <code>makeAggregatedShow</code>/<code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>nullifier-mismatch</code></td>
+<td>multi-issuer <code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>issuer-not-in-registry</code></td>
+<td>multi-issuer <code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>invalid-membership-proof</code></td>
+<td>multi-issuer <code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>subject-commitment-mismatch</code></td>
+<td>multi-issuer <code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>predicate-mismatch</code></td>
+<td>multi-issuer <code>verifyAggregated</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>stale-epsilon:</code> (family)</td>
+<td>multi-issuer <code>verifyAggregated</code>/<code>aggregateBound</code></td>
+<td>triggered</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>guardian-threshold-not-met</code></td>
+<td>guardian-recovery <code>recoverWithGuardians</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>guardian-epoch-lapsed</code></td>
+<td>guardian-recovery <code>recoverWithGuardians</code></td>
+<td>triggered</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>duplicate-guardian-seat</code></td>
+<td>guardian-recovery <code>recoverWithGuardians</code></td>
+<td>triggered</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>guardian-not-in-committed-set</code></td>
+<td>guardian-recovery <code>recoverWithGuardians</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>guardian-not-personhood-anchored</code></td>
+<td>guardian-recovery <code>commitGuardianSet</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>contested-recovery</code></td>
+<td>guardian-recovery <code>recoverWithGuardians</code>/<code>reissue</code></td>
+<td>triggered</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>attestation-not-outcome-evidence</code></td>
+<td>guardian-recovery <code>completionEvidence</code></td>
+<td>triggered</td>
+<td>no</td>
+</tr>
+</tbody></table>
+<h3>What v2 deliberately did NOT absorb (and why)</h3>
+<ul>
+<li><code>invalid-descriptor:</code> / <code>invalid-transcript:</code> (canonical) and context-card&#39;s render-time<br>re-throw of it — construction-time malformation guards on the caller&#39;s own input, the same<br>class as <code>schema.mjs</code>&#39;s own error strings; not conformance rejections of a presented artifact.</li>
+<li>multi-issuer <code>registry.mjs</code> construction throws (<code>invalid-registry-member:…</code>,<br><code>invalid-epsilon:…</code>, <code>invalid-dependency-classes:…</code>, <code>duplicate-registry-member:…</code>,<br><code>invalid-registry:…</code>, and <code>effectiveK</code>&#39;s parameterized <code>issuer-not-in-registry:&lt;id&gt;</code> throw) —<br>guards on building the verifier&#39;s OWN registry; the conformance surface is<br><code>verifyAggregated</code>, whose exact <code>issuer-not-in-registry</code> rejection IS registered. The<br>parameterized internal throw is unreachable through the verify path (membership is checked<br>before <code>aggregateBound</code> runs).</li>
+<li>guardian-recovery <code>invalid-threshold</code> and <code>not-an-authorization-input</code> — the source itself<br>says &quot;model guard, not a register code&quot;; honoured.</li>
+<li>quiet-presentation <code>budgetFor</code>&#39;s <code>unknown-profile:</code> throw — a lookup guard, not a rejection.</li>
+<li>OK-reasons (<code>verified</code>, <code>issuer-reissuance-is-the-outcome-artifact</code>) — the register is a<br>REJECTION vocabulary; accept-side strings stay out (same rule as accept vectors carrying<br>no reason code).</li>
+</ul>
+<h3>The seam statement</h3>
+<p>With v2, <strong>all six instrument builds and both foundation runtimes share one rejection<br>vocabulary</strong>: every named failure any instrument emits is a register entry with a source, a<br>decision-doc anchor, and a §13.6 retry-ambiguity marker — the X1 interop claim (&quot;two<br>implementations can compare <em>why</em> they rejected&quot;) now extends to the instrument layer.<br>quiet-presentation already consumes <code>isKnownReason</code> in the other direction (holder-routed<br>codes MUST be register vocabulary; an external surface drawn FROM the register is a leak),<br>so the seam is load-bearing both ways: the fixtures lane owns the vocabulary, the<br>instruments emit it, and F10/F11 keep the two sides byte-identical on every run.</p>
+</div>
+<div class="md"><h2>Reason register v1 stratum (26 codes — append-only over v0, unchanged at v2)</h2>
+<p>The seven <strong>show-composition</strong> strings, absorbed verbatim (F9 triggers each from the emitting<br>module and compares byte-exactly):</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>source</th>
+<th>retry-ambiguous (§13.6)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>partial-show-rejected</code></td>
+<td>verifyShow atomicity (member missing)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>member-transcript-mismatch</code></td>
+<td>verifyShow (member bound to a different transcript)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>bundle-outside-registry</code></td>
+<td>lookupBundle / matchBundle (à-la-carte, unknown id/version, surplus)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>stale-transcript</code></td>
+<td>verifyShow expiry vs explicit now</td>
+<td><strong>yes</strong> — clock skew vs replay</td>
+</tr>
+<tr>
+<td><code>transcript-invalid</code></td>
+<td>verifyShow (malformed / tampered digest)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>taskcontext-not-outcome-evidence</code></td>
+<td>completionEvidence (the credential/artifact wall)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>bundle-profile-mismatch</code></td>
+<td>makeShow (bundle vs descriptor profile disagree)</td>
+<td>no</td>
+</tr>
+</tbody></table>
+<p>The v0 codes, unchanged:</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>source</th>
+<th>ref</th>
+<th>retry-ambiguous (§13.6)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>duplicate-human-in-context</code></td>
+<td>runtime-01 P4</td>
+<td>§13, §13.6, §26</td>
+<td><strong>yes</strong> — retry, race, recovery, epoch disagreement, or attack</td>
+</tr>
+<tr>
+<td><code>endpoint-not-personhood-anchored</code></td>
+<td>runtime-07 G2</td>
+<td>§11, §13; PHC rule</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>self-edge-forbidden</code></td>
+<td>runtime-07 G3</td>
+<td>§13; SPELLWEB 6B</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unilateral-no-mutual-consent</code></td>
+<td>runtime-07 G1</td>
+<td>cred-spec bilateral VRC</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>r-did-mismatch</code></td>
+<td>runtime-07 G4</td>
+<td>cred-spec R-DID uniqueness</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>vrc-commitment-forged</code></td>
+<td>runtime-07 G7</td>
+<td>§2.6, §25</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>duplicate-edge</code></td>
+<td>runtime-07 G6</td>
+<td>§13.6 by analogy</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>expired-or-revoked-attestation</code></td>
+<td>§26.1 b1</td>
+<td>§10.1, §10.6</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>overclaim-verifier-output</code></td>
+<td>§26.1 b2</td>
+<td>§9, §24 (lint class)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>replay-cross-transcript</code></td>
+<td>§26.1 b3</td>
+<td>§15, §15.2</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>nullifier-domain-reuse</code></td>
+<td>§26.1 b4</td>
+<td>§13, §2.3</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>undocumented-collusion-claim</code></td>
+<td>§26.1 b5</td>
+<td>§24, §2.4</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>unjustified-stable-correlator</code></td>
+<td>§26.1 b6</td>
+<td>§24</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>context-expansion-without-version</code></td>
+<td>§26.1 b7</td>
+<td>§24, §6.2</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>silent-fallback</code></td>
+<td>§26.1 b8</td>
+<td>§21, §27.4</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>key-control-as-authority</code></td>
+<td>§26.1 b9</td>
+<td>§14.2, §27.5</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>stale-registry-snapshot</code></td>
+<td>§26.1 b10 (registry facet)</td>
+<td>§12.4</td>
+<td><strong>yes</strong> — refresh race</td>
+</tr>
+<tr>
+<td><code>epoch-snapshot-inconsistent</code></td>
+<td>§26.1 b10 (epoch facet)</td>
+<td>§12.4, §13.6</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td><code>disclosure-ignores-observables</code></td>
+<td>§26.1 b11</td>
+<td>§2.6, §2.4</td>
+<td>no</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>§26.1 coverage (v1 state: <strong>11 covered, 0 partial, 0 gaps of 11</strong>)</h2>
+<table>
+<thead>
+<tr>
+<th>bullet</th>
+<th>status</th>
+<th>via</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 expired/revoked attestation</td>
+<td>covered</td>
+<td>PR-LIV reject ×3 (revoked / expired / unaccepted issuer) — <em>semantic</em> attestation object; the full lifecycle model is rt 02&#39;s future work</td>
+</tr>
+<tr>
+<td>2 output implying biometric correctness</td>
+<td>covered</td>
+<td>3 lint vectors (PR-LIV/PR-PER/PR-UNQ)</td>
+</tr>
+<tr>
+<td>3 replay cross-transcript</td>
+<td>covered</td>
+<td>PR-SHW rejects ×4 via show-composition (transplant <code>member-transcript-mismatch</code>, <code>partial-show-rejected</code>, <code>bundle-outside-registry</code>, <code>stale-transcript</code>)</td>
+</tr>
+<tr>
+<td>4 nullifier-domain reuse</td>
+<td>covered</td>
+<td>PR-UNQ reject (nullifier computed under descriptor A, transcript binds B — consumer recomputes) + the v0 cross-context accept pair</td>
+</tr>
+<tr>
+<td>5 undocumented collusion claim</td>
+<td>covered</td>
+<td>PR-UNQ lint (collusion claim with no adversary model/test vs a §2.4-complete counterpart)</td>
+</tr>
+<tr>
+<td>6 unjustified stable correlator</td>
+<td>covered</td>
+<td>PR-UNQ reject (extra <code>stableHolderTag</code> field → canonical <code>validateDescriptor</code> rejects unknown fields)</td>
+</tr>
+<tr>
+<td>7 context expansion without version</td>
+<td>covered</td>
+<td>PR-CTX reject via context-card <code>diffCards</code> (expansion with no migration record) + compliant accept counterpart</td>
+</tr>
+<tr>
+<td>8 silent fallback</td>
+<td>covered</td>
+<td>PR-FLB reject (mediated proving occurred, no <code>provingMode</code> in transcript) + declared-mode accept</td>
+</tr>
+<tr>
+<td>9 key-control as authority</td>
+<td>covered</td>
+<td>PR-HLD lint vector (claim-language form)</td>
+</tr>
+<tr>
+<td>10 epoch/registry snapshot inconsistency</td>
+<td>covered</td>
+<td>PR-EPO rejects ×2 (<code>epoch-snapshot-inconsistent</code> epoch facet, <code>stale-registry-snapshot</code> root-age vs explicit now)</td>
+</tr>
+<tr>
+<td>11 disclosure ignores observables</td>
+<td>covered</td>
+<td>PR-SHW lint ×2 (&quot;verifier learns nothing&quot; fails; honest occurrence-and-timing statement passes)</td>
+</tr>
+</tbody></table>
+<p>The coverage report is printed by <code>node test.mjs</code> (F8) on every run — the no-silent-caps rule holds:<br>if a future edit reopens a gap, it prints. Honest caveat: bullets 1 and 8 use <em>semantic</em> vectors —<br>minimal attestation / fallback objects modelling the decision rules, whose full constructions are<br>future runtimes (rt 02, the §21 mediated-proving profile).</p>
+</div>
+<div class="md"><h2>Decisions this build took that the design doc left open</h2>
+<ul>
+<li><strong><code>PR-TGF</code></strong> is an exploration-local family id for runtime 07&#39;s trust-graph relations<br>(the §9 register has no trust-graph predicate). Non-normative; flagged for the TF.</li>
+<li><strong>Bullet 10 carries two codes</strong> (<code>stale-registry-snapshot</code> / <code>epoch-snapshot-inconsistent</code>)<br>because staleness and contradiction fail differently.</li>
+<li><strong>Accept vectors carry no reason code</strong> — the register is a <em>rejection</em> vocabulary; the<br>path name (<code>first-enrolment</code>) is descriptive only.</li>
+<li><strong>Witness opacity</strong> (X1 open question 1): these vectors sit at the <em>semantic</em> layer —<br>inputs are re-derivable model inputs (humanIds, descriptors), no construction witness yet.</li>
+<li><strong>Lint covers bullet 9 as claim language</strong>, not just bullet 2 — &quot;key control confirms the<br>agent is authorised&quot; is the §26.1 b9 failure expressed as verifier prose.</li>
+<li><strong>v1 additions (2026-07-18):</strong> the seam to show-composition closed by absorbing its seven<br>reason strings verbatim (append-only, F9-verified); bullets 1/8 modelled as semantic vectors<br>(minimal attestation + fallback objects) rather than waiting for rt 02/§21 constructions;<br>bullet 7 consumes context-card&#39;s <code>diffCards</code> — the first cross-instrument vector, which is<br>the composition story working as designed (instruments feed the fixture suite).</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream candidates (the §26.2 fixture-format proposal)</h2>
+<ol>
+<li><strong>§26.2 fixture format</strong>: the M2 schema (fixture id grammar, mandatory §2.4 claimParams,<br>accept/reject/lint classes, manifest) as the missing normative half of §26&#39;s<br>&quot;MUST provide … test vectors&quot; — offered with <code>reasons.mjs</code> v0 for ratification<br>alongside the §28 list.</li>
+<li><strong>Reason-register governance</strong>: reasons are append-only under a version tag, and each<br>entry carries an explicit §13.6 <code>retryAmbiguous</code> marker so error semantics stay<br>deterministic <em>and</em> redress-aware across implementations.</li>
+<li><strong>Lint vectors as a conformance class</strong>: the §9/§24 prohibited-pattern list as a shared<br>artefact with Human Experience (§27.4) — the negative meanings tested where they<br>actually leak: in verifier output text.</li>
+</ol>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-fixtures.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

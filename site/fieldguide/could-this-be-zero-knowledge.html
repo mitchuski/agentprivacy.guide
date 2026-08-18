@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Could This Be Zero Knowledge · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="fieldguide">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site on" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=fieldguide" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/fieldguide/welcome-visitors.html">Field Guide</a> / <span>Could This Be Zero Knowledge</span></div>
+  <article><div class="md"><h1>Could This Be Zero Knowledge</h1>
+</div>
+<div class="md"><p>An exploration, for the <a class="wlink" href="hitchhikers-field-guide.html">Hitchhikers Field Guide</a> side. Nothing here is on our roadmap and nothing needs to be.</p>
+<p>Short answer: yes — three parts usefully, one part beautifully. But not yet, and the blocker is not a circuit.</p>
+</div>
+<div class="md"><h2>The precondition nobody can skip</h2>
+<p>The server holds every avatar&#39;s keys, every edge and every discovery, and assembles the map itself.</p>
+<p><strong>A zero-knowledge proof presented to a party that already holds your secrets protects nothing.</strong> If a client proves to the server &quot;I hold an edge with the owner of this pin,&quot; the server issued that edge and can read it. The proof is decoration.</p>
+<p>So the first step is not circom. It is moving signing keys onto the device — what the spec calls a personal network vault, under the exclusive control of the person, whose use they <em>may</em> delegate to an agent. Holding them server-side is the delegated pattern, and it is permitted. It just means there is nothing yet for a proof to bite on.</p>
+<p>Worth saying first because it is the least fun part and the easiest to skip past into circuits.</p>
+</div>
+<div class="md"><h2>Where it goes, and where it does not</h2>
+<p>The instinct is to reach for the write path. Resist it: witnessing a place is a player telling their own server about their own visit. There is no counterparty and nothing to hide. <strong>Zero knowledge belongs at the presentation surface, not the write surface</strong> — which is where the spec puts it too.</p>
+<p>Four statements worth proving, in the order I would rank them:</p>
+<p><strong>A · &quot;These two personas have a relationship&quot;</strong> — without revealing either relationship identifier. The verifier is a third party, so this pays off <em>immediately</em>, with no key migration. It is also the spec&#39;s own worked example of the pairwise proof, and it is the share card upgraded: a card that carries a verifiable relationship claim a stranger can check, without the two parties leaking their private channel or becoming correlatable across every other card they have shared.</p>
+<p><strong>B · &quot;This pin belongs on my map&quot;</strong> — I hold an edge with its owner and their policy admits me, without revealing <em>which</em> peer. This inverts the overlay: the client proves, the server returns the pin, and the server never learns the social graph. The prize, and strictly gated on key custody.</p>
+<p><strong>C · &quot;We were within R metres of each other at time T&quot;</strong> — without either position being revealed to anyone, including the server. The spec&#39;s witness credential already anticipates the statement; its own example is both parties proving they were at the same event at the same time.</p>
+<p><strong>D · &quot;This discovery is fresher than H&quot;</strong> — without revealing when. Small, cheap, pleasant.</p>
+</div>
+<div class="md"><h2>The one I would most like to build</h2>
+<p>C. A meet currently sends both sets of coordinates to a server, which makes a location-tracking database accumulate as a side effect of a friendship feature. The proof version leaks a boolean and nothing else.</p>
+<p>The honest limit: a phone&#39;s location is self-asserted, so the proof establishes that two devices <em>claimed</em> nearby positions, not that two people were together. Zero knowledge makes the claim private; it does not make it true.</p>
+<p>Even so — turning <em>we were in the same place</em> from a database row into a proof that reveals nothing is a genuinely nice thing for a walking game to be able to say.</p>
+</div>
+<div class="md"><h2>What it costs, measured rather than adjectival</h2>
+<p>From the lab, real proofs over BN254, not simulations: a membership-plus-nullifier circuit at <strong>11,523 constraints — about 683 ms to prove, 8 ms to verify, 721 bytes</strong>.</p>
+<p>Read for a phone: the proof size is irrelevant, ship it in a header. Verification is free. <strong>Proving is the constraint</strong> — several times 683 ms on a mid-range handset. That is fine for a meet, a once-per-relationship ceremony where the player is already holding up a QR code. It is not fine per-pin on a map that repaints as you walk, which shapes statement B: one proof per query, not one per pin.</p>
+<p>Groth16 also needs a trusted setup per circuit, and the lab&#39;s is a lab fixture that says so. A production one is a governance exercise, not an afternoon.</p>
+<p>One number worth knowing because it is so cheap: binding a proof to its context cost <strong>exactly one constraint</strong>. Unbound proofs are replayable, so there is no reason to skip it.</p>
+</div>
+<div class="md"><h2>The path</h2>
+<p>Each step is useful alone and none of them strands you.</p>
+<ol start="0">
+<li><strong>Nothing.</strong> Ship the meet and the overlay with ordinary signatures, and get the object shapes right first — see <a class="wlink" href="oasis-and-the-cred-spec.html">OASIS And The Cred Spec</a>. Every step below is easier for it, and that work has to happen anyway.</li>
+<li><strong>A</strong>, the pairwise relationship proof on the card. Third-party verifier, no migration needed.</li>
+<li><strong>Keys to the device.</strong> The real one.</li>
+<li><strong>C</strong>, proximity as an annotation — a small circuit that removes a liability rather than adding a feature.</li>
+<li><strong>B</strong>, the private overlay query.</li>
+<li>Community-anchored proofs, if OASIS ever forms a community with personhood governance.</li>
+</ol>
+<p>If any of these become interesting I would rather build them in the task force lab, as public evidence with measurements attached, than bespoke inside one server — so the answer is reusable by anyone implementing the spec, and the Field Guide is the deployment that motivated it rather than the only place it works. See <a class="wlink" href="the-dtg-zkp-task-force.html">The DTG ZKP Task Force</a>.</p>
+<p>Caveat on all of it: I have not written these circuits. The costs above are for adjacent statements in the same family — a reasonable guide, not a quote.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="could-this-be-zero-knowledge.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

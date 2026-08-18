@@ -1,0 +1,99 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The HH Workshop · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=harness" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The HH Workshop</span></div>
+  <article><div class="md"><h1>🐟 The HH Workshop</h1>
+</div>
+<div class="md"><p>A standalone instance of the dual-agent harness built for a masters cohort — the <strong>babblefish recursion</strong>: narrative → poem → white paper → recurse, gated by a blind Fiat-Shamir-drawn census over 31 canon claims. The tongue you didn&#39;t polish is the one interrogated. The cohort graduates owning its own evaluation harness, three bound books, and ed25519 provenance as the mage&#39;s first trainers.</p>
+</div>
+<div class="md"><p>A <strong>standalone</strong> harness instance for a facilitated masters-cohort workshop<br>around a shared, air-gapped local mage: the <strong>babblefish recursion</strong> —</p>
+<pre><code>sci-fi narrative → poem → white paper → (recurse) ↺
+</code></pre>
+<p>— one understanding rendered across three tongues, with a blind, hash-drawn<br>gate checking that the understanding <em>survives translation</em>. Understanding is<br>the key (access is expressed, never issued); participant expressions are both<br>key and food (the cohort trains its own mage, week by week, through a<br>rotating steward); the cohort graduates owning its own evaluation harness,<br>three bound books, and verifiable provenance as the mage&#39;s first trainers.</p>
+<p>A sibling instance of the dual-agent harness<br>(github.com/mitchuski/agentprivacy-harness): the engine is vendored verbatim<br>(VENDOR.md), <code>harness.config.mjs</code> is the divergence surface, and TRUSTS.md<br>T1–T6 bind unchanged. Copy this directory onto a fresh machine and it runs —<br>no framework checkout, no internet, no Claude Code (mage/MACHINE_SETUP.md).</p>
+</div>
+<div class="md"><h2>Quickstart</h2>
+<pre><code>node tools/check.mjs                                  # every gate — green before anything else
+node driver/run_round.mjs --stub --run smoke          # the loop, deterministically, no model
+node driver/run_round.mjs --model &lt;m&gt; --run r1 --triptych canon/seed-triptych   # the mage holds the seats
+node tools/verify_run.mjs . r1                        # the round replays offline
+node tools/console.mjs                                # the room&#39;s window — 127.0.0.1:4242
+</code></pre>
+</div>
+<div class="md"><h2>The five answers (harness.config.mjs)</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>artifact</strong></td>
+<td>the cohort canon (<code>canon/UNDERSTANDING.md</code>, 31 numbered claims) + triptychs (<code>artifact/*/</code> — three tongues + <code>carry.json</code> declarations)</td>
+</tr>
+<tr>
+<td><strong>metric</strong></td>
+<td>translation-debt ↓ — (claim, form) pairs not yet carried; <code>node tools/measure_debt.mjs</code>; baseline 32 (frontier.json)</td>
+</tr>
+<tr>
+<td><strong>gate</strong></td>
+<td>babblefish census: all 31 claims, probed through ONE form drawn Fiat-Shamir from the committed triptych — the tongue you didn&#39;t polish is the one interrogated; assayer blind to canon; any miss = zero</td>
+</tr>
+<tr>
+<td><strong>hard constraint</strong></td>
+<td>no canon drift (additive-only register, keystone-folded) + consent-first (nothing enters corpus or export without a signed ledger line — enforced in the pipes, not the prose)</td>
+</tr>
+<tr>
+<td><strong>canary</strong></td>
+<td><code>canon/seed-triptych/</code> — authored with the register; passes the census by construction</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>The pages</h2>
+<ul>
+<li><a class="wlink" href="hh-workshop-brief.html">HH Workshop Brief</a> — The Hitchhikers Workshop — a brief of the work, and how it plays out</li>
+<li><a class="wlink" href="hh-workshop-trusts.html">HH Workshop Trusts</a> — TRUSTS — the constitutional layer</li>
+<li><a class="wlink" href="hh-workshop-ground-rules.html">HH Workshop Ground Rules</a> — GROUND RULES</li>
+<li><a class="wlink" href="hh-workshop-vendor.html">HH Workshop Vendor</a> — VENDOR.md — provenance of the vendored skeleton</li>
+<li><a class="wlink" href="hh-workshop-ceremony.html">HH Workshop Ceremony</a> — CEREMONY.md — the Portable Proof-of-Understanding Ceremony</li>
+<li><a class="wlink" href="hh-workshop-curriculum.html">HH Workshop Curriculum</a> — CURRICULUM.md — the course arc</li>
+<li><a class="wlink" href="hh-workshop-understanding-key.html">HH Workshop Understanding Key</a> — UNDERSTANDINGKEY.md — the access ladder (an AUDITOR, and it says so)</li>
+<li><a class="wlink" href="hh-workshop-preflight.html">HH Workshop Preflight</a> — PREFLIGHT.md — venue checklist + naming contract + failure playbook</li>
+<li><a class="wlink" href="hh-workshop-university-onepager.html">HH Workshop University Onepager</a> — The Hitchhikers Workshop — a one-pager for a university partner</li>
+</ul>
+</div>
+<div class="md"><h2>What stays sealed</h2>
+<p>The participant corpus, the consent registers, the run ledgers, and the letters — the workshop&#39;s own consent-first constraint keeps them in the repo&#39;s private lanes, not on any wiki.</p>
+</div>
+<a class="ref" href="/guide/understanding-as-key.html"><span class="ref-glyph">🏛</span>
+      <span class="ref-body"><span class="ref-title">Understanding as Key</span>
+      <span class="ref-text">the invariant the workshop's census gate embodies — the guide synthesis page.</span>
+      <span class="ref-site">guide</span></span></a>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>README.md</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 the-hh-workshop</span><a class="asset-file" href="/harness/assets/the-hh-workshop/README.md" download>README.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>github.com/mitchuski/hh_workshop</code> · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-harness-paths.html">The Harness Paths</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-hh-workshop.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

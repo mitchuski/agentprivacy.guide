@@ -1,0 +1,136 @@
+{
+  "title": "Spec — κ-Addressed Holon Interoperability — Spec v1",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "1a43be45a7ebbffc",
+      "text": "# κ-Addressed Holon Interoperability — Spec v1"
+    },
+    {
+      "type": "markdown",
+      "id": "de6ed0497d57027d",
+      "text": "**Status:** IMPLEMENTED (content edges) · SPEC (relational edges)\n**Origin:** the dual-agent harness (`~/dual-agent-harness`, `HOLONS.md`, head on\n`github.com/mitchuski/agentprivacy-harness`)\n**Companion:** `specs/DUAL_AGENT_HARNESS_SPEC_v1.md` · `reference/vrc_promise_protocol_v3_3.md`\n**Date:** 2026-07-12"
+    },
+    {
+      "type": "markdown",
+      "id": "15c92767d26de69b",
+      "text": "## Purpose\n\nDefine the content-addressing convention by which a result the harness produces\nbecomes an **interoperable, independently verifiable unit** — a *holon* — that\nany system in the corpus (the model instruments, the spellweb graph, a future\n`hologram-technologies` site) can carry and re-derive without trusting its\nsource. One law, computed identically everywhere, is the interoperability\nsubstrate."
+    },
+    {
+      "type": "markdown",
+      "id": "99e68f4a48cd8050",
+      "text": "## 1 · The κ-label\n\nA **holon** is any object carrying a `κ` field:\n\n```\nκ = \"sha256:\" + sha256( canonicalJson( holon with the κ field removed ) )\n```\n\n- `canonicalJson` — JSON with recursively sorted keys and no whitespace.\n- The κ field is **excluded from its own preimage**, so the object can carry its\n  own address.\n\nThis is the City Key / sigil **Law L5**: *a κ-label is never trusted, only\nre-derived.* Reference implementation: `tools/kappa.mjs` (`canonicalJson`,\n`sha256Hex`, `kappaOf`, `verifyKappa`). Any consumer that vendors this one\nfunction re-derives a holon minted anywhere byte-for-byte; two divergent\nimplementations do not catch each other, they break addressing, so there is\nexactly one."
+    },
+    {
+      "type": "markdown",
+      "id": "c3816b4071fab0a2",
+      "text": "## 2 · What the harness mints as holons\n\n- **`artefact.v1`** — a sealed result: run reference, per-proposal verdicts and\n  Gap-seed re-derivations, a frontier beat, an `evidenceManifest`, and a `door`\n  block naming the outward actions software did not take.\n- **`runtime-feed.v1`** — a workshop's produced math (the moving ceiling R(t),\n  the ℤ/64ℤ lattice). Self-addressing: `buildFeed` stamps its own κ, so a state\n  snapshot is a verifiable holon.\n\n*State is content-addressed:* the κ that seals a result at the door is the same\nκ that addresses runtime state during a run."
+    },
+    {
+      "type": "markdown",
+      "id": "ccf5fb74f8deeaa9",
+      "text": "## 3 · Edges\n\n- **Content edge** — a hash reference to bytes (an `evidenceManifest` entry).\n  Verified by **re-hashing**; needs no signature, because the content is its own\n  witness. **IMPLEMENTED.**\n- **Relational edge (VRC)** — a κ→κ reference between holons, governed by the\n  edge rule: *a reference proposes an edge; a counterparty's signature mints it*\n  (`vrc_promise_protocol_v3_3.md`). Verified by re-deriving both endpoints and\n  checking the signature. **SPEC** until real signatures land."
+    },
+    {
+      "type": "markdown",
+      "id": "021b22ec30e29767",
+      "text": "## 4 · Verification is an auditor, not a harness\n\nEvery interoperability claim a holon makes is **enumerable**: does its κ\nre-derive, do its content edges re-hash, do its relational endpoints resolve.\nThere is nothing to tune to — you cannot craft a holon whose κ re-derives to a\nvalue it does not have. So the mesh verifier `tools/holon_audit.mjs` is a\ndeterministic, agent-free **auditor**, not a harness (harnesses are for\nadversarial claim spaces too large to check; auditors are for enumerable facts —\nthe retired universe-builder is the corpus's record of that boundary).\n\n> **The harness mints the holons; the auditor verifies the mesh.**\n\nA holon's *substantive* claim (\"40% smaller and still correct\") remains the job\nof the minting harness; only the *integrity of the mesh* is the auditor's."
+    },
+    {
+      "type": "markdown",
+      "id": "c322f6b6f013cd66",
+      "text": "## 5 · Reach\n\nBecause `kappa.mjs` and `holon_audit.mjs` live in the shared harness core and\noperate on any instance directory, every runtime inherits κ-addressed state with\nno per-instance code change:\n\n```\nnode <harness>/tools/mint_artefact.mjs  <instance>  <run>\nnode <harness>/tools/holon_audit.mjs    <instance>/artefacts\n```\n\nlexon_pvm, shor_mage, privacy_pools_v2, and every future runtime become\ncontent-addressed the moment they are run through the harness. A consuming site\n(`hologram-technologies`) vendors this spec plus `kappa.mjs` and re-derives the\nwhole mesh; the corpus stays home, the κ travels."
+    },
+    {
+      "type": "markdown",
+      "id": "deedd3747e79d2a5",
+      "text": "## Interop map\n\n| this spec's term | corpus cognate |\n|---|---|\n| κ-label / holon | `con-content-addressing` (spellweb); content-addressed liveness C93 (PVM V6); holonic memory `A_h(τ)` |\n| relational edge / VRC | `vrc_promise_protocol_v3_3.md`; the edge rule (`universe/universe.json`) |\n| auditor vs harness | `ADOPTION.md` step 0; the retired universe-builder |\n| the door | T6 — outward actions are the First Person's |\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "0623f333cfc354ed",
+      "text": "# Assets"
+    },
+    {
+      "id": "871194cd5bd132ec",
+      "type": "assets",
+      "text": "spec-addressed-holon-interoperability-spec-v1"
+    },
+    {
+      "type": "markdown",
+      "id": "136688296fa9bd10",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Spec — κ-Addressed Holon Interoperability — Spec v1",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "1a43be45a7ebbffc",
+            "text": "# κ-Addressed Holon Interoperability — Spec v1"
+          },
+          {
+            "type": "markdown",
+            "id": "de6ed0497d57027d",
+            "text": "**Status:** IMPLEMENTED (content edges) · SPEC (relational edges)\n**Origin:** the dual-agent harness (`~/dual-agent-harness`, `HOLONS.md`, head on\n`github.com/mitchuski/agentprivacy-harness`)\n**Companion:** `specs/DUAL_AGENT_HARNESS_SPEC_v1.md` · `reference/vrc_promise_protocol_v3_3.md`\n**Date:** 2026-07-12"
+          },
+          {
+            "type": "markdown",
+            "id": "15c92767d26de69b",
+            "text": "## Purpose\n\nDefine the content-addressing convention by which a result the harness produces\nbecomes an **interoperable, independently verifiable unit** — a *holon* — that\nany system in the corpus (the model instruments, the spellweb graph, a future\n`hologram-technologies` site) can carry and re-derive without trusting its\nsource. One law, computed identically everywhere, is the interoperability\nsubstrate."
+          },
+          {
+            "type": "markdown",
+            "id": "99e68f4a48cd8050",
+            "text": "## 1 · The κ-label\n\nA **holon** is any object carrying a `κ` field:\n\n```\nκ = \"sha256:\" + sha256( canonicalJson( holon with the κ field removed ) )\n```\n\n- `canonicalJson` — JSON with recursively sorted keys and no whitespace.\n- The κ field is **excluded from its own preimage**, so the object can carry its\n  own address.\n\nThis is the City Key / sigil **Law L5**: *a κ-label is never trusted, only\nre-derived.* Reference implementation: `tools/kappa.mjs` (`canonicalJson`,\n`sha256Hex`, `kappaOf`, `verifyKappa`). Any consumer that vendors this one\nfunction re-derives a holon minted anywhere byte-for-byte; two divergent\nimplementations do not catch each other, they break addressing, so there is\nexactly one."
+          },
+          {
+            "type": "markdown",
+            "id": "c3816b4071fab0a2",
+            "text": "## 2 · What the harness mints as holons\n\n- **`artefact.v1`** — a sealed result: run reference, per-proposal verdicts and\n  Gap-seed re-derivations, a frontier beat, an `evidenceManifest`, and a `door`\n  block naming the outward actions software did not take.\n- **`runtime-feed.v1`** — a workshop's produced math (the moving ceiling R(t),\n  the ℤ/64ℤ lattice). Self-addressing: `buildFeed` stamps its own κ, so a state\n  snapshot is a verifiable holon.\n\n*State is content-addressed:* the κ that seals a result at the door is the same\nκ that addresses runtime state during a run."
+          },
+          {
+            "type": "markdown",
+            "id": "ccf5fb74f8deeaa9",
+            "text": "## 3 · Edges\n\n- **Content edge** — a hash reference to bytes (an `evidenceManifest` entry).\n  Verified by **re-hashing**; needs no signature, because the content is its own\n  witness. **IMPLEMENTED.**\n- **Relational edge (VRC)** — a κ→κ reference between holons, governed by the\n  edge rule: *a reference proposes an edge; a counterparty's signature mints it*\n  (`vrc_promise_protocol_v3_3.md`). Verified by re-deriving both endpoints and\n  checking the signature. **SPEC** until real signatures land."
+          },
+          {
+            "type": "markdown",
+            "id": "021b22ec30e29767",
+            "text": "## 4 · Verification is an auditor, not a harness\n\nEvery interoperability claim a holon makes is **enumerable**: does its κ\nre-derive, do its content edges re-hash, do its relational endpoints resolve.\nThere is nothing to tune to — you cannot craft a holon whose κ re-derives to a\nvalue it does not have. So the mesh verifier `tools/holon_audit.mjs` is a\ndeterministic, agent-free **auditor**, not a harness (harnesses are for\nadversarial claim spaces too large to check; auditors are for enumerable facts —\nthe retired universe-builder is the corpus's record of that boundary).\n\n> **The harness mints the holons; the auditor verifies the mesh.**\n\nA holon's *substantive* claim (\"40% smaller and still correct\") remains the job\nof the minting harness; only the *integrity of the mesh* is the auditor's."
+          },
+          {
+            "type": "markdown",
+            "id": "c322f6b6f013cd66",
+            "text": "## 5 · Reach\n\nBecause `kappa.mjs` and `holon_audit.mjs` live in the shared harness core and\noperate on any instance directory, every runtime inherits κ-addressed state with\nno per-instance code change:\n\n```\nnode <harness>/tools/mint_artefact.mjs  <instance>  <run>\nnode <harness>/tools/holon_audit.mjs    <instance>/artefacts\n```\n\nlexon_pvm, shor_mage, privacy_pools_v2, and every future runtime become\ncontent-addressed the moment they are run through the harness. A consuming site\n(`hologram-technologies`) vendors this spec plus `kappa.mjs` and re-derives the\nwhole mesh; the corpus stays home, the κ travels."
+          },
+          {
+            "type": "markdown",
+            "id": "deedd3747e79d2a5",
+            "text": "## Interop map\n\n| this spec's term | corpus cognate |\n|---|---|\n| κ-label / holon | `con-content-addressing` (spellweb); content-addressed liveness C93 (PVM V6); holonic memory `A_h(τ)` |\n| relational edge / VRC | `vrc_promise_protocol_v3_3.md`; the edge rule (`universe/universe.json`) |\n| auditor vs harness | `ADOPTION.md` step 0; the retired universe-builder |\n| the door | T6 — outward actions are the First Person's |\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "0623f333cfc354ed",
+            "text": "# Assets"
+          },
+          {
+            "id": "871194cd5bd132ec",
+            "type": "assets",
+            "text": "spec-addressed-holon-interoperability-spec-v1"
+          },
+          {
+            "type": "markdown",
+            "id": "136688296fa9bd10",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Specs]]"
+          }
+        ]
+      },
+      "date": 1787079756403
+    }
+  ]
+}

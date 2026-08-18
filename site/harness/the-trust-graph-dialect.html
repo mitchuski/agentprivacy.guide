@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Trust Graph Dialect · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=harness" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Trust Graph Dialect</span></div>
+  <article><div class="md"><h1>🕸️ The Trust Graph Dialect</h1>
+</div>
+<div class="md"><p>The harness emits graphs; it never renders them. This document pins the<br>dialect so any consumer — spellweb.ai, soulbis.com/star, game42, a FedWiki<br>page, your own interface — can speak it, and so the graph&#39;s semantics stay<br>aligned with the algebra and with the credential specs a trust graph must<br>eventually meet. Emitters: <code>tools/spellweb.mjs</code> (<code>graph.json</code>),<br><code>tools/star.mjs</code> (<code>star.v1</code>), <code>tools/emit_feed.mjs</code> (<code>runtime-feed.v1</code>),<br><code>tools/vrc.mjs</code> (signed edges).</p>
+</div>
+<div class="md"><h2>Nodes</h2>
+<pre><code>{ id, type, label, domain, layer, desc, ...extra }
+</code></pre>
+<p>A node is a reference to something the ledgers hold — and anything sealed<br>is <strong>κ-addressable</strong>: <code>κ = sha256(canonicalJson(record − κ))</code>, one law,<br>computed identically everywhere (<code>tools/kappa.mjs</code>, <code>HOLONS.md</code>). <code>domain</code><br>is the algebra&#39;s role, not a topic: <code>swordsman</code> (⚔️ neg — proves),<br><code>mage</code> (🧙 bnot — proposes), <code>first_person</code> (😊 — the door), <code>shared</code><br>(the axioms both may touch). <code>layer</code> is ring semantics for any consumer<br>that wants geometry (<code>core · knowledge · work · record · constitution · seats · machinery · paths</code>). Types are open; the emitted <code>nodeTypes</code> array<br>enumerates what a given graph uses.</p>
+</div>
+<div class="md"><h2>Edges — proposed vs minted</h2>
+<pre><code>{ source, target, type }
+</code></pre>
+<p>The load-bearing distinction, from <code>HOLONS.md</code> and FLEET §2:</p>
+<ul>
+<li><strong>A derived edge is a PROPOSAL.</strong> Everything <code>spellweb.mjs</code> emits —<br><code>validated_in</code>, <code>through_lens</code>, <code>claims</code>, <code>chronicles</code>, <code>inherits</code> — is<br>walked from content. It re-derives (re-run = re-true) but asserts only<br>what the ledgers already record.</li>
+<li><strong>A signature MINTS.</strong> A relational edge that crosses parties is a<br><strong>VRC</strong>: ed25519 over the exact tuple <em>(source κ, target κ, relation)</em>,<br>signer a <code>did:key</code>. Only the counterparty&#39;s signature makes the edge<br>real; an unsigned edge is a candidate, and a graph that renders it must<br>render it as one.</li>
+</ul>
+<p>That shape is deliberately the shape verifiable-credential and<br>personhood-credential specs already speak — <strong>issuer</strong> (the signer&#39;s DID),<br><strong>subject</strong> (the source κ), <strong>claim</strong> (the relation to the target κ) — so<br>a minted edge can travel as a credential without translation. <code>did:cid</code><br>identity is the same layer named for people (a CID <em>is</em> a κ-address), and<br>the DTG cred-spec / registry work is the acceptance-flow face of it: a<br>pinned manifest is a committed artifact, a stranger&#39;s byte-matched rebuild<br>is the prover&#39;s seat taken from outside, and the registry row is the<br>minted record. Known honest gap, filed at win-prominence: the<br>kappa-registry upstream&#39;s <code>DelegationScope</code> is <em>ahead of</em> the VRC — a<br>contribution seam, not a parity claim.</p>
+</div>
+<div class="md"><h2>The lattice (<code>star.v1</code>)</h2>
+<p>Pure math, no picture: ℤ/64ℤ = {0,1}⁶ over the six sovereignty axes<br>(MSB-first Protection 32 · Delegation 16 · Memory 8 · Connection 4 ·<br>Computation 2 · Value 1). A workshop&#39;s <strong>vertex</strong> is declared (config<br><code>star: { vertex: N }</code>) or provisional (sha256(name) mod 64, labelled so);<br>its <strong>anchor</strong> is never chosen — <code>anchor = 63 XOR vertex</code>, the same law<br><code>conform.mjs</code> checks. Every validated result seats at <strong>κ mod 64</strong>:<br>content-addressed geometry. All of it is colour and coordinates, <strong>never<br>proof</strong> (FLEET §6) — importing a seating into a City Key, /star, or<br>game42 is the First Person&#39;s.</p>
+</div>
+<div class="md"><h2>Rules for any consumer</h2>
+<ol>
+<li>Numbers come from <code>frontier.json</code>, cited live — never restated (GR-1).</li>
+<li>Unsigned edges render as candidates; only VRC-signed edges render as<br>relations between parties (FLEET §2).</li>
+<li>Doors render as doors: show the action, never perform it (T6).</li>
+<li>Re-derive, don&#39;t trust: every κ, seed, and signature in these files is<br>checkable offline (<code>verify_run.mjs</code>, <code>holon_audit.mjs</code>) — a consumer<br>that displays a checkmark it did not re-derive is decorating, and<br>should say so.</li>
+</ol>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 the-trust-graph-dialect</span><a class="asset-file" href="/harness/assets/the-trust-graph-dialect/GRAPH.md" download>GRAPH.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
+</div>
+<div class="md"><hr>
+<p><em>the wiki is a projection; <code>~/dual-agent-harness</code> (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ</em></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-trust-graph-dialect.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

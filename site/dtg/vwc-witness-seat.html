@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VWC — Witness Seat · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>VWC — Witness Seat</span></div>
+  <article><div class="md"><h1>VWC — the witness seat on the dream cycle</h1>
+<p><em>A third party attesting the collision: the Verifiable Witness Credential joins runtime 07 as the third<br>seat — transcript-bound, optional, and never a substitute for consent.</em></p>
+<p><strong>Register:</strong> runtime 07 &quot;next steps&quot; item 1 (not an O-item) · leverage 🟠 · <strong>Ladder:</strong> <strong>BUILT<br>2026-07-18</strong> — <a class="wlink" href="lab-witness-seat.html">Lab — witness-seat</a> 15/15 (W1–W7 incl. the separation<br>property enforced attestation-after-Swordsman, the never-sees-the-secret triple guard, and rt07&#39;s<br>11/11 as an executable regression gate). The oldest open thread of the 07-16 dream cycle, closed.<br>Same-VTC question + weighted propagation stay parked<br><strong>Anchor (cred-spec):</strong> <strong>VWC</strong> (witness annotation credential) · <code>taskContext</code> · outcome-interpretability<br>rule.<br><strong>Anchor (decision doc):</strong> §15 canonical transcript (a bare nonce is insufficient) · §7.3/§17 separation<br>discipline (a witness attests, it does not authorize) · §19 observer analysis (the witness is an observer).</p>
+<hr>
+</div>
+<div class="md"><h2>What it is</h2>
+<p>Runtime 07 grows the trust graph through the fold: Mage proposes the smallest edge, Swordsman proves<br>personhood + consent + freshness + non-collusion across the Gap. The cred-spec provides a third role the<br>cycle doesn&#39;t seat yet: a <strong>VWC</strong> — a third party&#39;s signed attestation that the encounter (the collision)<br>occurred, bound to a <code>taskContext</code>.</p>
+<p>The seat matters because it upgrades edge <em>evidence</em> without touching edge <em>admissibility</em>: a witnessed<br>edge carries independent corroboration of the collision; an unwitnessed edge still forms on bilateral<br>consent alone. That separation mirrors the decision doc&#39;s discipline exactly — the witness contributes to<br>the assurance side, never replaces a required proof, and must never become a hidden authority.</p>
+</div>
+<div class="md"><h2>Design</h2>
+<p><strong>The witness object:</strong></p>
+<pre><code>attestation = sign(witness_key, {
+  collision_commitment,    // H over the encounter&#39;s public parts — witness never learns the shared secret
+  rdid_a, rdid_b,          // the fresh per-counterparty R-DIDs on the candidate edge
+  transcript_digest,       // §15 canonical transcript, NOT a bare nonce: protocol/profile versions,
+                           // context descriptor, purpose, scope, session, epoch — canonically encoded
+  witness_membership_ref   // the witness&#39;s own personhood anchor (M-DID in a VTC, via rt 01)
+})
+</code></pre>
+<p><strong>Swordsman changes:</strong> accepts an <em>optional</em> witness attestation on a candidate edge; verifies the witness<br>signature, the witness&#39;s own personhood anchor, and that <code>transcript_digest</code> matches the transcript the<br>edge is forming under (a witness statement from another session/context must not transplant — §15.1 replay<br>discipline applied to witnesses).</p>
+<p><strong>Properties to add to the 11 (target 15/15):</strong></p>
+<ul>
+<li><strong>W1</strong> — a witnessed edge carries the witness attestation; verifiable independently later.</li>
+<li><strong>W2</strong> — an unwitnessed edge still forms (the witness is optional evidence, not a gate).</li>
+<li><strong>W3</strong> — a forged or transcript-mismatched witness attestation is rejected by name.</li>
+<li><strong>W4</strong> — a witness cannot mint an edge alone: witness ≠ consent ≠ proposal. (The separation property —<br>the witness seat must not collapse into a third signing authority.)</li>
+</ul>
+</div>
+<div class="md"><h2>Boundary notes (the paired records, drafted)</h2>
+<p><strong>Assurance boundary:</strong> a verifier of a witnessed edge may rely on: a registry-anchored third party signed<br>a statement binding this collision commitment to this transcript. It must NOT infer: that the collision&#39;s<br><em>content</em> was as claimed (the witness saw an encounter, not the shared secret); that the witness was<br>honest; that a witnessed edge is more <em>consensual</em> than an unwitnessed one. Accountability: the witness for<br>its attestation; the context authority for who may witness.</p>
+<p><strong>Disclosure boundary:</strong> the witness is an <strong>observer</strong> (§19&#39;s list gains a row) — it learns that two<br>R-DIDs collided at a time, under a context. It must not learn the shared secret or either party&#39;s M-DID.<br>Witness <em>patterns</em> (who witnesses whom, how often) are themselves correlatable — a busy witness becomes a<br>traffic-analysis hub; retention rules for witness logs belong in the profile (§20 minimisation applies).</p>
+</div>
+<div class="md"><h2>The dream-cycle reading</h2>
+<p>The fold gains its third seat: 🧙 proposes, ⚔️ proves, and the witness stands at the edge of the Gap —<br>seeing that a meeting happened, never what it meant. <code>witnessed_by</code> was already in the spellweb grammar<br>(SPELLWEB spec §6B); this makes it mechanical, with the same honesty the rest of the cycle carries: the<br>witness adds evidence, the Gap still decides.</p>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 —</strong> implement the witness channel in rt 07 (<code>src/trust-graph.mjs</code> + 4 new properties), reusing<br>rt 01 for the witness&#39;s own personhood anchor. Zero-dep, offline, like the rest.</li>
+<li><strong>M2 —</strong> upgrade <code>taskContext</code> handling to a §15-shaped canonical transcript digest (shared with O5&#39;s<br>freshness harness — same mechanism, one implementation).</li>
+<li><strong>M3 —</strong> boundary records (the two drafts above, completed in Appendix-B format).</li>
+<li><strong>M4 —</strong> feed rt 07&#39;s NOTES candidate-note 3 upstream: &quot;a VWC slots straight in&quot; now has a runnable<br>reference + a separation property (W4) worth stating normatively.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Must a witness hold a VMC in the <em>same</em> VTC as the parties, or is any registry-anchored witness<br>acceptable? (Same-community witnessing is stronger for the community-anchored construction but shrinks<br>the witness pool and increases intra-community traffic analysis.)</li>
+<li>Does a witnessed edge earn different weight in propagation? Tempting, but weight semantics belong to<br>trust-task protocols, not the formation layer — park it, note it.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="vwc-witness-seat.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

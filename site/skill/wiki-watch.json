@@ -1,0 +1,76 @@
+{
+  "title": "Wiki Watch",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "4ef990f563506e07",
+      "text": "# Wiki Watch 🛰️\n\n**Category** wikis\n\nObserve the external FedWiki federation you draw on as sources (ide.earth, self.fish, skill.fedwiki.club, radio.myth.garden, neighbour vision wikis) and report what pages moved since last check. Use to monitor other people's wikis for changes, get a digest of new/updated/removed pages, add a site to the watchlist, or set up recurring monitoring. Read-only — never writes to any wiki."
+    },
+    {
+      "type": "markdown",
+      "id": "2a06b08fc0df9351",
+      "text": "A change monitor for the external FedWiki federation the agentprivacy work draws on as **sources**.\nEvery Smallest-Federated-Wiki site publishes `GET /system/sitemap.json` — a public, no-auth array of\n`{slug, title, date, synopsis}` where `date` is each page's last-modified epoch-ms. This skill polls\nthat feed per site, diffs it against a stored snapshot, and reports what changed.\n\n**Read-only.** Public GETs only — it never pushes, forks, or logs in, so no cookies are needed. It is\nthe *observe* counterpart to `agentprivacy-wiki-resync` (project) and the fedwiki-cohere-sync skill\n(*write*). The live twin runs from `~/.claude/skills/fedwiki-watch/`.\n\n## Files\n\n- `roster.json` — the watchlist: `{name, url, group, owner}` per site. `owner:external` = other\n  people's wikis (star-flagged, sorted first); `owner:mitch` = your own sites.\n- `watch.mjs` — the runtime (zero dependencies, Node 18+ for global `fetch`).\n- `state/<name>.json` — per-site snapshot; `state/last-run.json` — full last result.\n- `reports/latest.md` + `reports/<timestamp>.md` — human digests.\n\n## Run it\n\n```\nnode watch.mjs                 # poll all sites, advance snapshots, write digest\nnode watch.mjs --json          # + machine summary to stdout (parse when driving as an agent)\nnode watch.mjs --external      # only owner:external sites (where alerts really matter)\nnode watch.mjs --site david.vision   # one site by name\nnode watch.mjs --dry           # detect + report, do NOT advance snapshots (safe preview)\nnode watch.mjs --detail        # also fetch each changed page's latest journal action\n```\n\nFirst run on any site **seeds a baseline** (records current state, flags nothing) — expected; the\nsecond run onward is where changes surface.\n\n## How to use the output\n\n1. Run `node watch.mjs --json`, parse it. `totals` gives counts; `sites[]` carries `new[]`,\n   `updated[]`, `removed[]`, `status`, `seeded`.\n2. Summarise **external changes first** (david/max/henry, skill.fedwiki.club, radio.myth.garden,\n   david.self.fish) — edits by others are the real signal.\n3. To show *what* changed on a page, GET `<site.url>/<slug>.json` and read the tail of `.journal`\n   (`--detail` does a light version automatically).\n\n## Watchlist & scheduling\n\nEdit `roster.json` to add/remove sites; discover neighbours from a roster site's\n`welcome-visitors`/`recent-changes` page JSON. Not scheduled by default — run on demand, or wire\n`/loop`, `/schedule`, or Windows Task Scheduler. The feed is public and read-only, so any cadence is\nsafe; hourly is plenty (these wikis move slowly). 21 seed sites verified live 2026-07-13."
+    },
+    {
+      "type": "markdown",
+      "id": "d3db882da1c5eca3",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-watch`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "644744b0cb077b2a",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "a42bb3a22583866d",
+      "text": "wiki-watch"
+    },
+    {
+      "type": "markdown",
+      "id": "34301e9730455424",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Watch",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "4ef990f563506e07",
+            "text": "# Wiki Watch 🛰️\n\n**Category** wikis\n\nObserve the external FedWiki federation you draw on as sources (ide.earth, self.fish, skill.fedwiki.club, radio.myth.garden, neighbour vision wikis) and report what pages moved since last check. Use to monitor other people's wikis for changes, get a digest of new/updated/removed pages, add a site to the watchlist, or set up recurring monitoring. Read-only — never writes to any wiki."
+          },
+          {
+            "type": "markdown",
+            "id": "2a06b08fc0df9351",
+            "text": "A change monitor for the external FedWiki federation the agentprivacy work draws on as **sources**.\nEvery Smallest-Federated-Wiki site publishes `GET /system/sitemap.json` — a public, no-auth array of\n`{slug, title, date, synopsis}` where `date` is each page's last-modified epoch-ms. This skill polls\nthat feed per site, diffs it against a stored snapshot, and reports what changed.\n\n**Read-only.** Public GETs only — it never pushes, forks, or logs in, so no cookies are needed. It is\nthe *observe* counterpart to `agentprivacy-wiki-resync` (project) and the fedwiki-cohere-sync skill\n(*write*). The live twin runs from `~/.claude/skills/fedwiki-watch/`.\n\n## Files\n\n- `roster.json` — the watchlist: `{name, url, group, owner}` per site. `owner:external` = other\n  people's wikis (star-flagged, sorted first); `owner:mitch` = your own sites.\n- `watch.mjs` — the runtime (zero dependencies, Node 18+ for global `fetch`).\n- `state/<name>.json` — per-site snapshot; `state/last-run.json` — full last result.\n- `reports/latest.md` + `reports/<timestamp>.md` — human digests.\n\n## Run it\n\n```\nnode watch.mjs                 # poll all sites, advance snapshots, write digest\nnode watch.mjs --json          # + machine summary to stdout (parse when driving as an agent)\nnode watch.mjs --external      # only owner:external sites (where alerts really matter)\nnode watch.mjs --site david.vision   # one site by name\nnode watch.mjs --dry           # detect + report, do NOT advance snapshots (safe preview)\nnode watch.mjs --detail        # also fetch each changed page's latest journal action\n```\n\nFirst run on any site **seeds a baseline** (records current state, flags nothing) — expected; the\nsecond run onward is where changes surface.\n\n## How to use the output\n\n1. Run `node watch.mjs --json`, parse it. `totals` gives counts; `sites[]` carries `new[]`,\n   `updated[]`, `removed[]`, `status`, `seeded`.\n2. Summarise **external changes first** (david/max/henry, skill.fedwiki.club, radio.myth.garden,\n   david.self.fish) — edits by others are the real signal.\n3. To show *what* changed on a page, GET `<site.url>/<slug>.json` and read the tail of `.journal`\n   (`--detail` does a light version automatically).\n\n## Watchlist & scheduling\n\nEdit `roster.json` to add/remove sites; discover neighbours from a roster site's\n`welcome-visitors`/`recent-changes` page JSON. Not scheduled by default — run on demand, or wire\n`/loop`, `/schedule`, or Windows Task Scheduler. The feed is public and read-only, so any cadence is\nsafe; hourly is plenty (these wikis move slowly). 21 seed sites verified live 2026-07-13."
+          },
+          {
+            "type": "markdown",
+            "id": "d3db882da1c5eca3",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-watch`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "644744b0cb077b2a",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "a42bb3a22583866d",
+            "text": "wiki-watch"
+          },
+          {
+            "type": "markdown",
+            "id": "34301e9730455424",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1785847257954
+    }
+  ]
+}

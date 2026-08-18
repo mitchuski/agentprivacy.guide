@@ -1,0 +1,208 @@
+{
+  "title": "MyTerms Privacy Value Equation",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "4e99c75e0a657df4",
+      "text": "# Privacy Value Model (PVM) V5.4"
+    },
+    {
+      "type": "markdown",
+      "id": "026da3be3bc092c3",
+      "text": "## The Mathematical Foundation of agentprivacy\n\n**From Balance, to Separation, to Three-Axis Gating**\n\n**Supersedes:** Privacy is Value Equation V3.1 (January 2026)\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "ca949b25abdd58e1",
+      "text": "## The Full Equation\n\n```\nV_twin = P^1.5 · C · Q · S · e^(-λt) · (1 + N/N₀)^k · R(d) · M(u,y) · Φ_v5\n```\n\nWhere the gating term is multiplicative across three axes:\n\n```\nΦ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ)\n```\n\nEach axis term is bounded in [0, 1]. Because the axes **multiply**, any single axis at (or near) zero collapses the whole product. There is no averaging, no offsetting, no compensation: a zero on any axis is a zero for the model.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "b34a121a979774b3",
+      "text": "## Term Breakdown\n\n### Base Terms (V1 — 2024)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| P^1.5 | 🔐^✨ | Privacy protection (superlinear scaling) |\n| C | 🔑 | Control over data |\n| Q | ✅ | Quality of data |\n| S | 🌐 | Scope/network effects |\n\n### Dynamic Terms (V2 — October 2025)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| e^(-λt) | ⏳ | Temporal decay |\n| (1 + N/N₀)^k | 🕸️^🌱 | Network dynamics |\n\n### Agent Terms (V3 — November 2025)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| R(d) | 🎯 | Reconstruction difficulty |\n| M(u,y) | 💰 | Market maturity |\n| Φ(S,M) | ⚖️(⚔️,🧙) | Golden duality multiplier (scalar — superseded) |\n\n### Separation Term (V3.1 — January 2026, superseded)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| Φ(S⊥⿻⊥M) | ⚖️(⚔️⊥⿻⊥🧙) | Lattice-mediated separation scalar (superseded) |\n\n### Three-Axis Gating (V5.4 — April 2026)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| Φ_agent(Σ) | ⚔️⊥🧙 | Agent separation axis — measured by `I(S;M\\|FP) < ε*` |\n| Φ_data(Δ) | 📜 | Data axis — policy expressed and cryptographically enforced |\n| Φ_inference(Γ) | 🔮 | Inference axis — bounds on what can be derived from released data |\n| Φ_v5 | 🔺 | Multiplicative gating: a zero on any axis collapses the product |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "b4720b993f783b47",
+      "text": "## Reading the Three Axes\n\n- **Σ — Agent separation.** Is the Swordsman (constraint, boundary) architecturally independent from the Mage (agency, projection)? A single-agent monolith scores Σ ≈ 0 regardless of policy. Measurable via the mutual-information bound `I(S;M|FP) < ε*`.\n- **Δ — Data axis.** What data moves, under what terms? `SD-BASE` through `SD-BASE-ATP-S3P` give a coarse-grained policy lattice; cryptographic backing (ZK, TEE, shielded pools) supplies the enforcement the agreement alone cannot.\n- **Γ — Inference axis.** What can the entity (or downstream systems) infer from what was released? `SD-BASE-ATP` addresses second-party profiling as an agreement variable; inference-over-published-data is the harder, partly open question below.\n\nThe V3.1 scalar `Φ(S⊥⿻⊥M)` collapsed these three concerns into one coefficient. V5.4 separates them so that architectural weakness on any single axis is visible in the model, not averaged over.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c1c297f848c1e4a0",
+      "text": "## Reading the Duality (Preserved from V3.1)\n\n- ⚔️ — **Swordsman** (constraint, boundary-making, privacy enforcement on Σ/Δ)\n- 🧙 — **Mage** (agency, projection, delegation operating inside Σ)\n- ⊥ — **orthogonality** (mathematical independence)\n- ⿻ — **plurality lattice** (overlap without entanglement)\n- ⚖️ — **balance** (now conditional on all three axes, not two)\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "50fd10463dbe4421",
+      "text": "## The Core Insight\n\n**V3 asked:** Are your agents balanced?\n\n**V3.1 asked:** Are your agents actually separate? Only then does balance matter.\n\n**V5.4 asks:** On which axis is your architecture leaking? All three must hold — agent, data, and inference — because a zero anywhere multiplies the product to zero.\n\nThe three-axis form makes architectural honesty cheaper. A system that scores well on Δ (good agreements) and Γ (little profiling) but fails on Σ (agents share state) does not score \"two out of three.\" It scores zero. The model matches the physical reality: behavioural capital leaks through whichever seam is weakest, and no amount of strength elsewhere compensates.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "19a446affe8929d1",
+      "text": "## Why This Matters\n\n> *The seed broadcast upon stone yields nothing regardless of proportion.*\n\nYou can allocate resources perfectly between privacy and utility. But if your architecture lets them leak into each other — or if the data layer is unenforceable, or if released data is trivially re-identifiable by inference — you are optimizing inside a collapsing space.\n\n**V5.4 makes the architectural honesty explicit: there are three places the model can be leaking, and the math refuses to pretend otherwise.**\n\nThe equation models behavioral capital — the 7th capital. The patterns of how you think, decide, act, relate. This is being systematically extracted by surveillance systems and converted into financial capital for platforms. Privacy-preserving architectures don't just protect data. They protect wealth that belongs to you.\n\nValue is the appropriation share the consent interface lets the subject keep, not a headline multiple. The historical figures (**678×** per-person, **31,000×** accessible-volume) are retired as asserted facts and survive only as fenced lineage of the essay era; what endures is the direction and the shape — the gap between sovereign and surveillance architectures, set by network maturity and the weakest axis among (Σ, Δ, Γ).\n\nMass is earned through retrieval, not declaration. Every time someone retrieves your work and finds it valuable, mass accumulates. Every time your compression decompresses accurately in someone else's context, mass accumulates. Progressive trust systems measure what others find when they look you up.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c17a52ddd28eb4de",
+      "text": "## IEEE 7012-2025 Mapping\n\nIEEE Std 7012™-2025 (approved 4 November 2025; published 20 January 2026) maps primarily to the **Σ axis** and provides a **coarse Δ policy**. Γ is largely out of scope for the standard.\n\n| Axis | IEEE 7012 contribution | What the standard does not provide |\n|---|---|---|\n| Σ | Defines the role boundary between person-agent and entity-agent; makes separation testable via the agreement artifact | The information-theoretic bound `I(S;M\\|FP) < ε*`; a single-agent monolith can be standard-compliant and still score Σ ≈ 0 |\n| Δ | Agreement IDs encode coarse-grained data-use policy (`SD-BASE-*` lattice, `PDC-*` contribution scope) | Cryptographic enforcement — a signed `SD-BASE` can still be violated in practice without ZK or TEE backing |\n| Γ | `SD-BASE-ATP` addresses profiling-by-second-party as an agreement variable | Inference over published data — out of scope entirely |\n\nIEEE 7012 is the **protocol for agreeing about** the three axes. The enforcement that actually moves the PVM value needle happens below (cryptographic substrate) and above (dual-agent architecture) the standard. The Swordsman implements the agreement; the Mage operates inside it; the ZK substrate provides the Δ/Γ guarantees that the agreement alone cannot.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "72172547025de29a",
+      "text": "## Version History\n\n| Version | Date | Key Addition |\n|---------|------|--------------|\n| V1 | 2024 | Base value model (P · C · Q · S) |\n| V2 | Oct 2025 | Temporal decay, network dynamics |\n| V3 | Nov 2025 | Reconstruction difficulty, market maturity, golden duality scalar |\n| V3.1 | Jan 2026 | Lattice-mediated separation scalar σ(⿻)² (superseded) |\n| V5.4 | Apr 2026 | Three-axis multiplicative gating Φ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ) |\n\nV4.x and early V5 increments are internal; V5.4 is the first externally-documented three-axis form.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "a9569d712fe0e287",
+      "text": "## Symbolic Notation\n\n```\n🔐^✨ · 🔑 · ✅ · 🌐 · ⏳ · 🕸️^🌱 · 🎯 · 💰 · (⚔️⊥🧙 · 📜 · 🔮) 🙂\n```\n\nThe 🙂 at the end? That's the human. Still sovereign. Still smiling.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "bf8fe467dc36c462",
+      "text": "## Honesty Calibration\n\n**Proven:**\n- Multiplicative gating is mathematically well-defined and matches the physical observation that privacy leaks through the weakest seam.\n- IEEE 7012 is a published, approved standard (verified from the published PDF).\n\n**Architectural claim (defensible, not theorem):**\n- Mapping IEEE 7012 primarily to Σ with coarse Δ and Γ-out-of-scope is consistent with §1.1 scope and with PVM V5.4 axis definitions. A reviewer could reasonably argue that `SD-BASE-*` granularity contributes more to Δ than \"coarse\" suggests.\n- The claim that a single-agent monolith scores Σ ≈ 0 requires the separation bound `I(S;M\\|FP) < ε*` to be empirically measurable, which remains to be demonstrated.\n\n**Conjecture (not load-bearing):**\n- That golden-ratio splits or φ-normalized quantities have any special status in bilateral agreement protocols. Treat as speculative.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "7c546e69bed225bf",
+      "text": "## References\n\n- **Full writeup:** https://sync.soulbis.com/s/privacy-is-value\n- **Stories:** https://agentprivacy.ai/story\n- **Documentation:** https://github.com/mitchuski/agentprivacy-docs\n- **Standard:** IEEE Std 7012™-2025 (Customer Commons: customercommons.org/p7012)\n\n---\n\n*Just another swordsman ⚔️, just another mage 🧙, just another drake 🐲 in the pattern space.*\n\n*Take back the 7th capital.*"
+    },
+    {
+      "type": "markdown",
+      "id": "b75824224cb24bdc",
+      "text": "# Assets\n\nSource: `myterms/A_privacy_is_value_equation.md`"
+    },
+    {
+      "id": "f43e4c767cad166d",
+      "type": "assets",
+      "text": "myterms-privacy-value-equation"
+    },
+    {
+      "id": "1a19793302c35919",
+      "type": "reference",
+      "site": "research.guide.agentprivacy.ai",
+      "slug": "pvm-v6-formal-specification",
+      "title": "PVM v6 — Formal Specification",
+      "text": "the current head of the Privacy Value Model — this page's V5.4 three-axis form is superseded by V6's moving ceiling R(t)."
+    },
+    {
+      "id": "2b67885196a59fbe",
+      "type": "reference",
+      "site": "atlas.guide.agentprivacy.ai",
+      "slug": "privacy-is-value-equation-explainer-myterms",
+      "title": "Privacy is Value — Equation Explainer (MyTerms)",
+      "text": "this document's node in the Atlas."
+    },
+    {
+      "type": "markdown",
+      "id": "10861fda5abee847",
+      "text": "---\n*upstream: `github.com/mitchuski/myterms` · the git repo is the source of truth; this page is a projection that records its origin · sigil ⚔️📜✍️🔐 · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "MyTerms Privacy Value Equation",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "4e99c75e0a657df4",
+            "text": "# Privacy Value Model (PVM) V5.4"
+          },
+          {
+            "type": "markdown",
+            "id": "026da3be3bc092c3",
+            "text": "## The Mathematical Foundation of agentprivacy\n\n**From Balance, to Separation, to Three-Axis Gating**\n\n**Supersedes:** Privacy is Value Equation V3.1 (January 2026)\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "ca949b25abdd58e1",
+            "text": "## The Full Equation\n\n```\nV_twin = P^1.5 · C · Q · S · e^(-λt) · (1 + N/N₀)^k · R(d) · M(u,y) · Φ_v5\n```\n\nWhere the gating term is multiplicative across three axes:\n\n```\nΦ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ)\n```\n\nEach axis term is bounded in [0, 1]. Because the axes **multiply**, any single axis at (or near) zero collapses the whole product. There is no averaging, no offsetting, no compensation: a zero on any axis is a zero for the model.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "b34a121a979774b3",
+            "text": "## Term Breakdown\n\n### Base Terms (V1 — 2024)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| P^1.5 | 🔐^✨ | Privacy protection (superlinear scaling) |\n| C | 🔑 | Control over data |\n| Q | ✅ | Quality of data |\n| S | 🌐 | Scope/network effects |\n\n### Dynamic Terms (V2 — October 2025)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| e^(-λt) | ⏳ | Temporal decay |\n| (1 + N/N₀)^k | 🕸️^🌱 | Network dynamics |\n\n### Agent Terms (V3 — November 2025)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| R(d) | 🎯 | Reconstruction difficulty |\n| M(u,y) | 💰 | Market maturity |\n| Φ(S,M) | ⚖️(⚔️,🧙) | Golden duality multiplier (scalar — superseded) |\n\n### Separation Term (V3.1 — January 2026, superseded)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| Φ(S⊥⿻⊥M) | ⚖️(⚔️⊥⿻⊥🧙) | Lattice-mediated separation scalar (superseded) |\n\n### Three-Axis Gating (V5.4 — April 2026)\n| Term | Symbol | Meaning |\n|------|--------|---------|\n| Φ_agent(Σ) | ⚔️⊥🧙 | Agent separation axis — measured by `I(S;M\\|FP) < ε*` |\n| Φ_data(Δ) | 📜 | Data axis — policy expressed and cryptographically enforced |\n| Φ_inference(Γ) | 🔮 | Inference axis — bounds on what can be derived from released data |\n| Φ_v5 | 🔺 | Multiplicative gating: a zero on any axis collapses the product |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "b4720b993f783b47",
+            "text": "## Reading the Three Axes\n\n- **Σ — Agent separation.** Is the Swordsman (constraint, boundary) architecturally independent from the Mage (agency, projection)? A single-agent monolith scores Σ ≈ 0 regardless of policy. Measurable via the mutual-information bound `I(S;M|FP) < ε*`.\n- **Δ — Data axis.** What data moves, under what terms? `SD-BASE` through `SD-BASE-ATP-S3P` give a coarse-grained policy lattice; cryptographic backing (ZK, TEE, shielded pools) supplies the enforcement the agreement alone cannot.\n- **Γ — Inference axis.** What can the entity (or downstream systems) infer from what was released? `SD-BASE-ATP` addresses second-party profiling as an agreement variable; inference-over-published-data is the harder, partly open question below.\n\nThe V3.1 scalar `Φ(S⊥⿻⊥M)` collapsed these three concerns into one coefficient. V5.4 separates them so that architectural weakness on any single axis is visible in the model, not averaged over.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c1c297f848c1e4a0",
+            "text": "## Reading the Duality (Preserved from V3.1)\n\n- ⚔️ — **Swordsman** (constraint, boundary-making, privacy enforcement on Σ/Δ)\n- 🧙 — **Mage** (agency, projection, delegation operating inside Σ)\n- ⊥ — **orthogonality** (mathematical independence)\n- ⿻ — **plurality lattice** (overlap without entanglement)\n- ⚖️ — **balance** (now conditional on all three axes, not two)\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "50fd10463dbe4421",
+            "text": "## The Core Insight\n\n**V3 asked:** Are your agents balanced?\n\n**V3.1 asked:** Are your agents actually separate? Only then does balance matter.\n\n**V5.4 asks:** On which axis is your architecture leaking? All three must hold — agent, data, and inference — because a zero anywhere multiplies the product to zero.\n\nThe three-axis form makes architectural honesty cheaper. A system that scores well on Δ (good agreements) and Γ (little profiling) but fails on Σ (agents share state) does not score \"two out of three.\" It scores zero. The model matches the physical reality: behavioural capital leaks through whichever seam is weakest, and no amount of strength elsewhere compensates.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "19a446affe8929d1",
+            "text": "## Why This Matters\n\n> *The seed broadcast upon stone yields nothing regardless of proportion.*\n\nYou can allocate resources perfectly between privacy and utility. But if your architecture lets them leak into each other — or if the data layer is unenforceable, or if released data is trivially re-identifiable by inference — you are optimizing inside a collapsing space.\n\n**V5.4 makes the architectural honesty explicit: there are three places the model can be leaking, and the math refuses to pretend otherwise.**\n\nThe equation models behavioral capital — the 7th capital. The patterns of how you think, decide, act, relate. This is being systematically extracted by surveillance systems and converted into financial capital for platforms. Privacy-preserving architectures don't just protect data. They protect wealth that belongs to you.\n\nValue is the appropriation share the consent interface lets the subject keep, not a headline multiple. The historical figures (**678×** per-person, **31,000×** accessible-volume) are retired as asserted facts and survive only as fenced lineage of the essay era; what endures is the direction and the shape — the gap between sovereign and surveillance architectures, set by network maturity and the weakest axis among (Σ, Δ, Γ).\n\nMass is earned through retrieval, not declaration. Every time someone retrieves your work and finds it valuable, mass accumulates. Every time your compression decompresses accurately in someone else's context, mass accumulates. Progressive trust systems measure what others find when they look you up.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c17a52ddd28eb4de",
+            "text": "## IEEE 7012-2025 Mapping\n\nIEEE Std 7012™-2025 (approved 4 November 2025; published 20 January 2026) maps primarily to the **Σ axis** and provides a **coarse Δ policy**. Γ is largely out of scope for the standard.\n\n| Axis | IEEE 7012 contribution | What the standard does not provide |\n|---|---|---|\n| Σ | Defines the role boundary between person-agent and entity-agent; makes separation testable via the agreement artifact | The information-theoretic bound `I(S;M\\|FP) < ε*`; a single-agent monolith can be standard-compliant and still score Σ ≈ 0 |\n| Δ | Agreement IDs encode coarse-grained data-use policy (`SD-BASE-*` lattice, `PDC-*` contribution scope) | Cryptographic enforcement — a signed `SD-BASE` can still be violated in practice without ZK or TEE backing |\n| Γ | `SD-BASE-ATP` addresses profiling-by-second-party as an agreement variable | Inference over published data — out of scope entirely |\n\nIEEE 7012 is the **protocol for agreeing about** the three axes. The enforcement that actually moves the PVM value needle happens below (cryptographic substrate) and above (dual-agent architecture) the standard. The Swordsman implements the agreement; the Mage operates inside it; the ZK substrate provides the Δ/Γ guarantees that the agreement alone cannot.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "72172547025de29a",
+            "text": "## Version History\n\n| Version | Date | Key Addition |\n|---------|------|--------------|\n| V1 | 2024 | Base value model (P · C · Q · S) |\n| V2 | Oct 2025 | Temporal decay, network dynamics |\n| V3 | Nov 2025 | Reconstruction difficulty, market maturity, golden duality scalar |\n| V3.1 | Jan 2026 | Lattice-mediated separation scalar σ(⿻)² (superseded) |\n| V5.4 | Apr 2026 | Three-axis multiplicative gating Φ_v5 = Φ_agent(Σ) · Φ_data(Δ) · Φ_inference(Γ) |\n\nV4.x and early V5 increments are internal; V5.4 is the first externally-documented three-axis form.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "a9569d712fe0e287",
+            "text": "## Symbolic Notation\n\n```\n🔐^✨ · 🔑 · ✅ · 🌐 · ⏳ · 🕸️^🌱 · 🎯 · 💰 · (⚔️⊥🧙 · 📜 · 🔮) 🙂\n```\n\nThe 🙂 at the end? That's the human. Still sovereign. Still smiling.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "bf8fe467dc36c462",
+            "text": "## Honesty Calibration\n\n**Proven:**\n- Multiplicative gating is mathematically well-defined and matches the physical observation that privacy leaks through the weakest seam.\n- IEEE 7012 is a published, approved standard (verified from the published PDF).\n\n**Architectural claim (defensible, not theorem):**\n- Mapping IEEE 7012 primarily to Σ with coarse Δ and Γ-out-of-scope is consistent with §1.1 scope and with PVM V5.4 axis definitions. A reviewer could reasonably argue that `SD-BASE-*` granularity contributes more to Δ than \"coarse\" suggests.\n- The claim that a single-agent monolith scores Σ ≈ 0 requires the separation bound `I(S;M\\|FP) < ε*` to be empirically measurable, which remains to be demonstrated.\n\n**Conjecture (not load-bearing):**\n- That golden-ratio splits or φ-normalized quantities have any special status in bilateral agreement protocols. Treat as speculative.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "7c546e69bed225bf",
+            "text": "## References\n\n- **Full writeup:** https://sync.soulbis.com/s/privacy-is-value\n- **Stories:** https://agentprivacy.ai/story\n- **Documentation:** https://github.com/mitchuski/agentprivacy-docs\n- **Standard:** IEEE Std 7012™-2025 (Customer Commons: customercommons.org/p7012)\n\n---\n\n*Just another swordsman ⚔️, just another mage 🧙, just another drake 🐲 in the pattern space.*\n\n*Take back the 7th capital.*"
+          },
+          {
+            "type": "markdown",
+            "id": "b75824224cb24bdc",
+            "text": "# Assets\n\nSource: `myterms/A_privacy_is_value_equation.md`"
+          },
+          {
+            "id": "f43e4c767cad166d",
+            "type": "assets",
+            "text": "myterms-privacy-value-equation"
+          },
+          {
+            "id": "1a19793302c35919",
+            "type": "reference",
+            "site": "research.guide.agentprivacy.ai",
+            "slug": "pvm-v6-formal-specification",
+            "title": "PVM v6 — Formal Specification",
+            "text": "the current head of the Privacy Value Model — this page's V5.4 three-axis form is superseded by V6's moving ceiling R(t)."
+          },
+          {
+            "id": "2b67885196a59fbe",
+            "type": "reference",
+            "site": "atlas.guide.agentprivacy.ai",
+            "slug": "privacy-is-value-equation-explainer-myterms",
+            "title": "Privacy is Value — Equation Explainer (MyTerms)",
+            "text": "this document's node in the Atlas."
+          },
+          {
+            "type": "markdown",
+            "id": "10861fda5abee847",
+            "text": "---\n*upstream: `github.com/mitchuski/myterms` · the git repo is the source of truth; this page is a projection that records its origin · sigil ⚔️📜✍️🔐 · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785843053871
+    }
+  ]
+}

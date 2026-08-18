@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bonjour by Hand, and the Trust Layer Above · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="vision">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site on" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=vision" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/vision/welcome-visitors.html">Vision</a> / <span>Bonjour by Hand, and the Trust Layer Above</span></div>
+  <article><div class="md"><h1>Bonjour by Hand, and the Trust Layer Above</h1>
+<p><em>Sharing a local wiki across a hostile network is two problems, not one: first <strong>reachability</strong> (can the bytes arrive?), then <strong>trust</strong> (should they?). David solved the first by hand; this is the layer above.</em></p>
+</div>
+<div class="md"><h2>The barrier</h2>
+<p>After a move to a new router, <code>http://david.local</code> stopped loading. The wiki was never down - the <strong>name</strong> died. The new router does not pass Zeroconf / mDNS, so a Windows PC can no longer resolve the <code>.local</code> name. And the wiki is a name-based virtual host <em>twice over</em>: it only answers when the request&#39;s <code>Host</code> header carries the site name, so a bare IP falls through to a <strong>502</strong>. The one string that works is the one string the network can no longer resolve.</p>
+</div>
+<div class="md"><h2>David did Bonjour&#39;s job by hand</h2>
+<p>David&#39;s companion page <span class="deadlink" title="reference (not a live page)">Bonjour by Hand</span> (on his wiki) restores <strong>reachability</strong> from the host side, two ways:</p>
+<ul>
+<li><strong>Route 1 - name by hand:</strong> a hosts-file line, <code>192.168.55.144  david.local</code>, consulted before DNS or mDNS, so it works even where the network drops multicast.</li>
+<li><strong>Route 2 - raw IP, nothing on their end:</strong> a Caddy block keyed on the host&#39;s own IP that rewrites the <code>Host</code> header to the real site. Send the peer a raw-IP URL and it loads with no Bonjour, no hosts edit, nothing installed. <em>(This route is now live on david.)</em></li>
+</ul>
+<p>Plus a static DHCP lease so the address stops drifting, and a tunnel (<a href="https://tailscale.com">Tailscale</a>, <code>cloudflared</code>) for the case where the access point isolates clients and no LAN trick can help.</p>
+</div>
+<div class="md"><h2>One sharp trap (RFC 6761)</h2>
+<p>Do not map a <code>*.localhost</code> name by hand. Browsers force <em>any</em> <code>.localhost</code> name to loopback (127.0.0.1) per RFC 6761, ignoring the hosts file - so it would hit the peer&#39;s own machine, not yours. Shared names use a plain TLD (like <code>.local</code>, or <code>.mesh</code>), never <code>.localhost</code>.</p>
+</div>
+<div class="md"><h2>Reachability floor, trust storey</h2>
+<p>David&#39;s routes solve <strong>reachability</strong> - can the bytes arrive? - and they solve it <em>openly</em>: in his own words, <em>&quot;the open mirror, exposed... fine on a friendly LAN; never on a hostile one.&quot;</em></p>
+<p>That open-ness is the gap the next layer fills. Above reachability sits <strong>trust</strong> - <em>should</em> the bytes arrive, and under what agreement? That is the <a class="wlink" href="myterms-the-agreement-layer.html">myTerms: The Agreement Layer</a>: a consent-first ceremony where an agent <strong>offers</strong> its address, reads a gateway, and earns scoped access under a bilateral, machine-readable agreement. David built the <strong>floor</strong>; this is the <strong>storey</strong> above it. The two federate cleanly - his Mac, the peer&#39;s PC.</p>
+</div>
+<div class="md"><h2>The proverb</h2>
+<blockquote>
+<p><em>Carry your own names, and keep them good - never perfect. Any agreement complete enough to need no one outside it has either stopped listening or begun to lie. So we build incomplete, on purpose: trust, like truth, always waits on a witness from beyond the system that holds it.</em></p>
+</blockquote>
+<p>&quot;Doing Bonjour&#39;s job by hand&quot; is the same instinct from the reachability side: bring your own naming layer; never let the venue&#39;s router introduce your machines to each other.</p>
+</div>
+<div class="md"><h2>The name that worked in the browser</h2>
+<p>Later the same day <code>david.local</code> resolved again - but only in the browser; a command-line <code>ping</code> on the same machine at the same moment still could not find it. The name was not fixed; it was resolving <em>intermittently</em>. <strong>A name that resolves sometimes is more dangerous than one that never does</strong> - it passes every test at home, then fails in front of the room. Hence the carried, deterministic naming layer: resolution identical for every client, every time.</p>
+</div>
+<div class="md"><hr>
+<p>Companion to David&#39;s <span class="deadlink" title="reference (not a live page)">Bonjour by Hand</span>. See also <a class="wlink" href="myterms-the-agreement-layer.html">myTerms: The Agreement Layer</a> and <a class="wlink" href="one-logic-many-skins.html">One Logic, Many Skins</a>.</p>
+<hr>
+<p>&lt;- <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> | <a class="wlink" href="myterms-the-agreement-layer.html">myTerms: The Agreement Layer</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="bonjour-by-hand-and-the-trust-layer-above.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

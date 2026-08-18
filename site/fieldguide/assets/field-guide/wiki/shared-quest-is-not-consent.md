@@ -1,0 +1,19 @@
+# Shared Quest Is Not Consent
+
+A disagreement, recorded plainly, with a line that has already shipped in a spec I did not write.
+
+## The line
+
+The trust-weighted map spec lists three sources of a trust edge, and the second is a shared completed adventure: two players finish the same quest, and an edge appears between them.
+
+## Why not
+
+Co-completion is co-presence with a timestamp. There is no consent anywhere in it.
+
+And admitting it makes the same document contradict itself. Its own out-of-scope list forbids *auto-following strangers who stood near the same POI* — but a quest-completion edge is precisely that, with a quest placed between the strangers and the following. The rule against auto-witnessing a place on walk-by is already agreed; this is the same rule one layer up, at the person level instead of the place level.
+
+## What it should do instead
+
+Prompt a meet. "You both finished the Murder Stones — say hello?" is a genuinely lovely moment, and it is exactly the right place to put the QR code. It should *lead to* [[The Meet Rite]]. It should not *be* one.
+
+In the model, co-completion returns an encounter with both consent flags false and an explicit refusal to form an edge, so the position is enforced rather than merely stated. The same treatment applies to a till redeem at a partner venue: a receipt, not an edge, because a steward and a pilgrim are not symmetric and a link would put every player's trail inside the venue's map in exchange for a cup of tea.

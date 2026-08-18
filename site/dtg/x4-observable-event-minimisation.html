@@ -1,0 +1,108 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X4 — Observable Event Minimisation · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X4 — Observable Event Minimisation</span></div>
+  <article><div class="md"><h1>X4 — Observable-event minimisation</h1>
+<p><em>The specification claims unlinkability, not undetectability (§20): a presentation event remains<br>observable, and the request pattern itself discloses behaviour. This doc develops §20&#39;s SHOULD-level<br>minimisation measures into a concrete design layer with a testable conformance tier.</em></p>
+<p><strong>Register:</strong> new (X-series; feeds §25 gate item 7 — &quot;composition and observable-event assumptions&quot;)<br>· leverage 🟠 · <strong>Ladder:</strong> reference built 2026-07-18 — <a class="wlink" href="lab-quiet-presentation.html">Lab — quiet-presentation</a><br>8/8: §19 budget as data, 5 of 7 tier properties at trace altitude (the two statistical<br>distribution-halves + §21.2 mediation honestly deferred), log-field register, structural residue<br>(undetectability unclaimable). See its NOTES.md<br><strong>Anchor (decision doc):</strong> §20 observable events · §19 observer list · §10.4 incidental disclosure ·<br>§12.4 registry lookup patterns · §21 mediated proving · §6.6 shared logs/telemetry.</p>
+<hr>
+</div>
+<div class="md"><h2>What the decision doc rules and leaves open</h2>
+<p>§20 rules the narrow claim — the specification claims unlinkability, not undetectability — and lists what<br>the request pattern alone discloses: which verifier requested a proof, when and how often step-up occurs,<br>whether an action triggered risk controls, retry counts, local-proving failure, mediated or lower-assurance<br>path use. §10.4 adds the transcript-adjacent fingerprints: proof size or proving-time differences, retry<br>count and failure mode, presentation timing and frequency, mediated-prover network traffic. §12.4 rules<br>that network lookup patterns revealing the issuer or holder MUST be included in the disclosure analysis.<br>But the minimisation measures themselves — batching, coarse timing, local caching, private status checks,<br>uniform error behaviour, strict telemetry controls — are SHOULDs with no mechanism. This exploration<br>supplies the mechanism layer, without weakening the ruling: nothing here promises undetectability (§3.2<br>excludes &quot;eliminate all observability of a presentation event&quot; from scope).</p>
+</div>
+<div class="md"><h2>The observer-by-observer leakage budget</h2>
+<p>Per §19, assume a <strong>perfect ZK transcript</strong> (witness reveals nothing) and budget what each observer still<br>sees per presentation. Each row is the residue the mechanisms below must shrink; each becomes a<br>disclosure-boundary record row (§19), and every minimisation claim states against whom / for how long /<br>alongside what (§2.4).</p>
+<table>
+<thead>
+<tr>
+<th>Observer (§19)</th>
+<th>Sees per presentation, even with perfect ZK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Verifier</td>
+<td>occurrence, exact time, requested predicates, step-up frequency, retries, error mode, proof size/latency, fallback vs local proving (§15.4, §10.4)</td>
+</tr>
+<tr>
+<td>Issuer</td>
+<td>nothing per-show <em>unless</em> status/refresh traffic reaches it — then presentation-rate side-channel (§12.4)</td>
+</tr>
+<tr>
+<td>Registry operator</td>
+<td>lookup timing + which root/status object queried → issuer class, presentation frequency (§12.4)</td>
+</tr>
+<tr>
+<td>Mediated prover</td>
+<td>full event stream: occurrence, timing, verifier, retries; can link contexts unless §21.2 controls hold</td>
+</tr>
+<tr>
+<td>Network observer</td>
+<td>endpoints, packet sizes/timing → verifier identity, proving-time fingerprint, retry bursts (§10.4)</td>
+</tr>
+<tr>
+<td>Auditor / log processor</td>
+<td>whatever fields the log register admits — the §6.6 surface</td>
+</tr>
+<tr>
+<td>Co-resident app</td>
+<td>presentation occurrence via device signals (network activity, prover CPU burst, UI step-up events)</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Mechanisms</h2>
+<p><strong>M-STATUS — private status checks.</strong> Rank O4&#39;s three revocation patterns by lookup-leakage: (1) <em>short<br>epochs, positive membership</em> — holder fetches the epoch root on a schedule <strong>independent of presentations</strong><br>(mirrored/broadcast roots, local cache), so the registry operator sees only cadence, not shows: best;<br>(2) <em>accumulator non-membership</em> — same property if witnesses refresh on-schedule, worst if refreshed<br>per-show; (3) <em>out-of-circuit status checks</em> — worst; admissible only batched over cover sets with coarse<br>timing (§20). Rule: <strong>no per-show contact with any authority.</strong> Registry roots are mirrored or pushed;<br>lookups that must occur are batched and decorrelated from presentation times. Claim form: status traffic<br>is uninformative about which credential was shown — against the registry operator and issuer, for the<br>root-cache validity window (≤ the relying policy&#39;s maximum root age, §12.4/§22.1), alongside a lookup<br>schedule independent of presentation events.</p>
+<p><strong>M-ERROR — uniform error behaviour.</strong> Externally, one rejection surface: a single failure message with<br>profile-constant shape and timing, whatever the cause (stale root, revoked attestation, predicate failure,<br>transcript mismatch). Detailed reason codes route <strong>only to the holder</strong>, who decides what to escalate —<br>preserving the §13.6/§23 challenge routes without making the error channel a fingerprint (§19: &quot;error codes<br>and diagnostics&quot;). <em>Tension to resolve at the §25 gate:</em> §26 conformance fixtures need a reason-code<br>vocabulary to test negative cases (X1&#39;s register); the design must separate the fixture-visible internal<br>vocabulary from the externally observable surface — the fixtures test that the external surface stays<br>uniform.</p>
+<p><strong>M-SHAPE — proof-shape uniformity.</strong> Proof size, encoding, and proving time are fingerprints (§10.4,<br>§19). Rule: pad proofs to a profile-constant size and quantise proving/response time to a profile-declared<br>grid, so &quot;which predicate bundle, which issuer variant, which device class&quot; is not readable from shape.<br>Claim: proof shape is constant per profile version — against verifier and network observer, for the profile<br>version&#39;s lifetime, alongside a padded transport channel.</p>
+<p><strong>M-RETRY — retry discipline.</strong> Retry count and failure mode are §10.4 correlators and §20 behaviour<br>signals. Rule: bounded retry budget, uniform inter-retry delay from the same timing grid, and no observable<br>distinction between first-attempt success and within-budget retry success at the verifier surface.<br>Downgrade to mediated or lower-assurance paths stays governed by §21.3 — never silent — but the <em>external</em><br>observability of the switch is minimised to the parties the relying policy requires (per §6.6, no common<br>fallback identifiers).</p>
+<p><strong>M-BATCH — batching and coarse timing.</strong> Where flows tolerate latency, presentations and status refreshes<br>are batched into epochs with coarse timestamps (§20; §6.6 already prohibits exact issuance timestamps when<br>a coarser proof is sufficient — extend the same instinct to event timing). This is the pools discipline<br>imported (O6): association-set reasoning, batched inclusion, deposit/withdraw timing decorrelation — the<br>classical traffic-analysis defences, applied to presentation and lookup traffic instead of withdrawals.</p>
+</div>
+<div class="md"><h2>The &quot;quiet presentation&quot; profile</h2>
+<p>A named conformance tier — <strong>quiet presentation</strong> — for deployments claiming observable-event<br>minimisation. Not a new privacy promise (unlinkability, not undetectability, still) but a declared,<br>testable posture, in the same spirit as §6.4&#39;s separately identified deployment classes. Required,<br>testable properties:</p>
+<ol>
+<li>status-check traffic independent of which credential is shown, and of whether a presentation occurred<br>in the window (test: traffic trace distributions indistinguishable across credential choices);</li>
+<li>no per-presentation network contact with issuer or registry (root age served from local mirror);</li>
+<li>external error surface uniform across all failure causes (test: shape + timing indistinguishability<br>over the §26.1 negative-test corpus);</li>
+<li>proof size and response time constant per profile version;</li>
+<li>retry behaviour within declared budget and grid;</li>
+<li>mediated path, where supported, satisfies §21.2 and adds no cross-context identifier (§6.6);</li>
+<li>a completed log-field register (below) with no prohibited field present.</li>
+</ol>
+<p>Each property ships as a conformance fixture; the tier declaration states its residue honestly — the<br>verifier still observes occurrence and coarse timing; the co-resident-app row is bounded, not eliminated.</p>
+</div>
+<div class="md"><h2>Telemetry governance — the log-field register</h2>
+<p>§6.6 rules that shared logs, telemetry, or analytics can restore the correlation the proof prevents. The<br>control is a <strong>log-field register</strong> analogous to the §18.1 schema field register: for every logged field —<br>at verifier, mediator, registry, wallet, auditor — record semantic purpose, retention, rarity/cardinality,<br>correlation risk, responsible authority, and conformance evidence. Prohibited by default: exact<br>presentation timestamps (coarsen), stable holder/device identifiers, retry counts keyed to a pseudonym,<br>proof sizes, reason codes beyond the uniform external surface, mediator session identifiers that outlive<br>the session (§21.2 non-retention). The register is the §26 conformance artefact for §6.6&#39;s last row, and<br>the accountability route for a violation is §23&#39;s &quot;excess disclosure or correlation&quot; row — the party<br>controlling the correlating surface.</p>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — budget tables:</strong> the §19 observer budget completed for MLP and EPP presentations, as<br>disclosure-boundary record rows (§2.4 form throughout).</li>
+<li><strong>M2 — quiet-presentation property tests:</strong> traffic-trace and error-surface indistinguishability<br>fixtures, drafted as §26 conformance fixtures; reuses O4&#39;s rt 03 status patterns and O5&#39;s transcript<br>harness for the error-surface corpus.</li>
+<li><strong>M3 — log-field register template</strong> + prohibited-field list, offered alongside the §18.1 register.</li>
+<li><strong>M4 — §25 gate input:</strong> the tier declaration text and its fixtures, feeding gate item 7.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Padding/quantisation cost on consumer devices vs §25&#39;s performance envelope — where does M-SHAPE&#39;s grid<br>collide with proving-time budgets?</li>
+<li>Can the co-resident-app row (§19) be budgeted at all without OS-level attestation, or is it declared<br>residue in every tier?</li>
+<li>Does the quiet tier need its own epoch clock (§22.1) for status-refresh cadence, or does it inherit the<br>registry&#39;s root epoch?</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x4-observable-event-minimisation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,181 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — erosion-record · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — erosion-record</span></div>
+  <article><div class="md"><h1>erosion-record — X6 assurance horizons and erosion clocks (the PVM reading)</h1>
+<p>The lightest of the X-builds: a <strong>record format + validator + one worked<br>example</strong>, not a simulation. Honesty is the whole point — H(X | B_t) is not<br>measurable in deployment, so the deliverable is <em>structure</em>: a record shape in<br>which overclaiming a measurement is a validation failure, not a review comment.</p>
+<p>Zero-dep Node ESM, offline, deterministic. Run: <code>node test.mjs</code> (8/8),<br><code>node example.mjs</code> (prints the PR-UNQ record canonically serialized).</p>
+</div>
+<div class="md"><h2>What it demonstrates</h2>
+<ol>
+<li><strong>Two clock families as validatable structure.</strong> The §22.1 ten-clock list<br>sorts into the PVM V6 two-clock thesis: <em>certification</em> clocks (an<br>authority certifies a value and can re-certify it) and <em>erosion</em> clocks<br>(background accumulation nobody can renew — only re-base). The sort is<br>data (<code>clocks.mjs</code>), and its validator enforces exactly the ten clocks,<br>each with a family.</li>
+<li><strong>Rate-not-cliff, enforced.</strong> &quot;For how long&quot; (§2.4) keeps its §10.6 cliffs<br>for the certification family, but every erosion entry must name its<br>accumulating observables (the §19/§20 surfaces feeding B_t), a monitoring<br>signal, and a re-base trigger. A bare expiry date wearing an erosion label<br>fails (<code>cliff-only-erosion-claim</code>); an erosion clock with no re-base<br>trigger is the §22.2 &quot;permanent or unbounded&quot; default the decision doc<br>prohibits (<code>erosion-clock-unwatched</code>).</li>
+<li><strong>Overclaim structurally impossible.</strong> An estimated horizon&#39;s basis may be<br><code>declared</code> or <code>estimated</code> — never <code>measured</code>. The X6 honesty rule is a<br>schema constraint (<code>overclaimed-measurement</code>).</li>
+</ol>
+</div>
+<div class="md"><h2>The ten clocks of §22.1, sorted (from X6, B1)</h2>
+<table>
+<thead>
+<tr>
+<th>§22.1 clock</th>
+<th>Family</th>
+<th>Who moves it</th>
+<th>Renewal / re-base path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>proof-transcript-lifetime</td>
+<td>certification</td>
+<td>profile</td>
+<td>expires per transcript (§15)</td>
+</tr>
+<tr>
+<td>challenge-session-lifetime</td>
+<td>certification</td>
+<td>verifier policy</td>
+<td>new session</td>
+</tr>
+<tr>
+<td>attestation-validity</td>
+<td>certification</td>
+<td>issuer</td>
+<td>re-issuance</td>
+</tr>
+<tr>
+<td>status-freshness</td>
+<td>certification</td>
+<td>status authority</td>
+<td>refresh / snapshot (§12.4)</td>
+</tr>
+<tr>
+<td>nullifier-epoch</td>
+<td>certification</td>
+<td>context authority (§6.7)</td>
+<td>governed rollover (§5.8)</td>
+</tr>
+<tr>
+<td>enrolment-root-cryptoperiod</td>
+<td>certification</td>
+<td>issuer/governance (§5.10)</td>
+<td>rotation, migration (§22.3)</td>
+</tr>
+<tr>
+<td>policy-accreditation-validity</td>
+<td>certification</td>
+<td>governance authority</td>
+<td>re-accreditation</td>
+</tr>
+<tr>
+<td>log-retention</td>
+<td><strong>erosion</strong></td>
+<td>retained observables accrue into B_t</td>
+<td>deletion/segregation; §20 minimisation slows the rate</td>
+</tr>
+<tr>
+<td>proof-system-security-horizon</td>
+<td><strong>erosion</strong> (honesty note)</td>
+<td>cryptanalytic background accumulates</td>
+<td>re-base by migration (§22.3)</td>
+</tr>
+<tr>
+<td>biometric-assurance-horizon</td>
+<td><strong>erosion</strong></td>
+<td>biometric threat evolution (§5.9)</td>
+<td>re-base by re-enrolment under stronger policy</td>
+</tr>
+</tbody></table>
+<p>The §5.9 assurance horizon is the minimum over the erosion rows — the<br>envelope clock. <strong>Honesty note</strong> (carried as <code>bridgeCaveat: true</code> +<br><code>driver: &#39;computational&#39;</code> on the proof-system row, surfaced by<br><code>getCaveats()</code>): the proof-system security horizon is erosion-family<br><em>operationally</em> (nobody renews it; only migration re-bases it), but its<br>driver is computational advance, whereas the PVM&#39;s R(t) drift is strictly<br>informational — the bridge is structural, not an identity.</p>
+</div>
+<div class="md"><h2>The worked example (B3): PR-UNQ</h2>
+<p><code>example.mjs</code> extends Appendix B&#39;s compact boundary-record for PR-UNQ:</p>
+<ul>
+<li><strong>Certification cliffs</strong> — Appendix B&#39;s own: epoch 30 days, enrolment-root<br>cryptoperiod 2 years, nullifier retention 35 days.</li>
+<li><strong>Erosion entry</strong> (clock: log-retention) — accumulating observables: the<br><strong>within-context pseudonym</strong> (§13.5 — every accepted show adds one stable<br>pseudonymous point to verifier-side B_t), the registry-query pattern, and<br>schema-variant rarity (§19). Monitoring signal: <code>nullifier-set-size × presentation-frequency proxy</code>. Estimated horizon: 2 years, basis<br><strong>declared</strong> (restating Appendix B&#39;s <code>assurance_horizon</code>, not measuring<br>H(X | B_t)). Re-base trigger: epoch rollover / re-enrolment under §22.3<br>migration.</li>
+<li>Accountable parties gain <code>erosion_monitoring</code> and <code>rebase_execution</code> —<br>the X6 open question &quot;where does re-base authority sit&quot; answered the §23<br>way: the trigger has a named party even though the clock has no renewer.</li>
+</ul>
+</div>
+<div class="md"><h2>PVM anchor</h2>
+<p>C82 (WP-07 Def 3.9 + Cor 5.4b lineage): erosion form<br>R_inf(t) = Σε_i / H(X | B_t) — the proof does not leak more; it matters less.<br><strong>Upstream posture: informative-only</strong> — the candidate surface is an<br>informative research note beside §22/§26, cited as external research, offered<br>through TF discussion. Never normative text, never a dependency of any<br>profile. The narrow language stays the decision doc&#39;s own; this build<br>contributes only the two-family sort and the rate-not-cliff record shape.</p>
+</div>
+<div class="md"><h2>Named failure codes (fixture-register candidates)</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>missing-clock:&lt;name&gt;</code></td>
+<td>a §22.1 clock is absent from the sort</td>
+</tr>
+<tr>
+<td><code>unsorted-clock:&lt;name&gt;</code></td>
+<td>a clock present without a valid family</td>
+</tr>
+<tr>
+<td><code>unknown-clock:&lt;name&gt;</code></td>
+<td>a clock outside the closed §22.1 list</td>
+</tr>
+<tr>
+<td><code>erosion-clock-unwatched</code></td>
+<td>erosion entry with no re-base trigger (§22.2 unbounded failure)</td>
+</tr>
+<tr>
+<td><code>overclaimed-measurement</code></td>
+<td>horizon basis claims <code>measured</code> — H(X</td>
+</tr>
+<tr>
+<td><code>cliff-only-erosion-claim</code></td>
+<td>erosion entry is a bare expiry with no observables</td>
+</tr>
+<tr>
+<td><code>claim-missing-parameter:&lt;which&gt;</code></td>
+<td>§2.4 parameter absent (against_whom / for_how_long / alongside_what)</td>
+</tr>
+<tr>
+<td><code>missing-clock-family:&lt;family&gt;</code></td>
+<td>for_how_long lacks the certification or erosion side</td>
+</tr>
+<tr>
+<td><code>erosion-missing-observables</code> / <code>-monitoring-signal</code> / <code>-horizon</code></td>
+<td>erosion entry incomplete</td>
+</tr>
+<tr>
+<td><code>invalid-horizon-basis</code></td>
+<td>basis outside {declared, estimated} (and not the measured overclaim)</td>
+</tr>
+<tr>
+<td><code>missing-field:&lt;name&gt;</code></td>
+<td>Appendix B top-level field absent</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Files</h2>
+<ul>
+<li><code>clocks.mjs</code> — B1: the ten-clock sort as data + <code>validateSort</code> + <code>getCaveats</code></li>
+<li><code>record.mjs</code> — B2: erosion-aware residual-risk record, <code>validateRecord</code> +<br><code>serializeRecord</code> (canonical, via <code>../canonical/canonical.mjs</code>)</li>
+<li><code>example.mjs</code> — B3: <code>PR_UNQ_EROSION_RECORD</code></li>
+<li><code>test.mjs</code> — E1–E8</li>
+</ul>
+<p>Design doc: <a class="wlink" href="x6-assurance-horizons-and-erosion-clocks.html">X6 — Assurance Horizons and Erosion Clocks</a><br>(research root). Decision doc anchors: §2.4, §5.9/§5.10, §13.5, §19/§20,<br>§22.1–§22.3, §26, Appendix B.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-erosion-record.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

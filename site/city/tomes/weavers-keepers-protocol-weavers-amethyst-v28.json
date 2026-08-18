@@ -1,0 +1,146 @@
+{
+  "title": "Weavers — Keeper's Protocol — Weavers · Amethyst · V28",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "2ff367a55a7cb4f6",
+      "text": "# Keeper's Protocol — Weavers · Amethyst · V28\n\n# Keeper's Protocol — Weavers Shop\n\nA complete, re-runnable guide for conducting a live Cloak Weaving ceremony. Follow these steps in order. No OOC commentary needed.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "ac1a947075d465e3",
+      "text": "## Pre-flight\n\n```bash\n# Load archon environment\nsource ~/.keymaster-mcp/.env\nalias km=\"ARCHON_WALLET_PATH=~/.keymaster-mcp/wallet.json npx @didcid/keymaster\"\n\n# Confirm GenitriX is active\nkm list-ids\n# Expected: GenitriX  <<< current\n\n# Start registry UI (if not running)\ncd tools/spellweb-registry && npm run dev   # → localhost:5173\n\n# Start spellweb (if not running)\ncd tools/spellweb && npm run dev            # → localhost:8000\n```\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "89687227cdf50d09",
+      "text": "## Step 1 — Identity Challenge\n\nThe seeker arrives and claims an identity. Do not accept it at face value.\n\n**Keeper:**\n```bash\nkm create-challenge\n# → did:cid:<challenge-did>\n```\n\nSend the challenge DID to the seeker (Telegram, dmail, or in-person).\n\n**Seeker runs:**\n```bash\nkeymaster create-response did:cid:<challenge-did>\n# → did:cid:<response-did>\n```\n\nSeeker returns the response DID.\n\n**Keeper verifies:**\n```bash\nkm verify-response did:cid:<response-did>\n# Expected output:\n# { \"match\": true, \"responder\": \"did:cid:<sovereign-did>\", ... }\n```\n\n✓ `match: true` — identity confirmed.  \nRecord `responder` value — this is the seeker's **sovereign DID** (V63 in the weave).\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "199c0319e4646ccc",
+      "text": "## Step 2 — Credential Challenge\n\nThe seeker presents which credential they want cloaked. You need from them:\n- The credential's **schema DID**\n- The **issuer** (name or DID)\n\nIf the issuer is a name (e.g. `morningstar@archon.social`), resolve it:\n\n```bash\nkm resolve-did morningstar@archon.social\n# Look for: didDocument.id → issuer DID\n```\n\nBuild the challenge file:\n\n```bash\ncat > /tmp/vc-challenge.json << EOF\n{\n  \"credentials\": [{\n    \"schema\": \"<schema-did-from-seeker>\",\n    \"issuers\": [\"<issuer-did-resolved-above>\"]\n  }]\n}\nEOF\n```\n\nCreate the credentialed challenge:\n\n```bash\nkm create-challenge /tmp/vc-challenge.json\n# → did:cid:<vc-challenge-did>\n```\n\nSend to seeker.\n\n**Seeker runs:**\n```bash\nkeymaster create-response did:cid:<vc-challenge-did>\n# Keymaster finds the matching VC automatically\n# → did:cid:<vc-response-did>\n```\n\nSeeker returns the response DID.\n\n**Keeper verifies:**\n```bash\nkm verify-response did:cid:<vc-response-did>\n# Expected: { \"match\": true, \"fulfilled\": 1, \"vps\": [{ ...full credential... }] }\n```\n\n✓ `fulfilled: 1` — credential presented and verified.\n\nFrom the output, record:\n- `vps[0].credentialSubject` — all credential claims (this is what you weave)\n- `credentials[0].vc` — the VC DID (V15 in the weave)\n- `vps[0].issuer` — confirm it matches the issuer DID you resolved\n- `vps[0].validFrom` — validity envelope\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c1c180bc31c70ec9",
+      "text": "## Step 3 — Valve-Class Assignment\n\nRead the credential claims aloud (or display them). Propose assignments. Confirm with the seeker before proceeding.\n\n**Default rules:**\n\n| Field type | Default valve class | Vertex |\n|---|---|---|\n| Core attestation (`credence`, `score`, `confidence`) | Always-Revealed | V20 |\n| Validity window (`validFrom`, `validUntil`) | Always-Revealed | V20 |\n| Subject identifier (`credentialSubject.id`) | Hash-Masked | V3 |\n| Statistical baselines (`priorAssumed`, `threshold`) | Hash-Masked | V3 |\n| Flags (`redFlags`, `warnings`) | Hash-Masked | V3 |\n| Behavioral evidence (`evidenceSummary`, `methodology`) | Always-Masked | V25 |\n| Cryptographic proof (`proof`, `signature`) | Always-Masked | V25 |\n\nSeeker may override any field. Record final assignments.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c38fe986d05eb022",
+      "text": "## Step 4 — Transmuted DID (Mage-Side Persona)\n\nAsk: *Do you have a transmuted identity — a second DID that is your Mage-side public persona?*\n\n**If yes:** get the DID from the seeker (V28 in the weave).\n\n**If no:** the seeker creates one now:\n```bash\n# Seeker runs:\nkeymaster create-id <mage-persona-name>\nkeymaster resolve-id\n# The output DID is their transmuted persona\n```\n\nRecord the transmuted DID (V28 in the weave).  \nIf skipped: use `did:cid:placeholder-transmuted-<visitor-name>` and flag it in the registry.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "678c781accde6bda",
+      "text": "## Step 5 — Build the Registry JSON\n\nCreate `/tmp/<visitor-name>-cloak-registry.json`:\n\n```json\n{\n  \"items\": [\n    {\n      \"id\": \"item-sovereign-<visitor>\",\n      \"type\": \"did\",\n      \"label\": \"<Visitor Name> — Sovereign Identity\",\n      \"did\": \"<sovereign-did from Step 1>\",\n      \"vertexId\": 63,\n      \"stratum\": 6,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"sovereign\",\n      \"notes\": \"Sovereign DID verified via keymaster challenge/response (match: true).\",\n      \"tags\": [\"cloak-weaving\", \"cloak-weave-v1\"]\n    },\n    {\n      \"id\": \"item-transmuted-<visitor>\",\n      \"type\": \"did\",\n      \"label\": \"<Visitor Name> — Public Mage Projection\",\n      \"did\": \"<transmuted-did from Step 4>\",\n      \"vertexId\": 28,\n      \"stratum\": 3,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"transmuted\",\n      \"notes\": \"Mage-side public persona. Memory · Connection · Computation. Role published; name concealed.\",\n      \"tags\": [\"cloak-weaving\", \"cloak-weave-v1\"]\n    },\n    {\n      \"id\": \"item-issuer\",\n      \"type\": \"did\",\n      \"label\": \"<Issuer Name>\",\n      \"did\": \"<issuer-did from Step 2>\",\n      \"vertexId\": 49,\n      \"stratum\": 3,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"issuer\",\n      \"notes\": \"<issuer-name> — issuing authority. Resolved from name service.\",\n      \"tags\": [\"cloak-weaving\"]\n    },\n    {\n      \"id\": \"item-schema\",\n      \"type\": \"schema\",\n      \"label\": \"<Schema Name>\",\n      \"did\": \"<schema-did from seeker>\",\n      \"vertexId\": 12,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"schema\",\n      \"controllerDid\": \"<issuer-did>\",\n      \"notes\": \"Credential schema. V12 — Memory · Connection.\",\n      \"tags\": [\"cloak-weaving\"]\n    },\n    {\n      \"id\": \"item-vc\",\n      \"type\": \"vc\",\n      \"label\": \"<Credential Name>\",\n      \"did\": \"<vc-did from Step 2 credentials[0].vc>\",\n      \"vertexId\": 15,\n      \"stratum\": 4,\n      \"createdAt\": \"<vps[0].validFrom>\",\n      \"schemaDid\": \"<schema-did>\",\n      \"issuerDid\": \"<issuer-did>\",\n      \"subjectDid\": \"<sovereign-did>\",\n      \"notes\": \"<Brief description of credential and claims>.\",\n      \"tags\": [\"cloak-weaving\"]\n    },\n    {\n      \"id\": \"item-revealed-claims\",\n      \"type\": \"capability\",\n      \"label\": \"Always-Revealed Claims (V20 · Techne)\",\n      \"did\": \"urn:capability:<visitor>-revealed-<date>\",\n      \"vertexId\": 20,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"parentDid\": \"<vc-did>\",\n      \"notes\": \"Always-Revealed (V20). Fields: <list confirmed Always-Revealed fields and values>.\",\n      \"tags\": [\"cloak-weaving\", \"valve-revealed\"]\n    },\n    {\n      \"id\": \"item-hashed-claims\",\n      \"type\": \"capability\",\n      \"label\": \"Hash-Masked Claims (V3 · Dual Agent)\",\n      \"did\": \"urn:capability:<visitor>-hashed-<date>\",\n      \"vertexId\": 3,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"parentDid\": \"<vc-did>\",\n      \"notes\": \"Hash-Masked (V3). Fields: <list confirmed Hash-Masked fields>. Structurally present; cryptographically inaccessible.\",\n      \"tags\": [\"cloak-weaving\", \"valve-masked\"]\n    },\n    {\n      \"id\": \"item-proof-spell\",\n      \"type\": \"capability\",\n      \"label\": \"Always-Masked Proof Spell (V38 · Aletheia)\",\n      \"did\": \"urn:capability:<visitor>-proof-spell-<date>\",\n      \"vertexId\": 25,\n      \"stratum\": 3,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"parentDid\": \"<vc-did>\",\n      \"notes\": \"Always-Masked (V25). Fields: <list confirmed Always-Masked fields>. ZK predicate: '<describe the predicate the verifier can confirm without seeing the value>'.\",\n      \"tags\": [\"cloak-weaving\", \"valve-zk\"]\n    },\n    {\n      \"id\": \"item-chronicle\",\n      \"type\": \"asset\",\n      \"label\": \"Cloak Weaving Chronicle\",\n      \"did\": \"urn:chronicle:cloak-weaving-<visitor>-<date>\",\n      \"vertexId\": 5,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"chronicle\",\n      \"notes\": \"Chronicle of Cloak Weaving ceremony at Weavers shop (V28 · Amethyst). Visitor verified via keymaster challenge/response. Pallia wove across 9 constellation vertices. <date>.\",\n      \"tags\": [\"cloak-weaving\", \"chronicle\", \"cloak-weave-v1\"]\n    }\n  ],\n  \"chronicle\": []\n}\n```\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "eba32940e10b448c",
+      "text": "## Step 6 — Export and Visualize\n\n```bash\n# From tools/spellweb-registry:\nnode scripts/export-to-spellweb.mjs /tmp/<visitor>-cloak-registry.json <visitor-name> \\\n  > ../spellweb/src/data/<visitor-name>-contribution.ts\n\n# Wire into spellweb (nodes.ts):\n# Add import: import { REGISTRY_NODES as <VISITOR>_NODES } from './<visitor-name>-contribution';\n# Add to NODES array end: ...VISITOR_NODES,\n\n# Wire into spellweb (edges.ts):\n# Add import: import { REGISTRY_EDGES as <VISITOR>_EDGES } from './<visitor-name>-contribution';\n# Add to EDGES array end: ...VISITOR_EDGES,\n```\n\nVite hot-reloads. Open **localhost:8000**.\n\nThe seeker should now see 9 nodes across the lattice at V3, V5, V12, V15, V20, V38, V28, V49, V63. Edges: issuer `generates` VC → VC `proves` schema → VC `relates_to` sovereign.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "0c7e3a8ae1db4a02",
+      "text": "## Step 7 — DID-Blind Public Export (optional)\n\nTo show the seeker their **public-layer projection** (what the world sees):\n\n1. Open the registry at **localhost:5173**\n2. Import `/tmp/<visitor>-cloak-registry.json`\n3. Click **Publish to Spellweb** → enable **DID-Blind ON**\n4. Every `did:cid:...` becomes `[DID]` — structure and valve-class geometry preserved, identifiers stripped\n\nThis is what a verifier would see on spellweb.ai.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "4df97c0cb61aa6ac",
+      "text": "## Known gaps (target for cloak-weave-v2)\n\n- [ ] Transmuted DID creation is manual — should be part of the ceremony flow before Step 4\n- [ ] Capability edge types (`manifests_as`) not auto-generated by current export script — capabilities appear as isolated nodes; edges would need to be added manually or via script update\n- [ ] V0 (Null Blade) is the ceremonial start but has no registry item — consider a placeholder or opening narration artifact\n\n---\n\n`(⚔️⊥⿻⊥🧙)😊`  \n🪡\n\nCC BY-SA 4.0 · csaucier · flaxscrip lineage · 2026-05-11"
+    },
+    {
+      "type": "markdown",
+      "id": "2c4ed72074d41707",
+      "text": "# Assets"
+    },
+    {
+      "id": "486037db5363180f",
+      "type": "assets",
+      "text": "weavers-keepers-protocol-weavers-amethyst-v28"
+    },
+    {
+      "type": "markdown",
+      "id": "a746813dec169c34",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Workshops]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Weavers — Keeper's Protocol — Weavers · Amethyst · V28",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "2ff367a55a7cb4f6",
+            "text": "# Keeper's Protocol — Weavers · Amethyst · V28\n\n# Keeper's Protocol — Weavers Shop\n\nA complete, re-runnable guide for conducting a live Cloak Weaving ceremony. Follow these steps in order. No OOC commentary needed.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "ac1a947075d465e3",
+            "text": "## Pre-flight\n\n```bash\n# Load archon environment\nsource ~/.keymaster-mcp/.env\nalias km=\"ARCHON_WALLET_PATH=~/.keymaster-mcp/wallet.json npx @didcid/keymaster\"\n\n# Confirm GenitriX is active\nkm list-ids\n# Expected: GenitriX  <<< current\n\n# Start registry UI (if not running)\ncd tools/spellweb-registry && npm run dev   # → localhost:5173\n\n# Start spellweb (if not running)\ncd tools/spellweb && npm run dev            # → localhost:8000\n```\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "89687227cdf50d09",
+            "text": "## Step 1 — Identity Challenge\n\nThe seeker arrives and claims an identity. Do not accept it at face value.\n\n**Keeper:**\n```bash\nkm create-challenge\n# → did:cid:<challenge-did>\n```\n\nSend the challenge DID to the seeker (Telegram, dmail, or in-person).\n\n**Seeker runs:**\n```bash\nkeymaster create-response did:cid:<challenge-did>\n# → did:cid:<response-did>\n```\n\nSeeker returns the response DID.\n\n**Keeper verifies:**\n```bash\nkm verify-response did:cid:<response-did>\n# Expected output:\n# { \"match\": true, \"responder\": \"did:cid:<sovereign-did>\", ... }\n```\n\n✓ `match: true` — identity confirmed.  \nRecord `responder` value — this is the seeker's **sovereign DID** (V63 in the weave).\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "199c0319e4646ccc",
+            "text": "## Step 2 — Credential Challenge\n\nThe seeker presents which credential they want cloaked. You need from them:\n- The credential's **schema DID**\n- The **issuer** (name or DID)\n\nIf the issuer is a name (e.g. `morningstar@archon.social`), resolve it:\n\n```bash\nkm resolve-did morningstar@archon.social\n# Look for: didDocument.id → issuer DID\n```\n\nBuild the challenge file:\n\n```bash\ncat > /tmp/vc-challenge.json << EOF\n{\n  \"credentials\": [{\n    \"schema\": \"<schema-did-from-seeker>\",\n    \"issuers\": [\"<issuer-did-resolved-above>\"]\n  }]\n}\nEOF\n```\n\nCreate the credentialed challenge:\n\n```bash\nkm create-challenge /tmp/vc-challenge.json\n# → did:cid:<vc-challenge-did>\n```\n\nSend to seeker.\n\n**Seeker runs:**\n```bash\nkeymaster create-response did:cid:<vc-challenge-did>\n# Keymaster finds the matching VC automatically\n# → did:cid:<vc-response-did>\n```\n\nSeeker returns the response DID.\n\n**Keeper verifies:**\n```bash\nkm verify-response did:cid:<vc-response-did>\n# Expected: { \"match\": true, \"fulfilled\": 1, \"vps\": [{ ...full credential... }] }\n```\n\n✓ `fulfilled: 1` — credential presented and verified.\n\nFrom the output, record:\n- `vps[0].credentialSubject` — all credential claims (this is what you weave)\n- `credentials[0].vc` — the VC DID (V15 in the weave)\n- `vps[0].issuer` — confirm it matches the issuer DID you resolved\n- `vps[0].validFrom` — validity envelope\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c1c180bc31c70ec9",
+            "text": "## Step 3 — Valve-Class Assignment\n\nRead the credential claims aloud (or display them). Propose assignments. Confirm with the seeker before proceeding.\n\n**Default rules:**\n\n| Field type | Default valve class | Vertex |\n|---|---|---|\n| Core attestation (`credence`, `score`, `confidence`) | Always-Revealed | V20 |\n| Validity window (`validFrom`, `validUntil`) | Always-Revealed | V20 |\n| Subject identifier (`credentialSubject.id`) | Hash-Masked | V3 |\n| Statistical baselines (`priorAssumed`, `threshold`) | Hash-Masked | V3 |\n| Flags (`redFlags`, `warnings`) | Hash-Masked | V3 |\n| Behavioral evidence (`evidenceSummary`, `methodology`) | Always-Masked | V25 |\n| Cryptographic proof (`proof`, `signature`) | Always-Masked | V25 |\n\nSeeker may override any field. Record final assignments.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c38fe986d05eb022",
+            "text": "## Step 4 — Transmuted DID (Mage-Side Persona)\n\nAsk: *Do you have a transmuted identity — a second DID that is your Mage-side public persona?*\n\n**If yes:** get the DID from the seeker (V28 in the weave).\n\n**If no:** the seeker creates one now:\n```bash\n# Seeker runs:\nkeymaster create-id <mage-persona-name>\nkeymaster resolve-id\n# The output DID is their transmuted persona\n```\n\nRecord the transmuted DID (V28 in the weave).  \nIf skipped: use `did:cid:placeholder-transmuted-<visitor-name>` and flag it in the registry.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "678c781accde6bda",
+            "text": "## Step 5 — Build the Registry JSON\n\nCreate `/tmp/<visitor-name>-cloak-registry.json`:\n\n```json\n{\n  \"items\": [\n    {\n      \"id\": \"item-sovereign-<visitor>\",\n      \"type\": \"did\",\n      \"label\": \"<Visitor Name> — Sovereign Identity\",\n      \"did\": \"<sovereign-did from Step 1>\",\n      \"vertexId\": 63,\n      \"stratum\": 6,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"sovereign\",\n      \"notes\": \"Sovereign DID verified via keymaster challenge/response (match: true).\",\n      \"tags\": [\"cloak-weaving\", \"cloak-weave-v1\"]\n    },\n    {\n      \"id\": \"item-transmuted-<visitor>\",\n      \"type\": \"did\",\n      \"label\": \"<Visitor Name> — Public Mage Projection\",\n      \"did\": \"<transmuted-did from Step 4>\",\n      \"vertexId\": 28,\n      \"stratum\": 3,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"transmuted\",\n      \"notes\": \"Mage-side public persona. Memory · Connection · Computation. Role published; name concealed.\",\n      \"tags\": [\"cloak-weaving\", \"cloak-weave-v1\"]\n    },\n    {\n      \"id\": \"item-issuer\",\n      \"type\": \"did\",\n      \"label\": \"<Issuer Name>\",\n      \"did\": \"<issuer-did from Step 2>\",\n      \"vertexId\": 49,\n      \"stratum\": 3,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"issuer\",\n      \"notes\": \"<issuer-name> — issuing authority. Resolved from name service.\",\n      \"tags\": [\"cloak-weaving\"]\n    },\n    {\n      \"id\": \"item-schema\",\n      \"type\": \"schema\",\n      \"label\": \"<Schema Name>\",\n      \"did\": \"<schema-did from seeker>\",\n      \"vertexId\": 12,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"schema\",\n      \"controllerDid\": \"<issuer-did>\",\n      \"notes\": \"Credential schema. V12 — Memory · Connection.\",\n      \"tags\": [\"cloak-weaving\"]\n    },\n    {\n      \"id\": \"item-vc\",\n      \"type\": \"vc\",\n      \"label\": \"<Credential Name>\",\n      \"did\": \"<vc-did from Step 2 credentials[0].vc>\",\n      \"vertexId\": 15,\n      \"stratum\": 4,\n      \"createdAt\": \"<vps[0].validFrom>\",\n      \"schemaDid\": \"<schema-did>\",\n      \"issuerDid\": \"<issuer-did>\",\n      \"subjectDid\": \"<sovereign-did>\",\n      \"notes\": \"<Brief description of credential and claims>.\",\n      \"tags\": [\"cloak-weaving\"]\n    },\n    {\n      \"id\": \"item-revealed-claims\",\n      \"type\": \"capability\",\n      \"label\": \"Always-Revealed Claims (V20 · Techne)\",\n      \"did\": \"urn:capability:<visitor>-revealed-<date>\",\n      \"vertexId\": 20,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"parentDid\": \"<vc-did>\",\n      \"notes\": \"Always-Revealed (V20). Fields: <list confirmed Always-Revealed fields and values>.\",\n      \"tags\": [\"cloak-weaving\", \"valve-revealed\"]\n    },\n    {\n      \"id\": \"item-hashed-claims\",\n      \"type\": \"capability\",\n      \"label\": \"Hash-Masked Claims (V3 · Dual Agent)\",\n      \"did\": \"urn:capability:<visitor>-hashed-<date>\",\n      \"vertexId\": 3,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"parentDid\": \"<vc-did>\",\n      \"notes\": \"Hash-Masked (V3). Fields: <list confirmed Hash-Masked fields>. Structurally present; cryptographically inaccessible.\",\n      \"tags\": [\"cloak-weaving\", \"valve-masked\"]\n    },\n    {\n      \"id\": \"item-proof-spell\",\n      \"type\": \"capability\",\n      \"label\": \"Always-Masked Proof Spell (V38 · Aletheia)\",\n      \"did\": \"urn:capability:<visitor>-proof-spell-<date>\",\n      \"vertexId\": 25,\n      \"stratum\": 3,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"parentDid\": \"<vc-did>\",\n      \"notes\": \"Always-Masked (V25). Fields: <list confirmed Always-Masked fields>. ZK predicate: '<describe the predicate the verifier can confirm without seeing the value>'.\",\n      \"tags\": [\"cloak-weaving\", \"valve-zk\"]\n    },\n    {\n      \"id\": \"item-chronicle\",\n      \"type\": \"asset\",\n      \"label\": \"Cloak Weaving Chronicle\",\n      \"did\": \"urn:chronicle:cloak-weaving-<visitor>-<date>\",\n      \"vertexId\": 5,\n      \"stratum\": 2,\n      \"createdAt\": \"<ISO timestamp>\",\n      \"role\": \"chronicle\",\n      \"notes\": \"Chronicle of Cloak Weaving ceremony at Weavers shop (V28 · Amethyst). Visitor verified via keymaster challenge/response. Pallia wove across 9 constellation vertices. <date>.\",\n      \"tags\": [\"cloak-weaving\", \"chronicle\", \"cloak-weave-v1\"]\n    }\n  ],\n  \"chronicle\": []\n}\n```\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "eba32940e10b448c",
+            "text": "## Step 6 — Export and Visualize\n\n```bash\n# From tools/spellweb-registry:\nnode scripts/export-to-spellweb.mjs /tmp/<visitor>-cloak-registry.json <visitor-name> \\\n  > ../spellweb/src/data/<visitor-name>-contribution.ts\n\n# Wire into spellweb (nodes.ts):\n# Add import: import { REGISTRY_NODES as <VISITOR>_NODES } from './<visitor-name>-contribution';\n# Add to NODES array end: ...VISITOR_NODES,\n\n# Wire into spellweb (edges.ts):\n# Add import: import { REGISTRY_EDGES as <VISITOR>_EDGES } from './<visitor-name>-contribution';\n# Add to EDGES array end: ...VISITOR_EDGES,\n```\n\nVite hot-reloads. Open **localhost:8000**.\n\nThe seeker should now see 9 nodes across the lattice at V3, V5, V12, V15, V20, V38, V28, V49, V63. Edges: issuer `generates` VC → VC `proves` schema → VC `relates_to` sovereign.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "0c7e3a8ae1db4a02",
+            "text": "## Step 7 — DID-Blind Public Export (optional)\n\nTo show the seeker their **public-layer projection** (what the world sees):\n\n1. Open the registry at **localhost:5173**\n2. Import `/tmp/<visitor>-cloak-registry.json`\n3. Click **Publish to Spellweb** → enable **DID-Blind ON**\n4. Every `did:cid:...` becomes `[DID]` — structure and valve-class geometry preserved, identifiers stripped\n\nThis is what a verifier would see on spellweb.ai.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "4df97c0cb61aa6ac",
+            "text": "## Known gaps (target for cloak-weave-v2)\n\n- [ ] Transmuted DID creation is manual — should be part of the ceremony flow before Step 4\n- [ ] Capability edge types (`manifests_as`) not auto-generated by current export script — capabilities appear as isolated nodes; edges would need to be added manually or via script update\n- [ ] V0 (Null Blade) is the ceremonial start but has no registry item — consider a placeholder or opening narration artifact\n\n---\n\n`(⚔️⊥⿻⊥🧙)😊`  \n🪡\n\nCC BY-SA 4.0 · csaucier · flaxscrip lineage · 2026-05-11"
+          },
+          {
+            "type": "markdown",
+            "id": "2c4ed72074d41707",
+            "text": "# Assets"
+          },
+          {
+            "id": "486037db5363180f",
+            "type": "assets",
+            "text": "weavers-keepers-protocol-weavers-amethyst-v28"
+          },
+          {
+            "type": "markdown",
+            "id": "a746813dec169c34",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Workshops]]"
+          }
+        ]
+      },
+      "date": 1787079794485
+    }
+  ]
+}

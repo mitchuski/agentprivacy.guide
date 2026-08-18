@@ -1,0 +1,116 @@
+{
+  "title": "The Trust Graph Dialect",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "68251cd637c7a34b",
+      "text": "# 🕸️ The Trust Graph Dialect"
+    },
+    {
+      "type": "markdown",
+      "id": "96e1ff9e27befbe5",
+      "text": "The harness emits graphs; it never renders them. This document pins the\ndialect so any consumer — spellweb.ai, soulbis.com/star, game42, a FedWiki\npage, your own interface — can speak it, and so the graph's semantics stay\naligned with the algebra and with the credential specs a trust graph must\neventually meet. Emitters: `tools/spellweb.mjs` (`graph.json`),\n`tools/star.mjs` (`star.v1`), `tools/emit_feed.mjs` (`runtime-feed.v1`),\n`tools/vrc.mjs` (signed edges)."
+    },
+    {
+      "type": "markdown",
+      "id": "355e6070109dfe84",
+      "text": "## Nodes\n\n```\n{ id, type, label, domain, layer, desc, ...extra }\n```\n\nA node is a reference to something the ledgers hold — and anything sealed\nis **κ-addressable**: `κ = sha256(canonicalJson(record − κ))`, one law,\ncomputed identically everywhere (`tools/kappa.mjs`, `HOLONS.md`). `domain`\nis the algebra's role, not a topic: `swordsman` (⚔️ neg — proves),\n`mage` (🧙 bnot — proposes), `first_person` (😊 — the door), `shared`\n(the axioms both may touch). `layer` is ring semantics for any consumer\nthat wants geometry (`core · knowledge · work · record · constitution ·\nseats · machinery · paths`). Types are open; the emitted `nodeTypes` array\nenumerates what a given graph uses."
+    },
+    {
+      "type": "markdown",
+      "id": "f36d5e69db8abfd2",
+      "text": "## Edges — proposed vs minted\n\n```\n{ source, target, type }\n```\n\nThe load-bearing distinction, from `HOLONS.md` and FLEET §2:\n\n- **A derived edge is a PROPOSAL.** Everything `spellweb.mjs` emits —\n  `validated_in`, `through_lens`, `claims`, `chronicles`, `inherits` — is\n  walked from content. It re-derives (re-run = re-true) but asserts only\n  what the ledgers already record.\n- **A signature MINTS.** A relational edge that crosses parties is a\n  **VRC**: ed25519 over the exact tuple *(source κ, target κ, relation)*,\n  signer a `did:key`. Only the counterparty's signature makes the edge\n  real; an unsigned edge is a candidate, and a graph that renders it must\n  render it as one.\n\nThat shape is deliberately the shape verifiable-credential and\npersonhood-credential specs already speak — **issuer** (the signer's DID),\n**subject** (the source κ), **claim** (the relation to the target κ) — so\na minted edge can travel as a credential without translation. `did:cid`\nidentity is the same layer named for people (a CID *is* a κ-address), and\nthe DTG cred-spec / registry work is the acceptance-flow face of it: a\npinned manifest is a committed artifact, a stranger's byte-matched rebuild\nis the prover's seat taken from outside, and the registry row is the\nminted record. Known honest gap, filed at win-prominence: the\nkappa-registry upstream's `DelegationScope` is *ahead of* the VRC — a\ncontribution seam, not a parity claim."
+    },
+    {
+      "type": "markdown",
+      "id": "9621afe04fa20607",
+      "text": "## The lattice (`star.v1`)\n\nPure math, no picture: ℤ/64ℤ = {0,1}⁶ over the six sovereignty axes\n(MSB-first Protection 32 · Delegation 16 · Memory 8 · Connection 4 ·\nComputation 2 · Value 1). A workshop's **vertex** is declared (config\n`star: { vertex: N }`) or provisional (sha256(name) mod 64, labelled so);\nits **anchor** is never chosen — `anchor = 63 XOR vertex`, the same law\n`conform.mjs` checks. Every validated result seats at **κ mod 64**:\ncontent-addressed geometry. All of it is colour and coordinates, **never\nproof** (FLEET §6) — importing a seating into a City Key, /star, or\ngame42 is the First Person's."
+    },
+    {
+      "type": "markdown",
+      "id": "30069edbf68d8efe",
+      "text": "## Rules for any consumer\n\n1. Numbers come from `frontier.json`, cited live — never restated (GR-1).\n2. Unsigned edges render as candidates; only VRC-signed edges render as\n   relations between parties (FLEET §2).\n3. Doors render as doors: show the action, never perform it (T6).\n4. Re-derive, don't trust: every κ, seed, and signature in these files is\n   checkable offline (`verify_run.mjs`, `holon_audit.mjs`) — a consumer\n   that displays a checkmark it did not re-derive is decorating, and\n   should say so.\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "dacde1b4ab20e58b",
+      "text": "# Assets"
+    },
+    {
+      "id": "84a5a314355191e9",
+      "type": "assets",
+      "text": "the-trust-graph-dialect"
+    },
+    {
+      "type": "markdown",
+      "id": "9b767dfd7f3dd2f8",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
+    },
+    {
+      "type": "markdown",
+      "id": "6912cea826702cea",
+      "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "The Trust Graph Dialect",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "68251cd637c7a34b",
+            "text": "# 🕸️ The Trust Graph Dialect"
+          },
+          {
+            "type": "markdown",
+            "id": "96e1ff9e27befbe5",
+            "text": "The harness emits graphs; it never renders them. This document pins the\ndialect so any consumer — spellweb.ai, soulbis.com/star, game42, a FedWiki\npage, your own interface — can speak it, and so the graph's semantics stay\naligned with the algebra and with the credential specs a trust graph must\neventually meet. Emitters: `tools/spellweb.mjs` (`graph.json`),\n`tools/star.mjs` (`star.v1`), `tools/emit_feed.mjs` (`runtime-feed.v1`),\n`tools/vrc.mjs` (signed edges)."
+          },
+          {
+            "type": "markdown",
+            "id": "355e6070109dfe84",
+            "text": "## Nodes\n\n```\n{ id, type, label, domain, layer, desc, ...extra }\n```\n\nA node is a reference to something the ledgers hold — and anything sealed\nis **κ-addressable**: `κ = sha256(canonicalJson(record − κ))`, one law,\ncomputed identically everywhere (`tools/kappa.mjs`, `HOLONS.md`). `domain`\nis the algebra's role, not a topic: `swordsman` (⚔️ neg — proves),\n`mage` (🧙 bnot — proposes), `first_person` (😊 — the door), `shared`\n(the axioms both may touch). `layer` is ring semantics for any consumer\nthat wants geometry (`core · knowledge · work · record · constitution ·\nseats · machinery · paths`). Types are open; the emitted `nodeTypes` array\nenumerates what a given graph uses."
+          },
+          {
+            "type": "markdown",
+            "id": "f36d5e69db8abfd2",
+            "text": "## Edges — proposed vs minted\n\n```\n{ source, target, type }\n```\n\nThe load-bearing distinction, from `HOLONS.md` and FLEET §2:\n\n- **A derived edge is a PROPOSAL.** Everything `spellweb.mjs` emits —\n  `validated_in`, `through_lens`, `claims`, `chronicles`, `inherits` — is\n  walked from content. It re-derives (re-run = re-true) but asserts only\n  what the ledgers already record.\n- **A signature MINTS.** A relational edge that crosses parties is a\n  **VRC**: ed25519 over the exact tuple *(source κ, target κ, relation)*,\n  signer a `did:key`. Only the counterparty's signature makes the edge\n  real; an unsigned edge is a candidate, and a graph that renders it must\n  render it as one.\n\nThat shape is deliberately the shape verifiable-credential and\npersonhood-credential specs already speak — **issuer** (the signer's DID),\n**subject** (the source κ), **claim** (the relation to the target κ) — so\na minted edge can travel as a credential without translation. `did:cid`\nidentity is the same layer named for people (a CID *is* a κ-address), and\nthe DTG cred-spec / registry work is the acceptance-flow face of it: a\npinned manifest is a committed artifact, a stranger's byte-matched rebuild\nis the prover's seat taken from outside, and the registry row is the\nminted record. Known honest gap, filed at win-prominence: the\nkappa-registry upstream's `DelegationScope` is *ahead of* the VRC — a\ncontribution seam, not a parity claim."
+          },
+          {
+            "type": "markdown",
+            "id": "9621afe04fa20607",
+            "text": "## The lattice (`star.v1`)\n\nPure math, no picture: ℤ/64ℤ = {0,1}⁶ over the six sovereignty axes\n(MSB-first Protection 32 · Delegation 16 · Memory 8 · Connection 4 ·\nComputation 2 · Value 1). A workshop's **vertex** is declared (config\n`star: { vertex: N }`) or provisional (sha256(name) mod 64, labelled so);\nits **anchor** is never chosen — `anchor = 63 XOR vertex`, the same law\n`conform.mjs` checks. Every validated result seats at **κ mod 64**:\ncontent-addressed geometry. All of it is colour and coordinates, **never\nproof** (FLEET §6) — importing a seating into a City Key, /star, or\ngame42 is the First Person's."
+          },
+          {
+            "type": "markdown",
+            "id": "30069edbf68d8efe",
+            "text": "## Rules for any consumer\n\n1. Numbers come from `frontier.json`, cited live — never restated (GR-1).\n2. Unsigned edges render as candidates; only VRC-signed edges render as\n   relations between parties (FLEET §2).\n3. Doors render as doors: show the action, never perform it (T6).\n4. Re-derive, don't trust: every κ, seed, and signature in these files is\n   checkable offline (`verify_run.mjs`, `holon_audit.mjs`) — a consumer\n   that displays a checkmark it did not re-derive is decorating, and\n   should say so.\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "dacde1b4ab20e58b",
+            "text": "# Assets"
+          },
+          {
+            "id": "84a5a314355191e9",
+            "type": "assets",
+            "text": "the-trust-graph-dialect"
+          },
+          {
+            "type": "markdown",
+            "id": "9b767dfd7f3dd2f8",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
+          },
+          {
+            "type": "markdown",
+            "id": "6912cea826702cea",
+            "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
+          }
+        ]
+      },
+      "date": 1787079851574
+    }
+  ]
+}

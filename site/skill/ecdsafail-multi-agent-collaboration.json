@@ -1,0 +1,156 @@
+{
+  "title": "Ecdsafail Multi Agent Collaboration",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "237fe1c1d7d52e45",
+      "text": "# ECDSA Fail Multi-Agent Collaboration"
+    },
+    {
+      "type": "markdown",
+      "id": "c3295b8bc5cfe3f8",
+      "text": "> Use this skill when coordinating two or more agents, such as Claude and Codex, on the ECDSA Fail challenge or another benchmark-driven circuit-optimization hunt — or when one agent fans out parallel sub-investigations (multi-agent autoresearch)."
+    },
+    {
+      "type": "markdown",
+      "id": "b4c218a3d7a67dae",
+      "text": "# ECDSA Fail Multi-Agent Collaboration\n\nUse this when another agent is working the same frontier. The goal is not more chatter; it is parallel scientific pressure with shared memory, independent verification, and fast convergence on one route worth spending GPUs on."
+    },
+    {
+      "type": "markdown",
+      "id": "0fb84bd2a792320c",
+      "text": "## Core Pattern\n\nRun the agents as independent labs connected by a lightweight mailbox:\n\n1. **Read before acting.** Pull the full new message thread and note the cursor/id you will resume from.\n2. **State your local ground truth.** Share exact configs, commit/worktree, q, emitted ops, avg executed Toffoli, score, `cls/pha/anc`, scan density, and validation status.\n3. **Split the frontier.** One agent should run structural/code or autopsy work while the other runs scoring, density triage, validation, or alternate-route sweeps.\n4. **Cross-check claims independently.** Treat another agent's promising result as a hypothesis until you rebuild/eval it in your own worktree or they provide enough reproducible detail.\n5. **Converge to one route.** When both agents see the same candidate as score-gated and landable, stop broad brainstorming and focus on repair, density, validation, and submission.\n6. **Preserve experiment memory.** Summarize dead ends, exact knobs, why a route is RED/YELLOW/GREEN, and what the next agent should not repeat."
+    },
+    {
+      "type": "markdown",
+      "id": "852cd708e1d30775",
+      "text": "## Fan Out Parallel Sub-Investigations\n\nThe mailbox connects *peer* agents; the second multiplier is each agent fanning out its own\n*sub-investigations*. When a question has several orthogonal angles — a literature survey, a\nfailure-mode autopsy across dimensions, a multi-route bake-off, a \"which of N levers binds the\npeak\" sweep — spawn one subagent (or background job) per angle in parallel, then synthesize. This\nis the `expert-autoresearch` / `super-autoresearch` pattern applied mid-hunt.\n\n- **Make the angles orthogonal.** For \"can any technique beat the floor?\" use distinct lenses —\n  e.g. (1) divstep/recompute circuits, (2) the specific paper's applicability to *our* exact\n  objective, (3) recent published records, (4) the underlying time-space theory. Overlapping\n  angles waste the fan-out.\n- **Force structured returns.** Each subagent returns a small table of facts + a bottom-line\n  yes/no with citations, not an essay. You synthesize; they measure.\n- **Read convergence and conflict as signal.** If independent subagents (or the two peer agents)\n  reach the *same* conclusion by *different* methods, that's high-confidence — stop and act. If\n  they *conflict*, the conflict localizes the crux: resolve it with the smallest decisive test\n  (often reading the source), not by averaging opinions. A theory predicting a cheap result and a\n  measurement showing an expensive one are reconciled by finding the assumption that breaks — not\n  by picking the answer you prefer. (Worked example this frontier: pebbling theory predicted a\n  cheap partial-recompute \"knee\"; the per-step cost measurement looked compatible; reading the\n  apply source — it carries no resumable GCD state — proved it was a cliff. The source read, not\n  the theory or the raw number, settled it.)\n- **A reproducible measurement outranks an analysis-only verdict.** If a peer's working branch or a\n  subagent's measured number contradicts your reasoned conclusion, rebuild it in your own worktree\n  and revise — own the correction fast. \"It can't be done\" loses to a branch that does it. (This\n  frontier: an analysis-only \"sub-1170 is closed\" verdict was overturned by a peer branch that\n  reached q1163; the right move was to rebuild it, measure that it was score-positive but\n  density-collapsed, and re-aim the work — not defend the verdict.)"
+    },
+    {
+      "type": "markdown",
+      "id": "6a65b6217c0dfc7a",
+      "text": "## Mailbox Workflow\n\nUse whatever lightweight mailbox the agents can stand up locally for the session: an ad-hoc HTTP\nserver, a tiny file-backed queue, a sqlite table, a named pipe wrapper, or any equivalent channel\nthat lets each agent read messages since a cursor and post addressed replies. The transport is not\nthe point; the cursor discipline and reproducible message content are.\n\nIf the agents create a small local HTTP mailbox, the interaction usually looks like this:\n\n```bash\nMAILBOX_URL=\"<local-mailbox-url>\"\n\ncurl -s \"$MAILBOX_URL/msgs?since=0&agent=<your-agent>\"\ncurl -s -X POST \"$MAILBOX_URL/msg\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"from\":\"<your-agent>\",\"to\":\"<peer-agent>\",\"topic\":\"<topic>\",\"text\":\"<message>\"}'\ncurl -s \"$MAILBOX_URL/msgs?since=<last-id>&agent=<your-agent>\"\n```\n\nKeep messages short but reproducible. A good message lets the other agent run the next experiment without asking for context."
+    },
+    {
+      "type": "markdown",
+      "id": "9b2da89096a746a6",
+      "text": "## Message Template\n\nUse this structure for substantive replies:\n\n```text\nRoute/config:\n- worktree/commit:\n- env/knobs:\n- nonce/state file, if relevant:\n\nMeasured facts:\n- q:\n- emitted ops:\n- avg executed Toffoli:\n- score/projection:\n- cls/pha/anc:\n- scan density or validation result:\n\nInterpretation:\n- GREEN/YELLOW/RED:\n- likely blocker:\n- what this disproves:\n\nProposed split:\n- I will:\n- Please check:\n- stop condition:\n```\n\nAvoid vague encouragement. Say what you measured, what changed your mind, and what should happen next."
+    },
+    {
+      "type": "markdown",
+      "id": "a656ad384df1458a",
+      "text": "## Division Of Labor\n\nPrefer complementary tracks:\n\n- **Agent A: route and source work**\n  - diff SOTA branches;\n  - identify peak binders and hot Toffoli phases;\n  - implement or toggle structural levers;\n  - run `TRACE_PEAK=1 build_circuit`, `eval_circuit`, phase stats, and autopsy helpers.\n\n- **Agent B: score and landability work**\n  - compute score gates against the latest promoted SOTA;\n  - build GPU state for candidate routes;\n  - run short density triage scans;\n  - remote-validate all GCD-clean candidates in full mode;\n  - local-cross-check exactly 5 sampled candidates for validator trust.\n\nSwap roles when one side is blocked. Do not let both agents spend the same hour retrying the same knob."
+    },
+    {
+      "type": "markdown",
+      "id": "a4c76e51d61c6de7",
+      "text": "## Independent Verification Rules\n\nBefore accepting a peer result:\n\n- Rebuild the exact config in your own worktree, or confirm the peer supplied worktree/commit/env/nonce sufficient to reproduce it.\n- Re-run `build_circuit`/`eval_circuit` or the closest cheap diagnostic.\n- If the route is dirty, collect `cls/pha/anc` and a failure histogram, not just the first failing shot.\n- If the route needs island hunting, run a small density triage before allocating broad GPU ranges.\n- If remote validation is used, drain the full candidate backlog remotely and use the local 5-candidate sample only as a trust cross-check.\n- For submissions, let the server compute the score. Do not submit with a hand-claimed score."
+    },
+    {
+      "type": "markdown",
+      "id": "aeeba61e16e28958",
+      "text": "## Disagreement Handling\n\nWhen agents disagree, classify the cause:\n\n- **Different defaults:** one worktree may have baked env defaults. Pin every controversial knob explicitly.\n- **Different op stream:** compare `emitted ops`, `ops.bin` length, commit hash, and `DIALOG_TAIL_NONCE`.\n- **Different metric:** emitted CCX, average executed Toffoli, and rounded submitted Toffoli are not interchangeable.\n- **Different validation mode:** full validation beats fast validation; local/remote mismatch quarantines the remote result until resolved.\n- **Different SOTA basis:** always name the promoted SOTA commit and score used for the score gate.\n\nDo not argue from memory. Make the smallest reproducible test that distinguishes the claims."
+    },
+    {
+      "type": "markdown",
+      "id": "550b367fd879a9e0",
+      "text": "## Route Triage Language\n\nUse consistent labels:\n\n- **GREEN:** score-gated, q cap satisfied, density healthy, near misses include independent zeros in each channel, validation trusted.\n- **YELLOW:** score-gated but dirty or density unknown; deserves short triage/autopsy.\n- **RED:** not score-gated, violates q cap, density collapsed, or failure is structurally impossible without an unaffordable repair.\n\nInclude why a route is labeled. For example:\n\n```text\nYELLOW: q1163 and score-positive by ~9M, but 60M scan has 0 GCD-clean candidates.\nAutopsy shows 7 GCD-hard failures and 43 apply mismatches, so next repair target is apply replay, not uniform active iterations.\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "8f05256d37da8902",
+      "text": "## Collaboration Loop For Frontier Hunts\n\n1. **Sync SOTA.** Pull/check promoted SOTA before score decisions.\n2. **Share a candidate slate.** Each agent proposes at most 2-3 routes, not a long undifferentiated list.\n3. **Score-gate first.** Reject anything that cannot beat SOTA under the user's q/Toffoli policy unless the user explicitly wants qubit-frontier preservation.\n4. **Cheap diagnostics.** Measure q, avg Toffoli, `cls/pha/anc`, and failure histogram.\n5. **Short density triage.** Use equal small GPU windows. Stop on density collapse.\n6. **Repair based on histograms.** Match the repair to the failure class: active-step convergence, tail codec, compare width, apply value mismatch, fold carry escape, phase cleanup, or ancilla cleanup.\n7. **Validate before broad hunt.** Remote full validation for all candidates, local 5-sample cross-check for trust.\n8. **Submit only verified winners.** Bake config+nonce, run canonical `ecdsafail run`, re-check SOTA, submit only if policy allows and measured score beats promoted SOTA.\n9. **Update the peer.** Send the exact result and next recommended action."
+    },
+    {
+      "type": "markdown",
+      "id": "e3bbafc7a07f9da5",
+      "text": "## What To Preserve\n\nAt the end of a useful exchange, record:\n\n- exact winning or dead-end config;\n- worktree and commit;\n- q / avg Toffoli / projected score;\n- full `cls/pha/anc`;\n- GCD-clean density and validated near misses;\n- failure histogram;\n- route label and reason;\n- next structural move.\n\nThis is the material that should graduate into `ecdsafail notes`, skill updates, or README memory."
+    },
+    {
+      "type": "markdown",
+      "id": "691a7ee29120df7d",
+      "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Ecdsafail Multi Agent Collaboration",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "237fe1c1d7d52e45",
+            "text": "# ECDSA Fail Multi-Agent Collaboration"
+          },
+          {
+            "type": "markdown",
+            "id": "c3295b8bc5cfe3f8",
+            "text": "> Use this skill when coordinating two or more agents, such as Claude and Codex, on the ECDSA Fail challenge or another benchmark-driven circuit-optimization hunt — or when one agent fans out parallel sub-investigations (multi-agent autoresearch)."
+          },
+          {
+            "type": "markdown",
+            "id": "b4c218a3d7a67dae",
+            "text": "# ECDSA Fail Multi-Agent Collaboration\n\nUse this when another agent is working the same frontier. The goal is not more chatter; it is parallel scientific pressure with shared memory, independent verification, and fast convergence on one route worth spending GPUs on."
+          },
+          {
+            "type": "markdown",
+            "id": "0fb84bd2a792320c",
+            "text": "## Core Pattern\n\nRun the agents as independent labs connected by a lightweight mailbox:\n\n1. **Read before acting.** Pull the full new message thread and note the cursor/id you will resume from.\n2. **State your local ground truth.** Share exact configs, commit/worktree, q, emitted ops, avg executed Toffoli, score, `cls/pha/anc`, scan density, and validation status.\n3. **Split the frontier.** One agent should run structural/code or autopsy work while the other runs scoring, density triage, validation, or alternate-route sweeps.\n4. **Cross-check claims independently.** Treat another agent's promising result as a hypothesis until you rebuild/eval it in your own worktree or they provide enough reproducible detail.\n5. **Converge to one route.** When both agents see the same candidate as score-gated and landable, stop broad brainstorming and focus on repair, density, validation, and submission.\n6. **Preserve experiment memory.** Summarize dead ends, exact knobs, why a route is RED/YELLOW/GREEN, and what the next agent should not repeat."
+          },
+          {
+            "type": "markdown",
+            "id": "852cd708e1d30775",
+            "text": "## Fan Out Parallel Sub-Investigations\n\nThe mailbox connects *peer* agents; the second multiplier is each agent fanning out its own\n*sub-investigations*. When a question has several orthogonal angles — a literature survey, a\nfailure-mode autopsy across dimensions, a multi-route bake-off, a \"which of N levers binds the\npeak\" sweep — spawn one subagent (or background job) per angle in parallel, then synthesize. This\nis the `expert-autoresearch` / `super-autoresearch` pattern applied mid-hunt.\n\n- **Make the angles orthogonal.** For \"can any technique beat the floor?\" use distinct lenses —\n  e.g. (1) divstep/recompute circuits, (2) the specific paper's applicability to *our* exact\n  objective, (3) recent published records, (4) the underlying time-space theory. Overlapping\n  angles waste the fan-out.\n- **Force structured returns.** Each subagent returns a small table of facts + a bottom-line\n  yes/no with citations, not an essay. You synthesize; they measure.\n- **Read convergence and conflict as signal.** If independent subagents (or the two peer agents)\n  reach the *same* conclusion by *different* methods, that's high-confidence — stop and act. If\n  they *conflict*, the conflict localizes the crux: resolve it with the smallest decisive test\n  (often reading the source), not by averaging opinions. A theory predicting a cheap result and a\n  measurement showing an expensive one are reconciled by finding the assumption that breaks — not\n  by picking the answer you prefer. (Worked example this frontier: pebbling theory predicted a\n  cheap partial-recompute \"knee\"; the per-step cost measurement looked compatible; reading the\n  apply source — it carries no resumable GCD state — proved it was a cliff. The source read, not\n  the theory or the raw number, settled it.)\n- **A reproducible measurement outranks an analysis-only verdict.** If a peer's working branch or a\n  subagent's measured number contradicts your reasoned conclusion, rebuild it in your own worktree\n  and revise — own the correction fast. \"It can't be done\" loses to a branch that does it. (This\n  frontier: an analysis-only \"sub-1170 is closed\" verdict was overturned by a peer branch that\n  reached q1163; the right move was to rebuild it, measure that it was score-positive but\n  density-collapsed, and re-aim the work — not defend the verdict.)"
+          },
+          {
+            "type": "markdown",
+            "id": "6a65b6217c0dfc7a",
+            "text": "## Mailbox Workflow\n\nUse whatever lightweight mailbox the agents can stand up locally for the session: an ad-hoc HTTP\nserver, a tiny file-backed queue, a sqlite table, a named pipe wrapper, or any equivalent channel\nthat lets each agent read messages since a cursor and post addressed replies. The transport is not\nthe point; the cursor discipline and reproducible message content are.\n\nIf the agents create a small local HTTP mailbox, the interaction usually looks like this:\n\n```bash\nMAILBOX_URL=\"<local-mailbox-url>\"\n\ncurl -s \"$MAILBOX_URL/msgs?since=0&agent=<your-agent>\"\ncurl -s -X POST \"$MAILBOX_URL/msg\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"from\":\"<your-agent>\",\"to\":\"<peer-agent>\",\"topic\":\"<topic>\",\"text\":\"<message>\"}'\ncurl -s \"$MAILBOX_URL/msgs?since=<last-id>&agent=<your-agent>\"\n```\n\nKeep messages short but reproducible. A good message lets the other agent run the next experiment without asking for context."
+          },
+          {
+            "type": "markdown",
+            "id": "9b2da89096a746a6",
+            "text": "## Message Template\n\nUse this structure for substantive replies:\n\n```text\nRoute/config:\n- worktree/commit:\n- env/knobs:\n- nonce/state file, if relevant:\n\nMeasured facts:\n- q:\n- emitted ops:\n- avg executed Toffoli:\n- score/projection:\n- cls/pha/anc:\n- scan density or validation result:\n\nInterpretation:\n- GREEN/YELLOW/RED:\n- likely blocker:\n- what this disproves:\n\nProposed split:\n- I will:\n- Please check:\n- stop condition:\n```\n\nAvoid vague encouragement. Say what you measured, what changed your mind, and what should happen next."
+          },
+          {
+            "type": "markdown",
+            "id": "a656ad384df1458a",
+            "text": "## Division Of Labor\n\nPrefer complementary tracks:\n\n- **Agent A: route and source work**\n  - diff SOTA branches;\n  - identify peak binders and hot Toffoli phases;\n  - implement or toggle structural levers;\n  - run `TRACE_PEAK=1 build_circuit`, `eval_circuit`, phase stats, and autopsy helpers.\n\n- **Agent B: score and landability work**\n  - compute score gates against the latest promoted SOTA;\n  - build GPU state for candidate routes;\n  - run short density triage scans;\n  - remote-validate all GCD-clean candidates in full mode;\n  - local-cross-check exactly 5 sampled candidates for validator trust.\n\nSwap roles when one side is blocked. Do not let both agents spend the same hour retrying the same knob."
+          },
+          {
+            "type": "markdown",
+            "id": "a4c76e51d61c6de7",
+            "text": "## Independent Verification Rules\n\nBefore accepting a peer result:\n\n- Rebuild the exact config in your own worktree, or confirm the peer supplied worktree/commit/env/nonce sufficient to reproduce it.\n- Re-run `build_circuit`/`eval_circuit` or the closest cheap diagnostic.\n- If the route is dirty, collect `cls/pha/anc` and a failure histogram, not just the first failing shot.\n- If the route needs island hunting, run a small density triage before allocating broad GPU ranges.\n- If remote validation is used, drain the full candidate backlog remotely and use the local 5-candidate sample only as a trust cross-check.\n- For submissions, let the server compute the score. Do not submit with a hand-claimed score."
+          },
+          {
+            "type": "markdown",
+            "id": "aeeba61e16e28958",
+            "text": "## Disagreement Handling\n\nWhen agents disagree, classify the cause:\n\n- **Different defaults:** one worktree may have baked env defaults. Pin every controversial knob explicitly.\n- **Different op stream:** compare `emitted ops`, `ops.bin` length, commit hash, and `DIALOG_TAIL_NONCE`.\n- **Different metric:** emitted CCX, average executed Toffoli, and rounded submitted Toffoli are not interchangeable.\n- **Different validation mode:** full validation beats fast validation; local/remote mismatch quarantines the remote result until resolved.\n- **Different SOTA basis:** always name the promoted SOTA commit and score used for the score gate.\n\nDo not argue from memory. Make the smallest reproducible test that distinguishes the claims."
+          },
+          {
+            "type": "markdown",
+            "id": "550b367fd879a9e0",
+            "text": "## Route Triage Language\n\nUse consistent labels:\n\n- **GREEN:** score-gated, q cap satisfied, density healthy, near misses include independent zeros in each channel, validation trusted.\n- **YELLOW:** score-gated but dirty or density unknown; deserves short triage/autopsy.\n- **RED:** not score-gated, violates q cap, density collapsed, or failure is structurally impossible without an unaffordable repair.\n\nInclude why a route is labeled. For example:\n\n```text\nYELLOW: q1163 and score-positive by ~9M, but 60M scan has 0 GCD-clean candidates.\nAutopsy shows 7 GCD-hard failures and 43 apply mismatches, so next repair target is apply replay, not uniform active iterations.\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "8f05256d37da8902",
+            "text": "## Collaboration Loop For Frontier Hunts\n\n1. **Sync SOTA.** Pull/check promoted SOTA before score decisions.\n2. **Share a candidate slate.** Each agent proposes at most 2-3 routes, not a long undifferentiated list.\n3. **Score-gate first.** Reject anything that cannot beat SOTA under the user's q/Toffoli policy unless the user explicitly wants qubit-frontier preservation.\n4. **Cheap diagnostics.** Measure q, avg Toffoli, `cls/pha/anc`, and failure histogram.\n5. **Short density triage.** Use equal small GPU windows. Stop on density collapse.\n6. **Repair based on histograms.** Match the repair to the failure class: active-step convergence, tail codec, compare width, apply value mismatch, fold carry escape, phase cleanup, or ancilla cleanup.\n7. **Validate before broad hunt.** Remote full validation for all candidates, local 5-sample cross-check for trust.\n8. **Submit only verified winners.** Bake config+nonce, run canonical `ecdsafail run`, re-check SOTA, submit only if policy allows and measured score beats promoted SOTA.\n9. **Update the peer.** Send the exact result and next recommended action."
+          },
+          {
+            "type": "markdown",
+            "id": "e3bbafc7a07f9da5",
+            "text": "## What To Preserve\n\nAt the end of a useful exchange, record:\n\n- exact winning or dead-end config;\n- worktree and commit;\n- q / avg Toffoli / projected score;\n- full `cls/pha/anc`;\n- GCD-clean density and validated near misses;\n- failure histogram;\n- route label and reason;\n- next structural move.\n\nThis is the material that should graduate into `ecdsafail notes`, skill updates, or README memory."
+          },
+          {
+            "type": "markdown",
+            "id": "691a7ee29120df7d",
+            "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847280969
+    }
+  ]
+}

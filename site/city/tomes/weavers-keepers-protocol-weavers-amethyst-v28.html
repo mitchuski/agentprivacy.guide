@@ -1,0 +1,337 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Weavers — Keeper's Protocol — Weavers · Amethyst · V28 · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=tomes" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Weavers — Keeper's Protocol — Weavers · Amethyst · V28</span></div>
+  <article><div class="md"><h1>Keeper&#39;s Protocol — Weavers · Amethyst · V28</h1>
+<h1>Keeper&#39;s Protocol — Weavers Shop</h1>
+<p>A complete, re-runnable guide for conducting a live Cloak Weaving ceremony. Follow these steps in order. No OOC commentary needed.</p>
+<hr>
+</div>
+<div class="md"><h2>Pre-flight</h2>
+<pre><code class="language-bash"># Load archon environment
+source ~/.keymaster-mcp/.env
+alias km=&quot;ARCHON_WALLET_PATH=~/.keymaster-mcp/wallet.json npx @didcid/keymaster&quot;
+
+# Confirm GenitriX is active
+km list-ids
+# Expected: GenitriX  &lt;&lt;&lt; current
+
+# Start registry UI (if not running)
+cd tools/spellweb-registry &amp;&amp; npm run dev   # → localhost:5173
+
+# Start spellweb (if not running)
+cd tools/spellweb &amp;&amp; npm run dev            # → localhost:8000
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Step 1 — Identity Challenge</h2>
+<p>The seeker arrives and claims an identity. Do not accept it at face value.</p>
+<p><strong>Keeper:</strong></p>
+<pre><code class="language-bash">km create-challenge
+# → did:cid:&lt;challenge-did&gt;
+</code></pre>
+<p>Send the challenge DID to the seeker (Telegram, dmail, or in-person).</p>
+<p><strong>Seeker runs:</strong></p>
+<pre><code class="language-bash">keymaster create-response did:cid:&lt;challenge-did&gt;
+# → did:cid:&lt;response-did&gt;
+</code></pre>
+<p>Seeker returns the response DID.</p>
+<p><strong>Keeper verifies:</strong></p>
+<pre><code class="language-bash">km verify-response did:cid:&lt;response-did&gt;
+# Expected output:
+# { &quot;match&quot;: true, &quot;responder&quot;: &quot;did:cid:&lt;sovereign-did&gt;&quot;, ... }
+</code></pre>
+<p>✓ <code>match: true</code> — identity confirmed.<br>Record <code>responder</code> value — this is the seeker&#39;s <strong>sovereign DID</strong> (V63 in the weave).</p>
+<hr>
+</div>
+<div class="md"><h2>Step 2 — Credential Challenge</h2>
+<p>The seeker presents which credential they want cloaked. You need from them:</p>
+<ul>
+<li>The credential&#39;s <strong>schema DID</strong></li>
+<li>The <strong>issuer</strong> (name or DID)</li>
+</ul>
+<p>If the issuer is a name (e.g. <code>morningstar@archon.social</code>), resolve it:</p>
+<pre><code class="language-bash">km resolve-did morningstar@archon.social
+# Look for: didDocument.id → issuer DID
+</code></pre>
+<p>Build the challenge file:</p>
+<pre><code class="language-bash">cat &gt; /tmp/vc-challenge.json &lt;&lt; EOF
+{
+  &quot;credentials&quot;: [{
+    &quot;schema&quot;: &quot;&lt;schema-did-from-seeker&gt;&quot;,
+    &quot;issuers&quot;: [&quot;&lt;issuer-did-resolved-above&gt;&quot;]
+  }]
+}
+EOF
+</code></pre>
+<p>Create the credentialed challenge:</p>
+<pre><code class="language-bash">km create-challenge /tmp/vc-challenge.json
+# → did:cid:&lt;vc-challenge-did&gt;
+</code></pre>
+<p>Send to seeker.</p>
+<p><strong>Seeker runs:</strong></p>
+<pre><code class="language-bash">keymaster create-response did:cid:&lt;vc-challenge-did&gt;
+# Keymaster finds the matching VC automatically
+# → did:cid:&lt;vc-response-did&gt;
+</code></pre>
+<p>Seeker returns the response DID.</p>
+<p><strong>Keeper verifies:</strong></p>
+<pre><code class="language-bash">km verify-response did:cid:&lt;vc-response-did&gt;
+# Expected: { &quot;match&quot;: true, &quot;fulfilled&quot;: 1, &quot;vps&quot;: [{ ...full credential... }] }
+</code></pre>
+<p>✓ <code>fulfilled: 1</code> — credential presented and verified.</p>
+<p>From the output, record:</p>
+<ul>
+<li><code>vps[0].credentialSubject</code> — all credential claims (this is what you weave)</li>
+<li><code>credentials[0].vc</code> — the VC DID (V15 in the weave)</li>
+<li><code>vps[0].issuer</code> — confirm it matches the issuer DID you resolved</li>
+<li><code>vps[0].validFrom</code> — validity envelope</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Step 3 — Valve-Class Assignment</h2>
+<p>Read the credential claims aloud (or display them). Propose assignments. Confirm with the seeker before proceeding.</p>
+<p><strong>Default rules:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field type</th>
+<th>Default valve class</th>
+<th>Vertex</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Core attestation (<code>credence</code>, <code>score</code>, <code>confidence</code>)</td>
+<td>Always-Revealed</td>
+<td>V20</td>
+</tr>
+<tr>
+<td>Validity window (<code>validFrom</code>, <code>validUntil</code>)</td>
+<td>Always-Revealed</td>
+<td>V20</td>
+</tr>
+<tr>
+<td>Subject identifier (<code>credentialSubject.id</code>)</td>
+<td>Hash-Masked</td>
+<td>V3</td>
+</tr>
+<tr>
+<td>Statistical baselines (<code>priorAssumed</code>, <code>threshold</code>)</td>
+<td>Hash-Masked</td>
+<td>V3</td>
+</tr>
+<tr>
+<td>Flags (<code>redFlags</code>, <code>warnings</code>)</td>
+<td>Hash-Masked</td>
+<td>V3</td>
+</tr>
+<tr>
+<td>Behavioral evidence (<code>evidenceSummary</code>, <code>methodology</code>)</td>
+<td>Always-Masked</td>
+<td>V25</td>
+</tr>
+<tr>
+<td>Cryptographic proof (<code>proof</code>, <code>signature</code>)</td>
+<td>Always-Masked</td>
+<td>V25</td>
+</tr>
+</tbody></table>
+<p>Seeker may override any field. Record final assignments.</p>
+<hr>
+</div>
+<div class="md"><h2>Step 4 — Transmuted DID (Mage-Side Persona)</h2>
+<p>Ask: <em>Do you have a transmuted identity — a second DID that is your Mage-side public persona?</em></p>
+<p><strong>If yes:</strong> get the DID from the seeker (V28 in the weave).</p>
+<p><strong>If no:</strong> the seeker creates one now:</p>
+<pre><code class="language-bash"># Seeker runs:
+keymaster create-id &lt;mage-persona-name&gt;
+keymaster resolve-id
+# The output DID is their transmuted persona
+</code></pre>
+<p>Record the transmuted DID (V28 in the weave).<br>If skipped: use <code>did:cid:placeholder-transmuted-&lt;visitor-name&gt;</code> and flag it in the registry.</p>
+<hr>
+</div>
+<div class="md"><h2>Step 5 — Build the Registry JSON</h2>
+<p>Create <code>/tmp/&lt;visitor-name&gt;-cloak-registry.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: &quot;item-sovereign-&lt;visitor&gt;&quot;,
+      &quot;type&quot;: &quot;did&quot;,
+      &quot;label&quot;: &quot;&lt;Visitor Name&gt; — Sovereign Identity&quot;,
+      &quot;did&quot;: &quot;&lt;sovereign-did from Step 1&gt;&quot;,
+      &quot;vertexId&quot;: 63,
+      &quot;stratum&quot;: 6,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;role&quot;: &quot;sovereign&quot;,
+      &quot;notes&quot;: &quot;Sovereign DID verified via keymaster challenge/response (match: true).&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;, &quot;cloak-weave-v1&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-transmuted-&lt;visitor&gt;&quot;,
+      &quot;type&quot;: &quot;did&quot;,
+      &quot;label&quot;: &quot;&lt;Visitor Name&gt; — Public Mage Projection&quot;,
+      &quot;did&quot;: &quot;&lt;transmuted-did from Step 4&gt;&quot;,
+      &quot;vertexId&quot;: 28,
+      &quot;stratum&quot;: 3,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;role&quot;: &quot;transmuted&quot;,
+      &quot;notes&quot;: &quot;Mage-side public persona. Memory · Connection · Computation. Role published; name concealed.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;, &quot;cloak-weave-v1&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-issuer&quot;,
+      &quot;type&quot;: &quot;did&quot;,
+      &quot;label&quot;: &quot;&lt;Issuer Name&gt;&quot;,
+      &quot;did&quot;: &quot;&lt;issuer-did from Step 2&gt;&quot;,
+      &quot;vertexId&quot;: 49,
+      &quot;stratum&quot;: 3,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;role&quot;: &quot;issuer&quot;,
+      &quot;notes&quot;: &quot;&lt;issuer-name&gt; — issuing authority. Resolved from name service.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-schema&quot;,
+      &quot;type&quot;: &quot;schema&quot;,
+      &quot;label&quot;: &quot;&lt;Schema Name&gt;&quot;,
+      &quot;did&quot;: &quot;&lt;schema-did from seeker&gt;&quot;,
+      &quot;vertexId&quot;: 12,
+      &quot;stratum&quot;: 2,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;role&quot;: &quot;schema&quot;,
+      &quot;controllerDid&quot;: &quot;&lt;issuer-did&gt;&quot;,
+      &quot;notes&quot;: &quot;Credential schema. V12 — Memory · Connection.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-vc&quot;,
+      &quot;type&quot;: &quot;vc&quot;,
+      &quot;label&quot;: &quot;&lt;Credential Name&gt;&quot;,
+      &quot;did&quot;: &quot;&lt;vc-did from Step 2 credentials[0].vc&gt;&quot;,
+      &quot;vertexId&quot;: 15,
+      &quot;stratum&quot;: 4,
+      &quot;createdAt&quot;: &quot;&lt;vps[0].validFrom&gt;&quot;,
+      &quot;schemaDid&quot;: &quot;&lt;schema-did&gt;&quot;,
+      &quot;issuerDid&quot;: &quot;&lt;issuer-did&gt;&quot;,
+      &quot;subjectDid&quot;: &quot;&lt;sovereign-did&gt;&quot;,
+      &quot;notes&quot;: &quot;&lt;Brief description of credential and claims&gt;.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-revealed-claims&quot;,
+      &quot;type&quot;: &quot;capability&quot;,
+      &quot;label&quot;: &quot;Always-Revealed Claims (V20 · Techne)&quot;,
+      &quot;did&quot;: &quot;urn:capability:&lt;visitor&gt;-revealed-&lt;date&gt;&quot;,
+      &quot;vertexId&quot;: 20,
+      &quot;stratum&quot;: 2,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;parentDid&quot;: &quot;&lt;vc-did&gt;&quot;,
+      &quot;notes&quot;: &quot;Always-Revealed (V20). Fields: &lt;list confirmed Always-Revealed fields and values&gt;.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;, &quot;valve-revealed&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-hashed-claims&quot;,
+      &quot;type&quot;: &quot;capability&quot;,
+      &quot;label&quot;: &quot;Hash-Masked Claims (V3 · Dual Agent)&quot;,
+      &quot;did&quot;: &quot;urn:capability:&lt;visitor&gt;-hashed-&lt;date&gt;&quot;,
+      &quot;vertexId&quot;: 3,
+      &quot;stratum&quot;: 2,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;parentDid&quot;: &quot;&lt;vc-did&gt;&quot;,
+      &quot;notes&quot;: &quot;Hash-Masked (V3). Fields: &lt;list confirmed Hash-Masked fields&gt;. Structurally present; cryptographically inaccessible.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;, &quot;valve-masked&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-proof-spell&quot;,
+      &quot;type&quot;: &quot;capability&quot;,
+      &quot;label&quot;: &quot;Always-Masked Proof Spell (V38 · Aletheia)&quot;,
+      &quot;did&quot;: &quot;urn:capability:&lt;visitor&gt;-proof-spell-&lt;date&gt;&quot;,
+      &quot;vertexId&quot;: 25,
+      &quot;stratum&quot;: 3,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;parentDid&quot;: &quot;&lt;vc-did&gt;&quot;,
+      &quot;notes&quot;: &quot;Always-Masked (V25). Fields: &lt;list confirmed Always-Masked fields&gt;. ZK predicate: &#39;&lt;describe the predicate the verifier can confirm without seeing the value&gt;&#39;.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;, &quot;valve-zk&quot;]
+    },
+    {
+      &quot;id&quot;: &quot;item-chronicle&quot;,
+      &quot;type&quot;: &quot;asset&quot;,
+      &quot;label&quot;: &quot;Cloak Weaving Chronicle&quot;,
+      &quot;did&quot;: &quot;urn:chronicle:cloak-weaving-&lt;visitor&gt;-&lt;date&gt;&quot;,
+      &quot;vertexId&quot;: 5,
+      &quot;stratum&quot;: 2,
+      &quot;createdAt&quot;: &quot;&lt;ISO timestamp&gt;&quot;,
+      &quot;role&quot;: &quot;chronicle&quot;,
+      &quot;notes&quot;: &quot;Chronicle of Cloak Weaving ceremony at Weavers shop (V28 · Amethyst). Visitor verified via keymaster challenge/response. Pallia wove across 9 constellation vertices. &lt;date&gt;.&quot;,
+      &quot;tags&quot;: [&quot;cloak-weaving&quot;, &quot;chronicle&quot;, &quot;cloak-weave-v1&quot;]
+    }
+  ],
+  &quot;chronicle&quot;: []
+}
+</code></pre>
+<hr>
+</div>
+<div class="md"><h2>Step 6 — Export and Visualize</h2>
+<pre><code class="language-bash"># From tools/spellweb-registry:
+node scripts/export-to-spellweb.mjs /tmp/&lt;visitor&gt;-cloak-registry.json &lt;visitor-name&gt; \
+  &gt; ../spellweb/src/data/&lt;visitor-name&gt;-contribution.ts
+
+# Wire into spellweb (nodes.ts):
+# Add import: import { REGISTRY_NODES as &lt;VISITOR&gt;_NODES } from &#39;./&lt;visitor-name&gt;-contribution&#39;;
+# Add to NODES array end: ...VISITOR_NODES,
+
+# Wire into spellweb (edges.ts):
+# Add import: import { REGISTRY_EDGES as &lt;VISITOR&gt;_EDGES } from &#39;./&lt;visitor-name&gt;-contribution&#39;;
+# Add to EDGES array end: ...VISITOR_EDGES,
+</code></pre>
+<p>Vite hot-reloads. Open <strong>localhost:8000</strong>.</p>
+<p>The seeker should now see 9 nodes across the lattice at V3, V5, V12, V15, V20, V38, V28, V49, V63. Edges: issuer <code>generates</code> VC → VC <code>proves</code> schema → VC <code>relates_to</code> sovereign.</p>
+<hr>
+</div>
+<div class="md"><h2>Step 7 — DID-Blind Public Export (optional)</h2>
+<p>To show the seeker their <strong>public-layer projection</strong> (what the world sees):</p>
+<ol>
+<li>Open the registry at <strong>localhost:5173</strong></li>
+<li>Import <code>/tmp/&lt;visitor&gt;-cloak-registry.json</code></li>
+<li>Click <strong>Publish to Spellweb</strong> → enable <strong>DID-Blind ON</strong></li>
+<li>Every <code>did:cid:...</code> becomes <code>[DID]</code> — structure and valve-class geometry preserved, identifiers stripped</li>
+</ol>
+<p>This is what a verifier would see on spellweb.ai.</p>
+<hr>
+</div>
+<div class="md"><h2>Known gaps (target for cloak-weave-v2)</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Transmuted DID creation is manual — should be part of the ceremony flow before Step 4</li>
+<li><input disabled="" type="checkbox"> Capability edge types (<code>manifests_as</code>) not auto-generated by current export script — capabilities appear as isolated nodes; edges would need to be added manually or via script update</li>
+<li><input disabled="" type="checkbox"> V0 (Null Blade) is the ceremonial start but has no registry item — consider a placeholder or opening narration artifact</li>
+</ul>
+<hr>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code><br>🪡</p>
+<p>CC BY-SA 4.0 · csaucier · flaxscrip lineage · 2026-05-11</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 weavers-keepers-protocol-weavers-amethyst-v28</span><a class="asset-file" href="/city/tomes/assets/weavers-keepers-protocol-weavers-amethyst-v28/KEEPER_PROTOCOL.md" download>KEEPER_PROTOCOL.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-workshops.html">The Workshops</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="weavers-keepers-protocol-weavers-amethyst-v28.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

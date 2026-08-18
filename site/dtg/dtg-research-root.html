@@ -1,0 +1,103 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DTG Research Root · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>DTG Research Root</span></div>
+  <article><div class="md"><h1>dtgwg-zkp-mage</h1>
+<p>Working lab + explorations for the <span class="deadlink" title="reference (not a live page)">ToIP <strong>DTG ZKP Task Force</strong></span><br>(Decentralized Trust Graph WG, ToIP/LFDT) — maintained by Mitchell Travers (co-chair, Soulbis).</p>
+<p>This is <strong>evidence, not spec</strong>: runnable reference models, real circuits with benchmark numbers,<br>cross-language interop proofs, and design explorations — each anchored to the task force&#39;s<br><a class="wlink" href="decision-overview.html">Decision — Overview</a> and the<br><span class="deadlink" title="reference (not a live page)">DTG Credentials Core Specification</span>. Spec text goes<br>through the upstream repo and TF process; this repo is the bench the proposals were tested on.</p>
+<p><strong>Task force members, start here:</strong> <code>./THE-WORK-SO-FAR.md</code> is the<br>4-minute human summary. Point your AI assistant at <code>./AGENTS.md</code> (its<br>introduction to this knowledge base) and <code>./PATH-MAP.md</code> (the research<br>paths + the position protocol for registering what you&#39;d ratify, refine, refute, or build).</p>
+<p><strong>Browse it as a wiki:</strong> <code>./kb/markdown/INDEX.md</code> — the whole corpus<br>(decision document §-split, explorations, lab notes, chronicles) as a deterministic, manifest-first<br>knowledge-base projection. Same content also ships as FedWiki page JSON in <code>kb/fedwiki/</code>.</p>
+</div>
+<div class="md"><h2>The lab — <code>runtimes/</code></h2>
+<p>18 suites, 178 properties, all green. 14 suites are <strong>zero-dependency</strong> (Node stdlib + Python stdlib) —<br>clone and run, nothing to install (<code>ceremony-orchestrator</code> is zero-dep too, but verifies the circuit<br>build, so it runs after the circom setups):</p>
+<pre><code class="language-sh">cd runtimes/canonical      &amp;&amp; node test.mjs   # §6.2 descriptor + §15.2 transcript encodings, 11/11
+cd runtimes/fixtures       &amp;&amp; node test.mjs   # 26-code rejection register + 39 vectors, 13/13
+cd runtimes/consumer-py    &amp;&amp; python test.py  # second-language consumer: 29/29 digests byte-exact
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Suites</th>
+<th>What it proves</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Predicates</td>
+<td><code>01-uniqueness-nullifier</code> · <code>07-trust-graph-formation</code> (+ stubs 02–06)</td>
+<td>scoped nullifier w/ self-Sybil rejection; graph formation = collision→edge→propagation</td>
+</tr>
+<tr>
+<td>Canonical layer</td>
+<td><code>canonical</code></td>
+<td>context descriptor + transcript digests; bare nonce insufficient is a <em>failing test</em></td>
+</tr>
+<tr>
+<td>Conformance</td>
+<td><code>fixtures</code> · <code>consumer-py</code></td>
+<td>byte-deterministic vectors; register v2 (95 entries, all triggered live); Python consumer = interop existence proof</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td><code>context-card</code> · <code>show-composition</code> · <code>quiet-presentation</code></td>
+<td>context legibility; atomic bundle shows; observer leakage budget</td>
+</tr>
+<tr>
+<td>Lifecycle</td>
+<td><code>rotation</code> · <code>guardian-recovery</code> · <code>erosion-record</code> · <code>multi-issuer</code> · <code>mediator</code> · <code>witness-seat</code></td>
+<td>key rotation w/o re-enrolment; t-of-n guardian recovery; assurance horizons; issuer independence collapse; mediated proving tiers; VWC witness seat</td>
+</tr>
+<tr>
+<td>Circuits</td>
+<td><code>circom-gadget</code> (needs <code>npm install</code> + <code>node setup.mjs</code>)</td>
+<td><strong>real Groth16</strong>: nullifier+membership+transcript-binding 11,523 constraints / ~680 ms prove / 721 B proof; dual-issuer k=2 (10,717); guardian t=3 (16,078). Lab-only trusted setup — stated, not hidden. <strong>Full answer + run transcript: <code>./CIRCUITS.md</code></strong></td>
+</tr>
+<tr>
+<td>Verification (X10 lane 1)</td>
+<td><code>ceremony-orchestrator</code></td>
+<td>seat-gated volunteer flow: rebuild → suites → digest report → acceptance vs the pinned manifest; lane-3 ceremony endpoint structurally unconstructable (<code>phase2-gate-closed</code>); lifetime-view secret scan ready for lane 2</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>The verification registry</h2>
+<p>Independent runs of the three circuits are logged publicly on this repo&#39;s <strong>GitHub Pages registry</strong><br>(<code>registry/</code> — prebuilt, deterministic, deployed by <code>.github/workflows/pages.yml</code>). File your own run<br>with the <code>.github/ISSUE_TEMPLATE/verification-run.yml</code> — the<br>orchestrator prints the submission body for you:</p>
+<pre><code class="language-sh">cd runtimes/ceremony-orchestrator &amp;&amp; node orchestrate.mjs &lt;your-seat-id&gt;
+</code></pre>
+<p>Acceptance is decided by <code>runtimes/circom-gadget/verify-run.mjs</code> against <code>artifacts.manifest.json</code>:<br>the <strong>compiled circuit</strong> (r1cs / wasm / constraint counts) must match byte-exact; the <strong>setup chain</strong><br>(ptau / zkeys / vkey) is machine-local — snarkjs mixes its own randomness into every contribution<br>regardless of the fixed entropy string (established empirically 2026-08-11) — so those digests are<br>recorded as advisory and your own green suites carry the proving-system claim. The wider frame<br>(ceremony-as-trust-task, the three lanes, why phase-2 is gated behind §25) is<br><a class="wlink" href="x10-ceremony-as-trust-task.html">X10 — Ceremony as Trust Task</a>.</p>
+</div>
+<div class="md"><h2>The decision layer</h2>
+<ul>
+<li><a class="wlink" href="decision-overview.html">Decision — Overview</a> — the<br>decision baseline (adopted as the TF&#39;s first-work-item frame): MLP/EPP profile split, PR-* predicate<br>register with paired assurance/disclosure boundaries, context as governed linkability domain,<br>nullifier = scoped reuse detection <em>not</em> &quot;one unique human&quot;, construction-selection gate.</li>
+<li><a class="wlink" href="explorations-index.html">Explorations Index</a> — O-series (charter register), VWC witness seat, and<br>X1–X10 (conformance fixtures, context legibility, show composition, observable-event minimisation,<br>recovery/rotation, assurance horizons, mediated proving, multi-issuer aggregation, guardian<br>recovery, ceremony-as-trust-task) — every §-anchor of the decision doc has an exploration, and<br>every exploration that matured has a runnable suite in <code>runtimes/</code>.</li>
+<li><a class="wlink" href="workflow-workbench-and-research-root.html">Workflow — Workbench and Research Root</a> — how this repo relates to the upstream task force: draw-from ·<br>promote · upstream · integrate. Only the TF process talks to upstream.</li>
+</ul>
+</div>
+<div class="md"><h2>Attribution</h2>
+<ul>
+<li>The <strong>DTG Credentials Core Specification</strong> is the ToIP DTG WG&#39;s work<br>(<code>trustoverip/dtgwg-cred-spec</code>); a vendored reading copy lives locally but is <strong>not republished<br>here</strong> (git-excluded). All spec text: upstream.</li>
+<li>The <strong>ZKP TF upstream</strong> (<code>trustoverip/dtgwg-zkp-tf</code>) carries the requirements draft, drafting<br>rules, and discussions this repo&#39;s evidence feeds into.</li>
+<li>Everything committed here is the mage method layer: reference models, circuits, registers,<br>explorations, and working documents.</li>
+</ul>
+</div>
+<div class="md"><h2>License</h2>
+<p>Code: Apache-2.0 · Documents: CC-BY-4.0 — matching the task force&#39;s IPR posture<br>(W3C-mode patents / Apache-2.0 code / CC-BY-4.0 docs).</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="dtg-research-root.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

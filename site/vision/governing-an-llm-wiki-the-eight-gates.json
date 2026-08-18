@@ -1,0 +1,46 @@
+{
+  "title": "Governing an LLM-Wiki: the Eight Gates",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "b2a1d4c3e5f60711",
+      "text": "# Governing an LLM-Wiki: the Eight Gates\n\n*A synthesis filed back into the wiki, 2026-06-27.*"
+    },
+    {
+      "type": "markdown",
+      "id": "b2a1d4c3e5f60712",
+      "text": "The [[The LLM-Wiki and the Self-Improving Research Loop]] names the pattern but leaves one thing ungoverned: the agent edits the wiki freely. At scale that is the failure mode - an agent that \"touches 15 files in one pass\" can also corrupt 15 files in one pass, leak internal records, or drift from the source of truth. The agentprivacy federation answers this with **eight distribution gates**, so the LLM-Wiki is *governed* rather than merely *maintained.*"
+    },
+    {
+      "type": "markdown",
+      "id": "b2a1d4c3e5f60713",
+      "text": "## Out (raw -> wiki): G0-G6\n\n- **G0 Source of truth** - the git canon is upstream; nothing is authored first on the wiki. This is the essay's \"raw sources are immutable\", enforced.\n- **G1 Classification** - every source file is marked circulating or sealed *before* ingest. This is the gate the federation learned the hard way: a firehose ingest of the graph once leaked three internal chronicle nodes. Manifest-first, always.\n- **G2 Coherence** - numbers, tiers, versions must match the register and grimoire. The essay's \"flag contradictions\", made a hard precondition.\n- **G3 Attribution** - every page carries upstream + author + license; vendored content credited to its real author.\n- **G4 Projection** - content at the right altitude; link down to source, do not dump.\n- **G5 Hyperlink coherence** - cross-references derived from the canonical graph; every link resolves. The essay's \"maintain cross-references\", made checkable.\n- **G6 Distribution** - content routes to the right site under canonical slugs."
+    },
+    {
+      "type": "markdown",
+      "id": "b2a1d4c3e5f60714",
+      "text": "## Back (wiki -> raw): G7\n\n- **G7 Fork-back** - an external wiki edit returns to the git canon only through coherence + attribution + a First-Person sign-off. The wiki proposes; a human signs; nothing auto-commits. This is the missing half of the essay: contributions *back* are gated too."
+    },
+    {
+      "type": "markdown",
+      "id": "b2a1d4c3e5f60715",
+      "text": "## The point\n\nThe Memex maintenance problem - *who does the bookkeeping* - the agent solves. But an agent doing bookkeeping unsupervised is a new risk. The gates are the supervision: cheap, mechanical checkpoints (manifest, leak-scan, link-integrity, sign-off) that let the agent do 15-file passes *and* stay honest. **Maintenance cost near zero; trust cost bounded.**\n\nThis is also where the loop becomes safe to run unattended. A self-improving process without an error signal drifts; the gates *are* the error signal made institutional - the same role [[The LLM-Wiki and the Self-Improving Research Loop]] gives to `lint`, hardened into pre-conditions on every write."
+    },
+    {
+      "type": "markdown",
+      "id": "b2a1d4c3e5f60716",
+      "text": "---\n**Read on:** [[The Hitchhiker Expression of the Same Protocol]] - the gates wearing a story. [[One Logic, Many Skins]] - the full correspondence.\n\n<- [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "id": "b2a1d4c3e5f60710",
+      "item": {
+        "title": "Governing an LLM-Wiki: the Eight Gates",
+        "story": []
+      },
+      "date": 1782690100000
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "title": "Design Note Predicate Shows and Bundle Profiles",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "44bdceb1063ba865",
+      "text": "# Predicate shows and bundle profiles — composing zero-knowledge presentations inside Trust Tasks"
+    },
+    {
+      "type": "markdown",
+      "id": "0ee0c4906be0f59d",
+      "text": "> *Design note — not a specification; no slugs are claimed here.*"
+    },
+    {
+      "type": "markdown",
+      "id": "b82b58464657f979",
+      "text": "*A design note from the DTG ZKP Task Force side of the table. It addresses the seam the\nZKP TF's decision baseline names but assigns jointly: \"Trust tasks compose predicates and\ndetermine request semantics. The transcript, purpose, scope, and multi-proof composition\nmodel require joint definition. Bundled proofs that are individually sound may leak\njointly.\" This note proposes the joint model: the show as one atomic transcript, a\nshow-level disclosure record, and governed bundle profiles in place of à-la-carte\npredicate requests.*\n\n**Status:** design note, not a specification. Nothing here is normative. It is written to\nbe discussed in the Decentralized Trust Graph Working Group, alongside the Trust Tasks\nframework (SPEC.md 0.2, working draft) whose conventions it deliberately reuses.\n\n**Author:** Mitch (co-chair, DTG ZKP Task Force).\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c52e68b160bb5a3e",
+      "text": "## 1. The problem\n\nA growing class of Trust Tasks will not carry data; they will carry *requests for proof*.\nA verifier asks a holder to demonstrate a set of predicates — credential validity from an\naccepted issuer set, holder liveness, per-context uniqueness, freshness within a window —\nand the holder answers with zero-knowledge presentations rather than disclosed attributes.\n\nA real task never requests one predicate. It requests several at once — call the composed\npresentation a **show**. And composition is where individually sound proofs go wrong:\n\n1. **Intersection narrowing.** Each predicate's derived disclosure (assurance class,\n   policy version, issuer-set choice, epoch, proof shape) is a population filter; the show\n   intersects the filters. Fields that are non-identifying separately can be identifying\n   together — the standard schema-field rule, applied unchanged to composed predicates.\n2. **Request-pattern leakage.** The predicate set requested is itself an observable event.\n   A rare combination — an unusual delegation predicate, a narrow range proof — fingerprints\n   the vertical, the verifier's risk posture, and hence the holder's activity, before any\n   proof is transmitted.\n3. **Cross-show correlation.** Two shows in different contexts sharing *no* identifiers\n   still present a correlatable pair (bundle shape, proof sizes, timing, retry pattern) to\n   a network observer or colluding verifiers. Context separation can be defeated by bundle\n   shape alone.\n\nThe consequence: **a show's disclosure boundary is a property of the predicate set, and it\nis strictly wider than the union of the per-predicate boundaries.** Any consent surface,\npolicy engine, or audit trail that reasons per-predicate is reasoning about the wrong unit."
+    },
+    {
+      "type": "markdown",
+      "id": "b3e2f65e0e573186",
+      "text": "## 2. The show is one transcript\n\nThe remedy begins by naming the unit. A show binds ONE canonical transcript:\n\n- **Atomicity.** A show verifies as a whole or fails as a whole. No partial acceptance —\n  a verifier MUST NOT accept three of four member proofs and act on the subset.\n- **No transplanting.** A member proof MUST NOT verify inside any transcript other than\n  the one it was produced for. Replay of a member across transcripts is a named rejection,\n  not a soft failure.\n- **The request is part of the transcript.** The requested predicate set is a required\n  transcript field, so the show — not the predicate — is the unit of freshness, binding,\n  and audit.\n\nIn Trust Tasks terms this maps cleanly: the show is one task exchange, correlated by\n`threadId`; the proof-request payload enumerates the bundle; the response carries the\ncomposed presentation; `trust-task-error` carries the named rejections (candidate codes:\npartial acceptance, member transplant, bundle-not-registered)."
+    },
+    {
+      "type": "markdown",
+      "id": "bdcfd812e4a84228",
+      "text": "## 3. The show-level disclosure record\n\nPer-predicate boundary analyses exist on the ZKP side (each predicate in the task force's\nregister carries one). A composed show additionally needs a **joint disclosure record**,\nstated in three-parameter form:\n\n- **against whom** — the observer classes that can see the show (verifier, colluding\n  verifiers, network observer, registry operator), per bundle;\n- **for how long** — the longest-lived member linkage dominates (a per-context uniqueness\n  predicate's epoch outlives a freshness nonce);\n- **alongside what** — the other members, explicitly enumerated, because they narrow the\n  anonymity set jointly.\n\nThis is descriptive, not prescriptive — the same doctrine this registry already applies to\n`sideEffects` and `exposure`: the record states what a show discloses; whether that is\nacceptable is the consumer's policy, derived locally, never delegated to the registry."
+    },
+    {
+      "type": "markdown",
+      "id": "5cc1508ed42fc3a5",
+      "text": "## 4. Governed bundle profiles\n\nThe constructive remedy for mechanisms 2 and 3 is to remove the à-la-carte request layer.\nInstead of verifiers composing predicate sets freely, a governed registry names **bundle\nprofiles**: named, versioned predicate bundles — a baseline profile (validity + liveness +\nholder binding + freshness), a uniqueness-extended profile (baseline ∪ per-context\nuniqueness), delegation variants — exactly as cipher suites replaced à-la-carte algorithm\nnegotiation in TLS.\n\nProperties this buys:\n\n- **Large anonymity sets per request shape.** A small governed vocabulary means every\n  request looks like one of a few well-populated shapes, not a fingerprint.\n- **A rejection surface.** A request outside the registry is a named rejection. The\n  consent surface can render \"this verifier requests the standard baseline bundle\" instead\n  of a bespoke predicate list no human can evaluate.\n- **Change control where it belongs.** Adding a bundle is a deliberate registry PR with\n  review, not a typo in one verifier's config — the same closed-enum instinct that made\n  this registry's category taxonomy a schema rather than a convention.\n\nMechanically, a bundle-profile registry fits the conventions already present here: shared\nschemas pinned by version, MAJOR.MINOR lifecycle, descriptive metadata, codegen into the\nclient libraries. Whether it lives as a Trust Tasks shared schema, a ZKP TF deliverable, or\na jointly governed object is an open question (§6) — the registries interlock either way,\nsince a context or task descriptor may need to name its admissible bundles."
+    },
+    {
+      "type": "markdown",
+      "id": "f0c25c5ba06b3dc7",
+      "text": "## 5. The credential/artifact wall — a framework consideration\n\nOne rule from the ZKP TF baseline deserves framework-level visibility because it bounds\nwhat any proof-carrying task may claim:\n\n> A valid show does not establish that any task was performed, completed, or performed\n> well.\n\nA show may *include* a ceremony-bound credential (one whose issuance context is bound into\nit), but the show's established statement never crosses into task completion. Completion\nevidence is the Trust Task side's object: the outcome artifact, `threadId`-correlated with\nthe exchange that produced it. Stated as a wall: **credentials prove standing; artifacts\nprove outcomes; a show is never a receipt.**\n\nThe framework already classifies tasks along two descriptive axes (`sideEffects`,\n`exposure`). This note suggests the working group consider whether a third descriptive\naxis is warranted — call it *evidence class*: what a successful `#response` may be relied\non to establish, and for how long. Like the existing axes it would be descriptive, with\nconsumers deriving the authoritative answer from their own verification, but it would give\nconsent surfaces and auditors a vocabulary for the difference between \"this proved a\npredicate held at presentation time\" and \"this is a durable receipt of completed work.\""
+    },
+    {
+      "type": "markdown",
+      "id": "6335861624c0a8be",
+      "text": "## 6. Fit with the existing registry surface\n\n- `policy/evaluate` returns `requireConsent`; the delegated-execution design note binds\n  *what executes* to *what was approved*. This note binds *what is proven* to *one\n  transcript* and governs *what may be requested*. Same instinct — closed vocabularies\n  against composition — on either side of the request/proof boundary.\n- `registry/authorization` already carries TRQP authorization queries; a bundle-profile\n  lookup is a structurally similar governed read.\n- A future `proof-request` / `proof-response` task family would reference bundle profiles\n  by identifier in its payload, keeping payload schemas closed while the bundle vocabulary\n  evolves under its own change control."
+    },
+    {
+      "type": "markdown",
+      "id": "c525ab62c6ed64c2",
+      "text": "## 7. Status and provenance\n\nThe composition model is not paper-only. A reference model in the ZKP Task Force's lab\nbinds shows to single transcripts and enforces the named rejections — atomicity (partial\nacceptance rejected), member transplant across transcripts rejected, bundle-outside-\nregistry rejected, credential-as-completion-evidence rejected — as passing property tests\n(10/10), alongside a v0 bundle registry with five named profiles. The joint-disclosure\nworksheet for a representative four-predicate show is in progress on the ZKP TF side.\n\nThis note is the ZKP TF half of a deliverable both groups' documents already assign\njointly. The Trust Tasks side owns request semantics and outcome artifacts; the ZKP side\nowns transcript binding and the disclosure calculus; the bundle-profile registry is the\nshared object."
+    },
+    {
+      "type": "markdown",
+      "id": "ea8ca14bc3cd98a2",
+      "text": "## 8. Open questions\n\n1. **Registry authority.** Context authority, Trust Task TF, or a shared body? The\n   registries interlock — a context descriptor may need to name its admissible bundles.\n2. **Uniformity vs honesty.** Padding proof sizes and coarsening timing shrinks bundle\n   fingerprints but costs constrained provers (mobile wallets). Where is the floor?\n3. **Recursive composition.** If proof folding collapses an n-predicate show into one\n   proof, bundle shape collapses to one size. Does that solve fingerprinting or move it\n   into proving-time side channels?\n4. **Linkage budgets.** Should a profile state how many shows per context per epoch it\n   tolerates before intersection narrowing defeats its anonymity-set claim?\n5. **Evidence class.** Does the framework want the third descriptive axis of §5, or is\n   the wall better held per-spec in Security & Privacy prose?"
+    },
+    {
+      "type": "markdown",
+      "id": "e934fc5fa384f0e5",
+      "text": "# Assets\n\nSource: `docs/design-notes/predicate-shows-and-bundle-profiles.md`"
+    },
+    {
+      "id": "e479dc7a4bdef562",
+      "type": "assets",
+      "text": "design-note-predicate-shows-and-bundle-profiles"
+    },
+    {
+      "type": "markdown",
+      "id": "8c10102e4ddf5660",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Design Note Predicate Shows and Bundle Profiles",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "44bdceb1063ba865",
+            "text": "# Predicate shows and bundle profiles — composing zero-knowledge presentations inside Trust Tasks"
+          },
+          {
+            "type": "markdown",
+            "id": "0ee0c4906be0f59d",
+            "text": "> *Design note — not a specification; no slugs are claimed here.*"
+          },
+          {
+            "type": "markdown",
+            "id": "b82b58464657f979",
+            "text": "*A design note from the DTG ZKP Task Force side of the table. It addresses the seam the\nZKP TF's decision baseline names but assigns jointly: \"Trust tasks compose predicates and\ndetermine request semantics. The transcript, purpose, scope, and multi-proof composition\nmodel require joint definition. Bundled proofs that are individually sound may leak\njointly.\" This note proposes the joint model: the show as one atomic transcript, a\nshow-level disclosure record, and governed bundle profiles in place of à-la-carte\npredicate requests.*\n\n**Status:** design note, not a specification. Nothing here is normative. It is written to\nbe discussed in the Decentralized Trust Graph Working Group, alongside the Trust Tasks\nframework (SPEC.md 0.2, working draft) whose conventions it deliberately reuses.\n\n**Author:** Mitch (co-chair, DTG ZKP Task Force).\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c52e68b160bb5a3e",
+            "text": "## 1. The problem\n\nA growing class of Trust Tasks will not carry data; they will carry *requests for proof*.\nA verifier asks a holder to demonstrate a set of predicates — credential validity from an\naccepted issuer set, holder liveness, per-context uniqueness, freshness within a window —\nand the holder answers with zero-knowledge presentations rather than disclosed attributes.\n\nA real task never requests one predicate. It requests several at once — call the composed\npresentation a **show**. And composition is where individually sound proofs go wrong:\n\n1. **Intersection narrowing.** Each predicate's derived disclosure (assurance class,\n   policy version, issuer-set choice, epoch, proof shape) is a population filter; the show\n   intersects the filters. Fields that are non-identifying separately can be identifying\n   together — the standard schema-field rule, applied unchanged to composed predicates.\n2. **Request-pattern leakage.** The predicate set requested is itself an observable event.\n   A rare combination — an unusual delegation predicate, a narrow range proof — fingerprints\n   the vertical, the verifier's risk posture, and hence the holder's activity, before any\n   proof is transmitted.\n3. **Cross-show correlation.** Two shows in different contexts sharing *no* identifiers\n   still present a correlatable pair (bundle shape, proof sizes, timing, retry pattern) to\n   a network observer or colluding verifiers. Context separation can be defeated by bundle\n   shape alone.\n\nThe consequence: **a show's disclosure boundary is a property of the predicate set, and it\nis strictly wider than the union of the per-predicate boundaries.** Any consent surface,\npolicy engine, or audit trail that reasons per-predicate is reasoning about the wrong unit."
+          },
+          {
+            "type": "markdown",
+            "id": "b3e2f65e0e573186",
+            "text": "## 2. The show is one transcript\n\nThe remedy begins by naming the unit. A show binds ONE canonical transcript:\n\n- **Atomicity.** A show verifies as a whole or fails as a whole. No partial acceptance —\n  a verifier MUST NOT accept three of four member proofs and act on the subset.\n- **No transplanting.** A member proof MUST NOT verify inside any transcript other than\n  the one it was produced for. Replay of a member across transcripts is a named rejection,\n  not a soft failure.\n- **The request is part of the transcript.** The requested predicate set is a required\n  transcript field, so the show — not the predicate — is the unit of freshness, binding,\n  and audit.\n\nIn Trust Tasks terms this maps cleanly: the show is one task exchange, correlated by\n`threadId`; the proof-request payload enumerates the bundle; the response carries the\ncomposed presentation; `trust-task-error` carries the named rejections (candidate codes:\npartial acceptance, member transplant, bundle-not-registered)."
+          },
+          {
+            "type": "markdown",
+            "id": "bdcfd812e4a84228",
+            "text": "## 3. The show-level disclosure record\n\nPer-predicate boundary analyses exist on the ZKP side (each predicate in the task force's\nregister carries one). A composed show additionally needs a **joint disclosure record**,\nstated in three-parameter form:\n\n- **against whom** — the observer classes that can see the show (verifier, colluding\n  verifiers, network observer, registry operator), per bundle;\n- **for how long** — the longest-lived member linkage dominates (a per-context uniqueness\n  predicate's epoch outlives a freshness nonce);\n- **alongside what** — the other members, explicitly enumerated, because they narrow the\n  anonymity set jointly.\n\nThis is descriptive, not prescriptive — the same doctrine this registry already applies to\n`sideEffects` and `exposure`: the record states what a show discloses; whether that is\nacceptable is the consumer's policy, derived locally, never delegated to the registry."
+          },
+          {
+            "type": "markdown",
+            "id": "5cc1508ed42fc3a5",
+            "text": "## 4. Governed bundle profiles\n\nThe constructive remedy for mechanisms 2 and 3 is to remove the à-la-carte request layer.\nInstead of verifiers composing predicate sets freely, a governed registry names **bundle\nprofiles**: named, versioned predicate bundles — a baseline profile (validity + liveness +\nholder binding + freshness), a uniqueness-extended profile (baseline ∪ per-context\nuniqueness), delegation variants — exactly as cipher suites replaced à-la-carte algorithm\nnegotiation in TLS.\n\nProperties this buys:\n\n- **Large anonymity sets per request shape.** A small governed vocabulary means every\n  request looks like one of a few well-populated shapes, not a fingerprint.\n- **A rejection surface.** A request outside the registry is a named rejection. The\n  consent surface can render \"this verifier requests the standard baseline bundle\" instead\n  of a bespoke predicate list no human can evaluate.\n- **Change control where it belongs.** Adding a bundle is a deliberate registry PR with\n  review, not a typo in one verifier's config — the same closed-enum instinct that made\n  this registry's category taxonomy a schema rather than a convention.\n\nMechanically, a bundle-profile registry fits the conventions already present here: shared\nschemas pinned by version, MAJOR.MINOR lifecycle, descriptive metadata, codegen into the\nclient libraries. Whether it lives as a Trust Tasks shared schema, a ZKP TF deliverable, or\na jointly governed object is an open question (§6) — the registries interlock either way,\nsince a context or task descriptor may need to name its admissible bundles."
+          },
+          {
+            "type": "markdown",
+            "id": "f0c25c5ba06b3dc7",
+            "text": "## 5. The credential/artifact wall — a framework consideration\n\nOne rule from the ZKP TF baseline deserves framework-level visibility because it bounds\nwhat any proof-carrying task may claim:\n\n> A valid show does not establish that any task was performed, completed, or performed\n> well.\n\nA show may *include* a ceremony-bound credential (one whose issuance context is bound into\nit), but the show's established statement never crosses into task completion. Completion\nevidence is the Trust Task side's object: the outcome artifact, `threadId`-correlated with\nthe exchange that produced it. Stated as a wall: **credentials prove standing; artifacts\nprove outcomes; a show is never a receipt.**\n\nThe framework already classifies tasks along two descriptive axes (`sideEffects`,\n`exposure`). This note suggests the working group consider whether a third descriptive\naxis is warranted — call it *evidence class*: what a successful `#response` may be relied\non to establish, and for how long. Like the existing axes it would be descriptive, with\nconsumers deriving the authoritative answer from their own verification, but it would give\nconsent surfaces and auditors a vocabulary for the difference between \"this proved a\npredicate held at presentation time\" and \"this is a durable receipt of completed work.\""
+          },
+          {
+            "type": "markdown",
+            "id": "6335861624c0a8be",
+            "text": "## 6. Fit with the existing registry surface\n\n- `policy/evaluate` returns `requireConsent`; the delegated-execution design note binds\n  *what executes* to *what was approved*. This note binds *what is proven* to *one\n  transcript* and governs *what may be requested*. Same instinct — closed vocabularies\n  against composition — on either side of the request/proof boundary.\n- `registry/authorization` already carries TRQP authorization queries; a bundle-profile\n  lookup is a structurally similar governed read.\n- A future `proof-request` / `proof-response` task family would reference bundle profiles\n  by identifier in its payload, keeping payload schemas closed while the bundle vocabulary\n  evolves under its own change control."
+          },
+          {
+            "type": "markdown",
+            "id": "c525ab62c6ed64c2",
+            "text": "## 7. Status and provenance\n\nThe composition model is not paper-only. A reference model in the ZKP Task Force's lab\nbinds shows to single transcripts and enforces the named rejections — atomicity (partial\nacceptance rejected), member transplant across transcripts rejected, bundle-outside-\nregistry rejected, credential-as-completion-evidence rejected — as passing property tests\n(10/10), alongside a v0 bundle registry with five named profiles. The joint-disclosure\nworksheet for a representative four-predicate show is in progress on the ZKP TF side.\n\nThis note is the ZKP TF half of a deliverable both groups' documents already assign\njointly. The Trust Tasks side owns request semantics and outcome artifacts; the ZKP side\nowns transcript binding and the disclosure calculus; the bundle-profile registry is the\nshared object."
+          },
+          {
+            "type": "markdown",
+            "id": "ea8ca14bc3cd98a2",
+            "text": "## 8. Open questions\n\n1. **Registry authority.** Context authority, Trust Task TF, or a shared body? The\n   registries interlock — a context descriptor may need to name its admissible bundles.\n2. **Uniformity vs honesty.** Padding proof sizes and coarsening timing shrinks bundle\n   fingerprints but costs constrained provers (mobile wallets). Where is the floor?\n3. **Recursive composition.** If proof folding collapses an n-predicate show into one\n   proof, bundle shape collapses to one size. Does that solve fingerprinting or move it\n   into proving-time side channels?\n4. **Linkage budgets.** Should a profile state how many shows per context per epoch it\n   tolerates before intersection narrowing defeats its anonymity-set claim?\n5. **Evidence class.** Does the framework want the third descriptive axis of §5, or is\n   the wall better held per-spec in Security & Privacy prose?"
+          },
+          {
+            "type": "markdown",
+            "id": "e934fc5fa384f0e5",
+            "text": "# Assets\n\nSource: `docs/design-notes/predicate-shows-and-bundle-profiles.md`"
+          },
+          {
+            "id": "e479dc7a4bdef562",
+            "type": "assets",
+            "text": "design-note-predicate-shows-and-bundle-profiles"
+          },
+          {
+            "type": "markdown",
+            "id": "8c10102e4ddf5660",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229504
+    }
+  ]
+}

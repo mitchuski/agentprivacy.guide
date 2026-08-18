@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chronicle 2026-07-18 — The First Circuit · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Chronicle 2026-07-18 — The First Circuit</span></div>
+  <article><div class="md"><h1>2026-07-18 · The First Circuit</h1>
+<p><em>The lab crossed from reference models into real cryptography — and the interesting part is not the<br>circuit. It is that the circuit came last, and everything it needed was already waiting for it.</em></p>
+<p><strong>Scope:</strong> the shared circom gadget (<a class="wlink" href="lab-circom-gadget.html">Lab — circom-gadget</a>) — Poseidon<br>commitment, depth-20 Merkle inclusion, domain-tagged nullifier, real groth16 proofs, 8/8 — and the<br>two-day arc that made it a one-evening build. Companion records: the exploration programme<br>(<code>~/dtgwg-cred-spec-main_mage/explorations/</code>, O-series + X1–X9), the decision baseline<br>(<a class="wlink" href="decision-overview.html">Decision — Overview</a>), the TF briefing draft, and the 2026-07-16 dream-cycle<br>chronicle this one continues.</p>
+<hr>
+</div>
+<div class="md"><h2>1. What happened, in order</h2>
+<p>The order is the story:</p>
+<ol>
+<li>The <strong>Credentials Core Spec</strong> fixed the objects and deliberately deferred the ZK layer.</li>
+<li>The <strong>decision document</strong> ruled how the layer must be filled: statement before construction (§2.1,<br>§25); every predicate with a positive statement <em>and</em> a negative meaning; the nullifier defined as<br><strong>scoped reuse detection, never &quot;one unique human&quot;</strong> (§5.12).</li>
+<li>The <strong>explorations</strong> stretched every deferred seam into a design doc — nineteen of them, each<br>anchored to the sections it serves.</li>
+<li>The <strong>references</strong> made the designs runnable: twelve zero-dependency suites, 124 properties, every<br>rejection a named string.</li>
+<li>The <strong>fixture register</strong> froze those strings into one vocabulary — 95 entries, every addition<br>triggered live from its emitting module, so the vocabulary provably cannot drift from the code.</li>
+<li>And only then, thirteenth suite of thirteen, the <strong>circuit</strong>: 11,522 constraints proving exactly the<br>statement written down four steps earlier. ~640 ms to prove on a desktop, ~8 ms to verify, 722 bytes<br>of proof.</li>
+</ol>
+</div>
+<div class="md"><h2>2. Why this is an interesting first example</h2>
+<p><strong>The circuit is the last artifact, not the first.</strong> Most ZK projects begin with a circuit and retrofit<br>its meaning afterwards — the statement gets reverse-engineered from the constraints, the privacy claims<br>from the marketing. Here the §25 gate discipline was actually lived: by the time <code>circom</code> ran, the<br>statement existed in prose (O2), in narrow language (PR-UNQ), in a reference algebra with an adversary<br>test (runtime 01&#39;s self-Sybil), in canonical encodings (§6.2/§15.2), and in a conformance vocabulary<br>(the register). The circuit had nothing left to decide except arithmetic. That inversion — meaning<br>first, constraints last — is the whole method in one example, and the reason the &quot;hard&quot; step took an<br>evening.</p>
+<p><strong>One digest, three faces.</strong> The circuit&#39;s public <code>context</code> input is the canonical §6.2 descriptor<br>digest reduced to a field element — the <em>same bytes</em> the context card renders into six human-legible<br>questions and the fixture vectors serialize for cross-implementation exchange. A person reads the<br>context, a test suite replays it, a constraint system proves against it, and all three are looking at<br>one object. That is what &quot;the user-facing description provably matches the cryptographic configuration&quot;<br>looks like when it reaches the bottom of the stack.</p>
+<p><strong>The narrow language survived into the constraints.</strong> What the circuit proves is precisely scoped<br>reuse detection: same secret + same context → same nullifier (detectable); same secret + different<br>context → unlinkable values. Nothing in the constraint system claims a unique human — the enrolment<br>dependency (one human ↔ one secret) stays visibly with governance, exactly where the decision document<br>put it. The honest split held all the way down.</p>
+<p><strong>The open questions were asked by the lab, answered by the build.</strong> Runtime 01&#39;s NOTES flagged, months<br>before any circuit existed, that the spec must pin the hash and the domain tag because nullifier values<br>differ by hash. The build made that concrete: <code>DOMAIN_TAG = sha256(&#39;dtg-zkp/nullifier/v0&#39;) mod p</code>,<br>derivation documented in the circuit header and re-asserted by the JS harness at import. A reference<br>model asked a spec question; a circuit answered it with a number the TF can now ratify or replace.</p>
+<p><strong>One circuit, four consumers.</strong> The gadget is the shared spine the explorations predicted: O2 uses it<br>as the PHC realization, O4 as registry set-membership, the multi-issuer work as the k-of-n seat, the<br>guardian pattern as committed-set membership. The next three circuits are instantiations, not<br>inventions.</p>
+<p><strong>And the honesty survived the crypto threshold.</strong> The point where projects usually start overclaiming<br>is the point where this one wrote its caveats largest: the trusted setup is a local, fixed-entropy,<br>lab-only ceremony — stated plainly as <em>not</em> production; the npm dependencies are confined to the one<br>directory, with the zero-dep rule holding everywhere else; the expected witness-generation failure in<br>the non-member test is labelled so nobody mistakes an intended rejection for a bug.</p>
+</div>
+<div class="md"><h2>3. The numbers, for the record</h2>
+<table>
+<thead>
+<tr>
+<th>measure</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>constraints</td>
+<td>11,522 (5,427 non-linear) · depth 20 ≈ 1M enrolment capacity</td>
+</tr>
+<tr>
+<td>proving time</td>
+<td>~640 ms (desktop, single-threaded wasm witness + groth16)</td>
+</tr>
+<tr>
+<td>verification</td>
+<td>~8 ms · proof 722 B · vkey 3.3 KB · zkey 5.0 MB</td>
+</tr>
+</tbody></table>
+<p>These are the first concrete datapoints for the strawman&#39;s &quot;claim ceiling per presentation&quot; question<br>and the decision document&#39;s §25 performance envelope — a consumer device can carry this predicate.</p>
+</div>
+<div class="md"><h2>4. The method, named</h2>
+<p>The two-day arc ran as the harness fold at the scale of research artifacts: exploration agents<br><em>proposed</em> (nineteen design docs, each a minimal candidate), build agents <em>proved</em> (thirteen suites,<br>every claim a property test), and the register held the shared vocabulary so no proposal could drift<br>from its proof. Collision → edge → propagation, where the colliding parties are ideas and the edges are<br>tested statements. The Gap held throughout — every suite re-verified by hand in the main thread, every<br>deferral stated rather than smoothed over, and the one contradiction the programme found (which family<br>owns log retention) left standing for the group to rule on rather than silently resolved.</p>
+</div>
+<div class="md"><h2>5. State and doors</h2>
+<p>All local, nothing pushed; the TF clone&#39;s tracked tree carries only the pending two-line README edit.<br>The briefing draft sits with the First Person for review. Open doors, in rough order: the briefing<br>verdict; the M5 second-language consumer (the interop existence proof, now guarding 95 vocabulary<br>entries); porting the gadget to its three sibling consumers; the Semaphore v4 cross-check; and the<br>upstream lane itself — E1–E7 and the §26.2 fixture format, when the group is ready.</p>
+<p>(⚔️⊥⿻⊥🧙)😊</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="chronicle-2026-07-18-the-first-circuit.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

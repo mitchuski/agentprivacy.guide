@@ -1,0 +1,99 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X2 — Context Legibility Instrument · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X2 — Context Legibility Instrument</span></div>
+  <article><div class="md"><h1>X2 — the context human-legibility instrument</h1>
+<p><em>The §6.8 six-question test made runnable: a context card derived from the canonical descriptor itself,<br>so the user-facing description provably matches the cryptographic configuration — and its person-side<br>twin is a MyTerms-shaped consent instrument.</em></p>
+<p><strong>Register:</strong> not an O-item — expansion from §6.8/§2.5 · leverage 🟠 · <strong>Ladder:</strong> instrument built<br>2026-07-17 — <a class="wlink" href="lab-context-card.html">Lab — context-card</a> 13/13 + demo card (see its NOTES.md)<br><strong>Anchor (decision doc):</strong> §2.5 legibility is part of the context boundary · §6.2 canonical descriptor ·<br>§6.7 change control · §6.8 human-legibility test · §21.2 user-visible mediation · §23 redress row<br>&quot;inaccessible or misleading context presentation&quot; · §26 conformance evidence · §27.4 Human Experience.<br><strong>Anchor (agentprivacy):</strong> MyTerms (IEEE 7012 machine-readable personal terms) · PVM Δ-axis — value is<br>the appropriation share the consent interface lets the subject keep.</p>
+<hr>
+</div>
+<div class="md"><h2>What it is</h2>
+<p>The decision document makes human legibility a <strong>conformance property of a context</strong>, not a UI nicety:<br>&quot;a context boundary that is cryptographically exact but cannot be understood by an affected person is<br>operationally defective&quot; (§2.5), and a context definition <em>fails review</em> unless an affected person can<br>answer six questions — what the proof is for, who can recognise repeat use, for how long, what an epoch<br>change does, whether fallback changes who observes, and how to challenge a wrong decision (§6.8).</p>
+<p>Today that test is prose. This exploration turns it into an <strong>instrument</strong>: a <em>context card</em> — a<br>canonical human-readable rendering <strong>generated from the §6.2 canonical context descriptor itself</strong>. The<br>§26 requirement for &quot;evidence that user-facing context descriptions match the cryptographic<br>configuration&quot; then becomes a <strong>derivation, not an audit</strong>: the card and the proof transcript embed the<br>same descriptor digest, so a mismatch is a build failure, not a finding.</p>
+</div>
+<div class="md"><h2>Design</h2>
+<p><strong>1. The card is a function, not a document.</strong> <code>card = render(descriptor)</code> where <code>descriptor</code> is the<br>canonically encoded §6.2 object (protocol/profile versions, context authority, policy, purpose, scope,<br>verifier set, epoch policy, nullifier and domain-separation version, retention/rollover policy). The<br>card carries the descriptor digest it was rendered from; the verifier&#39;s transcript (§15) binds the same<br>digest. Provenance is structural.</p>
+<p><strong>2. The six §6.8 questions as structured fields</strong>, each mapped to named descriptor inputs:</p>
+<table>
+<thead>
+<tr>
+<th>Q</th>
+<th>Card field</th>
+<th>Descriptor inputs (§6.2)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>What is this proof for?</td>
+<td>purpose identifier · scope identifier</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Who can recognise repeat use?</td>
+<td>verifier audience / governed verifier-set · context authority</td>
+</tr>
+<tr>
+<td>3</td>
+<td>For how long is repeat use linkable?</td>
+<td>epoch identifier and epoch policy · retention policy</td>
+</tr>
+<tr>
+<td>4</td>
+<td>What happens when the epoch changes?</td>
+<td>epoch policy · nullifier and domain-separation version</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Does fallback change who observes?</td>
+<td>mediated-proving declaration (§21.2 &quot;user-visible indication&quot;)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>How do I challenge a decision?</td>
+<td>context authority&#39;s correction/appeal/challenge route (§6.7)</td>
+</tr>
+</tbody></table>
+<p>The repeat-use answers use the mandatory narrow language verbatim: a nullifier establishes <strong>scoped<br>reuse detection</strong>, never &quot;one unique human.&quot;</p>
+<p><strong>3. Legibility conformance check (runnable).</strong> Every descriptor field either (a) appears on the card,<br>or (b) carries a recorded non-materiality justification. An unrendered, unjustified field fails the<br>check — the card cannot silently omit part of the linkability domain. Per §6.8: the card need not<br>expose cryptographic internals, but it MUST expose the operational meaning of the boundary.</p>
+<p><strong>4. Expansion made visible.</strong> §6.6 prohibits silent context expansion; §6.7 makes an expanding change<br>a material privacy change whose existing nullifiers MUST NOT be silently reinterpreted. On the card<br>this is a <strong>versioned diff</strong>: descriptor change → digest change → new card version, with Q2/Q3 deltas<br>highlighted (&quot;the set of services that can recognise repeat use grew from X to Y&quot;). What silent<br>expansion <em>looks like to a person</em> is precisely a card that didn&#39;t change when the domain did — which<br>the derivation makes impossible. This directly serves the §23 remedy row (notify, migrate, segregate)<br>and the §26.1 negative test &quot;a context expansion without version and migration.&quot;</p>
+<p><strong>5. The MyTerms twin.</strong> The context card is the <strong>verifier-side half</strong> of a two-sided contract surface.<br>MyTerms is the person-side half: machine-readable personal terms the person carries. Matching is then<br>term-to-field: the person&#39;s retention term against the card&#39;s retention policy, their observability term<br>against the verifier set and mediation declaration. In PVM terms, the card is what makes the Δ-axis<br>evaluable at proof time — the consent interface sets the appropriation share, and it can only do so<br>over a boundary it can read.</p>
+</div>
+<div class="md"><h2>Boundary notes (the paired records, drafted)</h2>
+<p><strong>Assurance boundary:</strong> a person relying on a card may rely on: this rendering was derived from the<br>same canonical descriptor the proof transcript binds. They must NOT infer: that verifiers <em>behave</em><br>within the described boundary (the card states the governed domain, not runtime compliance); that the<br>context authority&#39;s policy is fair; that an accurate card implies informed consent. Accountability:<br>the wallet/verifier experience owner for the rendering (§23), the context authority for descriptor<br>truth and change control (§6.7).</p>
+<p><strong>Disclosure boundary:</strong> the card itself is a surface. Fetching a card can signal which context a<br>person is about to enter (a §20-style observable event — serve cards from the wallet or cache-bundled,<br>never as a per-presentation remote lookup). Rare descriptor combinations can fingerprint a deployment<br>(§6.6&#39;s rare-variant concern applies to cards too); renderings should be uniform per profile.</p>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 —</strong> descriptor schema + canonical encoding as data (reuse rt 07&#39;s <code>taskContext</code> / O5 transcript<br>work — one encoding, shared).</li>
+<li><strong>M2 —</strong> <code>render(descriptor) → card</code> reference implementation (zero-dep, offline, like the runtimes),<br>emitting the six fields + digest; golden-fixture cards join the §26 conformance fixtures.</li>
+<li><strong>M3 —</strong> the legibility conformance check as property tests: coverage (design point 3), digest match<br>(card ↔ transcript), diff-on-change (design point 4) — early drafts of §26.1-style negative tests:<br>a card whose digest mismatches its descriptor MUST be rejected by name.</li>
+<li><strong>M4 —</strong> MyTerms mapping table (card field ↔ IEEE 7012 term) as a worked example, one context from<br>rt 07&#39;s trust-graph formation rendered end-to-end.</li>
+<li><strong>M5 —</strong> upstream surface: a Human Experience workstream contribution (§27.4) — &quot;the §6.8 test as a<br>derivation instrument,&quot; with the runnable checker as evidence. Local research doc until then.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Reading level and accessibility: §27.4 names accessibility and assisted use — what is the conformance<br>bar for the <em>rendering</em> itself (plain-language register, translation, screen-reader structure), and<br>who owns it, the profile or the wallet?</li>
+<li>Q6 needs a live route, not a string: should the challenge route be a resolvable, governed endpoint<br>the card verifies exists, or is a policy reference enough for V1?</li>
+<li>Can a card be <em>counter-signed</em> by the person&#39;s agent as evidence of presentation (tying into O7&#39;s<br>delegation evidence), or does that create a new correlatable receipt — exactly the §6.6 shared-log<br>risk the card exists to expose?</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x2-context-legibility-instrument.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

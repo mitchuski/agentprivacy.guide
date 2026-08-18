@@ -1,0 +1,116 @@
+{
+  "title": "Fedwiki Transcribe",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "15dbb3dd2b2ccb7e",
+      "text": "# FedWiki video transcription"
+    },
+    {
+      "type": "markdown",
+      "id": "46c19b40ef96f3a2",
+      "text": "> Transcribe video/audio assets hosted on a FedWiki (Smallest Federated Wiki) page using local whisper."
+    },
+    {
+      "type": "markdown",
+      "id": "a496e4df07400ab4",
+      "text": "# FedWiki video transcription\n\nEnd-to-end flow: **FedWiki assets folder → list files → stream audio (ffmpeg) → transcribe (whisper.cpp) → .txt/.srt/.vtt**."
+    },
+    {
+      "type": "markdown",
+      "id": "222ee05619a792d8",
+      "text": "## When to use\nThe user references a FedWiki page or assets folder hosting videos and wants transcripts. FedWiki URLs look like `http://<host>/view/<page>/view/<page>`; the videos live in an **assets** story item that names a folder (e.g. `workshop-videos`)."
+    },
+    {
+      "type": "markdown",
+      "id": "c37843ea5cf59837",
+      "text": "## Prerequisites (already installed on this machine)\n- **whisper.cpp** built: `C:\\Users\\mitch\\whisper.cpp-master\\build\\bin\\Release\\whisper-cli.exe`\n- **Model**: `C:\\Users\\mitch\\whisper.cpp-master\\models\\ggml-large-v3-turbo-q5_0.bin` (high accuracy, multilingual)\n- **ffmpeg**: `...\\WinGet\\Packages\\Gyan.FFmpeg_*\\ffmpeg-*-full_build\\bin\\ffmpeg.exe`\n\nIf building whisper.cpp fresh: it needs CMake + a C++ compiler. VS Build Tools 2019 bundles both —\n`cmake -B build -G \"Visual Studio 16 2019\" -A x64` then `cmake --build build --config Release`.\n(CMake is at `...\\BuildTools\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe`.)"
+    },
+    {
+      "type": "markdown",
+      "id": "a2fb3575444ade36",
+      "text": "## How enumeration works (the key trick)\nFedWiki's assets plugin renders the file list **client-side**, so the folder URL just returns the SPA\nshell. The real listing endpoint — discovered from `/plugins/assets/assets.js` — is:\n\n```\nGET {WikiBase}/plugin/assets/list?assets={folder}   ->   {\"error\":null,\"files\":[ ... ]}\n```\n\nIndividual files are served (no auth) at `{WikiBase}/assets/{folder}/{filename}`. Filenames may contain\nspaces/apostrophes (`Groundhog Day.mov`, `don't-panic.mov`) so URL-encode each segment.\n\nNote: the wiki may print asset URLs with hostname `public.guide.agentprivacy.ai` (only resolves on the host machine).\nSubstitute the host you can actually reach (e.g. `david.local`)."
+    },
+    {
+      "type": "markdown",
+      "id": "1cbecb1631bdb5ea",
+      "text": "## Run it\n```powershell\n& \"C:\\Users\\mitch\\.claude\\skills\\fedwiki-transcribe\\transcribe-assets.ps1\" `\n    -WikiBase \"http://david.local\" `\n    -AssetsFolder \"workshop-videos\"\n```\nUseful params: `-OutDir` (default `C:\\Users\\mitch\\transcripts`), `-Exclude @(\"file.mov\")`,\n`-KeepWav`, `-Language en|auto`, `-Model <path>`, `-Threads 16`.\n\nThe script is **idempotent**: a video whose `<base>.txt` already exists is skipped, so it can be\nresumed after interruption. It streams audio (does not save the multi-GB video), deletes the temp WAV\non success, and logs to `<OutDir>\\_batch_log.txt`. Run it in the background for large batches and tail\nthe log — transcription is CPU-bound (no GPU here), roughly real-time per video with the large model."
+    },
+    {
+      "type": "markdown",
+      "id": "5b29ed387315c90d",
+      "text": "## Manual single-file equivalent\n```powershell\n$ff=\"...\\ffmpeg.exe\"; $cli=\"...\\whisper-cli.exe\"; $m=\"...\\ggml-large-v3-turbo-q5_0.bin\"\n& $ff -y -i \"http://david.local/assets/workshop-videos/max_timeline_01.mov\" -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav\n& $cli -m $m -f out.wav -t 16 -otxt -osrt -ovtt -of out\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "ae2be6987b162ec2",
+      "text": "## Notes / gotchas\n- whisper.cpp's built-in miniaudio decodes WAV/MP3 directly but **not video containers** — hence ffmpeg.\n- whisper wants 16 kHz mono PCM; the ffmpeg flags above produce exactly that.\n- For non-English audio, pass `-Language auto` (the turbo model is multilingual).\n- To speed up a large batch at some accuracy cost, point `-Model` at `ggml-base.en.bin` or a `small` model."
+    },
+    {
+      "type": "markdown",
+      "id": "2f2ba8469d4445c8",
+      "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Fedwiki Transcribe",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "15dbb3dd2b2ccb7e",
+            "text": "# FedWiki video transcription"
+          },
+          {
+            "type": "markdown",
+            "id": "46c19b40ef96f3a2",
+            "text": "> Transcribe video/audio assets hosted on a FedWiki (Smallest Federated Wiki) page using local whisper."
+          },
+          {
+            "type": "markdown",
+            "id": "a496e4df07400ab4",
+            "text": "# FedWiki video transcription\n\nEnd-to-end flow: **FedWiki assets folder → list files → stream audio (ffmpeg) → transcribe (whisper.cpp) → .txt/.srt/.vtt**."
+          },
+          {
+            "type": "markdown",
+            "id": "222ee05619a792d8",
+            "text": "## When to use\nThe user references a FedWiki page or assets folder hosting videos and wants transcripts. FedWiki URLs look like `http://<host>/view/<page>/view/<page>`; the videos live in an **assets** story item that names a folder (e.g. `workshop-videos`)."
+          },
+          {
+            "type": "markdown",
+            "id": "c37843ea5cf59837",
+            "text": "## Prerequisites (already installed on this machine)\n- **whisper.cpp** built: `C:\\Users\\mitch\\whisper.cpp-master\\build\\bin\\Release\\whisper-cli.exe`\n- **Model**: `C:\\Users\\mitch\\whisper.cpp-master\\models\\ggml-large-v3-turbo-q5_0.bin` (high accuracy, multilingual)\n- **ffmpeg**: `...\\WinGet\\Packages\\Gyan.FFmpeg_*\\ffmpeg-*-full_build\\bin\\ffmpeg.exe`\n\nIf building whisper.cpp fresh: it needs CMake + a C++ compiler. VS Build Tools 2019 bundles both —\n`cmake -B build -G \"Visual Studio 16 2019\" -A x64` then `cmake --build build --config Release`.\n(CMake is at `...\\BuildTools\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe`.)"
+          },
+          {
+            "type": "markdown",
+            "id": "a2fb3575444ade36",
+            "text": "## How enumeration works (the key trick)\nFedWiki's assets plugin renders the file list **client-side**, so the folder URL just returns the SPA\nshell. The real listing endpoint — discovered from `/plugins/assets/assets.js` — is:\n\n```\nGET {WikiBase}/plugin/assets/list?assets={folder}   ->   {\"error\":null,\"files\":[ ... ]}\n```\n\nIndividual files are served (no auth) at `{WikiBase}/assets/{folder}/{filename}`. Filenames may contain\nspaces/apostrophes (`Groundhog Day.mov`, `don't-panic.mov`) so URL-encode each segment.\n\nNote: the wiki may print asset URLs with hostname `public.guide.agentprivacy.ai` (only resolves on the host machine).\nSubstitute the host you can actually reach (e.g. `david.local`)."
+          },
+          {
+            "type": "markdown",
+            "id": "1cbecb1631bdb5ea",
+            "text": "## Run it\n```powershell\n& \"C:\\Users\\mitch\\.claude\\skills\\fedwiki-transcribe\\transcribe-assets.ps1\" `\n    -WikiBase \"http://david.local\" `\n    -AssetsFolder \"workshop-videos\"\n```\nUseful params: `-OutDir` (default `C:\\Users\\mitch\\transcripts`), `-Exclude @(\"file.mov\")`,\n`-KeepWav`, `-Language en|auto`, `-Model <path>`, `-Threads 16`.\n\nThe script is **idempotent**: a video whose `<base>.txt` already exists is skipped, so it can be\nresumed after interruption. It streams audio (does not save the multi-GB video), deletes the temp WAV\non success, and logs to `<OutDir>\\_batch_log.txt`. Run it in the background for large batches and tail\nthe log — transcription is CPU-bound (no GPU here), roughly real-time per video with the large model."
+          },
+          {
+            "type": "markdown",
+            "id": "5b29ed387315c90d",
+            "text": "## Manual single-file equivalent\n```powershell\n$ff=\"...\\ffmpeg.exe\"; $cli=\"...\\whisper-cli.exe\"; $m=\"...\\ggml-large-v3-turbo-q5_0.bin\"\n& $ff -y -i \"http://david.local/assets/workshop-videos/max_timeline_01.mov\" -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav\n& $cli -m $m -f out.wav -t 16 -otxt -osrt -ovtt -of out\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "ae2be6987b162ec2",
+            "text": "## Notes / gotchas\n- whisper.cpp's built-in miniaudio decodes WAV/MP3 directly but **not video containers** — hence ffmpeg.\n- whisper wants 16 kHz mono PCM; the ffmpeg flags above produce exactly that.\n- For non-English audio, pass `-Language auto` (the turbo model is multilingual).\n- To speed up a large batch at some accuracy cost, point `-Model` at `ggml-base.en.bin` or a `small` model."
+          },
+          {
+            "type": "markdown",
+            "id": "2f2ba8469d4445c8",
+            "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847280967
+    }
+  ]
+}

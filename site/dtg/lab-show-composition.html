@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — show-composition · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — show-composition</span></div>
+  <article><div class="md"><h1>show-composition — the show is one transcript (X3, M2 + M4)</h1>
+<p>Runnable reference for <strong>X3 — trust-task composition</strong><br>(<a class="wlink" href="x3-trust-task-composition.html">X3 — Trust Task Composition</a>, research root).<br>Zero-dep Node ESM; imports the shared §15.2/§6.2 encodings from <code>../canonical/canonical.mjs</code>.<br>Run: <code>node test.mjs</code> → <code>show-composition: 10/10 pass</code>.</p>
+</div>
+<div class="md"><h2>What it demonstrates</h2>
+<p>A trust task never requests one predicate — it presents a <strong>show</strong>: several PR-*<br>member proofs bound to ONE canonical transcript (<code>requestedPredicates</code> is a<br>required §15.2 field, so the baseline already makes the show the unit of<br>freshness — canonical C9 is the same fact at digest level, S7/S8 here at show<br>level). The model enforces the X3 composition algebra:</p>
+<ul>
+<li><strong>Atomicity</strong> — a show verifies as a whole or fails as a whole; every member<br>must be present and bound to the same transcript digest.</li>
+<li><strong>Bundle profiles, not à-la-carte</strong> — requests name a governed<br><code>{bundleId, version}</code>; any other predicate set is rejected (cipher-suite<br>instinct; §18.3 cardinality control lifted to the request layer).</li>
+<li><strong>The credential/artifact wall</strong> — a <code>taskContext</code>-bearing credential may ride<br>along, but the verified statement never contains a <code>taskCompletion</code> claim and<br>a completion query is refused. Outcome evidence is a <code>threadId</code>-correlated<br>artifact on the Trust Task side of the boundary.</li>
+<li><strong>Joint disclosure record</strong> (M3 shape, §2.4 three-parameter form, as data):<br><code>againstWhom</code> = the §19 observer list; <code>forHowLong</code> = longest-lived member<br>linkage (PR-UNQ&#39;s epoch dominates session); <code>alongsideWhat</code> = the member list.</li>
+</ul>
+<p>The joint boundary is <strong>wider than the union</strong> of per-predicate boundaries<br>(intersection narrowing, request-pattern leakage, cross-show correlation) —<br>that quantitative worksheet is X3 <strong>M1</strong>, design-doc work, not code here.</p>
+</div>
+<div class="md"><h2>Bundle registry v0 (<code>bundles.mjs</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>version</th>
+<th>profile</th>
+<th>predicates</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MLP-BASE</td>
+<td>1</td>
+<td>mlp</td>
+<td>PR-LIV, PR-ISS, PR-HLD, PR-FRE</td>
+</tr>
+<tr>
+<td>MLP-BASE+DEL</td>
+<td>1</td>
+<td>mlp</td>
+<td>MLP-BASE + PR-DEL</td>
+</tr>
+<tr>
+<td>EPP-UNIQ</td>
+<td>1</td>
+<td>epp</td>
+<td>MLP-BASE + PR-PER, PR-UNQ</td>
+</tr>
+<tr>
+<td>EPP-UNIQ+DEL</td>
+<td>1</td>
+<td>epp</td>
+<td>EPP-UNIQ + PR-DEL</td>
+</tr>
+<tr>
+<td>EPP-RANGE</td>
+<td>1</td>
+<td>epp</td>
+<td>EPP-UNIQ + PR-RNG</td>
+</tr>
+</tbody></table>
+<p>+DEL variants carry §7.3 delegation as separate evidence (transcript gains the<br>optional <code>delegationRef</code> field); PR-DEL is never inferred from PR-HLD.</p>
+</div>
+<div class="md"><h2>Named rejection reasons (the seam to the X1 fixture reason register)</h2>
+<table>
+<thead>
+<tr>
+<th>reason</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bundle-outside-registry</code></td>
+<td>unknown id/version, à-la-carte set, surplus members</td>
+</tr>
+<tr>
+<td><code>partial-show-rejected</code></td>
+<td>atomicity: a member proof missing</td>
+</tr>
+<tr>
+<td><code>member-transcript-mismatch</code></td>
+<td>member bound to a different transcript (transplant/replay, §15.1/§26.1)</td>
+</tr>
+<tr>
+<td><code>stale-transcript</code></td>
+<td>expiry vs an explicitly supplied <code>now</code> (no <code>Date.now()</code> anywhere)</td>
+</tr>
+<tr>
+<td><code>transcript-invalid</code></td>
+<td>malformed transcript or tampered digest</td>
+</tr>
+<tr>
+<td><code>taskcontext-not-outcome-evidence</code></td>
+<td>completion asked of a show — category error</td>
+</tr>
+<tr>
+<td><code>bundle-profile-mismatch</code></td>
+<td>(makeShow) bundle profile vs descriptor profile disagree</td>
+</tr>
+</tbody></table>
+<p>These strings are intended verbatim as X1 fixture expected-reasons.</p>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<p>§27.2 joint session with the Trust Task workstream: they own request semantics<br>and outcome artifacts; we own transcript binding and the disclosure calculus.<br>The bundle registry is the shared object (M2 draft here; authority question —<br>context authority §6.7 vs Trust-Task-owned — is open in X3).</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-show-composition.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

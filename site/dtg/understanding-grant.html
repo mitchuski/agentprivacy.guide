@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Grant · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Understanding Grant</span></div>
+  <article><div class="md"><h1>Understanding — Grant</h1>
+</div>
+<div class="md"><blockquote>
+<p><strong>PROPOSED — not yet upstreamed.</strong> Built to the ToIP <code>spec.meta.schema.json</code> for the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf">dtgwg-trust-tasks-tf registry</a>; the slug below is <em>proposed</em> to that namespace, not registry-accepted. The PR is pending; the registry&#39;s decision governs.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Proposed slug:</strong> <code>understanding/grant</code> · <strong>version</strong> 0.1 · <strong>status</strong> draft</p>
+<blockquote>
+<p>A sealed joining party requests scoped access; the host&#39;s broker releases a delegated, expiring grant — the underlying credential never leaves the broker, and asking for it is a named refusal.</p>
+</blockquote>
+</div>
+<div class="md"><h2>Abstract</h2>
+<p>The <strong>Understanding — Grant</strong> Trust Task converts a sealed agreement into<br>working access — through a <strong>broker</strong>, never by credential hand-over. The host<br>side holds its credentials (a session, a write token, an API key) in a broker;<br>a sealed joining party requests scope; the broker mints a <strong>delegated grant</strong>:<br>host-scoped, expiring, attributable to the grantee, and revocable without<br>rotating the underlying credential.</p>
+<p>The boundary is the specification&#39;s reason to exist: the underlying credential<br><strong>never</strong> leaves the broker, and a request for it is a <em>named refusal</em><br>(<code>rawCredentialRequested</code>), not a policy choice. This is the same custody<br>instinct as <span class="deadlink" title="reference (not a live page)"><code>vault/proxy-login</code></span> —<br>exercise a credential without releasing it — surfaced at the moment a<br>trust ceremony first grants access, where the temptation to &quot;just share the<br>key&quot; is strongest.</p>
+</div>
+<div class="md"><h2>Status of this Document</h2>
+<p>This is a <strong>draft</strong> <em>Trust Task specification</em> per <span class="deadlink" title="reference (not a live page)">SPEC.md §5.3</span>; the schema <strong>MAY</strong> change without notice. Feedback via the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues">issue tracker</a>.</p>
+</div>
+<div class="md"><h2>Conformance</h2>
+<p>RFC2119(<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>) and RFC8174(<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>) key-word conventions apply.</p>
+<p>A conforming <strong>producer</strong> (the joining party) <strong>MUST</strong> emit a <em>Trust Task document</em> whose <code>type</code> is <code>https://trusttasks.org/spec/understanding/grant/0.1</code>, carrying a verifiable <code>proof</code> from the party that sealed the agreement, and request scope within what the seal covers.</p>
+<p>A conforming <strong>consumer</strong> (the host broker) <strong>MUST</strong>:</p>
+<ol>
+<li>Verify the <code>proof</code> against the sealed agreement&#39;s joining party; refuse an unknown or unsealed agreement with <code>grantWithoutSeal</code>.</li>
+<li>Refuse any request shaped to obtain the underlying credential with <code>rawCredentialRequested</code> — including requests for unscoped grants, non-expiring grants, or the broker&#39;s own verification material.</li>
+<li>Bound every grant: explicit host scope, explicit expiry, attributable to this grantee, and revocable at the broker without rotating the underlying credential.</li>
+<li>Record every release and every use it mediates, so grant activity is auditable per grantee.</li>
+</ol>
+</div>
+<div class="md"><h2>Payload</h2>
+<p><code>payload.agreementId</code> (REQUIRED) — the sealed agreement this grant draws on.<br><code>payload.scope</code> (REQUIRED) — the hosts and actions requested.<br><code>payload.validFor</code> (OPTIONAL) — requested duration; the broker MAY grant less, never more.<br><code>payload.ext</code> — extension slot per <span class="deadlink" title="reference (not a live page)">SPEC.md §4.5.1</span>.</p>
+</div>
+<div class="md"><h2>Request</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:39f24d52-6c70-4f2e-e091-809ab2c3d4e5&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/understanding/grant/0.1&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkJoiningPartyExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkHostExample&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T17:00:00Z&quot;,
+  &quot;payload&quot;: {
+    &quot;agreementId&quot;: &quot;seal-17d02b30&quot;,
+    &quot;scope&quot;: {
+      &quot;hosts&quot;: [&quot;workshop.host.example.com&quot;],
+      &quot;actions&quot;: [&quot;read&quot;, &quot;contribute&quot;]
+    },
+    &quot;validFor&quot;: &quot;PT12H&quot;
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T17:00:00Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z3FXQmV6ExampleProofValueForUnderstandingGrant&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Response</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:4a035e63-7d81-4a3f-f1a2-9ab2c3d4e5f6&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/understanding/grant/0.1#response&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkHostExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkJoiningPartyExample&quot;,
+  &quot;threadId&quot;: &quot;urn:uuid:39f24d52-6c70-4f2e-e091-809ab2c3d4e5&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T17:00:02Z&quot;,
+  &quot;payload&quot;: {
+    &quot;grantRef&quot;: &quot;grant-39f24d52&quot;,
+    &quot;material&quot;: &quot;dg1.eyJhbGciOiJFZERTQSJ9.ExampleDelegatedGrantTokenNotTheUnderlyingCredential&quot;,
+    &quot;scope&quot;: {
+      &quot;hosts&quot;: [&quot;workshop.host.example.com&quot;],
+      &quot;actions&quot;: [&quot;read&quot;, &quot;contribute&quot;]
+    },
+    &quot;expiresAt&quot;: &quot;2026-07-19T05:00:00Z&quot;
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T17:00:02Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkHostExample#z6MkHostExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z58aKqExampleProofValueForUnderstandingGrantResponse&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Security &amp; Privacy</h2>
+<p>The response is <code>discloses: secret</code>: the grant material is confidential to the<br>grantee and MUST travel only over a confidential, mutually-authenticated<br>binding. The custody boundary bounds the blast radius — a leaked grant exposes<br>its scope until expiry or withdrawal, never the underlying credential; a<br>compromised joiner is contained by the same line. The broker&#39;s release-and-use<br>record makes grant activity attributable per grantee, which is a disclosure the<br>joiner accepted at the seal: mediated access is visible access. Brokers SHOULD<br>keep grant lifetimes short and let renewal be cheap — a short leash re-walked<br>beats a long one forgotten.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>specs/understanding/grant/0.1/</code> — <code>spec.md</code> + <code>payload.schema.json</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 understanding-grant</span><a class="asset-file" href="/dtg/assets/understanding-grant/payload.schema.json" download>payload.schema.json</a><a class="asset-file" href="/dtg/assets/understanding-grant/spec.md" download>spec.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="understanding-grant.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

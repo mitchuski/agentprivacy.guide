@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The LLM-Wiki and the Self-Improving Research Loop · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="vision">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site on" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=vision" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/vision/welcome-visitors.html">Vision</a> / <span>The LLM-Wiki and the Self-Improving Research Loop</span></div>
+  <article><div class="md"><h1>The LLM-Wiki and the Self-Improving Research Loop</h1>
+<p><em>A reflection filed back into the wiki, 2026-06-28. Source idea: Andrej Karpathy, <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f">LLM Wiki</a>.</em></p>
+</div>
+<div class="md"><h2>The pattern in one breath</h2>
+<p>Most LLM-plus-documents work looks like RAG: upload files, retrieve chunks at query time, generate an answer, throw the answer away. Nothing accumulates. Every question rediscovers knowledge from scratch.</p>
+<p>The LLM-Wiki inverts this. Instead of retrieving from raw sources every time, the agent <strong>incrementally builds and maintains a persistent wiki</strong> - a structured, interlinked collection of markdown pages that sits between you and the raw sources. The knowledge is compiled once, then kept current. The wiki is a <strong>persistent, compounding artifact</strong>: the cross-references are already there, the contradictions are already flagged, the synthesis already reflects everything read.</p>
+</div>
+<div class="md"><h2>Three layers</h2>
+<ul>
+<li><strong>Raw sources</strong> - the immutable source of truth. Articles, papers, transcripts, data. The agent reads them, never edits them.</li>
+<li><strong>The wiki</strong> - LLM-generated markdown the agent owns entirely: summaries, entity pages, concept pages, an evolving synthesis. You read it; the agent writes it.</li>
+<li><strong>The schema</strong> - the configuration document (a CLAUDE.md / AGENTS.md) that tells the agent how the wiki is structured and what workflows to follow. This is what turns a generic chatbot into a disciplined wiki maintainer. You and the agent co-evolve it.</li>
+</ul>
+</div>
+<div class="md"><h2>Three operations - and where the loop lives</h2>
+<ul>
+<li><strong>Ingest</strong> - drop in a source; the agent reads it, discusses takeaways, writes a summary page, updates the index and every affected entity/concept page, appends to the log. One source can touch 10-15 pages in a single pass.</li>
+<li><strong>Query</strong> - ask a question; the agent reads the index, drills into relevant pages, synthesizes a cited answer. The crucial move: <strong>good answers are filed back into the wiki as new pages</strong>, so explorations compound exactly like ingested sources.</li>
+<li><strong>Lint</strong> - periodically health-check: contradictions, stale claims, orphan pages, missing cross-references, gaps a search could fill.</li>
+</ul>
+<p>That one move - <em>query answers filed back as sources</em> - is what closes the loop. Output becomes input. The wiki gets richer with every source added <strong>and every question asked.</strong></p>
+</div>
+<div class="md"><h2>Why an agent + a wiki is <em>naturally</em> self-improving</h2>
+<p>A self-improving loop needs four things, and the LLM-Wiki supplies all four for free:</p>
+<ol>
+<li><strong>Durable memory the worker can both read and write.</strong> The wiki is exactly this. The agent is not stateless between sessions; it stands on its own accumulated work.</li>
+<li><strong>A monotonic ratchet.</strong> Each ingest and each filed-back answer raises the floor. Nothing has to be re-derived; the next pass starts from a higher base.</li>
+<li><strong>An error signal.</strong> <code>lint</code> is the gradient - contradictions and orphans are defects the next pass corrects. The wiki critiques itself.</li>
+<li><strong>A trace.</strong> <code>log.md</code> is an append-only record of every ingest, query and lint. The loop can inspect its own history and reason about what to do next.</li>
+</ol>
+<p>Memory + ratchet + error signal + trace = a research process that compounds instead of resetting. This is why the pattern fits research self-improvement so cleanly: it is not a trick bolted onto an agent, it is the shape an agent&#39;s workflow takes when you give it a place to keep its thinking.</p>
+</div>
+<div class="md"><h2>The evidence: this page is an instance of the thing it describes</h2>
+<p>We did not theorise this loop; we ran it. Working from Karpathy&#39;s essay we built a wiki skill, and in doing so produced <a class="wlink" href="governing-an-llm-wiki-the-eight-gates.html">Governing an LLM-Wiki: the Eight Gates</a> - a synthesis that did not exist in any source, discovered by <em>querying</em> the pattern and then <strong>filed back into the wiki as a new page.</strong> That is the query-to-source move, observed in the wild.</p>
+<p>The same loop, run at scale on a different corpus, produced <a class="wlink" href="the-hitchhiker-expression-of-the-same-protocol.html">The Hitchhiker Expression of the Same Protocol</a>: dozens of session transcripts ingested, answered through five fixed lenses, cross-linked into hubs, lint-checked for coherence. Two corpora, one loop.</p>
+<p>The lineage is older than LLMs. Vannevar Bush&#39;s <strong>Memex</strong> (1945) imagined a private, curated knowledge store with associative trails between documents - the connections as valuable as the documents. The part Bush could not solve was <em>who does the maintenance.</em> The agent does. Maintenance cost falls to near zero, so the wiki actually stays alive.</p>
+</div>
+<div class="md"><hr>
+<p><strong>Read on:</strong> <a class="wlink" href="governing-an-llm-wiki-the-eight-gates.html">Governing an LLM-Wiki: the Eight Gates</a> - how the federation keeps the loop trustworthy. <a class="wlink" href="the-hitchhiker-expression-of-the-same-protocol.html">The Hitchhiker Expression of the Same Protocol</a> - the same logic in mythic voice. <a class="wlink" href="one-logic-many-skins.html">One Logic, Many Skins</a> - the correspondence table.</p>
+<p>&lt;- <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="the-llm-wiki-and-the-self-improving-research-loop.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

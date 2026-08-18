@@ -1,0 +1,116 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — multi-issuer · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — multi-issuer</span></div>
+  <article><div class="md"><h1>multi-issuer — X8 M3 reference model</h1>
+<p>Runnable reference for <strong>X8 — multi-issuer confidence aggregation</strong><br>(<a class="wlink" href="x8-multi-issuer-aggregation.html">X8 — Multi-Issuer Aggregation</a>):<br>§12.5&#39;s non-normative aggregation mechanism made mechanical, with its four<br>assumptions enforced structurally rather than assumed. Zero-dep Node ESM,<br>offline, deterministic (<code>now</code> is always an explicit argument; no <code>Date.now</code>).</p>
+<p>Run: <code>node test.mjs</code> → 10 properties (A1–A10), exit 1 on failure.</p>
+</div>
+<div class="md"><h2>What it demonstrates — §12.5 made mechanical</h2>
+<p>The §12.5 claim: k honest, <strong>independent</strong> issuers attesting the same<br>proposition bound residual mis-issuance by <strong>∏ ε_i</strong>; a corrupted issuer<br>degrades only its own factor. The model enforces X8&#39;s A1–A4 in code:</p>
+<ul>
+<li><strong>A1 (one-sided ε)</strong> — <code>registry.mjs</code> carries ε as the mis-issuance bound<br>only; nothing else is derived from it.</li>
+<li><strong>A2 (independence)</strong> — never assumed: the <strong>independence register</strong><br>(dependency classes per issuer) is consulted on every bound. Issuers<br>transitively sharing any class collapse into one group; a group&#39;s ε is the<br><strong>max</strong> ε in the group (the shared-dependency bound), so collapsing always<br><em>weakens</em> the bound — tested as the honesty property (A2: collapsed bound &gt;<br>naive product).</li>
+<li><strong>A3 (distinctness)</strong> — per-issuer, per-show nullifiers<br><code>H(&#39;dtg-zkp/issuer-show-nullifier/v0&#39;, issuerId, transcriptDigest)</code>: k<br>distinct nullifiers prove k distinct issuers while naming none (§5.12<br>scoped-reuse at the issuer level); a duplicate issuer is a nullifier<br>collision (A3), and transcript scoping prevents cross-show issuer<br>correlation (A7).</li>
+<li><strong>A4 (same proposition)</strong> — one subject commitment and one predicate across<br>all members, else rejection (A10); different predicates are composition<br>(X3), not aggregation.</li>
+</ul>
+<p>The verified statement reports <strong>{effectiveK, bound, root}</strong> — the collapsed<br>number of independence classes, <strong>never raw k as confidence</strong> — and contains<br>no issuer identifiers (A8 scans it structurally; §12.3 concealment mode 4).<br>k itself is confined to the governed tier vocabulary <code>K_TIERS = [1, 2, 3]</code><br>because k is a disclosure (§10.4/§18.4: a rare k fingerprints the verifier<br>and narrows the holder population); k outside the tiers is a §26.1-style<br>rejection. The §12.5 degradation clause is executable: <code>aggregateBound(..., {corrupted: [j]})</code> replaces ε_j with 1 and the bound remains the product of<br>the others (A9).</p>
+</div>
+<div class="md"><h2>M2 registry data model — as implemented shapes</h2>
+<p><code>makeIssuerRegistry({epoch, effectiveTime, issuers})</code> → frozen snapshot with<br><code>root = H(&#39;dtg-zkp/issuer-registry/v0&#39;, canonicalize({epoch, effectiveTime, members}))</code>, so naming the root names the whole register contents — ε values<br>and dependency classes included — and the aggregation claim is evaluable at a<br>named time (§12.4). Per-issuer member shape (the §27.3 registry-profile<br>fields, drafted here as code):</p>
+<pre><code>{
+  id:                   &#39;iss:alpha&#39;,
+  epsilon:              0.01,                    // 0 &lt; ε &lt; 1, one-sided; set by the
+                                                // accreditation authority from audit
+                                                // evidence, never self-asserted (§18.2)
+  epsilonEffectiveTime: &#39;2026-07-01T00:00:00Z&#39;, // when the audit established ε
+  epsilonHorizon:       &#39;2027-01-01T00:00:00Z&#39;, // X6 certification clock: past this,
+                                                // ε is stale and supports no bound
+  dependencyClasses:    [&#39;pipeline:alpha&#39;, &#39;vendor:acme&#39;, &#39;jurisdiction:AA&#39;, ...]
+}
+</code></pre>
+<p><code>effectiveK(issuerIds, snapshot)</code> → <code>{effectiveK, groups}</code> (connected<br>components over shared classes). <code>aggregateBound(issuerIds, snapshot, now, {corrupted})</code> → <code>{bound, effectiveK, groups, staleMembers}</code>.</p>
+</div>
+<div class="md"><h2>Named failure codes (fixture-register candidates → X1)</h2>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>property</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>duplicate-issuer-in-show</code></td>
+<td>A3</td>
+<td>nullifier collision — same issuer twice</td>
+</tr>
+<tr>
+<td><code>mixed-registry-roots</code></td>
+<td>A4</td>
+<td>members proved against different named roots (§12.4/§26.1)</td>
+</tr>
+<tr>
+<td><code>k-outside-tier</code></td>
+<td>A5</td>
+<td>k not in the governed tier vocabulary {1,2,3}</td>
+</tr>
+<tr>
+<td><code>stale-epsilon:&lt;issuerId&gt;</code></td>
+<td>A6</td>
+<td>member ε past its assurance horizon at <code>now</code></td>
+</tr>
+<tr>
+<td><code>issuer-not-in-registry</code></td>
+<td>—</td>
+<td>member&#39;s issuer outside the snapshot</td>
+</tr>
+<tr>
+<td><code>subject-commitment-mismatch</code></td>
+<td>A10</td>
+<td>members bind different subjects (A4-same-proposition)</td>
+</tr>
+<tr>
+<td><code>invalid-membership-proof</code> · <code>k-member-mismatch</code> · <code>nullifier-mismatch</code> · <code>predicate-mismatch</code></td>
+<td>—</td>
+<td>supporting structural rejections</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Honest limits</h2>
+<ul>
+<li><strong>This models the accounting, not the ZK.</strong> Members carry <code>issuerId</code> as a<br>modelled private witness that the verifier function (playing the circuit)<br>sees; the real build is k instances of the Poseidon-Merkle membership<br>gadget (O2/O4) against one root plus in-circuit nullifier derivation.<br><strong>Concealed k-of-n membership and threshold hiding (k-of-m held, k shown)<br>are the circuit&#39;s future work.</strong></li>
+<li><strong>ε values are governance inputs, never measured here.</strong> Who audits ε, and<br>whether two accreditation frameworks&#39; ε values are comparable at all,<br>stays an X8 open question.</li>
+<li>The register itself is asserted governance data: a shared dependency<br>nobody declared still correlates failures — the register makes A2<br><em>checkable</em>, not <em>true</em>.</li>
+<li>Aggregation is worth it where issuers make independent determinations<br>(PR-PER); countersigning one determination leaves effective k = 1 (PR-LIV).</li>
+</ul>
+</div>
+<div class="md"><h2>Pointers</h2>
+<ul>
+<li>Design doc: <a class="wlink" href="x8-multi-issuer-aggregation.html">X8 — Multi-Issuer Aggregation</a><br>(M1 boundary record, M2 registry-profile note, M4 decision memo remain<br>design-doc work; this runtime is M3).</li>
+<li>Decision doc: <a class="wlink" href="decision-overview.html">Decision — Overview</a> §12 (esp. 12.4,<br>12.5), §2.4, §10.4/§18.4, §26.1.</li>
+<li>Shared spine: <code>../canonical/canonical.mjs</code> (transcripts/descriptors),<br><code>../01-uniqueness-nullifier/src/nullifier.mjs</code> (H, enrolment commitment).</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<p>Decision input for the §12.5 open issue, answered as options priced by this<br>model&#39;s trade curve (M4): <strong>not-required</strong> / <strong>MAY per profile</strong> / <strong>SHOULD<br>for EPP PR-PER</strong>; plus the registry-field proposal (ε + dependency classes +<br>horizons) to the Credentials TF along the §27.3 boundary — they own the<br>register&#39;s institutional legitimacy; we own the statement, the bound, and<br>these fixtures.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-multi-issuer.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

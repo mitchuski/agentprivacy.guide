@@ -30,24 +30,29 @@ generator's model of the test.
 
 The harness answers the mirage structurally rather than behaviourally. Two
 agents do the work — **soulbae 🧙 proposes, soulbis ⚔️ proves** — and between
-them sits **the Gap ⿻**, a third seat whose only job is to derive the
-verification witnesses **by hashing the proposal's own canonical bytes**
-(a Fiat-Shamir construction). The proposer chooses its own exam without ever
-seeing the syllabus; any revision re-seeds the draw. The operational invariant
-is
+them sits **the Gap ⿻**, whose job is to derive the verification witnesses by
+hashing the proposal's own canonical bytes **together with a run secret the
+proposer never sees** (a *Fiat-Shamir-shaped* construction — hash-derived
+challenges, but with a committed nonce supplying the grinding resistance the
+bare transform lacks; a proposer that can resubmit cannot grind the draw). The
+proposer chooses its own exam without seeing the syllabus, and cannot steer it.
+Where the witness bank is small and enumerable, the Gap goes further and takes
+a **census** — every fact is a witness — so there is no held-out subset to game
+at all. The design's separation **target** is
 
 ```
 I(Y_S ; Y_M | X) = 0
 ```
 
-— given the target `X`, what the prover produces carries no information about
-what the proposer produces. This is not a promise the agents make to each other
-(under Promise Theory's autonomy axiom, no agent can promise on another's
-behalf, and "I will not learn what you know" is unenforceable from inside a
-seat). It is a property of **how the information is routed**: the proposer's
-seat never receives the gate or the witnesses, and the witnesses are a
-deterministic function of the proposal, so the proposer provably could not have
-tuned to them.
+— given the target `X`, what the prover produces should carry no information
+about what the proposer produces. This is not a promise the agents make to each
+other (under Promise Theory's autonomy axiom, no agent can promise on another's
+behalf). Today it is a **routing invariant enforced by prompt topology**: the
+proposer's seat is not sent the gate or the witnesses. That is a design target,
+not yet a measured result — it is tiered OPEN in `claims_register.md` and
+closes only when per-seat process mounts enforce the routing (`THREATS.md`).
+What *is* closed by construction is the draw: the seed folds a secret the
+proposer never sees, so it could not have tuned to the witnesses.
 
 Three further stances complete the design, each a factor in the same product:
 
@@ -99,17 +104,21 @@ re-verifies the load-bearing parts in one command.
 
 - **A real advancing frontier.** The runnable example (`examples/field-guide/`)
   compresses a fact-dense emergency guide from a **730-word baseline to a
-  472-word validated best across four audited folds** (730 → 573 → 526 → 472,
-  −35.3%), every step passing an 8-of-~40 held-out comprehension gate drawn by
-  hashing the candidate, the last two folds closed by an **exhaustive fact
-  census** — because when the claim space is small enough to enumerate, you
-  count it rather than sample it. Numbers live in `frontier.json`, the sole
-  authority; the per-round reasoning lives verdict-first in `chronicles/`.
-- **Seven defects, every one found by running.** The engine was debugged not by
-  inspection but by execution: an outage silently reported as an exhausted
+  472-word best across three audited folds** (730 → 573 → 526 → 472, −35.3%).
+  The original has **32** enumerable facts, so the gate is now a **census** —
+  every fact probed — because when the claim space is small enough to count, you
+  count it rather than sample it. The folds are labelled honestly by what each
+  bought: 526 and 472 were census-closed (`VALIDATED_CENSUS`, detection 1.0);
+  573 was closed on a single 8/32 sample (`VALIDATED_SAMPLE`, detection 0.25)
+  and is **not** retroactively upgraded — a weak fold is a fence, not a
+  footnote. Numbers live in `frontier.json`, the sole authority; the per-round
+  reasoning lives verdict-first in `chronicles/`.
+- **Eleven defects, every one found by running.** The engine was debugged not
+  by inspection but by execution: an outage silently reported as an exhausted
   search; a gate that passed an unfilled config; a critic with no vocabulary for
   a mis-specified gate; seats whose on-disk record was thinner than their
-  return. Each was invisible to reading and obvious on running, and each is now
+  return; a verifier that cried tamper on honest salted runs; an emitted page
+  that would have thrown on every load. Each was invisible to reading and obvious on running, and each is now
   pinned by a test or a prompt rule. That execution-driven discovery beats
   review for this class of system is itself a methodological finding, and the
   chronicles record it as one.
@@ -119,12 +128,19 @@ re-verifies the load-bearing parts in one command.
   witnesses are of unknown origin and voids the round (GR-4). The static run
   viewer and the live console both re-derive this in front of the reader rather
   than trusting a stored value.
-- **Ten embodiments, one skeleton.** `HARNESS_PATHS.md` catalogues ten instances
-  wearing the same architecture over topically unrelated bodies — quantum
-  resource estimation, ZK constraint reduction, research-document rehydration, a
-  controlled grammar, consent agreements, a publishing loop — plus one seat held
-  open by invitation. Partial embodiments are labelled partial; an honest
-  partial teaches the bar better than a complete one does.
+- **Fifteen embodiments, one skeleton.** `HARNESS_PATHS.md` catalogues fifteen
+  instances wearing the same architecture over topically unrelated bodies —
+  quantum resource estimation, ZK constraint reduction, research-document
+  rehydration, a controlled grammar, consent agreements, a publishing loop,
+  an agent-operated acceptance registry
+  whose first external run reproduced the pinned digests on another
+  organisation's machine and architecture, an adversarial literature-review
+  runtime, and a descendant lane that inherits the constitution without the
+  engine. One seat was held open by invitation until its acceptor signed.
+  Partial embodiments are labelled partial; an honest partial teaches the bar
+  better than a complete one does. The catalogue is evidence, not the system:
+  it is the origin operator's fleet — work done *with* the harness — and the
+  repo's gates pass without it.
 
 ## The limits this evidence does not cross
 

@@ -1,0 +1,146 @@
+{
+  "title": "Understanding Offer",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "11596c491c554eb4",
+      "text": "# Understanding — Offer"
+    },
+    {
+      "type": "markdown",
+      "id": "83a8d0f7285defa8",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "c1dd63a959f17b49",
+      "text": "**Proposed slug:** `understanding/offer` · **version** 0.1 · **status** draft\n\n> A joining party consensually offers its address and intent to a host; the host answers with the gateway — the terms document whose comprehension, not any credential, is the key to what follows."
+    },
+    {
+      "type": "markdown",
+      "id": "91188f4c50284505",
+      "text": "## Abstract\n\nThe **Understanding — Offer** Trust Task opens the proof-of-understanding\nceremony: a joining party **offers** its address and intent to a host —\nconsent-first; the host never scans for it. The host's `#response` is the\n**gateway**: a reference to the terms document governing the room, pinned by\ndigest. Reading the gateway is where the handshake actually happens; the family\nrule — *access is earned by understanding, not credential* — starts here.\n\nThe ceremony is the consent-first peer counterpart of the supervised\n[`agent-admission/*`](../../../agent-admission/apply/0.1/spec.md) family: no\nsupervisor, two parties meeting as equals, and the outcome is a sealed\nbilateral agreement ([`understanding/seal`](../../seal/0.1/spec.md)) followed\nby a brokered grant ([`understanding/grant`](../../grant/0.1/spec.md)), not a\ndeployment credential."
+    },
+    {
+      "type": "markdown",
+      "id": "dc0e5acacea5eac6",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "f0e9f4e7dfc981ed",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/offer/0.1`, offering an address it controls. Offering is consent: a host **MUST NOT** open a pending join for an address that was discovered rather than offered.\n\nA conforming **consumer** (the host) **MUST**:\n\n1. Probe the offered address deterministically before recording the join, and refuse intermittent resolution with `nameResolvesSometimes` — a sometimes-resolving name poisons every later step of the ceremony with ambiguity.\n2. Answer with a gateway reference **pinned by digest**, so the joiner and host can later agree on exactly which terms were read ([`understanding/exchange`](../../exchange/0.1/spec.md) echoes the digest).\n3. Serve the gateway such that near-misses degrade soft — a wrong path lands on the gateway, never a hard failure. The front door of a trust ceremony must not 502."
+    },
+    {
+      "type": "markdown",
+      "id": "29585a7377ec02b1",
+      "text": "## Payload\n\n`payload.endpoint` (REQUIRED) — the offered address (URI) the joiner answers at.\n`payload.intent` (REQUIRED) — one line of free text: what the joiner wants of the room.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "0f683468b2c75b71",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:d39ce7fc-061a-4fc8-ea3b-243546576879\",\n  \"type\": \"https://trusttasks.org/spec/understanding/offer/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T16:00:00Z\",\n  \"payload\": {\n    \"endpoint\": \"https://192.168.55.144:8443/join\",\n    \"intent\": \"Join the shared workshop model as a contributing member.\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForUnderstandingOffer\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "6a19bb836d27ab4f",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:e4adf80d-172b-4ad9-fb4c-354657687980\",\n  \"type\": \"https://trusttasks.org/spec/understanding/offer/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:d39ce7fc-061a-4fc8-ea3b-243546576879\",\n  \"issuedAt\": \"2026-07-18T16:00:02Z\",\n  \"payload\": {\n    \"gateway\": {\n      \"uri\": \"https://host.example.com/gateway\",\n      \"digest\": \"5b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f\"\n    },\n    \"exchangeBy\": \"2026-07-18T17:00:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:00:02Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForUnderstandingOfferResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "c2181ca3a267d789",
+      "text": "## Security & Privacy\n\nThe offer discloses the joiner's address and intent to the host — exactly the\ndisclosure the joiner consented to by offering; the host MUST NOT probe beyond\nthe offered address. A pending join is enumeration surface: hosts SHOULD\nrate-limit offers and expire unanswered ones. The gateway digest is\nload-bearing for the whole ceremony — a host that rotates its terms mid-join\nmust expect `gatewayStale` at exchange and reissue, never silently re-pin."
+    },
+    {
+      "type": "markdown",
+      "id": "429adf043778debd",
+      "text": "# Assets\n\nSource: `specs/understanding/offer/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "764530b42d2e519c",
+      "type": "assets",
+      "text": "understanding-offer"
+    },
+    {
+      "type": "markdown",
+      "id": "1c6edf8dfa11d946",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Understanding Offer",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "11596c491c554eb4",
+            "text": "# Understanding — Offer"
+          },
+          {
+            "type": "markdown",
+            "id": "83a8d0f7285defa8",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "c1dd63a959f17b49",
+            "text": "**Proposed slug:** `understanding/offer` · **version** 0.1 · **status** draft\n\n> A joining party consensually offers its address and intent to a host; the host answers with the gateway — the terms document whose comprehension, not any credential, is the key to what follows."
+          },
+          {
+            "type": "markdown",
+            "id": "91188f4c50284505",
+            "text": "## Abstract\n\nThe **Understanding — Offer** Trust Task opens the proof-of-understanding\nceremony: a joining party **offers** its address and intent to a host —\nconsent-first; the host never scans for it. The host's `#response` is the\n**gateway**: a reference to the terms document governing the room, pinned by\ndigest. Reading the gateway is where the handshake actually happens; the family\nrule — *access is earned by understanding, not credential* — starts here.\n\nThe ceremony is the consent-first peer counterpart of the supervised\n[`agent-admission/*`](../../../agent-admission/apply/0.1/spec.md) family: no\nsupervisor, two parties meeting as equals, and the outcome is a sealed\nbilateral agreement ([`understanding/seal`](../../seal/0.1/spec.md)) followed\nby a brokered grant ([`understanding/grant`](../../grant/0.1/spec.md)), not a\ndeployment credential."
+          },
+          {
+            "type": "markdown",
+            "id": "dc0e5acacea5eac6",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "f0e9f4e7dfc981ed",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/offer/0.1`, offering an address it controls. Offering is consent: a host **MUST NOT** open a pending join for an address that was discovered rather than offered.\n\nA conforming **consumer** (the host) **MUST**:\n\n1. Probe the offered address deterministically before recording the join, and refuse intermittent resolution with `nameResolvesSometimes` — a sometimes-resolving name poisons every later step of the ceremony with ambiguity.\n2. Answer with a gateway reference **pinned by digest**, so the joiner and host can later agree on exactly which terms were read ([`understanding/exchange`](../../exchange/0.1/spec.md) echoes the digest).\n3. Serve the gateway such that near-misses degrade soft — a wrong path lands on the gateway, never a hard failure. The front door of a trust ceremony must not 502."
+          },
+          {
+            "type": "markdown",
+            "id": "29585a7377ec02b1",
+            "text": "## Payload\n\n`payload.endpoint` (REQUIRED) — the offered address (URI) the joiner answers at.\n`payload.intent` (REQUIRED) — one line of free text: what the joiner wants of the room.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "0f683468b2c75b71",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:d39ce7fc-061a-4fc8-ea3b-243546576879\",\n  \"type\": \"https://trusttasks.org/spec/understanding/offer/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T16:00:00Z\",\n  \"payload\": {\n    \"endpoint\": \"https://192.168.55.144:8443/join\",\n    \"intent\": \"Join the shared workshop model as a contributing member.\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForUnderstandingOffer\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "6a19bb836d27ab4f",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:e4adf80d-172b-4ad9-fb4c-354657687980\",\n  \"type\": \"https://trusttasks.org/spec/understanding/offer/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:d39ce7fc-061a-4fc8-ea3b-243546576879\",\n  \"issuedAt\": \"2026-07-18T16:00:02Z\",\n  \"payload\": {\n    \"gateway\": {\n      \"uri\": \"https://host.example.com/gateway\",\n      \"digest\": \"5b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f\"\n    },\n    \"exchangeBy\": \"2026-07-18T17:00:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T16:00:02Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForUnderstandingOfferResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "c2181ca3a267d789",
+            "text": "## Security & Privacy\n\nThe offer discloses the joiner's address and intent to the host — exactly the\ndisclosure the joiner consented to by offering; the host MUST NOT probe beyond\nthe offered address. A pending join is enumeration surface: hosts SHOULD\nrate-limit offers and expire unanswered ones. The gateway digest is\nload-bearing for the whole ceremony — a host that rotates its terms mid-join\nmust expect `gatewayStale` at exchange and reissue, never silently re-pin."
+          },
+          {
+            "type": "markdown",
+            "id": "429adf043778debd",
+            "text": "# Assets\n\nSource: `specs/understanding/offer/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "764530b42d2e519c",
+            "type": "assets",
+            "text": "understanding-offer"
+          },
+          {
+            "type": "markdown",
+            "id": "1c6edf8dfa11d946",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229501
+    }
+  ]
+}

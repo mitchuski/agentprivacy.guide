@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>privacy guide star chart · the fedwiki space as constellations</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,400&family=Spline+Sans+Mono:wght@300;400;500&display=swap');
+  :root{ --ink:#e8edff; --dim:#7c86b8; --line:rgba(120,140,220,0.16); --glass:rgba(10,13,28,0.62);
+    --gold:#E0A526; --sapphire:#2563EB; --violet:#7C5CFF; --rose:#E0568A; --teal:#14B8A6; --emerald:#2FB67C; --lens:#38BDF8; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; overflow:hidden; }
+  body{ font-family:'Spline Sans Mono',monospace; color:var(--ink);
+    background:radial-gradient(120% 90% at 28% 14%, rgba(31,84,214,0.10), transparent 55%),
+      radial-gradient(110% 80% at 80% 88%, rgba(20,184,166,0.07), transparent 55%),
+      radial-gradient(140% 140% at 50% 50%, #0B0E14 0%, #060810 60%, #020308 100%); }
+  #scene{ position:fixed; inset:0; width:100%; height:100%; display:block; cursor:grab; }
+  #scene:active{ cursor:grabbing; }
+
+  header.top{ position:fixed; top:0; left:0; right:0; padding:22px 26px 0; pointer-events:none; z-index:5; }
+  .eyebrow{ font-size:10px; letter-spacing:0.32em; text-transform:uppercase; color:var(--dim); margin-bottom:8px; }
+  h1{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:clamp(26px,4vw,44px); line-height:0.95;
+    background:linear-gradient(100deg,#9fc0ff,#e8edff 44%,#7fe8d8); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  #status{ margin-top:8px; font-size:10px; color:var(--dim); letter-spacing:0.04em; }
+  #status b{ color:#7fe8d8; font-weight:500; }
+
+  .panel{ position:fixed; z-index:6; background:var(--glass); border:1px solid var(--line); border-radius:14px;
+    padding:14px; backdrop-filter:blur(10px); }
+  #legend{ left:22px; bottom:22px; width:265px; }
+  .sect{ font-size:9px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim); margin-bottom:10px; }
+  .chip{ display:flex; align-items:center; gap:9px; padding:6px 8px; border-radius:9px; cursor:pointer;
+    border:1px solid transparent; transition:all .15s; }
+  .chip:hover{ border-color:var(--line); }
+  .chip.iso{ border-color:rgba(232,237,255,0.4); background:rgba(120,140,220,0.08); }
+  .chip.dim{ opacity:0.32; }
+  .gem{ width:11px; height:11px; border-radius:50%; flex:none; background:currentColor; box-shadow:0 0 10px currentColor; }
+  .chip .nm{ font-size:10.5px; letter-spacing:0.02em; line-height:1.3; }
+  .chip .nm b{ font-weight:500; color:var(--ink); display:block; }
+  .chip .nm span{ color:var(--dim); font-size:9px; }
+  #legend .foot{ margin-top:10px; padding-top:9px; border-top:1px solid var(--line); font-size:8.5px; color:var(--dim); line-height:1.5; }
+  #legend .foot b{ color:#ffd6a0; font-weight:500; }
+
+  #controls{ right:22px; top:22px; width:230px; }
+  .row{ margin-bottom:10px; }
+  .row .lbl{ display:flex; justify-content:space-between; font-size:9.5px; color:var(--dim); margin-bottom:5px; letter-spacing:0.04em; }
+  .row .lbl .v{ color:#7fe8d8; font-variant-numeric:tabular-nums; }
+  input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:3px; border-radius:3px; outline:none;
+    background:linear-gradient(90deg,#14B8A6,#9fc0ff); }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:12px; height:12px; border-radius:50%;
+    background:#eef2ff; border:2px solid #0a0d1c; cursor:pointer; box-shadow:0 0 9px rgba(160,220,255,0.8); }
+  .togs{ display:flex; flex-wrap:wrap; gap:5px; }
+  .togs button{ font-family:inherit; font-size:9px; letter-spacing:0.03em; padding:5px 9px; border-radius:7px; cursor:pointer;
+    background:rgba(120,140,220,0.07); border:1px solid var(--line); color:var(--dim); transition:all .15s; }
+  .togs button.on{ color:#04050b; background:linear-gradient(120deg,#9fc0ff,#7fe8d8); border-color:transparent; font-weight:500; }
+
+  #tracer{ right:22px; bottom:22px; text-align:right; padding:11px 14px; max-width:250px; }
+  #tracer .big{ font-size:15px; color:#7fe8d8; font-variant-numeric:tabular-nums; }
+  #tracer .sm{ font-size:8.5px; color:var(--dim); letter-spacing:0.06em; margin-top:2px; }
+  .cbar{ display:flex; gap:5px; justify-content:flex-end; margin-top:9px; }
+  .cbar button{ font-family:inherit; font-size:9px; letter-spacing:0.03em; padding:5px 9px; border-radius:7px; cursor:pointer;
+    background:rgba(120,140,220,0.07); border:1px solid var(--line); color:var(--dim); transition:all .15s; }
+  .cbar button:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
+  #cList{ margin-top:7px; max-height:132px; overflow:auto; }
+  .crow2{ display:flex; gap:8px; align-items:baseline; justify-content:flex-end; font-size:9.5px; padding:3px 0; }
+  .crow2 .cn{ color:#ffe6c2; cursor:pointer; }
+  .crow2 .cn:hover{ text-decoration:underline; }
+  .crow2 .cm{ color:var(--dim); font-size:8.5px; font-variant-numeric:tabular-nums; }
+  .crow2 .cx{ color:var(--dim); cursor:pointer; padding:0 3px; }
+  .crow2 .cx:hover{ color:#e8523a; }
+
+  #tip{ position:fixed; z-index:9; pointer-events:none; display:none; max-width:250px;
+    background:var(--glass); border:1px solid rgba(56,189,248,0.4); border-radius:9px; padding:8px 11px;
+    font-size:10.5px; line-height:1.45; backdrop-filter:blur(9px); }
+  #tip b{ color:#dff4ff; font-weight:500; }
+  #tip .m{ color:var(--dim); font-size:9px; }
+
+  footer{ position:fixed; left:0; right:0; bottom:0; padding:0 26px 8px; z-index:4; pointer-events:none;
+    display:flex; justify-content:center; }
+  footer .pv{ font-size:9px; color:var(--dim); letter-spacing:0.06em; opacity:0.8; }
+  /* gradient text is clipped to the glyph box: the source's 0.95 line-height
+     crops descenders (the g's tail) — give the h1 room to breathe */
+  header.top h1{ line-height:1.12; padding-bottom:4px; }
+  header.top a.back{ color:var(--dim); pointer-events:auto; text-decoration:none; }
+  header.top a.back:hover{ color:var(--ink); }
+  header.top article{ max-width:560px; margin-top:8px; font-size:10.5px; line-height:1.55; color:var(--dim); display:none; }
+  header.top article.open{ display:block; }
+  #infoBtn{ pointer-events:auto; margin-top:8px; background:rgba(120,140,220,0.07); border:1px solid var(--line);
+    color:var(--dim); border-radius:7px; font-size:10px; letter-spacing:0.04em; padding:3px 9px; cursor:pointer; font-family:inherit; }
+  #infoBtn:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
+  /* every instrument panel folds to its emoji */
+  .minbtn{ position:absolute; top:7px; right:7px; z-index:2; background:none; border:none; font-size:12px;
+    cursor:pointer; opacity:0.6; padding:2px 4px; line-height:1; }
+  .minbtn:hover{ opacity:1; }
+  #tracer .minbtn{ right:auto; left:7px; }
+  .panel.min{ width:auto !important; min-width:0; padding:5px 7px; }
+  .panel.min > *:not(.minbtn){ display:none; }
+  .panel.min .minbtn{ position:static; font-size:16px; opacity:0.85; }
+  .cbar button.on{ color:#04050b; background:linear-gradient(120deg,#ffd27a,#ffe6c2); border-color:transparent; font-weight:500; }
+  /* palette wells */
+  #pal{ display:flex; gap:5px; }
+  #pal input{ width:27px; height:20px; border:1px solid var(--line); border-radius:5px; background:none; padding:1px; cursor:pointer; }
+  /* focus mode + keepsake — a small bottom-centre bar; body.zen hides every instrument */
+  #zenbar{ position:fixed; left:50%; transform:translateX(-50%); bottom:40px; z-index:10;
+    display:flex; gap:6px; transition:opacity .2s; }  /* clear of the (⚔️⊥⿻⊥🧙)😊 signature below */
+  #zenbar button{ font-family:inherit; font-size:9.5px; letter-spacing:0.08em; padding:6px 12px; border-radius:999px;
+    background:rgba(10,13,28,0.55); border:1px solid var(--line); color:var(--dim); cursor:pointer;
+    backdrop-filter:blur(8px); }
+  #zenbar button:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
+  body.zen header.top, body.zen .panel, body.zen footer, body.zen #tip{ display:none !important; }
+  body.zen #zenbar{ opacity:0.3; }
+  body.zen #zenbar:hover{ opacity:1; }
+  /* mobile: the three glass panels collide on a phone — legend becomes a bottom
+     chip-rail, controls tuck above it, the tracer HUD steps aside */
+  @media (max-width:760px){
+    footer{ display:none }
+    header.top{ padding:14px 150px 0 16px }  /* right gap keeps the eyebrow clear of the zenbar */
+    h1{ font-size:clamp(20px,6vw,30px) }
+    #status{ font-size:9px }
+    #tracer{ display:none }
+    #controls{ top:auto; bottom:104px; right:10px; width:150px; padding:10px }
+    #zenbar{ left:auto; right:12px; top:12px; bottom:auto; transform:none }
+    #legend{ left:10px; right:10px; bottom:10px; width:auto; padding:10px }
+    #legend .foot{ display:none }
+    #chips{ display:flex; overflow-x:auto; gap:4px; padding-bottom:2px; -webkit-overflow-scrolling:touch }
+    .chip{ flex:none; padding:5px 7px }
+    .chip .nm span{ display:none }
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<header class="top">
+  <div class="eyebrow"><a class="back" href="/">← the guide</a> · six strands × the knowledge hearth</div>
+  <h1>privacy guide star chart</h1>
+  <div id="status">waking the hearth…</div>
+  <button id="infoBtn" title="about this chart — expand / minimise">📜 about</button>
+  <article>The federation of the guide, redisplayed: every site's pages seated as
+  stars on the 64-vertex sovereignty lattice, six strands winding the torus, links woven from the
+  sitemaps at build time. A baked snapshot of the fedwiki space — the same improbable engine that
+  runs live on the local farm. Each strand winds the torus by its axis bit — protection, bit 0,
+  is the equator; value, bit 5, threads the hole five times. Stars seat by their universal
+  reference (the slug, never the host — a fork lands beside its original) and lift with their
+  weave: the more links, the higher a page rides. The five crystals ringing the hearth are the
+  axes' bit-flip bonds on the 64-vertex board. Click a strand to isolate it · click a page-star
+  to walk it · shift+click opens the page here · ◌ focus clears the instruments · 📷 keepsake
+  saves the view with a City Key inside.</article>
+</header>
+
+<div id="legend" class="panel">
+  <div class="sect">six strands · the sovereignty axes</div>
+  <div id="chips"></div>
+  <div class="foot">every federation site is seated on its axis strand. click a strand to isolate ·
+    click a page-star to walk it · <b>shift+click</b> opens the page in the guide.</div>
+</div>
+
+<div id="controls" class="panel">
+  <div class="sect">instrument</div>
+  <div class="row"><div class="lbl"><span>torus ⇄ codex</span><span class="v" id="foldV">torus</span></div>
+    <input type="range" id="fold" min="0" max="1" step="0.001" value="0"></div>
+  <div class="togs">
+    <button id="tStrands" class="on">strands</button>
+    <button id="tGrid" class="on">lattice</button>
+    <button id="tPages" class="on">pages</button>
+    <button id="tLinks" class="on">links</button>
+    <button id="tCrystals" class="on">crystals</button>
+    <button id="tDrift" class="on">drift</button>
+  </div>
+  <div class="row" style="margin:10px 0 0">
+    <div class="lbl"><span>palette — yours to keep</span><span class="v" id="palReset" style="cursor:pointer" title="back to the canon hues">reset</span></div>
+    <div id="pal"></div>
+  </div>
+</div>
+
+<div id="tracer" class="panel">
+  <div class="big" id="tVal">T∫(π) 0.0</div>
+  <div class="sm" id="tSteps">value lives on the path, not the vertex</div>
+  <div class="cbar">
+    <button id="cRun" title="run your path — a light circuit walks your constellation, flaring each page">▶ run</button>
+    <button id="cSave" title="keep this walk as a named constellation">✦ save</button>
+    <button id="cClear" title="let the current walk go">clear</button>
+    <button id="cExport" title="download all saved constellations as JSON">⬇ export</button>
+  </div>
+  <div id="cList"></div>
+</div>
+
+<div id="tip"></div>
+<div id="zenbar">
+  <button id="focusBtn" title="hide the instruments — just the shape (f toggles, Esc exits)">◌ focus</button>
+  <button id="snapBtn" title="save the view as a PNG — a City Key travels inside it (iTXt citykey chunk)">📷 keepsake</button>
+</div>
+<footer><div class="pv">(⚔️⊥⿻⊥🧙)😊</div></footer>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from './vendor/OrbitControls.js';
+
+const TAU = Math.PI*2, R_MAJ = 1.6, R_MIN = 0.62, CELL = 0.5;
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ease = p => p*p*(3-2*p);                       // smoothstep — the game42 fold easing
+const hash01 = s => { let h=2166136261; for(const c of s){ h^=c.charCodeAt(0); h=Math.imul(h,16777619); } return ((h>>>0)%100000)/100000; };
+
+const state = { fold:0, drift:!REDUCED, iso:null, strands:true, grid:true, pages:true, links:true, crystals:true };
+const HOSTPATH = {"guide":"guide","tomes":"city/tomes","grimoire":"grimoire","fieldguide":"fieldguide","engine":"improbable-engine","atlas":"atlas","spellbooks":"spellbooks","skill":"skill","mouse":"mouse-spellbook","game42":"game42","harness":"harness","dtg":"dtg","research":"research","kyra":"kyra","vision":"vision","tiles":"tiles","city":"city","lexon":"lexon","myterms":"myterms"}; // site id → snapshot subpath (baked by tools/star-chart.mjs)
+const SITESTRAND = {"guide":"connection","tomes":"connection","grimoire":"connection","fieldguide":"connection","engine":"connection","atlas":"memory","spellbooks":"memory","skill":"delegation","mouse":"delegation","game42":"compute","harness":"compute","dtg":"protection","research":"protection","kyra":"protection","vision":"connection","tiles":"delegation","city":"value","lexon":"value","myterms":"value","spellbook":"delegation","transmediale":"connection","plugin":"delegation"}; // ?site= deep link → strand to isolate
+
+// ===== seating — every position exists in BOTH forms; fold lerps between them =====
+// torus: P = ((R + (r+lift)·cos v)·cos u, …, (r+lift)·sin v)   ·   codex: 8×8 plane, lift → +z
+const wrap = a => ((a%TAU)+TAU)%TAU;
+function seat(u, v, lift, out){
+  const f = ease(state.fold), r = R_MIN + lift;
+  const tx = (R_MAJ + r*Math.cos(v))*Math.cos(u), ty = (R_MAJ + r*Math.cos(v))*Math.sin(u), tz = r*Math.sin(v);
+  // the codex branch MUST wrap into one fundamental domain — windings and jittered stars
+  // carry angles past τ, and unwrapped they seat off the 8×8 board (the fold-slider line-spray bug)
+  const fx = ((wrap(u)/TAU)*8 - 4)*CELL, fy = ((wrap(v)/TAU)*8 - 4)*CELL, fz = lift;
+  out.set(tx+(fx-tx)*f, ty+(fy-ty)*f, tz+(fz-tz)*f); return out;
+}
+
+// ===== renderer / scene =====
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setClearColor(0x000000, 0);
+const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x05060d, 0.055);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+camera.up.set(0, 0, 1);                                   // Z-up: the torus lies in the xy-plane
+camera.position.set(0, -4.6, 2.8);
+const world = new THREE.Group(); scene.add(world);
+const latticeGroup = new THREE.Group(), strandGroup = new THREE.Group(),
+      graphGroup = new THREE.Group(), linkGroup = new THREE.Group(),
+      hearthGroup = new THREE.Group(), crystalGroup = new THREE.Group();
+world.add(latticeGroup, strandGroup, graphGroup, linkGroup, hearthGroup, crystalGroup);
+
+scene.add(new THREE.AmbientLight(0x223055, 0.8));
+const keyLight = new THREE.PointLight(0x6ea0ff, 40, 50); keyLight.position.set(4,5,5); scene.add(keyLight);
+const fillLight = new THREE.PointLight(0x2fb67c, 18, 50); fillLight.position.set(-5,-3,-4); scene.add(fillLight);
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.06; controls.minDistance = 2.2; controls.maxDistance = 12;
+
+function glowSprite(hex, inner=0.25){ const cv=document.createElement('canvas'); cv.width=cv.height=128;
+  const ctx=cv.getContext('2d'); const g=ctx.createRadialGradient(64,64,0,64,64,64);
+  g.addColorStop(0,'rgba(255,255,255,0.95)'); g.addColorStop(inner,hex); g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,128,128);
+  return new THREE.SpriteMaterial({ map:new THREE.CanvasTexture(cv), blending:THREE.AdditiveBlending, transparent:true, depthWrite:false }); }
+
+// ===== the 64 vertex gems (6-bit lattice: low 3 bits → u, high 3 bits → v) =====
+const popcount = x => { let c=0; while(x){ c+=x&1; x>>=1; } return c; };
+const COOL = new THREE.Color('#141a3d'), WARM = new THREE.Color('#f0eee8');
+const gems = [];
+{
+  const geo = new THREE.IcosahedronGeometry(0.028, 1);
+  for(let x=0; x<64; x++){
+    const u = (x & 7)/8*TAU, v = (x >> 3)/8*TAU;
+    const c = COOL.clone().lerp(WARM, popcount(x)/6);
+    const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color:c, transparent:true, opacity:0.9 }));
+    m.userData = { u, v, lift:0 };
+    latticeGroup.add(m); gems.push(m);
+  }
+}
+
+// ===== grid edges (codex order: u+1 / v+1 wraps; seam edges fade as the codex opens) =====
+let gridMain, gridSeam;
+{
+  const mat = o => new THREE.LineBasicMaterial({ color:0x8a92c5, transparent:true, opacity:o });
+  gridMain = new THREE.LineSegments(new THREE.BufferGeometry(), mat(0.16));
+  gridSeam = new THREE.LineSegments(new THREE.BufferGeometry(), mat(0.16));
+  latticeGroup.add(gridMain, gridSeam);
+}
+const _a = new THREE.Vector3(), _b = new THREE.Vector3();
+function rebuildGrid(){
+  const main=[], seam=[];
+  for(let x=0; x<64; x++){
+    const ui=x&7, vi=x>>3;
+    for(const [du,dv] of [[1,0],[0,1]]){
+      const u2=(ui+du)%8, v2=(vi+dv)%8, wraps=(ui+du>7)||(vi+dv>7);
+      seat(ui/8*TAU, vi/8*TAU, 0, _a); seat(u2/8*TAU, v2/8*TAU, 0, _b);
+      (wraps?seam:main).push(_a.x,_a.y,_a.z,_b.x,_b.y,_b.z);
+    }
+  }
+  gridMain.geometry.setAttribute('position', new THREE.Float32BufferAttribute(main,3));
+  gridSeam.geometry.setAttribute('position', new THREE.Float32BufferAttribute(seam,3));
+  gridSeam.material.opacity = 0.16*(1-ease(state.fold));   // the seam is real on the torus, cut on the codex
+}
+
+// ===== data: labs (strands) =====
+const DATA = { strands:[], byId:{}, sites:[], stars:[], starBySlug:new Map(), links:[] };
+// winding (p,q) per strand — AESTHETIC choice (see plan §1); distinct so six ribbons read apart
+const WINDINGS = [[1,0],[1,1],[1,2],[1,3],[1,4],[1,5]]; // (1, bit) — the winding is the axis bit
+const strandLines = [], strandMats = {};
+
+async function loadLabs(){
+  const labs = await (await fetch('data/labs.json')).json();
+  DATA.strands = labs.strands;
+  labs.strands.forEach((s,i)=>{
+    DATA.byId[s.id] = s;
+    s.winding = WINDINGS[i%WINDINGS.length];
+    s.phase = [ (i*0.31)%1*TAU, (i*0.53)%1*TAU ];
+    const pts=[], n=360;
+    const mat = new THREE.LineBasicMaterial({ color:new THREE.Color(s.hue), transparent:true, opacity:0.8 });
+    strandMats[s.id] = mat;
+    const line = new THREE.LineSegments(new THREE.BufferGeometry(), mat);
+    line.userData = { strand:s };
+    strandGroup.add(line); strandLines.push(line);
+  });
+  rebuildStrands(); buildLegend();
+}
+function strandUV(s, t){ return [ TAU*s.winding[0]*t + s.phase[0], TAU*s.winding[1]*t + s.phase[1] ]; }
+function rebuildStrands(){
+  // segment pairs, skipping seam-crossing pairs: invisible micro-gaps on the torus,
+  // and no long jump-lines scribbled across the opened codex
+  for(const line of strandLines){
+    const s = line.userData.strand, pts=[], N=420;
+    let prev=null, pw=null;
+    for(let i=0;i<=N;i++){
+      const [u,v]=strandUV(s,i/N), p=seat(u,v,0.02,new THREE.Vector3()), w=[wrap(u),wrap(v)];
+      if(prev && Math.abs(w[0]-pw[0])<Math.PI && Math.abs(w[1]-pw[1])<Math.PI)
+        pts.push(prev.x,prev.y,prev.z,p.x,p.y,p.z);
+      prev=p; pw=w;
+    }
+    line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pts,3));
+  }
+  updateStrandOpacities();
+}
+function strandOpacity(s){
+  const base = 0.8*(1-0.45*ease(state.fold));   // ribbons quiet down as the codex opens
+  return (!state.iso || s.id===state.iso) ? base : 0.07;
+}
+function updateStrandOpacities(){ for(const line of strandLines) line.material.opacity = strandOpacity(line.userData.strand); }
+
+// ===== the hearth — the π wiki at the torus centre, threads reaching to the six strands =====
+let hearthCore, hearthRing, hearthThreads;
+{
+  hearthCore = new THREE.Mesh(new THREE.SphereGeometry(0.09,24,24),
+    new THREE.MeshBasicMaterial({ color:0xF5F0E1, transparent:true, opacity:0.95 }));
+  const glow = new THREE.Sprite(glowSprite('#F5F0E1', 0.18)); glow.scale.setScalar(0.85);
+  hearthRing = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.006, 10, 60),
+    new THREE.MeshBasicMaterial({ color:0x14B8A6, transparent:true, opacity:0.8 }));
+  hearthThreads = new THREE.LineSegments(new THREE.BufferGeometry(),
+    new THREE.LineBasicMaterial({ color:0x14B8A6, transparent:true, opacity:0.22 }));
+  hearthGroup.add(hearthCore, glow, hearthRing, hearthThreads);
+}
+function rebuildHearth(){
+  hearthGroup.position.z = ease(state.fold)*0.85;   // the hearth rises over the opened codex
+  const arr=[];
+  for(const s of DATA.strands){
+    const [u,v] = strandUV(s, 0.12);
+    seat(u,v,0.02,_a);
+    arr.push(hearthGroup.position.x, hearthGroup.position.y, hearthGroup.position.z, _a.x,_a.y,_a.z);
+  }
+  hearthThreads.geometry.setAttribute('position', new THREE.Float32BufferAttribute(arr,3));
+  hearthThreads.position.copy(hearthGroup.position).negate();  // threads live in hearthGroup space
+}
+
+// ===== the five lab crystals — 5×5 ground-state plaquettes in the torus void =====
+// Garden framing made literal: a lab is a crystal — a regular arrangement whose collective
+// properties emerge from local coupling. Five plaquettes ring the hearth (the hearth IS the
+// centre, so it gets no crystal), each at its strand's azimuth. 5×5 count: cohort-scale
+// resonance (~5 participants/lab), held as aesthetic-conjectural.
+const crystals = [];
+function buildCrystals(){
+  const N=8, SPACING=0.052, HALF=(N-1)/2*SPACING, RAD=0.56;
+  for(const s of DATA.strands){
+    if(s.id==='connection') continue;
+    const az = wrap(strandUV(s, 0.12)[0]);      // face the strand it seeds
+    const g = new THREE.Group();
+    const pts=[], bonds=[];
+    const P = (c,r)=>[c*SPACING-HALF, r*SPACING-HALF];
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++) pts.push(...P(c,r), 0);
+    // the 32 bit-flip bonds of this axis: partner = index ^ 2^(bit mod 3)
+    const stride = 1 << (s.bit % 3), onU = s.bit < 3;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      const c2 = onU ? (c ^ stride) : c, r2 = onU ? r : (r ^ stride);
+      if(c2 > c || r2 > r) bonds.push(...P(c,r), 0, ...P(c2,r2), 0);
+    }
+    const pgeo = new THREE.BufferGeometry();
+    pgeo.setAttribute('position', new THREE.Float32BufferAttribute(pts,3));
+    const points = new THREE.Points(pgeo, new THREE.PointsMaterial({
+      color:new THREE.Color(s.hue), size:0.019, transparent:true, opacity:0.95, sizeAttenuation:true }));
+    const bgeo = new THREE.BufferGeometry();
+    bgeo.setAttribute('position', new THREE.Float32BufferAttribute(bonds,3));
+    const lines = new THREE.LineSegments(bgeo, new THREE.LineBasicMaterial({
+      color:new THREE.Color(s.hue), transparent:true, opacity:0.33 }));
+    g.add(points, lines);
+    g.rotation.x = Math.PI/2;                    // stand the plaquette vertical
+    g.rotation.y = az + Math.PI/2;               // face along the ring, an arcade around the hearth
+    g.position.set(RAD*Math.cos(az), RAD*Math.sin(az), 0);
+    g.userData = { strand:s.id, az, points, lines };
+    crystalGroup.add(g); crystals.push(g);
+  }
+}
+function rebuildCrystals(){ crystalGroup.position.z = ease(state.fold)*0.85; }  // rises with the hearth
+
+// ===== the knowledge graph — live pages from the local farm, seated near their strand =====
+const statusEl = document.getElementById('status');
+const starMats = {};
+// transport: local federation sites read the sitemaps BAKED into this snapshot
+// at build time (tools/star-chart.mjs); remote sites with a url are fetched DIRECTLY —
+// FedWiki federation runs on permissive CORS
+async function wikiJSON(site, path){
+  const base = site.url ? site.url.replace(/\/+$/,'')+'/' : `data/sitemaps/${site.host}/`;
+  const r = await fetch(base+path);
+  if(!r.ok) throw new Error(site.host+' '+r.status);
+  return r.json();
+}
+async function loadWiki(){
+  let cfg;
+  try{ cfg = await (await fetch('data/wiki-sites.json')).json(); }
+  catch{ statusEl.textContent = 'no wiki-sites.json — torus runs latent'; return; }
+  DATA.sites = cfg.sites;
+  const maps = await Promise.all(cfg.sites.map(async site=>{
+    try{ return { site, map: await wikiJSON(site, 'system/sitemap.json') }; }
+    catch{ return null; }
+  }));
+  const alive = maps.filter(Boolean);
+  let pageCount=0;
+  const seated = [];   // [{site, pages}] — kept so links weave after ALL sites are seated
+  for(const {site, map} of alive){
+    map.sort((a,b)=>(b.date||0)-(a.date||0));
+    const pages = map.slice(0, cfg.pagesPerSite||24);
+    for(const pg of pages){
+      addStar(site, pg); pageCount++;
+      DATA.starBySlug.has(pg.slug) || DATA.starBySlug.set(pg.slug, DATA.stars[DATA.stars.length-1]);
+    }
+    seated.push({ site, pages });
+  }
+  if(!alive.length){
+    statusEl.innerHTML = 'hearth data missing — the torus runs latent';
+    return;
+  }
+  // links — the Promise Graph, straight from the sitemaps (each page carries its links: {slug: hash});
+  // slugs are site-agnostic, so federation-crossing links weave naturally
+  let linkCount=0;
+  for(const {pages} of seated) for(const pg of pages){
+    const from = DATA.starBySlug.get(pg.slug); if(!from) continue;
+    for(const slug of Object.keys(pg.links||{})){
+      const to = DATA.starBySlug.get(slug);
+      if(to && to!==from){ DATA.links.push({from,to}); linkCount++; }
+    }
+  }
+  DATA.links = DATA.links.slice(0, 2000);
+  rebuildStars(); // stars were piling at the origin until the fold dial forced a reseat
+  rebuildLinks();
+  statusEl.innerHTML = `hearth alive · <b>${alive.length}</b> sites · <b>${pageCount}</b> pages · <b>${linkCount}</b> links woven`;
+}
+function addStar(site, pg){
+  const s = DATA.byId[site.strand] || DATA.byId.connection;
+  if(!starMats[s.id]) starMats[s.id] = glowSprite(s.hue, 0.3);
+  const spr = new THREE.Sprite(starMats[s.id].clone());
+  const h = hash01(pg.slug); // UOR: the reference seats the star, the host is incidental
+  const t = h, du = (hash01(pg.slug+'u')-0.5)*0.55, dv = (hash01(pg.slug+'v')-0.5)*0.55;
+  const [u0,v0] = strandUV(s, t);
+  const week = (Date.now()-(pg.date||0)) < 7*864e5;
+  spr.userData = { star:true, title:pg.title, slug:pg.slug, host:site.host, siteUrl:site.url||null,
+    date:pg.date, strand:s.id,
+    u:u0+du, v:v0+dv, lift:0.04+Math.min(Object.keys(pg.links||{}).length,12)/12*0.12, week, baseScale: week?0.11:0.085 };
+  spr.scale.setScalar(spr.userData.baseScale);
+  graphGroup.add(spr); DATA.stars.push(spr);
+}
+function rebuildStars(){ for(const spr of DATA.stars){ const d=spr.userData; seat(d.u,d.v,d.lift,spr.position); } }
+let linkLines = null;
+function rebuildLinks(){
+  if(linkLines){ linkGroup.remove(linkLines); linkLines.geometry.dispose(); }
+  const pts=[], SEG=10, m=new THREE.Vector3(), f=ease(state.fold);
+  for(const {from,to} of DATA.links){
+    for(let i=0;i<SEG;i++){
+      for(const t of [i/SEG,(i+1)/SEG]){
+        m.lerpVectors(from.position, to.position, t);
+        const bump = 0.14*Math.sin(Math.PI*t);
+        const len = m.length()||1;
+        m.multiplyScalar((len+bump*(1-f))/len);   // arcs lift radially on the torus…
+        m.z += bump*f;                             // …and straight up off the codex page
+        pts.push(m.x,m.y,m.z);
+      }
+    }
+  }
+  linkLines = new THREE.LineSegments(new THREE.BufferGeometry(),
+    new THREE.LineBasicMaterial({ color:0x38BDF8, transparent:true, opacity:0.20, blending:THREE.AdditiveBlending }));
+  linkLines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pts,3));
+  linkGroup.add(linkLines);
+}
+
+// ===== the walk — Trust Graph trail + T∫(π) tracer =====
+const trail = { pts:[], line:null, value:0, steps:0 };
+{
+  trail.line = new THREE.Line(new THREE.BufferGeometry(),
+    new THREE.LineBasicMaterial({ color:0xffe6c2, transparent:true, opacity:0.9 }));
+  world.add(trail.line);
+}
+function walkTo(spr){
+  trail.pts.push(spr.userData);
+  trail.steps++; trail.value += 1 + spr.userData.lift*4;      // path-weighted, display register
+  rebuildTrail(); tHud();
+}
+function tHud(){
+  document.getElementById('tVal').textContent = 'T∫(π) ' + trail.value.toFixed(1);
+  document.getElementById('tSteps').textContent = trail.steps
+    ? trail.steps + ' page' + (trail.steps>1?'s':'') + ' walked · the dance, not the stance'
+    : 'value lives on the path, not the vertex';
+}
+
+// ===== constellations — saved walks, kept in localStorage, exportable =====
+const CKEY = 'lattice-constellations';
+const loadC = () => { try{ return JSON.parse(localStorage.getItem(CKEY))||[]; }catch{ return []; } };
+const saveC = list => localStorage.setItem(CKEY, JSON.stringify(list));
+function renderCList(){
+  const box = document.getElementById('cList'), list = loadC();
+  box.innerHTML = '';
+  list.forEach((c,i)=>{
+    const row = document.createElement('div'); row.className='crow2';
+    row.innerHTML = `<span class="cn">✦ ${c.name}</span><span class="cm">${c.steps.length} · ${c.value.toFixed(1)}</span><span class="cx" title="forget">×</span>`;
+    row.querySelector('.cn').onclick = ()=>{   // relight a saved constellation
+      trail.pts = c.steps.slice(); trail.steps = c.steps.length; trail.value = c.value;
+      rebuildTrail(); tHud();
+    };
+    row.querySelector('.cx').onclick = ()=>{ const l=loadC(); l.splice(i,1); saveC(l); renderCList(); };
+    box.appendChild(row);
+  });
+}
+document.getElementById('cSave').onclick = ()=>{
+  if(!trail.pts.length) return;
+  const name = prompt('name this constellation', 'constellation '+(loadC().length+1));
+  if(!name) return;
+  const l = loadC();
+  l.push({ name, at:Date.now(), value:trail.value,
+    steps:trail.pts.map(d=>({ host:d.host, slug:d.slug, title:d.title, strand:d.strand, u:d.u, v:d.v, lift:d.lift })) });
+  saveC(l); renderCList();
+};
+document.getElementById('cClear').onclick = ()=>{
+  trail.pts=[]; trail.steps=0; trail.value=0;
+  trail.line.geometry.setFromPoints([]); tHud();
+};
+document.getElementById('cExport').onclick = ()=>{
+  const blob = new Blob([JSON.stringify({ engine:'privacy guide star chart', exported:new Date().toISOString(),
+    constellations:loadC() }, null, 2)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'constellations.json'; a.click(); URL.revokeObjectURL(a.href);
+};
+renderCList();
+function rebuildTrail(){
+  if(trail.pts.length<1) return;
+  const pts = trail.pts.map(d=>seat(d.u,d.v,d.lift,new THREE.Vector3()));
+  trail.line.geometry.setFromPoints(pts);
+}
+
+// ===== legend / isolation =====
+function buildLegend(){
+  const box = document.getElementById('chips');
+  for(const s of DATA.strands){
+    const el = document.createElement('div'); el.className='chip'; el.style.color = s.hue;
+    el.innerHTML = `<span class="gem"></span><span class="nm"><b>${s.lab}</b><span>${s.steward} · ${s.axis}${s.force?' · '+s.force:''}</span></span>`;
+    el.onclick = ()=>{ state.iso = state.iso===s.id ? null : s.id; applyIso(); };
+    el.dataset.id = s.id; box.appendChild(el);
+  }
+}
+function applyIso(){
+  document.querySelectorAll('.chip').forEach(el=>{
+    el.classList.toggle('iso', el.dataset.id===state.iso);
+    el.classList.toggle('dim', !!state.iso && el.dataset.id!==state.iso);
+  });
+  updateStrandOpacities();
+  for(const spr of DATA.stars){ const on = !state.iso || spr.userData.strand===state.iso;
+    spr.material.opacity = on?1:0.06; }
+  for(const c of crystals){ const on = !state.iso || c.userData.strand===state.iso;
+    c.userData.points.material.opacity = on?0.95:0.10;
+    c.userData.lines.material.opacity  = on?0.33:0.04; }
+  if(linkLines) linkLines.material.opacity = state.iso ? 0.05 : 0.20;
+}
+
+// ===== pointer: hover tooltip, click to walk, shift+click to open =====
+const ray = new THREE.Raycaster(); const ptr = new THREE.Vector2(); const tip = document.getElementById('tip');
+let hovered = null, interacted = false;
+addEventListener('pointermove', e=>{
+  ptr.x = (e.clientX/innerWidth)*2-1; ptr.y = -(e.clientY/innerHeight)*2+1;
+  tip.style.left = (e.clientX+14)+'px'; tip.style.top = (e.clientY+10)+'px';
+});
+canvas.addEventListener('pointerdown', ()=>{ interacted = true; });
+canvas.addEventListener('click', e=>{
+  ptr.x = (e.clientX/innerWidth)*2-1; ptr.y = -(e.clientY/innerHeight)*2+1;
+  pickStars();
+  if(!hovered) return;
+  const d = hovered.userData;
+  if(e.shiftKey) open(d.siteUrl ? `${d.siteUrl}/view/${d.slug}` : `/${HOSTPATH[d.host]||d.host}/${d.slug}.html`, '_blank');
+  else walkTo(hovered);
+});
+function pickStars(){
+  if(!state.pages || !DATA.stars.length){ if(hovered){hovered=null; tip.style.display='none';} return; }
+  ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObjects(DATA.stars, false)[0];
+  const spr = hit && hit.object.material.opacity>0.5 ? hit.object : null;
+  if(spr!==hovered){
+    hovered = spr;
+    if(spr){ const d=spr.userData, s=DATA.byId[d.strand];
+      const age = d.date ? Math.round((Date.now()-d.date)/864e5) : null;
+      tip.innerHTML = `<b>${d.title}</b><br><span class="m">${d.host} · ${s.lab}${age!==null?' · edited '+(age===0?'today':age+'d ago'):''}</span>`;
+      tip.style.display='block'; canvas.style.cursor='pointer';
+    } else { tip.style.display='none'; canvas.style.cursor='grab'; }
+  }
+}
+
+// ===== controls wiring =====
+const foldEl = document.getElementById('fold');
+foldEl.addEventListener('input', ()=>{
+  state.fold = Number(foldEl.value);
+  document.getElementById('foldV').textContent = state.fold<0.05?'torus':state.fold>0.95?'codex':(state.fold*100|0)+'%';
+  rebuildAll();
+});
+function rebuildAll(){
+  for(const g of gems){ seat(g.userData.u, g.userData.v, 0, g.position); }
+  rebuildGrid(); rebuildStrands(); rebuildStars(); rebuildLinks(); rebuildHearth(); rebuildCrystals(); rebuildTrail();
+}
+const togs = { tStrands:['strands',strandGroup], tGrid:['grid',latticeGroup], tPages:['pages',graphGroup], tLinks:['links',linkGroup], tCrystals:['crystals',crystalGroup] };
+for(const [id,[key,grp]] of Object.entries(togs)){
+  document.getElementById(id).onclick = e=>{
+    state[key] = !state[key]; grp.visible = state[key]; e.target.classList.toggle('on', state[key]); };
+}
+document.getElementById('tDrift').classList.toggle('on', state.drift);
+document.getElementById('tDrift').onclick = e=>{ state.drift=!state.drift; e.target.classList.toggle('on', state.drift); };
+
+// ===== tick =====
+const clock = new THREE.Clock();
+function tick(){
+  requestAnimationFrame(tick);
+  const dt = clock.getDelta(), t = clock.elapsedTime;
+  if(state.drift) world.rotation.z += dt*0.05;                       // slow golden drift
+  if(!REDUCED && !interacted) latticeGroup.position.z = 0.028*Math.sin(t/6*TAU);  // the latent breath (game42 §5)
+  else latticeGroup.position.z = 0;
+  const pulse = 1 + 0.12*Math.sin(t*2.2);
+  hearthCore.scale.setScalar(pulse); hearthRing.rotation.z = t*0.4; hearthRing.rotation.x = Math.PI/2 + 0.3*Math.sin(t*0.3);
+  if(!REDUCED) crystals.forEach((c,i)=>{      // phonon shimmer — the crystal is in ground state, not frozen
+    c.scale.setScalar(1 + 0.025*Math.sin(t*1.7 + i*1.3));
+    c.rotation.y = c.userData.az + Math.PI/2 + 0.10*Math.sin(t*0.5 + i*2.1);
+  });
+  if(!REDUCED) for(const spr of DATA.stars) if(spr.userData.week)
+    spr.scale.setScalar(spr.userData.baseScale*(1+0.25*Math.sin(t*2.5+spr.userData.u)));
+  runnerTick(dt);
+  pickStars();
+  controls.update();
+  renderer.render(scene, camera);
+}
+function resize(){ renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+
+// ===== ignite =====
+await loadLabs();
+buildCrystals();
+rebuildAll();
+tick();
+loadWiki().then(()=>{   // baked sitemaps; ?site=/?strand= deep links isolate a strand
+  const q = new URLSearchParams(location.search);
+  const pre = q.get('strand') || SITESTRAND[q.get('site')] || null;
+  if(pre && DATA.byId[pre]){ state.iso = pre; applyIso(); }
+  restorePalette();        // retint stars only after they exist
+});
+
+// ===== the palette — recolor the six strands; yours to keep =====
+const PALKEY = 'chart-palette';
+function recolor(id, hex){
+  const s = DATA.byId[id]; if(!s) return;
+  s.hue = hex;
+  if(strandMats[id]) strandMats[id].color.set(hex);
+  const fresh = glowSprite(hex, 0.3);                       // one new glow texture per strand
+  starMats[id] = fresh;
+  for(const spr of DATA.stars) if(spr.userData.strand === id){ spr.material.map = fresh.map; spr.material.needsUpdate = true; }
+  for(const c of crystals) if(c.userData.strand === id){ c.userData.points.material.color.set(hex); c.userData.lines.material.color.set(hex); }
+  if(id === 'connection'){ hearthRing.material.color.set(hex); hearthThreads.material.color.set(hex); }
+  const chip = document.querySelector('.chip[data-id="' + id + '"]'); if(chip) chip.style.color = hex;
+}
+const palBox = document.getElementById('pal');
+for(const s of DATA.strands){
+  const inp = document.createElement('input');
+  inp.type = 'color'; inp.value = s.hue; inp.title = s.lab; inp.dataset.id = s.id;
+  inp.oninput = () => { recolor(s.id, inp.value);
+    localStorage.setItem(PALKEY, JSON.stringify(Object.fromEntries(DATA.strands.map(x => [x.id, x.hue])))); };
+  palBox.appendChild(inp);
+}
+function restorePalette(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(PALKEY) || '{}');
+    for(const [id, hex] of Object.entries(saved)){
+      recolor(id, hex);
+      const inp = palBox.querySelector('input[data-id="' + id + '"]'); if(inp) inp.value = hex;
+    }
+  }catch{}
+}
+document.getElementById('palReset').onclick = () => { localStorage.removeItem(PALKEY); location.reload(); };
+
+// ===== fold each instrument to its emoji =====
+const PKEY = 'chart-panels';
+const pstate = (() => { try{ return JSON.parse(localStorage.getItem(PKEY)) || {}; }catch{ return {}; } })();
+const psave = () => localStorage.setItem(PKEY, JSON.stringify(pstate));
+const art = document.querySelector('header.top article');
+const infoBtn = document.getElementById('infoBtn');
+const setInfo = open => art.classList.toggle('open', open);
+infoBtn.onclick = () => { setInfo(!art.classList.contains('open')); pstate.info = art.classList.contains('open') ? 0 : 1; psave(); };
+setInfo(pstate.info !== undefined ? !pstate.info : innerWidth > 760);
+for(const [id, emo, name] of [['legend','🧵','the strands'], ['controls','🎛️','the instrument'], ['tracer','👣','the walk']]){
+  const p = document.getElementById(id);
+  const b = document.createElement('button');
+  b.className = 'minbtn'; b.textContent = emo; b.title = name + ' — minimise / expand';
+  b.onclick = () => { p.classList.toggle('min'); pstate[id] = p.classList.contains('min') ? 1 : 0; psave(); };
+  p.prepend(b);
+  if(pstate[id]) p.classList.add('min');
+}
+
+// ===== run your path — a light circuit along the walk =====
+// var (not const): tick() runs its first frame synchronously during module
+// evaluation, before this line — runnerTick must see undefined, not a TDZ throw.
+var runner = { on: false, dist: 0, lastSeg: -1, flares: [], spr: null };
+runner.spr = new THREE.Sprite(glowSprite('#ffd27a', 0.18));
+runner.spr.scale.setScalar(0.15); runner.spr.visible = false; world.add(runner.spr);
+const runBtn = document.getElementById('cRun');
+runBtn.onclick = () => {
+  if(trail.pts.length < 2) return;
+  runner.on = !runner.on; runner.dist = 0; runner.lastSeg = -1;
+  runner.spr.visible = runner.on;
+  runBtn.classList.toggle('on', runner.on);
+};
+function flareStar(d){
+  const spr = DATA.stars.find(s => s.userData === d);
+  if(spr) runner.flares.push({ spr, life: 1 });
+}
+function runnerTick(dt){
+  if(!runner) return;   // frames before module evaluation reaches the runner init
+  // decay star flares back to their base scale
+  for(const f of runner.flares){
+    f.life -= dt * 1.1;
+    f.spr.scale.setScalar(f.spr.userData.baseScale * (1 + 2.4 * Math.max(f.life, 0)));
+  }
+  runner.flares = runner.flares.filter(f => f.life > 0);
+  if(!runner.on || trail.pts.length < 2){ runner.spr.visible = false; return; }
+  runner.spr.visible = true;
+  // reseat waypoints each frame so the circuit rides the fold torus⇄codex live
+  const pts = trail.pts.map(d => seat(d.u, d.v, d.lift, new THREE.Vector3()));
+  const segs = []; let total = 0;
+  for(let i = 0; i < pts.length - 1; i++){ const L = pts[i].distanceTo(pts[i+1]); segs.push(L); total += L; }
+  if(total <= 0) return;
+  runner.dist = (runner.dist + dt * 0.9) % total;   // constant world speed, loops the circuit
+  let d = runner.dist, i = 0;
+  while(i < segs.length - 1 && d > segs[i]){ d -= segs[i]; i++; }
+  runner.spr.position.lerpVectors(pts[i], pts[i+1], segs[i] ? Math.min(d / segs[i], 1) : 0);
+  if(i !== runner.lastSeg){                          // crossing into a segment flares its start star
+    runner.lastSeg = i;
+    flareStar(trail.pts[i]);
+    if(i === segs.length - 1) flareStar(trail.pts[i + 1]);
+  }
+}
+
+// ===== focus mode — clear the instruments, keep the shape =====
+const setZen = on => document.body.classList.toggle('zen', on);
+document.getElementById('focusBtn').onclick = () => setZen(!document.body.classList.contains('zen'));
+addEventListener('keydown', e => {
+  if(e.key === 'Escape') setZen(false);
+  else if((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey) setZen(!document.body.classList.contains('zen'));
+});
+
+// ===== keepsake — the view as a PNG with a City Key inside (iTXt "citykey") =====
+const CRC_T = (() => { const t = new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = c&1 ? 0xEDB88320 ^ (c>>>1) : c>>>1; t[n]=c; } return t; })();
+const crc32 = buf => { let c=0xFFFFFFFF; for(let i=0;i<buf.length;i++) c = CRC_T[(c^buf[i])&255] ^ (c>>>8); return (c^0xFFFFFFFF)>>>0; };
+function cityKeyPNG(dataURL, meta){
+  const bin = atob(dataURL.split(',')[1]);
+  const png = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) png[i] = bin.charCodeAt(i);
+  const kw = new TextEncoder().encode('citykey'), txt = new TextEncoder().encode(JSON.stringify(meta));
+  // iTXt: keyword NUL compFlag compMethod NUL(lang) NUL(translated) text — 5 zero bytes between
+  const data = new Uint8Array(kw.length + 5 + txt.length);
+  data.set(kw, 0); data.set(txt, kw.length + 5);
+  const chunk = new Uint8Array(12 + data.length), dv = new DataView(chunk.buffer);
+  dv.setUint32(0, data.length); chunk.set([105,84,88,116], 4); chunk.set(data, 8);
+  dv.setUint32(8 + data.length, crc32(chunk.slice(4, 8 + data.length)));
+  const cut = 33; // 8-byte signature + 25-byte IHDR chunk — the key rides right behind the header
+  const out = new Uint8Array(png.length + chunk.length);
+  out.set(png.slice(0, cut), 0); out.set(chunk, cut); out.set(png.slice(cut), cut + chunk.length);
+  return new Blob([out], { type: 'image/png' });
+}
+document.getElementById('snapBtn').onclick = () => {
+  renderer.render(scene, camera); // fresh buffer in the same task — no preserveDrawingBuffer needed
+  const meta = {
+    key: 'city-key', chart: 'privacy guide star chart',
+    origin: 'https://guide.agentprivacy.ai/star-chart/',
+    exported: new Date().toISOString(),
+    sites: new Set(DATA.stars.map(s => s.userData.host)).size,
+    pages: DATA.stars.length, links: DATA.links.length,
+    strand: state.iso || 'all', fold: Number(state.fold.toFixed(3)),
+    walk: trail.pts.map(d => ({ site: d.host, slug: d.slug })), T: Number(trail.value.toFixed(1)),
+    palette: Object.fromEntries(DATA.strands.map(s => [s.id, s.hue])), // your colors ride in the key
+    seal: '(⚔️⊥⿻⊥🧙)😊'
+  };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(cityKeyPNG(renderer.domElement.toDataURL('image/png'), meta));
+  a.download = 'privacy-guide-star-chart.png';
+  a.click(); URL.revokeObjectURL(a.href);
+};
+</script>
+</body>
+</html>

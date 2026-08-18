@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — 01-uniqueness-nullifier · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — 01-uniqueness-nullifier</span></div>
+  <article><div class="md"><h1>01 — Uniqueness within a context (nullifier) — notes</h1>
+<p><strong>Predicate (Section 4):</strong> <em>Uniqueness within a context</em> — &quot;Nullifier-based scheme (deterministic per-context pseudonym) for duplicate / Sybil resistance without a global identifier — cf. privacy-pool / Semaphore-style nullifiers.&quot;</p>
+<p><strong>Cred-spec anchor</strong> (<code>../CRED-SPEC-COHERENCE.md</code>): this nullifier is the ZK mechanism that <em>enforces</em> two Credentials-Core-Spec rules — <strong>R-DID uniqueness</strong> (&quot;each entity MUST generate a new, unique R-DID for every counterparty; no reuse&quot;) and the <strong>PHC pattern</strong> (&quot;a VMC whose governance enforces real human personhood <strong>and exactly-one-membership-per-person</strong>&quot;). One deterministic pseudonym per person per context is precisely the &quot;one membership per person&quot; a PHC asserts. Rides the spec&#39;s <strong>community-anchored (VMC-based) construction</strong> — the &quot;context&quot; scoping is the shared C-DID. Where notes below say &quot;accredited enrolment set,&quot; the spec&#39;s governance term is <strong>trust registry</strong> (the VTC membership the registry governs); &quot;set&quot; is kept only for the cryptographic Merkle object.</p>
+<p><strong>Stack decision for this predicate:</strong> Node reference model now (zero-dep, offline) → circom/Semaphore circuit next. Rationale: the reference model pins down the <em>relations</em> and the property set cheaply; the circuit only needs to prove those same relations in ZK, so getting the algebra and the adversary tests right first de-risks the circuit.</p>
+</div>
+<div class="md"><h2>What the runtime demonstrates</h2>
+<p>Construction:</p>
+<ul>
+<li><code>enrol(human)</code> → <code>secret s</code>, blinding <code>r</code>, public <code>commitment = H(s, r)</code> (goes in the accredited enrolment set).</li>
+<li><code>nullifier(s, context) = H(s, context)</code> — the per-context pseudonym.</li>
+<li>ZKP (modelled, not yet in ZK): public = (context, nullifier, enrolment-set root); private = (s, r, membership path); statement = <code>commitment(s,r) ∈ set  ∧  nullifier == H(s, context)</code>.</li>
+</ul>
+<p>Properties verified by <code>test.mjs</code> (9/9):</p>
+<ul>
+<li><strong>Determinism</strong> (P1), <strong>cross-context unlinkability</strong> (P2), <strong>distinctness of real humans</strong> (P3).</li>
+<li><strong>User-as-adversary / self-Sybil</strong> (P4): the same human&#39;s second account in one context is rejected as <code>duplicate-human-in-context</code>, without the registry learning identity.</li>
+<li><strong>Context isolation</strong> (P5), <strong>grinding resistance</strong> (P6), <strong>commitment hiding + stability</strong> (P7).</li>
+</ul>
+</div>
+<div class="md"><h2>Feedback to the strawman (candidate upstream edits)</h2>
+<ol>
+<li><p><strong>The nullifier is necessary but not sufficient — and the runtime makes that concrete.</strong> P4 only holds <em>because</em> <code>enrol</code> is assumed to map one human to one <code>secret</code>. The strawman&#39;s Section 4 design note already says this (&quot;anti-Sybil strength comes from the deduplicating enrolment, not the proof&quot;); the runtime is a runnable demonstration of exactly that dependency. Suggest citing a reference construction next to the prose so the WG&#39;s first decision has something executable attached.</p>
+</li>
+<li><p><strong>Hash agility is a spec-level requirement, not an implementation detail.</strong> The reference uses SHA-256; the circuit will use Poseidon. Both give the same security argument, but the <em>nullifier value differs by hash</em>, so the spec should pin the hash (and a versioned domain-separation tag — the runtime already uses <code>dtg-zkp/nullifier/v0</code>) to keep nullifiers stable and interoperable across implementations. Propose adding a &quot;nullifier binding = H_domain(secret, context)&quot; definition with the hash named.</p>
+</li>
+<li><p><strong>&quot;Context&quot; needs a canonical encoding.</strong> Unlinkability (P2) and isolation (P5) depend on two verifiers deriving <em>different</em> context strings and one verifier deriving a <em>stable</em> one. That makes context canonicalization a conformance requirement — worth a line in Section 5 (Context) or an open question in Section 9.</p>
+</li>
+</ol>
+</div>
+<div class="md"><h2>Next steps for this runtime</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Port to a circom circuit (Poseidon nullifier + Merkle membership over the accredited set); prove <code>commitment ∈ set ∧ N == Poseidon(s, ctx)</code>.</li>
+<li><input disabled="" type="checkbox"> Measure proof-gen cost on a consumer device (feeds Section 9 Q4, &quot;claim ceiling per presentation&quot;).</li>
+<li><input disabled="" type="checkbox"> Cross-check the nullifier definition against Semaphore v4 so we can say &quot;conformant with / diverges from&quot; precisely.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-01-uniqueness-nullifier.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

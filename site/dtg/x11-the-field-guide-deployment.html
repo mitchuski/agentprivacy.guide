@@ -1,0 +1,163 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X11 — The Field Guide Deployment · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X11 — The Field Guide Deployment</span></div>
+  <article><div class="md"><h1>X11 — The Field Guide deployment — runtime 07 meets a walking AR game</h1>
+<p><em>Runtime 07 has been a reference model with no consumer. A production AR client needed exactly its<br>relations — collision → edge → propagation, bilateral consent, fresh R-DIDs, the Gap — to replace a<br>hard-coded peer fixture with real one-hop trust. Most of 07 survived contact. One gate has no analogue<br>in the deployment and cannot be given one. One property the deployment deliberately declined to use,<br>and the reason is a finding rather than a shortcut.</em></p>
+<p><strong>Register:</strong> none — X-series deployment bridge (TF work reaching <em>out</em> into a shipping product, the<br>reverse direction from X6) · leverage 🟢 · <strong>Ladder:</strong> reference built 2026-08-15 —<br><code>/Volumes/24mitchuski/field_guide_privacymage/runtimes/</code> : <code>meet-overlay</code> 54/54, <code>fixtures</code> 8/8,<br><code>consumer-py</code> 15/15, <strong><code>lab-bridge</code> 10/10 importing this repo&#39;s <code>07-trust-graph-formation</code> and<br><code>01-uniqueness-nullifier</code> directly</strong>. Run: <code>cd runtimes &amp;&amp; node verify.mjs</code>.<br><strong>Anchor (this repo):</strong> <a class="wlink" href="lab-07-trust-graph-formation.html">Lab — 07-trust-graph-formation</a> (all of it) · <a class="wlink" href="lab-01-uniqueness-nullifier.html">Lab — 01-uniqueness-nullifier</a><br>(by absence — see §4) · X1 conformance fixtures (§7) · X6 erosion clocks (§6) · X4 observable-event<br>minimisation (§5).<br><strong>Anchor (external):</strong> Hitchhikers Field Guide (Unity AR World) + OASIS ONODE <code>TrustGraphController</code>;<br>handoff <code>MITCH_ARWORLD_FIELD_GUIDE_HANDOFF.md</code>, 2026-08-15, from Max.<br><strong>Counter-spec produced:</strong> <code>field_guide_privacymage/COUNTER-SPEC-meet-and-overlay.md</code>.</p>
+<hr>
+</div>
+<div class="md"><h2>1. Why this is evidence and not a side project</h2>
+<p>The lab&#39;s working principle is that before the group decides anything there should be something you can<br>run that makes the decision concrete. Runtime 07 does that for trust-graph formation — but only against<br>itself. Every gate in it is justified by an argument, and arguments are cheap until something outside<br>the argument needs them.</p>
+<p>The Field Guide is that outside thing. It is a walking AR client where &quot;multiplayer&quot; means you witness a<br>place, that fact lands in Knowledge, Promise decides what a peer may see, and Trust decides whose<br>Knowledge you may query at all. Its overlay ships today with the Trust side stubbed: <code>fromGraph</code> returns<br>two invented players from a JSON file. The ask was for the smallest honest thing that replaces them.</p>
+<p>The answer turned out to be runtime 07, almost unchanged. That is the first result, and it is worth<br>stating plainly because it could easily have gone the other way.</p>
+</div>
+<div class="md"><h2>2. What survived, asserted rather than claimed</h2>
+<p><code>runtimes/lab-bridge/test.mjs</code> imports this repo and runs the same scenarios through both models. It is<br>a dependency, not a correspondence table: if a gate or a rejection name changes here, it goes red.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Both models</th>
+<th>Bridge</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A consenting meet forms exactly one edge</td>
+<td>✓</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>Unilateral consent refused, <em>same rejection name</em></td>
+<td>✓</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>Self-edge refused, same name</td>
+<td>✓</td>
+<td>B3</td>
+</tr>
+<tr>
+<td>The edge is idempotent per pair</td>
+<td>✓</td>
+<td>B4</td>
+</tr>
+<tr>
+<td><strong>The Gap</strong> — the prover recomputes the commitment and refuses the proposer&#39;s claim</td>
+<td>✓</td>
+<td>B5</td>
+</tr>
+<tr>
+<td>R-DID freshness per counterparty</td>
+<td>✓</td>
+<td>B6</td>
+</tr>
+</tbody></table>
+<p>The Gap surviving is the one I would highlight to the task force. In the lab it is an algebraic<br>commitment about non-collusion between proposer and prover. In the game it is a phone that has just<br>scanned a QR code asserting a value to the phone that displayed it, and the displaying phone recomputing<br>it instead. Same structure, entirely different substrate, no adjustment required.</p>
+</div>
+<div class="md"><h2>3. The delta is four gates, and it is bounded</h2>
+<p>The deployment adds four rejections to 07&#39;s core and no others (B8 asserts the count, so a fifth added<br>quietly turns the suite red):</p>
+<ul>
+<li><code>meet-offer-expired</code> — an offer is a moment. TTL 120 s.</li>
+<li><code>meet-offer-replayed</code> — the nonce is single-use, so a photographed QR is spent.</li>
+<li><code>meet-not-colocated</code> — the two devices were within 50 m.</li>
+<li><code>offer-not-mine</code> — a routing check that exists only because the rite crosses an HTTP endpoint rather<br>than two co-present processes.</li>
+</ul>
+<p>The first three are what &quot;the encounter is physical&quot; costs. 07&#39;s <code>encounter()</code> produces a shared matching<br>compression that only two parties can derive; it does not care <em>how</em>, and it is right not to. When the<br>how is two people in a street, freshness and replay and proximity are exactly the three questions that<br>appear. <strong>Proposed refinement to 07&#39;s NOTES:</strong> name these as the deployment surface of <code>encounter()</code>, so<br>the next consumer knows which three questions it owns rather than rediscovering them.</p>
+</div>
+<div class="md"><h2>4. The gate with no analogue — and the honest finding</h2>
+<p>Runtime 07 gate <strong>G2</strong> requires both endpoints to be personhood-anchored: a member of a VTC with an<br>M-DID, one node per human per community, via runtime 01&#39;s nullifier. It is the PHC rule made mechanical<br>and it is load-bearing for everything the trust graph claims about Sybil resistance.</p>
+<p>The Field Guide has nothing to anchor to. OASIS avatar creation is not personhood-gated. So:</p>
+<blockquote>
+<p><strong>B7 — an OASIS avatar presented to this repo&#39;s own Swordsman is rejected with<br><code>endpoint-not-personhood-anchored</code>.</strong></p>
+</blockquote>
+<p>That check passes, which is to say the boundary is real and now lives in a test rather than in a caveat.<br>The consequence, stated for the record: <strong>the Field Guide trust graph is a pseudonym graph, not a<br>personhood graph.</strong> One human can hold many avatars and mint edges between them. Every privacy property<br>of the deployment survives that — pairwise references, per-edge disclosure, the absence of a score — but<br>no Sybil-resistance property does, and none is claimed.</p>
+<p>This is the negative space the drafting rules ask for. It also names precisely where runtime 01 would<br>enter if the deployment ever needs it: not as a nice addition, but as the only thing that would make<br>G2 satisfiable.</p>
+<h3>4.1 Correction — G2 is stricter than the cred-spec, and the deployment found that</h3>
+<p><em>Added after reading the vendored cred-spec (<code>dtgwg-cred-spec-main/spec/body.md</code>) rather than working<br>from the coherence map.</em> My first draft of §4 framed the personhood gap as the deployment falling<br>short. That framing is wrong, and the error is on the lab&#39;s side, not the game&#39;s.</p>
+<p>The cred-spec defines <strong>two</strong> constructions, and is explicit that the first needs no community:</p>
+<blockquote>
+<p>&quot;Community membership is <strong>not</strong> a precondition for issuing, holding, or presenting a VRC; two<br>entities that do not share (or do not hold) a VMC can still exchange VRCs, and the resulting edges<br>are valid trust attestations standing on their cryptographic signatures and on whatever real-world<br>context the parties bring to them.&quot;</p>
+</blockquote>
+<p>And of the pairwise ZKP: &quot;It does not by itself confer any community-level assurance (e.g.,<br>personhood).&quot;</p>
+<p>So the Field Guide is not a deficient community-anchored deployment. It is a <strong>conformant pairwise<br>(VRC-based) deployment</strong>, which the spec names and permits.</p>
+<p><strong>The finding for this lab:</strong> <code>runtime 07</code> gates <em>every</em> edge on personhood anchoring (G2), which<br>models only the <strong>community-anchored (VMC-based)</strong> construction. It does not model the pairwise one at<br>all — and the pairwise one is the construction available to any two parties, with no VTC in sight.<br>That is a coverage gap in the lab&#39;s own evidence, and it took an external deployment to surface it:<br>the lab had no consumer standing outside a community, so nothing ever exercised the case.</p>
+<p><strong>Proposed build:</strong> a <code>07b</code> variant, or a flag on <code>Swordsman</code>, that omits G2 and models pairwise VRC<br>formation. Every other gate — consent, no self-edge, R-DID freshness, the Gap, idempotence — applies<br>unchanged, which the bridge already demonstrates. B7 then changes meaning from &quot;the deployment fails<br>the gate&quot; to &quot;the deployment uses the construction where the gate does not apply,&quot; and stays valuable<br>either way because it pins which construction is in play.</p>
+<p>This supersedes the framing in §4 above wherever the two disagree.</p>
+</div>
+<div class="md"><h2>5. What the deployment declined to use, and why that is a finding</h2>
+<p>Runtime 07 models <strong>propagation</strong> — <code>connected()</code>, transitive reachability — and it is right to. &quot;Does<br>trust reach from A to C&quot; is a genuine question about a trust graph, and G8 is a correct property.</p>
+<p>The overlay declined it. Peers appear on your map at one hop only; two hops contributes nothing, not a<br>reduced tier. B9 asserts the divergence directly: the lab reports <code>connected() === true</code> across two hops<br>while the game reports that nothing is visible.</p>
+<p>The reason is not performance and not caution. The two models are answering different questions:</p>
+<ul>
+<li>07 asks <strong>does trust reach</strong> — a property of the graph.</li>
+<li>The overlay asks <strong>who may see</strong> — a disclosure decision about a person&#39;s data.</li>
+</ul>
+<p>Answering the second with the first is how a trust score gets built by accident. The moment<br>friend-of-friend leaks in at a reduced tier, graph distance has become a currency, every player&#39;s<br>incentive turns into edge farming, and the &quot;no central trust score&quot; commitment is gone without anyone<br>deciding to remove it.</p>
+<p><strong>Proposed refinement:</strong> 07&#39;s NOTES currently presents propagation as the third arrow of<br>collision → edge → propagation without distinguishing these two readings. Naming them separately would<br>cost two sentences and would protect the next consumer from the same conflation. This is the one place<br>where the deployment thinks the lab&#39;s framing, though correct, is under-specified — a <em>refine</em>, not a<br>refute. It also connects to discussion #11&#39;s list-inflation question: edge admissibility is one answer,<br>and &quot;reachability is not visibility&quot; is a second, cheaper one that does not require a threshold.</p>
+</div>
+<div class="md"><h2>6. Erosion, arriving independently at X6</h2>
+<p>The deployment needed a recency rule for overlay pins — the product spec proposed &quot;witnessed in the last<br>90 days&quot;. It ended up at a half-life with a floor rather than a cliff, and the same asymmetry X6 argues<br>for: a peer&#39;s old enthusiasm should weigh less over time, while your own record of having been somewhere<br>does not decay at all.</p>
+<p>That is X6&#39;s rate-not-cliff ruling reached from a completely different direction, by someone solving a<br>map-rendering problem. Weak evidence, but the good kind: the shape was not imported, it was arrived at.</p>
+<p><strong>Gap in the deployment, recorded here so it is not lost:</strong> the <em>edge</em> does not erode and there is no<br>revocation path. A meet from four years ago currently weighs exactly what a meet from Tuesday weighs.<br>The machinery exists; it is simply not applied to the edge. X6&#39;s ten-clock sort is the obvious place to<br>go for what kind of clock a relationship should be on.</p>
+</div>
+<div class="md"><h2>7. A second instance of the X1 instrument — and what it caught</h2>
+<p>The deployment reproduced this repo&#39;s conformance pattern from scratch in a different domain: a closed<br>rejection register (22 codes, every one triggered live), deterministic vectors, and a zero-shared-code<br>Python consumer re-deriving every projection digest byte-exactly (15/15).</p>
+<p>Within an hour of existing, the consumer caught a real divergence that no amount of review would have<br>found. The public disclosure tier coarsens geography to ~100 m. JavaScript rounds a midpoint up; Python<br>and <strong>C# round to even</strong>. Same pin, ~110 m apart, opposite sides of a street, both implementations<br>passing their own tests. The rule now names its rounding mode and a vector sits exactly on the boundary.</p>
+<p>For the task force this is worth more than the bug. <strong>X1&#39;s thesis is that the fixture set is the real<br>interop artefact, and P5 asks for a third-language consumer.</strong> Here the instrument was rebuilt by the<br>same author in an unrelated domain and immediately earned its keep. That is not proof, but it is the<br>second data point, and it is the kind of thing that should be cited when §26.2 fixture-format adoption<br>comes up rather than argued from first principles again.</p>
+<p>The relevant detail for spec text: it is not enough to say a value is coarsened. <strong>A coarsening rule<br>that does not name its rounding mode is not a rule</strong> — and the same applies to any numeric field in a<br>canonical encoding. This generalises directly to the descriptor and transcript encodings in P2.</p>
+</div>
+<div class="md"><h2>8. Draft position record</h2>
+<p>Filed here as a draft. Per the protocol, positions on TF decisions go upstream under Mitch&#39;s own name;<br>nothing below has been posted.</p>
+<pre><code class="language-markdown">### Position — P10 · Trust-graph formation
+- **Member:** Mitchell Travers, Soulbis
+- **Position:** ratify (core), refine (two framings)
+- **On what, exactly:** `runtimes/07-trust-graph-formation` gates G1, G3, G4, G5, G6, G7 —
+  ratify. Runtime 07 NOTES&#39; presentation of propagation (the third arrow) and of
+  `encounter()`&#39;s deployment surface — refine.
+- **Reasoning:** the six ratified gates were re-derived, unaltered, by an external
+  deployment (Hitchhikers Field Guide / OASIS ONODE) that needed them for a shipping
+  product rather than for an argument, including the Gap surviving a substrate change
+  from agent-to-agent to phone-to-phone. Adversary named: a tampered client attempting
+  to talk a counterparty into an edge (B5), and a player attempting to farm visibility
+  through graph distance (B9). Horizon: none claimed for the edge — the deployment has
+  no edge erosion or revocation, which is stated negative space, not an implied
+  permanence claim. Conjecture: that &quot;reachability is not visibility&quot; generalises beyond
+  map overlays is untested.
+- **Evidence:** `field_guide_privacymage/runtimes/lab-bridge/` 10/10, importing this
+  repo&#39;s runtime 07 and 01 directly, so drift breaks the suite. B7 is a live check that
+  an OASIS avatar fails G2 — the deployment is a pseudonym graph, not a personhood
+  graph, and says so.
+- **What I/we could bring:** a deployment consumer of runtime 07, kept running against
+  this repo; a second instance of the X1 conformance instrument with a cross-language
+  divergence it caught; and the pseudonym-vs-personhood boundary as a worked example for
+  the decision document&#39;s negative space.
+</code></pre>
+</div>
+<div class="md"><h2>9. What this does not establish</h2>
+<ul>
+<li><strong>Not zero knowledge.</strong> Same standing as runtime 07: it models the relations a ZK construction would<br>prove. Nothing here bears on §25 construction selection.</li>
+<li><strong>Not location integrity.</strong> Co-location is asserted by a client&#39;s own GPS. Two colluding players can<br>mint an edge from opposite ends of the country. Acceptable <em>in the deployment</em> because an edge exposes<br>only what the owner&#39;s policy allows and there is no score to farm — but that argument is local to this<br>product and must not be carried into the spec.</li>
+<li><strong>Not personhood, and not Sybil resistance.</strong> §4. This is the boundary, and it is the point.</li>
+<li><strong>Not a claim about scale.</strong> One deployment, one author, and that author wrote both sides. An<br>independent consumer of runtime 07 would be worth more than this document, and remains the ask.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x11-the-field-guide-deployment.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

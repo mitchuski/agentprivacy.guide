@@ -1,0 +1,250 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Toffoli Reduction · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Toffoli Reduction</span></div>
+  <article><div class="md"><h1>Toffoli Reduction</h1>
+</div>
+<div class="md"><blockquote>
+<blockquote>
+<p>-.</p>
+</blockquote>
+</blockquote>
+</div>
+<div class="md"><h1>Toffoli Reduction</h1>
+<p>On error-corrected hardware almost all cost is the <strong>non-Clifford gates</strong> — Toffoli (CCX) and<br>the T gates they decompose into — because each one consumes a distilled magic state. Cliffords<br>and measurements are nearly free by comparison. So in a <code>qubits × Toffoli</code> objective, this<br>skill owns the second factor, and on a fault-tolerant runtime estimate the Toffoli/T-count <em>is</em><br>the headline number. It is the dual of <code>peak-qubit-reduction</code> (which owns the width factor);<br>the two trade against each other, and the exchange-rate section below is how you arbitrate.</p>
+<p>Two facts shape every move here:</p>
+<ul>
+<li><strong>Cliffords and measurements are free; only the non-Clifford gates cost.</strong> So the winning<br>rewrites <em>convert</em> Toffoli/T work into measurement + Clifford (phase) corrections, or make it<br><em>not execute</em>, rather than just shuffling it around.</li>
+<li><strong>The trap is Toffoli-DEPTH, not Toffoli-COUNT.</strong> The reciprocal &quot;trade qubits for gates&quot;<br>rule holds only if a rewrite is <strong>depth-neutral</strong>. Recompute/uncompute and fewer-ancilla<br>tricks inflate the non-Clifford <em>depth</em>, and at the magic-state reaction floor that depth is<br><strong>not refundable</strong> — a count win that triples depth can be a real-hardware loss the score<br>doesn&#39;t see. Prefer depth-neutral moves; treat a depth blowup as a real cost.</li>
+</ul>
+</div>
+<div class="md"><h2>Emitted vs average-executed — know which your metric counts</h2>
+<p>Before optimizing, find out whether your objective counts <strong>emitted</strong> Toffoli (every CCX in the<br>circuit) or <strong>average-executed</strong> Toffoli (CCX weighted by how often its control condition<br>actually fires, averaged over inputs). They reward different moves:</p>
+<ul>
+<li><strong>Emitted</strong> → only <em>structural</em> cuts help: fewer CCX in the circuit (fusion, MAJ, vents,<br>skipped cleanup, less materialization).</li>
+<li><strong>Average-executed</strong> → <em>also</em> rewards <strong>conditional replay</strong>: wrapping a block under a<br>measurable predicate so its gates only count on the fraction of inputs where the predicate<br>fires. A block that&#39;s emitted once but executes on 5% of inputs costs ~0.05× its Toffoli.</li>
+</ul>
+<p>This distinction decides which half of the move-set is even available. State it explicitly at<br>the start.</p>
+</div>
+<div class="md"><h2>The core loop</h2>
+<p>Mirrors the width loop, but the resource is gates, not wires.</p>
+<ol>
+<li><strong>Measure</strong> — get the Toffoli/T count and find the <strong>hot-spot</strong>: which phase/operation emits (or executes) the most non-Clifford gates. Note emitted-vs-executed.</li>
+<li><strong>Classify</strong> the hot-spot&#39;s Toffoli by <em>kind</em> (table below) — the kind dictates the move.</li>
+<li><strong>Pick the move</strong> that fits that kind.</li>
+<li><strong>Cost it</strong> — depth-neutral? qubit cost? correctness risk? worth it at the exchange rate?</li>
+<li><strong>Re-measure</strong> — the hot-spot moves; repeat until it&#39;s an irreducible floor.</li>
+</ol>
+</div>
+<div class="md"><h2>Step 2 — Classify the hot-spot&#39;s gates</h2>
+<table>
+<thead>
+<tr>
+<th>Kind of Toffoli at the hot-spot</th>
+<th>The move that fits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Carry-uncompute</strong> (reverse carry chain returning scratch to |0⟩)</td>
+<td><strong>Vent</strong> it — replace each with a measurement + Clifford phase fixup (T-count 0)</td>
+</tr>
+<tr>
+<td><strong>Recomputed self-uncomputing scratch</strong> (comparators built then cleanly reversed)</td>
+<td><strong>Conditional replay</strong> under a measurable predicate (executed-metric only)</td>
+</tr>
+<tr>
+<td><strong>Data-controlled arithmetic</strong> (cadd, fold-sub controlled on live data)</td>
+<td><em>Not</em> conditionable — attack via fusion / materialization instead</td>
+</tr>
+<tr>
+<td><strong>Majority / MAJ gadgets</strong> (3-CCX majority)</td>
+<td><strong>Ancilla-free majority</strong> (2-CCX) — peak-neutral count cut</td>
+</tr>
+<tr>
+<td><strong>Redundant final cleanup</strong> (a top-clean made unnecessary by the folded structure)</td>
+<td><strong>Skip it</strong> — but only if provably redundant</td>
+</tr>
+<tr>
+<td><strong>Full intermediate products / wide rows</strong></td>
+<td><strong>Avoid materialization</strong> — short/streamed/segmented forms emit fewer gates</td>
+</tr>
+<tr>
+<td><strong>Repeated algebraic stages</strong> (back-to-back add/negate/subtract chains, or stages with separate carry chains)</td>
+<td><strong>Fuse</strong> into one equivalent modular operation or shared carry chain (value-identical)</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Step 3 — The moves</h2>
+<h3>Venting: turn carry-uncompute into a measurement (the exact, depth-neutral primitive)</h3>
+<p>A hybrid controlled adder costs <code>Toffoli = 3n − 2 − vents</code>. Each <strong>vent</strong> replaces one<br>carry-<em>uncompute</em> Toffoli with an <strong>X-basis measurement + a <code>CZ</code> phase fixup</strong> (T-count 0). So<br>each vent is exactly <strong>−1 Toffoli, +1 qubit</strong> — and the extra qubit is held <em>only</em> between the<br>forward and reverse carry chains, a short window. It is the cleanest, sim-verified, essentially<br>depth-neutral Toffoli dial there is.</p>
+<p>The dial has a rule: <strong>vent OFF-peak phases for free.</strong> Where ancilla headroom exists (the phase<br>is not the qubit binder), every vent is pure Toffoli savings at no score cost. On the<br>peak-binding phase, the +1 qubit raises width and costs you on the other factor — so don&#39;t vent<br>there unless the gate win beats the qubit loss at your exchange rate. This is the single most<br>reliable count reducer when you have off-peak headroom.</p>
+<h3>Conditional / measured replay (average-executed metric only)</h3>
+<p>If the metric counts executed gates, wrap a block under <code>push_condition(measurable predicate)</code><br>so its CCX only count on inputs where the predicate is set. The score charges<br><code>popcount(condition)</code> per CCX, so a predicate that is 0 on most inputs makes the block nearly<br>free on average.</p>
+<p><strong>The hard-won constraint:</strong> replay only works on <strong>recomputed, self-uncomputing scratch</strong> — a<br>comparator you build, read under the condition, and cleanly reverse (e.g. compute-condition →<br>phase-conditioned recompute). It does <strong>not</strong> work on:</p>
+<ul>
+<li><strong>data-controlled ops</strong> (a <code>cadd</code>/fold-sub whose control is live data, not a measurable<br>scratch bit) — the metric counts the push_condition mask, not the data controls, so wrapping<br>these changes nothing, and</li>
+<li><strong>live-qubit predicates</strong> that get reused downstream (you can&#39;t measure-and-discard them).<br>Mis-applying replay here is the classic over-optimistic estimate — verify the predicate is a<br>measurable, recomputed scratch bit before counting the savings.</li>
+</ul>
+<h3>Fused folds and fast-adds</h3>
+<p>Fusing adjacent stages removes redundant controls, duplicated cleanup, and repeated carry work.<br>Examples that paid off: fusing <code>mod_double + cmod_double</code> into a single shared carry chain<br>(value-identical); turning coherent small adders into measured-fast form. These are usually the<br>first thing to try when you have a little qubit slack — low risk, real count savings.</p>
+<h3>Cross-block algebraic fusion: collapse add/negate chains</h3>
+<p>Look for adjacent modular-arithmetic stages that are separated in the program because they<br>belong to different semantic phases, but algebraically telescope when composed. If the<br>intermediate value is not externally observed and the next phase immediately transforms it<br>again, replace the whole chain with one equivalent modular operation.</p>
+<p>ECDSA Fail example (<code>DIALOG_FUSE_C_FORM</code>, <code>DIALOG_FUSE_X_RESTORE</code>):</p>
+<ul>
+<li>Square tail + c-form originally does<br><code>tx += 2*Qx; tx = -tx; tx -= Qx; tx = -tx</code>.<br>The two negations cancel and the constants combine, so this is exactly <code>tx += 3*Qx</code>.</li>
+<li>x-restore originally does <code>tx = -tx; tx += Qx</code>.<br>This is exactly <code>tx = Qx - tx</code>.</li>
+</ul>
+<p>This reduces Toffoli because each removed modular negate/add/subtract avoids a carry chain,<br>reduction fold, and cleanup. It is not a truncation or approximation; it is an exact identity<br>over the modulus.</p>
+<p>Checklist before trusting a fusion:</p>
+<ol>
+<li>Prove the algebra in modular form, including underflow/overflow reduction behavior.</li>
+<li>Confirm the intermediate value is not used as a control, measured, or needed by a later<br>uncompute before the fused replacement.</li>
+<li>Implement the fused primitive behind a default-off knob and verify knob-off is byte-identical.</li>
+<li>Add or run component selftests for value, phase, and ancilla cleanliness.</li>
+<li>Re-measure both q and average-executed Toffoli. A fusion should usually be peak-neutral,<br>but the new primitive can briefly allocate different scratch.</li>
+<li>If the op stream changes, assume the old Fiat-Shamir nonce is stale. Re-hunt or revalidate<br>clean islands; algebraic exactness does not preserve the old transcript seed.</li>
+</ol>
+<p>Treat fusion as a high-quality first move on the Toffoli axis: depth-neutral, peak-neutral<br>when scratch fits, and stackable with width/slope/truncation routes. Do not combine it with<br>risky truncation and then blame Fusion for density collapse; isolate Fusion-only density first.</p>
+<h3>Witness-first / deferred-output dataflow</h3>
+<p>Read <code>references/Q980_TOFFOLI_CUT_4352CFB_HANDOFF.md</code> when the task mentions Shrunken-PZ,<br>TrailMix q980, <code>zero-dy/newdx</code>, deferred <code>y</code> materialization, elliptic-curve slope cancellation, or<br>a large Toffoli cut that preserves the same qubit count.</p>
+<p>Reusable lesson: if a later uncompute/cancellation only needs a witness relation, build that witness<br>directly instead of materializing the final coordinate early and then cleaning it. The q980<br><code>zero-dy/newdx</code> route zeroes the old <code>dy</code>, reuses it as scratch, constructs <code>new_dy = lambda * new_dx</code>, cancels <code>lambda</code> via the ratio <code>new_dy/new_dx</code>, and only materializes the final <code>new_y</code><br>after cancellation. This pattern is math-exact when the ratio identity and passenger restoration are<br>proved, but still needs full <code>cls/pha/anc</code> validation because changed dataflow can expose phase or<br>support assumptions.</p>
+<h3>Ancilla-free majority</h3>
+<p>Replace a 3-CCX majority with a 2-CCX ancilla-free majority (and its per-position variants).<br>Peak-neutral, value-identical, pure count reduction wherever majorities appear in carry logic.</p>
+<h3>Skip provably-redundant cleanup</h3>
+<p>A folded structure sometimes makes a final top-clean pass unnecessary. Dropping it removes its<br>Toffoli — but <strong>only if it is genuinely redundant.</strong> If it isn&#39;t, you get silent phase/classical<br>dirt. Pair this with strong correctness validation; it&#39;s the highest-risk move here.</p>
+<h3>Avoid full materialization</h3>
+<p>Don&#39;t build a full-width intermediate when a window, the top bits, or a streamed/folded<br>contribution suffices. Short product paths, segmented rows, and truncated/streamed forms emit<br>fewer gates <em>and</em> fewer cleanup gates — a shared win with <code>peak-qubit-reduction</code>.</p>
+<h3>Off-peak loosening (the dual move)</h3>
+<p>Once a phase falls off the qubit peak, you can <em>loosen</em> its width to buy Toffoli back for free<br>(a real SOTA did exactly this: it widened a segment knob once that phase was no longer the<br>binder, recovering gates at zero qubit cost). The general rule: <strong>shrinking an off-peak phase<br>is a pure-Toffoli play</strong>, and <strong>widening an off-peak phase is a free Toffoli refund</strong> — judge<br>both on gates alone.</p>
+<h3>Per-step scheduling</h3>
+<p>When a block runs in a loop, a single constant width/precision must be set for the worst<br>iteration, emitting cleanup/carry gates the easy iterations don&#39;t need. A per-step schedule<br><code>width(step)</code> trims the gate work to each step&#39;s tolerance. (Same lever as in<br><code>peak-qubit-reduction</code>, here aimed at gates.)</p>
+<h3>Local peak-window trims beat global Toffoli taxes</h3>
+<p>For a one-qubit frontier drop, measure whether the peak is owned by a narrow loop window before<br>introducing a global structure. A global codec or branch-layout rewrite can lower width but add<br>non-Clifford work on every iteration; a local <code>width(step)</code> or carry-layout trim can lower the same<br>peak with only a tiny executed-Toffoli change.</p>
+<p>ECDSA Fail TrailMix case study (<code>b310de9</code>, submission <code>175749f</code>): the 1164q-&gt;1163q score win used<br><code>TLM_GCD_K_ADJUST=-1</code> only for GCD steps <code>172..196</code>, plus small <code>HYB_V/COUT/FOLD/FFG</code> schedule<br>deltas and padding shrink. It landed at 1163q with avg Toffoli about 1,412,401.873. A broader<br>streamed-triple / dirty-suffix approach also reached 1163q locally, but measured around<br>1,449,707 avg Toffoli and was dirty. The lesson is a Toffoli rule as much as a qubit rule: do not<br>pay a circuit-wide tax when the live-qubit surplus is localized to one peak window.</p>
+</div>
+<div class="md"><h2>Step 4 — Cost the move</h2>
+<ul>
+<li><strong>Depth first.</strong> Is the rewrite non-Clifford-depth-neutral? Vents and fusion roughly are;<br>recompute-heavy replay and aggressive uncompute may not be. A count win that inflates the<br>reaction-floor depth can lose on real hardware even though the score improves — call that out.</li>
+<li><strong>Exchange rate.</strong> Vents and some replays spend qubits to save gates. Compute break-even =<br>(qubits added) ÷ (gates saved) against your qubit budget; off-peak the qubit is free, on-peak<br>it isn&#39;t. If your score is <code>qubits × Toffoli</code>, a rough break-even is <code>qubits_total / Toffoli_total</code> gates-per-qubit.</li>
+<li><strong>Correctness.</strong> Every move must be value-identical and phase-clean. The dangerous ones are<br>measured uncompute / vents (phase fixup must be exact), skipped cleanup (must be truly<br>redundant), and mis-scoped conditional replay. Validate with a <code>cls / pha / anc</code><br>(classical / phase / ancilla) error decomposition, not just an output-value check —<br>measurement-based moves fail in <em>phase</em>, which value checks miss.</li>
+</ul>
+</div>
+<div class="md"><h2>Step 5 — Re-measure and repeat</h2>
+<p>Re-count after each change; the Toffoli hot-spot migrates just like the qubit binder does.<br>Stop when the hot-spot is irreducible (the genuine arithmetic the result depends on) or the<br>next move costs more qubits/depth than the exchange rate allows. <strong>Re-measure BOTH factors</strong> —<br>a gate win that quietly raised the peak (a vent on the wrong phase) may be a net score loss.</p>
+</div>
+<div class="md"><h2>Relationship to peak-qubit-reduction</h2>
+<p>These two skills are duals over the same <code>qubits × Toffoli</code> objective and constantly trade:<br>venting and conditional replay spend qubits to save gates; the width skill&#39;s uncompute holes<br>spend gates to save qubits. Use the exchange rate to decide direction, and after <em>any</em> change<br>re-measure <strong>both</strong> the peak qubits and the Toffoli count — the score is the product, and it&#39;s<br>easy to win one factor while quietly losing more on the other.</p>
+</div>
+<div class="md"><h2>Worked example (this lineage, for grounding)</h2>
+<p>A reversible point-add scored <code>peak_qubits × avg_executed_Toffoli</code>:</p>
+<ul>
+<li><code>DIALOG_GCD_FOLD_MAJ1/MAJ2</code> (ancilla-free majority) and a fused double-y shared carry chain —<br>structural count cuts, peak-neutral.</li>
+<li><code>ROUND84_FOLD_FAST_ADD=0</code> flipped small Solinas-fold adders from coherent to measured-fast:<br><strong>−1,434 executed Toffoli, peak-neutral</strong> (a textbook measured-uncompute win).</li>
+<li><code>SQUARE_ROW_WINDOW_CLEAN_COMPARE_BITS</code> 21→19 once the square was off the qubit peak: <strong>−442<br>avg-Toffoli at 0 qubits</strong> — a pure-Toffoli play on a now-off-peak phase.</li>
+<li>Conversely the 1192→1185 step <em>spent</em> +6,604 avg-Toffoli to buy −7 qubits — the dual<br>direction, justified only because it cleared the exchange rate.</li>
+</ul>
+<p>Note how each move is matched to the <em>kind</em> of gate at the hot-spot, and how the off-peak/<br>on-peak status of a phase decides whether a gate cut is free or costs width.</p>
+</div>
+<div class="md"><h2>Domain specifics</h2>
+<p>This is the domain-agnostic method. For the concrete knob names, the executed-Toffoli metric<br>mechanics, and the validated exchange-rate numbers of the ECDSA-fail / quantum-ECC<br>point-addition circuit, use the companion <strong>ecdsafail-circuit-optimization</strong> skill.</p>
+<hr>
+</div>
+<div class="md"><h2>Live-frontier Toffoli levers (trailmix_ludicrous family, 2026-06)</h2>
+<p>These are the Toffoli levers that drove the current <code>trailmix_ludicrous</code> SOTA (1159q × 1,378,242).<br>They are instances of the moves above, but the <em>named knobs</em> and <em>leverage points</em> are worth knowing<br>verbatim. Source: per-commit analysis in <code>ecdsafail-circuit-optimization/references/REPORT_1168_wall_revamp.md</code><br>§2.6–§2.7. Every change re-rolls the FS island → re-hunt <code>DIALOG_TAIL_NONCE</code> and re-validate 0/0/0.</p>
+<ul>
+<li><p><strong>⭐ Better arithmetic at the dominant cost-center (the biggest wins by far).</strong> The modular <em>square</em><br>runs every GCD divstep round, so an O(n²) improvement there has enormous leverage. <strong>Karatsuba</strong><br>the square (<code>λ = hi·2¹²⁸ + lo</code> → <code>lo²</code>, <code>hi²</code>, <code>(lo+hi)²</code>) cut <strong>−22.4M Toffoli</strong> from a +175/−47<br>diff (~25% off the schoolbook cross-products). <strong>NAF-recode</strong> the modulus constant (<code>f = 2³²+977</code> →<br>5 signed terms <code>2³²+2¹⁰−2⁶+2⁴+1</code>) to cut reduction terms. <strong>Remove the <code>mod_double</code> ramp</strong> in the<br>reduction: apply each NAF term <code>±(value≪shift) mod q</code> <em>directly</em> (<code>mod_add_shifted_low</code> +<br><code>add_f_window_shifted</code> pseudo-Mersenne overflow folds) instead of building a 257-bit register and<br>doubling up to each offset — value-exact, the SOTA lever. <strong>Rule: before touching schedule knobs,<br>audit any O(n²) or ×(iterations) primitive (the square, the reduction) for a structural rewrite;<br>open follow-up — recurse Karatsuba on the n=128 halves.</strong></p>
+</li>
+<li><p><strong>⭐ Comparator-window narrowing (<code>GAP_J2</code>) — highest leverage per line of diff.</strong> In the jump-GCD,<br><code>GAP_J2[i]</code> (a 258-long <code>schedule.rs</code> table) is the per-step swap-decision comparator <strong>window<br>width</strong>; the held Gidney carries / compared MSBs scale with it. Shaving ~1 bit/step across <strong>258<br>steps × 2 GCD passes</strong> cut <strong>−1.33M Toffoli from a 22-line table edit</strong> (<code>f0c1c42</code>). Island-exact:<br>mis-decides the swap with prob ~`2^-k<code>when the top differing bit falls below the window (recovered by the nonce hunt). This is the swap-comparator analogue of</code>PAD` truncation — sweep one notch at a<br>time. <em>(Generic lesson: a per-iteration width that multiplies across a long loop is the fattest<br>truncation target.)</em></p>
+</li>
+<li><p><strong>⭐ Converged-tail gate elision (<code>TLM_APPLY_CSWAP_SKIP_LASTK</code>).</strong> On the last K GCD iterations the<br>apply-phase <code>cswap</code>&#39;s control is deterministically 0 for all-but-rare inputs (the GCD has<br>converged), so the swap is a no-op — skip it. Island-exact, huntable; a structural instance of<br>&quot;elide a data-dependent gate that is provably 0 on the island&quot; (the average-executed metric makes<br>this free on the common shots).</p>
+</li>
+<li><p><strong>Classical-constant folding (when an operand is classical, do constant arithmetic for free).</strong> In<br>this circuit <code>Q</code> is classical, so <code>coord_add3x</code> (<code>dst += 3·ox mod q</code>) folds <code>3·ox mod q</code> entirely<br>into the classical <code>BitId</code> domain (<code>BitStore/BitInvert</code>, <strong>0 Toffoli</strong>) and emits one exact<br>mod-add — removing the doubling + second mod-add + temp register (<code>662e267</code>). Audit every step that<br>combines a quantum register with a classical operand by a constant. <em>(Caveat: trades Toffoli for a<br>transient register — check it doesn&#39;t raise peak before keeping; this one oscillated in/out.)</em></p>
+</li>
+<li><p><strong>Carry-drop + MBU vent on the final chunk (<code>TLM_GRAD_FINAL_NO_COUT</code>).</strong> Drop the unneeded final<br>carry-out of the top constant-add chunk and uncompute the chunk&#39;s carries with <code>hmr</code>+<code>cz_if_bit</code><br>(Gidney measurement-based uncompute, <strong>0 Toffoli</strong>) instead of a CCX.</p>
+</li>
+<li><p><strong>Deeper post-pass + schedule-value narrowing.</strong> <code>CONSTPROP_MAX_ITERS</code> (16→256) runs the sound<br>constprop/affine post-pass to a deeper fixpoint (drops/folds more provably-constant CCX, −377k); the<br><code>TLM_HYB_V_DELTA</code>/<code>TLM_COUT_K_DELTA</code>/<code>TLM_FOLD_DELTA</code>/<code>LUD_EXTRA_FOLD_VENTS</code> knobs narrow scheduled<br>vent/carry-cap values or add fold-round measurement vents. These are peak-coupled — see the<br>break-even rule in the peak-qubit-reduction skill before trading either way.</p>
+</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Appendix — Concrete lever catalog (credit: benhuang2025)</h2>
+<blockquote>
+<p><strong>Source / credit.</strong> The lever catalog below is adapted from<br><a href="https://github.com/benhuang2025/ecdsafail-challenge/blob/main/ecdsafail-agent/toffoli_reduction_skill.md"><code>benhuang2025/ecdsafail-challenge</code> → <code>ecdsafail-agent/toffoli_reduction_skill.md</code></a>,<br>by <strong>benhuang2025</strong>. It is a frontier-tested set of named levers, each with the exact<br><code>src/point_add/mod.rs</code> env knob and the commit that introduced it. The commit hashes,<br>tuned values, and <code>461a4a3</code> &quot;current frontier&quot; numbers are from <em>their</em> fork&#39;s lineage —<br>treat them as worked examples of the method, not as our live frontier. Re-screen every value<br>against whatever base you are on. (Their operational notes — host <code>zan3</code>, &quot;never <code>git push</code>&quot;,<br><code>ecdsafail sync</code> — are their environment; ignore for ours.)</p>
+</blockquote>
+<p><strong>Two correctness regimes — tag every lever before applying:</strong></p>
+<ul>
+<li><strong>Value-exact</strong> (preferred): computes the SAME function on ALL inputs; only gate<br>scheduling / ancilla handling differs. Adds ZERO new hard inputs. → Levers B, C, E, F, G, H.</li>
+<li><strong>Island-exact</strong> (truncation): drops bits provably zero <em>on the hunted Fiat–Shamir island</em><br>but not on all inputs. SAVES Toffoli but ADDS hard inputs → raises λ → needs a fresh<br>clean-nonce hunt. → Levers A, D.</li>
+</ul>
+<p>Either way, <strong>any op-stream change re-rolls the FS island</strong> ⇒ the baked <code>DIALOG_TAIL_NONCE</code> goes<br>stale ⇒ re-hunt + re-validate <code>0/0/0</code>. Read the <code>avg executed Toffoli</code> line (a FAIL row still<br>prints it) BEFORE hunting a nonce.</p>
+<p><strong>Lever A — truncated-suffix cleanup comparator (island-exact).</strong> Recompute an inter-window<br>boundary carry from a <em>high suffix</em> of the segment, not a full-width (~2n CCX) comparator; the<br>dropped low bits don&#39;t affect the boundary carry on the island.</p>
+<ul>
+<li><code>SQUARE_ROW_WINDOW_CLEAN_COMPARE_BITS=&lt;k&gt;</code> (round84 square boundary cleanup; <code>1a5e620</code><br>introduced, <code>5a783e4</code> cut 22→21).</li>
+<li><code>DIALOG_GCD_APPLY_CLEAN_COMPARE_BITS=&lt;k&gt;</code> (apply ripple cleanup).</li>
+<li><code>DIALOG_GCD_COMPARE_BITS=&lt;k&gt;</code> (GCD compare width).<br>Their frontier <code>461a4a3</code>: <code>21 / 19 / 46</code>. Lower k = fewer Toffoli but more carry-escape hard<br>inputs. Find the smallest k whose first GCD-clean candidate still hits a fully clean island.</li>
+</ul>
+<p><strong>Lever B — measurement-based uncompute instead of coherent recompute (value-exact).</strong> A cleanup<br>bit coherently <em>recomputed</em> to return it to |0⟩ costs CCX. Instead <code>Hmr(cout)</code> (measure-and-reset<br>in the Hadamard basis), then replay the predicate <strong>classically-conditioned on the measurement</strong><br>to cancel the phase → 0 Toffoli, phase-exact, peak-flat (if it borrows an already-clean high tail).</p>
+<ul>
+<li><code>SQUARE_ROW_WINDOW_MEASURED_CARRY_CLEAR=1</code> (<code>d636d62</code>, ~−387 avg-Toffoli at 1218q).</li>
+<li><code>DIALOG_GCD_FUSED_OVFCLEAR_MEASURED=1</code> (<code>bde4caa</code>, GCD overflow-clear → 0 Toffoli).<br>The cleanest class: value-exact AND Toffoli-negative. Hunt every place a scratch bit is coherently<br>recomputed purely to clear it.</li>
+</ul>
+<p><strong>Lever C — exact-adder swap (removing a truncation can REDUCE Toffoli) (value-exact).</strong> A<br><em>top-clean&#39;d</em> adder can cost MORE Toffoli than an EXACT full-carry adder, because the truncation<br>needs carry-escape correction. Swapping back is value-exact AND recovers Toffoli AND drops hard<br>inputs (easier hunt).</p>
+<ul>
+<li><code>DIALOG_GCD_APPLY_FINAL_TOPCLEAN=0</code> (<code>98e1322</code>, ~−2,597 avg-Toffoli, value-exact).<br>Audit every truncated adder/comparator: if its correction overhead exceeds the bits it saves, the<br>exact variant is a free Toffoli win + a λ reduction.</li>
+</ul>
+<p><strong>Lever D — carry-truncation notches (island-exact).</strong> Drop one more high carry bit from a modular<br>fold/reduction ripple. Saves Toffoli, peak-flat, adds carry-escape hard inputs → re-hunt.</p>
+<ul>
+<li><code>KAL_FOLD_CARRY_TRUNC_W</code> (in-place fold; trajectory 21→20→19→18→17, <code>00fb66d</code>).</li>
+<li><code>KAL_DOUBLE_CARRY_TRUNC_W</code> (double_y fold).</li>
+<li><code>ROUND84_INPLACE_QUOTIENT_CARRY_TRUNC_W</code> (<code>f4404de</code>=20).</li>
+<li><code>DIALOG_GCD_FOLD_CARRY_TRUNC_W</code> (fused fold; <code>461a4a3</code> cut 19→18).<br>At/near the <strong>cliff</strong> on a mature base — each dropped bit raises λ steeply. Cheap to <em>try</em> (flip<br>env, read avg-Toffoli on a FAIL row), low-odds for a net win once the base is tuned. Don&#39;t grind<br>here if λ is already high.</li>
+</ul>
+<p><strong>Lever E — data-dependent gate eliding (value-exact, executed-Toffoli only).</strong> Skip gates whose<br>control is <em>known zero on this shot</em>. The binary-GCD / Kaliski path has conditional double/halve<br>shifts gated by an edge bit; on shots where that bit is 0 the shift is a no-op, so eliding it<br>removes its EXECUTED Toffoli while staying exact on every shot (emitted count unchanged, average<br>drops by the fire fraction). <code>zero-edge conditional-shift skip</code> (<code>7822c37</code>/<code>b8ce940</code>). Hunt any<br>conditional sub-circuit whose control is frequently 0 across the island.</p>
+<p><strong>Lever F — measured-fast adders on NON-peak-setting adders (value-exact).</strong> A coherent ripple<br>adder costs ~2 CCX/bit; a <strong>measured-fast</strong> adder (measurement-based carry, Hadamard+CZ) costs ~1<br>Toffoli/bit. Converting is value-exact and peak-flat ONLY if that adder isn&#39;t the one setting the<br>peak — convert the <em>small / non-binding</em> adders, LEAVE the wide peak-setting adder coherent.</p>
+<ul>
+<li><code>c27e8a5</code>: round84 fold&#39;s three small adders → measured-fast, −1,434 exec-T, peak flat.</li>
+<li><code>b7515d5</code>: big-fold split adder → asymmetric 2-block windowed measured-fast (small low block +<br>wide fast high block), −2,124 exec-T; plus measured control-ride uncompute, −528 exec-T.<br>General rule: every coherent adder/uncompute that is NOT peak-binding is a measured-fast candidate<br>(Lever B is the cleanup-bit special case).</li>
+</ul>
+<p><strong>Lever G — cheaper exact primitives &amp; constant recoding (value-exact).</strong></p>
+<ul>
+<li><strong>Majority folding identity</strong>: <code>maj(a,k,c) = c ⊕ ((a⊕c) &amp; (k⊕c))</code> — controlled-const add/sub<br>carry with fewer Toffoli than a literal 3-input majority, same carry (<code>2a87f33</code>).</li>
+<li><strong>NAF / signed-digit recoding</strong> of a constant: <code>977 = 2^10 − 2^5 − 2^4 + 1</code> (4 signed terms) vs<br><code>1 + 2^4 + 2^6 + 2^7 + 2^8 + 2^9</code> (6 unsigned) → fewer add/sub passes in the reversible<br>product/unproduct (<code>ed94ad2</code>, <code>R84_QPROD_NAF=1</code>). Audit every constant multiply (secp256k1&#39;s<br><code>c = 2^32 + 977</code>, the Solinas folds) for a shorter signed-digit expansion.</li>
+</ul>
+<p><strong>Lever H — phase-conditioned comparator replay (value-exact, executed-Toffoli only).</strong> Lever B<br>extended to whole <strong>comparator paths</strong>: (1) HMR the comparison flag, (2) replay the predicate<br>classically (CZ/CX tree conditioned on the measurement), (3) the comparison&#39;s Toffoli collapses to<br>near 0 on most shots, peak flat. Committed in <code>98dd2ad</code>/<code>bfd3fa6</code>; ON in their baseline:<br><code>MOD_FAST_FLAG_CONDITIONAL_REPLAY</code>, <code>DIALOG_GCD_REVERSE_BRANCH_CONDITIONAL_REPLAY</code>,<br><code>DIALOG_GCD_SPECIAL_CLEAN_CONDITIONAL_REPLAY</code>, <code>DIALOG_GCD_APPLY_BOUNDARY_CONDITIONAL_REPLAY</code>. The<br>key primitive to study before writing a new variant is <code>cmp_lt_phase_conditioned()</code> /<br><code>cmp_lt_phase_conditioned_borrowed_carries()</code> in <code>compare.rs</code>. Apply to any comparator (or<br><code>cmod_add</code>/<code>cmod_sub</code>) still coherent: find it with <code>TRACE_PEAK</code>, write a <code>_phase_conditioned</code><br>variant behind an env flag.</p>
+<p><strong>GCD iteration / body tuning knobs (mixed peak/Toffoli).</strong> Tune together with <code>TRACE_PEAK</code>; each<br>raises λ independently — screen with a FAIL row and check hard-input count before a re-hunt.</p>
+<ul>
+<li><code>DIALOG_GCD_ACTIVE_ITERATIONS=&lt;n&gt;</code> — fewer reduction iterations, exact if the dropped ones are<br>provably redundant on the support (<code>f6f9536</code>=258, <code>2a87f33</code>=260).</li>
+<li><code>DIALOG_GCD_BINDER_NOTCH_MAP=11:1,12:1,...</code> — per-binder-iteration notch map; extend one step at<br>a time (<code>ab5469b</code>, <code>2dcf00d</code>).</li>
+<li><code>DIALOG_GCD_BINDER_NOTCH_EXTRA=&lt;n&gt;</code> — global extra-notch count (<code>a4db9a5</code>: 2→3).</li>
+<li><code>DIALOG_GCD_BINDER_NOTCH_STEPS=&quot;8,9,10,11&quot;</code> — which GCD steps get fallback notches (<code>73f4f48</code>,<br><code>f3820d0</code>).</li>
+<li><code>DIALOG_GCD_BODY_CARRY_BAND_TRIMS=&quot;0,2,2,2,...&quot;</code> — per-step carry-band trim vector (<code>bde4caa</code>,<br><code>8983da8</code>); <code>&quot;0,3,3,...&quot;</code> = step 0 untrimmed, steps 1+ trimmed by 3 bits.</li>
+<li><code>DIALOG_GCD_BODY_STEP_GIVEBACKS=10:6</code> + step-stream top-clean — the <strong>carry-relief exchange</strong>:<br>spend top-clean coherent uncompute to avoid extra live carry lanes (peak-neutral), then spend the<br>recovered Toffoli on one more GCD iteration / a fuller body (<code>2a87f33</code>). A peak↔Toffoli rebalance.</li>
+</ul>
+<p>Tuning order: <code>ACTIVE_ITERATIONS</code> (global budget) → <code>BINDER_NOTCH_MAP</code> (per-step fallback) →<br><code>BODY_CARRY_BAND_TRIMS</code> (per-step fine-grain).</p>
+<blockquote>
+<p>Note: several of these knobs (<code>SQUARE_ROW_WINDOW_MEASURED_CARRY_CLEAR</code>,<br><code>DIALOG_GCD_APPLY_FINAL_TOPCLEAN</code>, <code>KAL_FOLD_CARRY_TRUNC_W</code>, <code>DIALOG_GCD_FOLD_CARRY_TRUNC_W</code>, the<br>majority-fold identity, <code>ROUND84_FOLD_FAST_ADD</code>) also appear in our own<br><strong>ecdsafail-circuit-optimization</strong> notes — the benhuang catalog is an independent,<br>commit-attributed cross-check of the same lever families. Where a knob name differs, both forks<br>are exploring the same underlying mechanism.</p>
+</blockquote>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="toffoli-reduction.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

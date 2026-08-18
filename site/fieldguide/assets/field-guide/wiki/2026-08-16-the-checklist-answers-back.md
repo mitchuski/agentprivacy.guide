@@ -1,0 +1,75 @@
+# 2026-08-16 · The Checklist Answers Back
+
+> **Provenance.** A chronicle — the second of this arc, covering the window in which the work stopped being a reply on a laptop and became something a collaborator could open, download, run, and argue with. Voice: framework. Signed by the First Person: not yet.
+>
+> **Runtime traces:** eight suites, 124 properties, `cd runtimes && node verify.mjs` → ALL GREEN. Everything downloadable from [[The Working Files]].
+
+*I spent a day answering our own open questions from the other side of the team. Then I made the map side's acceptance criteria executable, and the second one I ran found a leak in my answer.*
+
+**Scope:** the counter-spec wired to the task force lab as a dependency rather than a resemblance; the credentials specification read properly and a framing of mine corrected; every question in the ARWorld pack mapped to a property that runs; and both strands of our own work put on the tailnet where the rest of the team can see them.
+
+## 1. From describing to carrying
+
+The pages in this space described the work. That is a weaker thing than it sounds — a reader who wants to disagree needs the work itself, and pointing at a path on my laptop is not an invitation.
+
+So the wiki learned to carry its own evidence. Thirty-seven files under an assets lane it serves itself, each with a digest, a captured run report, and a bundle that untars and runs with nothing installed. The front page lists them. A stranger on the tailnet can now get from *there is a claim here* to *the claim failed on my machine* without asking me for anything.
+
+## 2. The table became a dependency
+
+Until this window, the relationship between this workbench and the ToIP lab was a correspondence table in a notes file. A table is prose. It cannot go stale loudly.
+
+So it became a suite that imports the lab and runs the same scenarios through both models. Six gates behave identically, including the one that matters — the proposer proposes, the prover recomputes rather than trusts, and here that is one phone refusing to take another phone's word for a value it can derive itself. Same structure, different substrate, no adjustment.
+
+One gate could not follow: the lab requires both ends to be personhood-anchored and a game avatar is not. I wrote that up as the game falling short.
+
+## 3. Then I read the specification
+
+Properly, the vendored copy, rather than my own map of it. And it does not say what I had been saying.
+
+The credentials spec defines two constructions, and the first needs no community at all: two entities who share no membership can still exchange relationship credentials, and the resulting edges are valid trust attestations. Of that construction it says plainly that it confers no community-level assurance.
+
+So the game is not a deficient community-anchored deployment. It is a conformant pairwise one. The error was mine, and the sharper finding runs the other way: **the lab gates every edge on personhood, which models only the second construction and does not cover the first at all.** The lab had no consumer standing outside a community, so nothing had ever exercised the case.
+
+The deployment found the hole. That is what deployments are for, and it is the second time in two days that building the thing corrected the person describing it.
+
+## 4. Twenty questions, and a rule against answering in prose
+
+Their three documents carry twenty questions between them. It is easy to answer a question in prose and believe it handled; it is harder to keep believing that when a suite tells you the row is empty.
+
+So every question is anchored to the properties that answer it, and the map is checked: a question with no property fails, an anchor pointing at something deleted fails, and the inventory drifting from twenty fails. A new question in their documents has to be added deliberately. It cannot be quietly not-answered.
+
+Three of the twenty are answered *no*, and those are the ones worth arguing with — a shared quest is not consent, a till redeem is not a friendship, and equity must not ride on the social edge.
+
+## 5. The checklist answers back
+
+Their trust-weighted spec ends with five acceptance criteria for Phase 0. Five unticked boxes in a markdown file, and the most obviously runnable thing in the entire pack.
+
+The third one says the peek shows the peer name **when the audience is link** — which means at public it must not, and their own spec spells public out as title, kind and position only.
+
+My disclosure layer was attaching peer attribution at every tier. The rung meant to say least was quietly publishing *who* alongside *where*, in the one place a cautious player would have chosen precisely to avoid that.
+
+The checklist caught it. Not my review, not my leak test, not the closed allow-list I had been rather pleased with — a box a colleague wrote into a document four days earlier and never ran. A public pin is anonymous now: something was witnessed here, by nobody you are told about.
+
+The fourth criterion earned its keep differently. With the fixture off, the map is byte-identical to a floor-only map — which settles what the fixture *is*. Seeding two consented edges produces exactly what two real meets would leave behind. It is not a special path awaiting removal; it is ordinary state that arrived by an unusual door, and it retires by simply not being seeded.
+
+## 6. Both strands on the tailnet
+
+I had held the map side's documents back, reasoning that another person's papers are theirs to circulate.
+
+Sound instinct, wrong room. These are our own working papers and the audience is the team, on a tailnet we run ourselves — and a reply without the thing it replies to is half a conversation. So the pack is served here now, unaltered and digest-checked, in its own directory so it stays obvious which strand each thing came down. See [[The ARWorld Pack]].
+
+The caution belongs to anything public-facing. It does not belong to the room the work is happening in.
+
+## 7. What this window taught, in one line
+
+Twice in two days, the thing that corrected me was not review. It was a document from the other end of the work, made executable.
+
+First the specification, which said the deployment was conformant where I had called it deficient. Then the acceptance checklist, which found a leak the leak test missed. Neither was written to catch me. Both did, because they were written down precisely and then actually run.
+
+Compressed further: [[Proverbs Of The Trust Overlay]].
+
+## 8. Not done
+
+The edge still does not erode and there is no way to unmake one. Nothing has been sent to Max. Nothing has been committed or pushed anywhere.
+
+And the standing limit: one deployment, one author, and that author wrote both sides. An independent consumer of the lab's formation runtime would still be worth more than either day.

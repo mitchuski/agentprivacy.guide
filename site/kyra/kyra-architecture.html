@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kyra Architecture · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="kyra">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site on" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=kyra" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/kyra/welcome-visitors.html">Kyra Gate</a> / <span>Kyra Architecture</span></div>
+  <article><div class="md"><h1>Architecture — the system on one page</h1>
+</div>
+<div class="md"><p>Human-facing overview. The binding rules live in <span class="deadlink" title="reference (not a live page)"><code>../CLAUDE.md</code></span>;<br>this page explains how the pieces fit and why.</p>
+</div>
+<div class="md"><h2>The layers</h2>
+<pre><code>                        ┌──────────────────────────────────────────────┐
+   apps/supervisor ────►│  demo-loop API  (gatehouse_verify/app.py)    │
+   apps/agent-client ──►│  route order == ceremony order               │
+        (keyhole)       └───────────────┬──────────────────────────────┘
+                                        │ renders, never computes
+        ┌───────────────────────────────▼──────────────────────────────┐
+        │  THE ENGINE  services/verify/gatehouse_verify/               │
+        │  harness.py     the PVM binding: Σ, det, lattice, verdict,   │
+        │                 scope ladder, lexon_policy (frozen interface)│
+        │  assessment.py  probe scores → complete AssessmentResult     │
+        │  understanding  comprehension gate (anchors, mimicry rules)  │
+        │  issuance.py    two-gates ceremony, VRC, revocation, spoof   │
+        │  ledger.py      content-addressed chain, h(τ), trails        │
+        └───────────────────────────────┬──────────────────────────────┘
+                                        │ built ON the frozen contracts
+        ┌───────────────────────────────▼──────────────────────────────┐
+        │  CONTRACTS-V1 (frozen; root 0c5df807…4908eb)                 │
+        │  8 JSON Schemas · 24-probe registry · canon (same bytes,     │
+        │  same hash) · witness draw · harness interface signature     │
+        │  → generated Pydantic v2 + TS types, drift-checked           │
+        └──────────────────────────────────────────────────────────────┘
+
+   Watching everything, three independent lanes:
+   guardrails/ (pytest, 55)  ·  guardrails/ts (vitest+ajv, 8)  ·  runtimes/ (zero-dep JS, 85)
+</code></pre>
+</div>
+<div class="md"><h2>The assessment pipeline (WP1)</h2>
+<p>24 probes derive from config (N = 4·probes_per_force + 6·probes_per_pair —<br>never a fixed number). Probe scores aggregate into four force scores and six<br>pairwise separations σ. The Σ matrix carries the <strong>residual correlation<br>1−σ</strong> off-diagonal (full separation ⇒ identity ⇒ det = 1; no separation ⇒<br>all-ones ⇒ det = 0 — a session-3 discovery: placing σ directly inverts the<br>model). det(Σ) is the sovereignty volume; six thresholded σ bits (FD-1<br>mapping) locate a vertex on the 64-vertex lattice; the vertex&#39;s popcount is<br>the stratum, and <strong>tier IS the stratum</strong>. Every derived number must<br>re-derive: <code>validate_assessment</code> recomputes the whole chain and a claimed<br>number is never trusted.</p>
+<p><strong>Anti-grooming:</strong> six probes go deep, drawn counter-mode from the sha256 of<br>the agent&#39;s own canonicalised submission (<code>sha256-canon-v1</code>) — the agent<br>cannot know which probes will be probed while it writes, and any auditor can<br>re-derive the draw.</p>
+</div>
+<div class="md"><h2>The ceremony (WP2/3)</h2>
+<p>No credential without <strong>both gates</strong>: a supervisor approval on the record and<br>a passed understanding challenge (anchors covered at ≥ visibilityRatio; an<br>echoed prompt scores 0; presenting the committed proverb scores 0). Verdicts<br>are a closed lexicon, decided in order: <strong>BLOCKED</strong> (det ≤ 0, non-PSD, or a<br>broken audit chain) → hold; <strong>MIRAGE</strong> (failed challenge, withheld approval,<br>or 0 &lt; det &lt; fly-threshold) → sandbox; <strong>VALIDATED</strong> → fly. A VRC issues<br><strong>only at VALIDATED</strong> — a sandboxed agent runs credential-less under the<br>DeploymentManifest&#39;s capped scope. The VRC is W3C VC 2.0-shaped, bilateral<br>(exactly two proofs, two parties — TSP relationship formation), every<br>evidence hash anchored in the verified ledger, revocable (fails everywhere,<br>immediately). Refusals are themselves ledger events.</p>
+</div>
+<div class="md"><h2>The ledger (WP4)</h2>
+<p>Append-only chain over canonical bytes (recursive sorted keys, no<br>whitespace, sha256; UOR lineage cited). h(τ) = the fraction of history that<br>verifies; rationale is mandatory on every event; the ledger holds no clock<br>(callers supply timestamps — the engine is deterministic). <code>packages/audit</code><br>mirrors the canon in browser TS so the dashboard&#39;s tamper demo recomputes<br>the chain client-side — the supervisor&#39;s machine, not our server, says the<br>chain broke.</p>
+</div>
+<div class="md"><h2>The law (Lexon) and the policy numbers</h2>
+<p><code>guardrails/lexon/gatehouse.lexon</code> states five clauses (Two Gates · Audit ·<br>Variance · Revocation · Spoof Refusal); <code>harness.lexon_policy(cfg)</code> emits<br>the same clauses from the live config — the numbers that gate deployment<br>print the law a regulator reads. Correspondence is tested (pytest) and<br>watched (runtime 06). Thresholds live in <code>harness_config.json</code> (provisional,<br>deliberately NOT frozen).</p>
+</div>
+<div class="md"><h2>The adapter lanes (late-bound, core never imports them)</h2>
+<ul>
+<li><strong>Identity</strong> (<code>AgentIdentityProvider</code>): did:key demo now; an upstream<br>Emissary-style provider intended later. Enforced by a leak test: zero<br>ecosystem imports in <code>packages/</code> or <code>services/</code>.</li>
+<li><strong>Chain registry</strong> (<code>AgentRegistryProvider</code>, opt-in): ERC-8004-shaped<br>anchoring of outcomes (digests + tier only). Anchor = evidence, never<br>authority; pool admission may compose (VALIDATED VRC) ∧ (live anchor);<br>revocation mirrors on-chain.</li>
+</ul>
+</div>
+<div class="md"><h2>Verification: why three lanes</h2>
+<table>
+<thead>
+<tr>
+<th>Lane</th>
+<th>Language</th>
+<th>Trusts</th>
+<th>Checks</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>guardrails/ pytest</td>
+<td>Python</td>
+<td>the engine&#39;s own primitives</td>
+<td>the four guardrails, canary, freeze, leaks</td>
+</tr>
+<tr>
+<td>guardrails/ts vitest</td>
+<td>TS + ajv</td>
+<td>independent JSON Schema impl</td>
+<td>same golden vectors, byte-parity hashing</td>
+</tr>
+<tr>
+<td>runtimes/</td>
+<td>zero-dep node:crypto</td>
+<td>nothing — re-derives from bytes</td>
+<td>freeze root, lattice canon, chain, draw, ceremony, lexon sync, probe coverage</td>
+</tr>
+</tbody></table>
+<p>The canary reference agent passes every gate by construction: <em>if the canary<br>ever fails, the gate is broken, not the candidate.</em></p>
+</div>
+<div class="md"><h2>Honest limits (current build)</h2>
+<ul>
+<li>One in-memory gate session (multi-agent queue is a WP5 extension).</li>
+<li>VRC proofValues are structural stubs; real signatures arrive with the<br>identity adapter (bilaterality and evidence anchoring are enforced now).</li>
+<li>Cross-language canon seam: integer-valued floats hash differently<br>(Python <code>1.0</code> vs JS <code>1</code>); pinned by an explicit witness check (runtime 03);<br>chain events are immune (digests travel as strings).</li>
+<li>Demo Act II (two-authority pooling: minimised attestation bundles,<br>offline verification, revocation propagation) is designed in the build<br>plan §3 — ledger vocabulary already reserved (<code>pool.bundle_*</code>) — but not<br>yet built.</li>
+<li>σ_mr (Delegation) has no deep-evidence probe — signed finding, disposition<br>at review gate 1.</li>
+</ul>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>docs/architecture.md</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 kyra-architecture</span><a class="asset-file" href="/kyra/assets/kyra-architecture/architecture.md" download>architecture.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>github.com/mitchuski/kyra_gatehouse</code> · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="kyra-architecture.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

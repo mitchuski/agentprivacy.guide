@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reversible Circuit Validation · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Reversible Circuit Validation</span></div>
+  <article><div class="md"><h1>Reversible Circuit Validation</h1>
+</div>
+<div class="md"><blockquote>
+<blockquote>
+<p>-.</p>
+</blockquote>
+</blockquote>
+</div>
+<div class="md"><h1>Reversible Circuit Validation</h1>
+<p>A reversible/quantum circuit is correct only if it is correct in <strong>three independent channels<br>at once</strong> — and the trap that bites everyone is that the easiest test (feed a basis state,<br>check the output bits) only exercises <em>one</em> of them. The other two fail silently in the<br>computational basis and only bite once the circuit runs in superposition, which is exactly<br>where you can no longer see them by inspection.</p>
+</div>
+<div class="md"><h2>The three channels: cls / pha / anc</h2>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>What&#39;s wrong</th>
+<th>How it hides</th>
+<th>Why it&#39;s fatal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>cls</strong> (classical)</td>
+<td>the output <em>value</em> is wrong on some inputs</td>
+<td>— (a basis-state test catches it)</td>
+<td>wrong answer</td>
+</tr>
+<tr>
+<td><strong>pha</strong> (phase)</td>
+<td>output value is right, but a spurious <strong>relative phase</strong> was stamped on the state</td>
+<td>invisible to any value/output check</td>
+<td>destroys the interference Shor/QPE depend on</td>
+</tr>
+<tr>
+<td><strong>anc</strong> (ancilla)</td>
+<td>scratch qubits don&#39;t return to <strong>|0⟩</strong> — they stay <strong>entangled</strong> with the data</td>
+<td>output register still reads correct</td>
+<td>the leftover entanglement decoheres the computation and breaks reversibility/uncompute</td>
+</tr>
+</tbody></table>
+<p>The headline rule: <strong>a value check is necessary but not sufficient.</strong> A circuit can pass<br>&quot;basis state in → correct bits out&quot; on every input you try and still be broken in <code>pha</code> or<br><code>anc</code>. Validation means checking all three — and tracking them <em>separately</em>, because they have<br>different causes and different fixes.</p>
+</div>
+<div class="md"><h2>The core loop</h2>
+<ol>
+<li><strong>Decide which channels you need.</strong> Standalone classical use → <code>cls</code> may be enough. Anything<br>run in superposition (Shor, QPE, amplitude estimation, or any circuit <em>composed</em> into a<br>larger one) → you need all three. State this first.</li>
+<li><strong>Differential-test</strong> the circuit against a trusted reference, on <strong>random</strong> inputs (not just<br>the structured/graded set).</li>
+<li><strong>Decompose</strong> every failure into <code>cls</code> / <code>pha</code> / <code>anc</code>.</li>
+<li><strong>Classify</strong> each failure: a <em>designed</em> approximation failure, or a real <em>bug</em>?</li>
+<li><strong>Localize</strong> real bugs to the first broken operation.</li>
+<li><strong>Fix the smallest responsible mechanism, re-validate</strong> — and re-check all three channels,<br>since a fix in one can disturb another.</li>
+</ol>
+</div>
+<div class="md"><h2>Step 2 — Differential testing, on random inputs</h2>
+<p>Run the circuit and compare its output to a <strong>trusted classical reference</strong> that computes the<br>same function (e.g. compute <code>P+Q</code> classically and check the circuit&#39;s output register equals<br>it). Two disciplines matter:</p>
+<ul>
+<li><strong>Use random inputs, seeded for reproducibility — not only the structured/graded set.</strong> A<br>fixed or Fiat-Shamir-derived test set can systematically <em>dodge</em> an input-dependent bug; a<br>bug that triggers on 0.2% of inputs may never appear in 24 hand-picked cases. Generate many<br>random inputs, batch them, and report per-channel counts. (In practice: a few hundred catches<br>gross bugs; ~10k surfaces rare input-dependent ones.)</li>
+<li><strong>Report <code>cls / pha / anc</code> per batch</strong>, not a single pass/fail. You want to see <em>which</em><br>channel is dirty and how often — that immediately narrows the cause.</li>
+</ul>
+</div>
+<div class="md"><h2>Step 3 — How to actually measure each channel</h2>
+<ul>
+<li><strong>anc</strong> — after the circuit runs, every ancilla must be provably back to <strong>|0⟩</strong>. Assert it<br>(measure them, or check the statevector). Non-zero, or <em>entangled-but-happens-to-read-zero</em>,<br>both count as dirty: cleanliness means <strong>disentangled and |0⟩</strong>, not &quot;value unused.&quot; The<br>sharpest single test: run the circuit <strong>forward then its exact inverse</strong> (<code>U† U</code>) and confirm<br>you recover the input state <em>exactly</em> — any ancilla left entangled makes <code>U†U ≠ I</code>.</li>
+<li><strong>pha</strong> — a value check can&#39;t see relative phase, so test it directly: (a) the same<br><strong>forward-inverse identity</strong> <code>U†U = I</code> catches a stray phase (you won&#39;t return to the exact<br>input state, including global/relative phase); or (b) run on a <strong>superposition</strong> input and<br>check the output interferes as the reference unitary predicts; or (c) compare against the<br>reference unitary on basis states <em>with phase tracked</em>, not just bit-values.</li>
+<li><strong>cls</strong> — compare the output register to the classical reference value on each input.</li>
+</ul>
+<p>The <strong>forward-inverse identity (<code>U†U = I</code>)</strong> is the highest-leverage single check: it exercises<br><code>pha</code> and <code>anc</code> together and needs no superposition machinery — if the composed circuit doesn&#39;t<br>return every input exactly to itself, something is dirty. Make it your first reflex.</p>
+</div>
+<div class="md"><h2>Step 4 — Designed approximation failure vs. real bug</h2>
+<p>Many space-optimized circuits <strong>deliberately</strong> truncate carries, narrow compare windows, or<br>approximate a reduction — so they are <em>supposed</em> to be wrong on a small fraction of inputs<br>(the inputs where the dropped information mattered). Before chasing a &quot;bug,&quot; decide whether a<br>failure is <strong>designed-hard</strong> or <strong>unexpected</strong>:</p>
+<ul>
+<li>Build (or reuse) a <strong>classical model of the approximation</strong> — e.g. a model of the GCD&#39;s<br>width/convergence envelope — and run each failing input through it. If the model predicts<br>failure (it overflowed the width, didn&#39;t converge in the budget, lost a needed body bit),<br>the input is <strong>designed-hard</strong>: expected, not a bug.</li>
+<li>If the model says the input <em>should</em> have been clean but the circuit failed → <strong>unexpected</strong>:<br>a real bug (or an approximation your model doesn&#39;t capture). Investigate.</li>
+<li><strong>Know your model&#39;s coverage.</strong> A classical filter usually models <em>some</em> of the<br>approximations, not all — e.g. it may capture GCD-width failures but not an apply-phase carry<br>truncation. So an &quot;unexpected-clean&quot; failure can still be a <em>designed</em> truncation your model<br>is blind to. Don&#39;t over-trust the filter; widen it, or localize (Step 5) to be sure.</li>
+</ul>
+<p>For a circuit graded on a <strong>fixed input set</strong>, the endgame of this is a <strong>clean island</strong>: since<br>the designed-hard inputs are a tiny fraction, you search for a seed/parameter under which the<br>graded inputs all dodge the hard set, giving <code>0/0/0</code> on exactly that set. Validation&#39;s job is to<br><em>confirm</em> <code>0/0/0</code> across all graded shots — and to keep the random-input failure rate at the<br>designed level, no higher.</p>
+<h3>Per-channel zero-reachability: a cheap go/no-go for that search</h3>
+<p>When you are <em>searching</em> a candidate set (seeds, nonces, parameters) for one instance clean in<br><strong>all</strong> channels at once, you can read the verdict off a modest sample before committing to a<br>long search:</p>
+<blockquote>
+<p>A jointly-clean candidate (<code>0/0/0</code>) needs every channel at 0 <strong>simultaneously</strong>. A <em>necessary</em><br>condition is that each channel reaches 0 <strong>independently</strong> somewhere in your sample. If a<br>channel is <strong>never</strong> 0 across many candidates, it has a <strong>per-channel floor</strong> — a defect no<br>choice of seed removes — and the joint-clean is <strong>unreachable</strong>, no matter how the other<br>channels behave.</p>
+</blockquote>
+<p>So rank candidate sets by whether <strong>{cls→0, pha→0, anc→0} each occur somewhere</strong>, even over a set<br>with lower <em>average</em> severity:</p>
+<ul>
+<li><code>A = {(2,0,0), (0,1,1), (0,2,0)}</code> — every channel hits 0 in some row → <code>0/0/0</code> is plausibly<br>reachable; keep searching.</li>
+<li><code>B = {(2,0,0), (1,2,0), (2,1,0)}</code> — <code>cls</code> is <em>never</em> 0 (a non-zero floor) → <code>0/0/0</code> is<br>unreachable; <strong>stop searching and fix the <code>cls</code> mechanism</strong> (a real bug or an over-aggressive<br>truncation), then resample.</li>
+</ul>
+<p>This is <em>necessary, not sufficient</em>: each channel reaching 0 separately doesn&#39;t prove they reach<br>0 <em>together</em> (the coverage caveats above still apply). But it is the cheapest screen there is — a<br>single floored channel kills the search outright, and it names <em>which</em> channel to repair (use the<br>Step 5 channel→cause map). The best outcome is the strongest version of this: near-misses<br>clustered close to <code>0/0/0</code> <strong>and</strong> each channel touching 0.</p>
+</div>
+<div class="md"><h2>Step 5 — Localize a real bug to the first broken op</h2>
+<p>When a failure is unexpected, treat the circuit as a program under debugging and find the<br><em>first</em> operation where an invariant breaks — don&#39;t eyeball the whole thing:</p>
+<ul>
+<li><strong>Bisect the op stream.</strong> Run to op <code>K</code>, check an invariant (an intermediate value, or<br>&quot;ancilla X should still be |0⟩ here&quot;), and binary-search the first <code>K</code> where it breaks.</li>
+<li><strong>Per-section invariants / counters.</strong> Carry/borrow width histograms, compare-decision<br>agreement counts, &quot;this scratch should be clean at this boundary&quot; receipts.</li>
+<li><strong>Channel tells you where to look:</strong> an <code>anc</code> failure points at a missing/incorrect<br><em>uncompute</em> (a compute with no matching reverse, or an aliased qubit reused before it was<br>cleaned); a <code>pha</code> failure points at a measurement/phase-fixup that&#39;s wrong or a<br>relative-phase gadget whose mirror didn&#39;t cancel; a <code>cls</code> failure points at the arithmetic<br>itself (a truncation that went too far, a wrong control).</li>
+</ul>
+</div>
+<div class="md"><h2>Step 6 — Fix the smallest mechanism, re-validate all three channels</h2>
+<p>Patch the one responsible op (restore the missing uncompute, fix the phase fixup, widen the one<br>truncation), then <strong>re-run the full cls/pha/anc validation</strong> — not just the channel you fixed.<br>Repairs interact: restoring an uncompute can change timing that exposes a phase bug; a phase fix<br>can leave an ancilla dirty. The circuit is correct only when all three channels are clean on<br>random inputs at the designed failure rate.</p>
+</div>
+<div class="md"><h2>Guardrails (the &quot;why&quot;)</h2>
+<ul>
+<li><strong>Never ship on a value check alone.</strong> <code>cls</code>-clean with dirty <code>pha</code>/<code>anc</code> is the most common<br>silent failure — it works in your basis-state test and corrupts the moment it&#39;s used coherently.</li>
+<li><strong>Random inputs expose what structured inputs hide.</strong> If you only ever test the graded/derived<br>set, a bug can hide in the gap; random differential testing is the cheapest way to find it.</li>
+<li><strong>Clean ≠ value-unused.</strong> An ancilla can hold the &quot;right&quot; value and still be entangled — that&#39;s<br>an <code>anc</code> failure. Demand provable |0⟩ and disentanglement (the <code>U†U=I</code> test proves it).</li>
+<li><strong>Don&#39;t over-trust your approximation model.</strong> &quot;Unexpected-clean&quot; failures may be designed<br>truncations the model doesn&#39;t cover; confirm by localizing rather than assuming a bug.</li>
+</ul>
+</div>
+<div class="md"><h2>Worked example (this lineage, for grounding)</h2>
+<p>Validating a space-optimized reversible point-add (output <code>P+Q</code>): generate 10,000 <strong>random,<br>non-graded</strong> inputs (seeded), run each through the circuit, compare to the classical <code>P+Q</code>, and<br>report <code>cls/pha/anc</code> per batch. Result pattern: <strong><code>anc</code> always 0</strong> (the circuit is structurally<br>clean — every scratch uncomputes), and the only <code>cls</code> failures were ~0.16% of inputs that hit<br>the <strong>designed</strong> carry/width truncation. Each failure was run through the classical GCD filter<br>and classified: <code>NonConvergence</code> / <code>WidthOverflow</code> / <code>BodyTrimMismatch</code> → <strong>designed-hard</strong>;<br>a residue the filter didn&#39;t model (an apply-phase truncation) showed up as <strong>unexpected-clean</strong><br>— a reminder that the filter&#39;s coverage is partial. The graded 9024-shot set, on its hunted<br>island, validated <code>0/0/0</code>. The whole exercise is Steps 2-4 of this loop.</p>
+</div>
+<div class="md"><h2>Relationship to the other skills</h2>
+<p>This skill is the <strong>correctness</strong> counterpart to the two optimization skills: every qubit you<br>free with <code>peak-qubit-reduction</code> and every gate you cut with <code>toffoli-reduction</code> is exactly the<br>kind of change that risks a <code>pha</code>/<code>anc</code> regression (a freed-too-early ancilla, a measurement<br>whose phase fixup is wrong, a skipped cleanup that wasn&#39;t redundant). Run this validation loop<br>after any such change. For the domain-specific filter, the GPU island search that finds a clean<br>nonce, and the exact graded-shot harness of the ECDSA-fail circuit, see the companion<br><strong>ecdsafail-island-hunting</strong> and <strong>ecdsafail-circuit-optimization</strong> skills.</p>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="reversible-circuit-validation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

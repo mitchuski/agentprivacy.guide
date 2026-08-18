@@ -1,0 +1,138 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — Pvm V6 1 Bakhta Half Life · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=research" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Note — Pvm V6 1 Bakhta Half Life</span></div>
+  <article><div class="md"><h1>Pvm V6 1 Bakhta Half Life</h1>
+</div>
+<div class="md"><h2>The Bakhta Half-Life of Trust</h2>
+<p><em>Trust as a decaying-and-renewing measure across registers</em></p>
+<p><strong>Version:</strong> V6.0-conjecture (C30–C33)<br><strong>Date:</strong> 2026-04-17 (drafted as forthcoming reference; locked-in 2026-05-09)<br><strong>Author:</strong> privacymage<br><strong>Status:</strong> Research note — conjecture stage<br><strong>Depends on:</strong> V5.4 Formal Specification (v2.0), Bakhta (StarkWare 2025), Promise Theory v1.5<br><strong>Anchors:</strong> C30–C33 used throughout the Cloak Specification, the Bilateral Cloak Ceremony Spec, and Tome IV Act IV / Tome V Acts 2–5 of the Second Person Spellbook.</p>
+<hr>
+</div>
+<div class="md"><h2>How It Arrived</h2>
+<p>Bakhta&#39;s StarkWare paper (2025) framed cryptographic trust as a <strong>half-life</strong> rather than a binary. A primitive&#39;s strength is not &quot;secure&quot; or &quot;broken&quot; — it is a measure that decays over time as adversary capability grows, and is renewed by parameter refresh, substrate migration, or fresh attestation. Three aging categories were named: <em>ages by parameter growth</em>, <em>ages by substrate migration</em>, <em>ages by fresh attestation</em>.</p>
+<p>The PVM had been treating trust as accumulated weight on edges (the <code>(1 + Σᵢ wᵢ · nᵢ/N₀)^k</code> term in <code>V(π,t)</code>). Bakhta&#39;s framing made the claim sharper: each accumulation step <em>also</em> has its own decay clock, and the architecture either renews or fails.</p>
+<p>The four conjectures here translate Bakhta&#39;s half-life from cryptographic primitives onto the sovereignty trajectory.</p>
+<hr>
+</div>
+<div class="md"><h2>C30: Trust Half-Life Begins at Inscription</h2>
+<p><strong>Statement.</strong> A trust edge in the VRC network has a Bakhta half-life <code>τ_VRC</code> whose clock starts at the moment of inscription. The trust value <code>T(t) = T₀ · 2^{-(t-t₀)/τ_VRC}</code> for a single inscription, decaying monotonically until either renewed (a fresh inscription on the same axis) or augmented (a complementary inscription on a co-supporting axis).</p>
+<p><strong>Why it matters.</strong> The First Person Spellbook treated trust as a static weight. C30 makes it dynamic: the Naming Ceremony (Tome IV Act IV) starts a clock the moment flaxscrip&#39;s Bitcoin block lands. Every commission that follows either renews or extends the original half-life.</p>
+<p><strong>Confidence:</strong> ~60%<br><strong>Path to formalisation:</strong> Empirical measurement post-deployment; comparison with Bakhta&#39;s parametric formulation for cryptographic primitives. The translation from primitive-half-life to edge-half-life is structural, not derived.</p>
+<hr>
+</div>
+<div class="md"><h2>C31: Half-Life Differs by Inscription Register</h2>
+<p><strong>Statement.</strong> Shielded inscriptions (Zcash sapling) and transparent inscriptions (t-address) have <strong>different half-life curves</strong> even when carrying isomorphic trust content. The shielded register accumulates trust through <em>recallable witness</em> (the sender retains the viewing key); the transparent register accumulates trust through <em>public witness</em> (anyone with the chain reads it). These are not interconvertible without a discrete reveal step.</p>
+<p><strong>Why it matters.</strong> Tome V Act 3 (The Shielded Memo) and Act 5 (The Stake) operationalise this. The 61.8/38.2 transparent/shielded inscription ratio (C41) is a cultural-emergence consequence — the architecture has <em>two</em> aging clocks running, and the ratio falls out of how often each clock is renewed.</p>
+<p><strong>Confidence:</strong> ~55%<br><strong>Path to formalisation:</strong> Information-theoretic comparison of recallable-witness half-life vs public-witness half-life under matched VRC content; possible Bakhta-style derivation.</p>
+<hr>
+</div>
+<div class="md"><h2>C32: Productive Trust-Edges Have Higher Half-Life</h2>
+<p><strong>Statement.</strong> A trust edge formed by <em>productive</em> work (a Mage executing a commissioned cloak, a Priest consecrating a covenant, a forge producing a blade) has a longer half-life than a trust edge formed by <em>transactional</em> work (a one-shot hash exchange, an anonymous attestation). The productive form is what Tome V Act 4 (The Reveal) calls &quot;the trust earned under shield survives the reveal.&quot;</p>
+<p><strong>Why it matters.</strong> This is the conjecture that distinguishes ceremony from transaction in the architecture. C46 (productive trust-edge has higher half-life than transactional) is the operational corollary; C44 (productive VRC ≈ hash-exchange VRC in trust strength) is the comparison statement at the moment of inscription. C32 says the <em>clock</em> differs even when the <em>initial value</em> is comparable.</p>
+<p><strong>Confidence:</strong> ~50%<br><strong>Path to formalisation:</strong> Empirical longitudinal measurement; possibly a formal Bakhta-style note co-authored with an information-theoretic collaborator.</p>
+<hr>
+</div>
+<div class="md"><h2>C33: Half-Lives Compose Multiplicatively Across the Three Axes</h2>
+<p><strong>Statement.</strong> The total half-life <code>τ_total</code> of a sovereign&#39;s accumulated trust is <strong>multiplicative</strong> across the three separation axes: <code>τ_total = τ_Σ · τ_Δ · τ_Γ</code> (where Σ = Agent, Δ = Data, Γ = Inference). Aging in one axis (e.g., a cryptographic primitive ageing in Δ) cannot be compensated by stronger aging in another (e.g., fresh inscription in Σ); the product collapses if any single τ approaches zero.</p>
+<p><strong>Why it matters.</strong> This is the half-life parallel of V5&#39;s multiplicative gating <code>Φ_v5 = Φ_agent · Φ_data · Φ_inference</code>. The defence-in-depth claim has a temporal dimension: not only must all three axes hold <em>now</em>, all three must keep their half-lives renewable <em>over time</em>. C33 says the multiplicative gating extends through the time domain.</p>
+<p><strong>Confidence:</strong> ~45%<br><strong>Path to formalisation:</strong> Structural argument from V5.4&#39;s multiplicative gating proof, extended to ages; empirical confirmation post-deployment.</p>
+<hr>
+</div>
+<div class="md"><h2>Mapping onto the Tomes</h2>
+<table>
+<thead>
+<tr>
+<th>Tome</th>
+<th>Act</th>
+<th>C-foregrounded</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tome IV</td>
+<td>IV.4 The Naming Ceremony</td>
+<td>C30 (clock starts at Bitcoin block 945508 inscription)</td>
+</tr>
+<tr>
+<td>Tome V</td>
+<td>V.2 The Commissioned Cloak</td>
+<td>C30 (tip + proof + cloak each carry their own half-life)</td>
+</tr>
+<tr>
+<td>Tome V</td>
+<td>V.3 The Shielded Memo</td>
+<td>C30, C31 (shielded register half-life)</td>
+</tr>
+<tr>
+<td>Tome V</td>
+<td>V.4 The Reveal</td>
+<td>C30, C32 (productive trust survives the register transition)</td>
+</tr>
+<tr>
+<td>Tome V</td>
+<td>V.5 The Stake</td>
+<td>C30, C31 (transparent register half-life)</td>
+</tr>
+<tr>
+<td>Tome V</td>
+<td>V.9 The Workshop Expands</td>
+<td>C30, C31, C33 (Lampyra&#39;s frequent attestations reshape the curve; multiplicative across registers)</td>
+</tr>
+</tbody></table>
+<hr>
+</div>
+<div class="md"><h2>What This Note Does NOT Do</h2>
+<ul>
+<li>It does <strong>not</strong> derive <code>τ_VRC</code> from first principles. The half-life is named structurally and used operationally; the parametric form is conjectural.</li>
+<li>It does <strong>not</strong> replace V5.4&#39;s accumulation term <code>(1 + Σᵢ wᵢ · nᵢ/N₀)^k</code>. The accumulation and the half-life are complementary — accumulation is the value at inscription; half-life is the decay between inscriptions.</li>
+<li>It does <strong>not</strong> attempt the cryptographic-primitive ageing analysis Bakhta does. C30–C33 are the <em>behavioural-architecture</em> analogue of Bakhta&#39;s framework, not its extension.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>References</h2>
+<ul>
+<li>Bakhta, A. (2025). &quot;On the Half-Life of Cryptographic Trust.&quot; StarkWare Industries.</li>
+<li>privacymage (2026). &quot;PVM V5.4 Formal Specification.&quot; v2.0. <em>agentprivacy-docs.</em></li>
+<li>privacymage (2026). &quot;PVM V6.1 Research Note: The Fourth Aging Category.&quot; <em>agentprivacy-docs.</em> (extends C30–C33 with C47–C50, formerly C22–C25 Bakhta-response)</li>
+<li>privacymage (2026). &quot;V6 Research Note: The Existence-Leak and the Falling Z (Schrottenloher ECDLP).&quot; June 2, 2026. <em>agentprivacy-docs/research/.</em> (worked example feeding C30–C33: a reproducible quantum attack on secp256k1 decrements Z_b in the Behavioural Mosca Inequality; proposes candidate C40, Existence-Leak)</li>
+<li>privacymage (2026). &quot;Cloak Specification v1.0.&quot; <em>agentprivacy-docs/specs/.</em></li>
+<li>privacymage (2026). &quot;Bilateral Cloak Ceremony Spec v1.0.&quot; <em>agentprivacy-docs/specs/.</em></li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>The Proverb</h2>
+<blockquote>
+<p><em>Old trusts decay with time. The architecture either renews or fails.</em></p>
+</blockquote>
+<blockquote>
+<p><em>Each inscription starts a clock. Each ceremony resets one. The sovereign tends the half-lives like a forge tends its fires.</em></p>
+</blockquote>
+<hr>
+<p><em>(⚔️⊥⿻⊥🧙)😊</em></p>
+<p>CC BY-SA 4.0 · privacymage · originally drafted Apr 2026; locked-in 2026-05-09 as part of post-V5.4 coherence pass</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 note-pvm-v6-1-bakhta-half-life</span><a class="asset-file" href="/research/assets/note-pvm-v6-1-bakhta-half-life/pvm-v6-1-bakhta-half-life.md" download>pvm-v6-1-bakhta-half-life.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-research-notes.html">The Research Notes</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="note-pvm-v6-1-bakhta-half-life.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

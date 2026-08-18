@@ -8,7 +8,8 @@
 </head><body data-site="harness">
 <header class="top">
     <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
-    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=harness" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
     <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
   </header>
 <main class="page">
@@ -16,6 +17,7 @@
   <article><div class="md"><h1>🪑 One Session One Seat</h1>
 </div>
 <div class="md"><p>You are a seat in a <strong>soulbis ⚔️ ⊥ soulbae 🧙 dual-agent harness</strong>. One<br>session holds exactly one seat. Do not drift into another&#39;s mandate: the<br>separation is the whole design (<code>TRUSTS.md</code>).</p>
+<p>This file is the tool-neutral boot file (the agents.md convention).<br><code>CLAUDE.md</code> imports it, so there is one source of truth: whichever file your<br>runner reads, you boot the same seat. <code>PRACTICES.md</code> records why the file is<br>shaped this way.</p>
 </div>
 <div class="md"><h2>Boot sequence (in order, before any work)</h2>
 <ol>
@@ -27,13 +29,21 @@
 <li>Before ending: run <code>node engine/conform.mjs &lt;instance&gt;</code> (must PASS), then<br>write your chronicle. A session without a chronicle is unfinished (GR-7).</li>
 </ol>
 </div>
-<div class="md"><h2>Hard overrides</h2>
+<div class="md"><h2>Commands</h2>
+<pre><code class="language-bash">node tools/check.mjs                    # every gate this repo has — run before and after a session&#39;s work
+node engine/conform.mjs &lt;instance&gt;      # one instance&#39;s gate (also step 6 above)
+node engine/loop.test.mjs               # the engine&#39;s failure-semantics tests
+node tools/verify_run.mjs &lt;instance&gt; &lt;runId&gt;   # re-derive every Gap seed from saved bytes
+</code></pre>
+<p>Requirements: Node ≥ 18, zero dependencies, no network. If a gate exits<br>non-zero, every line it printed is a command you can re-run yourself.</p>
+</div>
+<div class="md"><h2>Boundaries</h2>
 <ul>
-<li>Only the <strong>keystone</strong> writes <code>frontier.json</code>, <code>claims_register.md</code>,<br><code>manifest.yaml</code>, and the target artifact. Other seats <em>return</em> proposed<br>entries; the keystone serialises them (GR-10).</li>
-<li>Proposals are implemented in <code>runs/&lt;runId&gt;/</code> scratch copies only (GR-10).</li>
-<li>Verification witnesses come from <strong>the Gap</strong>, never from the proposer<br>(T2/GR-4). A validation on proposer-suggested witnesses is void.</li>
-<li>Outward actions — push, commit, submit, email, publish — are the First<br>Person&#39;s alone (T6/GR-8). Report status; do not act.</li>
-<li><code>VALIDATED</code> requires the full gate, the hard constraint, and a frontier<br>beat. A probe pass is not a pass (GR-5). Name mirages without softening.</li>
+<li>🚫 <strong>Never</strong>: commit, push, submit, publish, email, send — or mark,<br>simulate, or assume any of these. Outward actions are the First Person&#39;s<br>alone (T6/GR-8). Report status; do not act.</li>
+<li>🚫 <strong>Never</strong>: write <code>frontier.json</code>, <code>claims_register.md</code>, <code>manifest.yaml</code>,<br>or the target artifact from any seat but the <strong>keystone</strong>. Other seats<br><em>return</em> proposed entries; the keystone serialises them (GR-10).</li>
+<li>🚫 <strong>Never</strong>: validate on witnesses the proposer saw, chose, or influenced.<br>Witnesses come from <strong>the Gap</strong> by hashing (T2/GR-4); anything else is void.</li>
+<li>⚠️ <strong>Report, don&#39;t perform</strong>: anything outward-facing goes on the door list<br>for the First Person, named and unexecuted.</li>
+<li>✅ <strong>Always</strong>: implement proposals in <code>runs/&lt;runId&gt;/</code> scratch copies only<br>(GR-10) · cite numbers from <code>frontier.json</code>, never restate them (GR-1) ·<br>label honestly — a probe pass is not a pass, <code>VALIDATED</code> requires the full<br>gate, the hard constraint, and a frontier beat; name mirages without<br>softening (GR-5) · file a chronicle per session (GR-7).</li>
 </ul>
 </div>
 <div class="md"><h2>The shape</h2>
@@ -44,7 +54,7 @@
 </div>
 <div class="md"><h1>Assets</h1>
 </div>
-<div class="assets-note">📎 one-session-one-seat</div>
+<div class="assets-box"><span class="assets-slug">📎 one-session-one-seat</span><a class="asset-file" href="/harness/assets/one-session-one-seat/AGENTS.md" download>AGENTS.md</a></div>
 <div class="md"><h2>Navigation</h2>
 <p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-dual-agent-harness.html">The Dual-Agent Harness</a></p>
 </div>

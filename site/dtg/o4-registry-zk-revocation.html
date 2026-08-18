@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O4 — Registry ZK Revocation · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>O4 — Registry ZK Revocation</span></div>
+  <article><div class="md"><h1>O4 — Registry-ZK interaction and revocation</h1>
+<p><em>How a zero-knowledge proof reads a trust registry: snapshot semantics, issuer-set membership, revocation,<br>and the edge-admissibility rule — the deferred interaction, by name.</em></p>
+<p><strong>Register:</strong> O4 · leverage 🟠 · <strong>Ladder:</strong> design doc (+ rt 07&#39;s edge-admissibility rule, 11/11)<br><strong>Anchor (cred-spec):</strong> trust registry (issuer/role/revocation authority) · &quot;registry-ZK interactions<br>deferred to future work.&quot;<br><strong>Anchor (decision doc):</strong> <strong>PR-ISS</strong> (§12) · §22 lifecycle clocks · §12.4 registry and snapshot semantics.</p>
+<hr>
+</div>
+<div class="md"><h2>What the spec defers and the decision doc structures</h2>
+<p>The cred-spec names the trust registry as the governance object (acceptable issuers, roles, revocations)<br>and defers how a ZK proof interacts with it. The decision doc supplies the missing requirements without<br>picking a construction:</p>
+<ul>
+<li><strong>PR-ISS is a snapshot statement</strong> (§12.4): issuer qualification is evaluated against &quot;a named registry,<br>set commitment, or governance snapshot with explicit effective time, cache rules, update semantics, and<br>failure behaviour.&quot; Not &quot;the registry&quot; in the abstract — a versioned root at a time.</li>
+<li><strong>Issuer concealment is profile-specific</strong> (§12.3): explicit disclosure, concealment within a named set,<br>coarse issuer class, or threshold/multi-issuer assurance — chosen per relying purpose + correlation<br>analysis, never hard-coded.</li>
+<li><strong>Registry traffic is a disclosure surface</strong> (§12.4, §19): status lookups and network patterns can reveal<br>the issuer or holder even when the proof reveals nothing — the interaction design carries its own<br>disclosure-boundary record.</li>
+<li><strong>Lifecycle clocks are separate</strong> (§22.1): status freshness ≠ attestation validity ≠ nullifier epoch ≠<br>enrolment-root cryptoperiod. &quot;Registry snapshot no older than 24 hours&quot; (Appendix B) is the shape of a<br>conformant freshness rule.</li>
+</ul>
+</div>
+<div class="md"><h2>The design sketch</h2>
+<p><strong>Registry as epoch-rooted commitments.</strong> The registry authority publishes, per epoch, signed roots over its<br>governed sets — accepted-issuer set, membership set(s), revocation set — each with effective time and epoch<br>policy. Proofs are made <strong>against a named root</strong>, and the verifier&#39;s relying policy states the maximum<br>acceptable root age.</p>
+<p><strong>Membership</strong> = the shared Poseidon-Merkle gadget (one circuit with O2): <code>commitment ∈ root(epoch)</code>.</p>
+<p><strong>Revocation</strong> — three candidate patterns, to be selected through the §25 gate:</p>
+<ol>
+<li><strong>Short epochs, positive membership only</strong> — the set is re-rooted often enough that removal <em>is</em><br>revocation. Simplest; cost = re-issuance of paths each epoch.</li>
+<li><strong>Accumulator / vector-commitment non-membership</strong> — prove absence from the revocation set at a named<br>root. Stronger freshness; heavier circuits.</li>
+<li><strong>Privacy-preserving status mechanism</strong> (§18.2&#39;s &quot;status reference&quot; row) — bounded-cache status checks<br>outside the circuit, with the lookup pattern itself minimised (batching, coarse timing — §20).</li>
+</ol>
+<p><strong>The edge-admissibility rule</strong> (runtime 07&#39;s contribution): registry interaction is not only <em>reading</em> —<br>it governs when the graph may <em>grow</em>. Runtime 07&#39;s Swordsman checks (both endpoints personhood-anchored in<br>the registry-governed set, mutual consent, fresh R-DIDs, non-collusion recompute) are a candidate profile<br>for &quot;when may an edge be minted against a registry snapshot&quot; — the write-side of the deferred interaction.</p>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li>rt 03 STUB (set-membership over the accredited set) + rt 07 (11/11, the admissibility rule).</li>
+<li>The coherence reconciliation: &quot;accredited set&quot; = the cryptographic Merkle object; <strong>trust registry</strong> = the<br>governance object. The proof&#39;s set-membership is a ZK <em>view</em> of the registry&#39;s authorized list.</li>
+<li>§12.5&#39;s multi-issuer aggregation note — independent honest issuers multiply confidence — gives the<br>registry a purpose beyond list-keeping; composable with concealment-within-a-set.</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — data model note:</strong> epoch-rooted registry (roots, effective times, epoch policy, failure behaviour)<br>written as a short profile the Credentials TF can review — this is the co-authored piece (§27.3).</li>
+<li><strong>M2 — rt 03 reference model:</strong> set-membership against a named epoch root + negative tests (stale root<br>rejected; revoked issuer rejected; inconsistent snapshots rejected — §26.1).</li>
+<li><strong>M3 — revocation selection:</strong> cost out patterns 1–3 against the §25 evaluation list (refresh cost,<br>offline verification, mobile viability); recommend one per profile.</li>
+<li><strong>M4 — circuit:</strong> the shared gadget instantiated for PR-ISS; edge-admissibility statement ported once<br>01/03 land.</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<ul>
+<li>The one deliverable the cred-spec <em>asks for by name</em>. Frame as joint work: our TF specifies the proof<br>side; the Credentials TF owns registry governance/institutional legitimacy (§27.3 boundary).</li>
+<li>E3 (trust-registry terminology) is already staged; this exploration is its continuation into mechanism.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Who operates nullifier/state storage when a context spans a governed verifier <em>set</em> (§13.5) — the<br>registry, a verifier-set operator, or per-verifier state with reconciliation?</li>
+<li>Does revocation of an <em>issuer</em> retroactively invalidate proofs made against roots where it was accepted?<br>(§10.6 says reliance expires on accreditation change — propagation semantics needed; ties to the<br>redress matrix §23 row 2.)</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="o4-registry-zk-revocation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

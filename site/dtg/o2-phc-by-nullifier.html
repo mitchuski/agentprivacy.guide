@@ -1,0 +1,85 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O2 — PHC by Nullifier · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>O2 — PHC by Nullifier</span></div>
+  <article><div class="md"><h1>O2 — PHC supported by scoped reuse detection</h1>
+<p><em>The nullifier is the cryptographic leg of a Personhood Credential — it enforces scoped reuse detection<br>within a governed context. The &quot;one person&quot; part stays with enrolment governance, and the claim is stated<br>that narrowly on purpose.</em></p>
+<p><strong>Register:</strong> O2 · leverage 🔴 · <strong>Ladder:</strong> <strong>CIRCUIT BUILT 2026-07-18 (M3 done)</strong> —<br><a class="wlink" href="lab-circom-gadget.html">Lab — circom-gadget</a> 8/8 with real groth16 proofs: Poseidon/BN254, depth-20<br>Merkle, domain tag pinned (sha256(&#39;dtg-zkp/nullifier/v0&#39;) mod p), context = §6.2 descriptor digest as<br>field. <strong>M4 first datapoint: 11,523 constraints (incl. the +1 transcript-binding constraint added<br>2026-07-18 per the cross-check&#39;s recommendation — proof now cryptographically bound to the §15.2<br>transcript; nullifier preimage unchanged) · ~630 ms prove · ~8 ms verify · 725 B proof.</strong> Suite 10/10<br>(Z9 transplant rejection now cryptographic, Z10 nullifier-stability distinction).<br>Lab-only trusted setup (not a production ceremony). <strong>M5 DONE</strong> — <a class="wlink" href="semaphore-v4-crosscheck.html">Semaphore v4 Crosscheck</a> (this<br>dir): structurally conformant, byte-incompatible at every preimage; one accidental gap found (no<br>in-circuit transcript binding — ~1-constraint fix recommended); Semaphore-compat profile sketched.<br>Remaining: M1 boundary record · the transcript-binding input decision · epoch-as-separate-input (§22.2)<br><strong>Anchor (cred-spec):</strong> PHC pattern (a VMC whose governance enforces real-human + one-membership-per-person)<br>· R-DID uniqueness rule · community-anchored construction.<br><strong>Anchor (decision doc):</strong> <strong>PR-UNQ</strong> (§13) · §5.12 nullifier definition · §6 context · EPP only (§7.2).</p>
+<hr>
+</div>
+<div class="md"><h2>The narrow claim (decision-doc language, adopted verbatim)</h2>
+<blockquote>
+<p>The same enrolled secret cannot produce two accepted actions in the same context, scope, purpose, and<br>epoch without producing the same nullifier, assuming correct enrolment binding and construction<br>implementation. (§13.1)</p>
+</blockquote>
+<p>What it does <strong>not</strong> establish (§13.2, and our docs must never imply otherwise): one unique human globally;<br>one enrolment per issuer or ecosystem; that two secrets can&#39;t belong to one person; that one secret can&#39;t be<br>shared; cross-context identity. <strong>Only scoped reuse detection is primarily cryptographic</strong> — one-enrolment-<br>per-issuer is a biometric/governance property, and global uniqueness is outside the V1 claim entirely (§13.3).</p>
+</div>
+<div class="md"><h2>How this still realizes the PHC</h2>
+<p>The cred-spec&#39;s PHC asserts one-membership-per-person at the governance layer. The decision doc splits the<br>enforcement honestly:</p>
+<ul>
+<li><strong>Governance + enrolment</strong> (issuer, biometric dedup, accreditation) make one human ↔ one enrolled secret.</li>
+<li><strong>The nullifier</strong> makes that binding <em>hold at proof time</em>: within the governed context, a second accepted<br>action from the same secret is detected — without a global identifier, without the registry learning who.</li>
+</ul>
+<p>So the exploration&#39;s contribution to the Credentials TF is unchanged in substance but sharper in language:<br><em>the ZK mechanism by which a VTC&#39;s PHC governance becomes enforceable within a context</em> — the cryptographic<br>leg, never the whole PHC.</p>
+</div>
+<div class="md"><h2>The statement (proof form)</h2>
+<pre><code>public:   canonical context descriptor (→ §6.2, not an opaque string), nullifier N,
+          enrolment-root R (epoch-bounded, cryptoperiod-governed — §22.2)
+private:  enrolled secret s, blinding r, Merkle path π
+statement: commitment(s, r) ∈ R   ∧   N = H_domain(s, ctx)
+</code></pre>
+<p>Decision-doc upgrades over the runtime-01 model:</p>
+<ul>
+<li><strong>Context is a descriptor, not a string</strong> (§6.2): protocol/profile versions, context authority, policy,<br>purpose, scope, verifier-set, epoch, nullifier version, retention policy — canonically encoded. Runtime<br>01&#39;s &quot;context canonicalization&quot; note (NOTES item 3) anticipated this; §6.2 is the full answer.</li>
+<li><strong>The nullifier MUST bind</strong> enrolment-root id, context descriptor, scope, purpose, epoch, versions, and<br>recovery domain (§13.4) — our <code>H(s, context)</code> becomes <code>H_domain(s, descriptor-digest)</code> with each input<br>explicit.</li>
+<li><strong>Bounded epochs are conformance requirements</strong> (§22.2): an unbounded nullifier is non-conformant.</li>
+</ul>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li><a class="wlink" href="lab-01-uniqueness-nullifier.html">Lab — 01-uniqueness-nullifier</a> — zero-dep reference model, <strong>9/9 property<br>tests</strong>, including <strong>P4 user-as-adversary self-Sybil</strong> (the presenter is the adversary; their second<br>action in one context is refused) — a direct fixture for §26.1&#39;s negative tests.</li>
+<li>Domain separation already versioned: <code>dtg-zkp/nullifier/v0</code>.</li>
+<li>Lineage: privacy-pools / mana-pools nullifier discipline (see O6 in <a class="wlink" href="o5-o6-o8-supporting-notes.html">O5 O6 O8 — Supporting Notes</a>).</li>
+<li>§13.6 adds what the runtime lacks: <strong>failure/redress semantics</strong> — a repeated nullifier may be a retry,<br>race, recovery, or epoch disagreement, not only an attack; deterministic error semantics + a challenge<br>route are part of the profile.</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — boundary record.</strong> Complete the PR-UNQ assurance + disclosure boundary pair for our construction<br>(Appendix B of the decision doc is the worked example for exactly this predicate — start from it).</li>
+<li><strong>M2 — descriptor + epoch upgrade</strong> of the reference model: replace the string context with a canonical<br>descriptor digest; add epoch input + rollover test; add the retry-vs-attack error semantics.</li>
+<li><strong>M3 — circom port</strong> (the shared gadget): Poseidon nullifier + Merkle membership (depth ~20). Toolchain<br>present: circom 2.2.3. Only after M1 clears the §25 gate posture.</li>
+<li><strong>M4 — cost measurement</strong> on a consumer device (§25&#39;s performance envelope; feeds &quot;claim ceiling per<br>presentation&quot;).</li>
+<li><strong>M5 — Semaphore v4 cross-check</strong> — state precisely &quot;conformant with / diverges from.&quot;</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<ul>
+<li>The strawman&#39;s uniqueness row gains a runnable reference + the narrow PR-UNQ statement.</li>
+<li>To the Credentials TF: an informative note — <em>how a VTC&#39;s PHC governance is made enforceable in-context</em> —<br>with the honest split (governance dedupes the enrolment; the nullifier makes the dedup binding at proof<br>time), citing §13.3&#39;s assurance-dependency list.</li>
+<li>The spec must pin the hash (nullifier values differ by hash) + the versioned domain tag — rt 01 NOTES<br>item 2, now reinforced by §13.4&#39;s version-binding requirement.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Cross-VTC uniqueness is deliberately <em>not</em> provable (unlinkability working as designed) — but §13.3&#39;s<br>&quot;issuer coordination and common-root semantics&quot; leaves room for governed multi-issuer roots; position?</li>
+<li>Recovery/rotation domain (§13.4) — how the pools lineage&#39;s note on secret rotation maps onto §29&#39;s<br>&quot;biometric-derived secret rotation&quot; open question.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="o2-phc-by-nullifier.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

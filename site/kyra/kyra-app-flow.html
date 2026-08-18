@@ -1,0 +1,188 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kyra App Flow · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="kyra">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site on" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=kyra" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/kyra/welcome-visitors.html">Kyra Gate</a> / <span>Kyra App Flow</span></div>
+  <article><div class="md"><h1>The Gatehouse app flow — how the engine is visualised</h1>
+</div>
+<div class="md"><p><strong>Audience:</strong> the WP5 (supervisor dashboard) and WP6 (agent client) build<br>sessions. Every panel below names its data source: an endpoint of<br><code>gatehouse_verify/app.py</code> (all live as of session 3) and the artifact it<br>renders. Nothing in the UI computes; the UI RENDERS what the engine derived —<br>the same discipline as the engine itself (a claimed number is never trusted,<br>so the app never invents one).</p>
+<p><strong>Register:</strong> standards voice throughout the apps. The user is a supervisor,<br>never an agent-owner (CLAUDE.md rules 1 and 2). Mythopoetic edges belong to<br>render-time expressions, not to these surfaces.</p>
+<p><strong>The demo is two acts</strong> (the north-star video): Act 1 — an agent approaches,<br>is challenged, proves understanding, a VRC issues, the audit trail renders.<br>Act 2 — the supervisor revokes, and verification fails everywhere.</p>
+<hr>
+</div>
+<div class="md"><h2>The shared spine: the ceremony rail</h2>
+<p>Both apps show the same seven-station rail, always visible, one station lit<br>at a time. It IS the route order of the API and the action vocabulary of the<br>ledger — the UI never needs its own state machine:</p>
+<pre><code> APPROACH ▸ ASSESS ▸ CHALLENGE ▸ APPROVE ▸ ISSUE ▸ FLY/SANDBOX/HOLD ▸ (REVOKE)
+    │          │          │          │        │            │              │
+ gate.*   assessment.* challenge.* approval.* vrc.*   manifest.issued  vrc.revoked
+</code></pre>
+<p>Hydrate from <code>GET /gate/state</code>: the furthest non-null artifact<br>(identity → assessment → challenge → approvalEventHash → vrc → manifest)<br>positions the rail. <code>POST /gate/reset</code> restarts the demo.</p>
+</div>
+<div class="md"><h2>Verdict colour language (used everywhere, never a third vocabulary)</h2>
+<table>
+<thead>
+<tr>
+<th>verdict</th>
+<th>decision</th>
+<th>colour</th>
+<th>UI noun</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VALIDATED</td>
+<td>fly</td>
+<td>green</td>
+<td>cleared</td>
+</tr>
+<tr>
+<td>MIRAGE</td>
+<td>sandbox</td>
+<td>amber</td>
+<td>sandboxed</td>
+</tr>
+<tr>
+<td>BLOCKED</td>
+<td>hold</td>
+<td>red</td>
+<td>held</td>
+</tr>
+</tbody></table>
+<p>Refusals are first-class UI, not error toasts: a refusal renders as a station<br>outcome WITH its ledger event (<code>vrc.refused</code>, <code>gate.identity_refused</code>) —<br>&quot;the gate says no on the record&quot; is a feature to show, not an exception to hide.</p>
+<hr>
+</div>
+<div class="md"><h2>Act 1 · Supervisor dashboard (WP5), scene by scene</h2>
+<h3>Scene 1 — the gate (identity)</h3>
+<p><code>POST /gate/approach</code> · artifact: AgentIdentity · event: <code>gate.approach</code> or<br><code>gate.identity_refused</code> (403)</p>
+<pre><code>┌─ AGENT AT THE GATE ──────────────────────────────┐
+│  did:key:z6MkCanary…                 [VERIFIED ✓]│
+│  key  z6MkCanary…      binding: did == key  ✓    │
+│  operator  did:web:gatehouse…                    │
+│  capabilities declared: sandbox.echo             │
+│  ┌ refused case: red banner + the refusal event ┐│
+└──────────────────────────────────────────────────┘
+</code></pre>
+<p>Identity card with a hard verified/refused state. The did:key↔multibase<br>binding is shown as a literal padlock joining the two strings — spoof refusal<br>(Act 1 cold open: show a spoofed identity bounced BEFORE any assessment).</p>
+<h3>Scene 2 — the witness draw (the dice moment)</h3>
+<p><code>POST /gate/assess</code> response <code>.assessment.witnessDraw</code> · event:<br><code>assessment.witness_drawn</code></p>
+<pre><code>┌ THE DRAW ────────────────────────────────────────┐
+│ seed = sha256(agent&#39;s own submission)            │
+│ 7e51d081…  ──►  6 of 24 probes go DEEP           │
+│ [force.reflect.3] [sigma.sm.2] [force.connect.3] │
+│ [sigma.rc.1] [force.reflect.2] [force.protect.1] │
+│ derivable by any auditor: algorithm sha256-canon-v1
+└──────────────────────────────────────────────────┘
+</code></pre>
+<p>Animate: the agent&#39;s canonical bytes flow into a hash, the hash deals 6 probe<br>cards face-up out of the 24-card grid. The caption carries the whole point:<br><em>the agent cannot know which probes will be probed while it writes.</em></p>
+<h3>Scene 3 — the probe board (24 derived probes)</h3>
+<p><code>GET /probes</code> for prompts + <code>POST /gate/assess</code> with <code>probeScores</code> · events:<br><code>assessment.completed</code></p>
+<pre><code>┌ PROBES — N = 4·3 + 6·2 = 24 (derived, not fixed) ┐
+│ PROTECT  ●1.0 ●1.0 ●0.9   σ_sm ●0.9 ●1.0        │
+│ PROJECT  ●0.9 ●1.0 ●0.9   σ_sr ●1.0 ●0.9  …     │
+│ REFLECT  …                σ_mr ●0.8 ●0.9 ⚠ no-deep│
+│ CONNECT  …                …                      │
+└──────────────────────────────────────────────────┘
+</code></pre>
+<p>Two-column board: 12 force probes (4 rows) and 12 separation probes (6 rows).<br>Deep-drawn probes wear the draw&#39;s mark. Each probe expands to its supervisor-<br>voice prompt + score slider + rationale field. The σ_mr row can badge the<br>open runtime-07 finding until its disposition.</p>
+<h3>Scene 4 — the sovereignty instrument (the centrepiece)</h3>
+<p><code>POST /gate/assess</code> response: <code>.assessment</code> + <code>.sigmaMatrix</code> + <code>.scope</code></p>
+<p>Three linked instruments, one derivation, left to right:</p>
+<pre><code>┌ Σ (4×4, 1−σ off-diag) ┬ VOLUME det(Σ) ┬ LATTICE {0,1}^6      ┐
+│    S    M    R    C   │               │        ●63  stratum 6 │
+│ S 1.0  .10  .10  .10  │   ▓▓▓▓▓▓▓░░   │       ╱ ╲   tier 6   │
+│ M .10  1.0  .10  .10  │   0.948       │   … 15 · 20 · 15 …   │
+│ R .10  .10  1.0  .10  │   fly ≥ 0.15  │   bits 111111        │
+│ C .10  .10  .10  1.0  │   hold ≤ 0    │   Protection…Value   │
+└───────────────────────┴───────────────┴──────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Σ heatmap:</strong> white diagonal, off-diagonal cells shaded by residual<br>correlation (1−σ); hovering a cell highlights the two probes that fed it.</li>
+<li><strong>Volume gauge:</strong> det(Σ) on a 0→1 bar with the two config thresholds drawn<br>ON the bar (<code>GET /policy</code> supplies them — the gauge and the law share one<br>number). Below 0.15: amber sandbox band. At/below 0: red hold. The<br>tetrahedron collapse can render literally: a 3D tetra flattening as det→0.</li>
+<li><strong>Lattice:</strong> the 64-vertex Boolean lattice as 7 stacked strata<br>(1·6·15·20·15·6·1); the agent&#39;s vertex lights up; each of the 6 bits labels<br>its dimension AND the σ pair that set it (FD-1 made visible). Tier = the<br>stratum row the vertex sits in — the ladder is not a separate widget.</li>
+</ul>
+<h3>Scene 5 — the understanding challenge (gate two)</h3>
+<p><code>POST /gate/challenge</code>, <code>POST /gate/challenge/attempt</code> · events:<br><code>challenge.issued/attempted/passed/failed</code></p>
+<pre><code>┌ UNDERSTANDING, NOT POSSESSION ───────────────────┐
+│ prompt: &quot;Why does a revoked credential fail…?&quot;   │
+│ anchors: [revocation] [verifier] [status list]   │
+│ attempt 1  ▸ anchors hit 3/3 = 1.00 ≥ 0.60  PASS │
+│ (echoing the prompt scores 0 — shown live)       │
+│ proverb: committed as 4f2a…  (hash, never shown) │
+└──────────────────────────────────────────────────┘
+</code></pre>
+<p>Anchors light up as the agent&#39;s answer covers them. The proverbCommitment<br>renders as a sealed hash chip — the UI making &quot;we never store the secret&quot;<br>visible. Failed attempts stay on screen with their audit hash: permanence<br>is the point.</p>
+<h3>Scene 6 — approval and issuance (the two gates close)</h3>
+<p><code>POST /gate/approve</code> (rationale REQUIRED in the UI — the button is disabled<br>until the supervisor writes one), then <code>POST /gate/issue</code>.</p>
+<pre><code>┌ THE TWO GATES ───────────────────────────────────┐
+│ gate 1 SUPERVISOR APPROVAL   ✓ on the record     │
+│ gate 2 UNDERSTANDING PASSED  ✓ attempt-1         │
+│        ▼ both gates + det ≥ 0.15 ▼               │
+│ ┌ VRC ───────────────────────────┐  two proofs:  │
+│ │ tier 6 · A(τ)=0.69 · h(τ)=1.0  │  issuer  ✍    │
+│ │ status: list index 0 · active  │  subject ✍    │
+│ └────────────────────────────────┘  (bilateral)  │
+│ MANIFEST: fly · scope: pool.*, gate.* · ttl 7d   │
+└──────────────────────────────────────────────────┘
+</code></pre>
+<p>The credential renders as a physical card stamped by TWO signatures — the<br>bilateral ceremony is the image. Under it, the DeploymentManifest as a<br>boarding pass: decision, capability list (the scope ladder rung), TTL.<br>A refused issuance renders the <code>vrc.refused</code> event in this same panel, amber<br>or red per verdict.</p>
+<h3>Scene 7 — the audit rail (always on, bottom of screen)</h3>
+<p><code>GET /gate/state</code> <code>.ledger</code> · every event</p>
+<pre><code>┌ AUDIT ─ h(τ) = 1.00 ─ chain VERIFIED ────────────────────────┐
+│ ⛓ 0000…┄▶[gate.approach]┄▶[witness_drawn]┄▶[completed]┄▶ …   │
+│          aa65…            d5da…            d38d…             │
+│ every block: action · rationale · payload digest · prior     │
+└──────────────────────────────────────────────────────────────┘
+</code></pre>
+<p>A horizontal block chain from the 64-zero genesis; each block shows its<br>action and opens to actor/subject/rationale/digests. The h(τ) dial sits at<br>the rail&#39;s head. <strong>The tamper demo:</strong> an &quot;audit inspector&quot; toggle lets the<br>supervisor flip one byte in a COPY of an event — the rail recomputes live,<br>the block and every later link go red, h(τ) drops, and the Variance/Audit<br>clause quote appears: <em>a broken chain voids deployment.</em> (Pure client-side<br>recompute — <code>packages/audit</code>&#39;s TS mirror of the canon, WP5.)</p>
+<h3>Act 2 — revocation</h3>
+<p><code>POST /gate/revoke</code> (rationale required) then <code>GET /gate/verify</code>.</p>
+<p>The credential card gets a REVOKED stamp; the <code>vrc.revoked</code> block joins the<br>rail; and a &quot;relying-party strip&quot; — three little verifier badges (registry,<br>peer agent, auditor) — flips from ✓✓✓ to ✗✗✗ in one motion: <em>fails<br>verification everywhere, immediately.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Act 1/2 from the other side · Agent client (WP6)</h2>
+<p>The agent client is deliberately austere — a terminal-like column. It shows<br>what the AGENT can see, which is the demo&#39;s quiet argument about privacy:</p>
+<ul>
+<li>its own identity + key custody (the <code>AgentIdentityProvider</code> adapter slot;<br>hearthold&#39;s Emissary can seat here later without touching the core);</li>
+<li>the prompts it is asked (never the scoring rubric, never the thresholds);</li>
+<li>the challenge question and its own answers;</li>
+<li>the credential it holds once issued (and the moment it stops verifying);</li>
+<li>NOT the witness-draw seed logic, NOT the Σ instrument, NOT other agents.</li>
+</ul>
+<p>Same endpoints, read through the subject&#39;s keyhole. Panel titles mirror the<br>dashboard&#39;s rail so the video can cut between the two views station by station.</p>
+</div>
+<div class="md"><h2>Policy panel (<code>GET /policy</code>)</h2>
+<p>A standing side panel printing <code>lexon_policy(cfg)</code> verbatim — the five-clause<br>law with the LIVE threshold numbers in it. When a threshold gates something<br>on screen (the volume gauge bands, a refusal), the corresponding clause<br>highlights. The law and the instrument are visibly the same numbers<br>(runtime 06 is the watch on exactly this).</p>
+</div>
+<div class="md"><h2>Build notes for WP5/6</h2>
+<ul>
+<li>Stack: the existing Vite+React+TS shells in <code>apps/supervisor</code> and<br><code>apps/agent-client</code>; types from <code>@gatehouse/contracts</code> generated TS.</li>
+<li>The dashboard polls <code>GET /gate/state</code> (1s) — no websockets needed for the<br>demo; the state IS the render model.</li>
+<li><code>packages/audit</code> (WP4 TS side): browser mirror of canonical-bytes +<br>sha256 (WebCrypto) for the client-side tamper demo; parity is already<br>proven by the vitest lane and runtime 03.</li>
+<li>Every scene&#39;s screenshot doubles as a WP8 render asset: the GDC deck and<br>Block 15 case study reuse the same seven stations.</li>
+</ul>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>docs/app-flow.md</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 kyra-app-flow</span><a class="asset-file" href="/kyra/assets/kyra-app-flow/app-flow.md" download>app-flow.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>github.com/mitchuski/kyra_gatehouse</code> · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="kyra-app-flow.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

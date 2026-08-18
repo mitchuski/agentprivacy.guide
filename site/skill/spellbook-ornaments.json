@@ -1,0 +1,116 @@
+{
+  "title": "Spellbook Ornaments",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "c5877cdabb9b0910",
+      "text": "# spellbook-ornaments"
+    },
+    {
+      "type": "markdown",
+      "id": "607095531287ae0f",
+      "text": "> >."
+    },
+    {
+      "type": "markdown",
+      "id": "3c6d5c4d5c78f772",
+      "text": "# spellbook-ornaments\n\nThe local home of the *Selene's Spellbook* art generator — originally built as a\n**claude.ai artifact**, reconstructed here so the ornaments can be rendered,\nedited, and extended on this machine in step with the poems.\n\n> The work lives in two greys and the white of the page. Everything else is restraint."
+    },
+    {
+      "type": "markdown",
+      "id": "e476e65280bf3e1a",
+      "text": "## Where everything lives\n\n| Path | What |\n|---|---|\n| `C:\\Users\\mitch\\privacymage_book\\art\\chapbook_framework.py` | palette, weights, fonts, **`_sparkle_field`**, the 9 glyph functions |\n| `C:\\Users\\mitch\\privacymage_book\\art\\engravings.py` | the Mage + Crossed Swords figures, the envoi bird |\n| `C:\\Users\\mitch\\privacymage_book\\art\\build_ornament_proof.py` | the proof sheet (renders all implemented glyphs at 12/9/5.5 mm) |\n| `C:\\Users\\mitch\\privacymage_book\\art\\HANDOFF.md` | how to drop in the cloud-artifact code + EB Garamond |\n| `C:\\Users\\mitch\\privacymage_book\\STYLE_GUIDE.md` | **the canonical visual spec** (read this for any real work) |"
+    },
+    {
+      "type": "markdown",
+      "id": "be7389fd62817296",
+      "text": "## State (2026-05-30)\n\n- ✅ Toolchain ready: Python 3.14 + **ReportLab 4.5.1** + **PyMuPDF 1.27** installed.\n- ✅ Recovered exactly from `STYLE_GUIDE.md`: palette (INK `#1a1a1a` / SILVER `#7a7a82` / GHOST `#444444`), the five line weights, and **the sparkle mark + `_sparkle_field`** (the meaning-bearing core).\n- ✅ **All nine `draw_*_glyph` reconstructed** — traced from the real ornaments in `15_ornament_reference.pdf` (rasterized to `art/_ref/`), in the same three-grey hand, with each glyph's canonical polarity ratio. Render: `python build_ornaments_page.py` → `ornaments_page.{pdf,svg,png}` (all nine on one page).\n- ⏳ Still stubbed: the **2 figure engravings** (Mage front / Swords back) in `engravings.py` — reconstruct per §7/§10 or port from the cloud artifact.\n- ⚠️ EB Garamond TTFs not installed → Times fallback. Drop TTFs in `art/fonts/` to match the book (see HANDOFF.md).\n- Note: the reconstruction is *in the same hand*, not byte-identical to the bound PDF. For an exact match, port the original artifact bodies over the reconstructed ones."
+    },
+    {
+      "type": "markdown",
+      "id": "d14a6db67bcc1db8",
+      "text": "## The two rules above all (STYLE_GUIDE §13)\n\n1. **Same line weight for same visual function.** If an orbit ellipse is 0.5pt SILVER in one glyph, it is 0.5pt SILVER in every glyph. The eye reads consistency as quality. When unsure of a new mark, copy the weight/colour of the closest existing equivalent.\n2. **Polarity is meaning, not decoration.** The `+`/`−` sparkle ratio is a *statement about the promise character* of the work it surrounds, per Promise Theory:\n   - `+` positive promise (\"I will\") → **vertical + horizontal** crossing — delegation, projection, kindling, planting.\n   - `−` negative promise (\"I will not\") → **horizontal only**, the vertical refused — protection, refusal, keeping, boundary. *The line not drawn is the boundary kept.*\n   - giving/kindling poem → 3+/1−; refusal/forgetting poem → 1+/3−; balanced exchange → 2+/2−. Mage figure skews +6/−2; Swords figure skews +2/−6."
+    },
+    {
+      "type": "markdown",
+      "id": "57c2918dbee1ef92",
+      "text": "## Common tasks\n\n**Render the proof (verify anything is working):**\n```\ncd C:\\Users\\mitch\\privacymage_book\\art\npython build_ornament_proof.py        # -> ornament_proof.pdf\n```\n\n**Port a glyph from the cloud artifact:** open `chapbook_framework.py`, find the matching `draw_*_glyph` stub, replace the `raise NotImplementedError(...)` with the artifact body, re-run the proof. Repeat one at a time.\n\n**Add a NEW glyph** (e.g. a Movement-Two revision or a v6 motif) — follow STYLE_GUIDE §9:\n1. One central image; 3–5 composing elements; pick weight+colour per element.\n2. Compose in a bounded radius `r`, asymmetrically (a centred glyph reads as a logo; an off-balanced one reads as a scene).\n3. Choose the polarity ratio from the poem's promise character; place 4 sparkle marks at ~1.2–1.6r via `_sparkle_field`.\n4. Test at 12 / 9 / 5.5 mm — simplify if detail collapses at the smallest.\n5. Append it to the `GLYPHS` registry so the proof picks it up.\n\n**Add a NEW engraving** — follow STYLE_GUIDE §10 (vertical anatomy anchors → width anchors → Bezier parts, heavy INK silhouette + SILVER internal lines → narrative props → 8–12 polarity-skewed sparkles)."
+    },
+    {
+      "type": "markdown",
+      "id": "8b8c3129de1efc64",
+      "text": "## Cross-references to honour (STYLE_GUIDE §11)\n\nThe Mage's staff bears a crescent (echoes the Selene/Tide moon); the hat carries a filled star (same vocabulary as the sparkle field, elevated); the Field glyph's staff-with-crescent echoes the Mage figure; compass-centre dot / lattice vertices / Selene-dot share one small-filled-INK-circle vocabulary. When adding visuals, plant these quiet echoes."
+    },
+    {
+      "type": "markdown",
+      "id": "a6d454454aa44156",
+      "text": "## Function template\n\n```python\ndef draw_my_glyph(c, cx, cy, r):\n    \"\"\"One line. For: <Roman + title>. <polarity>.\"\"\"\n    c.saveState(); c.setLineCap(1)\n    # 1 primary subject  — INK 0.7-0.9\n    # 2 secondary        — INK/SILVER, layered\n    # 3 ambient outline  — SILVER, lighter\n    # 4 light/motion     — SILVER 0.35-0.5\n    c.restoreState()\n    _sparkle_field(c, [(sx1, sy1, sr1, '+'), (sx2, sy2, sr2, '-')])  # polarity = meaning\n```\n\n*This skill is itself part of the grimoire. Extend it as you extend the work.* `(⚔️⊥⿻⊥🧙)😊`"
+    },
+    {
+      "type": "markdown",
+      "id": "b007e7327320a9af",
+      "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Spellbook Ornaments",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "c5877cdabb9b0910",
+            "text": "# spellbook-ornaments"
+          },
+          {
+            "type": "markdown",
+            "id": "607095531287ae0f",
+            "text": "> >."
+          },
+          {
+            "type": "markdown",
+            "id": "3c6d5c4d5c78f772",
+            "text": "# spellbook-ornaments\n\nThe local home of the *Selene's Spellbook* art generator — originally built as a\n**claude.ai artifact**, reconstructed here so the ornaments can be rendered,\nedited, and extended on this machine in step with the poems.\n\n> The work lives in two greys and the white of the page. Everything else is restraint."
+          },
+          {
+            "type": "markdown",
+            "id": "e476e65280bf3e1a",
+            "text": "## Where everything lives\n\n| Path | What |\n|---|---|\n| `C:\\Users\\mitch\\privacymage_book\\art\\chapbook_framework.py` | palette, weights, fonts, **`_sparkle_field`**, the 9 glyph functions |\n| `C:\\Users\\mitch\\privacymage_book\\art\\engravings.py` | the Mage + Crossed Swords figures, the envoi bird |\n| `C:\\Users\\mitch\\privacymage_book\\art\\build_ornament_proof.py` | the proof sheet (renders all implemented glyphs at 12/9/5.5 mm) |\n| `C:\\Users\\mitch\\privacymage_book\\art\\HANDOFF.md` | how to drop in the cloud-artifact code + EB Garamond |\n| `C:\\Users\\mitch\\privacymage_book\\STYLE_GUIDE.md` | **the canonical visual spec** (read this for any real work) |"
+          },
+          {
+            "type": "markdown",
+            "id": "be7389fd62817296",
+            "text": "## State (2026-05-30)\n\n- ✅ Toolchain ready: Python 3.14 + **ReportLab 4.5.1** + **PyMuPDF 1.27** installed.\n- ✅ Recovered exactly from `STYLE_GUIDE.md`: palette (INK `#1a1a1a` / SILVER `#7a7a82` / GHOST `#444444`), the five line weights, and **the sparkle mark + `_sparkle_field`** (the meaning-bearing core).\n- ✅ **All nine `draw_*_glyph` reconstructed** — traced from the real ornaments in `15_ornament_reference.pdf` (rasterized to `art/_ref/`), in the same three-grey hand, with each glyph's canonical polarity ratio. Render: `python build_ornaments_page.py` → `ornaments_page.{pdf,svg,png}` (all nine on one page).\n- ⏳ Still stubbed: the **2 figure engravings** (Mage front / Swords back) in `engravings.py` — reconstruct per §7/§10 or port from the cloud artifact.\n- ⚠️ EB Garamond TTFs not installed → Times fallback. Drop TTFs in `art/fonts/` to match the book (see HANDOFF.md).\n- Note: the reconstruction is *in the same hand*, not byte-identical to the bound PDF. For an exact match, port the original artifact bodies over the reconstructed ones."
+          },
+          {
+            "type": "markdown",
+            "id": "d14a6db67bcc1db8",
+            "text": "## The two rules above all (STYLE_GUIDE §13)\n\n1. **Same line weight for same visual function.** If an orbit ellipse is 0.5pt SILVER in one glyph, it is 0.5pt SILVER in every glyph. The eye reads consistency as quality. When unsure of a new mark, copy the weight/colour of the closest existing equivalent.\n2. **Polarity is meaning, not decoration.** The `+`/`−` sparkle ratio is a *statement about the promise character* of the work it surrounds, per Promise Theory:\n   - `+` positive promise (\"I will\") → **vertical + horizontal** crossing — delegation, projection, kindling, planting.\n   - `−` negative promise (\"I will not\") → **horizontal only**, the vertical refused — protection, refusal, keeping, boundary. *The line not drawn is the boundary kept.*\n   - giving/kindling poem → 3+/1−; refusal/forgetting poem → 1+/3−; balanced exchange → 2+/2−. Mage figure skews +6/−2; Swords figure skews +2/−6."
+          },
+          {
+            "type": "markdown",
+            "id": "57c2918dbee1ef92",
+            "text": "## Common tasks\n\n**Render the proof (verify anything is working):**\n```\ncd C:\\Users\\mitch\\privacymage_book\\art\npython build_ornament_proof.py        # -> ornament_proof.pdf\n```\n\n**Port a glyph from the cloud artifact:** open `chapbook_framework.py`, find the matching `draw_*_glyph` stub, replace the `raise NotImplementedError(...)` with the artifact body, re-run the proof. Repeat one at a time.\n\n**Add a NEW glyph** (e.g. a Movement-Two revision or a v6 motif) — follow STYLE_GUIDE §9:\n1. One central image; 3–5 composing elements; pick weight+colour per element.\n2. Compose in a bounded radius `r`, asymmetrically (a centred glyph reads as a logo; an off-balanced one reads as a scene).\n3. Choose the polarity ratio from the poem's promise character; place 4 sparkle marks at ~1.2–1.6r via `_sparkle_field`.\n4. Test at 12 / 9 / 5.5 mm — simplify if detail collapses at the smallest.\n5. Append it to the `GLYPHS` registry so the proof picks it up.\n\n**Add a NEW engraving** — follow STYLE_GUIDE §10 (vertical anatomy anchors → width anchors → Bezier parts, heavy INK silhouette + SILVER internal lines → narrative props → 8–12 polarity-skewed sparkles)."
+          },
+          {
+            "type": "markdown",
+            "id": "8b8c3129de1efc64",
+            "text": "## Cross-references to honour (STYLE_GUIDE §11)\n\nThe Mage's staff bears a crescent (echoes the Selene/Tide moon); the hat carries a filled star (same vocabulary as the sparkle field, elevated); the Field glyph's staff-with-crescent echoes the Mage figure; compass-centre dot / lattice vertices / Selene-dot share one small-filled-INK-circle vocabulary. When adding visuals, plant these quiet echoes."
+          },
+          {
+            "type": "markdown",
+            "id": "a6d454454aa44156",
+            "text": "## Function template\n\n```python\ndef draw_my_glyph(c, cx, cy, r):\n    \"\"\"One line. For: <Roman + title>. <polarity>.\"\"\"\n    c.saveState(); c.setLineCap(1)\n    # 1 primary subject  — INK 0.7-0.9\n    # 2 secondary        — INK/SILVER, layered\n    # 3 ambient outline  — SILVER, lighter\n    # 4 light/motion     — SILVER 0.35-0.5\n    c.restoreState()\n    _sparkle_field(c, [(sx1, sy1, sr1, '+'), (sx2, sy2, sr2, '-')])  # polarity = meaning\n```\n\n*This skill is itself part of the grimoire. Extend it as you extend the work.* `(⚔️⊥⿻⊥🧙)😊`"
+          },
+          {
+            "type": "markdown",
+            "id": "b007e7327320a9af",
+            "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847280971
+    }
+  ]
+}

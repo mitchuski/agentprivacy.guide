@@ -1,0 +1,108 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decision §6 — Foundational context decision · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Decision §6 — Foundational context decision</span></div>
+  <article><div class="md"><h2>6. Foundational context decision</h2>
+<h3>6.1 Adopted working definition</h3>
+<p>For V1, a context SHALL be defined as:</p>
+<blockquote>
+<p>A versioned, governance-authorised linkability domain identified by a canonical context descriptor, within which specified actions may be linked for a declared purpose and bounded epoch, and across which the profile claims unlinkability or non-correlation against a named adversary and collusion model.</p>
+</blockquote>
+<p>The context descriptor MUST be derived from governed semantic inputs rather than an opaque verifier-chosen label.</p>
+<h3>6.2 Required context descriptor inputs</h3>
+<p>A canonical context descriptor SHOULD include, directly or through an unambiguous digest:</p>
+<ul>
+<li>protocol identifier and version;</li>
+<li>profile identifier and version;</li>
+<li>context authority identifier;</li>
+<li>context policy identifier and version;</li>
+<li>purpose identifier;</li>
+<li>scope identifier;</li>
+<li>verifier audience or governed verifier-set identifier;</li>
+<li>ecosystem, registry, or accreditation domain where relevant;</li>
+<li>epoch identifier and epoch policy;</li>
+<li>nullifier and domain-separation version;</li>
+<li>applicable retention and rollover policy identifier.</li>
+</ul>
+<p>The descriptor MUST be encoded canonically and MUST be included in conformance fixtures.</p>
+<h3>6.3 What delimits a context</h3>
+<p>The default context SHOULD be <strong>purpose-and-governance bounded</strong>, not automatically “per verifier,” “per application,” or “per ecosystem.” Those may be valid context boundaries only when the governance record demonstrates why they are proportionate and humanly legible.</p>
+<p>A context may cover multiple verifiers when they genuinely perform the same governed purpose and participants are clearly informed that reuse detection spans that set. A context MUST NOT silently expand because of corporate ownership, vendor infrastructure, common analytics, merger, acquisition, federation, or use of the same registry.</p>
+<h3>6.4 Required resistance target</h3>
+<p>The Extended Personhood Profile SHOULD target cross-context unlinkability against:</p>
+<ul>
+<li>an honest-but-curious verifier;</li>
+<li>multiple colluding verifiers in different contexts; and</li>
+<li>an issuer colluding with a verifier,</li>
+</ul>
+<p>subject to the explicit limitations created by issuer-held enrolment data, registry traffic, network observability, schema fields, presentation timing, and external identifiers.</p>
+<p>A deployment that cannot resist issuer-verifier linkage MUST state that limitation plainly and MUST NOT describe its context boundary as issuer-verifier-collusion resistant.</p>
+<p>The Task Force should treat issuer-verifier collusion resistance as the <strong>target profile</strong>, while allowing a separately identified reduced-privacy deployment class where technical or governance dependencies prevent it. Reduced resistance MUST result in a different profile or conformance declaration, not a hidden implementation caveat.</p>
+<h3>6.5 Intentionally linkable within a context</h3>
+<p>A profile MAY intentionally reveal or derive enough information to determine that:</p>
+<ul>
+<li>the same enrolled secret has already performed the same bounded action in the same scope and epoch;</li>
+<li>a rate or count threshold has been reached;</li>
+<li>a returning presenter is bound to the same enrolment or account context;</li>
+<li>a proof is a replay of the same challenge or transcript;</li>
+<li>a credential or attestation has been revoked, suspended, expired, or superseded.</li>
+</ul>
+<p>No additional linkage is implied. In particular, linkability within a context MUST NOT be reused for advertising, general analytics, unrelated fraud scoring, cross-service identity resolution, or open-ended behavioural profiling unless such use is separately authorised, disclosed, and outside the claimed privacy profile.</p>
+<h3>6.6 Prohibited cross-context linkage</h3>
+<p>A conformant context design MUST NOT intentionally enable linkage across contexts through:</p>
+<ul>
+<li>a global stable nullifier;</li>
+<li>a stable holder identifier;</li>
+<li>a reusable enrolment-root identifier exposed to verifiers;</li>
+<li>issuer-local tracking numbers;</li>
+<li>globally unique status-list indices;</li>
+<li>exact issuance timestamps when a coarser proof is sufficient;</li>
+<li>rare schema or assurance variants that fingerprint the issuer or subject;</li>
+<li>deterministic proof encoding not domain-separated by context;</li>
+<li>common fallback or mediated-prover identifiers;</li>
+<li>shared logs, telemetry, or analytics that restore the correlation the proof prevents.</li>
+</ul>
+<h3>6.7 Context authority and change control</h3>
+<p>Every context MUST identify an authority responsible for:</p>
+<ul>
+<li>defining the context and its purpose;</li>
+<li>admitting or removing verifiers;</li>
+<li>setting epoch and retention rules;</li>
+<li>approving changes to scope;</li>
+<li>publishing effective times and migration rules;</li>
+<li>preventing silent expansion;</li>
+<li>providing a correction, appeal, and challenge route;</li>
+<li>maintaining evidence that the user-facing description matches the cryptographic domain.</li>
+</ul>
+<p>A context change that expands linkability MUST be treated as a material privacy change. Existing nullifiers or pseudonyms MUST NOT be silently reinterpreted under the expanded context.</p>
+<h3>6.8 Human-legibility test</h3>
+<p>A context definition fails review unless an affected person can reasonably answer:</p>
+<ol>
+<li>What activity is this proof for?</li>
+<li>Which organisations or services can recognise repeat use within this context?</li>
+<li>For how long is repeat use linkable?</li>
+<li>What happens when the epoch changes?</li>
+<li>Does using a fallback or mediated prover change who can observe the event?</li>
+<li>How can the person challenge an incorrect reuse or uniqueness decision?</li>
+</ol>
+<p>The interface need not expose cryptographic internals, but it MUST expose the operational meaning of the boundary.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="decision-6-foundational-context-decision.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

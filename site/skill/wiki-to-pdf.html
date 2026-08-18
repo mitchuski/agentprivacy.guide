@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki To Pdf · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki To Pdf</span></div>
+  <article><div class="md"><h1>wiki-to-pdf</h1>
+</div>
+<div class="md"><blockquote>
+<p>Pull FedWiki timeline pages and render formal executive-brief PDFs - one brief per timeline plus a combined dossier whose .</p>
+</blockquote>
+</div>
+<div class="md"><h1>wiki-to-pdf</h1>
+<p>Turns the federated timeline wikis into formal PDF documents. Source of truth is the<br><strong>live</strong> <code>*.timeline.ide.earth</code> subdomains, read over public GET (no cookie needed).</p>
+</div>
+<div class="md"><h2>What it produces (into <code>out/</code>, inside this skill dir)</h2>
+<ul>
+<li><code>&lt;sub&gt;-brief.pdf</code> - one executive brief per timeline (cover -&gt; overview -&gt; In-brief -&gt; Key Points / Action Items -&gt; the five questions in detail).</li>
+<li><code>timeline-dossier.pdf</code> - combined dossier: <strong>cover -&gt; Contents -&gt; Unified Summary (every In-brief, all 12 milestones) -&gt; Milestones in Detail</strong>.</li>
+<li><code>model.json</code> - the pulled, parsed content model (re-render offline with <code>--model</code>).</li>
+</ul>
+<p>The <strong>Unified Summary</strong> section is deliberate: it is the shared semantic core (each<br>milestone compressed to its five answers) from which the detailed sections - and any<br>community-specific retelling produced by the <code>understanding-compression</code> skill - expand.</p>
+</div>
+<div class="md"><h2>Run</h2>
+<pre><code>python wiki_pdf.py                      # all 12 timelines + dossier -&gt; out/
+python wiki_pdf.py --sub agm            # one timeline brief
+python wiki_pdf.py --no-dossier         # briefs only
+python wiki_pdf.py --dump out/model.json   # pull + cache the model
+python wiki_pdf.py --model out/model.json  # render from cache (no network)
+</code></pre>
+</div>
+<div class="md"><h2>How it works</h2>
+<ol>
+<li><strong>Pull</strong> - for each timeline: the video/primary page (title, date object, video URL,<br>Overview, Key Points, Action Items) + the 5 question pages (<code>who-cares</code>,<br><code>who-is-involved</code>, <code>what-changes</code>, <code>proof--realness</code>, <code>becoming-real</code>).</li>
+<li><strong>Parse</strong> - FedWiki <code>story[]</code> items -&gt; structured record. For each question page it<br>separates the <code>## In brief</code> summary from the verbatim answer body and drops the<br>navigation chrome (the intro line and <code># See</code> block).</li>
+<li><strong>Render</strong> - ReportLab (Platypus). A minimal markdown-&gt;flowables converter handles<br>headings, bullets, numbered lists, bold/italic/code, and <code>wiki links</code>.</li>
+</ol>
+</div>
+<div class="md"><h2>Config</h2>
+<p>The timeline family, chronological order, video-slug map, and question slugs are at the<br>top of <code>wiki_pdf.py</code> (<code>TIMELINES</code>, <code>QUESTIONS</code>). Add/replace a milestone there.</p>
+</div>
+<div class="md"><h2>Dependencies</h2>
+<ul>
+<li>Python 3 + <code>reportlab</code> (<code>pip install reportlab</code>). No LaTeX / GTK / wkhtmltopdf needed.</li>
+<li>weasyprint is NOT used (its GTK libs are broken on this box); ReportLab is the engine.</li>
+</ul>
+</div>
+<div class="md"><h2>Notes / gotchas</h2>
+<ul>
+<li>Dates are read from each video page&#39;s <code>date</code> story item and shown verbatim (&quot;date object true&quot;).</li>
+<li>The combined dossier paginates one milestone per section; ~64 pp for the current 12.</li>
+<li>If a question page is missing/renamed, that answer renders as &quot;(missing: ...)&quot; rather<br>than failing the whole run.</li>
+<li>Pairs with <code>fedwiki-cohere-sync</code> (which keeps the source pages coherent) and feeds<br><code>understanding-compression</code> (which re-expresses the Unified Summary per community).</li>
+</ul>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="wiki-to-pdf.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

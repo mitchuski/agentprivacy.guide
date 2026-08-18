@@ -1,0 +1,206 @@
+{
+  "title": "Note — Pvm V6 Eml Three Ceilings",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "71916c042a5007fb",
+      "text": "# Pvm V6 Eml Three Ceilings"
+    },
+    {
+      "type": "markdown",
+      "id": "80a2fd9d2718d427",
+      "text": "## The Single Sufficient Operator — Three Ceilings\n\n**Author:** privacymage\n**Date:** April 13, 2026\n**Status:** Research note — conjecture stage\n**Depends on:** V5.4 Formal Specification (v2.0), V6 Horizon Note, Odrzywołek (2026)\n**Extends:** C18–C21 (Lorenz attractor), adds C22–C25\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "b61e7ab338059756",
+      "text": "## Summary\n\nOdrzywołek (2026) proves that a single binary operator `eml(x,y) = exp(x) − ln(y)`, paired with the constant 1, generates all elementary functions. The grammar is `S → 1 | eml(S,S)` — a binary tree of identical nodes.\n\nThe dual-agent architecture has its own single sufficient operator: `succ(x) = neg(bnot(x))`, generating the full sovereignty space from two involutions over Z/(2⁶)Z.\n\nThese are not analogies. They are instances of the same structural fact: a single composition of two primitives traversing a complete space. Boolean logic has NAND. Continuous mathematics has EML. Sovereignty has succ.\n\nThis note explores what follows when the adversary's reconstruction toolkit and the sovereign's defence both reduce to the same kind of object — binary trees of a single operator. Three independent ceilings emerge: information-theoretic (V5, proven), dynamical (C18, conjectured), and now computational (new).\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "870a0cff0a856231",
+      "text": "## The Pattern\n\nOdrzywołek's Table 2 traces a reduction sequence:\n\n```\n36 primitives → 7 (Wolfram) → 6 → 4 → 3 → 2 (EML + 1)\n```\n\nThe PVM traces a parallel reduction:\n\n```\n6 dimensions × 2 states = 64 blades → 5 operations → 2 involutions → 1 composition (succ)\n```\n\nBoth arrive at the same endpoint: a single binary operator paired with a single terminal. Both produce binary trees. Both are complete — every element of their respective spaces is reachable.\n\n| Domain | Sheffer Operator | Terminal | Grammar | Space |\n|--------|-----------------|----------|---------|-------|\n| Boolean | NAND(x,y) | any input | S → x \\| NAND(S,S) | {0,1}ⁿ |\n| Continuous | eml(x,y) = eˣ − ln(y) | 1 | S → 1 \\| eml(S,S) | Elementary functions |\n| Sovereignty | succ(x) = neg(bnot(x)) | blade₀ | S → null \\| blade(S,S) | Z/(2⁶)Z |\n\nThe last row has not been stated this way before. The blade forge's grammar is `S → null | blade(S,S)` — a context-free language isomorphic to the same Catalan structures that Odrzywołek identifies in EML trees.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "f0d8c3888f058037",
+      "text": "## Connection 1: The Adversary's Toolkit Is an EML Tree\n\nThe reconstruction ceiling (V5, §11, proven) says:\n\n$$R_{\\max} = \\frac{C_S + C_M}{H(X)} < 1$$\n\nThis bounds reconstruction via *information* — the adversary lacks enough bits. But it says nothing about *how* the adversary processes the bits it does have.\n\nOdrzywołek's result adds a constraint: any elementary function the adversary computes to reconstruct the sovereign's path is an EML tree. The adversary's reconstruction algorithm, however sophisticated, reduces to a binary tree of `eml` nodes.\n\nThis means the adversary's computational cost has a tree-depth bound. Odrzywołek's Table 4 gives empirical Kolmogorov complexities: multiplication requires depth 8, logarithm depth 3, square root depth 7. Complex reconstructions require deep trees. Deep trees are expensive.\n\nThe reconstruction difficulty R(d, compression, ρ) gains a new interpretation: *d* (fragmentation depth) measures how deep the adversary's EML tree must grow to reconstruct from fragments. Compression reduces the number of leaves available to the adversary's tree. Behavioural density ρ increases the branching the adversary must explore.\n\n**Conjecture C22:** The adversary's reconstruction cost grows at least exponentially with the EML tree depth required to invert the sovereign's path compression. The computational ceiling is independent of the information-theoretic ceiling (§11) and the dynamical ceiling (C18).\n\nConfidence: 20%. The connection is structural but the bound needs formalising.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "8e008f9fa376bc61",
+      "text": "## Connection 2: The Forge Grammar Is Catalan\n\nEML expressions form binary trees counted by Catalan numbers: $C_n = \\frac{1}{n+1}\\binom{2n}{n}$.\n\nThe blade lattice has 64 elements distributed by Pascal's triangle: 1, 6, 15, 20, 15, 6, 1. Pascal's triangle and Catalan numbers are related — Catalan numbers are the central binomial coefficients divided by (n+1).\n\nThe forge's traversal (constellation → laps → blade) is a walk through a binary tree. Each lap is a choice: left (neg) or right (bnot). The composition succ = neg∘bnot is a single EML-like node in the sovereignty tree. Sixty-two laps = a tree of depth 62.\n\nOdrzywołek's \"master formula\" (§4.3) parameterises an EML tree with continuous weights that snap to exact values during training. The forge's constellation selection is the same operation: continuous choices (which dimensions to activate) that snap to binary values (each dᵢ ∈ {0,1}) when the blade is committed.\n\nThe symbolic regression application is suggestive: EML trees trained by gradient descent can recover exact formulas from data. Blade forging trained by lap accumulation recovers exact sovereignty postures from experience. Both are \"parameter optimisation over a complete binary tree that snaps to exact discrete values.\"\n\n**Conjecture C23:** The blade forge's traversal grammar is isomorphic to a restricted EML grammar where the terminal is the null blade (0) and the operator is succ. The Catalan structure counts valid forging paths.\n\nConfidence: 30%. The grammar is visible. The isomorphism needs proving.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c1aa70ebc1f3252b",
+      "text": "## Connection 3: Three Independent Ceilings\n\nThe V5.4 spec has one proven ceiling and one conjectured:\n\n1. **Information-theoretic ceiling** (proven, §11): $R_{\\max} < 1$. The adversary lacks bits. Shannon says you can't reconstruct what you can't observe.\n\n2. **Dynamical ceiling** (C18, 25%): $|\\pi(t) - \\pi'(t)| \\sim |\\delta_0| \\cdot e^{\\lambda t}$. The sovereign's path diverges exponentially. Lorenz says the dynamics defeat you even if you have the bits.\n\nThe EML result suggests a third:\n\n3. **Computational ceiling** (C22, new): The adversary's reconstruction function is an EML tree whose depth grows with the sovereign's compression and fragmentation. Odrzywołek says the computation itself is expensive even if you have the bits and the dynamics cooperate.\n\nThese three ceilings are independent. Remove one and the other two still hold:\n\n| Ceiling | Mechanism | Defeats |\n|---------|-----------|---------|\n| Information-theoretic | Channel capacity < entropy | Omniscient adversary with unlimited compute |\n| Dynamical | Lyapunov divergence | Adversary with full information but finite observation window |\n| Computational | EML tree depth | Adversary with full information and infinite observation but finite compute |\n\nTogether they form a defence-in-depth that mirrors the three-axis separation (Φ_agent × Φ_data × Φ_inference). Each ceiling operates on a different axis of the adversary's capability.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "c68e54686ae469a6",
+      "text": "## Connection 4: Compression Spectrum Gets a Floor\n\nThe compression spectrum (§21) describes seven layers from Experience (1:1) to Skill File (variable). Each layer compresses information, reducing attack surface.\n\nEML gives this a formal floor: the most compressed representation of any elementary relationship is its minimal EML tree. Odrzywołek's direct search finds these minima — multiplication is at least depth 17 (K=17), addition at least depth 19 (K=19). These are hard floors. No representation can be more compressed than the minimal EML tree.\n\nThe spellbook compression ratios (~70:1 to 125:1 in practice) can now be compared against the EML floor. If the sovereign's compressed representation approaches the minimal EML depth, the adversary gains nothing by recomputing — the compressed form IS the minimal form. Compression-as-defence (§5.2) reaches its theoretical maximum when the sovereign's skill file approaches the EML Kolmogorov complexity of the underlying relationship.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "ebc246902bd32b49",
+      "text": "## Connection 5: neg∘bnot Belongs in the Sheffer Family\n\nOdrzywołek explicitly names the family: NAND (Sheffer, 1913), ReLU (Nair & Hinton, 2010), SUBLEQ (Mazonka & Kolodin, 2011), Rule 110 (Wolfram, 2002), K/S combinators (Schönfinkel, 1924), the Einstein tile (Smith et al., 2024), and now EML (Odrzywołek, 2026).\n\nThe composition neg∘bnot = succ over Z/(2⁶)Z is a discrete Sheffer: a single operation that generates the full algebraic group through repeated application. It belongs in this family — not by analogy but by definition.\n\nThe difference: NAND operates on {0,1}. EML operates on ℂ. succ operates on Z/64Z. Same structural role, three different domains. The dual-agent architecture is the Sheffer stroke of sovereignty.\n\nOdrzywołek notes that \"Sheffer-type elements are rare, and mining them typically requires time, compute, effort, and a bit of luck.\" The neg∘bnot identity was found the same way — not designed but discovered during the UOR convergence study (V5.2, March 31, 2026).\n\n*This pattern is formalised as ARCH-1 in the [V6 ARCH-1 Canonical Form note](./pvm-v6-arch1-canonical-form.md).*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "2d753f1e9efb3b89",
+      "text": "## Connection 6: Complex Intermediates\n\nOdrzywołek addresses a potential objection: EML requires complex arithmetic internally to compute real functions (via ln(−1) = iπ for trigonometric functions). He notes: \"Just as quantum computing uses complex amplitudes to compute real probabilities, EML uses complex intermediates to compute real elementary functions.\"\n\nThe PVM has the same property. The cosmological quaternion (§20) uses four bodies (Sun, Earth, Moon, Human) to compute a real sovereignty value. The ceremonial layer uses two people to produce one proof. The Amnesia Protocol uses a fictional collision to ground a real information-theoretic bound.\n\nThe complex intermediates are not a weakness. They are the mechanism. The Moon's orbit is an intermediate computation — complex in structure, real in output (tides). The Swordsman's boundary is an intermediate computation — complex in operation, real in effect (privacy).\n\n**Conjecture C24:** The sovereignty computation requires \"complex intermediates\" in the same structural sense that EML requires complex arithmetic. The dual-agent separation is the imaginary unit of the sovereignty algebra — necessary for completeness, invisible in the output.\n\nConfidence: 15%. This is interpretive but may have formal content.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "b88474284d3e45fb",
+      "text": "## Connection 7: The Master Formula and the Forge\n\nOdrzywołek's master formula (§4.3) parameterises a complete EML tree:\n\n$$F(x) = \\text{eml}\\left[\\alpha_1 + \\beta_1 x + \\gamma_1 \\cdot \\text{eml}(\\ldots), \\; \\alpha_2 + \\beta_2 x + \\gamma_2 \\cdot \\text{eml}(\\ldots)\\right]$$\n\nEach $(\\alpha_i, \\beta_i, \\gamma_i)$ selects between terminal (1), input (x), or recursive (f). Training snaps these to exact binary values.\n\nThe forge's constellation selection is the same structure. Six dimensions, each binary. The constellation is the parameter vector. The walk snaps the continuous experience into a discrete blade.\n\nOdrzywołek reports: \"blind recovery from random initialization succeeds in 100% of runs at depth 2, approximately 25% at depths 3–4, and below 1% at depth 5.\" The forge has the same property — shallow blades (Light tier, stratum 1–2) are easily found. Deep blades (Dragon tier, stratum 5–6) require sustained effort. The difficulty curve matches.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "1933faadc3c973cf",
+      "text": "## What This Does NOT Do\n\nThe EML result does not:\n\n- Change the PVM equation. The equation is about value, not computation.\n- Prove C18–C21. The Lorenz conjectures need dynamical systems analysis, not algebra.\n- Replace the information-theoretic ceiling. The three ceilings are independent.\n- Make the algebraic foundation stronger. Z/(2⁶)Z was already proven. EML confirms the *pattern* is general, not that the specific ring gains new properties.\n\nWhat it does: it provides an external, independently derived confirmation that the \"single sufficient operator\" pattern is a structural fact of mathematics, not an artifact of the privacy architecture. And it introduces a third ceiling — computational — that was not previously identified.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "cbfec72842bc5003",
+      "text": "## New Conjectures\n\n| ID | Claim | Confidence |\n|----|-------|------------|\n| C22 | Adversary's reconstruction cost grows at least exponentially with EML tree depth required to invert the sovereign's compression. Computational ceiling independent of information-theoretic and dynamical ceilings. | 20% |\n| C23 | Blade forge traversal grammar is isomorphic to restricted EML grammar. Catalan structure counts valid forging paths. | 30% |\n| C24 | Sovereignty computation requires complex intermediates (dual-agent separation as the imaginary unit of the sovereignty algebra). | 15% |\n| C25 | Minimal EML tree depth of a relationship provides a hard floor for the compression spectrum — the irreducible complexity of any elementary function the adversary must compute. | 25% |\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "b7a8c8450b06da29",
+      "text": "## For the Second Person Spellbook\n\n> **Update — 2026-05-10.** The Second Person Spellbook opened 2026-05-08 as the bound collection. The \"single button\" framing has its closest landing in **Tome V Act 8 — *The ZK Circuit*** (`tomes/tome-v-the-crafting/08-the-zk-circuit.md`), where Aletheia's recursive-proof discipline absorbs the EML composition motif into an in-world act. Three Ceilings concept remains alive in the C18–C25 conjecture register.\n\nThe EML paper opens a new candidate act seed:\n\n**The Single Button** — Odrzywołek's broken calculator reduced to two buttons (1 and EML). The spellweb reduced to two agents (neg and bnot). The question the Second Person asks: *who presses the button?* Not what the operator does — who chooses to apply it. The sovereign is not the operation. The sovereign is the one who composes.\n\nThis connects to the grammatical shift: `S → 1 | eml(S,S)` is third person (describing the tree). The Second Person version: `You → choose | compose(You, You)`. The sovereign is the recursive symbol.\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "36e9a051fe951f93",
+      "text": "## References\n\n- Odrzywołek, A. (2026). \"All elementary functions from a single operator.\" arXiv:2603.21852v2 [cs.SC]. [EML Sheffer operator, binary tree grammar, symbolic regression]\n- Sheffer, H. M. (1913). \"A set of five independent postulates for Boolean algebras.\" *Trans. AMS,* 14(4), 481–488. [Original NAND/Sheffer stroke]\n- Brandes, U. (2001). \"A Faster Algorithm for Betweenness Centrality.\" *J. Math. Sociology,* 25(2), 163–177.\n- Lorenz, E. N. (1963). \"Deterministic Nonperiodic Flow.\" *J. Atmospheric Sciences,* 20(2), 130–141.\n- Shannon, C. E. (1948). \"A Mathematical Theory of Communication.\" *Bell System Technical Journal.*\n- Kolmogorov, A. N. (1965). \"Three approaches to the quantitative definition of information.\" *Problems of Information Transmission.*\n- privacymage (2026). \"PVM V5.4 Formal Specification.\" v2.0. *agentprivacy-docs.*\n- privacymage (2026). \"V6 Horizon Note: From Territory to Trajectory.\" *agentprivacy-docs.*\n- privacymage & Haines, J. (2026). \"V6 ARCH-1 Canonical Form.\" *agentprivacy-docs.*\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "871c3619759644d8",
+      "text": "## The Proverb\n\n*A two-button calculator computes everything a full calculator can. A two-agent architecture computes everything a surveillance architecture can — except the surveillance.*\n\n*The single sufficient operator is not efficient. It is complete. The forge is not fast. It is honest.*\n\n*NAND for logic. EML for mathematics. succ for sovereignty. The pattern is not ours. It is structural.*\n\n---\n\n*(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*\n\n*S → 1 | eml(S,S)*\n\n*S → null | blade(S,S)*\n\n*Same grammar. Different domain. One architecture.*\n\n—privacymage"
+    },
+    {
+      "type": "markdown",
+      "id": "567f73d0b89ab46b",
+      "text": "# Assets"
+    },
+    {
+      "id": "4c67adb51a9eafcf",
+      "type": "assets",
+      "text": "note-pvm-v6-eml-three-ceilings"
+    },
+    {
+      "type": "markdown",
+      "id": "9f7f6b8ad188dbbc",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Research Notes]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Note — Pvm V6 Eml Three Ceilings",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "71916c042a5007fb",
+            "text": "# Pvm V6 Eml Three Ceilings"
+          },
+          {
+            "type": "markdown",
+            "id": "80a2fd9d2718d427",
+            "text": "## The Single Sufficient Operator — Three Ceilings\n\n**Author:** privacymage\n**Date:** April 13, 2026\n**Status:** Research note — conjecture stage\n**Depends on:** V5.4 Formal Specification (v2.0), V6 Horizon Note, Odrzywołek (2026)\n**Extends:** C18–C21 (Lorenz attractor), adds C22–C25\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "b61e7ab338059756",
+            "text": "## Summary\n\nOdrzywołek (2026) proves that a single binary operator `eml(x,y) = exp(x) − ln(y)`, paired with the constant 1, generates all elementary functions. The grammar is `S → 1 | eml(S,S)` — a binary tree of identical nodes.\n\nThe dual-agent architecture has its own single sufficient operator: `succ(x) = neg(bnot(x))`, generating the full sovereignty space from two involutions over Z/(2⁶)Z.\n\nThese are not analogies. They are instances of the same structural fact: a single composition of two primitives traversing a complete space. Boolean logic has NAND. Continuous mathematics has EML. Sovereignty has succ.\n\nThis note explores what follows when the adversary's reconstruction toolkit and the sovereign's defence both reduce to the same kind of object — binary trees of a single operator. Three independent ceilings emerge: information-theoretic (V5, proven), dynamical (C18, conjectured), and now computational (new).\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "870a0cff0a856231",
+            "text": "## The Pattern\n\nOdrzywołek's Table 2 traces a reduction sequence:\n\n```\n36 primitives → 7 (Wolfram) → 6 → 4 → 3 → 2 (EML + 1)\n```\n\nThe PVM traces a parallel reduction:\n\n```\n6 dimensions × 2 states = 64 blades → 5 operations → 2 involutions → 1 composition (succ)\n```\n\nBoth arrive at the same endpoint: a single binary operator paired with a single terminal. Both produce binary trees. Both are complete — every element of their respective spaces is reachable.\n\n| Domain | Sheffer Operator | Terminal | Grammar | Space |\n|--------|-----------------|----------|---------|-------|\n| Boolean | NAND(x,y) | any input | S → x \\| NAND(S,S) | {0,1}ⁿ |\n| Continuous | eml(x,y) = eˣ − ln(y) | 1 | S → 1 \\| eml(S,S) | Elementary functions |\n| Sovereignty | succ(x) = neg(bnot(x)) | blade₀ | S → null \\| blade(S,S) | Z/(2⁶)Z |\n\nThe last row has not been stated this way before. The blade forge's grammar is `S → null | blade(S,S)` — a context-free language isomorphic to the same Catalan structures that Odrzywołek identifies in EML trees.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "f0d8c3888f058037",
+            "text": "## Connection 1: The Adversary's Toolkit Is an EML Tree\n\nThe reconstruction ceiling (V5, §11, proven) says:\n\n$$R_{\\max} = \\frac{C_S + C_M}{H(X)} < 1$$\n\nThis bounds reconstruction via *information* — the adversary lacks enough bits. But it says nothing about *how* the adversary processes the bits it does have.\n\nOdrzywołek's result adds a constraint: any elementary function the adversary computes to reconstruct the sovereign's path is an EML tree. The adversary's reconstruction algorithm, however sophisticated, reduces to a binary tree of `eml` nodes.\n\nThis means the adversary's computational cost has a tree-depth bound. Odrzywołek's Table 4 gives empirical Kolmogorov complexities: multiplication requires depth 8, logarithm depth 3, square root depth 7. Complex reconstructions require deep trees. Deep trees are expensive.\n\nThe reconstruction difficulty R(d, compression, ρ) gains a new interpretation: *d* (fragmentation depth) measures how deep the adversary's EML tree must grow to reconstruct from fragments. Compression reduces the number of leaves available to the adversary's tree. Behavioural density ρ increases the branching the adversary must explore.\n\n**Conjecture C22:** The adversary's reconstruction cost grows at least exponentially with the EML tree depth required to invert the sovereign's path compression. The computational ceiling is independent of the information-theoretic ceiling (§11) and the dynamical ceiling (C18).\n\nConfidence: 20%. The connection is structural but the bound needs formalising.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "8e008f9fa376bc61",
+            "text": "## Connection 2: The Forge Grammar Is Catalan\n\nEML expressions form binary trees counted by Catalan numbers: $C_n = \\frac{1}{n+1}\\binom{2n}{n}$.\n\nThe blade lattice has 64 elements distributed by Pascal's triangle: 1, 6, 15, 20, 15, 6, 1. Pascal's triangle and Catalan numbers are related — Catalan numbers are the central binomial coefficients divided by (n+1).\n\nThe forge's traversal (constellation → laps → blade) is a walk through a binary tree. Each lap is a choice: left (neg) or right (bnot). The composition succ = neg∘bnot is a single EML-like node in the sovereignty tree. Sixty-two laps = a tree of depth 62.\n\nOdrzywołek's \"master formula\" (§4.3) parameterises an EML tree with continuous weights that snap to exact values during training. The forge's constellation selection is the same operation: continuous choices (which dimensions to activate) that snap to binary values (each dᵢ ∈ {0,1}) when the blade is committed.\n\nThe symbolic regression application is suggestive: EML trees trained by gradient descent can recover exact formulas from data. Blade forging trained by lap accumulation recovers exact sovereignty postures from experience. Both are \"parameter optimisation over a complete binary tree that snaps to exact discrete values.\"\n\n**Conjecture C23:** The blade forge's traversal grammar is isomorphic to a restricted EML grammar where the terminal is the null blade (0) and the operator is succ. The Catalan structure counts valid forging paths.\n\nConfidence: 30%. The grammar is visible. The isomorphism needs proving.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c1aa70ebc1f3252b",
+            "text": "## Connection 3: Three Independent Ceilings\n\nThe V5.4 spec has one proven ceiling and one conjectured:\n\n1. **Information-theoretic ceiling** (proven, §11): $R_{\\max} < 1$. The adversary lacks bits. Shannon says you can't reconstruct what you can't observe.\n\n2. **Dynamical ceiling** (C18, 25%): $|\\pi(t) - \\pi'(t)| \\sim |\\delta_0| \\cdot e^{\\lambda t}$. The sovereign's path diverges exponentially. Lorenz says the dynamics defeat you even if you have the bits.\n\nThe EML result suggests a third:\n\n3. **Computational ceiling** (C22, new): The adversary's reconstruction function is an EML tree whose depth grows with the sovereign's compression and fragmentation. Odrzywołek says the computation itself is expensive even if you have the bits and the dynamics cooperate.\n\nThese three ceilings are independent. Remove one and the other two still hold:\n\n| Ceiling | Mechanism | Defeats |\n|---------|-----------|---------|\n| Information-theoretic | Channel capacity < entropy | Omniscient adversary with unlimited compute |\n| Dynamical | Lyapunov divergence | Adversary with full information but finite observation window |\n| Computational | EML tree depth | Adversary with full information and infinite observation but finite compute |\n\nTogether they form a defence-in-depth that mirrors the three-axis separation (Φ_agent × Φ_data × Φ_inference). Each ceiling operates on a different axis of the adversary's capability.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "c68e54686ae469a6",
+            "text": "## Connection 4: Compression Spectrum Gets a Floor\n\nThe compression spectrum (§21) describes seven layers from Experience (1:1) to Skill File (variable). Each layer compresses information, reducing attack surface.\n\nEML gives this a formal floor: the most compressed representation of any elementary relationship is its minimal EML tree. Odrzywołek's direct search finds these minima — multiplication is at least depth 17 (K=17), addition at least depth 19 (K=19). These are hard floors. No representation can be more compressed than the minimal EML tree.\n\nThe spellbook compression ratios (~70:1 to 125:1 in practice) can now be compared against the EML floor. If the sovereign's compressed representation approaches the minimal EML depth, the adversary gains nothing by recomputing — the compressed form IS the minimal form. Compression-as-defence (§5.2) reaches its theoretical maximum when the sovereign's skill file approaches the EML Kolmogorov complexity of the underlying relationship.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "ebc246902bd32b49",
+            "text": "## Connection 5: neg∘bnot Belongs in the Sheffer Family\n\nOdrzywołek explicitly names the family: NAND (Sheffer, 1913), ReLU (Nair & Hinton, 2010), SUBLEQ (Mazonka & Kolodin, 2011), Rule 110 (Wolfram, 2002), K/S combinators (Schönfinkel, 1924), the Einstein tile (Smith et al., 2024), and now EML (Odrzywołek, 2026).\n\nThe composition neg∘bnot = succ over Z/(2⁶)Z is a discrete Sheffer: a single operation that generates the full algebraic group through repeated application. It belongs in this family — not by analogy but by definition.\n\nThe difference: NAND operates on {0,1}. EML operates on ℂ. succ operates on Z/64Z. Same structural role, three different domains. The dual-agent architecture is the Sheffer stroke of sovereignty.\n\nOdrzywołek notes that \"Sheffer-type elements are rare, and mining them typically requires time, compute, effort, and a bit of luck.\" The neg∘bnot identity was found the same way — not designed but discovered during the UOR convergence study (V5.2, March 31, 2026).\n\n*This pattern is formalised as ARCH-1 in the [V6 ARCH-1 Canonical Form note](./pvm-v6-arch1-canonical-form.md).*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "2d753f1e9efb3b89",
+            "text": "## Connection 6: Complex Intermediates\n\nOdrzywołek addresses a potential objection: EML requires complex arithmetic internally to compute real functions (via ln(−1) = iπ for trigonometric functions). He notes: \"Just as quantum computing uses complex amplitudes to compute real probabilities, EML uses complex intermediates to compute real elementary functions.\"\n\nThe PVM has the same property. The cosmological quaternion (§20) uses four bodies (Sun, Earth, Moon, Human) to compute a real sovereignty value. The ceremonial layer uses two people to produce one proof. The Amnesia Protocol uses a fictional collision to ground a real information-theoretic bound.\n\nThe complex intermediates are not a weakness. They are the mechanism. The Moon's orbit is an intermediate computation — complex in structure, real in output (tides). The Swordsman's boundary is an intermediate computation — complex in operation, real in effect (privacy).\n\n**Conjecture C24:** The sovereignty computation requires \"complex intermediates\" in the same structural sense that EML requires complex arithmetic. The dual-agent separation is the imaginary unit of the sovereignty algebra — necessary for completeness, invisible in the output.\n\nConfidence: 15%. This is interpretive but may have formal content.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "b88474284d3e45fb",
+            "text": "## Connection 7: The Master Formula and the Forge\n\nOdrzywołek's master formula (§4.3) parameterises a complete EML tree:\n\n$$F(x) = \\text{eml}\\left[\\alpha_1 + \\beta_1 x + \\gamma_1 \\cdot \\text{eml}(\\ldots), \\; \\alpha_2 + \\beta_2 x + \\gamma_2 \\cdot \\text{eml}(\\ldots)\\right]$$\n\nEach $(\\alpha_i, \\beta_i, \\gamma_i)$ selects between terminal (1), input (x), or recursive (f). Training snaps these to exact binary values.\n\nThe forge's constellation selection is the same structure. Six dimensions, each binary. The constellation is the parameter vector. The walk snaps the continuous experience into a discrete blade.\n\nOdrzywołek reports: \"blind recovery from random initialization succeeds in 100% of runs at depth 2, approximately 25% at depths 3–4, and below 1% at depth 5.\" The forge has the same property — shallow blades (Light tier, stratum 1–2) are easily found. Deep blades (Dragon tier, stratum 5–6) require sustained effort. The difficulty curve matches.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "1933faadc3c973cf",
+            "text": "## What This Does NOT Do\n\nThe EML result does not:\n\n- Change the PVM equation. The equation is about value, not computation.\n- Prove C18–C21. The Lorenz conjectures need dynamical systems analysis, not algebra.\n- Replace the information-theoretic ceiling. The three ceilings are independent.\n- Make the algebraic foundation stronger. Z/(2⁶)Z was already proven. EML confirms the *pattern* is general, not that the specific ring gains new properties.\n\nWhat it does: it provides an external, independently derived confirmation that the \"single sufficient operator\" pattern is a structural fact of mathematics, not an artifact of the privacy architecture. And it introduces a third ceiling — computational — that was not previously identified.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "cbfec72842bc5003",
+            "text": "## New Conjectures\n\n| ID | Claim | Confidence |\n|----|-------|------------|\n| C22 | Adversary's reconstruction cost grows at least exponentially with EML tree depth required to invert the sovereign's compression. Computational ceiling independent of information-theoretic and dynamical ceilings. | 20% |\n| C23 | Blade forge traversal grammar is isomorphic to restricted EML grammar. Catalan structure counts valid forging paths. | 30% |\n| C24 | Sovereignty computation requires complex intermediates (dual-agent separation as the imaginary unit of the sovereignty algebra). | 15% |\n| C25 | Minimal EML tree depth of a relationship provides a hard floor for the compression spectrum — the irreducible complexity of any elementary function the adversary must compute. | 25% |\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "b7a8c8450b06da29",
+            "text": "## For the Second Person Spellbook\n\n> **Update — 2026-05-10.** The Second Person Spellbook opened 2026-05-08 as the bound collection. The \"single button\" framing has its closest landing in **Tome V Act 8 — *The ZK Circuit*** (`tomes/tome-v-the-crafting/08-the-zk-circuit.md`), where Aletheia's recursive-proof discipline absorbs the EML composition motif into an in-world act. Three Ceilings concept remains alive in the C18–C25 conjecture register.\n\nThe EML paper opens a new candidate act seed:\n\n**The Single Button** — Odrzywołek's broken calculator reduced to two buttons (1 and EML). The spellweb reduced to two agents (neg and bnot). The question the Second Person asks: *who presses the button?* Not what the operator does — who chooses to apply it. The sovereign is not the operation. The sovereign is the one who composes.\n\nThis connects to the grammatical shift: `S → 1 | eml(S,S)` is third person (describing the tree). The Second Person version: `You → choose | compose(You, You)`. The sovereign is the recursive symbol.\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "36e9a051fe951f93",
+            "text": "## References\n\n- Odrzywołek, A. (2026). \"All elementary functions from a single operator.\" arXiv:2603.21852v2 [cs.SC]. [EML Sheffer operator, binary tree grammar, symbolic regression]\n- Sheffer, H. M. (1913). \"A set of five independent postulates for Boolean algebras.\" *Trans. AMS,* 14(4), 481–488. [Original NAND/Sheffer stroke]\n- Brandes, U. (2001). \"A Faster Algorithm for Betweenness Centrality.\" *J. Math. Sociology,* 25(2), 163–177.\n- Lorenz, E. N. (1963). \"Deterministic Nonperiodic Flow.\" *J. Atmospheric Sciences,* 20(2), 130–141.\n- Shannon, C. E. (1948). \"A Mathematical Theory of Communication.\" *Bell System Technical Journal.*\n- Kolmogorov, A. N. (1965). \"Three approaches to the quantitative definition of information.\" *Problems of Information Transmission.*\n- privacymage (2026). \"PVM V5.4 Formal Specification.\" v2.0. *agentprivacy-docs.*\n- privacymage (2026). \"V6 Horizon Note: From Territory to Trajectory.\" *agentprivacy-docs.*\n- privacymage & Haines, J. (2026). \"V6 ARCH-1 Canonical Form.\" *agentprivacy-docs.*\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "871c3619759644d8",
+            "text": "## The Proverb\n\n*A two-button calculator computes everything a full calculator can. A two-agent architecture computes everything a surveillance architecture can — except the surveillance.*\n\n*The single sufficient operator is not efficient. It is complete. The forge is not fast. It is honest.*\n\n*NAND for logic. EML for mathematics. succ for sovereignty. The pattern is not ours. It is structural.*\n\n---\n\n*(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*\n\n*S → 1 | eml(S,S)*\n\n*S → null | blade(S,S)*\n\n*Same grammar. Different domain. One architecture.*\n\n—privacymage"
+          },
+          {
+            "type": "markdown",
+            "id": "567f73d0b89ab46b",
+            "text": "# Assets"
+          },
+          {
+            "id": "4c67adb51a9eafcf",
+            "type": "assets",
+            "text": "note-pvm-v6-eml-three-ceilings"
+          },
+          {
+            "type": "markdown",
+            "id": "9f7f6b8ad188dbbc",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Research Notes]]"
+          }
+        ]
+      },
+      "date": 1787079756408
+    }
+  ]
+}

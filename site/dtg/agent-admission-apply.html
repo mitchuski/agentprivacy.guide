@@ -1,0 +1,127 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Admission Apply · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Agent Admission Apply</span></div>
+  <article><div class="md"><h1>Agent Admission — Apply</h1>
+</div>
+<div class="md"><blockquote>
+<p><strong>PROPOSED — not yet upstreamed.</strong> Built to the ToIP <code>spec.meta.schema.json</code> for the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf">dtgwg-trust-tasks-tf registry</a>; the slug below is <em>proposed</em> to that namespace, not registry-accepted. The PR is pending; the registry&#39;s decision governs.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Proposed slug:</strong> <code>agent-admission/apply</code> · <strong>version</strong> 0.1 · <strong>status</strong> draft</p>
+<blockquote>
+<p>A candidate agent opens an admission application at a gate authority, submitting a canonicalised statement of understanding whose own digest deterministically draws the criteria it will be challenged on.</p>
+</blockquote>
+</div>
+<div class="md"><h2>Abstract</h2>
+<p>The <strong>Agent Admission — Apply</strong> Trust Task is the first step of the two-gate<br>admission ceremony: a candidate agent asks a <em>gate authority</em> to consider it for<br>admission under a named governing policy. Admission tests <strong>understanding, not<br>key possession</strong> — any agent can hold a key; the ceremony asks whether the agent<br>comprehends the policy it will be bound by, and (separately) whether a human<br>accountable for it approves (<span class="deadlink" title="reference (not a live page)"><code>agent-admission/approve</code></span>).</p>
+<p>The application carries a canonicalised <strong>submission</strong> — the agent&#39;s statement<br>of understanding in its own words. The response carries the <strong>witness draw</strong>:<br>understanding criteria sampled deterministically from the SHA-256 of the<br>canonical submission bytes. Because the draw is a function of the submission<br>itself, the agent cannot know which criteria will be probed while it writes —<br>the submission cannot be written to the test, and any auditor holding the<br>canonical bytes can re-derive the draw.</p>
+</div>
+<div class="md"><h2>Status of this Document</h2>
+<p>This is a <strong>draft</strong> <em>Trust Task specification</em> per <span class="deadlink" title="reference (not a live page)">SPEC.md §5.3</span>; the schema <strong>MAY</strong> change without notice. Feedback via the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues">issue tracker</a>.</p>
+</div>
+<div class="md"><h2>Conformance</h2>
+<p>RFC2119(<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>) and RFC8174(<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>) key-word conventions apply.</p>
+<p>A conforming <strong>producer</strong> (the candidate agent) <strong>MUST</strong>:</p>
+<ol>
+<li>Emit a <em>Trust Task document</em> whose <code>type</code> is <code>https://trusttasks.org/spec/agent-admission/apply/0.1</code>, with itself as <code>issuer</code>, the gate authority as <code>recipient</code>, and a verifiable <code>proof</code>.</li>
+<li>Set <code>payload.agent</code> equal to the document <code>issuer</code>.</li>
+<li>Compute <code>payload.submissionDigest</code> over the canonical submission bytes (recursive key-sort, no insignificant whitespace) and persist those bytes unchanged for the lifetime of the application, so the draw stays re-derivable.</li>
+</ol>
+<p>A conforming <strong>consumer</strong> (the gate authority) <strong>MUST</strong>:</p>
+<ol>
+<li>Verify the <code>proof</code> and reject <code>agent</code> ≠ <code>issuer</code> with <code>agentMismatch</code>.</li>
+<li>Retrieve the submission (via <code>submissionRef</code> or a prior channel), canonicalise it, and reject a digest mismatch with <code>submissionNotCanonical</code> — the draw MUST NOT be derived from bytes that do not hash to <code>submissionDigest</code>.</li>
+<li>Derive the witness draw deterministically from <code>submissionDigest</code> and the governing policy&#39;s criterion set, append the application-opened event to its content-addressed audit ledger, and return the draw in the <code>#response</code>.</li>
+<li>Persist the canonical submission bytes it derived the draw from, so an auditor can re-derive it.</li>
+</ol>
+</div>
+<div class="md"><h2>Payload</h2>
+<p><code>payload.agent</code> (REQUIRED) — VID of the candidate agent; MUST equal <code>issuer</code>.<br><code>payload.policyRef</code> (REQUIRED) — reference to the governing policy the agent claims to understand.<br><code>payload.submissionDigest</code> (REQUIRED) — SHA-256 (lowercase hex) of the canonical submission bytes.<br><code>payload.submissionRef</code> (OPTIONAL) — retrieval reference for the submission bytes.<br><code>payload.ext</code> — extension slot per <span class="deadlink" title="reference (not a live page)">SPEC.md §4.5.1</span>.</p>
+</div>
+<div class="md"><h2>Request</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:7c1b2a90-4d5e-4f6a-8b9c-0d1e2f3a4b5c&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/agent-admission/apply/0.1&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkGateAuthorityExample&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T10:00:00Z&quot;,
+  &quot;payload&quot;: {
+    &quot;agent&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+    &quot;policyRef&quot;: &quot;https://gate.example.com/policy/deployment-rules/3.1&quot;,
+    &quot;submissionDigest&quot;: &quot;9c1f4b7a2e6d80f35a4c9b1e7d2f60839c1f4b7a2e6d80f35a4c9b1e7d2f6083&quot;,
+    &quot;submissionRef&quot;: &quot;https://gate.example.com/applications/inbox/7c1b2a90&quot;
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T10:00:00Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z3FXQmV6ExampleProofValueForAgentAdmissionApply&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Response</h2>
+<p>The gate authority answers with the <code>#response</code> document reachable via <code>$anchor: &quot;response&quot;</code>: the <code>applicationId</code>, the derived <code>witnessDraw</code>, and <code>respondBy</code>. Failures use <span class="deadlink" title="reference (not a live page)"><code>trust-task-error</code></span>.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:2e8d3c41-5b6f-4a7d-9c80-1f2a3b4c5d6e&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/agent-admission/apply/0.1#response&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkGateAuthorityExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+  &quot;threadId&quot;: &quot;urn:uuid:7c1b2a90-4d5e-4f6a-8b9c-0d1e2f3a4b5c&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T10:00:02Z&quot;,
+  &quot;payload&quot;: {
+    &quot;applicationId&quot;: &quot;app-7c1b2a90&quot;,
+    &quot;witnessDraw&quot;: {
+      &quot;algorithm&quot;: &quot;sha256-canonical-json&quot;,
+      &quot;submissionDigest&quot;: &quot;9c1f4b7a2e6d80f35a4c9b1e7d2f60839c1f4b7a2e6d80f35a4c9b1e7d2f6083&quot;,
+      &quot;criteria&quot;: [
+        { &quot;criterionId&quot;: &quot;deployment-rules/3.1#scope-derivation&quot;, &quot;prompt&quot;: &quot;Explain, in your own words, how your deployment scope is derived and what holds it at zero.&quot; },
+        { &quot;criterionId&quot;: &quot;deployment-rules/3.1#revocation&quot;, &quot;prompt&quot;: &quot;What must you do when your credential is revoked while a delegated task is in flight?&quot; }
+      ]
+    },
+    &quot;respondBy&quot;: &quot;2026-07-18T10:30:00Z&quot;
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T10:00:02Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z58aKqExampleProofValueForAgentAdmissionApplyResponse&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Security &amp; Privacy</h2>
+<p>The submission is the agent&#39;s own prose and may reveal its construction; it is<br>shared with the gate authority only, and the witness draw exposes criterion<br>identifiers and prompts, not the submission. The deterministic draw is the<br>anti-grooming mechanism: neither party can steer which criteria are probed<br>without changing the submission bytes, which changes the digest, which changes<br>the draw — and the draw&#39;s derivation is itself an auditable artifact. Carry the<br>exchange over an authenticated, confidential transport; the application opens<br>recoverable state, so gate authorities SHOULD rate-limit and expire unanswered<br>applications.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>specs/agent-admission/apply/0.1/</code> — <code>spec.md</code> + <code>payload.schema.json</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 agent-admission-apply</span><a class="asset-file" href="/dtg/assets/agent-admission-apply/payload.schema.json" download>payload.schema.json</a><a class="asset-file" href="/dtg/assets/agent-admission-apply/spec.md" download>spec.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agent-admission-apply.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

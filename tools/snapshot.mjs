@@ -22,7 +22,7 @@ const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'site'
 // = standalone wiki hosts folded into the snapshot (own single source, linked,
 // not re-projected). glyph/color from the live federationmap.
 const SITES = [
-  { id: 'guide',     label: 'Guide',      glyph: '🧭', color: '#8a6d3b', path: 'guide',      group: 'federation', blurb: 'The front door — the path through the federated agentprivacy canon.' },
+  { id: 'guide',     label: 'Guide',      glyph: '🏛', color: '#8a6d3b', path: 'guide',      group: 'federation', blurb: 'The front door — the path through the federated agentprivacy canon.' },
   { id: 'spellbooks',label: 'Spellbooks', glyph: '📚', color: '#5b6e9c', path: 'spellbooks', group: 'federation', blurb: 'The First Person Spellbook (“I”) — privacymage’s narrative: Story (Acts I–XXXI) · Zero · Canon · Society · Plurality, + Selene’s poems.',
     groups: [
       { label: '📜 First Person · The Story', re: /^story-/ },
@@ -36,13 +36,23 @@ const SITES = [
   { id: 'research',  label: 'Research',   glyph: '🧮', color: '#3d7c47', path: 'research',   group: 'federation', blurb: 'The privacy-value model V(π,t) and the conjecture register (C1–C96).' },
   { id: 'atlas',     label: 'Atlas',      glyph: '🌐', color: '#6a5acd', path: 'atlas',      group: 'federation', blurb: 'The knowledge graph — the backbone hyperlinking every site.' },
   { id: 'skill',     label: 'Skill',      glyph: '🗃️', color: '#2a7d8c', path: 'skill',      group: 'federation', blurb: '163 forkable skills — 42 personas + role / privacy-layer / meta.' },
-  { id: 'harness',   label: 'Harness',    glyph: '♻️', color: '#4a7c6a', path: 'harness',    group: 'federation', blurb: 'The dual-agent harness — the soulbis ⊥ soulbae loop, its seven seats, and the fleet of specialised instances (shor_mage · privacy-pools · lexon · and more).' },
+  { id: 'harness',   label: 'Harness',    glyph: '⿻', color: '#4a7c6a', path: 'harness',    group: 'federation', blurb: 'The dual-agent harness — soulbae 🧙 proposes, soulbis ⚔️ proves, the Gap ⿻ holds them apart: seven seats, six trusts, ten ground rules — built for trust-graph construction: a validated result proposes an edge, only a signature mints it.' },
   { id: 'lexon',     label: 'Lexon',      glyph: '⚖️', color: '#b08a3a', path: 'lexon',      group: 'federation', blurb: 'The Grammar Workshop — the Privacy Value Model written in Lexon controlled legal-English, 189 of 211 canon terms carrying machine-checkable structural claims (coverage 211 → 22), run through the dual-agent harness.' },
+  { id: 'myterms',   label: 'MyTerms',    glyph: '📜', color: '#86a9c9', path: 'myterms',    group: 'federation', blurb: 'The Agreement Layer — MyTerms / IEEE Std 7012™-2025: the founding-member application to the MyTerms Alliance (Customer Commons), the integration plan, and the two browser familiars. The standard specifies agreement, not enforcement.' },
+  { id: 'dtg',       label: 'DTG',        glyph: '🕸️', color: '#3a7c6f', path: 'dtg',        group: 'federation', blurb: 'The Trust Graph Lab — the DTG ZKP research corpus: the Predicate & Assurance-Boundary decision baseline (split per §), nineteen explorations, the lab evidence layer with real circuits, and the proposed ToIP trust-task families (agent-admission · understanding).' },
+  { id: 'kyra',      label: 'Kyra Gate',  glyph: '⛩️', color: '#c96a5a', path: 'kyra',       group: 'federation', blurb: 'KYRA — Know Your Runtime Agent: the checkpoint where an AI agent earns, and loses, the right to act. Understanding as key, the witness draw, det(Σ) sovereignty volume, bilateral credentials, a tamper-evident audit rail.' },
+  { id: 'fieldguide', label: 'Field Guide', glyph: '🧭', color: '#4a8c5f', path: 'fieldguide', group: 'federation', blurb: 'The Field Guide trust overlay — the Hitchhikers walking AR client meets the trust-graph work: the Meet rite, eight suites and 124 properties, nine proverbs, and the rulings (audience is granted, not computed · a wiki fork is not an audience · shared quest is not consent).' },
+  { id: 'transmediale', label: 'Improbable Engine', glyph: '🌀', color: '#5a7ca8', path: 'improbable-engine', host: 'transmediale', group: 'sibling', blurb: 'The lattice lab improbable engine — the 64-vertex sovereignty lattice closed into a torus, six strands, a live farm seated on the geometry.' },
   { id: 'city',      label: 'City of Mages', glyph: '🏛️', color: '#a23a3a', path: 'city', group: 'federation', blurb: 'The City of Mages — the Second Person Spellbook (“you”): the Tomes, its cast, and the City’s structural grimoire.' },
   { id: 'tomes',     label: 'Tomes',      glyph: '📖', color: '#a23a3a', path: 'city/tomes', group: 'federation', nested: 'city', blurb: 'The Second Person Spellbook (“you”) — City of Mages acts I–X (incl. IX the Horizon and X the Hearth) + cast + specs.' },
   { id: 'game42',    label: 'Game of 42', glyph: '🎲', color: '#c98a2a', path: 'game42',         group: 'sibling', blurb: 'The Game of 42 — its own wiki (sibling host).' },
   { id: 'spellbook', label: 'Mouse Spellbook', glyph: '🐭', color: '#6a8c3b', path: 'mouse-spellbook', group: 'sibling', host: 'spellbook', blurb: 'The Mouse Spellbook — a wiki-native agentic directory pathway (the mouse rendering of the First Person Spellbook), walked through in the wiki itself.' },
+  { id: 'vision',    label: 'Vision', glyph: '🐬', color: '#4aa3c9', path: 'vision', host: 'mitch.vision', group: 'sibling', blurb: 'The Hitchhiker vision — thirteen milestone timelines (Groundhog Day → AGM 2027), each answered five ways: what changes · who cares · who is involved · proof of realness · how it becomes real. The source wiki behind the public timeline subdomains.' },
+  { id: 'plugin',    label: 'Root Tiles', glyph: '🧩', color: '#b0783a', path: 'tiles', group: 'sibling', blurb: 'The TileGlyph lab — colored glyph navigation tiles for the federation: the Root Tiles registry, the tile wall, the tile index, and the plugin that renders them.' },
 ];
+// NOT projected (G1): chronicle.localhost (working chronicles — sealed) ·
+// embassy.localhost (tailnet-facing by design; carries a plan page) ·
+// *.timeline.localhost ×14 + the root wiki (♻️ projections/predecessors of vision).
 // host = the live .wiki host (defaults to id); path = output subpath in the snapshot.
 const hostOf = s => s.host || s.id;
 const PATHS = Object.fromEntries(SITES.map(s => [s.id, s.path]));
@@ -61,7 +71,7 @@ const WEBSITES = [
   { name: 'spellweb.ai', url: 'https://spellweb.ai', desc: 'The knowledge-graph app — nodes, edges, the blade forge.', wikis: ['atlas'] },
   { name: '42.agentprivacy.ai', url: 'https://42.agentprivacy.ai', desc: 'The Game of 42 — the visualization engine.', wikis: ['game42'] },
   { name: "Swordsman's Key (star)", url: 'https://github.com/mitchuski/star', desc: 'The first holospace — landing → portal, City Keys.', wikis: ['atlas'] },
-  { name: 'myTerms + extensions', url: 'https://myterms.info', desc: 'The agreement layer (IEEE 7012) + the Mage / Swordsman browser extensions.', wikis: ['research', 'skill'] },
+  { name: 'myTerms + extensions', url: 'https://myterms.info', desc: 'The agreement layer (IEEE 7012) + the Mage / Swordsman browser extensions.', wikis: ['myterms', 'research', 'skill'] },
   // Mouse Spellbook is NOT a hosted site / git repo — it is a wiki agentic directory
   // pathway, surfaced under "Sibling wikis" (the spellbook host), not here.
 ];
@@ -219,7 +229,19 @@ function renderItem(item, site) {
     return `<div class="roster">${rows}</div>`;
   }
   if (type === 'assets') {
-    return `<div class="assets-note">📎 ${esc(fixText(item.text || 'assets'))}</div>`;
+    // the live wiki serves these folders via the assets plugin; the snapshot copies
+    // the files (copyDir) — so link them for real instead of a dead note.
+    const slug = fixText(item.text || '').trim().replace(/^\/?assets\//, '');
+    const st = SITES.find(x => x.id === site);
+    let files = [];
+    try {
+      const dir = path.join(WIKI, `${hostOf(st)}.localhost`, 'assets', slug);
+      files = fs.readdirSync(dir, { withFileTypes: true }).filter(e => e.isFile()).map(e => e.name);
+    } catch {}
+    if (!files.length) return `<div class="assets-note">📎 ${esc(slug || 'assets')}</div>`;
+    const rows = files.map(f =>
+      `<a class="asset-file" href="/${pathOf(site)}/assets/${slug}/${encodeURIComponent(f)}" download>${esc(f)}</a>`).join('');
+    return `<div class="assets-box"><span class="assets-slug">📎 ${esc(slug)}</span>${rows}</div>`;
   }
   if (type === 'html') return `<div class="raw">${fixText(item.text || '')}</div>`;
   if (type === 'search' || type === 'activity') {
@@ -237,9 +259,14 @@ function nav(active) {
   const sib = SIBLINGS.map(link).join('');
   // the Gatehouse — built by tools/gate.mjs AFTER the snapshot (which clears site/)
   const gate = `<a class="nav-site${active === 'gates' ? ' on' : ''}" href="/gates/"><span>⚔️</span>Gatehouse</a>`;
+  // the Star Chart — built by tools/star-chart.mjs AFTER the snapshot; the ✨ Visualise
+  // button is general across the guide and carries the current site into the chart
+  // (deep-link isolates that site's strand).
+  const viz = `<a class="nav-viz" href="/star-chart/${SITE_IDS.has(active) ? `?site=${active}` : ''}" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>`;
   return `<header class="top">
     <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
     <nav class="sites">${fed}<span class="nav-sep"></span>${sib}${gate}</nav>
+    ${viz}
     <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
   </header>`;
 }
@@ -406,6 +433,14 @@ fs.writeFileSync(path.join(OUT, 'index.html'), shell({
   <p class="muted">Two spellbooks frame the canon: 📚 <strong>Spellbooks = the First Person Spellbook</strong> (“I” — privacymage's whole narrative) ⟂ 🏛️ <strong>City › Tomes = the Second Person Spellbook</strong> (“you” — the City of Mages). 🔮 Grimoire holds the first-person atoms; 🐭 the Mouse Spellbook is its mouse rendering.</p>
   <section class="hub-grid">${fedCards}</section>
 
+  <h2 class="hub-h">The Star Chart — the space, visualised</h2>
+  <p class="muted">The whole federation seated on the 64-vertex sovereignty lattice, closed into a torus — every site's pages as stars on one of six strands, links woven from the sitemaps. The fedwiki space as a walkable constellation map.</p>
+  <section class="hub-grid"><a class="hub-card" href="/star-chart/" style="--c:#14B8A6">
+    <span class="hub-glyph">✨</span>
+    <span class="hub-name">The Star Chart</span>
+    <span class="hub-blurb">${FEDERATION.length + SIBLINGS.length} sites as constellations on six strands — the Gates ⚔️ · the Skills 🧙 · the Harness ⿻ · the Canon 📚 · the Federation 🏛 · the Agreements. Click a strand to isolate it, click a page-star to walk it, shift+click to open the page here.</span>
+    <span class="hub-n">open the chart</span></a></section>
+
   <h2 class="hub-h">Open the experience — the sites</h2>
   <p class="muted">Every site you host, linkable, and opened into its wiki.</p>
   <section class="site-dir">${siteRows}</section>
@@ -443,6 +478,7 @@ function deadLinkSweep() {
     const resolves = href => {
       if (/^(https?:|mailto:|#|data:)/i.test(href)) return true;
       if (href === '/gates/') return true; // built AFTER the snapshot by tools/gate.mjs; audit enforces it exists
+      if (href.split('?')[0] === '/star-chart/') return true; // built AFTER the snapshot by tools/star-chart.mjs; audit enforces it exists
       const t = href.split('#')[0].split('?')[0]; if (!t) return true;
       let tgt = t.startsWith('/') ? path.join(OUT, t) : path.join(dir, t);
       if (t.endsWith('/')) tgt = path.join(tgt, 'index.html');
@@ -490,6 +526,10 @@ a{color:var(--cyan);text-decoration:none} a:hover{color:var(--aqua)}
   padding:5px 9px;border-radius:7px;border:1px solid transparent;display:inline-flex;gap:5px;align-items:center}
 .nav-site:hover{color:var(--white);background:rgba(255,255,255,.04)}
 .nav-site.on{color:var(--cyan);border-color:var(--border-hi);background:rgba(77,217,232,.08)}
+/* the ✨ Visualise button — general across the guide, opens the Star Chart */
+.nav-viz{font-family:var(--mono);font-size:11.5px;display:inline-flex;gap:6px;align-items:center;color:#062a30;
+  background:linear-gradient(120deg,var(--cyan),var(--aqua));padding:6px 13px;border-radius:999px;font-weight:600;white-space:nowrap}
+.nav-viz:hover{filter:brightness(1.08);color:#04151a}
 .search{position:relative}
 #q{font-family:var(--mono);font-size:12px;background:var(--surface);border:1px solid var(--border);
   color:var(--white);padding:7px 11px;border-radius:8px;width:200px}
@@ -542,6 +582,10 @@ hr.fold{position:relative;border-top:1px dashed var(--border)}
 .roster-row{display:flex;gap:9px;align-items:center;padding:4px 0;color:var(--white)}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);flex:none}
 .assets-note,.dyn-note{font-family:var(--mono);font-size:12px;color:var(--ghost);margin:8px 0}
+.assets-box{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.assets-slug{font-family:var(--mono);font-size:11px;color:var(--ghost)}
+.asset-file{font-family:var(--mono);font-size:12px;padding:4px 10px;border:1px solid var(--border-hi);border-radius:7px;color:var(--cyan);background:rgba(77,217,232,.06)}
+.asset-file:hover{background:rgba(77,217,232,.14)}
 figure.img{margin:1.2em 0} figure.img img{max-width:100%;border-radius:10px;border:1px solid var(--border)}
 figcaption{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:6px}
 /* footer */
@@ -592,6 +636,7 @@ figcaption{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:6p
   .top.js-nav.nav-open .nav-toggle .nt-x{display:inline}
   .top.js-nav.nav-open .nav-toggle .nt-bars{display:none}
   .js-nav .nav-site{font-size:13px;padding:9px 11px}
+  .js-nav .nav-viz{font-size:11px;padding:5px 11px}
   .js-nav .nav-sep{display:none}
   .js-nav #q{width:100%} .js-nav #results{width:100%;right:auto;left:0}
 }

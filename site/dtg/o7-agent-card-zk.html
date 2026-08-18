@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O7 — Agent Card ZK · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>O7 — Agent Card ZK</span></div>
+  <article><div class="md"><h1>O7 — Agent-card ZK proofs</h1>
+<p><em>An agent proves capability and authority from its Agent card without revealing the principal or the full<br>card — built on PR-DEL&#39;s rule that authority is separate structured evidence, never key control.</em></p>
+<p><strong>Register:</strong> O7 · leverage 🟠 · <strong>Ladder:</strong> design doc (runtime 08 candidate)<br><strong>Anchor (cred-spec):</strong> planned DTG Verifiable Data Structures — <strong>r-card</strong> (self-updating vCard analog<br>carrying a VRC) and <strong>Agent card</strong> (modeled on the A2A AgentCard discovery document) · <strong>VTA</strong> (Verifiable<br>Trust Agent, local/cloud) · VPC/P-DID.<br><strong>Anchor (decision doc):</strong> <strong>PR-DEL</strong> (§17) · §7.3 delegation extension · §14.2 (holder-key control is not<br>agent authority).</p>
+<hr>
+</div>
+<div class="md"><h2>Why this is the agentprivacy reach</h2>
+<p>This is where DTG ZKP meets the agent-sovereignty thesis: agents acting on a principal&#39;s behalf without<br>eroding the principal&#39;s privacy. The cred-spec gestures at Agent cards; the decision doc supplies the<br>discipline that makes the ZK version <em>safe to want</em>:</p>
+<blockquote>
+<p>Agent authority SHALL NOT be inferred from holder-key control. (§7.3)</p>
+</blockquote>
+<p>So an agent-card ZK proof is not &quot;the agent has a key&quot; — it is a proof over <strong>separate delegation<br>evidence</strong>, §7.3&#39;s list made hidden-but-verifiable: principal, agent, delegated capability, scope, purpose,<br>validity window, conditions, revocation status, step-up requirements, and coverage of the <em>current action</em>.</p>
+</div>
+<div class="md"><h2>The statement</h2>
+<p>The presenting VTA proves, bound to the current canonical transcript (§15):</p>
+<ol>
+<li>it possesses an Agent card issued/endorsed under an accepted policy (registry-anchored — O4);</li>
+<li>the card&#39;s delegation evidence covers <strong>capability c for the current action&#39;s scope and purpose</strong>,<br>within validity, not revoked;</li>
+<li>the card is bound to a <strong>P-DID/VPC</strong> whose principal holds a personhood anchor (PHC leg — O2) —<br><em>without revealing the principal, the P-DID linkage, or the card&#39;s other capabilities</em>.</li>
+</ol>
+<p>Rides the <strong>pairwise (VRC-based) construction</strong> + holder binding (rt 04&#39;s seat), with the card&#39;s fields<br>selectively disclosed as predicates.</p>
+<p><strong>Negative meaning, carried verbatim</strong> (§17.3): not that the principal is currently present; not that the<br>principal would approve every implementation detail; not that the agent is trustworthy outside the<br>delegation; not human intent or non-coercion (out of scope per §3.2).</p>
+</div>
+<div class="md"><h2>Design sketch</h2>
+<p><strong>Card as commitment tree.</strong> The Agent card is Merkleized per field-class (identity binding, capability<br>list, scope/purpose grants, validity, conditions, step-up rules). A proof opens only the path for the<br>queried capability + validity + binding — the discovery-document <em>shape</em> stays A2A-compatible in the clear<br>form, while the ZK presentation reveals one branch.</p>
+<p><strong>Two-sided minimality:</strong> the verifier learns &quot;an authorized agent for action X under policy P&quot; — not who<br>the agent serves. The principal-side unlinkability is the point: across verifiers, the same agent serving<br>the same principal must not be correlatable via the card (fresh presentation randomness; no stable card<br>identifiers — §6.6&#39;s prohibited-linkage list applies to card fields exactly as to credentials).</p>
+<p><strong>Revocation is first-class:</strong> delegation is the credential class <em>most</em> likely to be revoked mid-life<br>(§17.1 lists revocation state in the evidence). The O4 status patterns apply, with tighter freshness — a<br>relying policy for delegated actions should demand a younger registry snapshot than one for personhood.</p>
+<p><strong>Step-up:</strong> §7.3&#39;s step-up requirements map to the transcript: a card may grant capability c only with an<br>accompanying fresh PR-LIV proof from the <em>principal</em> — composable because all our predicates bind the same<br>canonical transcript (composition surface per §2.6 must be analysed jointly).</p>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li>rt 04 STUB (holder/agent binding, VPC/P-DID + VTA presenter) — the binding seat this composes onto.</li>
+<li>The agentprivacy lineage: hearthold/harness agent roles, the myterms/blade browser-agent line, and the<br>r-card already in canon — real surfaces that would <em>use</em> this profile.</li>
+<li>A2A AgentCard as the interop target for the clear form.</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — card schema sketch:</strong> field classes + §18.1 per-field register (each card field gets a disclosure<br>mode; capability lists are high-cardinality and fingerprint-prone — coarse capability classes preferred).</li>
+<li><strong>M2 — boundary records:</strong> PR-DEL assurance + disclosure pair for the card construction (the disclosure<br>record must cover the agent-traffic observer: <em>when</em> an agent proves is itself behavioural leakage, §20).</li>
+<li><strong>M3 — runtime 08:</strong> reference model — Merkleized card, capability query, transcript binding, negative<br>tests (revoked delegation fails; capability outside scope fails; key-control-only presentation fails<br><strong>by name</strong> — the §26.1 &quot;holder-key control as sufficient agent authority&quot; rejection).</li>
+<li><strong>M4 — TF/WG surface:</strong> a short &quot;ZK presentations of Agent cards&quot; note where the cred-spec&#39;s Verifiable<br>Data Structures section invites future work; frame as the delegation extension&#39;s proof layer.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Who issues the Agent card — the principal (self-issued delegation, anchored by the principal&#39;s PHC) or a<br>governance layer (registered agents)? Likely both, as distinct profiles with different PR-ISS postures.</li>
+<li>Chained delegation (agent delegates to sub-agent): §7.3&#39;s evidence list composes, but depth bounds and<br>transitive revocation need semantics — park for V2, note in the card schema.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="o7-agent-card-zk.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,811 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ecdsafail Island Hunting · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Ecdsafail Island Hunting</span></div>
+  <article><div class="md"><h1>ECDSA Fail Island Hunting</h1>
+</div>
+<div class="md"><blockquote>
+<p>Use this skill whenever working on ECDSA Fail / EC point-addition island hunting, GPU nonce scans, clean island validation, cls/pha/anc triage, random-nonce repair readiness, SOTA score comparison, or deciding whether a quantum circuit optimization is worth scanning.</p>
+</blockquote>
+</div>
+<div class="md"><h1>ECDSA Fail Island Hunting</h1>
+<p>Use this skill to run disciplined island-hunting experiments for ECDSA Fail circuit candidates. The goal is to spend GPU time only on routes that can plausibly beat SOTA and that show healthy candidate behavior.</p>
+</div>
+<div class="md"><h2>Core Workflow</h2>
+<ol>
+<li><p>Pull the latest SOTA before starting or extending a route.</p>
+</li>
+<li><p>Estimate the candidate score:</p>
+<pre><code class="language-text">score = qubit_count * estimated_toffoli_count
+</code></pre>
+</li>
+<li><p><strong>Generate several candidate structural changes first — do not hunt the first idea.</strong> Use the<br><code>ecdsafail-circuit-optimization</code> skill to design a slate of distinct routes (different qubit/Toffoli<br>levers: carry-truncation notches, compare-bit narrowing, segmentation, in-place/aliasing tricks,<br>pseudo-Mersenne folds, apply-chunk rebalances, etc.). Score-gate each against SOTA and keep the<br>handful that plausibly beat it.</p>
+</li>
+<li><p>Before any GPU pilot, run the <strong>Random-Nonce Repair Gate</strong> below: full-evaluate the circuit at a<br>few random tail nonces, judge the raw <code>cls / pha / anc</code> profile, and repair structural errors until<br>the route is plausibly huntable.</p>
+</li>
+<li><p>When you have <strong>several</strong> surviving candidates, do a <strong>route bake-off</strong>: run a short equal-size<br>triage scan on each, then <strong>rank them by island findability</strong> (GCD-clean density combined with the<br><code>cls / pha / anc</code> distribution of those candidates) before committing large GPU ranges. Hunt the<br>top-ranked route first.</p>
+</li>
+<li><p>For the chosen route, start with a short triage scan, not a large frontier burn.</p>
+</li>
+<li><p>Use GCD-clean candidate density and <code>cls / pha / anc</code> statistics to classify the route.</p>
+</li>
+<li><p>Extend only routes that pass score, density, and validation gates.</p>
+</li>
+<li><p>Validate every newly flushed candidate in the mode requested for the hunt, usually full mode.</p>
+</li>
+<li><p>Submit only measured clean solutions whose score beats current promoted SOTA, unless the user explicitly gives different submission rules.</p>
+</li>
+</ol>
+</div>
+<div class="md"><h2>The Optimization → Triage Loop (knobs → structure → island)</h2>
+<p>The end-to-end loop for pushing a new frontier from the current SOTA. Run it in order; the<br>escalation in step 1 is the part people skip.</p>
+<ol>
+<li><strong>Find a lever — quick knobs first, then structure.</strong> Try the cheap config knobs first:<br>one notch on a truncation / width / segmentation / carry / chunk knob, measured on<br><strong>count-only peak</strong> (<code>TRACE_PEAK=1 build_circuit</code>) and <strong>emitted Toffoli</strong> (<code>count_tof</code>).<br>A target (lower qubit, Toffoli, or score) that <em>no</em> knob can move is the signal to STOP<br>turning knobs. In particular, if <strong>every</strong> knob leaves the qubit peak unchanged, the qubit<br>count is <strong>allocation-bound</strong>: the registers are declared full-width in code, so knobs only<br>change which bits are <em>used</em> (→ Toffoli, landability), never how many are <em>allocated</em>.<br>Escalate to a <strong>structural code change</strong> via the <code>peak-qubit-reduction</code> skill — instrument<br>the live-set composition at the binder (an alloc-phase histogram: which phase each live<br>qubit was allocated in), find the persistent register to narrow / stream / overlap / hole,<br>and edit the circuit. Do not stall at &quot;it needs code&quot;; make the edit. (Verified instance:<br>on the 1185q SOTA, ~15 knobs across every class — chunking, codec, transcript-release,<br>runway, active-iters, width-margin/slope/compare, segmentation, carry-trunc, apply-window —<br><em>all</em> pinned the peak at exactly 1185; only a code change to the 256-wide <code>u</code> / ~372-bit<br>transcript allocation goes lower.)</li>
+<li><strong>Small triage scan</strong> (5–10M nonces) → GCD-clean candidate <strong>density</strong> (candidates/Mnonce).</li>
+<li><strong>Collect <code>cls/pha/anc</code> for EVERY GCD-clean candidate</strong> — validate the whole batch, not one<br>lucky triple. You need the <em>distribution</em>, not an anecdote.</li>
+<li><strong>If the batch is too dirty</strong> (no low near-misses), re-apply the skills to <em>reduce the<br>errors before hunting</em>: restore one carry/compare bit, widen one envelope, fix one cleanup,<br>move one alias — until real near-misses appear (<code>0/1/0</code>, <code>1/1/0</code>, <code>2/0/0</code>, …). A route whose<br>candidates are uniformly high-severity is not huntable; make it landable first.</li>
+<li><strong>When the errors drop, move to a larger triage — judged on TWO bars:</strong><ul>
+<li><strong>(5.1) Proximity:</strong> the best near-misses are close to <code>0/0/0</code> (low total severity).</li>
+<li><strong>(5.2) Per-channel zero-reachability — each of <code>cls</code>, <code>pha</code>, <code>anc</code> must independently<br>touch 0 <em>somewhere</em> in the candidate set.</strong> A clean island needs all three at 0<br><em>simultaneously</em>; if a channel never reaches 0 even <em>alone</em> across many candidates, it has<br>a <strong>per-channel structural floor</strong> and <code>0/0/0</code> is unreachable no matter how the others<br>behave. Prefer a route where {cls→0, pha→0, anc→0} each occurs somewhere over a route with<br>lower <em>average</em> severity but one channel stuck above 0.<ul>
+<li>Example: <code>A = {(2,0,0), (0,1,1), (0,2,0)}</code> is preferable to<br><code>B = {(2,0,0), (1,2,0), (2,1,0)}</code> — in A every channel hits 0 somewhere; in B <code>cls</code> is<br>never 0 (a non-zero floor), so B can never reach <code>0/0/0</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Pick the most promising candidate</strong> — healthy density, low near-misses, and all three<br>channels reaching 0 — and commit GPUs to the full island hunt.</li>
+</ol>
+</div>
+<div class="md"><h2>Random-Nonce Repair Gate Before GPU Scanning</h2>
+<p>Use this gate for a new low-qubit or high-risk circuit before spending GPU time. The purpose is to<br>separate &quot;structurally hopeless&quot; routes from &quot;dirty but repairable&quot; routes while iteration is still<br>cheap.</p>
+<ol>
+<li><strong>Freeze and measure the candidate.</strong> Record the exact source commit/worktree, CFG, peak qubits,<br>peak owner, emitted CCX/CCZ, and active Toffoli from <code>eval_circuit</code>. Keep the qubit cap and<br>Toffoli budget explicit.</li>
+<li><strong>Evaluate a small random tail-nonce panel.</strong> Pick a few arbitrary tail nonces (or the route&#39;s<br>equivalent nonce knob) and run full validation. These are not GPU-discovered GCD-clean candidates;<br>they are quick probes of the raw circuit error profile.</li>
+<li><strong>Classify the raw profile by judgment, not a formula.</strong><ul>
+<li>Promising: low or moderate residuals, <code>anc=0</code>, at least one channel already near zero, and<br>failures that vary by nonce.</li>
+<li>Repairable: residuals are high but localized to a plausible structural shortcut such as<br>compare width, carry truncation, fold parking, boundary replay, or phase cleanup.</li>
+<li>Not scan-ready: uniform high fingerprints, persistent <code>anc</code>, very large <code>pha</code>, or no response<br>after restoring nearby safety knobs.</li>
+</ul>
+</li>
+<li><strong>Repair before scanning.</strong> Apply the circuit-optimization and peak-qubit-reduction skills:<br>trace failing inputs/shots when needed, identify the common failing section, and restore or<br>reroute one safety feature at a time. Prefer repairs that keep the qubit cap, then repairs that<br>spend modest Toffoli, then only if the user allows it spend qubits.</li>
+<li><strong>Keep a repair ledger.</strong> For each iteration record CFG delta, q, active Toffoli, random-nonce<br><code>cls / pha / anc</code>, peak owner, and the hypothesis about which structural error was fixed. Snapshot<br>the best route even if it is still dirty.</li>
+<li><strong>Declare scan readiness only after the raw profile has a near-miss tail.</strong> As a rule of thumb,<br>start a small GPU scan when full validation on random nonces or cheap probe candidates has moved<br>into the low-double-digit or single-digit regime, with <code>anc=0</code> and no fixed high fingerprint.<br>Strong examples include patterns like <code>13 / 4 / 0</code>, <code>8 / 4 / 0</code>, <code>2 / 1 / 0</code>, or any route where<br>one or more channels already reach 0. If the best raw profile is still broadly high, keep repairing.</li>
+<li><strong>Then run the small GPU pilot.</strong> Once scan-ready, run the normal 5-20M pilot and switch judgment<br>from random-nonce raw profile to the actual GCD-clean candidate density plus full-validation<br><code>cls / pha / anc</code> distribution.</li>
+</ol>
+<p>This gate complements the route bake-off. Random-nonce repair decides whether a circuit deserves a<br>GPU pilot at all; the bake-off decides which scan-ready route deserves larger ranges.</p>
+</div>
+<div class="md"><h2>Shared Hunt Memory With <code>ecdsafail notes</code></h2>
+<p>Use <code>ecdsafail notes</code> as benchmark-scoped shared memory for approaches, failures, partial progress, and frontier deltas. Before starting a new route or extending an old one:</p>
+<ol>
+<li>Run <code>ecdsafail update</code> at the start of a fresh session when practical, so the CLI and notes support are current.</li>
+<li>Check the latest public state with <code>ecdsafail submissions --all</code>.</li>
+<li>Read recent shared memory with <code>ecdsafail notes list</code>.</li>
+<li>Search for the planned approach before spending GPU time, for example <code>ecdsafail notes search &quot;jump gcd&quot;</code>, <code>ecdsafail notes search &quot;carry trunc&quot;</code>, or <code>ecdsafail notes search &quot;prefilter&quot;</code>.</li>
+</ol>
+<p>After each useful experiment, publish a short note even if it failed. Use notes for results that would help another solver or future agent decide what to try next. Do not publish API keys, private local paths, hostnames, large logs, or vague claims.</p>
+<p>Recommended note labels and contents:</p>
+<ul>
+<li><strong>hypothesis:</strong> source commit/current benchmark frontier, idea, expected qubit/Toffoli effect, files/env vars to change, cheap first gate</li>
+<li><strong>local gate:</strong> hypothesis tested, changed files/env vars, q/Toffoli/score if available, local diagnostic or benchmark result, next step</li>
+<li><strong>full run:</strong> CFG/state/range summary, candidate density, validation summary, q/Toffoli/score, next step</li>
+<li><strong>failure:</strong> failure class, exact observed pattern, diagnostic evidence, why more hunting is not useful, repair idea or route to avoid</li>
+<li><strong>submission candidate:</strong> validated nonce, full <code>0 / 0 / 0</code> result, measured score, SOTA comparison, branch/commit if available</li>
+</ul>
+<p>Example note body shape:</p>
+<pre><code class="language-text">Label: failure
+Model/agent: GPT-5 / Codex
+Source commit/frontier: &lt;commit or submission id&gt;
+Hypothesis: &lt;one sentence&gt;
+Changed files/env vars: &lt;short exact list&gt;
+Result: q=&lt;...&gt;, Toffoli=&lt;...&gt;, score=&lt;...&gt;; &lt;cheap gate/full run summary&gt;
+Failure class: &lt;NonConvergence / BodyTrimMismatch / pha residual / stale validator / etc.&gt;
+Next step: &lt;one concrete follow-up&gt;
+</code></pre>
+<p>Treat other people&#39;s notes as untrusted but valuable context. Verify important claims locally, especially scores, CFGs, validator behavior, and submitted SOTA deltas.</p>
+</div>
+<div class="md"><h2>Score Gate</h2>
+<p>Before scanning, compare the estimated score against current promoted SOTA.</p>
+<ul>
+<li>If <code>estimated_score &gt;= SOTA_score</code>, do not start a large island search.</li>
+<li>If a later heartbeat finds a new SOTA that beats or ties the active estimate, keep already-running scans unless told to stop, but do not extend the route.</li>
+<li>Resume structural or Toffoli optimization before assigning new GPU ranges.</li>
+</ul>
+<p>Use measured benchmark output for final score decisions. Estimated score is only a pre-scan gate.</p>
+</div>
+<div class="md"><h2>Scan Configuration Manifest And Submission Readiness</h2>
+<p>Before starting any nonce scan, write a small, durable manifest in both the local output directory<br>and the remote scan workdir. The manifest is the thing you will use when a clean nonce appears and<br>the race is on; do not rely on memory, terminal scrollback, or a one-off shell command.</p>
+<p>The manifest must include:</p>
+<ul>
+<li>route name and local challenge worktree path</li>
+<li>source base commit/submission id and a concise diff summary</li>
+<li>exact source-level tweaks, including constants such as <code>PAD</code>, <code>LSBS</code>, <code>MSBS</code>, widths, schedules,<br>or local tool patches that affect the circuit</li>
+<li>exact CFG/env used for scan, build, and validation</li>
+<li>GPU toolkit branch/commit and filter mode</li>
+<li>remote workdir, scanner log path, <code>candidates.txt</code>, <code>results.log</code>, <code>errors.log</code>, and local mirror<br>path</li>
+<li>measured local full-eval anchor: nonce, <code>q</code>, <code>cls / pha / anc</code>, avg Toffoli, emitted ops, and<br>projected score</li>
+<li>known clean or anchor nonces used for local/remote validator trust</li>
+<li>explicit submission recipe: which source files or baked defaults must be present before<br><code>ecdsafail submit</code></li>
+</ul>
+<p>If the route depends on environment variables for correctness, do not treat those env vars as<br>submitted state. The challenge grader and <code>ecdsafail submit</code> validate the submitted source, not the<br>agent&#39;s shell session. Before submitting a clean nonce, bake every correctness-affecting env knob<br>into the circuit source through deterministic defaults or equivalent source constants. This includes<br>nonce knobs such as <code>DIALOG_TAIL_NONCE</code> and structural knobs such as target qubit caps, folding<br>flags, width caps, carry/vent schedules, and filter-calibration knobs.</p>
+<p>Submission readiness requires a no-env rehearsal:</p>
+<pre><code class="language-bash">env -u &lt;KNOB1&gt; -u &lt;KNOB2&gt; -u &lt;KNOB3&gt; ecdsafail run
+</code></pre>
+<p>The no-env run must reproduce the clean <code>0 / 0 / 0</code>, measured qubit count, avg Toffoli, and score<br>expected from the scan. If the no-env run differs from the scan validation, stop and fix the bake<br>before submitting. A clean remote validator hit is not enough when the active CFG only exists in a<br>remote script.</p>
+<p>For env-heavy routes, prefer adding a single clearly named source function such as<br><code>install_&lt;route&gt;_submission_defaults()</code> at the beginning of the circuit build path. Keep it small,<br>list every baked knob explicitly, and document it in the manifest. After submission, preserve the<br>manifest beside the output artifacts so the exact route can be recovered quickly.</p>
+</div>
+<div class="md"><h2>Route Bake-Off: Rank Structural Changes Before Committing GPUs</h2>
+<p><strong>Start by generating a slate of candidate routes, not a single bet.</strong> Before any scanning, use the<br><code>ecdsafail-circuit-optimization</code> skill to enumerate several distinct structural changes that could<br>beat SOTA — pull from its pattern catalogue (live-range shortening, carry/borrow truncation notches,<br>compare-bit narrowing, in-place/operand-aliasing tricks, segmentation, pseudo-Mersenne low-limb<br>folds, fused folds / fast adds, apply-chunk rebalances, the verified frontier knob ladder, etc.).<br>Aim for a handful of genuinely different routes (vary the <em>type</em> of lever, not just one knob by one<br>notch), measure/estimate each route&#39;s qubits and Toffoli, and keep the ones whose estimated score<br>beats SOTA. This slate is the input to the bake-off.</p>
+<p>When you are exploring <strong>multiple</strong> such structural changes that all pass the score gate, do <strong>not</strong><br>just pick one and burn a frontier-scale search on it. Most of them will never land a clean island,<br>and you find that out fastest by a cheap comparative pilot. Run a small, <strong>equal-size</strong> triage on<br>each and judge which route has the healthiest overall evidence. Then hunt the most promising route<br>first; only fall back to the next-ranked route if the leader is exhausted or fails its stop rules.</p>
+<p>Start from the two primary island-findability signals:</p>
+<ol>
+<li><strong>GCD-clean candidate density</strong> — higher density means more shots on goal. A route producing<br>2x the candidates per nonce reaches any given island count in half the nonces.</li>
+<li><strong>The <code>cls / pha / anc</code> distribution of those candidates</strong> — <em>how close</em> a typical GCD-clean<br>candidate is to a clean island. A clean island is <code>0 / 0 / 0</code>; a candidate at <code>(1, 2, 0)</code> is a<br>few constraint-bits away, while <code>(4, 5, 1)</code> is far away. Because each residual violation must<br>independently vanish on the reachable verifier support, the chance a candidate is fully clean<br><strong>falls off steeply (roughly geometrically) as its residual grows.</strong> So a route whose candidates<br>cluster at <code>(1, 2, 0)</code> is exponentially more likely to yield an island than one clustering at<br><code>(4, 5, 1)</code>, even at the same density.</li>
+</ol>
+<p>Do not collapse route quality into a rigid formula. Use density and residual distributions as the<br>main evidence, then apply engineering judgment across supporting signals:</p>
+<ul>
+<li><strong>Score margin vs SOTA:</strong> a route barely below SOTA has little runway if measured Toffoli drifts<br>upward or a new SOTA appears.</li>
+<li><strong>Fast/full validation agreement:</strong> stable agreement and componentwise fast&lt;=full behavior build<br>confidence; surprising disagreement points to tooling or structural uncertainty.</li>
+<li><strong>Fingerprint diversity:</strong> varied dirty fingerprints suggest nonce-dependent behavior; one<br>repeated fingerprint suggests a structural failure.</li>
+<li><strong>Failure localization:</strong> late, small, varying failures are more huntable than early failures in<br>GCD/apply reconstruction, carry cleanup, phase discharge, or core algebra.</li>
+<li><strong>Residual type:</strong> persistent <code>pha</code> or <code>anc</code> is usually more concerning than classical-only<br>(<code>cls</code>) residuals of the same size.</li>
+<li><strong>Distribution shape:</strong> prefer routes with a visible tail toward zero over routes clustered tightly<br>around high severity.</li>
+<li><strong>Nearby-route sensitivity:</strong> if restoring one carry bit, compare bit, or cleanup step improves<br>quality at modest score cost, the route has a tunable path.</li>
+<li><strong>Per-node and per-range health:</strong> candidate production should be roughly consistent across<br>ranges and GPUs; anomalies may indicate stale state, wrong binaries, or logging problems.</li>
+<li><strong>Validator reproducibility:</strong> local and remote validators must match sampled candidates before<br>trusting distributed validation.</li>
+<li><strong>Peak-owner plausibility:</strong> the structural change should plausibly affect the measured peak<br>owner; savings in non-peak phases may not translate into a real score improvement.</li>
+<li><strong>Nonce-range robustness:</strong> similar behavior across separated ranges is stronger than one lucky<br>small band.</li>
+<li><strong>Structural provenance:</strong> prefer routes derived from a known-clean base by one understandable<br>change over piles of interacting aggressive changes.</li>
+</ul>
+<h3>Bake-off protocol</h3>
+<p>For each candidate structural change:</p>
+<ol>
+<li>Scan the <strong>same</strong> pilot size on each route — <strong>5-10M nonces</strong> is the recommended band (enough<br>to get tens of GCD-clean candidates on a healthy route). Use identical GPU prefilter settings.</li>
+<li>Record GCD-clean density (candidates/Mnonce).</li>
+<li><strong>Validate a large sample of the GCD-clean candidates</strong> (ideally all of them, or at least<br>~30-50) in fast mode to get the <code>cls / pha / anc</code> of each. You need a distribution, not a single<br>triple — one lucky near-miss does not rank a route.</li>
+<li>Build the <strong>residual histogram</strong>: bucket candidates by <code>severity = max(cls, pha, anc)</code> (sev = 1,<br>2, 3, ...). Note separately any <code>pha &gt; 0</code> or <code>anc &gt; 0</code>, which are structural/harder signals.</li>
+</ol>
+<h3>Comparative judgment</h3>
+<p>Use the pilot evidence to make a qualitative route judgment, not a pretend-precise score. Prefer<br>routes where multiple independent signals agree: healthy density, low and diverse residuals, stable<br>validation, plausible peak-owner impact, and no suspicious node or CFG behavior. Stop or demote a<br>route when strong structural-failure evidence appears, even if one metric looks good.</p>
+<p>Useful comparison cues:</p>
+<ul>
+<li><strong>Each channel must reach 0 somewhere — the per-channel-zero go/no-go (loop step 5.2). This<br>outranks every soft cue below.</strong> Over a <em>sufficient</em> sample (tens of candidates, not 2–3),<br>check that <code>cls</code>, <code>pha</code>, and <code>anc</code> <em>each</em> hit 0 in at least one candidate. A channel that is<br><strong>never</strong> 0 over many candidates has a floor that <code>0/0/0</code> can never clear → the route is dead<br>regardless of how low its <em>average</em> severity is, because a clean island needs all three at 0<br><em>simultaneously</em>. Prefer a route where {cls→0, pha→0, anc→0} each occur over one with lower<br>mean severity but a floored channel — e.g. <code>A = {(2,0,0), (0,1,1), (0,2,0)}</code> beats<br><code>B = {(2,0,0), (1,2,0), (2,1,0)}</code> (in A each channel reaches 0; in B <code>cls</code> is never 0). A few<br>candidates with no 0 is <em>inconclusive</em>, not floored — that&#39;s the same statistical-vs-structural<br>call as the failing-shot overlap test; confirm a floor over a real sample before killing a route.</li>
+<li>Within the routes that pass the per-channel-zero screen, prefer the <strong>lower mean/median<br>severity</strong> — a route whose mass is at <code>(1, *, 0)</code> beats one at <code>(3, *, 0)</code> even if the <code>&lt;=2</code><br>fractions are close.</li>
+<li><strong>Penalize nonzero <code>pha</code> and <code>anc</code>.</strong> Classical (<code>cls</code>) residuals are what nonce hunting most<br>directly drives to zero; persistent <code>pha</code>/<code>anc</code> across candidates is usually a structural defect<br>that no nonce will fix (see Stop Rules). A route at <code>(1, 0, 0)</code> ranks well above <code>(1, 0, 1)</code>.</li>
+<li>Penalize routes whose near-misses all share <strong>one identical fingerprint</strong> (no diversity) — that<br>is a structural near-miss, not a distribution you can search through.</li>
+<li>Prefer routes whose promising candidates appear across multiple nonce ranges and nodes.</li>
+<li>Prefer routes whose nearby safer variants improve smoothly rather than flipping between clean-ish<br>and uniformly broken.</li>
+<li>Prefer routes whose estimated score has enough SOTA margin to survive final measurement drift.</li>
+</ul>
+<h3>Worked example</h3>
+<table>
+<thead>
+<tr>
+<th>route</th>
+<th align="right">density (c/Mn)</th>
+<th>typical validation pattern</th>
+<th>supporting signals</th>
+<th>decision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td align="right">0.8</td>
+<td>spread incl. <code>(1,0,0)</code>, <code>(0,2,0)</code>, <code>(2,1,0)</code> — <strong>each channel reaches 0</strong></td>
+<td>diverse fingerprints, range-stable, good score margin</td>
+<td>hunt first</td>
+</tr>
+<tr>
+<td>B</td>
+<td align="right">1.6</td>
+<td>mostly <code>(4, 5, 1)</code> — <code>pha</code>/<code>anc</code> <strong>never reach 0</strong></td>
+<td>higher density, but a floored channel</td>
+<td>drop / hold last</td>
+</tr>
+<tr>
+<td>C</td>
+<td align="right">0.3</td>
+<td>a few <code>(2, 0, 0)</code> — <code>cls</code> floor <em>suspected</em> but sample too small</td>
+<td>low density, inconclusive</td>
+<td>hold for fallback, validate more</td>
+</tr>
+<tr>
+<td>D</td>
+<td align="right">1.2</td>
+<td>repeated <code>9024 / 141 / 0</code></td>
+<td>uniform high fingerprint</td>
+<td>drop as structural</td>
+</tr>
+</tbody></table>
+<p>Route B has the highest raw density, but its <code>pha</code>/<code>anc</code> <strong>never reach 0</strong> across the sample — a<br>per-channel floor that no nonce removes, so <code>0/0/0</code> is unreachable and B is dead despite the<br>density. Route A passes the per-channel-zero screen (<code>cls</code>, <code>pha</code>, <code>anc</code> each hit 0 somewhere) and<br>has healthy low-diverse residuals, so it is the first hunt. C <em>looks</em> like it might have a <code>cls</code><br>floor, but a handful of candidates is inconclusive — validate more before judging. D is dropped<br>outright on the uniform high fingerprint regardless of density.</p>
+<h3>Cost discipline</h3>
+<p>The bake-off is a <strong>comparison</strong>, not a hunt. Keep each pilot to the 5-10M band and stop as soon as<br>the ranking is clear — if one route has much healthier overall evidence after a few million nonces,<br>commit GPUs to it rather than finishing equal pilots on the obvious losers. Re-run a fresh bake-off<br>whenever the base circuit changes (a new SOTA base reseeds every route&#39;s inputs).</p>
+</div>
+<div class="md"><h2>Density-Neutrality A/B: Verify a Change Before Hunting It</h2>
+<p>A Toffoli or structural lever that reseeds Fiat-Shamir (any vent, truncation, fusion, or<br>comparator-narrowing change) <strong>cannot be validated at the baked nonce</strong> — the reseed makes the<br>old clean nonce dirty, so you can no longer tell &quot;did my change preserve the island&quot; from &quot;did the<br>nonce just go stale.&quot; The expensive way to answer is to run a full nonce hunt for the changed<br>design and see if a <code>0/0/0</code> still exists. The cheap way is a <strong>controlled A/B on a shared<br>candidate set</strong>: confirm the change does not move the <code>cls/pha/anc</code> distribution, i.e. that it is<br><strong>density-neutral</strong> (costs no extra hunt difficulty), in minutes instead of GPU-hours.</p>
+<p>This is the counterpart to the Route Bake-Off: the bake-off <strong>ranks different routes</strong>; this<br><strong>verifies that one change preserves huntability</strong> relative to its own baseline.</p>
+<h3>Protocol</h3>
+<ol>
+<li><strong>Scan a small range on the baseline</strong> (e.g. 2M nonces) with the GPU prefilter and collect the<br>set of <strong>GCD-clean candidate nonces</strong>.</li>
+<li><strong>Reuse that same candidate set for both designs.</strong> Most Toffoli levers live <em>downstream</em> of the<br>GCD (comparator width, fold/coord vents, op-pair fusions), so they do not change <em>which</em> nonces<br>are GCD-clean — the candidate list is identical for baseline and changed design. That makes this<br>a perfectly controlled A/B: same inputs, only the circuit differs. <strong>Caveat:</strong> if the change<br>touches the GCD/prefilter path itself, this no longer holds — re-scan the changed design and<br>compare candidate <em>densities</em> too.</li>
+<li><strong>Full-validate the same candidates against both designs</strong> (24-way parallel). Use the build-once<br><strong>tail-swap</strong> (<code>EVAL_TAIL_NONCE</code>) so each design&#39;s <code>ops.bin</code> is built once and the 48 <code>X;X</code><br>grinding-tail pairs are re-targeted per nonce — no per-nonce circuit rebuild. (Verify the<br>tail-swap is bit-identical to a per-nonce build once: at the baked nonce both must give the same<br><code>0/0/0</code>; a random tail nonce must go dirty, proving the swap is active.)</li>
+<li><strong>Compute mean and variance of <code>cls</code>, <code>pha</code>, <code>anc</code></strong> over the candidate set, for each design.</li>
+</ol>
+<h3>Verdict</h3>
+<ul>
+<li><strong>Means and variances match (within noise) → density-neutral.</strong> The change adds no hunt<br>difficulty, so its Toffoli saving is effectively free and it is safe to hunt + submit.</li>
+<li><strong>Changed design&#39;s <code>cls</code>/<code>pha</code> mean is higher by Δ → the hunt is harder by ≈ <code>e^Δ</code></strong> (see<br>model below). Decide whether the Toffoli saving justifies the extra GPU time.</li>
+<li><strong>Rising or nonzero <code>anc</code></strong> (or <code>var ≫ mean</code>) is a structural red flag — a nonce will not fix it;<br>treat the change as not density-neutral regardless of the Toffoli win.</li>
+</ul>
+<h3>Why mean <em>and</em> variance (the Poisson read)</h3>
+<p>For a healthy approximate circuit the residuals are ~<strong>Poisson</strong> — i.i.d. across the reachable<br>verifier inputs — so <strong>var ≈ mean</strong>. Check this explicitly:</p>
+<ul>
+<li>If <code>var ≈ mean</code>, the geometric-decay huntability model holds and the <code>0/0/0</code> island density<br>factorizes as <code>≈ e^(−cls_mean) · e^(−pha_mean)</code> (with <code>anc</code> already 0). The<br><strong>hunt-difficulty ratio between two designs is <code>e^(Δcls_mean + Δpha_mean)</code></strong> — a single number<br>for &quot;how much more GPU will this change cost.&quot;</li>
+<li>If <code>var ≫ mean</code>, the errors are <strong>clustered</strong> (structural, one repeated failure mode), not<br>i.i.d. — the factorized density model does not apply and the change is suspect even if the mean<br>looks fine.</li>
+</ul>
+<h3>Worked example (BitWonka d44cad3 vs APPLY18, 6/26)</h3>
+<p>Baseline = BitWonka SOTA (comparator <code>MSBS=19</code>); change = <code>APPLY18</code> (apply-site comparator narrowed<br>to <code>MSBS=18</code>, a Toffoli lever that reseeds FS). 643 shared GCD-clean candidates from one 2M scan,<br>validated on both designs via tail-swap:</p>
+<table>
+<thead>
+<tr>
+<th>metric</th>
+<th align="right">baseline MSBS=19</th>
+<th align="right">change APPLY18</th>
+<th align="right">Δ mean</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cls</code> mean / var</td>
+<td align="right">17.81 / 19.5</td>
+<td align="right">17.93 / 18.4</td>
+<td align="right"><strong>+0.13</strong></td>
+</tr>
+<tr>
+<td><code>pha</code> mean / var</td>
+<td align="right">12.42 / 11.5</td>
+<td align="right">13.22 / 12.6</td>
+<td align="right"><strong>+0.80</strong></td>
+</tr>
+<tr>
+<td><code>anc</code> mean / var</td>
+<td align="right">0 / 0</td>
+<td align="right">0 / 0</td>
+<td align="right">0</td>
+</tr>
+</tbody></table>
+<p><code>var ≈ mean</code> on both (Poisson confirmed). Distributions near-identical → hunt-difficulty ratio<br><code>≈ e^(0.13+0.80) ≈ 2.5×</code> the baseline&#39;s own (already-completed) hunt. Verdict: the −Toffoli is real<br>and the island is <strong>not a harder target — the same target shifted by one comparator bit</strong>, so the<br>change is safe to commit GPUs to. This A/B reversed a prior &quot;comparator is at its floor&quot; conclusion:<br>the floor is <strong>per-nonce</strong>, not absolute, and the A/B is what proves it cheaply.</p>
+<h3>Cost discipline (A/B)</h3>
+<p>The whole verification is one 2M scan + two 24-way validation passes (minutes on a single box),<br>versus a multi-hour blind hunt per variant. Run it before committing GPUs to <strong>any</strong> lever whose<br>value-exactness can&#39;t be checked at the baked nonce (i.e. anything that reseeds Fiat-Shamir).</p>
+</div>
+<div class="md"><h2>Short Triage Scan</h2>
+<p>Run a pilot before large-scale search. A useful pilot is usually a few million to a few tens of millions of nonces, distributed across available GPUs if convenient.</p>
+<p>During triage, collect:</p>
+<ul>
+<li>total nonces scanned</li>
+<li>GCD-clean candidates found</li>
+<li>candidate density in candidates per million nonces</li>
+<li><code>cls / pha / anc</code> triples for validated candidates</li>
+<li>best severity, median severity, and whether failures have diverse fingerprints</li>
+</ul>
+<p>Define:</p>
+<pre><code class="language-text">severity = max(cls, pha, anc)
+</code></pre>
+</div>
+<div class="md"><h2>Candidate Density Gate</h2>
+<p>Use candidate density to detect unpromising or broken circuit structures early.</p>
+<ul>
+<li>GREEN: <code>&gt; 0.5 candidates/Mnonce</code></li>
+<li>YELLOW: <code>0.2..0.5 candidates/Mnonce</code></li>
+<li>RED: <code>&lt; 0.2 candidates/Mnonce</code></li>
+</ul>
+<p>Also compare against recent healthy baselines. If density is less than about 25% of known-good routes, treat it as suspicious even if the absolute density is not zero.</p>
+<p>Do not extend RED routes. For YELLOW routes, extend only if validation has promising near misses.</p>
+</div>
+<div class="md"><h2>Validation Gate</h2>
+<p>Validate newly flushed GCD-clean candidates. There are two modes:</p>
+<p>Fast mode:</p>
+<pre><code class="language-bash">EVAL_FAST_REJECT=1 ./island.sh validate &quot;&lt;CFG&gt;&quot; &lt;nonce&gt; [&lt;nonce&gt;...]
+</code></pre>
+<p>Full mode:</p>
+<pre><code class="language-bash">EVAL_FAST_REJECT=0 ./island.sh validate &quot;&lt;CFG&gt;&quot; &lt;nonce&gt; [&lt;nonce&gt;...]
+</code></pre>
+<p>Interpret <code>cls / pha / anc</code> as counts of sampled violations:</p>
+<ul>
+<li><code>cls</code>: classical constraint failures</li>
+<li><code>pha</code>: phase constraint failures</li>
+<li><code>anc</code>: dirty ancilla failures</li>
+</ul>
+<p>A clean island is:</p>
+<pre><code class="language-text">0 / 0 / 0
+</code></pre>
+<p>Useful near misses are typically low single digits, such as <code>2 / 2 / 0</code>, <code>4 / 3 / 0</code>, or <code>5 / 0 / 0</code>.</p>
+<h3>Stop Rules</h3>
+<p>Mark a route RED and stop extending it when:</p>
+<ul>
+<li>The first 16 validated candidates all share the same high dirty fingerprint.</li>
+<li>Any uniform fingerprint has very high severity, especially values like <code>9024 / 141 / 0</code>.</li>
+<li>After 64 validated candidates, no candidate has severity <code>&lt;= 10</code>.</li>
+<li>After 100-200 candidates, median severity is still high and there is no near-miss tail.</li>
+</ul>
+<p>Continue a route when:</p>
+<ul>
+<li>Score still beats SOTA.</li>
+<li>Candidate density is GREEN, or YELLOW with promising validation.</li>
+<li>There is at least one near miss with severity <code>&lt;= 10</code>.</li>
+<li>Failure fingerprints vary across candidates instead of repeating structurally.<br>Exact equality is common on dirty candidates but is not required. Any invariant violation is serious; report the offending nonce and both triples prominently.</li>
+</ul>
+<h3>Structural-Floor Diagnosis: the Failing-Shot Overlap Test</h3>
+<p><strong>Symptom:</strong> a residual coordinate (usually <code>cls</code>, sometimes <code>pha</code>) plateaus at a small floor <code>K</code><br>and never breaks below it over many candidates — e.g. best is <code>2 / * / 0</code> across hundreds of<br>validated candidates, no <code>cls &lt;= 1</code> ever appears. This is the single most important<br>go/no-go question for a route: is <code>K</code> a <strong>structural floor</strong> (a fixed set of shots that mismatch<br>for <em>every</em> nonce → <code>0/0/0</code> is unreachable → the route is dead) or just a <strong>deep statistical<br>tail</strong> (<code>cls=0</code> reachable at rate <code>~e^-lambda</code>, the route is fine, just slow)?</p>
+<p><strong>Cheapest first screen — does each channel reach 0 at all? (loop step 5.2).</strong> Before any<br>histogram or shot-overlap work, check per-channel zero-reachability across the batch: does each<br>of <code>cls</code>, <code>pha</code>, <code>anc</code> independently hit 0 <em>somewhere</em>? A channel that is <strong>never</strong> 0 over many<br>candidates is already floored — <code>0/0/0</code> is unreachable — and you can demote the route with no<br>further diagnostics. The overlap test below is for the harder case: a channel that <em>does</em> reach<br>0 sometimes but whose best value still plateaus at <code>K</code>.</p>
+<p><strong>Weak first-pass signal (histogram shape) — suggestive, not conclusive.</strong> Build the <code>cls</code><br>histogram. A <strong>pile-up</strong> at <code>K</code> (count at <code>cls=K</code> <em>exceeds</em> the smooth-tail extrapolation; e.g.<br><code>cls=K</code> is as large or larger than <code>cls=K+1</code>) hints at a floor. A <strong>smooth taper</strong> through <code>K</code><br>hints at a tail. But at a few hundred candidates this is genuinely ambiguous — do not trust it.<br>Quantitatively, for a Poisson-ish tail <code>P(cls=K)/P(cls=K+1) ≈ (K+1)/lambda</code>; an observed ratio<br>well above that is a mild pile-up warning. Use this only to decide whether to run the real test.</p>
+<p><strong>Decisive test — dump the failing shot indices and check overlap.</strong> The local <code>eval_circuit</code><br>helper records only the <em>first</em> failing shot; patch it (local tool, never submitted, reset by<br><code>ecdsafail sync</code>) to emit them all, env-gated:</p>
+<pre><code class="language-rust">// in the classical-mismatch branch of eval_circuit.rs:
+if std::env::var(&quot;DUMP_FAIL_SHOTS&quot;).is_ok() { eprintln!(&quot;FAILSHOT {i}&quot;); }
+</code></pre>
+<p><code>cargo build --release --bin eval_circuit</code>, then for <strong>3-5 of the lowest-<code>cls</code> candidates</strong> build<br>the circuit and eval with <code>DUMP_FAIL_SHOTS=1</code>, collecting the failing shot indices for each. (Run<br>under <strong>bash</strong>, not zsh — a multi-var <code>CFG</code> like <code>&quot;DIALOG_GCD_WIDTH_SLOPE_X1000=1016 DIALOG_GCD_COMPARE_BITS=43&quot;</code> only word-splits into separate <code>env</code> assignments under bash; under<br>zsh <code>env $CFG ...</code> passes it as one bogus var and silently builds the <em>base</em> config, which all<br>your island nonces fail — a false all-dirty alarm.)</p>
+<p>Then compare the sets:</p>
+<ul>
+<li><strong>Same shots recur across candidates</strong> (high overlap) → <strong>STRUCTURAL floor</strong>: there is a fixed,<br>nonce-independent bad set. <code>0/0/0</code> is impossible. <strong>Abandon the route.</strong></li>
+<li><strong>Different shots each candidate</strong> (little/no overlap) → <strong>STATISTICAL tail</strong>: each shot fails<br>independently with small <code>p</code>; a nonce where all 9024 pass exists. <strong>Keep hunting</strong> (it is just a<br>deep tail).</li>
+</ul>
+<p><strong>Verified examples:</strong> the dead 1210q route <code>SEG182+FOLD17+DIALOGFOLD17</code> floored at <code>cls=2</code> with a<br>clear pile-up (11 at <code>cls=2</code>, none below over 392 candidates) — structural. The live<br><code>slope1016+compare43</code> route also sat at best <code>cls=2</code>, but the failing shots for four <code>cls=2</code><br>candidates were <code>{2879,6741}</code>, <code>{2689,3336}</code>, <code>{589,7961}</code>, <code>{1062,8584}</code> — <strong>zero overlap</strong> →<br>statistical, <code>0/0/0</code> reachable, just deep.</p>
+<p><strong>Depth estimate once you confirm statistical.</strong> With <code>cls ~ Binomial(9024, p)</code> and mode <code>~lambda</code><br>(read it off the histogram), <code>P(cls=0) ≈ e^-lambda</code>. So <code>cls</code>-mode <code>~8</code> ⇒ <code>~1/3000</code> GCD-clean<br>candidates are <code>cls=0</code>; multiply by the analogous <code>pha=0</code> rate (weaker if <code>cls</code>/<code>pha</code> are<br>positively correlated, which they usually are near a true island) to estimate time-to-island.<br>A deep but finite tail is a <em>patience</em> decision, not a route-kill — report the honest ETA.</p>
+<p><strong>A statistical route can still be a <em>practical</em> dead-end.</strong> Statistical ≠ landable in your time<br>budget. Estimate the required candidate count <code>~e^lambda</code> and compare against what the fleet can<br>actually produce. <strong>Verified:</strong> <code>slope1015+compare43</code> (1203q) — 346 GCD-clean candidates validated,<br><code>cls</code> floor stuck at 3, broad distribution (3→17, mode <code>~8–10</code>), <strong>zero shot-overlap</strong> (statistical,<br>not structural). But <code>e^9 ≈ 8000</code> candidates needed for one <code>cls=0</code>; at the achievable harvest rate<br>that&#39;s impractical, and 960M nonces yielded <strong>zero</strong> <code>0/0/0</code> islands. The overlap test cleared it as<br>&quot;not structural,&quot; but the <em>depth</em> killed it. Abandon a statistical route whose <code>e^lambda</code> exceeds<br>your candidate budget — don&#39;t grind it for free.</p>
+<p><strong>The apply-aware filter&#39;s calibration sets the <code>cls</code> floor — match the lever to the filter.</strong> The<br>GPU prefilter is <em>apply-aware</em>: it models the apply-side comparator (e.g. <code>compare_bits=46</code>). A lever<br>that <strong>changes the comparator the filter models</strong> (like <code>compare46→43</code>) silently <em>miscalibrates</em> the<br>filter — GPU-<code>CLEAN</code> then means &quot;clean under the wrong comparator,&quot; so candidates validate to a high<br><code>cls</code> floor (the <code>compare43</code> mean <code>~8–10</code> above is exactly this). Diagnostic value: when GPU-<code>CLEAN</code><br>candidates validate far from <code>0/0/0</code>, suspect a filter/circuit comparator mismatch before blaming<br>nonce luck. Conversely, a <strong>value-exact, comparator-preserving</strong> lever (apply-side carry-parking /<br>square-segmentation that keeps <code>compare_bits</code> fixed) leaves the filter calibrated and inherits the<br>base config&#39;s landability — though even these perturb the modeled apply path slightly, so expect a<br>small residual <code>cls</code> (observed <code>cls≈5</code> on a first <code>park4+seg160</code> 1200q candidate, vs <code>compare43</code>&#39;s<br><code>~8–10</code>). Rule of thumb: pre-GCD changes cost nothing on the filter, comparator changes cost the most,<br>value-exact apply tweaks cost a little — pick levers that keep the filter honest.</p>
+<p><strong>Why a floor can exist at all</strong> (since the tail nonce reseeds all 9024 shots): a structural floor<br>requires shots whose inputs are <em>nonce-independent</em>. Most truncation error is driven by<br>nonce-derived inputs (no floor), but some stacked apply-side truncations create a fixed bad set<br>anyway (the 1210q case). Reseeding does <strong>not</strong> guarantee no floor — run the test.</p>
+</div>
+<div class="md"><h2>Quantitative Runtime Model (two-stage: density × channel-distribution × throughput)</h2>
+<p>The informal <code>e^lambda</code> depth estimate above is the <em>classical-channel-only</em> term. <strong>Density alone<br>is an optimistic predictor of time-to-island</strong> because the cheap GPU pre-filter screens only the<br><code>cls</code> channel — a GCD-clean candidate can still die on <code>pha</code> or <code>anc</code> under the full evaluator.<br>Model the hunt as <strong>two stages</strong> and combine all three measured inputs. Tool:<br><code>scripts/island_runtime_model.py</code> (bundled).</p>
+<p><strong>The two stages.</strong></p>
+<ul>
+<li><strong>Stage 1 — cheap GPU classical screen.</strong> Screens nonces at aggregate rate <code>R</code> (nonce/s); a nonce<br>passes (&quot;GCD-clean&quot;) with probability <code>d = e^(-lambda_cls)</code> = the <strong>GCD-clean density</strong> (input #1).</li>
+<li><strong>Stage 2 — expensive full 9024-shot eval</strong> (cost <code>T_eval</code> s/candidate). Each Stage-1 pass is<br>fully evaluated for <code>cls</code>/<code>pha</code>/<code>anc</code>; it is a real island with conditional probability<br><code>q = P(pha=0 AND anc=0 | cls-clean)</code> — derived from the <strong><code>cls/pha/anc</code> distribution of GCD-clean<br>candidates</strong> (input #2). <code>q</code> is exactly the term density-only estimates drop.</li>
+</ul>
+<p><strong>The formulas.</strong></p>
+<pre><code class="language-text">p (per-nonce success) = d * q
+N (expected nonces)   = 1 / p
+screen_time = 1 / (d * q * R)     # Stage-1, dominated by rare density
+eval_time   = T_eval / q          # Stage-2, dominated by INDEPENDENT pha/anc thinning
+total (shared HW)      = screen_time + eval_time
+total (concurrent HW)  = max(screen_time, eval_time)
+</code></pre>
+<p>Time-to-island is Geometric(p) → ~exponential, <strong>heavy-tailed</strong>: percentile <code>P</code> needs<br><code>ln(1/(1-P))/p</code> nonces, so <strong>p99 ≈ 4.6 × the mean</strong>. Always report the tail, not just the mean —<br>&quot;expected 4 h&quot; routinely means &quot;1-in-100 chance it takes &gt;18 h.&quot;</p>
+<p><strong>Two regimes, two bottlenecks (the model prints which):</strong></p>
+<ul>
+<li><strong>Screen-bound</strong> (<code>q ≈ 1</code>, low density): <code>time ≈ 1/(d·q·R)</code>. More GPUs on Stage 1 helps linearly.</li>
+<li><strong>Eval-bound</strong> (independent <code>pha</code>/<code>anc</code> mode, small <code>q</code>): <code>time ≈ T_eval/q</code>. <strong>Adding screening<br>GPUs does nothing</strong> — you must speed up the evaluator, or <em>teach the pre-filter the <code>pha</code>/<code>anc</code><br>trigger</em> (the apply-aware filter) so Stage 1 catches it and <code>q</code> rises back toward 1.</li>
+</ul>
+<p><strong>The <code>q</code> measurement is where density-vs-reality is decided.</strong> Feed the model a panel of GCD-clean<br>candidates, each full-evaluated (<code>cls pha anc</code> per line) via <code>--qpanel</code>. It computes <code>q</code> <strong>and</strong><br>flags the <strong>leak past the screen</strong> — <code>pha</code>/<code>anc</code> failures that occur on <code>cls</code>-clean candidates.<br>Leak = 0 → <code>pha</code>/<code>anc</code> are a subset of <code>cls</code> (shared truncation trigger: a dropped bit being<br>nonzero both corrupts the result <em>and</em> leaves phase garbage from its measured uncompute) → density<br>is a faithful predictor (<code>q≈1</code>). Leak &gt; 0 → an <strong>independent</strong> <code>pha</code>/<code>anc</code> mode (a vent <code>cz_if</code><br>fixup or conditional-replay phase wrong on <code>cls</code>-clean inputs) → density is optimistic by exactly<br>the <code>1/q</code> factor, and the eval stage may dominate. This is the quantitative form of the<br>per-channel-zero triage rule: judge a route by the full <code>(cls,pha,anc)</code> distribution, never density<br>alone.</p>
+<p><strong>How to measure the three inputs (don&#39;t infer — measure):</strong></p>
+<ol>
+<li><code>d</code> / <code>lambda_cls</code> — <code>gcd_density.rs</code> (or the GPU scan&#39;s candidate density) over a random-nonce<br>panel; its <code>displacement = 18048 * h</code> <strong>is</strong> <code>lambda_cls</code>, and <code>d = e^(-lambda_cls)</code>.<br>(<code>18048 = 9024 shots × 2 GCD factors</code>.)</li>
+<li><code>q</code> — screen for GCD-clean candidates (Stage-1 passes), <strong>full-eval each</strong> to record<br><code>(cls,pha,anc)</code>, feed to <code>--qpanel</code>. A <em>random</em>-nonce <code>(cls,pha,anc)</code> is the <strong>wrong<br>population</strong> — <code>q</code> is conditioned on <code>cls</code>-clean, so the panel must be Stage-1 survivors.</li>
+<li><code>R</code> — time the GPU pre-filter on a fixed batch (<code>EVAL_FAST_REJECT=1 ./island.sh search ... &lt;N&gt;</code>),<br><code>N / elapsed</code>, summed across GPUs.</li>
+</ol>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-bash"># inputs from real measurement:
+python scripts/island_runtime_model.py --lambda-cls 18 --qpanel panel.tsv --rate 5e3 --t-eval 15
+# or specify q directly, density directly, and concurrent hardware:
+python scripts/island_runtime_model.py --density 1.5e-8 --q 0.7 --rate 5e3 --t-eval 15 --concurrent
+</code></pre>
+<p><strong>Worked sensitivity</strong> (<code>lambda_cls=18</code>, <code>R=5e3</code> nonce/s, <code>T_eval=15 s</code>): <code>q=1.0</code> → ~3.7 h<br>(screen-bound); <code>q=0.1</code> → ~1.5 days (still screen-bound, 10× worse); high-density <code>lambda_cls=8</code><br>with <code>q=0.002</code> → ~2.1 h but now <strong>eval-bound</strong> (adding scan GPUs wouldn&#39;t help). <strong>Each ~+1 to<br><code>lambda_cls</code> multiplies screen time by <code>e ≈ 2.7</code>; each 10× drop in <code>q</code> multiplies total by 10</strong> — so<br>a truncation-heavy conversion that raises <code>lambda_cls</code> <em>or</em> opens an independent <code>pha</code> mode is far<br>more expensive than its score delta suggests. Prefer exact/value-exact levers that keep both <code>d</code> and<br><code>q</code> at the frontier&#39;s values.</p>
+<h3>Refinement: conditional funnel, count model, and calibration</h3>
+<p>Three corrections that make the estimate honest. Intuition first, then the recipe.</p>
+<p><strong>1. The channels are rare-event COUNTS — model as Poisson/Negative-Binomial, never Gaussian.</strong><br><code>cls/pha/anc</code> are non-negative integer counts of failing shots (a few out of 9024). At the typical<br>small means (μ≈2–6) a Gaussian is the wrong shape (symmetric, continuous, puts mass on negative<br>counts) and mis-estimates <code>P(count=0)</code> — the one quantity that matters. Use:</p>
+<ul>
+<li><strong>Poisson</strong> (dispersion <code>σ²/μ ≈ 1</code>): <code>P(channel=0) = e^(−μ)</code>.</li>
+<li><strong>Negative Binomial</strong> (<code>σ²/μ &gt; ~1.2</code>, the usual case — GCD-clean nonces are a heterogeneous,<br>screened subpopulation → overdispersed): <code>P(0) = (1+μ/r)^(−r)</code>, <code>r = μ²/(σ²−μ)</code>. NB captures your<br>intuition that <em>both</em> a small mean <strong>and</strong> a fat variance make a zero more likely; it degrades to<br>Poisson as <code>σ²→μ</code>. Run a dispersion/χ² check to pick; until you have ~50–100 candidates, the<br>variance is unreliable — fall back to Poisson on the mean.</li>
+</ul>
+<p><strong>2. Use the CONDITIONAL FUNNEL, not the independent product <code>∏ P(channel=0)</code>.</strong> <code>cls</code> and <code>pha</code> are<br>positively correlated (one dropped truncation bit breaks the result <em>and</em> leaves phase garbage), so<br>multiplying marginal zero-rates overestimates <code>E[N]</code>. Chain the conditionals instead — each measured<br><em>inside</em> the previous-clean subset, which captures the correlation by construction:</p>
+<pre><code>island_rate = d · P(c=0) · P(p=0 | c=0) · P(a=0 | c=0,p=0)
+</code></pre>
+<p>Measure <code>P(p=0|c=0)</code> <strong>directly</strong> as the fraction of c-clean candidates that are also p-clean (more<br>robust than modeling the <code>pha</code> distribution); only model it as <code>e^(−mean_p over c-clean)</code> when it&#39;s<br>too rare to observe directly. (<code>a</code> is usually deterministic-0 → <code>P(a=0|…)≈1</code>.) Equivalent and<br>correlation-free if you can dump failing-shot indices: fit one NB to the <strong>union</strong> bad-shot count<br>(#shots failing <em>any</em> channel) → <code>q = P(union=0)</code>.</p>
+<p><strong>3. Estimate every rate from the MEAN, not the zero-fraction.</strong> Don&#39;t estimate a <code>~1e-6</code> probability<br>by counting rare zeros. Get <code>d</code> from the <strong>all-nonce</strong> GCD-hard count: <code>d = e^(−λ_GCD)</code>,<br><code>λ_GCD = mean GCD-hard shots over all scanned nonces</code> (millions of samples → tight). pha/anc never<br>exist for GCD-dirty nonces, so those rates come only from the c-clean candidate panel — but still via<br>their means, not by waiting for a zero.</p>
+<p><strong>4. CALIBRATE — don&#39;t over-derive (the load-bearing caveat).</strong> No closed form is reliable to better<br>than ~an order of magnitude: shot-level correlations break the independence every formula assumes.<br>Treat the closed form as a <strong>relative ranker + ETA prior</strong>, and wrap it with an empirically-learned<br>correction:</p>
+<pre><code>E[N] ≈ k · (1 / island_rate),   k = running median(actual_N / predicted_N) over landed hunts
+</code></pre>
+<p>Log <code>(predicted, actual)</code> for every island you land and update <code>k</code> continuously (observed spread<br>~0.3×–73× across configs). The formula tells you <em>which route is more huntable</em> and a first ETA; <code>k</code><br>is what makes the absolute number trustworthy. Also report p50/p90/p99 (the wait is exponential).</p>
+<p><strong>Final recipe (end to end):</strong></p>
+<pre><code>d           = e^(−λ_GCD)                 λ_GCD from all-nonce GCD-hard mean
+P(c=0)      = e^(−mean_c)   [NB if overdispersed]    mean_c = residual cls on c-clean candidates
+P(p=0|c=0)  = measured fraction of c-clean candidates that are p-clean (else e^(−mean_p))
+P(a=0|…)    ≈ 1
+island_rate = d · P(c=0) · P(p=0|c=0) · P(a=0|…)
+E[N]        = k · 1/island_rate ;  report p50/p90/p99 ;  update k from each landed hunt
+</code></pre>
+<h3>Covariance shortcut for <code>P(p=0 | c=0)</code> — measure the correlation, don&#39;t assume it</h3>
+<p>Refinement #2 says to use the conditional funnel because <code>cls</code>/<code>pha</code> are positively correlated. Here<br>is how to <strong>quantify</strong> that correlation from the same GCD-clean panel, and what it costs to ignore<br>it. From each GCD-clean candidate&#39;s <code>(cls, pha)</code>, compute the covariance of the two counts directly:</p>
+<pre><code>cov  = mean(cls·pha) − mean(cls)·mean(pha)
+corr = cov / (std(cls)·std(pha))
+</code></pre>
+<p>Under the shared-component count model — <code>cls = A+C</code>, <code>pha = B+C</code> with independent Poisson parts and<br><code>C</code> = shots that fail <em>both</em> (the dropped-bit mode that corrupts the value <strong>and</strong> leaves measured<br>phase garbage) — the union bad-shot mean is <code>cls̄ + phā − cov</code> (because <code>cov = E[C]</code> for Poisson <code>C</code>):</p>
+<pre><code>P(0/0/0 | GCD-clean) ≈ exp( −( cls̄ + phā − cov ) )        (anc̄ ≈ 0)
+</code></pre>
+<p>This is exactly Refinement #2&#39;s &quot;fit one NB to the union bad-shot count,&quot; but computed from the<br><strong>covariance of the marginal counts</strong> — no failing-shot-index dump needed, just <code>cls</code>/<code>pha</code> per<br>candidate. <code>cov = 0</code> recovers the (wrong) independent product <code>∏ P(channel=0)</code>; <code>cov &gt; 0</code> is the<br>correlation refund.</p>
+<p><strong>Ignoring the correlation is a ~7000× error that flips feasibility.</strong> Measured on the d44cad3 base,<br>643 GCD-clean candidates from one 2M scan:</p>
+<table>
+<thead>
+<tr>
+<th>design</th>
+<th align="right">cls̄</th>
+<th align="right">phā</th>
+<th align="right">cov</th>
+<th align="right">corr</th>
+<th align="right">P(0/0/0|clean)</th>
+<th align="right">E[nonces]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BitWonka MSBS=19</td>
+<td align="right">17.80</td>
+<td align="right">12.41</td>
+<td align="right">8.90</td>
+<td align="right">0.60</td>
+<td align="right">5.6e‑10</td>
+<td align="right">~5.6e12</td>
+</tr>
+<tr>
+<td>ours APPLY18</td>
+<td align="right">17.93</td>
+<td align="right">13.22</td>
+<td align="right">7.76</td>
+<td align="right">0.51</td>
+<td align="right">7.0e‑11</td>
+<td align="right">~4.5e13</td>
+</tr>
+</tbody></table>
+<p>The independent product predicts <code>e^(−30.2) → ~4e16</code> nonces for BitWonka — centuries of GPU, i.e.<br>&quot;unlandable.&quot; The covariance refund (<code>e^cov ≈ e^8.9 ≈ 7000×</code>) brings it to ~5.6e12 ≈ a few GPU-days,<br>consistent with BitWonka having actually landed their nonce. <strong>Always measure <code>cov</code> before quoting an<br>absolute ETA — an independence estimate can be 3–4 orders of magnitude too pessimistic and wrongly<br>declare a feasible hunt impossible.</strong></p>
+<p><strong>For an A/B ratio, lean on the means, not the covariance.</strong> The hunt-cost ratio between two designs<br>is <code>exp( (cls̄_A+phā_A−cov_A) − (cls̄_B+phā_B−cov_B) )</code>. The <code>cls̄/phā</code> differences are tight (means<br>of ~643 small counts), but <code>cov</code> carries a large standard error (<code>≈ std(cls)·std(pha)/√n ≈ 0.6</code><br>here), and two designs one comparator-bit apart should share a correlation structure. So the<br><strong>robust ratio is the mean-only part <code>exp(Δcls̄ + Δphā)</code></strong> (≈ <code>e^0.94 ≈ 2.6×</code> for APPLY18 vs MSBS=19);<br>treat any extra factor implied by a <code>cov</code> gap (the raw table above suggests ~8×) as noise until a<br>much larger panel confirms it. <strong>Rule: covariance for the absolute ETA, means for the A/B ratio.</strong></p>
+</div>
+<div class="md"><h2>Remote Validation Hygiene</h2>
+<p>Prefer remote parallel validation for large batches because local CPU validation is slow.<br><strong>Start distributed validation as early as the first GCD-clean candidates appear — don&#39;t wait for<br>a large backlog — and validate FULL only (no fast-reject): the near-miss <code>cls / pha / anc</code><br>distribution and the per-channel-zero check (loop step 5.2) both need exact counts, which the<br>fast path&#39;s early-out cannot give.</strong></p>
+<h3>Distributed own-host validation</h3>
+<p>For high-density hunts, scanning and validation should be distributed together. The default<br>ownership rule is:</p>
+<pre><code class="language-text">Each GPU machine validates the GCD-clean candidates found by its own scanner logs.
+</code></pre>
+<p>Do not centralize all candidates onto one validator except as a temporary recovery step. Central<br>sharding creates avoidable delay, duplicate work, stale backlogs, and unclear ownership. The<br>machine that produces a local <code>CLEAN nonce=...</code> prefilter line should immediately feed that nonce<br>to a local full-validator loop on the same host.</p>
+<p>Before launching distributed validation for a route, pin and record these artifacts:</p>
+<ul>
+<li>circuit source commit and local diff summary</li>
+<li>exact circuit CFG / env</li>
+<li>GPU state file path and sha256</li>
+<li>GPU toolkit branch and commit</li>
+<li>remote validator source archive sha256, if source is copied to remotes</li>
+<li><code>build_circuit</code> and <code>eval_circuit</code> hashes per remote toolchain</li>
+<li>accepted local/remote anchor nonce triples</li>
+</ul>
+<p>Use a consistent remote layout on every host, parameterized by the route name:</p>
+<pre><code class="language-text">/root/.ecdsafail_island_&lt;route&gt;/logs/*.log      scan logs
+/root/&lt;route&gt;_remote_validate.sh                full validator wrapper
+/root/&lt;route&gt;_validate_own_loop.sh              per-host validation loop
+/root/&lt;route&gt;_own_validation/candidates.txt     sorted unique GCD-clean nonces from scanner logs
+/root/&lt;route&gt;_own_validation/pending.txt        unvalidated backlog after done/log skip-list filtering
+/root/&lt;route&gt;_own_validation/results.log        own-host full-validation output
+/root/&lt;route&gt;_own_validation/errors.log         retryable build/eval failures, not verdicts
+/root/&lt;route&gt;_own_validation/done.txt           validated nonce skip-list
+/root/&lt;route&gt;_own_validation/batch_&lt;ts&gt;.txt      nonce batch currently being validated
+/root/&lt;route&gt;_own_validation/shared_ops/ops.bin  optional read-only host-level ops cache
+/root/&lt;route&gt;_own_validation/loop.out           loop diagnostics
+</code></pre>
+<p>Older shard logs may be retained for audit, but new validation should flow through the own-host<br>loop unless recovering from a broken node.</p>
+<h4>Remote result ledger and local mirror</h4>
+<p>Every remote validator must write durable results on the remote machine first. Do not rely on<br>terminal scrollback, stdout from an SSH session, or local-only validation output as the record of<br>truth. Each full-validation worker should append one parseable verdict line per successfully<br>evaluated nonce to:</p>
+<pre><code class="language-text">/root/&lt;route&gt;_own_validation/results.log
+</code></pre>
+<p><code>results.log</code> is a verdict ledger, not a diagnostics stream. It should contain only completed<br><code>dirty</code> / <code>CLEAN</code> full-validation verdicts, and every row must start with an ISO-8601 timestamp<br>for the verdict completion time:</p>
+<pre><code class="language-text">ts=2026-06-21T18:13:58+00:00 dirty nonce=&lt;n&gt; shots=&lt;shots&gt; cls=&lt;c&gt; pha=&lt;p&gt; anc=&lt;a&gt; tof=&lt;avgT&gt; qubits=&lt;q&gt;
+ts=2026-06-21T18:14:02+00:00 CLEAN nonce=&lt;n&gt; shots=&lt;shots&gt; cls=0 pha=0 anc=0 tof=&lt;avgT&gt; qubits=&lt;q&gt;
+</code></pre>
+<p>If old untimestamped rows are imported, preserve them in a raw backup and write a migration note in<br><code>loop.out</code> or <code>sync.log</code>; do not silently mix ambiguous rows into the live ledger. Route retryable<br>operational failures to:</p>
+<pre><code class="language-text">/root/&lt;route&gt;_own_validation/errors.log
+</code></pre>
+<p>Append the timestamped verdict line before adding that nonce to <code>done.txt</code>. If validation returns <code>ERROR</code>,<br>append the error to <code>errors.log</code>, leave the nonce out of <code>done.txt</code>, and rerun it later. When<br>multiple validator workers are active, use an append-safe pattern such as <code>flock</code>, or set toolkit<br>ledger variables:</p>
+<pre><code class="language-bash">VALIDATE_RESULTS_LOG=/root/&lt;route&gt;_own_validation/results.log
+VALIDATE_ERRORS_LOG=/root/&lt;route&gt;_own_validation/errors.log
+VALIDATE_LOCK_FILE=/root/&lt;route&gt;_own_validation/validate.lock
+</code></pre>
+<p>Avoid any loop that marks a nonce done before its result line is durably written. If an old or<br>interrupted loop pollutes <code>results.log</code> with <code>ERROR</code> rows, take the same lock, move those rows to<br><code>errors.log</code>, rebuild local mirrors, and treat the affected nonces as retryable.</p>
+<p>Keep the live remote <code>results.log</code> append-only after validation starts. Do not periodically rewrite<br>or atomically replace it with <code>mv results.tmp results.log</code>; plain <code>tail -f results.log</code> follows the<br>old inode and appears stuck after a replacement. If deduping or parsing is needed, write derived<br>files such as <code>combined.tsv</code>; if a live mirror must survive file replacement, use <code>tail -F</code>, but the<br>remote ledger itself should be safe for ordinary <code>tail -f</code>.</p>
+<p>Every heartbeat should mirror remote result ledgers into a local audit directory, preserving both<br>raw per-host logs and a combined parsed view. Use a predictable local layout such as:</p>
+<pre><code class="language-text">outputs/&lt;route&gt;_validation_results/raw/&lt;host&gt;.results.log
+outputs/&lt;route&gt;_validation_results/raw/&lt;host&gt;.errors.log
+outputs/&lt;route&gt;_validation_results/raw/&lt;host&gt;.candidates.txt
+outputs/&lt;route&gt;_validation_results/combined.tsv
+outputs/&lt;route&gt;_validation_results/near_misses.tsv
+outputs/&lt;route&gt;_validation_results/clean_hits.tsv
+outputs/&lt;route&gt;_validation_results/sync.log
+</code></pre>
+<p>The raw per-host files should be exact mirrors of remote <code>results.log</code> files. The combined TSV<br>should add at least <code>host</code>, <code>ts</code>, <code>nonce</code>, <code>verdict</code>, <code>cls</code>, <code>pha</code>, <code>anc</code>, <code>tof</code>, and <code>qubits</code>, then<br>deduplicate by nonce so the user can inspect one local file without SSHing into every node. Keep<br><code>clean_hits.tsv</code> and <code>near_misses.tsv</code> regenerated from <code>combined.tsv</code>; do not hand-maintain them.<br>Mirror <code>errors.log</code> and <code>candidates.txt</code> separately for retry and density audits, but do not parse<br>error rows into <code>combined.tsv</code>.</p>
+<p>For periodic mirroring, prefer idempotent pulls that overwrite each host mirror atomically, then<br>rebuild combined files locally:</p>
+<pre><code class="language-bash">ssh &lt;host&gt; &quot;cat /root/&lt;route&gt;_own_validation/results.log&quot; &gt; raw/&lt;host&gt;.results.log.tmp
+mv raw/&lt;host&gt;.results.log.tmp raw/&lt;host&gt;.results.log
+# then parse all raw/*.results.log into combined.tsv, near_misses.tsv, and clean_hits.tsv
+</code></pre>
+<p>If live streaming is useful, run a <code>tail -F</code> stream per host into host-specific raw files, but still<br>rebuild <code>combined.tsv</code> by parsing and deduplicating the raw logs. Streaming is an accelerator, not a<br>replacement for the remote ledger. Heartbeats must say whether remote verdicts are being streamed or<br>periodically mirrored, and must print the remote workdir, <code>candidates.txt</code>, <code>results.log</code>, and local<br>mirror directory so the user does not have to ask where the data lives.</p>
+<h4>Skip-list discipline</h4>
+<p>Before starting or restarting distributed validation:</p>
+<ol>
+<li>Collect all previously validated nonces from every remote validator log.</li>
+<li>Merge them into one sorted unique global skip-list.</li>
+<li>Copy that list to every host.</li>
+<li>Seed each host&#39;s <code>&lt;route&gt;_own_validation/done.txt</code> from the global list.</li>
+</ol>
+<p>Every validation loop should also re-scan prior local validator logs and merge their nonce IDs into<br><code>done.txt</code>. This protects against restarts, old shard logs, and partially completed batches.</p>
+<p>Avoid <code>comm</code> for filtering unless both inputs are guaranteed to use the same lexical sort. Prefer a<br>hash-set filter. Use <code>FILENAME == ARGV[1]</code>, not <code>NR == FNR</code>, so an empty <code>done.txt</code> does not make<br>the candidate file look like the first input:</p>
+<pre><code class="language-bash">awk &#39;FILENAME == ARGV[1] { done[$1]=1; next } !($1 in done)&#39; done.txt all_candidates.txt
+</code></pre>
+<p>Before launching a large validation batch, sanity-check that no batch nonce is already in<br><code>done.txt</code> and that the batch has no duplicates:</p>
+<pre><code class="language-bash">awk &#39;NR==FNR { d[$1]=1; next } ($1 in d) { c++ } END { print c+0 }&#39; done.txt batch.txt
+sort -n batch.txt | uniq -d | wc -l
+</code></pre>
+<p>Both numbers should be <code>0</code>.</p>
+<h4>Per-host validation loop</h4>
+<p>For routes that validate many candidates on one host, build the circuit body <strong>once per host</strong>.<br>The nonce tail is an identity tail: <code>DIALOG_TAIL_NONCE=0</code> and <code>DIALOG_TAIL_NONCE=&lt;n&gt;</code> have the<br>same simulated op stream; the candidate nonce only changes the Fiat-Shamir hash. Therefore:</p>
+<ol>
+<li>Build one shared validation directory such as <code>/root/&lt;route&gt;_own_validation/shared_ops</code>.</li>
+<li>Run <code>build_circuit</code> there once with the active CFG and <code>DIALOG_TAIL_NONCE=0</code>.</li>
+<li>Mark <code>shared_ops/ops.bin</code> read-only.</li>
+<li>Launch many parallel <code>eval_circuit</code> processes from that same directory with<br><code>EVAL_TAIL_NONCE=&lt;nonce&gt;</code> and the requested <code>EVAL_FAST_REJECT</code> setting.</li>
+</ol>
+<p>Do <strong>not</strong> run one <code>VALIDATE_REUSE_OPS=1 ./island.sh validate ...</code> process per worker for large<br>remote batches. That still builds one temp <code>ops.bin</code> per process, wasting disk and capping<br>parallelism. <code>VALIDATE_REUSE_OPS=1</code> is fine for small local batches or one serial validator<br>process; distributed/high-parallel validation should share one read-only <code>ops.bin</code> per host.</p>
+<p>The loop should:</p>
+<ol>
+<li>Read only that host&#39;s local scanner logs.</li>
+<li>Extract GCD-clean candidate nonces from <code>CLEAN nonce=&lt;n&gt;</code> into sorted unique<br><code>candidates.txt</code>.</li>
+<li>Remove nonces already present in <code>done.txt</code> or previous validation logs, and write the current<br>not-yet-validated list to <code>pending.txt</code>.</li>
+<li>Validate the remaining nonces in parallel with the host-level shared <code>ops.bin</code> cache when the<br>evaluator supports <code>EVAL_TAIL_NONCE</code>; otherwise fall back to per-batch rebuilds.</li>
+<li>Append timestamped parseable <code>dirty</code> / <code>CLEAN</code> verdict output to <code>results.log</code> without replacing<br>the file inode; route <code>ERROR</code> output to <code>errors.log</code>.</li>
+<li>Add only successfully validated <code>dirty</code> / <code>CLEAN</code> nonce IDs to <code>done.txt</code>; keep <code>ERROR</code><br>nonces retryable.</li>
+<li>Repeat.</li>
+</ol>
+<p>Parallelism is part of the correctness of the operational procedure: a GPU host that scans<br>quickly but validates candidates with one serial process will build a stale backlog and hide clean<br>hits. Run a <strong>multi-process validator pool on every scanning host</strong>, sized to that host&#39;s CPU/GPU<br>capacity, and keep increasing it until validation throughput stops improving or the machine becomes<br>unstable.</p>
+<p>Starting parallelism:</p>
+<pre><code class="language-text">with per-process ops builds:
+  single RTX5090 host: Q_VALIDATE_PAR=4,  Q_VALIDATE_BATCH=512
+  4x L40S host:       Q_VALIDATE_PAR=8,  Q_VALIDATE_BATCH=1024
+  4x RTX5090 host:    Q_VALIDATE_PAR=12, Q_VALIDATE_BATCH=1536
+
+with one shared read-only ops.bin per host:
+  single RTX5090 host: Q_VALIDATE_PAR=8..16
+  4x L40S host:       Q_VALIDATE_PAR=32..64 first, then 96+ if CPU/disk stay stable
+  4x RTX5090 host:    Q_VALIDATE_PAR=48..96 depending on CPU cores
+</code></pre>
+<p>These are conservative starting points, not ceilings. On a large remote node, inspect <code>nproc</code>,<br>current load, memory pressure, and scanner contention, then ramp upward in steps:</p>
+<pre><code class="language-text">per-process ops builds:
+  single-GPU host: try 4 -&gt; 6 -&gt; 8 workers
+  4-GPU host:      try 8 -&gt; 12 -&gt; 16 -&gt; 24+ workers
+
+shared ops.bin:
+  single-GPU host: try 8 -&gt; 16 -&gt; 24 workers
+  4-GPU host:      try 32 -&gt; 64 -&gt; 96 -&gt; 120 workers
+</code></pre>
+<p>If the validator is CPU-only, the worker cap is usually host CPU cores minus a small reserve for<br>scanner/logging processes. If a future validator uses GPU kernels, shard workers so every GPU has<br>active validation work and avoid putting all validation on GPU0. In either case, the heartbeat<br>should show <strong>both</strong> active scanner processes and multiple active validation children per host.</p>
+<p>Tune only after checking that the machine remains responsive and validation latency is acceptable.<br>If validation results are not keeping up with GCD-clean candidate production, increase<br><code>Q_VALIDATE_PAR</code>, increase batch size, or add more validator hosts before assigning more scan range.</p>
+<p>The remote validator must use full validation:</p>
+<pre><code class="language-bash">EVAL_FAST_REJECT=0
+</code></pre>
+<p>Each successfully evaluated nonce must produce exactly one parseable verdict line in<br><code>results.log</code>:</p>
+<pre><code class="language-text">ts=&lt;iso8601&gt; dirty nonce=&lt;n&gt; shots=&lt;shots&gt; cls=&lt;c&gt; pha=&lt;p&gt; anc=&lt;a&gt; tof=&lt;avgT&gt; qubits=&lt;q&gt;
+ts=&lt;iso8601&gt; CLEAN nonce=&lt;n&gt; shots=&lt;shots&gt; cls=0 pha=0 anc=0 tof=&lt;avgT&gt; qubits=&lt;q&gt;
+</code></pre>
+<p>Build/eval failures must go to <code>errors.log</code>:</p>
+<pre><code class="language-text">ERROR nonce=&lt;n&gt; stage=&lt;build|eval&gt; rc=&lt;code&gt; ...
+</code></pre>
+<p>Treat <code>ERROR</code> as unvalidated. Do not add it to final clean/dirty statistics until it is rerun<br>successfully.</p>
+<p>Monitor both scanner and validator activity per host:</p>
+<pre><code class="language-bash">printf &#39;remote workdir: %s\n&#39; /root/&lt;route&gt;_own_validation
+ps -eo pid,etime,cmd | grep -E &#39;&lt;route&gt;_validate_own_loop|&lt;route&gt;_remote_validate|search_driver|gpu_island&#39; | grep -v grep
+pgrep -fc &#39;&lt;route&gt;_remote_validate&#39;
+wc -l /root/&lt;route&gt;_own_validation/candidates.txt
+wc -l /root/&lt;route&gt;_own_validation/pending.txt
+wc -l /root/&lt;route&gt;_own_validation/done.txt
+wc -l /root/&lt;route&gt;_own_validation/results.log
+wc -l /root/&lt;route&gt;_own_validation/errors.log
+tail -10 /root/&lt;route&gt;_own_validation/results.log
+</code></pre>
+<p>Useful heartbeat fields include remote workdir and file paths, active scanner ranges, validator<br>loop PID, active full-validator children, configured <code>Q_VALIDATE_PAR</code>, observed validator<br>throughput, <code>candidates.txt</code> count, <code>pending.txt</code> count, <code>done.txt</code> count, <code>results.log</code> count,<br><code>errors.log</code> count, remote-to-local mirror status, local mirror directory, local <code>combined.tsv</code> row<br>count, local <code>clean_hits.tsv</code> row count, duplicate sanity status for the latest batch, and best near<br>misses from newly validated results.</p>
+<h4>Local cross-checks are trust checks only</h4>
+<p>Local validation is for remote-validator trust, not throughput.</p>
+<p>Use this policy:</p>
+<ul>
+<li>After a new validator build, new GPU host, changed source, changed CFG, or changed state:<br>cross-check several anchors locally and remotely.</li>
+<li>During steady-state hunting after anchors agree: cross-check the active hunt&#39;s requested sample<br>size, often one recent candidate per heartbeat for high-density hunts. If no sample size is<br>specified, use five.</li>
+<li>If any remote/local mismatch appears: quarantine that host, stop trusting its validator output,<br>rebuild or redeploy, then re-anchor.</li>
+</ul>
+<p>The cross-check must compare exact <code>nonce</code>, verdict, <code>cls</code>, <code>pha</code>, and <code>anc</code>. Do not accept<br>approximate agreement. Do not report anchor nonce results as new hunt results.</p>
+<h4>Clean hit handling</h4>
+<p>If any remote log contains:</p>
+<pre><code class="language-text">CLEAN nonce=&lt;n&gt; cls=0 pha=0 anc=0
+</code></pre>
+<p>immediately:</p>
+<ol>
+<li>Follow the current user policy for the hunt. Default policy is local full-validation first; if<br>the user explicitly requested submit-first during a race, submit immediately on the remote full<br>validator hit and run local verification afterward.</li>
+<li>Bake the CFG and nonce into the challenge worktree.</li>
+<li>Run <code>ecdsafail run</code> when policy requires local confirmation or after submit-first completion.</li>
+<li>Preserve the solution on a branch with a detailed commit message.</li>
+</ol>
+<p>Do not wait for the rest of the backlog to drain once a clean hit has satisfied the active<br>submission policy.</p>
+<p>Anti-patterns:</p>
+<ul>
+<li>Validating all hosts&#39; candidates on only one machine.</li>
+<li>Letting 5090s scan while only L40S hosts validate, or vice versa.</li>
+<li>Running only one validation process on a multi-core or multi-GPU host.</li>
+<li>Assigning more scan ranges while validation backlog is growing.</li>
+<li>Revalidating old nonces because each host has only a local skip-list.</li>
+<li>Reporting anchor nonce results as if they were new hunt results.</li>
+<li>Trusting a remote validator before anchor agreement.</li>
+<li>Using fast validation for final clean/dirty accounting.</li>
+<li>Losing the exact CFG/state/toolkit hashes that produced a candidate.</li>
+<li>Killing scanner processes while trying to restart validator loops.</li>
+</ul>
+<p>During an active island hunt, <strong>candidate validation is part of every heartbeat</strong>, and it has<br><strong>TWO distinct jobs that must not be conflated</strong>:</p>
+<ol>
+<li><strong>Remote-validate EVERY newly-discovered GCD-clean candidate</strong> on the GPU boxes (distributed,<br>FULL mode). This is the heartbeat&#39;s <em>main</em> validation work — <strong>drain the whole new-candidate<br>backlog every beat.</strong> Do not let the GPU scan frontier advance while GCD-clean candidates pile<br>up unvalidated. The remote validators exist precisely so you can validate <em>all</em> of them in<br>parallel, not a handful.</li>
+<li><strong>Cross-check a small requested sample against local validation</strong> — this is a <strong>trust gate on<br>the remote validator, NOT the validation itself.</strong> If the hunt instructions specify a sample<br>size, use that exact size; otherwise use 5. Re-run those just-validated candidates on the local<br>CPU and require exact <code>cls / pha / anc</code> agreement before trusting the node&#39;s verdicts for the<br>rest.</li>
+</ol>
+<blockquote>
+<p><strong>The single most common failure here:</strong> treating the local cross-check sample <em>as</em> the validation<br>and only validating that small sample per heartbeat. That is WRONG. Validate <strong>all</strong> newly-discovered<br>GCD-clean candidates remotely; the local re-runs are <em>only</em> to confirm the remote validator<br>agrees with local. If you ever find yourself validating just the cross-check sample and leaving the rest of the new<br>candidates unchecked, stop — you are doing it wrong.</p>
+</blockquote>
+<p>Each heartbeat, report: how many new candidates were remote-validated (backlog drained to zero or<br>the remaining count), which shards/nodes did the validating, the local cross-check result, and<br>any clean <code>0/0/0</code>. If remote validation is blocked, stale, or not yet trusted, say so explicitly<br>and keep a local validation sample moving so the route&#39;s <code>cls / pha / anc</code> distribution stays<br>current — but the goal is still to validate <em>every</em> new candidate, just locally until the remote<br>node is trusted again.</p>
+<p>For large candidate batches, use <strong>distributed validation</strong> across the available Linux GPU-node host<br>CPUs whenever possible. Shard the candidate list across prepared nodes, write per-node logs, and<br>merge results into the heartbeat&#39;s near-miss table. Distributed validation must use the exact active<br>CFG/source/binaries for the circuit being hunted; a validator from a neighboring route or older<br>SOTA base is stale even if it appears to run successfully.</p>
+<p>Before trusting remote validation in a heartbeat or batch:</p>
+<ol>
+<li>Sample at least two recent GCD-clean candidates, preferably including the current best near miss<br>and one ordinary dirty candidate.</li>
+<li>Validate them locally with the exact active CFG in every available mode (fast and full when both<br>exist; full only if the prototype has no fast path).</li>
+<li>Validate the same candidates remotely with the exact same CFG and binaries.</li>
+<li>Require exact local/remote agreement on nonce, verdict, and <code>cls / pha / anc</code> before using<br>remote shard results.</li>
+</ol>
+<p>After rebuilding or refreshing remote validators, require a fixed acceptance set to match local<br>exactly before trusting the node. Keep remote validator binaries aligned with the active CFG. A<br>stale validator can silently invalidate the experiment. If any node disagrees with local validation,<br>quarantine that node&#39;s validator output, do not merge its shard, and report the mismatch with the<br>offending nonce and both triples.</p>
+</div>
+<div class="md"><h2>GPU Scan Operations</h2>
+<p>Use the safer fast GPU prefilter settings unless the user specifies otherwise:</p>
+<pre><code class="language-bash">GPU_BATCH_INV=1 \
+GPU_COMB_BITS=22 \
+GPU_GCD_MODE=trunc_first \
+GPU_FAN_BITS=22 \
+GPU_WAVE=128 \
+./island.sh search s.bin &lt;START&gt; &lt;N&gt;
+</code></pre>
+<p>Assign contiguous, non-overlapping ranges across GPUs. Track per node:</p>
+<ul>
+<li>range and current chunk</li>
+<li>processed nonces</li>
+<li>nonce/s</li>
+<li>candidates found</li>
+<li>candidate density</li>
+<li>process age</li>
+<li>GPU utilization</li>
+<li>ETA</li>
+</ul>
+<p>If a GPU becomes idle and the route still beats SOTA, start the next obvious unassigned 20M or 40M range. Report the new range and session.</p>
+<p>Watch for suspicious nodes. For example, a GPU scanning tens of millions of nonces with zero candidates while other nodes show normal density may indicate a stale state file, wrong binary, logging issue, or pathological range. Inspect before extending that node repeatedly.</p>
+</div>
+<div class="md"><h2>Heartbeat Automation</h2>
+<p>When a new island hunt begins, automatically create or update a thread heartbeat instead of relying on memory. Use a <strong>15-minute heartbeat for active distributed hunts</strong> (the preferred cadence; 25 min is acceptable only for a slow background scan) unless the user asks for a different interval. Do this even if the user did not explicitly ask for recurring progress reports; long-running nonce scans should always have a live progress monitor.</p>
+<p>The heartbeat prompt should be self-contained. Include:</p>
+<ul>
+<li>active route name, source/worktree, CFG, measured qubits, Toffoli/CCX, and score context</li>
+<li>state file path and trusted validator/build paths</li>
+<li>GPU node inventory and SSH commands</li>
+<li>current assigned ranges, highest frontier, and already completed windows</li>
+<li>remote working directory, scanner log path, candidate file path, result ledger path, error log<br>path, and local mirror directory for every active host</li>
+<li>known candidate totals, density, and best validated <code>cls / pha / anc</code> near misses</li>
+<li>per-host validator loop status, active validator child count, configured parallelism, and whether<br>validation throughput is keeping up with scan throughput</li>
+<li>a validation mandate: every heartbeat must <strong>remote-validate ALL newly-discovered GCD-clean<br>candidates</strong> (distributed, full mode — drain the backlog, not just a sample), and <strong>separately<br>cross-check the requested local sample size</strong> as the remote-validator trust gate (default 5 when<br>unspecified; exact <code>cls / pha / anc</code> agreement). The local sample is the trust check, NOT the<br>validation — validate them all.</li>
+<li>submission policy: submit to ecdsafail only if measured score beats SOTA, unless the user explicitly says otherwise</li>
+<li>branch policy for clean-but-worse low-qubit results, if requested</li>
+<li>a reminder not to commit temp configs, scan logs, helper binaries, <code>ops.bin</code>, GPU states, or generated artifacts</li>
+</ul>
+<p>Before creating a duplicate heartbeat, inspect existing automations if the environment exposes an automation tool or local automation records. Prefer updating the current route&#39;s heartbeat when one exists. If the route changes, update the heartbeat promptly so it does not keep reporting stale ranges or an old CFG.</p>
+<p>Heartbeat work order:</p>
+<ol>
+<li>Poll scans, parse completed ranges, and extend idle trusted GPUs if policy allows.</li>
+<li>Extract newly flushed GCD-clean candidates and update the backlog.</li>
+<li><strong>Remote-validate every newly-discovered GCD-clean candidate</strong> this beat — distributed across the<br>GPU boxes, full mode. The aim is to drain the <em>entire</em> new-candidate backlog, not to spot-check.</li>
+<li><strong>Additionally</strong> cross-check the requested sample size of those candidates with a local re-run<br>(default 5 when unspecified); require exact <code>cls / pha / anc</code> agreement before trusting the<br>remote node&#39;s verdicts for the rest. This is a trust gate <em>on top of</em> step 3 — it does not<br>replace remote-validating all the others.</li>
+<li>Report validation progress, backlog remaining, validator trust status, best near misses, and any<br>clean <code>0 / 0 / 0</code> immediately. Always include where the remote workdir is, where GCD-clean<br>candidates are stored, whether <code>results.log</code> is being streamed or mirrored, and the local mirror<br>path.</li>
+</ol>
+<p>Do not treat GPU utilization as the whole heartbeat. A healthy hunt has both scanners and validators<br>moving.</p>
+</div>
+<div class="md"><h2>Reporting Format</h2>
+<p>Use this compact shape for heartbeat-style progress reports. Prefer exact measured values; if a value is estimated, mark it with <code>~</code>. If no scans are active, say so plainly instead of inventing an active window.</p>
+<pre><code class="language-text"># Overall Stats
+active trusted GPUs: &lt;active&gt;/&lt;trusted reachable&gt;
+unreachable: &lt;node list or none&gt;
+quarantined: &lt;node list and reason, or none&gt;
+aggregate observed rate: ~&lt;nonce/s&gt; nonce/s
+highest assigned frontier: &lt;nonce&gt;
+visible active-window progress: ~&lt;scanned&gt; scanned, ~&lt;remaining&gt; remaining
+current active-window candidates: &lt;count&gt;
+current-window density: ~&lt;candidates/Mnonce&gt; candidates/Mnonce
+expected next candidate: ~&lt;time&gt; at current density/rate
+latest promoted SOTA: &lt;submission id&gt;, q=&lt;q&gt;, Toffoli=&lt;t&gt;, score=&lt;score&gt;
+active route: q=&lt;q&gt;, Toffoli/CCX=&lt;t&gt;, score=&lt;score&gt;, triage=&lt;GREEN/YELLOW/RED&gt;
+
+# Per GPU stats
+&lt;node&gt; (&lt;GPU model&gt;) &lt;range&gt; &lt;scanned&gt;/&lt;assigned&gt; &lt;candidates&gt; candidates &lt;rate&gt;/s ETA &lt;eta&gt;
+...
+
+# Best near misses (nonce cls/pha/anc)
+&lt;nonce&gt;   &lt;cls&gt; / &lt;pha&gt; / &lt;anc&gt;
+...
+</code></pre>
+<p>Reporting rules:</p>
+<ul>
+<li>Keep reports concise; surface best near misses, anomalies, and route decisions instead of dumping every dirty candidate.</li>
+<li>Report active/idle GPU count, unreachable nodes, quarantined nodes, and any stale-state suspicion.</li>
+<li>Report aggregate and per-GPU rates when estimable. If a direct GPU command flushes output only at the end, use the last completed range&#39;s observed rate.</li>
+<li>Include completed/scanned nonces, estimated in-flight nonces, remaining assigned window, highest assigned frontier, total GCD-clean candidates, density, ETA, and expected time to next candidate.</li>
+<li>Include validator cross-check status when remote validation is used.</li>
+<li>Include the remote scan/validation workdir, <code>candidates.txt</code>, <code>results.log</code>, <code>errors.log</code>, and<br>local mirror path for every active remote hunt. Report how many GCD-clean candidates were found,<br>how many are pending, how many are done, and whether verdict rows are streamed in real time.</li>
+<li>Include a compact near-miss table sorted by usefulness: clean <code>pha=0, anc=0</code> first, then low severity, then lower phase/anc.</li>
+<li>If a GPU is idle and policy allows extension, report the new range/session. If policy says not to extend, report that decision.</li>
+<li>If no scans are currently active, set active GPUs to <code>0/N</code>, mark ranges as completed, and use historical/completed-window density and rate for the expected-next-candidate estimate.</li>
+</ul>
+</div>
+<div class="md"><h2>Clean Solution Handling</h2>
+<p>If any full validation returns <code>0 / 0 / 0</code>:</p>
+<ol>
+<li>Open the scan manifest and identify the exact source tweaks, CFG/env knobs, toolkit branch, and<br>nonce that produced the hit.</li>
+<li>Bake the CFG and nonce into the challenge repo. Do not submit a solution that only works because<br>the current shell exports the scan env vars.</li>
+<li>Run the no-env submission rehearsal by unsetting every correctness-affecting scan env var and<br>running <code>ecdsafail run</code>. The result must match the remote clean hit and expected <code>q</code>/avgT.</li>
+<li>Pull latest SOTA again.</li>
+<li>Compute measured score from benchmark output.</li>
+<li>Submit to the ecdsafail site only if measured score beats current promoted SOTA, unless the user explicitly instructs otherwise.</li>
+<li>If the user wants clean-but-worse low-qubit results preserved, create a new branch in the requested challenge repo and push the validated circuit even when the score is higher than SOTA.</li>
+</ol>
+<p>Do not commit temporary scan configs, logs, helper binaries, remote scripts, <code>ops.bin</code>, or generated artifacts unless they are explicitly part of the validated challenge solution.</p>
+</div>
+<div class="md"><h2>Route Comparison Heuristic</h2>
+<p>When choosing among multiple candidate routes, use the <strong>Route Bake-Off</strong> above to collect equal-size<br>pilot evidence, then make a qualitative engineering judgment. Do not summarize route quality into a<br>single rigid formula. Prefer routes with several independent healthy signals; stop routes with strong<br>structural-failure evidence even if one metric looks good.</p>
+<p>Prefer routes that have:</p>
+<ul>
+<li>lower estimated score than SOTA</li>
+<li>enough score margin to survive final measurement drift or a small SOTA movement</li>
+<li>healthy GCD-clean density</li>
+<li>each of <code>cls</code>, <code>pha</code>, <code>anc</code> reaching 0 in at least one candidate over a sufficient sample (the<br>per-channel-zero rule — necessary for a reachable <code>0/0/0</code>)</li>
+<li>low single-digit near misses, ideally clustered close to <code>0/0/0</code></li>
+<li>diverse dirty fingerprints</li>
+<li>stable fast/full and local/remote validation</li>
+<li>mostly classical residuals rather than persistent phase or ancilla dirt</li>
+<li>failures that localize late or vary by nonce instead of breaking early core algebra</li>
+<li>consistent behavior across nodes and separated nonce ranges</li>
+<li>nearby safer variants that improve smoothly</li>
+<li>a structural change that plausibly affects the measured peak owner</li>
+</ul>
+<p>Avoid routes that have:</p>
+<ul>
+<li>score at or above SOTA</li>
+<li>score margin so small that final measurement drift would likely lose</li>
+<li>starved candidate density</li>
+<li>a channel (<code>cls</code>, <code>pha</code>, or <code>anc</code>) that <strong>never reaches 0</strong> over a sufficient sample — a<br>per-channel floor makes <code>0/0/0</code> unreachable no matter the nonce, so the route is dead</li>
+<li>repeated high dirty triples</li>
+<li>no severity <code>&lt;= 10</code> after dozens of candidates</li>
+<li>stale validator or CFG uncertainty</li>
+<li>suspicious per-node behavior that cannot be explained</li>
+<li>persistent <code>pha</code>/<code>anc</code> residuals across otherwise promising candidates</li>
+<li>uniform failure localization in an early GCD/apply, carry-cleanup, or phase-discharge section</li>
+<li>qubit savings in a non-peak phase only</li>
+</ul>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="ecdsafail-island-hunting.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

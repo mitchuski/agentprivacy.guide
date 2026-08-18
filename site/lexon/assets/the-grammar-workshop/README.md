@@ -79,11 +79,14 @@ artifact/
   SPELLS/            the constitution: TRUSTS + seats as 13 verified spells
   GRAMMAR.ebnf.md    the attested Lexon subset the checker accepts
   OT7_TERRITORIES.json  the residue partition for the merged-charter runs
-blocks/              189 portable "structured language blocks" (JSON + Cypher)
+blocks/              189 portable "structured language blocks" (JSON + Cypher),
+                     each a κ-addressed holon (re-derive the address, don't trust the emitter)
 tools/
   lexon_check.mjs    the grammar gate (parse, round-trip, roles, promises)
   relation_check.mjs the mutation probe (claims survive their negation)
-  blocks_emit.mjs    LEXICON entry -> portable block
+  blocks_emit.mjs    LEXICON entry -> portable κ-addressed block (holon)
+  blocks_audit.mjs   the mesh auditor: re-derive every block's κ (never trust, re-derive)
+  kappa.mjs          the κ content-address law (shared with the harness holon layer)
   spells_check.mjs   verify the constitution corpus (13/13)
   render_lexicon.mjs regenerate the viewer
   coverage.mjs       the coverage-debt metric

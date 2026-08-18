@@ -1,0 +1,116 @@
+{
+  "title": "Tile From Page",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "b3bee2fd19f88cb0",
+      "text": "# tile-from-page"
+    },
+    {
+      "type": "markdown",
+      "id": "80b871e69b8e9462",
+      "text": "> Read a FedWiki page's content, semantically choose a glyph + color + category for it, and write a `tileglyph` navigation tile (the wiki-plugin-tileglyph item type) into a destination page — matching a Root Tiles registry for federation-wide consistency, or minting a new canonical entry."
+    },
+    {
+      "type": "markdown",
+      "id": "e7dc9df2a61b1438",
+      "text": "# tile-from-page\n\nThe **authoring-time, semantic half** of the TileGlyph system. The plugin\n(`wiki-plugin-tileglyph`, item type `tileglyph`) only *renders* tiles; it\ncannot read content or call a skill in the browser. This skill is where an\nagent reads a page, **decides** what glyph/color/category fit it, and writes\nthe tile. The mechanical disk work is in `tile.js`; the judgement is yours."
+    },
+    {
+      "type": "markdown",
+      "id": "21d6420cade77ae9",
+      "text": "## When this runs\n\n- \"make a tile for X\" / \"turn these pages into tiles\" / \"build a tile wall\"\n- \"add <page/site> to the Plugin Lab\" / a navigation index of glyph tiles\n- \"extend the Root Tiles vocabulary\""
+    },
+    {
+      "type": "markdown",
+      "id": "5e11f39ac4a0307f",
+      "text": "## The model\n\n- **Root Tiles** = a registry page (`root-tiles`) holding the canonical\n  `category → { glyph, color }` map. It is the shared vocabulary; matching it\n  keeps the same category looking identical across the federation.\n- A tile either **matches** an existing category (inherits its glyph+color) or\n  **mints** a new category (your chosen glyph+color is written back as canon).\n- Tiles are written by **direct disk edit** to `~/.wiki/<host>/pages/<slug>`\n  (NOT the action API — it mojibakes emoji). So this skill is main-thread,\n  local-farm work."
+    },
+    {
+      "type": "markdown",
+      "id": "a9278d29be9bd26b",
+      "text": "## Workflow\n\n1. **Read the source.** `node tile.js read <host> <source-slug>` → prints\n   `{title, synopsis}`. Read it. (Or read the page file directly for more.)\n2. **Check the registry.** `node tile.js registry <host>` → current\n   `category → {glyph,color}` map.\n3. **Decide** (the semantic step — see vocabulary below): pick `category`,\n   and if the category is new, a `glyph`, `color`, `sparkle` polarity, `anim`.\n4. **Write the tile.**\n   ```\n   node tile.js add <host> <dest-slug> --label \"<Page Title>\" \\\n     --category \"<Category>\" [--glyph 🌙] [--color \"#3d7c47\"] \\\n     [--anim float] [--sparkle \"2+ 2-\"] [--link \"<target page>\"]\n   ```\n   - If `--category` already exists in the registry and you omit `--glyph`/\n     `--color`, the canonical ones are inherited automatically.\n   - If the category is new, your `--glyph`/`--color` are written back as the\n     new canonical Root Tiles entry.\n5. **Report** what matched vs. what was minted (the `add` command prints this)."
+    },
+    {
+      "type": "markdown",
+      "id": "fce2ebd0dd9dc4b0",
+      "text": "## The glyph vocabulary (how to choose)\n\nChoose by **role/meaning**, in the Privacymage Grimoire hand — restrained, one\nclear central image. Lean on the established cast canon for consistency:\n\n| Category / cast | Glyph | Color | Note |\n|---|---|---|---|\n| Cosmological (Selene) | 🌙 | `#3d7c47` | the witness, the moon |\n| Threshold (Pandia) | 🌕 | `#6a5acd` | the portal/display |\n| Registry (Hermaion) | ⚚ | `#3d7c47` | the keeper |\n| Navigation (Pleione) | 🧭 | `#2a7d8c` | the chart |\n| Library (Archivist) | 📚 | `#8a6d3b` | the tower |\n| Boundary (Swordsman) | ⚔️ | `#a23a3a` | the refuser |\n\n- **color is identity** — reuse a cast's color for pages in that cast's domain;\n  pick a new restrained hue only for a genuinely new grouping.\n- **sparkle polarity is meaning, not decoration** (`N+ M-`): a page about\n  *giving / projecting / kindling* skews positive (`3+ 1-`); a page about\n  *refusing / keeping / boundaries* skews negative (`1+ 3-`); balanced → `2+ 2-`.\n- **anim**: `float`/`pulse` for gentle/witnessing, `glow` for warded/boundary,\n  `spin` for navigational, `none` for plain.\n- Prefer a **single emoji** glyph; use a short multi-line ASCII block only when\n  no emoji fits (leave `--glyph` off and edit the tile's `glyph:` block by hand)."
+    },
+    {
+      "type": "markdown",
+      "id": "f8b5a67af3b1c70f",
+      "text": "## Files\n\n- `tile.js` — read / registry / add (disk-level, registry-syncing).\n- The plugin it feeds: `~/wiki-plugin-tileglyph` (item type `tileglyph`),\n  served on the local farm host `plugin.guide.agentprivacy.ai`."
+    },
+    {
+      "type": "markdown",
+      "id": "f8bee65be393888d",
+      "text": "## Related\n\n- `wiki-plugin-tileglyph` — the render-time plugin (the *what you see*).\n- project_tileglyph_plugin memory — host ownership, build/link facts,\n  and the pending PNG-embed export (soulbis star/lattice City Key pattern)."
+    },
+    {
+      "type": "markdown",
+      "id": "96e0a7917ad43174",
+      "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Tile From Page",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "b3bee2fd19f88cb0",
+            "text": "# tile-from-page"
+          },
+          {
+            "type": "markdown",
+            "id": "80b871e69b8e9462",
+            "text": "> Read a FedWiki page's content, semantically choose a glyph + color + category for it, and write a `tileglyph` navigation tile (the wiki-plugin-tileglyph item type) into a destination page — matching a Root Tiles registry for federation-wide consistency, or minting a new canonical entry."
+          },
+          {
+            "type": "markdown",
+            "id": "e7dc9df2a61b1438",
+            "text": "# tile-from-page\n\nThe **authoring-time, semantic half** of the TileGlyph system. The plugin\n(`wiki-plugin-tileglyph`, item type `tileglyph`) only *renders* tiles; it\ncannot read content or call a skill in the browser. This skill is where an\nagent reads a page, **decides** what glyph/color/category fit it, and writes\nthe tile. The mechanical disk work is in `tile.js`; the judgement is yours."
+          },
+          {
+            "type": "markdown",
+            "id": "21d6420cade77ae9",
+            "text": "## When this runs\n\n- \"make a tile for X\" / \"turn these pages into tiles\" / \"build a tile wall\"\n- \"add <page/site> to the Plugin Lab\" / a navigation index of glyph tiles\n- \"extend the Root Tiles vocabulary\""
+          },
+          {
+            "type": "markdown",
+            "id": "5e11f39ac4a0307f",
+            "text": "## The model\n\n- **Root Tiles** = a registry page (`root-tiles`) holding the canonical\n  `category → { glyph, color }` map. It is the shared vocabulary; matching it\n  keeps the same category looking identical across the federation.\n- A tile either **matches** an existing category (inherits its glyph+color) or\n  **mints** a new category (your chosen glyph+color is written back as canon).\n- Tiles are written by **direct disk edit** to `~/.wiki/<host>/pages/<slug>`\n  (NOT the action API — it mojibakes emoji). So this skill is main-thread,\n  local-farm work."
+          },
+          {
+            "type": "markdown",
+            "id": "a9278d29be9bd26b",
+            "text": "## Workflow\n\n1. **Read the source.** `node tile.js read <host> <source-slug>` → prints\n   `{title, synopsis}`. Read it. (Or read the page file directly for more.)\n2. **Check the registry.** `node tile.js registry <host>` → current\n   `category → {glyph,color}` map.\n3. **Decide** (the semantic step — see vocabulary below): pick `category`,\n   and if the category is new, a `glyph`, `color`, `sparkle` polarity, `anim`.\n4. **Write the tile.**\n   ```\n   node tile.js add <host> <dest-slug> --label \"<Page Title>\" \\\n     --category \"<Category>\" [--glyph 🌙] [--color \"#3d7c47\"] \\\n     [--anim float] [--sparkle \"2+ 2-\"] [--link \"<target page>\"]\n   ```\n   - If `--category` already exists in the registry and you omit `--glyph`/\n     `--color`, the canonical ones are inherited automatically.\n   - If the category is new, your `--glyph`/`--color` are written back as the\n     new canonical Root Tiles entry.\n5. **Report** what matched vs. what was minted (the `add` command prints this)."
+          },
+          {
+            "type": "markdown",
+            "id": "fce2ebd0dd9dc4b0",
+            "text": "## The glyph vocabulary (how to choose)\n\nChoose by **role/meaning**, in the Privacymage Grimoire hand — restrained, one\nclear central image. Lean on the established cast canon for consistency:\n\n| Category / cast | Glyph | Color | Note |\n|---|---|---|---|\n| Cosmological (Selene) | 🌙 | `#3d7c47` | the witness, the moon |\n| Threshold (Pandia) | 🌕 | `#6a5acd` | the portal/display |\n| Registry (Hermaion) | ⚚ | `#3d7c47` | the keeper |\n| Navigation (Pleione) | 🧭 | `#2a7d8c` | the chart |\n| Library (Archivist) | 📚 | `#8a6d3b` | the tower |\n| Boundary (Swordsman) | ⚔️ | `#a23a3a` | the refuser |\n\n- **color is identity** — reuse a cast's color for pages in that cast's domain;\n  pick a new restrained hue only for a genuinely new grouping.\n- **sparkle polarity is meaning, not decoration** (`N+ M-`): a page about\n  *giving / projecting / kindling* skews positive (`3+ 1-`); a page about\n  *refusing / keeping / boundaries* skews negative (`1+ 3-`); balanced → `2+ 2-`.\n- **anim**: `float`/`pulse` for gentle/witnessing, `glow` for warded/boundary,\n  `spin` for navigational, `none` for plain.\n- Prefer a **single emoji** glyph; use a short multi-line ASCII block only when\n  no emoji fits (leave `--glyph` off and edit the tile's `glyph:` block by hand)."
+          },
+          {
+            "type": "markdown",
+            "id": "f8b5a67af3b1c70f",
+            "text": "## Files\n\n- `tile.js` — read / registry / add (disk-level, registry-syncing).\n- The plugin it feeds: `~/wiki-plugin-tileglyph` (item type `tileglyph`),\n  served on the local farm host `plugin.guide.agentprivacy.ai`."
+          },
+          {
+            "type": "markdown",
+            "id": "f8bee65be393888d",
+            "text": "## Related\n\n- `wiki-plugin-tileglyph` — the render-time plugin (the *what you see*).\n- project_tileglyph_plugin memory — host ownership, build/link facts,\n  and the pending PNG-embed export (soulbis star/lattice City Key pattern)."
+          },
+          {
+            "type": "markdown",
+            "id": "96e0a7917ad43174",
+            "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847280967
+    }
+  ]
+}

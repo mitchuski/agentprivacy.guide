@@ -1,0 +1,166 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Admission Issue · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Agent Admission Issue</span></div>
+  <article><div class="md"><h1>Agent Admission — Issue</h1>
+</div>
+<div class="md"><blockquote>
+<p><strong>PROPOSED — not yet upstreamed.</strong> Built to the ToIP <code>spec.meta.schema.json</code> for the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf">dtgwg-trust-tasks-tf registry</a>; the slug below is <em>proposed</em> to that namespace, not registry-accepted. The PR is pending; the registry&#39;s decision governs.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Proposed slug:</strong> <code>agent-admission/issue</code> · <strong>version</strong> 0.1 · <strong>status</strong> draft</p>
+<blockquote>
+<p>The gate authority offers the bilateral relationship credential that admits an agent — only when both gates passed and their evidence resolves into a verified audit ledger; the agent&#39;s counter-signature completes it.</p>
+</blockquote>
+</div>
+<div class="md"><h2>Abstract</h2>
+<p>The <strong>Agent Admission — Issue</strong> Trust Task completes the ceremony: the gate<br>authority offers a <strong>bilateral relationship credential</strong> — a W3C Verifiable<br>Credential expressing the admission relationship, first-signed by the gate<br>authority — and the candidate agent&#39;s counter-signature in the <code>#response</code><br>completes it. In ToIP terms the ceremony is a Trust Spanning Protocol<br>relationship formation between two VIDs: exactly two proofs, two roles, two<br>distinct parties. A self-signed credential is a named rejection<br>(<code>notBilateral</code>), not a degenerate case.</p>
+<p>Issuance is where the ceremony&#39;s rules are enforced <em>in order</em>:</p>
+<ol>
+<li>the audit ledger verifies, or the ceremony is void before any gate is weighed;</li>
+<li><strong>both gates</strong> — a passed supervisor approval AND a passed understanding<br>challenge, distinct kinds — or no credential (<code>missingSupervisorGate</code> /<br><code>missingUnderstandingGate</code>);</li>
+<li>the verdict comes from the <strong>closed lexicon</strong>: <code>validated</code> → deploy within<br>granted scope, <code>failedHeldOut</code> → sandbox, <code>blocked</code> → hold and <strong>no<br>credential at all</strong> (<code>blockedNoIssuance</code>);</li>
+<li>every gate&#39;s evidence resolves into the verified ledger;</li>
+<li>the tier is <strong>derived</strong> by the published scope function from the recorded<br>assessment, never negotiated — a flattering tier is refused<br>(<code>tierScopeMismatch</code>).</li>
+</ol>
+</div>
+<div class="md"><h2>Status of this Document</h2>
+<p>This is a <strong>draft</strong> <em>Trust Task specification</em> per <span class="deadlink" title="reference (not a live page)">SPEC.md §5.3</span>; the schema <strong>MAY</strong> change without notice. Feedback via the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues">issue tracker</a>.</p>
+</div>
+<div class="md"><h2>Conformance</h2>
+<p>RFC2119(<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>) and RFC8174(<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>) key-word conventions apply.</p>
+<p>A conforming <strong>producer</strong> (the gate authority) <strong>MUST</strong>:</p>
+<ol>
+<li>Emit a <em>Trust Task document</em> whose <code>type</code> is <code>https://trusttasks.org/spec/agent-admission/issue/0.1</code>, with itself as <code>issuer</code>, the admitted agent as <code>recipient</code>, and a verifiable <code>proof</code>.</li>
+<li>Enforce the five rules above, in order, before emitting the offer; the checks are the producer&#39;s because only the gate authority holds the ledger and the recorded gates.</li>
+<li>Carry both gate results (with evidence digests), the verdict, the tier grant, and the ledger head in the payload, so the offer is auditable standing alone.</li>
+<li>First-sign the embedded credential in the gate-authority relationship role.</li>
+</ol>
+<p>A conforming <strong>consumer</strong> (the candidate agent) <strong>MUST</strong>:</p>
+<ol>
+<li>Verify the <code>proof</code>, the embedded credential&#39;s first signature, and that the credential&#39;s subject is itself.</li>
+<li>Re-check what it can from outside: both gates present and of distinct kinds, verdict in the closed lexicon, evidence digests present. An agent SHOULD refuse to counter-sign an offer whose gates it cannot see.</li>
+<li>Counter-sign in the agent relationship role and return the completed credential in the <code>#response</code>. The credential is not in force until the counter-signature exists — admission is a relationship, and a relationship has two signatures.</li>
+</ol>
+</div>
+<div class="md"><h2>Payload</h2>
+<p><code>payload.applicationId</code> (REQUIRED) — the completed application.<br><code>payload.agent</code> (REQUIRED) — VID of the admitted agent; MUST equal <code>recipient</code>.<br><code>payload.verdict</code> (REQUIRED) — from the closed lexicon.<br><code>payload.tierGrant</code> (REQUIRED) — the derived tier and its published scope function.<br><code>payload.gates</code> (REQUIRED) — exactly two gate results, distinct kinds.<br><code>payload.ledgerHead</code> (REQUIRED) — digest of the audit-ledger head at issuance.<br><code>payload.credential</code> (REQUIRED) — the first-signed W3C Verifiable Credential.<br><code>payload.ext</code> — extension slot per <span class="deadlink" title="reference (not a live page)">SPEC.md §4.5.1</span>; an external anchor reference (evidence, never authority) belongs here under the anchoring vendor&#39;s namespace.</p>
+</div>
+<div class="md"><h2>Request</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:7d3c8196-a0b4-4fc2-e4d5-6e7f80910213&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/agent-admission/issue/0.1&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkGateAuthorityExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T10:25:00Z&quot;,
+  &quot;payload&quot;: {
+    &quot;applicationId&quot;: &quot;app-7c1b2a90&quot;,
+    &quot;agent&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+    &quot;verdict&quot;: &quot;validated&quot;,
+    &quot;tierGrant&quot;: {
+      &quot;tier&quot;: 6,
+      &quot;scopeFunction&quot;: &quot;https://gate.example.com/policy/deployment-rules/3.1#scope-function&quot;
+    },
+    &quot;gates&quot;: [
+      {
+        &quot;gate&quot;: &quot;understandingChallenge&quot;,
+        &quot;passed&quot;: true,
+        &quot;at&quot;: &quot;2026-07-18T10:12:05Z&quot;,
+        &quot;evidenceDigest&quot;: &quot;1d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e&quot;
+      },
+      {
+        &quot;gate&quot;: &quot;supervisorApproval&quot;,
+        &quot;passed&quot;: true,
+        &quot;at&quot;: &quot;2026-07-18T10:20:02Z&quot;,
+        &quot;evidenceDigest&quot;: &quot;2e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c&quot;
+      }
+    ],
+    &quot;ledgerHead&quot;: &quot;3f4a5b6c7d8e9f20113f4a5b6c7d8e9f20113f4a5b6c7d8e9f20113f4a5b6c7d&quot;,
+    &quot;credential&quot;: {
+      &quot;@context&quot;: [&quot;https://www.w3.org/ns/credentials/v2&quot;],
+      &quot;type&quot;: [&quot;VerifiableCredential&quot;, &quot;RelationshipCredential&quot;],
+      &quot;issuer&quot;: &quot;did:key:z6MkGateAuthorityExample&quot;,
+      &quot;credentialSubject&quot;: {
+        &quot;id&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+        &quot;relationship&quot;: &quot;admitted-agent&quot;,
+        &quot;tier&quot;: 6,
+        &quot;applicationId&quot;: &quot;app-7c1b2a90&quot;
+      },
+      &quot;proof&quot;: [
+        {
+          &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+          &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+          &quot;created&quot;: &quot;2026-07-18T10:25:00Z&quot;,
+          &quot;verificationMethod&quot;: &quot;did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample&quot;,
+          &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+          &quot;proofValue&quot;: &quot;z3FXQmV6ExampleFirstSignatureGateAuthorityRole&quot;
+        }
+      ]
+    }
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T10:25:00Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z3FXQmV6ExampleProofValueForAgentAdmissionIssue&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Response</h2>
+<p>The agent returns the completed, counter-signed credential. The credential now<br>carries exactly two proofs — the gate authority&#39;s and the agent&#39;s — in the two<br>relationship roles.</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:8e4d92a7-b1c5-4ad3-f5e6-7f8091021324&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/agent-admission/issue/0.1#response&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkGateAuthorityExample&quot;,
+  &quot;threadId&quot;: &quot;urn:uuid:7d3c8196-a0b4-4fc2-e4d5-6e7f80910213&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T10:25:04Z&quot;,
+  &quot;payload&quot;: {
+    &quot;applicationId&quot;: &quot;app-7c1b2a90&quot;,
+    &quot;credentialDigest&quot;: &quot;4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e&quot;,
+    &quot;counterSigned&quot;: true
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T10:25:04Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z58aKqExampleCounterSignatureAgentRole&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Security &amp; Privacy</h2>
+<p>The offer discloses verdict, tier, gate outcomes, and evidence digests — audit<br>metadata, not challenge content; the submission and the answers never leave the<br>application record. The bilaterality requirement is load-bearing: a credential<br>one party can mint alone is an assertion, not a relationship, and everything<br>downstream (delegation policy, revocation, external anchoring) assumes the<br>relationship reading. Where the outcome is anchored on an external registry via<br><code>ext</code>, the anchor MUST carry digests and tier only — anchors are evidence,<br>never authority, and revocation MUST mirror to the same registry (see<br><span class="deadlink" title="reference (not a live page)"><code>agent-admission/revoke</code></span>).</p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>specs/agent-admission/issue/0.1/</code> — <code>spec.md</code> + <code>payload.schema.json</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 agent-admission-issue</span><a class="asset-file" href="/dtg/assets/agent-admission-issue/payload.schema.json" download>payload.schema.json</a><a class="asset-file" href="/dtg/assets/agent-admission-issue/spec.md" download>spec.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agent-admission-issue.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

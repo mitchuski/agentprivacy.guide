@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Watch · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Watch</span></div>
+  <article><div class="md"><h1>Wiki Watch 🛰️</h1>
+<p><strong>Category</strong> wikis</p>
+<p>Observe the external FedWiki federation you draw on as sources (ide.earth, self.fish, skill.fedwiki.club, radio.myth.garden, neighbour vision wikis) and report what pages moved since last check. Use to monitor other people&#39;s wikis for changes, get a digest of new/updated/removed pages, add a site to the watchlist, or set up recurring monitoring. Read-only — never writes to any wiki.</p>
+</div>
+<div class="md"><p>A change monitor for the external FedWiki federation the agentprivacy work draws on as <strong>sources</strong>.<br>Every Smallest-Federated-Wiki site publishes <code>GET /system/sitemap.json</code> — a public, no-auth array of<br><code>{slug, title, date, synopsis}</code> where <code>date</code> is each page&#39;s last-modified epoch-ms. This skill polls<br>that feed per site, diffs it against a stored snapshot, and reports what changed.</p>
+<p><strong>Read-only.</strong> Public GETs only — it never pushes, forks, or logs in, so no cookies are needed. It is<br>the <em>observe</em> counterpart to <code>agentprivacy-wiki-resync</code> (project) and the fedwiki-cohere-sync skill<br>(<em>write</em>). The live twin runs from <code>~/.claude/skills/fedwiki-watch/</code>.</p>
+<h2>Files</h2>
+<ul>
+<li><code>roster.json</code> — the watchlist: <code>{name, url, group, owner}</code> per site. <code>owner:external</code> = other<br>people&#39;s wikis (star-flagged, sorted first); <code>owner:mitch</code> = your own sites.</li>
+<li><code>watch.mjs</code> — the runtime (zero dependencies, Node 18+ for global <code>fetch</code>).</li>
+<li><code>state/&lt;name&gt;.json</code> — per-site snapshot; <code>state/last-run.json</code> — full last result.</li>
+<li><code>reports/latest.md</code> + <code>reports/&lt;timestamp&gt;.md</code> — human digests.</li>
+</ul>
+<h2>Run it</h2>
+<pre><code>node watch.mjs                 # poll all sites, advance snapshots, write digest
+node watch.mjs --json          # + machine summary to stdout (parse when driving as an agent)
+node watch.mjs --external      # only owner:external sites (where alerts really matter)
+node watch.mjs --site david.vision   # one site by name
+node watch.mjs --dry           # detect + report, do NOT advance snapshots (safe preview)
+node watch.mjs --detail        # also fetch each changed page&#39;s latest journal action
+</code></pre>
+<p>First run on any site <strong>seeds a baseline</strong> (records current state, flags nothing) — expected; the<br>second run onward is where changes surface.</p>
+<h2>How to use the output</h2>
+<ol>
+<li>Run <code>node watch.mjs --json</code>, parse it. <code>totals</code> gives counts; <code>sites[]</code> carries <code>new[]</code>,<br><code>updated[]</code>, <code>removed[]</code>, <code>status</code>, <code>seeded</code>.</li>
+<li>Summarise <strong>external changes first</strong> (david/max/henry, skill.fedwiki.club, radio.myth.garden,<br>david.self.fish) — edits by others are the real signal.</li>
+<li>To show <em>what</em> changed on a page, GET <code>&lt;site.url&gt;/&lt;slug&gt;.json</code> and read the tail of <code>.journal</code><br>(<code>--detail</code> does a light version automatically).</li>
+</ol>
+<h2>Watchlist &amp; scheduling</h2>
+<p>Edit <code>roster.json</code> to add/remove sites; discover neighbours from a roster site&#39;s<br><code>welcome-visitors</code>/<code>recent-changes</code> page JSON. Not scheduled by default — run on demand, or wire<br><code>/loop</code>, <code>/schedule</code>, or Windows Task Scheduler. The feed is public and read-only, so any cadence is<br>safe; hourly is plenty (these wikis move slowly). 21 seed sites verified live 2026-07-13.</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-watch</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 wiki-watch</span><a class="asset-file" href="/skill/assets/wiki-watch/SKILL.md" download>SKILL.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="wiki-watch.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

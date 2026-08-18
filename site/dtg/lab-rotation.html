@@ -1,0 +1,196 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — rotation · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — rotation</span></div>
+  <article><div class="md"><h1>Rotation — recovery and rotation without correlators (X5 as a runnable reference)</h1>
+<p>Implements the X5 exploration<br>(<a class="wlink" href="x5-recovery-and-rotation.html">X5 — Recovery and Rotation</a>) at milestones<br><strong>M1</strong> (clock table), <strong>M2</strong> (hierarchical epoch derivation), <strong>M3</strong> (recovery-domain<br>nullifier), <strong>M4</strong> (boundary pair, drafted below as prose), <strong>M5</strong> (edge-rekey over rt 07).<br>10/10 properties (R1–R10), zero-dep, offline, deterministic (no <code>Date.now</code> — explicit<br>epoch ids, nonces and <code>now</code> values throughout).</p>
+</div>
+<div class="md"><h2>The two-case split (never share a mechanism)</h2>
+<table>
+<thead>
+<tr>
+<th>case</th>
+<th>mechanism</th>
+<th>touches issuer?</th>
+<th>touches biometric?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>routine epoch rotation</strong></td>
+<td>holder-side one-way derivation <code>s_epoch = H(&#39;dtg-zkp/epoch-secret/v0&#39;, s_master, epoch)</code> (pools-lineage discipline)</td>
+<td><strong>never</strong> (R1: issuer state byte-identical across 5 rotations)</td>
+<td>never</td>
+</tr>
+<tr>
+<td><strong>catastrophic recovery</strong></td>
+<td>issuer-blind replacement: revoke (status change) → fresh enrol, guarded by biometric dedup + recovery-domain nullifier</td>
+<td>yes</td>
+<td>yes (dedup match)</td>
+</tr>
+</tbody></table>
+<p>A profile that routes routine rotation through re-enrolment has built a periodic biometric<br>correlator into its lifecycle (X5). Here the routine path <em>cannot</em> reach the issuer: it is<br>pure derivation. PR-UNQ (§13.1) survives rotation (R2), epochs are unlinkable without the<br>master (R3), and descent from the enrolled commitment is checkable without the master ever<br>crossing the verifier boundary (R4 — the check consumes commitment + epoch + candidate<br>epoch secret only; the ZK version proves the derivation as a relation).</p>
+<p>Recovery stores <strong>no old→new pair</strong>: the issuer state is three flat tables of atoms<br>(commitments→status, templates→status, timing events), and R5 audits <em>every</em> record<br>structurally for a pairing. Duplication is prevented by the dedup matcher (R7) bounded by<br>the recovery-domain nullifier (R6) — §13.3&#39;s assurance-dependency list made mechanical.<br>The recovery context is a governed §6.2 descriptor (built via <code>runtimes/canonical</code>), never<br>an opaque label; its <code>epoch</code> field is the recovery epoch, so the rate limit (§6.5) is<br>epoch-scoped and the recovery-domain state is epoch-bounded like any nullifier state<br>(§22.2).</p>
+</div>
+<div class="md"><h2>M1 — the §22.1 clock table</h2>
+<p>Families follow the X6 erosion-clocks split: <strong>certification</strong> = a governed validity<br>period someone grants and can renew; <strong>erosion</strong> = a horizon that decays regardless of<br>governance. <code>touchedBy</code> records which X5 case moves the clock — the load-bearing rows are<br>in bold.</p>
+<table>
+<thead>
+<tr>
+<th>clock</th>
+<th>family</th>
+<th>touched by</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>proof-transcript lifetime</td>
+<td>certification</td>
+<td>neither</td>
+</tr>
+<tr>
+<td>challenge/session lifetime</td>
+<td>certification</td>
+<td>neither</td>
+</tr>
+<tr>
+<td>attestation validity</td>
+<td>certification</td>
+<td>catastrophic</td>
+</tr>
+<tr>
+<td>status freshness</td>
+<td>certification</td>
+<td>catastrophic</td>
+</tr>
+<tr>
+<td><strong>nullifier epoch</strong></td>
+<td>certification</td>
+<td><strong>routine</strong></td>
+</tr>
+<tr>
+<td><strong>enrolment-root cryptoperiod</strong></td>
+<td>certification</td>
+<td><strong>catastrophic</strong></td>
+</tr>
+<tr>
+<td>recovery-domain retention</td>
+<td>certification</td>
+<td>catastrophic</td>
+</tr>
+<tr>
+<td>policy and accreditation validity</td>
+<td>certification</td>
+<td>neither</td>
+</tr>
+<tr>
+<td>log retention</td>
+<td>certification</td>
+<td>neither</td>
+</tr>
+<tr>
+<td>proof-system security horizon</td>
+<td>erosion</td>
+<td>neither (migration is §22.3, out of X5 scope)</td>
+</tr>
+<tr>
+<td>biometric assurance horizon</td>
+<td>erosion</td>
+<td>catastrophic (recovery re-enters enrolment under the <em>current</em> horizon)</td>
+</tr>
+</tbody></table>
+<p>The nullifier epoch and the enrolment-root cryptoperiod rotate on different clocks <strong>by<br>construction</strong> — routine rotation turns only the first, recovery only the second.<br><code>validateClocks</code> enforces §22.2: a missing/<code>permanent</code>/<code>unbounded</code> bound fails<br><code>unbounded-clock:&lt;name&gt;</code> (R10).</p>
+</div>
+<div class="md"><h2>M4 — boundary pair for &quot;credential replaced&quot; (drafted, prose)</h2>
+<p><strong>Assurance record.</strong> What a successful recovery establishes: <em>a person whose biometric<br>matched a live template, within an unexhausted recovery epoch of the governed recovery<br>context, now holds exactly one live enrolment; the previously live commitment is revoked;<br>the recovery event is reuse-detected within its epoch.</em> In §13.2-style negative form, it<br>does <strong>not</strong> establish: that the new commitment belongs to the <em>same natural person</em> as<br>the old one beyond dedup-match strength (the whole continuity claim rides on biometric<br>match quality and resistance to fraudulent presentation — §13.3); that the old secret was<br>destroyed rather than merely abandoned (compromise vs loss — the attacker-window question<br>X5 leaves open); that no recovery happened in <em>other</em> recovery epochs; or one-unique-human<br>globally. Against whom: resistant to issuer and verifier as linkers (no stored pair);<br><strong>not</strong> resistant to an adversary who defeats the dedup matcher. For how long: the<br>recovery nullifier persists one recovery epoch; the revoked status persists per status<br>policy.</p>
+<p><strong>Disclosure record.</strong> The issuer&#39;s view of a recovery is a revocation event and an<br>enrolment event, close in time. Even with no stored pair, that <strong>revocation→enrolment<br>timing adjacency is an X4-class observable</strong> (traffic-shape, §20/§19 issuer-as-observer):<br>an issuer processing one recovery a week trivially reconstructs old→new by timing alone.<br>Mitigations are X4&#39;s, not X5&#39;s: batching, coarse timestamps, uniform event handling — the<br>model keeps <code>events</code> records commitment-free to make the <em>residual</em> leak (timing only)<br>explicit. The <strong>guardian/threshold variant</strong> (X5 pattern 3 — correlator moves from issuer<br>to guardian set, guardian-selection metadata as a social graph) is <strong>deferred</strong>: not<br>modelled here; needs its own boundary pair and a §22.2 answer for guardian-attestation<br>epochs.</p>
+</div>
+<div class="md"><h2>Deviation from the design doc (additive, not modify)</h2>
+<p>X5&#39;s M2 says &quot;add <code>s_epoch = H_domain(s_master, epoch)</code> <strong>to runtime 01</strong>&quot;. Runtime 01 is<br>a byte-stability dependency of the fixtures lane (<a class="wlink" href="lab-fixtures.html">Lab — fixtures</a> re-derives its<br>digests), so the lab rule is <strong>additive</strong>: rt 01 is untouched; the derivation layer lives<br>here and imports rt 01&#39;s <code>enrol</code>/<code>nullifier</code>/<code>H</code>/<code>ContextRegistry</code>. Same construction,<br>different home. One knock-on: rt 01&#39;s <code>enrol(humanId)</code> is deterministic per human (it<br>models biometric→secret), so a <em>replacement</em> enrolment seeds it with a per-instance value<br><code>H(&#39;dtg-zkp/enrol-instance/v0&#39;, humanId, nonce)</code> — modelling issuer-side entropy at<br>enrolment without changing rt 01.</p>
+</div>
+<div class="md"><h2>M5 — edge re-key over rt 07 (per-edge-type choice, §6.7)</h2>
+<p>Two honest options, both runnable (<code>edges.mjs</code>); a profile MUST pick per edge type and<br>state it — silent continuity is a silent context expansion (§6.7):</p>
+<ul>
+<li><strong><code>reformEdge</code></strong> — the old edge dies with the epoch key; a new encounter forms a fresh<br>edge. R8 asserts the old and new edge share <em>only</em> the unrotated counterparty&#39;s own<br>member id — nothing attributable to the rotator bridges the epochs.</li>
+<li><strong><code>continueEdge</code></strong> — a bridging value scoped by the edge&#39;s shared matching compression<br>(derivable only by the two parties — rt 07&#39;s <code>encounter</code> discipline). The counterparty<br>learns <code>same-enrolment-new-key</code> as an <strong>explicit disclosure record</strong> held in the pair&#39;s<br>private edge context (§6.5 intentional in-context linkage). R9 asserts the shared<br>graph&#39;s outside view carries neither the bridge nor the disclosure, and that the bridge<br>is not derivable from public edge values (§6.6). Feeds O9&#39;s schema-extension discussion.</li>
+</ul>
+</div>
+<div class="md"><h2>Named failure codes (fixture-register v2 candidates)</h2>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>source</th>
+<th>ref</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>recovery-rate-exceeded</code></td>
+<td><code>recover()</code> recovery-domain gate</td>
+<td>§6.5, §13.4, §22.2</td>
+</tr>
+<tr>
+<td><code>duplicate-live-enrolment</code></td>
+<td><code>issuerEnrol()</code> dedup matcher</td>
+<td>§13.3, X5 pattern 1</td>
+</tr>
+<tr>
+<td><code>epoch-descent-mismatch</code></td>
+<td><code>checkDescent()</code></td>
+<td>X5 M2, §5.10</td>
+</tr>
+<tr>
+<td><code>unknown-enrolment</code></td>
+<td><code>recover()</code> on a commitment the issuer never issued</td>
+<td>§10.1 status semantics</td>
+</tr>
+<tr>
+<td><code>unbounded-clock:&lt;name&gt;</code></td>
+<td><code>validateClocks()</code></td>
+<td>§22.2</td>
+</tr>
+</tbody></table>
+<p>Reused unchanged: <code>duplicate-human-in-context</code> (rt 01, byte-exact — R2). Per §13.6,<br><code>duplicate-human-in-context</code> remains retry-ambiguous and <strong>recovery is one of its named<br>legitimate causes</strong>: a verifier seeing a repeated nullifier during a recovery window<br>needs the challenge route, not a permanent exclusion.</p>
+</div>
+<div class="md"><h2>Files</h2>
+<table>
+<thead>
+<tr>
+<th>file</th>
+<th>role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>rotation.mjs</code></td>
+<td>routine derivation + descent commitment; issuer-blind recovery + recovery domain; <code>CLOCKS</code> + validator</td>
+</tr>
+<tr>
+<td><code>edges.mjs</code></td>
+<td>M5 — epoch-aware rt 07 nodes, <code>reformEdge</code> / <code>continueEdge</code>, outside-view check</td>
+</tr>
+<tr>
+<td><code>test.mjs</code></td>
+<td>R1–R10 (<code>node test.mjs</code> → <code>rotation: 10/10 pass</code>)</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>Upstream surface (§29)</h2>
+<p>Direct contribution to §29&#39;s open item (&quot;biometric-derived secret rotation … without<br>creating reusable biometric correlators&quot;): the case split + recovery-domain nullifier turn<br>the open question into a decidable profile choice with stated trades; fills §13.4&#39;s<br>&quot;recovery or rotation domain&quot; input with concrete semantics and fixture-ready codes; feeds<br>§13.6 (recovery as a named cause of repeated nullifiers); the M5 analysis is the shared<br>surface with the Credentials TF (rotation must not break R-DID per-counterparty freshness<br>— R-DIDs here rotate with the epoch automatically because rt 07 derives them from<br><code>node.secret</code>).</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-rotation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

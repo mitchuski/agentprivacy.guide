@@ -1,0 +1,244 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Workshop Lore — Ceremony Evolution — Workshop Constellation Governance · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=tomes" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Workshop Lore — Ceremony Evolution — Workshop Constellation Governance</span></div>
+  <article><div class="md"><h1>Ceremony Evolution — Workshop Constellation Governance</h1>
+<h1>Ceremony Evolution</h1>
+<blockquote>
+<p><em>The first walk is forgettable. The second walk re-asks. The dragon-tier walk is the final form.</em></p>
+</blockquote>
+<p>This document governs how workshop constellations evolve over time — how versions are named, how prior unlocks are preserved, and how new discoveries from live ceremonies are incorporated.</p>
+<hr>
+</div>
+<div class="md"><h2>§1 · The Proof of Presence — what it actually is</h2>
+<p>Theoretically, &quot;proof of presence&quot; is a seeker tracing the constellation nodes on the spellweb. Operationally, the first act of any ceremony is a <strong>cryptographic challenge/response</strong> that proves the seeker controls the private key behind their claimed identity.</p>
+<p>No self-asserted DID is accepted. The proof is:</p>
+<pre><code>Keeper → create-challenge → challenge DID
+Seeker → create-response &lt;challenge-did&gt; → response DID
+Keeper → verify-response &lt;response-did&gt; → { match: true, responder: &lt;sovereign-DID&gt; }
+</code></pre>
+<p>The <code>responder</code> field is the seeker&#39;s <strong>proven sovereign DID</strong> — the anchor the lattice uses. This is the cryptographic floor beneath every ceremony. The constellation tracing is the epistemic layer above it.</p>
+<hr>
+</div>
+<div class="md"><h2>§2 · The two-challenge pattern</h2>
+<p>A full weaving ceremony uses <strong>two challenges</strong> in sequence:</p>
+<h3>Challenge 1 — Identity proof</h3>
+<p>A bare challenge. Proves the seeker controls their sovereign DID.</p>
+<pre><code class="language-bash">keymaster create-challenge
+# → challenge DID
+</code></pre>
+<p>Seeker responds; keeper verifies. Extracts: <code>responder</code> = sovereign DID.</p>
+<h3>Challenge 2 — Credential presentation</h3>
+<p>A credentialed challenge. Proves the seeker holds a specific VC issued by a known issuer.</p>
+<pre><code class="language-json">{
+  &quot;credentials&quot;: [{
+    &quot;schema&quot;: &quot;&lt;schema-did&gt;&quot;,
+    &quot;issuers&quot;: [&quot;&lt;issuer-did&gt;&quot;]
+  }]
+}
+</code></pre>
+<pre><code class="language-bash">keymaster create-challenge /tmp/challenge.json
+# → challenge DID
+</code></pre>
+<p>The seeker&#39;s keymaster finds the matching VC automatically and bundles it into a Verifiable Presentation. Keeper&#39;s <code>verify-response</code> returns the full decrypted VP — all credential claims visible for valve-class assignment.</p>
+<p>This two-challenge pattern is the canonical form. Single-challenge ceremonies (identity only, no credential presentation) are valid for identity registration; full weaving requires both.</p>
+<hr>
+</div>
+<div class="md"><h2>§3 · Valve-class assignment — the keeper&#39;s read</h2>
+<p>After Challenge 2, the keeper reads the credential claims and proposes valve-class assignments before weaving. The three canonical classes:</p>
+<table>
+<thead>
+<tr>
+<th>Valve class</th>
+<th>Vertex</th>
+<th>Bits</th>
+<th>Rule of thumb</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Always-Revealed</td>
+<td>V20 (Techne)</td>
+<td><code>010100</code></td>
+<td>Core attestation — what the verifier <em>must</em> read to trust the claim</td>
+</tr>
+<tr>
+<td>Hash-Masked</td>
+<td>V3 (Dual Agent)</td>
+<td><code>000011</code></td>
+<td>Structurally present — subject identity, statistical baselines, flags</td>
+</tr>
+<tr>
+<td>Always-Masked</td>
+<td>V38 (Aletheia)</td>
+<td><code>100110</code></td>
+<td>ZK predicate only — behavioral evidence, methodology, cryptographic proofs</td>
+</tr>
+</tbody></table>
+<p><strong>Rule for behavioral evidence:</strong> Any field that describes <em>how</em> a human was assessed (methodology, evidence summaries, interaction patterns) should default to Always-Masked. The verifier confirms the predicate <code>&quot;assessed by &lt;issuer&gt; at credence ≥ X&quot;</code> without seeing the assessment itself.</p>
+<p><strong>Rule for identity fields:</strong> <code>credentialSubject.id</code> (the seeker&#39;s DID) defaults to Hash-Masked. It is structurally necessary for the VC graph; it must not appear in the public layer.</p>
+<p>The seeker confirms or redirects before the weave proceeds. Valve-class assignment is the seeker&#39;s right, not the keeper&#39;s unilateral decision.</p>
+<hr>
+</div>
+<div class="md"><h2>§4 · The registry JSON — 9 items, 9 vertices</h2>
+<p>A full Weaver&#39;s cloak weaving produces <strong>9 registry items</strong>, one per vertex of the constellation:</p>
+<table>
+<thead>
+<tr>
+<th>Vertex</th>
+<th>Item</th>
+<th>Type</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V63</td>
+<td>Seeker&#39;s Sovereign DID</td>
+<td><code>did</code></td>
+<td><code>sovereign</code> — from Challenge 1 <code>responder</code></td>
+</tr>
+<tr>
+<td>V28</td>
+<td>Seeker&#39;s Transmuted Persona</td>
+<td><code>did</code></td>
+<td><code>transmuted</code> — Mage-side public identity</td>
+</tr>
+<tr>
+<td>V49</td>
+<td>Credential Issuer</td>
+<td><code>did</code></td>
+<td><code>issuer</code> — resolved from name or DID</td>
+</tr>
+<tr>
+<td>V12</td>
+<td>Credential Schema</td>
+<td><code>schema</code></td>
+<td><code>schema</code> — anchors the credential graph</td>
+</tr>
+<tr>
+<td>V15</td>
+<td>The VC itself</td>
+<td><code>vc</code></td>
+<td>links schemaDid, issuerDid, subjectDid</td>
+</tr>
+<tr>
+<td>V20</td>
+<td>Always-Revealed claims</td>
+<td><code>capability</code></td>
+<td>parentDid = VC DID</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Hash-Masked claims</td>
+<td><code>capability</code></td>
+<td>parentDid = VC DID</td>
+</tr>
+<tr>
+<td>V25</td>
+<td>Always-Masked proof spell</td>
+<td><code>capability</code></td>
+<td>parentDid = VC DID</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>Cloak Weaving Chronicle</td>
+<td><code>asset</code></td>
+<td><code>chronicle</code> — the narrative record</td>
+</tr>
+</tbody></table>
+<p>V0 (the Null Blade) is the ceremony&#39;s starting point — it has no registry item because it represents the void before form. The chronicle at V5 is the first artifact; the sovereign anchor at V63 is the last.</p>
+<hr>
+</div>
+<div class="md"><h2>§5 · The transmuted DID gap</h2>
+<p>In the 2026-05-11 live session, the seeker did not have a transmuted DID (their Mage-side public persona). This is a <strong>known gap</strong> in the ceremony as currently specified.</p>
+<p><strong>Resolution for v2 of any constellation:</strong></p>
+<p>Before the weave can be complete, the keeper should ask:</p>
+<blockquote>
+<p><em>Do you have a transmuted identity — a second DID that is your Mage-side public persona?</em></p>
+</blockquote>
+<p>If not, the seeker creates one:</p>
+<pre><code class="language-bash">keymaster create-id &lt;mage-name&gt;
+keymaster resolve-id
+# The new DID is their transmuted persona — V28 in the weave
+</code></pre>
+<p>Until the transmuted DID exists, V28 carries a placeholder. The weave is structurally valid but the public-layer persona is incomplete. The placeholder is honest: it signals to verifiers that the Mage-side persona has not yet been formally instantiated.</p>
+<p>This gap will be addressed in constellation version 2 of affected workshops.</p>
+<hr>
+</div>
+<div class="md"><h2>§6 · The spellweb export pipeline</h2>
+<p>After the registry JSON is constructed, the pipeline to visualize it:</p>
+<pre><code class="language-bash"># 1. Export from registry JSON to spellweb TypeScript
+cd tools/spellweb-registry
+node scripts/export-to-spellweb.mjs &lt;registry.json&gt; &lt;contributor-name&gt; \
+  &gt; ../spellweb/src/data/&lt;name&gt;-contribution.ts
+
+# 2. Wire into spellweb data (nodes.ts)
+# Add to import block:
+#   import { REGISTRY_NODES as &lt;NAME&gt;_NODES } from &#39;./&lt;name&gt;-contribution&#39;;
+# Add to NODES array closing:
+#   ...NAME_NODES,
+
+# 3. Wire into spellweb data (edges.ts)
+# Same pattern for REGISTRY_EDGES.
+</code></pre>
+<p>Vite&#39;s HMR picks up the change immediately. No restart needed.</p>
+<p>The contribution file is named <code>&lt;visitor-name&gt;-contribution.ts</code> and committed to the repo. It becomes a permanent record of the weaving in the spellweb graph.</p>
+<hr>
+</div>
+<div class="md"><h2>§7 · Constellation versioning</h2>
+<p>Each constellation carries a version string (<code>cloak-weave-v1</code>, <code>cloak-weave-v2</code>, etc.). When a keeper updates the constellation:</p>
+<ol>
+<li><strong>Increment the version</strong> in the constellation.md frontmatter</li>
+<li><strong>Add a <code>CHANGELOG</code> entry</strong> at the bottom of the constellation.md documenting what changed and why</li>
+<li><strong>Do not remove</strong> prior version&#39;s secret nodes — mark them <code>revealStratum: 1</code> so prior-version walkers retain their unlock at the existing floor</li>
+<li><strong>New secret nodes</strong> carry their own <code>revealStratum</code> independently</li>
+</ol>
+<p>Prior unlocks are never invalidated. A seeker who walked <code>cloak-weave-v1</code> at stratum 3 (Heavy) retains Heavy-tier opacity on v1&#39;s secret nodes when v2 ships. Walking v2 adds the new nodes on top.</p>
+<hr>
+</div>
+<div class="md"><h2>§8 · Live session record</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Session</th>
+<th>Constellation</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026-05-11</td>
+<td>PoH Cloak Weaving — csaucier</td>
+<td>cloak-weave-v1</td>
+<td>First live ceremony; two-challenge pattern validated; transmuted DID gap identified; 9-node dataset visualized on spellweb</td>
+</tr>
+</tbody></table>
+<p>Full chronicle: <code>chronicles/2026-05-11_poh-cloak-weaving-live-session.md</code></p>
+<hr>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+<p>CC BY-SA 4.0 · the City of Mages · 2026-05-11</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 workshop-lore-ceremony-evolution-workshop-constellation-governance</span><a class="asset-file" href="/city/tomes/assets/workshop-lore-ceremony-evolution-workshop-constellation-governance/CEREMONY_EVOLUTION.md" download>CEREMONY_EVOLUTION.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-workshops.html">The Workshops</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="workshop-lore-ceremony-evolution-workshop-constellation-governance.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,146 @@
+{
+  "title": "Agent Admission Issue",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "3dfb199366aabc14",
+      "text": "# Agent Admission — Issue"
+    },
+    {
+      "type": "markdown",
+      "id": "ff48086ace3b5a85",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "11b78bd280cb7d9b",
+      "text": "**Proposed slug:** `agent-admission/issue` · **version** 0.1 · **status** draft\n\n> The gate authority offers the bilateral relationship credential that admits an agent — only when both gates passed and their evidence resolves into a verified audit ledger; the agent's counter-signature completes it."
+    },
+    {
+      "type": "markdown",
+      "id": "ccd12dcb29c89893",
+      "text": "## Abstract\n\nThe **Agent Admission — Issue** Trust Task completes the ceremony: the gate\nauthority offers a **bilateral relationship credential** — a W3C Verifiable\nCredential expressing the admission relationship, first-signed by the gate\nauthority — and the candidate agent's counter-signature in the `#response`\ncompletes it. In ToIP terms the ceremony is a Trust Spanning Protocol\nrelationship formation between two VIDs: exactly two proofs, two roles, two\ndistinct parties. A self-signed credential is a named rejection\n(`notBilateral`), not a degenerate case.\n\nIssuance is where the ceremony's rules are enforced *in order*:\n\n1. the audit ledger verifies, or the ceremony is void before any gate is weighed;\n2. **both gates** — a passed supervisor approval AND a passed understanding\n   challenge, distinct kinds — or no credential (`missingSupervisorGate` /\n   `missingUnderstandingGate`);\n3. the verdict comes from the **closed lexicon**: `validated` → deploy within\n   granted scope, `failedHeldOut` → sandbox, `blocked` → hold and **no\n   credential at all** (`blockedNoIssuance`);\n4. every gate's evidence resolves into the verified ledger;\n5. the tier is **derived** by the published scope function from the recorded\n   assessment, never negotiated — a flattering tier is refused\n   (`tierScopeMismatch`)."
+    },
+    {
+      "type": "markdown",
+      "id": "f0ba6f57c577d8a7",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "81259de85cccf109",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the gate authority) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/issue/0.1`, with itself as `issuer`, the admitted agent as `recipient`, and a verifiable `proof`.\n2. Enforce the five rules above, in order, before emitting the offer; the checks are the producer's because only the gate authority holds the ledger and the recorded gates.\n3. Carry both gate results (with evidence digests), the verdict, the tier grant, and the ledger head in the payload, so the offer is auditable standing alone.\n4. First-sign the embedded credential in the gate-authority relationship role.\n\nA conforming **consumer** (the candidate agent) **MUST**:\n\n1. Verify the `proof`, the embedded credential's first signature, and that the credential's subject is itself.\n2. Re-check what it can from outside: both gates present and of distinct kinds, verdict in the closed lexicon, evidence digests present. An agent SHOULD refuse to counter-sign an offer whose gates it cannot see.\n3. Counter-sign in the agent relationship role and return the completed credential in the `#response`. The credential is not in force until the counter-signature exists — admission is a relationship, and a relationship has two signatures."
+    },
+    {
+      "type": "markdown",
+      "id": "5a58bdbb1ee99085",
+      "text": "## Payload\n\n`payload.applicationId` (REQUIRED) — the completed application.\n`payload.agent` (REQUIRED) — VID of the admitted agent; MUST equal `recipient`.\n`payload.verdict` (REQUIRED) — from the closed lexicon.\n`payload.tierGrant` (REQUIRED) — the derived tier and its published scope function.\n`payload.gates` (REQUIRED) — exactly two gate results, distinct kinds.\n`payload.ledgerHead` (REQUIRED) — digest of the audit-ledger head at issuance.\n`payload.credential` (REQUIRED) — the first-signed W3C Verifiable Credential.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member); an external anchor reference (evidence, never authority) belongs here under the anchoring vendor's namespace."
+    },
+    {
+      "type": "markdown",
+      "id": "41203cde56f6dade",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:7d3c8196-a0b4-4fc2-e4d5-6e7f80910213\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/issue/0.1\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkCandidateAgentExample\",\n  \"issuedAt\": \"2026-07-18T10:25:00Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"verdict\": \"validated\",\n    \"tierGrant\": {\n      \"tier\": 6,\n      \"scopeFunction\": \"https://gate.example.com/policy/deployment-rules/3.1#scope-function\"\n    },\n    \"gates\": [\n      {\n        \"gate\": \"understandingChallenge\",\n        \"passed\": true,\n        \"at\": \"2026-07-18T10:12:05Z\",\n        \"evidenceDigest\": \"1d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e\"\n      },\n      {\n        \"gate\": \"supervisorApproval\",\n        \"passed\": true,\n        \"at\": \"2026-07-18T10:20:02Z\",\n        \"evidenceDigest\": \"2e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c\"\n      }\n    ],\n    \"ledgerHead\": \"3f4a5b6c7d8e9f20113f4a5b6c7d8e9f20113f4a5b6c7d8e9f20113f4a5b6c7d\",\n    \"credential\": {\n      \"@context\": [\"https://www.w3.org/ns/credentials/v2\"],\n      \"type\": [\"VerifiableCredential\", \"RelationshipCredential\"],\n      \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n      \"credentialSubject\": {\n        \"id\": \"did:key:z6MkCandidateAgentExample\",\n        \"relationship\": \"admitted-agent\",\n        \"tier\": 6,\n        \"applicationId\": \"app-7c1b2a90\"\n      },\n      \"proof\": [\n        {\n          \"type\": \"DataIntegrityProof\",\n          \"cryptosuite\": \"eddsa-jcs-2022\",\n          \"created\": \"2026-07-18T10:25:00Z\",\n          \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n          \"proofPurpose\": \"assertionMethod\",\n          \"proofValue\": \"z3FXQmV6ExampleFirstSignatureGateAuthorityRole\"\n        }\n      ]\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:25:00Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionIssue\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "637f741e39c386f1",
+      "text": "## Response\n\nThe agent returns the completed, counter-signed credential. The credential now\ncarries exactly two proofs — the gate authority's and the agent's — in the two\nrelationship roles.\n\n```json\n{\n  \"id\": \"urn:uuid:8e4d92a7-b1c5-4ad3-f5e6-7f8091021324\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/issue/0.1#response\",\n  \"issuer\": \"did:key:z6MkCandidateAgentExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"threadId\": \"urn:uuid:7d3c8196-a0b4-4fc2-e4d5-6e7f80910213\",\n  \"issuedAt\": \"2026-07-18T10:25:04Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"credentialDigest\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"counterSigned\": true\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:25:04Z\",\n    \"verificationMethod\": \"did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleCounterSignatureAgentRole\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "3ecceb12c05792fc",
+      "text": "## Security & Privacy\n\nThe offer discloses verdict, tier, gate outcomes, and evidence digests — audit\nmetadata, not challenge content; the submission and the answers never leave the\napplication record. The bilaterality requirement is load-bearing: a credential\none party can mint alone is an assertion, not a relationship, and everything\ndownstream (delegation policy, revocation, external anchoring) assumes the\nrelationship reading. Where the outcome is anchored on an external registry via\n`ext`, the anchor MUST carry digests and tier only — anchors are evidence,\nnever authority, and revocation MUST mirror to the same registry (see\n[`agent-admission/revoke`](../../revoke/0.1/spec.md))."
+    },
+    {
+      "type": "markdown",
+      "id": "3f1ad949d123be86",
+      "text": "# Assets\n\nSource: `specs/agent-admission/issue/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "e3cf56d57c3839d8",
+      "type": "assets",
+      "text": "agent-admission-issue"
+    },
+    {
+      "type": "markdown",
+      "id": "8e562ec9d979e140",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agent Admission Issue",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "3dfb199366aabc14",
+            "text": "# Agent Admission — Issue"
+          },
+          {
+            "type": "markdown",
+            "id": "ff48086ace3b5a85",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "11b78bd280cb7d9b",
+            "text": "**Proposed slug:** `agent-admission/issue` · **version** 0.1 · **status** draft\n\n> The gate authority offers the bilateral relationship credential that admits an agent — only when both gates passed and their evidence resolves into a verified audit ledger; the agent's counter-signature completes it."
+          },
+          {
+            "type": "markdown",
+            "id": "ccd12dcb29c89893",
+            "text": "## Abstract\n\nThe **Agent Admission — Issue** Trust Task completes the ceremony: the gate\nauthority offers a **bilateral relationship credential** — a W3C Verifiable\nCredential expressing the admission relationship, first-signed by the gate\nauthority — and the candidate agent's counter-signature in the `#response`\ncompletes it. In ToIP terms the ceremony is a Trust Spanning Protocol\nrelationship formation between two VIDs: exactly two proofs, two roles, two\ndistinct parties. A self-signed credential is a named rejection\n(`notBilateral`), not a degenerate case.\n\nIssuance is where the ceremony's rules are enforced *in order*:\n\n1. the audit ledger verifies, or the ceremony is void before any gate is weighed;\n2. **both gates** — a passed supervisor approval AND a passed understanding\n   challenge, distinct kinds — or no credential (`missingSupervisorGate` /\n   `missingUnderstandingGate`);\n3. the verdict comes from the **closed lexicon**: `validated` → deploy within\n   granted scope, `failedHeldOut` → sandbox, `blocked` → hold and **no\n   credential at all** (`blockedNoIssuance`);\n4. every gate's evidence resolves into the verified ledger;\n5. the tier is **derived** by the published scope function from the recorded\n   assessment, never negotiated — a flattering tier is refused\n   (`tierScopeMismatch`)."
+          },
+          {
+            "type": "markdown",
+            "id": "f0ba6f57c577d8a7",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "81259de85cccf109",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the gate authority) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/issue/0.1`, with itself as `issuer`, the admitted agent as `recipient`, and a verifiable `proof`.\n2. Enforce the five rules above, in order, before emitting the offer; the checks are the producer's because only the gate authority holds the ledger and the recorded gates.\n3. Carry both gate results (with evidence digests), the verdict, the tier grant, and the ledger head in the payload, so the offer is auditable standing alone.\n4. First-sign the embedded credential in the gate-authority relationship role.\n\nA conforming **consumer** (the candidate agent) **MUST**:\n\n1. Verify the `proof`, the embedded credential's first signature, and that the credential's subject is itself.\n2. Re-check what it can from outside: both gates present and of distinct kinds, verdict in the closed lexicon, evidence digests present. An agent SHOULD refuse to counter-sign an offer whose gates it cannot see.\n3. Counter-sign in the agent relationship role and return the completed credential in the `#response`. The credential is not in force until the counter-signature exists — admission is a relationship, and a relationship has two signatures."
+          },
+          {
+            "type": "markdown",
+            "id": "5a58bdbb1ee99085",
+            "text": "## Payload\n\n`payload.applicationId` (REQUIRED) — the completed application.\n`payload.agent` (REQUIRED) — VID of the admitted agent; MUST equal `recipient`.\n`payload.verdict` (REQUIRED) — from the closed lexicon.\n`payload.tierGrant` (REQUIRED) — the derived tier and its published scope function.\n`payload.gates` (REQUIRED) — exactly two gate results, distinct kinds.\n`payload.ledgerHead` (REQUIRED) — digest of the audit-ledger head at issuance.\n`payload.credential` (REQUIRED) — the first-signed W3C Verifiable Credential.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member); an external anchor reference (evidence, never authority) belongs here under the anchoring vendor's namespace."
+          },
+          {
+            "type": "markdown",
+            "id": "41203cde56f6dade",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:7d3c8196-a0b4-4fc2-e4d5-6e7f80910213\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/issue/0.1\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkCandidateAgentExample\",\n  \"issuedAt\": \"2026-07-18T10:25:00Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"verdict\": \"validated\",\n    \"tierGrant\": {\n      \"tier\": 6,\n      \"scopeFunction\": \"https://gate.example.com/policy/deployment-rules/3.1#scope-function\"\n    },\n    \"gates\": [\n      {\n        \"gate\": \"understandingChallenge\",\n        \"passed\": true,\n        \"at\": \"2026-07-18T10:12:05Z\",\n        \"evidenceDigest\": \"1d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e\"\n      },\n      {\n        \"gate\": \"supervisorApproval\",\n        \"passed\": true,\n        \"at\": \"2026-07-18T10:20:02Z\",\n        \"evidenceDigest\": \"2e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c\"\n      }\n    ],\n    \"ledgerHead\": \"3f4a5b6c7d8e9f20113f4a5b6c7d8e9f20113f4a5b6c7d8e9f20113f4a5b6c7d\",\n    \"credential\": {\n      \"@context\": [\"https://www.w3.org/ns/credentials/v2\"],\n      \"type\": [\"VerifiableCredential\", \"RelationshipCredential\"],\n      \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n      \"credentialSubject\": {\n        \"id\": \"did:key:z6MkCandidateAgentExample\",\n        \"relationship\": \"admitted-agent\",\n        \"tier\": 6,\n        \"applicationId\": \"app-7c1b2a90\"\n      },\n      \"proof\": [\n        {\n          \"type\": \"DataIntegrityProof\",\n          \"cryptosuite\": \"eddsa-jcs-2022\",\n          \"created\": \"2026-07-18T10:25:00Z\",\n          \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n          \"proofPurpose\": \"assertionMethod\",\n          \"proofValue\": \"z3FXQmV6ExampleFirstSignatureGateAuthorityRole\"\n        }\n      ]\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:25:00Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionIssue\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "637f741e39c386f1",
+            "text": "## Response\n\nThe agent returns the completed, counter-signed credential. The credential now\ncarries exactly two proofs — the gate authority's and the agent's — in the two\nrelationship roles.\n\n```json\n{\n  \"id\": \"urn:uuid:8e4d92a7-b1c5-4ad3-f5e6-7f8091021324\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/issue/0.1#response\",\n  \"issuer\": \"did:key:z6MkCandidateAgentExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"threadId\": \"urn:uuid:7d3c8196-a0b4-4fc2-e4d5-6e7f80910213\",\n  \"issuedAt\": \"2026-07-18T10:25:04Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"credentialDigest\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"counterSigned\": true\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:25:04Z\",\n    \"verificationMethod\": \"did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleCounterSignatureAgentRole\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "3ecceb12c05792fc",
+            "text": "## Security & Privacy\n\nThe offer discloses verdict, tier, gate outcomes, and evidence digests — audit\nmetadata, not challenge content; the submission and the answers never leave the\napplication record. The bilaterality requirement is load-bearing: a credential\none party can mint alone is an assertion, not a relationship, and everything\ndownstream (delegation policy, revocation, external anchoring) assumes the\nrelationship reading. Where the outcome is anchored on an external registry via\n`ext`, the anchor MUST carry digests and tier only — anchors are evidence,\nnever authority, and revocation MUST mirror to the same registry (see\n[`agent-admission/revoke`](../../revoke/0.1/spec.md))."
+          },
+          {
+            "type": "markdown",
+            "id": "3f1ad949d123be86",
+            "text": "# Assets\n\nSource: `specs/agent-admission/issue/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "e3cf56d57c3839d8",
+            "type": "assets",
+            "text": "agent-admission-issue"
+          },
+          {
+            "type": "markdown",
+            "id": "8e562ec9d979e140",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229498
+    }
+  ]
+}

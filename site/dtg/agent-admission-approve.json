@@ -1,0 +1,146 @@
+{
+  "title": "Agent Admission Approve",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "5535ef54e4cc2131",
+      "text": "# Agent Admission — Approve"
+    },
+    {
+      "type": "markdown",
+      "id": "bfd0ff4a9b95cbfb",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "70dbc489756d112c",
+      "text": "**Proposed slug:** `agent-admission/approve` · **version** 0.1 · **status** draft\n\n> A supervisor, accountable for the admission, records the human gate — a signed approval or denial of one pending agent application, distinct from and never substitutable for the understanding gate."
+    },
+    {
+      "type": "markdown",
+      "id": "7f20ae5be0745f1e",
+      "text": "## Abstract\n\nThe **Agent Admission — Approve** Trust Task records the **human gate** of the\ntwo-gate admission ceremony: a supervisor, accountable for this agent operating\nin this scope, signs an approval or denial of one pending application.\n\nThe two gates are deliberately different in kind. The understanding gate\n([`agent-admission/respond`](../../respond/0.1/spec.md)) tests the *agent*; the\nsupervisor gate binds a *human*. Either alone is refused at issuance\n([`agent-admission/issue`](../../issue/0.1/spec.md)): an approval without\ndemonstrated understanding is patronage; demonstrated understanding without an\naccountable approver is unsupervised admission. Two results of the same kind\nnever satisfy the rule."
+    },
+    {
+      "type": "markdown",
+      "id": "8719845223271dcd",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "7dae68b33925f033",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the supervisor) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/approve/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof`.\n2. Decide against the recorded application — the gate authority's rendering of the submission, the draw, and the understanding-gate result — not against material supplied out-of-band by the candidate.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` and that the `issuer` is a supervisor it recognises for this policy; an unverifiable or unrecognised approval is `permissionDenied`, and the gate authority **MUST NOT** record it.\n2. Reject with `supervisorIsAgent` when the approving VID is, or resolves to the same controller as, the candidate agent. The separation of parties is the gate.\n3. Record exactly one decision per application (`alreadyDecided` thereafter), append the supervisor-gate event to the content-addressed audit ledger, and return the gate result in the `#response`.\n4. Treat a `deny` decision as terminal for the application: issuance MUST NOT proceed, whatever the understanding gate scored."
+    },
+    {
+      "type": "markdown",
+      "id": "418cd246e3002c34",
+      "text": "## Payload\n\n`payload.applicationId` (REQUIRED) — the application being decided.\n`payload.agent` (REQUIRED) — VID of the candidate agent the decision covers.\n`payload.decision` (REQUIRED) — `approve` or `deny`.\n`payload.note` (OPTIONAL) — the supervisor's free-text rationale, recorded to the ledger.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "aff8157e4d02ab6c",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:5b1a6f74-8e92-4da0-c2b3-4c5d6e7f8091\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/approve/0.1\",\n  \"issuer\": \"did:key:z6MkSupervisorExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T10:20:00Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"decision\": \"approve\",\n    \"note\": \"Reviewed the submission and the scored answers; scope derivation is correctly understood.\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:20:00Z\",\n    \"verificationMethod\": \"did:key:z6MkSupervisorExample#z6MkSupervisorExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionApprove\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "1cb5ed5ae005e9e2",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:6c2b7085-9fa3-4eb1-d3c4-5d6e7f809102\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/approve/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkSupervisorExample\",\n  \"threadId\": \"urn:uuid:5b1a6f74-8e92-4da0-c2b3-4c5d6e7f8091\",\n  \"issuedAt\": \"2026-07-18T10:20:02Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"supervisorGate\": {\n      \"gate\": \"supervisorApproval\",\n      \"passed\": true,\n      \"at\": \"2026-07-18T10:20:02Z\",\n      \"evidenceDigest\": \"2e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c\"\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:20:02Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionApproveResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "5e230eed510f435f",
+      "text": "## Security & Privacy\n\nThe decision discloses the supervisor's identity to the gate authority and, via\nthe ledger, to auditors — that disclosure is the point: accountability requires\nattributability. The `note` is free text written by the supervisor and recorded\ndurably; supervisors SHOULD NOT place third-party personal data in it. The\n`supervisorIsAgent` check depends on the gate authority's controller-resolution\nbeing at least as strong as its VID acceptance policy; where controllers cannot\nbe resolved, the gate authority SHOULD require the supervisor set and the agent\npopulation to be disjoint by construction."
+    },
+    {
+      "type": "markdown",
+      "id": "9416f04b86e1c676",
+      "text": "# Assets\n\nSource: `specs/agent-admission/approve/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "b1b72897fba197ae",
+      "type": "assets",
+      "text": "agent-admission-approve"
+    },
+    {
+      "type": "markdown",
+      "id": "498e164bdc684781",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agent Admission Approve",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "5535ef54e4cc2131",
+            "text": "# Agent Admission — Approve"
+          },
+          {
+            "type": "markdown",
+            "id": "bfd0ff4a9b95cbfb",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "70dbc489756d112c",
+            "text": "**Proposed slug:** `agent-admission/approve` · **version** 0.1 · **status** draft\n\n> A supervisor, accountable for the admission, records the human gate — a signed approval or denial of one pending agent application, distinct from and never substitutable for the understanding gate."
+          },
+          {
+            "type": "markdown",
+            "id": "7f20ae5be0745f1e",
+            "text": "## Abstract\n\nThe **Agent Admission — Approve** Trust Task records the **human gate** of the\ntwo-gate admission ceremony: a supervisor, accountable for this agent operating\nin this scope, signs an approval or denial of one pending application.\n\nThe two gates are deliberately different in kind. The understanding gate\n([`agent-admission/respond`](../../respond/0.1/spec.md)) tests the *agent*; the\nsupervisor gate binds a *human*. Either alone is refused at issuance\n([`agent-admission/issue`](../../issue/0.1/spec.md)): an approval without\ndemonstrated understanding is patronage; demonstrated understanding without an\naccountable approver is unsupervised admission. Two results of the same kind\nnever satisfy the rule."
+          },
+          {
+            "type": "markdown",
+            "id": "8719845223271dcd",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "7dae68b33925f033",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the supervisor) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/approve/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof`.\n2. Decide against the recorded application — the gate authority's rendering of the submission, the draw, and the understanding-gate result — not against material supplied out-of-band by the candidate.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` and that the `issuer` is a supervisor it recognises for this policy; an unverifiable or unrecognised approval is `permissionDenied`, and the gate authority **MUST NOT** record it.\n2. Reject with `supervisorIsAgent` when the approving VID is, or resolves to the same controller as, the candidate agent. The separation of parties is the gate.\n3. Record exactly one decision per application (`alreadyDecided` thereafter), append the supervisor-gate event to the content-addressed audit ledger, and return the gate result in the `#response`.\n4. Treat a `deny` decision as terminal for the application: issuance MUST NOT proceed, whatever the understanding gate scored."
+          },
+          {
+            "type": "markdown",
+            "id": "418cd246e3002c34",
+            "text": "## Payload\n\n`payload.applicationId` (REQUIRED) — the application being decided.\n`payload.agent` (REQUIRED) — VID of the candidate agent the decision covers.\n`payload.decision` (REQUIRED) — `approve` or `deny`.\n`payload.note` (OPTIONAL) — the supervisor's free-text rationale, recorded to the ledger.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "aff8157e4d02ab6c",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:5b1a6f74-8e92-4da0-c2b3-4c5d6e7f8091\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/approve/0.1\",\n  \"issuer\": \"did:key:z6MkSupervisorExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T10:20:00Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"decision\": \"approve\",\n    \"note\": \"Reviewed the submission and the scored answers; scope derivation is correctly understood.\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:20:00Z\",\n    \"verificationMethod\": \"did:key:z6MkSupervisorExample#z6MkSupervisorExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionApprove\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "1cb5ed5ae005e9e2",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:6c2b7085-9fa3-4eb1-d3c4-5d6e7f809102\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/approve/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkSupervisorExample\",\n  \"threadId\": \"urn:uuid:5b1a6f74-8e92-4da0-c2b3-4c5d6e7f8091\",\n  \"issuedAt\": \"2026-07-18T10:20:02Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"supervisorGate\": {\n      \"gate\": \"supervisorApproval\",\n      \"passed\": true,\n      \"at\": \"2026-07-18T10:20:02Z\",\n      \"evidenceDigest\": \"2e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c7d8e9f102e3f4a5b6c\"\n    }\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:20:02Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionApproveResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "5e230eed510f435f",
+            "text": "## Security & Privacy\n\nThe decision discloses the supervisor's identity to the gate authority and, via\nthe ledger, to auditors — that disclosure is the point: accountability requires\nattributability. The `note` is free text written by the supervisor and recorded\ndurably; supervisors SHOULD NOT place third-party personal data in it. The\n`supervisorIsAgent` check depends on the gate authority's controller-resolution\nbeing at least as strong as its VID acceptance policy; where controllers cannot\nbe resolved, the gate authority SHOULD require the supervisor set and the agent\npopulation to be disjoint by construction."
+          },
+          {
+            "type": "markdown",
+            "id": "9416f04b86e1c676",
+            "text": "# Assets\n\nSource: `specs/agent-admission/approve/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "b1b72897fba197ae",
+            "type": "assets",
+            "text": "agent-admission-approve"
+          },
+          {
+            "type": "markdown",
+            "id": "498e164bdc684781",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229497
+    }
+  ]
+}

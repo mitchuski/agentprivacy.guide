@@ -1,0 +1,53 @@
+{
+  "title": "Bonjour by Hand, and the Trust Layer Above",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "b00000fed0000001",
+      "text": "# Bonjour by Hand, and the Trust Layer Above\n\n*Sharing a local wiki across a hostile network is two problems, not one: first **reachability** (can the bytes arrive?), then **trust** (should they?). David solved the first by hand; this is the layer above.*"
+    },
+    {
+      "type": "markdown",
+      "id": "b00000fed0000002",
+      "text": "## The barrier\n\nAfter a move to a new router, `http://david.local` stopped loading. The wiki was never down - the **name** died. The new router does not pass Zeroconf / mDNS, so a Windows PC can no longer resolve the `.local` name. And the wiki is a name-based virtual host *twice over*: it only answers when the request's `Host` header carries the site name, so a bare IP falls through to a **502**. The one string that works is the one string the network can no longer resolve."
+    },
+    {
+      "type": "markdown",
+      "id": "b00000fed0000003",
+      "text": "## David did Bonjour's job by hand\n\nDavid's companion page [[Bonjour by Hand]] (on his wiki) restores **reachability** from the host side, two ways:\n\n- **Route 1 - name by hand:** a hosts-file line, `192.168.55.144  david.local`, consulted before DNS or mDNS, so it works even where the network drops multicast.\n- **Route 2 - raw IP, nothing on their end:** a Caddy block keyed on the host's own IP that rewrites the `Host` header to the real site. Send the peer a raw-IP URL and it loads with no Bonjour, no hosts edit, nothing installed. *(This route is now live on david.)*\n\nPlus a static DHCP lease so the address stops drifting, and a tunnel ([https://tailscale.com Tailscale], `cloudflared`) for the case where the access point isolates clients and no LAN trick can help."
+    },
+    {
+      "type": "markdown",
+      "id": "b00000fed0000004",
+      "text": "## One sharp trap (RFC 6761)\n\nDo not map a `*.localhost` name by hand. Browsers force *any* `.localhost` name to loopback (127.0.0.1) per RFC 6761, ignoring the hosts file - so it would hit the peer's own machine, not yours. Shared names use a plain TLD (like `.local`, or `.mesh`), never `.localhost`."
+    },
+    {
+      "type": "markdown",
+      "id": "b00000fed0000005",
+      "text": "## Reachability floor, trust storey\n\nDavid's routes solve **reachability** - can the bytes arrive? - and they solve it *openly*: in his own words, *\"the open mirror, exposed... fine on a friendly LAN; never on a hostile one.\"*\n\nThat open-ness is the gap the next layer fills. Above reachability sits **trust** - *should* the bytes arrive, and under what agreement? That is the [[myTerms: The Agreement Layer]]: a consent-first ceremony where an agent **offers** its address, reads a gateway, and earns scoped access under a bilateral, machine-readable agreement. David built the **floor**; this is the **storey** above it. The two federate cleanly - his Mac, the peer's PC."
+    },
+    {
+      "type": "markdown",
+      "id": "b00000fed0000006",
+      "text": "## The proverb\n\n> *Carry your own names, and keep them good - never perfect. Any agreement complete enough to need no one outside it has either stopped listening or begun to lie. So we build incomplete, on purpose: trust, like truth, always waits on a witness from beyond the system that holds it.*\n\n\"Doing Bonjour's job by hand\" is the same instinct from the reachability side: bring your own naming layer; never let the venue's router introduce your machines to each other."
+    },
+    {
+      "type": "markdown",
+      "id": "b00000fed0000007",
+      "text": "## The name that worked in the browser\n\nLater the same day `david.local` resolved again - but only in the browser; a command-line `ping` on the same machine at the same moment still could not find it. The name was not fixed; it was resolving *intermittently*. **A name that resolves sometimes is more dangerous than one that never does** - it passes every test at home, then fails in front of the room. Hence the carried, deterministic naming layer: resolution identical for every client, every time."
+    },
+    {
+      "type": "markdown",
+      "id": "b00000fed0000008",
+      "text": "---\nCompanion to David's [[Bonjour by Hand]]. See also [[myTerms: The Agreement Layer]] and [[One Logic, Many Skins]].\n\n---\n<- [[Welcome Visitors]] | [[myTerms: The Agreement Layer]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "id": "b00000fed0000001",
+      "item": { "title": "Bonjour by Hand, and the Trust Layer Above" },
+      "date": 1782654243000
+    }
+  ]
+}

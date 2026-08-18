@@ -1,0 +1,146 @@
+{
+  "title": "Understanding Grant",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "214b1e9eba1e9066",
+      "text": "# Understanding — Grant"
+    },
+    {
+      "type": "markdown",
+      "id": "98d2b45fc8aa85c1",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "d3ff468a01316b11",
+      "text": "**Proposed slug:** `understanding/grant` · **version** 0.1 · **status** draft\n\n> A sealed joining party requests scoped access; the host's broker releases a delegated, expiring grant — the underlying credential never leaves the broker, and asking for it is a named refusal."
+    },
+    {
+      "type": "markdown",
+      "id": "f405c57ae124d039",
+      "text": "## Abstract\n\nThe **Understanding — Grant** Trust Task converts a sealed agreement into\nworking access — through a **broker**, never by credential hand-over. The host\nside holds its credentials (a session, a write token, an API key) in a broker;\na sealed joining party requests scope; the broker mints a **delegated grant**:\nhost-scoped, expiring, attributable to the grantee, and revocable without\nrotating the underlying credential.\n\nThe boundary is the specification's reason to exist: the underlying credential\n**never** leaves the broker, and a request for it is a *named refusal*\n(`rawCredentialRequested`), not a policy choice. This is the same custody\ninstinct as [`vault/proxy-login`](../../../vault/proxy-login/0.2/spec.md) —\nexercise a credential without releasing it — surfaced at the moment a\ntrust ceremony first grants access, where the temptation to \"just share the\nkey\" is strongest."
+    },
+    {
+      "type": "markdown",
+      "id": "1b44d2649b13b735",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "f1fdfce486be9d60",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/grant/0.1`, carrying a verifiable `proof` from the party that sealed the agreement, and request scope within what the seal covers.\n\nA conforming **consumer** (the host broker) **MUST**:\n\n1. Verify the `proof` against the sealed agreement's joining party; refuse an unknown or unsealed agreement with `grantWithoutSeal`.\n2. Refuse any request shaped to obtain the underlying credential with `rawCredentialRequested` — including requests for unscoped grants, non-expiring grants, or the broker's own verification material.\n3. Bound every grant: explicit host scope, explicit expiry, attributable to this grantee, and revocable at the broker without rotating the underlying credential.\n4. Record every release and every use it mediates, so grant activity is auditable per grantee."
+    },
+    {
+      "type": "markdown",
+      "id": "63d481127669953a",
+      "text": "## Payload\n\n`payload.agreementId` (REQUIRED) — the sealed agreement this grant draws on.\n`payload.scope` (REQUIRED) — the hosts and actions requested.\n`payload.validFor` (OPTIONAL) — requested duration; the broker MAY grant less, never more.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "d57e3babedd1b2df",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:39f24d52-6c70-4f2e-e091-809ab2c3d4e5\",\n  \"type\": \"https://trusttasks.org/spec/understanding/grant/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T17:00:00Z\",\n  \"payload\": {\n    \"agreementId\": \"seal-17d02b30\",\n    \"scope\": {\n      \"hosts\": [\"workshop.host.example.com\"],\n      \"actions\": [\"read\", \"contribute\"]\n    },\n    \"validFor\": \"PT12H\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T17:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForUnderstandingGrant\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "94fb1333c45cf319",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:4a035e63-7d81-4a3f-f1a2-9ab2c3d4e5f6\",\n  \"type\": \"https://trusttasks.org/spec/understanding/grant/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:39f24d52-6c70-4f2e-e091-809ab2c3d4e5\",\n  \"issuedAt\": \"2026-07-18T17:00:02Z\",\n  \"payload\": {\n    \"grantRef\": \"grant-39f24d52\",\n    \"material\": \"dg1.eyJhbGciOiJFZERTQSJ9.ExampleDelegatedGrantTokenNotTheUnderlyingCredential\",\n    \"scope\": {\n      \"hosts\": [\"workshop.host.example.com\"],\n      \"actions\": [\"read\", \"contribute\"]\n    },\n    \"expiresAt\": \"2026-07-19T05:00:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T17:00:02Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForUnderstandingGrantResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "94a56a08a4e853b0",
+      "text": "## Security & Privacy\n\nThe response is `discloses: secret`: the grant material is confidential to the\ngrantee and MUST travel only over a confidential, mutually-authenticated\nbinding. The custody boundary bounds the blast radius — a leaked grant exposes\nits scope until expiry or withdrawal, never the underlying credential; a\ncompromised joiner is contained by the same line. The broker's release-and-use\nrecord makes grant activity attributable per grantee, which is a disclosure the\njoiner accepted at the seal: mediated access is visible access. Brokers SHOULD\nkeep grant lifetimes short and let renewal be cheap — a short leash re-walked\nbeats a long one forgotten."
+    },
+    {
+      "type": "markdown",
+      "id": "ec848c51bb0d3530",
+      "text": "# Assets\n\nSource: `specs/understanding/grant/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "4e19909009929cf4",
+      "type": "assets",
+      "text": "understanding-grant"
+    },
+    {
+      "type": "markdown",
+      "id": "3277229070160bea",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Understanding Grant",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "214b1e9eba1e9066",
+            "text": "# Understanding — Grant"
+          },
+          {
+            "type": "markdown",
+            "id": "98d2b45fc8aa85c1",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "d3ff468a01316b11",
+            "text": "**Proposed slug:** `understanding/grant` · **version** 0.1 · **status** draft\n\n> A sealed joining party requests scoped access; the host's broker releases a delegated, expiring grant — the underlying credential never leaves the broker, and asking for it is a named refusal."
+          },
+          {
+            "type": "markdown",
+            "id": "f405c57ae124d039",
+            "text": "## Abstract\n\nThe **Understanding — Grant** Trust Task converts a sealed agreement into\nworking access — through a **broker**, never by credential hand-over. The host\nside holds its credentials (a session, a write token, an API key) in a broker;\na sealed joining party requests scope; the broker mints a **delegated grant**:\nhost-scoped, expiring, attributable to the grantee, and revocable without\nrotating the underlying credential.\n\nThe boundary is the specification's reason to exist: the underlying credential\n**never** leaves the broker, and a request for it is a *named refusal*\n(`rawCredentialRequested`), not a policy choice. This is the same custody\ninstinct as [`vault/proxy-login`](../../../vault/proxy-login/0.2/spec.md) —\nexercise a credential without releasing it — surfaced at the moment a\ntrust ceremony first grants access, where the temptation to \"just share the\nkey\" is strongest."
+          },
+          {
+            "type": "markdown",
+            "id": "1b44d2649b13b735",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "f1fdfce486be9d60",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the joining party) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/understanding/grant/0.1`, carrying a verifiable `proof` from the party that sealed the agreement, and request scope within what the seal covers.\n\nA conforming **consumer** (the host broker) **MUST**:\n\n1. Verify the `proof` against the sealed agreement's joining party; refuse an unknown or unsealed agreement with `grantWithoutSeal`.\n2. Refuse any request shaped to obtain the underlying credential with `rawCredentialRequested` — including requests for unscoped grants, non-expiring grants, or the broker's own verification material.\n3. Bound every grant: explicit host scope, explicit expiry, attributable to this grantee, and revocable at the broker without rotating the underlying credential.\n4. Record every release and every use it mediates, so grant activity is auditable per grantee."
+          },
+          {
+            "type": "markdown",
+            "id": "63d481127669953a",
+            "text": "## Payload\n\n`payload.agreementId` (REQUIRED) — the sealed agreement this grant draws on.\n`payload.scope` (REQUIRED) — the hosts and actions requested.\n`payload.validFor` (OPTIONAL) — requested duration; the broker MAY grant less, never more.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "d57e3babedd1b2df",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:39f24d52-6c70-4f2e-e091-809ab2c3d4e5\",\n  \"type\": \"https://trusttasks.org/spec/understanding/grant/0.1\",\n  \"issuer\": \"did:key:z6MkJoiningPartyExample\",\n  \"recipient\": \"did:key:z6MkHostExample\",\n  \"issuedAt\": \"2026-07-18T17:00:00Z\",\n  \"payload\": {\n    \"agreementId\": \"seal-17d02b30\",\n    \"scope\": {\n      \"hosts\": [\"workshop.host.example.com\"],\n      \"actions\": [\"read\", \"contribute\"]\n    },\n    \"validFor\": \"PT12H\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T17:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForUnderstandingGrant\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "94fb1333c45cf319",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:4a035e63-7d81-4a3f-f1a2-9ab2c3d4e5f6\",\n  \"type\": \"https://trusttasks.org/spec/understanding/grant/0.1#response\",\n  \"issuer\": \"did:key:z6MkHostExample\",\n  \"recipient\": \"did:key:z6MkJoiningPartyExample\",\n  \"threadId\": \"urn:uuid:39f24d52-6c70-4f2e-e091-809ab2c3d4e5\",\n  \"issuedAt\": \"2026-07-18T17:00:02Z\",\n  \"payload\": {\n    \"grantRef\": \"grant-39f24d52\",\n    \"material\": \"dg1.eyJhbGciOiJFZERTQSJ9.ExampleDelegatedGrantTokenNotTheUnderlyingCredential\",\n    \"scope\": {\n      \"hosts\": [\"workshop.host.example.com\"],\n      \"actions\": [\"read\", \"contribute\"]\n    },\n    \"expiresAt\": \"2026-07-19T05:00:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T17:00:02Z\",\n    \"verificationMethod\": \"did:key:z6MkHostExample#z6MkHostExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForUnderstandingGrantResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "94a56a08a4e853b0",
+            "text": "## Security & Privacy\n\nThe response is `discloses: secret`: the grant material is confidential to the\ngrantee and MUST travel only over a confidential, mutually-authenticated\nbinding. The custody boundary bounds the blast radius — a leaked grant exposes\nits scope until expiry or withdrawal, never the underlying credential; a\ncompromised joiner is contained by the same line. The broker's release-and-use\nrecord makes grant activity attributable per grantee, which is a disclosure the\njoiner accepted at the seal: mediated access is visible access. Brokers SHOULD\nkeep grant lifetimes short and let renewal be cheap — a short leash re-walked\nbeats a long one forgotten."
+          },
+          {
+            "type": "markdown",
+            "id": "ec848c51bb0d3530",
+            "text": "# Assets\n\nSource: `specs/understanding/grant/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "4e19909009929cf4",
+            "type": "assets",
+            "text": "understanding-grant"
+          },
+          {
+            "type": "markdown",
+            "id": "3277229070160bea",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229502
+    }
+  ]
+}

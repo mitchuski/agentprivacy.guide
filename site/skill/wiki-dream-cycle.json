@@ -1,0 +1,76 @@
+{
+  "title": "Wiki Dream Cycle",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "62c72c9a34977a64",
+      "text": "# Wiki Dream Cycle\n\n**Category** wikis · **Version** 5.5\n\nThe standing research loop that keeps the static guide rebound to the source. Each relevant /mitch repo \"dreams\" about itself — a deep multi-lap pass that diffs the repo's canon against the live FedWiki, writes a standing `chronicles/DREAM-<date>.md` (its resumable work-ledger), and feeds a single confirm-able GATE document. The First Person ticks the GATE; builders write the approved canon into ~/.wiki; the snapshot publishes it. Activates when planning what to fill into the guide next, running a daily research cycle, fanning out per-directory gap analysis, or turning \"what's missing\" into ordered next actions. Four stages — RESEARCH → GATE → BUILD → SNAPSHOT — looped until comfortable to push. Authored by the Chronicler 🧙📖, kept by the Librarian 🗃️."
+    },
+    {
+      "type": "markdown",
+      "id": "7a7e5619a64ad01a",
+      "text": "The **dream cycle** is how the agentprivacy guide stays rebound to the universe\nacross `/mitch`. Where `agentprivacy-wiki-resync` is the *per-turn* operation\n(\"I changed a repo → rebuild the wiki\"), the dream cycle is the *discovery* layer\nthat runs *before* you know what to change: every current repo dreams about\nitself, surfaces its gaps, and proposes what to fill — and the First Person\ndecides.\n\nIt is the Chronicler's loop (it *produces chronicles*) cataloged by the Librarian\n(the `wikis/` keeper). The dream files are standing ledgers that travel **with**\neach repo, so the next cycle resumes from them.\n\n## The four stages (looped)\n\n```\n1. RESEARCH   scan the source dirs → diff vs the live FedWiki → gap report\n2. GATE       the First Person reads the dreams and ticks what to fill   ← the only human step\n3. BUILD      builders write the approved canon into ~/.wiki (journal-versioned, [[linked]], hub backlinks)\n4. SNAPSHOT   tools/snapshot.mjs → ./site → review on :3200\n   ↺ loop until comfortable → push → guide.agentprivacy.ai\n              (the live ~/.wiki stays the editable, tunnel-able carry copy)\n```\n\n## Two layers of dream\n\n1. **Thematic dreams** (`flow/dream/`): cross-cutting passes by site/topic —\n   grimoire+research, tomes/cast/city, skills/personas, atlas/graph,\n   library/narrative, and the **relevance-curated** wider-universe pass that\n   triages the ~80 `/mitch` dirs into *current · stale · irrelevant* so the\n   fan-out never dreams on cruft.\n2. **Per-directory dreams** (`<repo>/chronicles/DREAM-<date>.md`): each current\n   repo dreams about its own state + its link to the guide. This is the daily\n   work-ledger. Template:\n\n   ```\n   # Dream — <DirName> — <date>\n   ## What this is\n   ## Current state & open threads (within the dir)\n   ## Guide coverage (projected vs missing)  | site | item | status | source |\n   ## Suggestions (prioritized)              | suggestion | target | why | H/M/L |\n   ## To get rolling tomorrow (ordered next actions)\n   ## Notes & uncertainties\n   ```\n\n## Discipline (the keeper's rules)\n\n- **Relevance first.** Never treat a stale/duplicate/version-named dir\n  (`v4…`, `nov11…`, `…copy`, `…fork`) or a system folder as a gap. Triage, then\n  verify each surviving candidate against the live sites before calling it a gap.\n- **No duplicate information flows.** Source canon → one guide projection. Fill\n  what's *missing*; **link**, don't re-create, what already lives elsewhere\n  (sibling hosts, other sites). Resolve collisions as cleanups, not new dupes.\n- **The dreams are research input, not content to paste.** They drive *what canon\n  to build*; they stay as the working ledger.\n- **Human gate is load-bearing.** Nothing is built from a dream without the First\n  Person ticking it; nothing is pushed/published without an explicit ask.\n- **Honest framing carries.** e.g. estimation is not attack; vendored work is not\n  the author's — every dream preserves the source's honesty.\n\n## Run it\n\n```bash\nnode flow/run.mjs audit              # RESEARCH → flow/gap-report.json\n#   (read flow/GUIDE-DREAM-SUGGESTIONS.md — the GATE — and decide)\nnode flow/run.mjs build <site>       # BUILD the approved gaps into ~/.wiki\nnode flow/run.mjs snapshot           # SNAPSHOT → ./site → review on :3200\nnode flow/run.mjs cycle <site>       # audit → build → snapshot → audit, in one\n```\n\nThe fan-out of per-directory dreams is driven from the relevance ledger; refresh\nit when the `/mitch` layout changes, then dream each current repo. See\n`flow/DREAM-CYCLE.md` for the full convention and `flow/builders/` for the\nper-site builders (grimoire and research are the worked examples).\n\n## Lineage\n\nBorn 2026-06-29 building the `guide.agentprivacy.ai` static snapshot, when the\nquestion shifted from \"patch this gap\" to \"keep the guide standing-rebound to the\nwhole universe.\" The Chronicler writes the dreams; the Librarian federates them;\nthe First Person decides."
+    },
+    {
+      "type": "markdown",
+      "id": "fae5750fbe782197",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-dream-cycle`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "61ae5f6ed4eb5e6a",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "06096a138836f1e1",
+      "text": "wiki-dream-cycle"
+    },
+    {
+      "type": "markdown",
+      "id": "9f809898959052af",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Dream Cycle",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "62c72c9a34977a64",
+            "text": "# Wiki Dream Cycle\n\n**Category** wikis · **Version** 5.5\n\nThe standing research loop that keeps the static guide rebound to the source. Each relevant /mitch repo \"dreams\" about itself — a deep multi-lap pass that diffs the repo's canon against the live FedWiki, writes a standing `chronicles/DREAM-<date>.md` (its resumable work-ledger), and feeds a single confirm-able GATE document. The First Person ticks the GATE; builders write the approved canon into ~/.wiki; the snapshot publishes it. Activates when planning what to fill into the guide next, running a daily research cycle, fanning out per-directory gap analysis, or turning \"what's missing\" into ordered next actions. Four stages — RESEARCH → GATE → BUILD → SNAPSHOT — looped until comfortable to push. Authored by the Chronicler 🧙📖, kept by the Librarian 🗃️."
+          },
+          {
+            "type": "markdown",
+            "id": "7a7e5619a64ad01a",
+            "text": "The **dream cycle** is how the agentprivacy guide stays rebound to the universe\nacross `/mitch`. Where `agentprivacy-wiki-resync` is the *per-turn* operation\n(\"I changed a repo → rebuild the wiki\"), the dream cycle is the *discovery* layer\nthat runs *before* you know what to change: every current repo dreams about\nitself, surfaces its gaps, and proposes what to fill — and the First Person\ndecides.\n\nIt is the Chronicler's loop (it *produces chronicles*) cataloged by the Librarian\n(the `wikis/` keeper). The dream files are standing ledgers that travel **with**\neach repo, so the next cycle resumes from them.\n\n## The four stages (looped)\n\n```\n1. RESEARCH   scan the source dirs → diff vs the live FedWiki → gap report\n2. GATE       the First Person reads the dreams and ticks what to fill   ← the only human step\n3. BUILD      builders write the approved canon into ~/.wiki (journal-versioned, [[linked]], hub backlinks)\n4. SNAPSHOT   tools/snapshot.mjs → ./site → review on :3200\n   ↺ loop until comfortable → push → guide.agentprivacy.ai\n              (the live ~/.wiki stays the editable, tunnel-able carry copy)\n```\n\n## Two layers of dream\n\n1. **Thematic dreams** (`flow/dream/`): cross-cutting passes by site/topic —\n   grimoire+research, tomes/cast/city, skills/personas, atlas/graph,\n   library/narrative, and the **relevance-curated** wider-universe pass that\n   triages the ~80 `/mitch` dirs into *current · stale · irrelevant* so the\n   fan-out never dreams on cruft.\n2. **Per-directory dreams** (`<repo>/chronicles/DREAM-<date>.md`): each current\n   repo dreams about its own state + its link to the guide. This is the daily\n   work-ledger. Template:\n\n   ```\n   # Dream — <DirName> — <date>\n   ## What this is\n   ## Current state & open threads (within the dir)\n   ## Guide coverage (projected vs missing)  | site | item | status | source |\n   ## Suggestions (prioritized)              | suggestion | target | why | H/M/L |\n   ## To get rolling tomorrow (ordered next actions)\n   ## Notes & uncertainties\n   ```\n\n## Discipline (the keeper's rules)\n\n- **Relevance first.** Never treat a stale/duplicate/version-named dir\n  (`v4…`, `nov11…`, `…copy`, `…fork`) or a system folder as a gap. Triage, then\n  verify each surviving candidate against the live sites before calling it a gap.\n- **No duplicate information flows.** Source canon → one guide projection. Fill\n  what's *missing*; **link**, don't re-create, what already lives elsewhere\n  (sibling hosts, other sites). Resolve collisions as cleanups, not new dupes.\n- **The dreams are research input, not content to paste.** They drive *what canon\n  to build*; they stay as the working ledger.\n- **Human gate is load-bearing.** Nothing is built from a dream without the First\n  Person ticking it; nothing is pushed/published without an explicit ask.\n- **Honest framing carries.** e.g. estimation is not attack; vendored work is not\n  the author's — every dream preserves the source's honesty.\n\n## Run it\n\n```bash\nnode flow/run.mjs audit              # RESEARCH → flow/gap-report.json\n#   (read flow/GUIDE-DREAM-SUGGESTIONS.md — the GATE — and decide)\nnode flow/run.mjs build <site>       # BUILD the approved gaps into ~/.wiki\nnode flow/run.mjs snapshot           # SNAPSHOT → ./site → review on :3200\nnode flow/run.mjs cycle <site>       # audit → build → snapshot → audit, in one\n```\n\nThe fan-out of per-directory dreams is driven from the relevance ledger; refresh\nit when the `/mitch` layout changes, then dream each current repo. See\n`flow/DREAM-CYCLE.md` for the full convention and `flow/builders/` for the\nper-site builders (grimoire and research are the worked examples).\n\n## Lineage\n\nBorn 2026-06-29 building the `guide.agentprivacy.ai` static snapshot, when the\nquestion shifted from \"patch this gap\" to \"keep the guide standing-rebound to the\nwhole universe.\" The Chronicler writes the dreams; the Librarian federates them;\nthe First Person decides."
+          },
+          {
+            "type": "markdown",
+            "id": "fae5750fbe782197",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-dream-cycle`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "61ae5f6ed4eb5e6a",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "06096a138836f1e1",
+            "text": "wiki-dream-cycle"
+          },
+          {
+            "type": "markdown",
+            "id": "9f809898959052af",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1785847257924
+    }
+  ]
+}

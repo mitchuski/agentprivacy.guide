@@ -1,0 +1,146 @@
+{
+  "title": "Agent Admission Apply",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "317b1a6a6a2492e3",
+      "text": "# Agent Admission — Apply"
+    },
+    {
+      "type": "markdown",
+      "id": "a0886d9fdd78e3ec",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "2664e36ce790f724",
+      "text": "**Proposed slug:** `agent-admission/apply` · **version** 0.1 · **status** draft\n\n> A candidate agent opens an admission application at a gate authority, submitting a canonicalised statement of understanding whose own digest deterministically draws the criteria it will be challenged on."
+    },
+    {
+      "type": "markdown",
+      "id": "29bce166dcfc07fe",
+      "text": "## Abstract\n\nThe **Agent Admission — Apply** Trust Task is the first step of the two-gate\nadmission ceremony: a candidate agent asks a *gate authority* to consider it for\nadmission under a named governing policy. Admission tests **understanding, not\nkey possession** — any agent can hold a key; the ceremony asks whether the agent\ncomprehends the policy it will be bound by, and (separately) whether a human\naccountable for it approves ([`agent-admission/approve`](../../approve/0.1/spec.md)).\n\nThe application carries a canonicalised **submission** — the agent's statement\nof understanding in its own words. The response carries the **witness draw**:\nunderstanding criteria sampled deterministically from the SHA-256 of the\ncanonical submission bytes. Because the draw is a function of the submission\nitself, the agent cannot know which criteria will be probed while it writes —\nthe submission cannot be written to the test, and any auditor holding the\ncanonical bytes can re-derive the draw."
+    },
+    {
+      "type": "markdown",
+      "id": "a9415b04d84c1cc6",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "282109ca9d07ea6c",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the candidate agent) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/apply/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof`.\n2. Set `payload.agent` equal to the document `issuer`.\n3. Compute `payload.submissionDigest` over the canonical submission bytes (recursive key-sort, no insignificant whitespace) and persist those bytes unchanged for the lifetime of the application, so the draw stays re-derivable.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` and reject `agent` ≠ `issuer` with `agentMismatch`.\n2. Retrieve the submission (via `submissionRef` or a prior channel), canonicalise it, and reject a digest mismatch with `submissionNotCanonical` — the draw MUST NOT be derived from bytes that do not hash to `submissionDigest`.\n3. Derive the witness draw deterministically from `submissionDigest` and the governing policy's criterion set, append the application-opened event to its content-addressed audit ledger, and return the draw in the `#response`.\n4. Persist the canonical submission bytes it derived the draw from, so an auditor can re-derive it."
+    },
+    {
+      "type": "markdown",
+      "id": "b420943f29a3e1d5",
+      "text": "## Payload\n\n`payload.agent` (REQUIRED) — VID of the candidate agent; MUST equal `issuer`.\n`payload.policyRef` (REQUIRED) — reference to the governing policy the agent claims to understand.\n`payload.submissionDigest` (REQUIRED) — SHA-256 (lowercase hex) of the canonical submission bytes.\n`payload.submissionRef` (OPTIONAL) — retrieval reference for the submission bytes.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "d056748282285bb5",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:7c1b2a90-4d5e-4f6a-8b9c-0d1e2f3a4b5c\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/apply/0.1\",\n  \"issuer\": \"did:key:z6MkCandidateAgentExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T10:00:00Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"policyRef\": \"https://gate.example.com/policy/deployment-rules/3.1\",\n    \"submissionDigest\": \"9c1f4b7a2e6d80f35a4c9b1e7d2f60839c1f4b7a2e6d80f35a4c9b1e7d2f6083\",\n    \"submissionRef\": \"https://gate.example.com/applications/inbox/7c1b2a90\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionApply\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "3deedf30c485da92",
+      "text": "## Response\n\nThe gate authority answers with the `#response` document reachable via `$anchor: \"response\"`: the `applicationId`, the derived `witnessDraw`, and `respondBy`. Failures use [`trust-task-error`](../../../trust-task-error/0.2/spec.md).\n\n```json\n{\n  \"id\": \"urn:uuid:2e8d3c41-5b6f-4a7d-9c80-1f2a3b4c5d6e\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/apply/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkCandidateAgentExample\",\n  \"threadId\": \"urn:uuid:7c1b2a90-4d5e-4f6a-8b9c-0d1e2f3a4b5c\",\n  \"issuedAt\": \"2026-07-18T10:00:02Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"witnessDraw\": {\n      \"algorithm\": \"sha256-canonical-json\",\n      \"submissionDigest\": \"9c1f4b7a2e6d80f35a4c9b1e7d2f60839c1f4b7a2e6d80f35a4c9b1e7d2f6083\",\n      \"criteria\": [\n        { \"criterionId\": \"deployment-rules/3.1#scope-derivation\", \"prompt\": \"Explain, in your own words, how your deployment scope is derived and what holds it at zero.\" },\n        { \"criterionId\": \"deployment-rules/3.1#revocation\", \"prompt\": \"What must you do when your credential is revoked while a delegated task is in flight?\" }\n      ]\n    },\n    \"respondBy\": \"2026-07-18T10:30:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:00:02Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionApplyResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "90711f1786c43413",
+      "text": "## Security & Privacy\n\nThe submission is the agent's own prose and may reveal its construction; it is\nshared with the gate authority only, and the witness draw exposes criterion\nidentifiers and prompts, not the submission. The deterministic draw is the\nanti-grooming mechanism: neither party can steer which criteria are probed\nwithout changing the submission bytes, which changes the digest, which changes\nthe draw — and the draw's derivation is itself an auditable artifact. Carry the\nexchange over an authenticated, confidential transport; the application opens\nrecoverable state, so gate authorities SHOULD rate-limit and expire unanswered\napplications."
+    },
+    {
+      "type": "markdown",
+      "id": "44aa9d321d1b1083",
+      "text": "# Assets\n\nSource: `specs/agent-admission/apply/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "3b4fc7ad38e92e85",
+      "type": "assets",
+      "text": "agent-admission-apply"
+    },
+    {
+      "type": "markdown",
+      "id": "8c7423765c991364",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agent Admission Apply",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "317b1a6a6a2492e3",
+            "text": "# Agent Admission — Apply"
+          },
+          {
+            "type": "markdown",
+            "id": "a0886d9fdd78e3ec",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "2664e36ce790f724",
+            "text": "**Proposed slug:** `agent-admission/apply` · **version** 0.1 · **status** draft\n\n> A candidate agent opens an admission application at a gate authority, submitting a canonicalised statement of understanding whose own digest deterministically draws the criteria it will be challenged on."
+          },
+          {
+            "type": "markdown",
+            "id": "29bce166dcfc07fe",
+            "text": "## Abstract\n\nThe **Agent Admission — Apply** Trust Task is the first step of the two-gate\nadmission ceremony: a candidate agent asks a *gate authority* to consider it for\nadmission under a named governing policy. Admission tests **understanding, not\nkey possession** — any agent can hold a key; the ceremony asks whether the agent\ncomprehends the policy it will be bound by, and (separately) whether a human\naccountable for it approves ([`agent-admission/approve`](../../approve/0.1/spec.md)).\n\nThe application carries a canonicalised **submission** — the agent's statement\nof understanding in its own words. The response carries the **witness draw**:\nunderstanding criteria sampled deterministically from the SHA-256 of the\ncanonical submission bytes. Because the draw is a function of the submission\nitself, the agent cannot know which criteria will be probed while it writes —\nthe submission cannot be written to the test, and any auditor holding the\ncanonical bytes can re-derive the draw."
+          },
+          {
+            "type": "markdown",
+            "id": "a9415b04d84c1cc6",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "282109ca9d07ea6c",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the candidate agent) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/apply/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof`.\n2. Set `payload.agent` equal to the document `issuer`.\n3. Compute `payload.submissionDigest` over the canonical submission bytes (recursive key-sort, no insignificant whitespace) and persist those bytes unchanged for the lifetime of the application, so the draw stays re-derivable.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` and reject `agent` ≠ `issuer` with `agentMismatch`.\n2. Retrieve the submission (via `submissionRef` or a prior channel), canonicalise it, and reject a digest mismatch with `submissionNotCanonical` — the draw MUST NOT be derived from bytes that do not hash to `submissionDigest`.\n3. Derive the witness draw deterministically from `submissionDigest` and the governing policy's criterion set, append the application-opened event to its content-addressed audit ledger, and return the draw in the `#response`.\n4. Persist the canonical submission bytes it derived the draw from, so an auditor can re-derive it."
+          },
+          {
+            "type": "markdown",
+            "id": "b420943f29a3e1d5",
+            "text": "## Payload\n\n`payload.agent` (REQUIRED) — VID of the candidate agent; MUST equal `issuer`.\n`payload.policyRef` (REQUIRED) — reference to the governing policy the agent claims to understand.\n`payload.submissionDigest` (REQUIRED) — SHA-256 (lowercase hex) of the canonical submission bytes.\n`payload.submissionRef` (OPTIONAL) — retrieval reference for the submission bytes.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "d056748282285bb5",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:7c1b2a90-4d5e-4f6a-8b9c-0d1e2f3a4b5c\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/apply/0.1\",\n  \"issuer\": \"did:key:z6MkCandidateAgentExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T10:00:00Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"policyRef\": \"https://gate.example.com/policy/deployment-rules/3.1\",\n    \"submissionDigest\": \"9c1f4b7a2e6d80f35a4c9b1e7d2f60839c1f4b7a2e6d80f35a4c9b1e7d2f6083\",\n    \"submissionRef\": \"https://gate.example.com/applications/inbox/7c1b2a90\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionApply\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "3deedf30c485da92",
+            "text": "## Response\n\nThe gate authority answers with the `#response` document reachable via `$anchor: \"response\"`: the `applicationId`, the derived `witnessDraw`, and `respondBy`. Failures use [`trust-task-error`](../../../trust-task-error/0.2/spec.md).\n\n```json\n{\n  \"id\": \"urn:uuid:2e8d3c41-5b6f-4a7d-9c80-1f2a3b4c5d6e\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/apply/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkCandidateAgentExample\",\n  \"threadId\": \"urn:uuid:7c1b2a90-4d5e-4f6a-8b9c-0d1e2f3a4b5c\",\n  \"issuedAt\": \"2026-07-18T10:00:02Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"witnessDraw\": {\n      \"algorithm\": \"sha256-canonical-json\",\n      \"submissionDigest\": \"9c1f4b7a2e6d80f35a4c9b1e7d2f60839c1f4b7a2e6d80f35a4c9b1e7d2f6083\",\n      \"criteria\": [\n        { \"criterionId\": \"deployment-rules/3.1#scope-derivation\", \"prompt\": \"Explain, in your own words, how your deployment scope is derived and what holds it at zero.\" },\n        { \"criterionId\": \"deployment-rules/3.1#revocation\", \"prompt\": \"What must you do when your credential is revoked while a delegated task is in flight?\" }\n      ]\n    },\n    \"respondBy\": \"2026-07-18T10:30:00Z\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:00:02Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionApplyResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "90711f1786c43413",
+            "text": "## Security & Privacy\n\nThe submission is the agent's own prose and may reveal its construction; it is\nshared with the gate authority only, and the witness draw exposes criterion\nidentifiers and prompts, not the submission. The deterministic draw is the\nanti-grooming mechanism: neither party can steer which criteria are probed\nwithout changing the submission bytes, which changes the digest, which changes\nthe draw — and the draw's derivation is itself an auditable artifact. Carry the\nexchange over an authenticated, confidential transport; the application opens\nrecoverable state, so gate authorities SHOULD rate-limit and expire unanswered\napplications."
+          },
+          {
+            "type": "markdown",
+            "id": "44aa9d321d1b1083",
+            "text": "# Assets\n\nSource: `specs/agent-admission/apply/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "3b4fc7ad38e92e85",
+            "type": "assets",
+            "text": "agent-admission-apply"
+          },
+          {
+            "type": "markdown",
+            "id": "8c7423765c991364",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229497
+    }
+  ]
+}

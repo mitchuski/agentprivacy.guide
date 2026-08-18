@@ -1,0 +1,96 @@
+{
+  "title": "HH Workshop Preflight",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "fabc60a00fae9d62",
+      "text": "# PREFLIGHT.md — venue checklist + naming contract + failure playbook"
+    },
+    {
+      "type": "markdown",
+      "id": "70ea6106950ffaf8",
+      "text": "Run **on arrival, before participants enter**. Two minutes when everything is\nhealthy; the whole point is discovering when it isn't (C22: you find the\nmissing dependency standing in a strange room — this list makes you find it\n*first*)."
+    },
+    {
+      "type": "markdown",
+      "id": "dce019fc44be1824",
+      "text": "## The 2-minute pre-flight\n\n- [ ] Mage powered; `curl http://127.0.0.1:11434/api/tags` answers **on the\n      mage box** (model present — pulled before travel, never at the venue).\n- [ ] Carried naming layer up; the one good name resolves from a **clean\n      resolver** (`ping <name>` in a *fresh* shell — never a warm browser,\n      C26) on **two different client machines** (one PC, one Mac if mixed).\n- [ ] Raw-IP fallback answers something soft (the catch-all — C28), not a 502.\n- [ ] Client-to-client reachability: one laptop pings another. If this fails,\n      the venue has client/AP isolation → carried switch/AP or overlay; no\n      LAN trick will help (playbook, CEREMONY.md §5).\n- [ ] `node tools/check.mjs` green on the mage box (axioms → runs re-derive).\n- [ ] `node tools/corpus_pack.mjs --verify` green (the chain is intact before\n      the room watches it extend).\n- [ ] Roster page empty and serving; consent registers printed/loadable\n      (workshop/consent/)."
+    },
+    {
+      "type": "markdown",
+      "id": "0242843f6b9d83db",
+      "text": "## Naming contract (carried, not negotiated per venue)\n\n- ONE good name for this mage instance — chosen by the cohort, held by the\n  holder, no canonical string (C24). Services are **paths** under it.\n- Resolution comes from **our resolver**, deterministic and identical for\n  every client (C25). Venue mDNS may work; it is never *load-bearing*.\n- Never `.localhost` for a shared name (RFC 6761 forces it to loopback —\n  C27). Plain TLD (`.mesh` and friends) per instance.\n- DHCP: the mage box gets a static/reserved address the resolver leans on."
+    },
+    {
+      "type": "markdown",
+      "id": "f8c68321f2bf38e5",
+      "text": "## Failure playbook (what the room sees → the move)\n\n| the room sees | it is | the move |\n|---|---|---|\n| \"can't find the server\" on SOME laptops | mDNS intermittency (C26) | switch everyone to the carried name; verify from clean shells |\n| name dead AND raw IP 502s | name-keyed vhost (C23) | catch-all front door; never one literal string |\n| nothing reaches anything | client isolation | carried AP/switch; else the overlay/tunnel |\n| worked at home, dead here | outsourced naming (C22) | this checklist, next time run FIRST |\n| it loads in the browser but ping fails | warm cache lying (C26) | trust the clean resolver, not the browser |\n\n**The meta-rule:** a flaky pass is a fail. A name that resolves *sometimes*\nships the failure to the exact moment the room is watching."
+    },
+    {
+      "type": "markdown",
+      "id": "41943da7bef230fb",
+      "text": "# Assets\n\nSource: `workshop/PREFLIGHT.md`"
+    },
+    {
+      "id": "67dadbb4e75b85ef",
+      "type": "assets",
+      "text": "hh-workshop-preflight"
+    },
+    {
+      "type": "markdown",
+      "id": "689efc001014ecde",
+      "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "HH Workshop Preflight",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "fabc60a00fae9d62",
+            "text": "# PREFLIGHT.md — venue checklist + naming contract + failure playbook"
+          },
+          {
+            "type": "markdown",
+            "id": "70ea6106950ffaf8",
+            "text": "Run **on arrival, before participants enter**. Two minutes when everything is\nhealthy; the whole point is discovering when it isn't (C22: you find the\nmissing dependency standing in a strange room — this list makes you find it\n*first*)."
+          },
+          {
+            "type": "markdown",
+            "id": "dce019fc44be1824",
+            "text": "## The 2-minute pre-flight\n\n- [ ] Mage powered; `curl http://127.0.0.1:11434/api/tags` answers **on the\n      mage box** (model present — pulled before travel, never at the venue).\n- [ ] Carried naming layer up; the one good name resolves from a **clean\n      resolver** (`ping <name>` in a *fresh* shell — never a warm browser,\n      C26) on **two different client machines** (one PC, one Mac if mixed).\n- [ ] Raw-IP fallback answers something soft (the catch-all — C28), not a 502.\n- [ ] Client-to-client reachability: one laptop pings another. If this fails,\n      the venue has client/AP isolation → carried switch/AP or overlay; no\n      LAN trick will help (playbook, CEREMONY.md §5).\n- [ ] `node tools/check.mjs` green on the mage box (axioms → runs re-derive).\n- [ ] `node tools/corpus_pack.mjs --verify` green (the chain is intact before\n      the room watches it extend).\n- [ ] Roster page empty and serving; consent registers printed/loadable\n      (workshop/consent/)."
+          },
+          {
+            "type": "markdown",
+            "id": "0242843f6b9d83db",
+            "text": "## Naming contract (carried, not negotiated per venue)\n\n- ONE good name for this mage instance — chosen by the cohort, held by the\n  holder, no canonical string (C24). Services are **paths** under it.\n- Resolution comes from **our resolver**, deterministic and identical for\n  every client (C25). Venue mDNS may work; it is never *load-bearing*.\n- Never `.localhost` for a shared name (RFC 6761 forces it to loopback —\n  C27). Plain TLD (`.mesh` and friends) per instance.\n- DHCP: the mage box gets a static/reserved address the resolver leans on."
+          },
+          {
+            "type": "markdown",
+            "id": "f8c68321f2bf38e5",
+            "text": "## Failure playbook (what the room sees → the move)\n\n| the room sees | it is | the move |\n|---|---|---|\n| \"can't find the server\" on SOME laptops | mDNS intermittency (C26) | switch everyone to the carried name; verify from clean shells |\n| name dead AND raw IP 502s | name-keyed vhost (C23) | catch-all front door; never one literal string |\n| nothing reaches anything | client isolation | carried AP/switch; else the overlay/tunnel |\n| worked at home, dead here | outsourced naming (C22) | this checklist, next time run FIRST |\n| it loads in the browser but ping fails | warm cache lying (C26) | trust the clean resolver, not the browser |\n\n**The meta-rule:** a flaky pass is a fail. A name that resolves *sometimes*\nships the failure to the exact moment the room is watching."
+          },
+          {
+            "type": "markdown",
+            "id": "41943da7bef230fb",
+            "text": "# Assets\n\nSource: `workshop/PREFLIGHT.md`"
+          },
+          {
+            "id": "67dadbb4e75b85ef",
+            "type": "assets",
+            "text": "hh-workshop-preflight"
+          },
+          {
+            "type": "markdown",
+            "id": "689efc001014ecde",
+            "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1787079880727
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X10 — Ceremony as Trust Task · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X10 — Ceremony as Trust Task</span></div>
+  <article><div class="md"><h1>X10 — Ceremony-as-trust-task: the contribution site</h1>
+<p><em>Raised on the 2026-08-11 call companion&#39;s tail: &quot;would it make sense to host a site that allows our<br>working group&#39;s agent runtimes to be submitted as entropy to the circuits?&quot; Yes — with one reframing<br>and one sequencing gate. The reframing: <strong>agents orchestrate entropy; they are never the entropy.</strong><br>The gate: <strong>no phase-2 ceremony before §25 closes.</strong> Everything else in this design follows from<br>those two sentences.</em></p>
+<p><strong>Register:</strong> new entry (post-X9) · the production-ceremony caveat in <code>CIRCUITS.md</code> made actionable ·<br>leverage 🟠 (unblocks nothing until §25, but the verification lane pays for itself now)<br><strong>Ladder:</strong> idea → <strong>design doc (here)</strong>. No runtime yet. Candidate runtime: <code>runtimes/ceremony-orchestrator/</code><br>(the never-sees-the-secret guard as property tests, kin to witness-seat&#39;s W-series). Hosting plan = separate<br>workbench decision, not this doc.<br><strong>Anchor (cred-spec):</strong> VWC pattern (attestation over an act, <code>taskContext</code> REQUIRED) · trust registry<br>(admission list) · credential-vs-artifact test (a contribution attestation is true standing alone =<br>credential; the growing zkey chain is an artifact).<br><strong>Anchor (decision doc):</strong> §15 canonical transcript (the contribution record is transcript-bound) ·<br>§19 observers (the agent&#39;s context window is a NEW observer class — see hazard below) · §25<br>construction-selection gate (phase-2 sequencing) · §7.3 structured evidence (seat admission) ·<br>§6.2 descriptor (ceremony identity as a governed context) · drafting rule four (the recursion label).</p>
+<hr>
+</div>
+<div class="md"><h2>The claim to prove</h2>
+<p>A trusted-setup contribution is a <strong>trust task</strong>: an act performed under a transcript, producing an<br>attestation whose accountability lives in governance, while the cryptography carries only what it can —<br>the verifiable chain of contributions. An agent runtime can <em>drive</em> that task end-to-end (fetch chain<br>head, verify, contribute, file the attestation) while being <strong>structurally incapable of observing the<br>contribution secret</strong> — the same separation the witness seat proves for edges (W-series: a witness<br>attests, never mints). If that separation cannot be enforced as a testable property, agent-mediated<br>contributions should not exist.</p>
+</div>
+<div class="md"><h2>The security frame, stated first</h2>
+<p>A ceremony&#39;s soundness needs <strong>one honest participant who destroys their toxic waste</strong>. It does not<br>need &quot;good&quot; entropy from anyone in particular. Three consequences:</p>
+<ol>
+<li><strong>Entropy source = the contributing machine&#39;s OS CSPRNG</strong>, piped directly into the contribution<br>tool. Never derived from agent output, transcripts, model samples, or anything an agent generated —<br>all of that is observable, logged, and replayable by construction.</li>
+<li><strong>The agent&#39;s context window is an observer</strong> (§19, new row): everything the agent sees persists in<br>session logs, telemetry, and provider retention. A beacon value that transits the agent&#39;s context is<br>a <strong>compromised contribution</strong> — the toxic waste survived in a log. This is the log-leak hazard X4&#39;s<br>log-field register exists to name; here it is fatal rather than corrosive.</li>
+<li>Therefore the orchestrator gets a <strong>never-sees-the-secret structural guard</strong>: the secret is read from<br>the CSPRNG inside the contribution subprocess; the orchestrator&#39;s whole lifetime view (arguments,<br>environment, captured output, filed attestation) is scanned to prove the secret&#39;s bytes appear<br>nowhere. Witness-seat already demonstrates the pattern (whitelist + lifetime-view scan); this<br>runtime inherits it verbatim.</li>
+</ol>
+</div>
+<div class="md"><h2>The three lanes, in sequencing order</h2>
+<p><strong>Lane 1 — verification-transcript registry (build now, zero ceremony risk).</strong> The call companion<br>already asks volunteers to clone, run the three suites, and file transcripts against the 2026-08-04<br>run. A submission lane that accepts <code>{run transcript, artifact hashes, machine profile, position record (ratify/refine/refute/build)}</code> is the same machinery a ceremony needs later — queue, public log,<br>attestation per submission — with nothing secret anywhere. Byte-exact artifact matching is the<br>acceptance test (deterministic lockfile + fixed-entropy setup make it decidable). This lane is where<br>the position protocol becomes infrastructure.</p>
+<p><strong>Lane 2 — phase-1 powers-of-tau on BN254 (low-regret, admission-gated).</strong> Phase 1 is universal:<br>it survives every circuit change, serves any future Groth16 phase 2, and a KZG-based PLONKish<br>counter-proposal consumes the same SRS — useful whichever way §25 goes, which is rare for ceremony<br>work. Size pot15+ (the guardian circuit&#39;s t=4 already breaks the 2^14 cap). Contribution chain =<br>standard snarkjs/perpetual-powers-of-tau flow; the site is a thin coordinator (queue, chain-head<br>pointer, per-contribution verification, public transcript log), not new cryptography — the<br>p0tion/DefinitelySetup shape, self-hosted small.</p>
+<p><strong>Lane 3 — phase-2 per-circuit ceremony (GATED: after §25 + circuit freeze).</strong> A per-circuit Groth16<br>ceremony consecrates the benchmarking vehicle as the product — the exact failure the CIRCUITS.md<br>caveat paragraph exists to prevent — and is invalidated by any circuit edit. It does not open until<br>the TF selects a construction and freezes the circuit. <strong>The fixed-entropy lab fixture is untouched<br>by all three lanes</strong>: byte-exact reproducibility IS lane 1&#39;s acceptance test; the ceremony lanes run<br>beside it, never through it.</p>
+</div>
+<div class="md"><h2>The contribution as a credential</h2>
+<p>Each accepted contribution files, publicly: <code>{ceremony descriptor (§6.2 canonical — ceremony id, phase, parameter set, governing body), chain position, prior-head hash, new-head hash, contributor seat ref, orchestrator attestation (&quot;secret sourced from CSPRNG inside the subprocess; lifetime-view scan clean&quot;), transcript digest (§15.2), timestamp}</code>. By the cred-spec&#39;s test this attestation is a <strong>credential</strong><br>(true standing alone: &quot;seat N extended chain H₁→H₂ under ceremony D&quot;) and it is VWC-shaped — an<br>attestation over an act, taskContext required. The <em>chain</em> itself is an artifact. Accountability for<br>&quot;I destroyed my waste&quot; is a governance claim carried by the seat&#39;s admission, not a cryptographic one —<br>say so in the record (drafting rule one: name the adversary the record does NOT bind).</p>
+</div>
+<div class="md"><h2>Seat gating — where our primitives recurse, carefully</h2>
+<p>One-contribution-per-member via personhood-gated seat nullifiers is the obvious recursive story, and it<br>must be handled honestly: <strong>you cannot security-critically gate a ceremony with a circuit whose setup<br>depends on that ceremony.</strong> The rule:</p>
+<ul>
+<li>Seat admission = <strong>governance layer</strong>: WG membership list / trust-registry entry, revocable,<br>auditable — §7.3 structured evidence, never a soundness assumption.</li>
+<li>Nullifier-based one-seat-one-contribution MAY run as an <em>advisory</em> dedup signal using the lab-fixture<br>circuit, labelled as such. It contributes convenience, not soundness. If the lab fixture were<br>malicious, the ceremony&#39;s security is untouched — only the dedup signal degrades.</li>
+<li>The recursion is stated in the ceremony descriptor itself (drafting rule four: label the conjecture-<br>free boundary). A reader must be able to see that no ceremony-security claim rests on artifacts the<br>ceremony produces.</li>
+</ul>
+</div>
+<div class="md"><h2>What the orchestrator runtime must prove (property-test sketch)</h2>
+<ul>
+<li>C1 contribution secret is generated inside the subprocess from the OS CSPRNG; orchestrator lifetime<br>view scanned — secret bytes appear nowhere (witness-seat pattern, inherited).</li>
+<li>C2 the orchestrator verifies the chain head before contributing; a tampered prior contribution is<br>rejected by name.</li>
+<li>C3 the filed attestation binds the §15.2 transcript; replay under a different ceremony descriptor<br>fails (kin to Z9).</li>
+<li>C4 a seat not on the admission list cannot file (governance gate); a revoked seat fails closed,<br>visibly (mediator&#39;s de-listing pattern).</li>
+<li>C5 duplicate seat submission is <em>detected</em> (advisory nullifier) but the record states detection is<br>advisory — the register string names the tier.</li>
+<li>C6 lane-3 endpoints are unconstructable while the §25 flag is unset (the T2-honeypot pattern: the<br>prohibited thing cannot be built, not merely rejected).</li>
+<li>C7 lane-1 acceptance = byte-exact artifact match against the pinned run; a near-miss fails with the<br>differing hash named.</li>
+</ul>
+<p>New register candidates: <code>ceremony-secret-observed</code>, <code>chain-head-mismatch</code>, <code>seat-not-admitted</code>,<br><code>seat-revoked</code>, <code>duplicate-seat-advisory</code>, <code>phase2-gate-closed</code>, <code>artifact-hash-mismatch:</code>.</p>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<p>Not spec text. This is TF <em>operations</em>: a proposal in the upstream repo (discussion or short doc) that<br>the WG run lane 1 now and lane 2 as a named WG activity, with lane 3 explicitly deferred behind §25 —<br>plus the §19 observer-row addition (agent context windows) which IS decision-doc material and should go<br>in with the next boundary-register batch.</p>
+</div>
+<div class="md"><h2>Honest unknowns</h2>
+<ul>
+<li>Whether ToIP/LFDT process wants a ceremony run under WG colours at all, or under a neutral banner<br>with WG participation — governance question, Mitch/chairs, not this doc.</li>
+<li>Contribution liveness: agent-orchestrated seats make contributing cheap; cheap contributions invite<br>low-effort seats. Whether seat count or seat diversity is the metric worth governing is open.</li>
+<li>Whether lane 2 should anchor to an existing perpetual-powers-of-tau chain (import its head, extend<br>under WG governance) instead of starting fresh — fewer contributions to bootstrap trust, one more<br>provenance dependency to document.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x10-ceremony-as-trust-task.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -227,7 +227,7 @@ AI agents need to know about you to act effectively on your behalf. But that kno
 
 - **70:1 compression efficiency** through VRC coordination
 - **O(n²) network effects** from relationship formation
-- **$47k-52k/year** value capture for active participants
+- **Per-person value capture** for active participants, denominated in protocol units (fiat estimates retired)
 - **Self-sustaining** by Year 3 through signal revenue
 
 ---

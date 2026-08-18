@@ -1,0 +1,146 @@
+{
+  "title": "Agent Admission Status",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "c5a57a72da0f84c5",
+      "text": "# Agent Admission — Status"
+    },
+    {
+      "type": "markdown",
+      "id": "dea16ffa0013d27e",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "7e974564619f68d3",
+      "text": "**Proposed slug:** `agent-admission/status` · **version** 0.1 · **status** draft\n\n> A relying party asks a gate authority for an admitted agent's current standing — verdict, tier, revocation state, and anchors — the authoritative read that anchor registries only mirror."
+    },
+    {
+      "type": "markdown",
+      "id": "4ca2dfae34c51631",
+      "text": "## Abstract\n\nThe **Agent Admission — Status** Trust Task is the authoritative read on an\nadmitted agent's standing. Where an admission outcome was anchored on an\nexternal registry, the anchor is discoverable evidence only; this query is the\nauthority it mirrors. A relying party that can reach the gate authority SHOULD\nprefer this read over an anchor read — it reflects revocation immediately,\nwithout waiting on mirror convergence.\n\nThe response discloses standing metadata only: verdict, tier, issuance and\nrevocation state, and the anchor set. The submission, the drawn criteria, the\nanswers, and the supervisor's note never leave the application record."
+    },
+    {
+      "type": "markdown",
+      "id": "d5149a1781f1560b",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "b2b0516f25263d6f",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the relying party) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/status/0.1`, naming the agent VID or the credential identifier (at least one).\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Answer from its own record, never from an anchor.\n2. Include `revoked` in every successful response — a relying party MUST be able to distinguish \"admitted and in force\" from \"admitted and revoked\" from one read.\n3. Apply its own access policy to who may query (`permissionDenied` where refused)."
+    },
+    {
+      "type": "markdown",
+      "id": "0eb8874e8738f144",
+      "text": "## Payload\n\n`payload.agent` (OPTIONAL) — VID of the agent queried.\n`payload.credentialId` (OPTIONAL) — credential identifier queried.\nAt least one of the two MUST be present.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "7b5cf6eaffe4ebc3",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:b17ac5da-e4f8-4da6-c819-021324354657\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/status/0.1\",\n  \"issuer\": \"did:key:z6MkRelyingPartyExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T15:00:00Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T15:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkRelyingPartyExample#z6MkRelyingPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionStatus\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "acd825f7f618c975",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:c28bd6eb-f509-4eb7-d92a-132435465768\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/status/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkRelyingPartyExample\",\n  \"threadId\": \"urn:uuid:b17ac5da-e4f8-4da6-c819-021324354657\",\n  \"issuedAt\": \"2026-07-18T15:00:01Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"credentialId\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"verdict\": \"validated\",\n    \"tierGrant\": {\n      \"tier\": 6,\n      \"scopeFunction\": \"https://gate.example.com/policy/deployment-rules/3.1#scope-function\"\n    },\n    \"issuedAt\": \"2026-07-18T10:25:04Z\",\n    \"revoked\": false,\n    \"anchors\": [\n      { \"namespace\": \"org.erc8004.validation\", \"ref\": \"0x5a…e21f\" }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T15:00:01Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionStatusResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "e8ca8a860d3b2eba",
+      "text": "## Security & Privacy\n\nThe query reveals which agent a relying party is interested in — the same\nconsideration as any registry read; carry it over an authenticated,\nconfidential transport, and gate authorities SHOULD apply access policy to\nqueries. The response is a point-in-time read; consumers SHOULD NOT cache it\nbeyond their own risk window, and MUST NOT treat a cached `revoked: false` as\ncurrent. Composition downstream (e.g. admission to a privileged pool requiring\na validated credential AND an anchored validation entry) lives with the relying\nparty, never at the gate authority."
+    },
+    {
+      "type": "markdown",
+      "id": "03e48780aacf60a8",
+      "text": "# Assets\n\nSource: `specs/agent-admission/status/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "7d6630b60d5576c0",
+      "type": "assets",
+      "text": "agent-admission-status"
+    },
+    {
+      "type": "markdown",
+      "id": "f37d99d4da60c019",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agent Admission Status",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "c5a57a72da0f84c5",
+            "text": "# Agent Admission — Status"
+          },
+          {
+            "type": "markdown",
+            "id": "dea16ffa0013d27e",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "7e974564619f68d3",
+            "text": "**Proposed slug:** `agent-admission/status` · **version** 0.1 · **status** draft\n\n> A relying party asks a gate authority for an admitted agent's current standing — verdict, tier, revocation state, and anchors — the authoritative read that anchor registries only mirror."
+          },
+          {
+            "type": "markdown",
+            "id": "4ca2dfae34c51631",
+            "text": "## Abstract\n\nThe **Agent Admission — Status** Trust Task is the authoritative read on an\nadmitted agent's standing. Where an admission outcome was anchored on an\nexternal registry, the anchor is discoverable evidence only; this query is the\nauthority it mirrors. A relying party that can reach the gate authority SHOULD\nprefer this read over an anchor read — it reflects revocation immediately,\nwithout waiting on mirror convergence.\n\nThe response discloses standing metadata only: verdict, tier, issuance and\nrevocation state, and the anchor set. The submission, the drawn criteria, the\nanswers, and the supervisor's note never leave the application record."
+          },
+          {
+            "type": "markdown",
+            "id": "d5149a1781f1560b",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "b2b0516f25263d6f",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the relying party) **MUST** emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/status/0.1`, naming the agent VID or the credential identifier (at least one).\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Answer from its own record, never from an anchor.\n2. Include `revoked` in every successful response — a relying party MUST be able to distinguish \"admitted and in force\" from \"admitted and revoked\" from one read.\n3. Apply its own access policy to who may query (`permissionDenied` where refused)."
+          },
+          {
+            "type": "markdown",
+            "id": "0eb8874e8738f144",
+            "text": "## Payload\n\n`payload.agent` (OPTIONAL) — VID of the agent queried.\n`payload.credentialId` (OPTIONAL) — credential identifier queried.\nAt least one of the two MUST be present.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "7b5cf6eaffe4ebc3",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:b17ac5da-e4f8-4da6-c819-021324354657\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/status/0.1\",\n  \"issuer\": \"did:key:z6MkRelyingPartyExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T15:00:00Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\"\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T15:00:00Z\",\n    \"verificationMethod\": \"did:key:z6MkRelyingPartyExample#z6MkRelyingPartyExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionStatus\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "acd825f7f618c975",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:c28bd6eb-f509-4eb7-d92a-132435465768\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/status/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkRelyingPartyExample\",\n  \"threadId\": \"urn:uuid:b17ac5da-e4f8-4da6-c819-021324354657\",\n  \"issuedAt\": \"2026-07-18T15:00:01Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"credentialId\": \"4a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e9f2021324a5b6c7d8e\",\n    \"verdict\": \"validated\",\n    \"tierGrant\": {\n      \"tier\": 6,\n      \"scopeFunction\": \"https://gate.example.com/policy/deployment-rules/3.1#scope-function\"\n    },\n    \"issuedAt\": \"2026-07-18T10:25:04Z\",\n    \"revoked\": false,\n    \"anchors\": [\n      { \"namespace\": \"org.erc8004.validation\", \"ref\": \"0x5a…e21f\" }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T15:00:01Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionStatusResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "e8ca8a860d3b2eba",
+            "text": "## Security & Privacy\n\nThe query reveals which agent a relying party is interested in — the same\nconsideration as any registry read; carry it over an authenticated,\nconfidential transport, and gate authorities SHOULD apply access policy to\nqueries. The response is a point-in-time read; consumers SHOULD NOT cache it\nbeyond their own risk window, and MUST NOT treat a cached `revoked: false` as\ncurrent. Composition downstream (e.g. admission to a privileged pool requiring\na validated credential AND an anchored validation entry) lives with the relying\nparty, never at the gate authority."
+          },
+          {
+            "type": "markdown",
+            "id": "03e48780aacf60a8",
+            "text": "# Assets\n\nSource: `specs/agent-admission/status/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "7d6630b60d5576c0",
+            "type": "assets",
+            "text": "agent-admission-status"
+          },
+          {
+            "type": "markdown",
+            "id": "f37d99d4da60c019",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229500
+    }
+  ]
+}

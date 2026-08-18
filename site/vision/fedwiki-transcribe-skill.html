@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FedWiki Transcribe Skill · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="vision">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site on" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=vision" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/vision/welcome-visitors.html">Vision</a> / <span>FedWiki Transcribe Skill</span></div>
+  <article><div class="md"><h1>FedWiki Transcribe Skill</h1>
+<p>A Claude Code skill that turns a <span class="deadlink" title="reference (not a live page)">Federated Wiki</span> assets folder full of recordings into finished wiki pages. It enumerates the videos, transcribes them locally with whisper.cpp, writes an AI summary, embeds the full transcript, and publishes each as a page. Built during the <a class="wlink" href="mouse-house-workshop.html">Mouse House Workshop</a>, where it produced 17 session pages.</p>
+</div>
+<div class="md"><h2>What it does</h2>
+<ol>
+<li><strong>List</strong> the videos in a FedWiki assets folder (via the assets plugin&#39;s list endpoint).</li>
+<li><strong>Extract</strong> audio by streaming each video over the network with ffmpeg (no multi-GB download kept on disk) to 16 kHz mono WAV.</li>
+<li><strong>Transcribe</strong> with whisper.cpp (large-v3-turbo) to .txt / .srt / .vtt.</li>
+<li><strong>Summarise</strong> each transcript (title, abstract, key points, action items).</li>
+<li><strong>Publish</strong> a FedWiki page per video: video embed, summary, and a collapsible transcript.</li>
+</ol>
+</div>
+<div class="md"><h2>Prerequisites</h2>
+<ul>
+<li><strong>whisper.cpp</strong> built (MSVC / CMake) with a model such as large-v3-turbo-q5_0.</li>
+<li><strong>ffmpeg</strong> on PATH (audio extraction; whisper&#39;s miniaudio reads WAV/MP3 but not video containers).</li>
+<li><strong>node + wiki</strong> for the local wiki (see <span class="deadlink" title="reference (not a live page)">Wiki Here</span>).</li>
+</ul>
+</div>
+<div class="md"><h2>The enumeration trick</h2>
+<p>FedWiki&#39;s assets plugin renders the file list client-side, so the folder URL just returns the page shell. The real listing endpoint (found in /plugins/assets/assets.js) is:</p>
+</div>
+<div class="md"><p>GET {wiki}/plugin/assets/list?assets={folder}<br>  -&gt; { &quot;error&quot;: null, &quot;files&quot;: [ ... ] }</p>
+<h1>files are served (no auth) at:</h1>
+<p>{wiki}/assets/{folder}/{filename}   # URL-encode spaces &amp; apostrophes</p>
+</div>
+<div class="md"><h2>The scripts</h2>
+<ul>
+<li><strong>transcribe-assets.ps1</strong> - enumerate a FedWiki assets folder, stream + extract audio, transcribe. Resumable (skips done) with per-file logs.</li>
+<li><strong>make-wiki-page.ps1</strong> - assemble a FedWiki page JSON from content (and optionally embed a transcript as a collapsible section). Writes UTF-8 without BOM.</li>
+<li><strong>stage-wiki-pages.ps1</strong> - rename page JSON to FedWiki slugs (no extension) ready to drop into pages/.</li>
+<li><strong>build-index-page.ps1</strong> - build a hub page linking every session and link it from the home page.</li>
+<li><strong>build-workshop-page.ps1</strong> - bundle all artifacts into a wiki assets folder and build a master workshop page.</li>
+</ul>
+</div>
+<div class="md"><h2>Usage</h2>
+<p>Transcribe a whole assets folder:</p>
+</div>
+<div class="md"><p>./transcribe-assets.ps1 -WikiBase <a href="http://david.local">http://david.local</a> -AssetsFolder workshop-videos</p>
+</div>
+<div class="md"><h1>single file, by hand</h1>
+<p>ffmpeg -y -i &quot;{wiki}/assets/{folder}/clip.mov&quot; -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav<br>whisper-cli -m ggml-large-v3-turbo-q5_0.bin -f out.wav -t 16 -otxt -osrt -ovtt -of out</p>
+</div>
+<div class="md"><h2>Gotchas</h2>
+<ul>
+<li><strong>BOM</strong> - FedWiki&#39;s JSON.parse rejects a leading byte-order mark; PowerShell&#39;s <code>Out-File -Encoding utf8</code> adds one. Write UTF-8 without BOM (a bad page gets auto-recycled).</li>
+<li><strong>Reading UTF-8</strong> - <code>Get-Content</code> on PS 5.1 misreads BOM-less UTF-8 as ANSI and corrupts em dashes / curly quotes; read with <code>[IO.File]::ReadAllText(path, [Text.Encoding]::UTF8)</code>.</li>
+<li><strong>Video plugin</strong> - the wiki needs wiki-plugin-video to render the embeds.</li>
+<li><strong>Writes need auth</strong> - the default security module 403s anonymous writes; seed pages by file, or run friends security (<span class="deadlink" title="reference (not a live page)">Wiki Here</span>) to edit in the browser.</li>
+<li><strong>PowerShell 5.1</strong> - keep scripts ASCII; a stray em dash mangles when the script is read as ANSI.</li>
+</ul>
+</div>
+<div class="md"><h1>Files</h1>
+<p>The five scripts and SKILL.md are attached below. (They are also bundled with <a class="wlink" href="mouse-house-workshop.html">Mouse House Workshop</a> under its /skill folder.)</p>
+</div>
+<div class="assets-note">📎 fedwiki-transcribe-skill</div>
+<div class="md"><h1>See</h1>
+<ul>
+<li><a class="wlink" href="mouse-house-workshop.html">Mouse House Workshop</a></li>
+<li><a class="wlink" href="workshop-videos.html">Workshop Videos</a></li>
+<li><span class="deadlink" title="reference (not a live page)">Wiki Here</span></li>
+<li><span class="deadlink" title="reference (not a live page)">Federated Wiki</span></li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="fedwiki-transcribe-skill.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

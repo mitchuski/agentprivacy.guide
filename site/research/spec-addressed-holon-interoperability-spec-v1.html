@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spec — κ-Addressed Holon Interoperability — Spec v1 · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="research">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site on" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=research" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Spec — κ-Addressed Holon Interoperability — Spec v1</span></div>
+  <article><div class="md"><h1>κ-Addressed Holon Interoperability — Spec v1</h1>
+</div>
+<div class="md"><p><strong>Status:</strong> IMPLEMENTED (content edges) · SPEC (relational edges)<br><strong>Origin:</strong> the dual-agent harness (<code>~/dual-agent-harness</code>, <code>HOLONS.md</code>, head on<br><code>github.com/mitchuski/agentprivacy-harness</code>)<br><strong>Companion:</strong> <code>specs/DUAL_AGENT_HARNESS_SPEC_v1.md</code> · <code>reference/vrc_promise_protocol_v3_3.md</code><br><strong>Date:</strong> 2026-07-12</p>
+</div>
+<div class="md"><h2>Purpose</h2>
+<p>Define the content-addressing convention by which a result the harness produces<br>becomes an <strong>interoperable, independently verifiable unit</strong> — a <em>holon</em> — that<br>any system in the corpus (the model instruments, the spellweb graph, a future<br><code>hologram-technologies</code> site) can carry and re-derive without trusting its<br>source. One law, computed identically everywhere, is the interoperability<br>substrate.</p>
+</div>
+<div class="md"><h2>1 · The κ-label</h2>
+<p>A <strong>holon</strong> is any object carrying a <code>κ</code> field:</p>
+<pre><code>κ = &quot;sha256:&quot; + sha256( canonicalJson( holon with the κ field removed ) )
+</code></pre>
+<ul>
+<li><code>canonicalJson</code> — JSON with recursively sorted keys and no whitespace.</li>
+<li>The κ field is <strong>excluded from its own preimage</strong>, so the object can carry its<br>own address.</li>
+</ul>
+<p>This is the City Key / sigil <strong>Law L5</strong>: <em>a κ-label is never trusted, only<br>re-derived.</em> Reference implementation: <code>tools/kappa.mjs</code> (<code>canonicalJson</code>,<br><code>sha256Hex</code>, <code>kappaOf</code>, <code>verifyKappa</code>). Any consumer that vendors this one<br>function re-derives a holon minted anywhere byte-for-byte; two divergent<br>implementations do not catch each other, they break addressing, so there is<br>exactly one.</p>
+</div>
+<div class="md"><h2>2 · What the harness mints as holons</h2>
+<ul>
+<li><strong><code>artefact.v1</code></strong> — a sealed result: run reference, per-proposal verdicts and<br>Gap-seed re-derivations, a frontier beat, an <code>evidenceManifest</code>, and a <code>door</code><br>block naming the outward actions software did not take.</li>
+<li><strong><code>runtime-feed.v1</code></strong> — a workshop&#39;s produced math (the moving ceiling R(t),<br>the ℤ/64ℤ lattice). Self-addressing: <code>buildFeed</code> stamps its own κ, so a state<br>snapshot is a verifiable holon.</li>
+</ul>
+<p><em>State is content-addressed:</em> the κ that seals a result at the door is the same<br>κ that addresses runtime state during a run.</p>
+</div>
+<div class="md"><h2>3 · Edges</h2>
+<ul>
+<li><strong>Content edge</strong> — a hash reference to bytes (an <code>evidenceManifest</code> entry).<br>Verified by <strong>re-hashing</strong>; needs no signature, because the content is its own<br>witness. <strong>IMPLEMENTED.</strong></li>
+<li><strong>Relational edge (VRC)</strong> — a κ→κ reference between holons, governed by the<br>edge rule: <em>a reference proposes an edge; a counterparty&#39;s signature mints it</em><br>(<code>vrc_promise_protocol_v3_3.md</code>). Verified by re-deriving both endpoints and<br>checking the signature. <strong>SPEC</strong> until real signatures land.</li>
+</ul>
+</div>
+<div class="md"><h2>4 · Verification is an auditor, not a harness</h2>
+<p>Every interoperability claim a holon makes is <strong>enumerable</strong>: does its κ<br>re-derive, do its content edges re-hash, do its relational endpoints resolve.<br>There is nothing to tune to — you cannot craft a holon whose κ re-derives to a<br>value it does not have. So the mesh verifier <code>tools/holon_audit.mjs</code> is a<br>deterministic, agent-free <strong>auditor</strong>, not a harness (harnesses are for<br>adversarial claim spaces too large to check; auditors are for enumerable facts —<br>the retired universe-builder is the corpus&#39;s record of that boundary).</p>
+<blockquote>
+<p><strong>The harness mints the holons; the auditor verifies the mesh.</strong></p>
+</blockquote>
+<p>A holon&#39;s <em>substantive</em> claim (&quot;40% smaller and still correct&quot;) remains the job<br>of the minting harness; only the <em>integrity of the mesh</em> is the auditor&#39;s.</p>
+</div>
+<div class="md"><h2>5 · Reach</h2>
+<p>Because <code>kappa.mjs</code> and <code>holon_audit.mjs</code> live in the shared harness core and<br>operate on any instance directory, every runtime inherits κ-addressed state with<br>no per-instance code change:</p>
+<pre><code>node &lt;harness&gt;/tools/mint_artefact.mjs  &lt;instance&gt;  &lt;run&gt;
+node &lt;harness&gt;/tools/holon_audit.mjs    &lt;instance&gt;/artefacts
+</code></pre>
+<p>lexon_pvm, shor_mage, privacy_pools_v2, and every future runtime become<br>content-addressed the moment they are run through the harness. A consuming site<br>(<code>hologram-technologies</code>) vendors this spec plus <code>kappa.mjs</code> and re-derives the<br>whole mesh; the corpus stays home, the κ travels.</p>
+</div>
+<div class="md"><h2>Interop map</h2>
+<table>
+<thead>
+<tr>
+<th>this spec&#39;s term</th>
+<th>corpus cognate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>κ-label / holon</td>
+<td><code>con-content-addressing</code> (spellweb); content-addressed liveness C93 (PVM V6); holonic memory <code>A_h(τ)</code></td>
+</tr>
+<tr>
+<td>relational edge / VRC</td>
+<td><code>vrc_promise_protocol_v3_3.md</code>; the edge rule (<code>universe/universe.json</code>)</td>
+</tr>
+<tr>
+<td>auditor vs harness</td>
+<td><code>ADOPTION.md</code> step 0; the retired universe-builder</td>
+</tr>
+<tr>
+<td>the door</td>
+<td>T6 — outward actions are the First Person&#39;s</td>
+</tr>
+</tbody></table>
+<pre><code>(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
+</code></pre>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 spec-addressed-holon-interoperability-spec-v1</span><a class="asset-file" href="/research/assets/spec-addressed-holon-interoperability-spec-v1/KAPPA_HOLON_INTEROP_SPEC_v1.md" download>KAPPA_HOLON_INTEROP_SPEC_v1.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="spec-addressed-holon-interoperability-spec-v1.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

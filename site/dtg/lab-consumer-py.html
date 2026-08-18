@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — consumer-py · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — consumer-py</span></div>
+  <article><div class="md"><h1>consumer-py — the second-language consumer (X1 milestone M5)</h1>
+<p>Python 3, stdlib only (<code>hashlib</code>, <code>json</code>, <code>re</code>, <code>pathlib</code>) — the fixtures lab&#39;s<br>zero-dep rule, in a second language. Run from this directory:</p>
+<pre><code>python consume.py   # re-run the frozen suite     -&gt; vectors: 39/39 pass
+python test.py      # the P1–P6 property suite    -&gt; consumer-py: 6/6 pass
+</code></pre>
+</div>
+<div class="md"><h2>What this proves</h2>
+<p>Two implementations — <code>../fixtures/consume.mjs</code> (JavaScript) and this<br><code>consume.py</code> (Python) — share <strong>no code</strong>. They share only the data: the 39<br>vectors under <code>../fixtures/vectors/</code>, the manifest, and the reason-register<br>vocabulary. Both consumers load the same vectors, re-derive every digest,<br>re-run the constructions, and reach the <strong>same outcome and the same reason<br>code, byte for byte</strong>, on every vector (P1), including the same per-family<br>counts (PR-CTX 2, PR-EPO 3, PR-FLB 2, PR-HLD 1, PR-LIV 5, PR-PER 1, PR-SHW 8,<br>PR-TGF 7, PR-UNQ 10 = 39).</p>
+<p>That is the X1 interop claim demonstrated, and §26&#39;s requirement instantiated:<br><em>independent implementations instantiate the decisions consistently</em>. The<br>fixtures — not the JavaScript — carry the decisions. X1&#39;s M5 milestone<br>(&quot;a second implementation in another language would rewrite exactly this file<br>and nothing else&quot; — consume.mjs header) is discharged by this directory.</p>
+<p>Suite size note: the vector count is <strong>39</strong> (9 families), exactly as<br><code>manifest.json</code> pins (<code>vectorCount: 39</code>); the 40th <code>.json</code> file in the vectors<br>tree is the manifest itself.</p>
+</div>
+<div class="md"><h2>Canonical-JSON byte-compatibility — what actually mattered</h2>
+<p>P3 is the critical property: all <strong>29 embedded digests</strong> (descriptor digests<br>bound into transcripts, transcript digests, the show transcript digest, the<br>six member commitments of the accept show, and the two <code>card:&lt;digest[:12]&gt;</code><br>versions in the PR-CTX migration record) re-derive byte-identically from the<br>Python canonical encoding. What had to match the JS <code>canonicalize()</code>:</p>
+<ul>
+<li><strong>Separators</strong>: exactly <code>{&quot;k&quot;:v,&quot;k2&quot;:v2}</code> and <code>[a,b]</code> — no spaces anywhere.<br>(Python&#39;s <code>json.dumps</code> default of <code>&#39;, &#39;</code> / <code>&#39;: &#39;</code> would break every digest;<br>the encoder here builds the string by hand like the JS does.)</li>
+<li><strong>Key sorting</strong>: JS <code>Object.keys(...).sort()</code> sorts UTF-16 code units;<br>Python <code>sorted()</code> sorts code points. Identical for ASCII keys — and every<br>key in the suite is ASCII. A key containing astral-plane characters would<br>diverge; recorded here as the known boundary of the port.</li>
+<li><strong>String escaping</strong>: <code>JSON.stringify</code> escapes <code>&quot;</code> and <code>\</code>, uses the short<br>escapes <code>\b \t \n \f \r</code> for those controls, <code>\u00XX</code> for other chars<br>&lt; 0x20, and leaves non-ASCII <strong>raw</strong>. <code>json.dumps(s, ensure_ascii=False)</code><br>produces exactly that. (With the default <code>ensure_ascii=True</code>, any non-ASCII<br>byte would diverge — the suite&#39;s canonicalized objects happen to be pure<br>ASCII, but the port does not rely on that.)</li>
+<li><strong>Numbers</strong>: all numbers in the canonicalized data are integers (epoch<br>seconds); JS prints them without a decimal point and so does Python for<br><code>int</code>. The port also renders integral <strong>floats</strong> the JS way (<code>1</code> not <code>1.0</code>)<br>and rejects non-finite numbers, but no vector exercises a float — untested<br>path, flagged honestly.</li>
+<li><strong><code>undefined</code> filtering</strong>: the JS drops <code>undefined</code>-valued keys. JSON-loaded<br>Python dicts cannot contain such a value, so no code was needed — noted so a<br>future non-JSON caller does not assume the filter exists.</li>
+<li><strong>Hash discipline</strong>: runtime 01&#39;s <code>H</code> = SHA-256 over parts, each prefixed<br>with its 4-byte big-endian byte length (so <code>H(a,b) != H(a||b)</code>), parts UTF-8<br>encoded; domain-tag strings copied byte-exact from the sources.</li>
+</ul>
+</div>
+<div class="md"><h2>The register port (<code>reasons.py</code>)</h2>
+<p>The register is treated as <strong>data</strong>: the 66 exact codes and 29 family prefixes<br>are parsed out of <code>../fixtures/reasons.mjs</code> as text (never imported or<br>executed), and the vectors&#39; own <code>expect.reason</code> codes (22 distinct across the<br>suite) are collected alongside. Only the <em>mechanism</em> is re-implemented: exact<br>stratum + family stratum (<code>isKnownReason</code> = exact match, or family prefix +<br>non-empty parameter). P2 confirms every non-accept reason in the suite is<br>known to the port. Parsed counts (66 + 29 = 95, version <code>v2</code>) agree with the<br>JS suite&#39;s own F10 result.</p>
+</div>
+<div class="md"><h2>What was NOT ported (nothing any vector exercises)</h2>
+<ul>
+<li><strong>rt01</strong>: nothing omitted — enrol / nullifier / ContextRegistry all used.</li>
+<li><strong>rt07</strong>: <code>encounter()</code>, <code>Mage.propose()</code>, <code>dreamCycleTurn()</code>,<br><code>TrustGraph.neighbours/connected</code> — vectors carry the candidate and the<br>shared compression pre-computed; only <code>joinCommunity</code>, <code>rdid</code>,<br><code>Swordsman.prove</code>, <code>roster</code>, and edge add/has are needed.</li>
+<li><strong>show-composition</strong>: <code>makeShow</code> (and so <code>bundle-profile-mismatch</code>),<br><code>matchBundle</code>, <code>completionEvidence</code> (<code>taskcontext-not-outcome-evidence</code>),<br><code>jointDisclosureRecord</code>, <code>STATEMENTS</code>/<code>OBSERVERS</code> content — <code>verifyShow</code><br>never consults them for a verdict. The <code>transcript-invalid</code> branch of<br><code>verifyShow</code> IS ported (it is reachable), but no vector triggers it.</li>
+<li><strong>context-card</strong>: the <code>provingMode</code> q5 branch and custom-justification<br>merging are ported but unexercised; <code>checkLegibility</code>&#39;s failure families<br>(<code>unrendered-field:</code> etc.) can fire but no vector makes them fire.</li>
+<li><strong>canonical</strong>: transcripts with <code>delegationRef</code> (no PR-DEL vector).</li>
+<li><strong>Register-wide</strong>: the 29 family-prefixed codes and the v2 instrument codes<br>(quiet-presentation, rotation, erosion, mediator, multi-issuer, guardian)<br>exist only as <em>vocabulary</em> here — no vector exercises those constructions,<br>so no Python port of those six labs was attempted (that is the JS suite&#39;s<br>F10 live-trigger job, out of M5&#39;s scope).</li>
+</ul>
+</div>
+<div class="md"><h2>Divergences found between the JS and the data</h2>
+<p><strong>None.</strong> Every embedded digest re-derives (P3: 29/29), every outcome and<br>reason matches (P1: 39/39), the manifest agrees with the tree, and the lint<br>regex ports reproduce all 7 prohibited hits with the frozen reason codes while<br>passing all 3 narrow-language samples (P5) — including the <code>unless</code>-guarded<br>collusion pattern. The JS suite (<code>node ../fixtures/test.mjs</code>) still passes<br>13/13 untouched. One near-miss worth recording: JS <code>\s</code> and Python <code>\s</code> differ<br>slightly at the Unicode margins (JS includes <code>\v</code> and some exotic spaces in<br>both engines — they agree on everything the lint texts contain), so the lint<br>port&#39;s equivalence is demonstrated on the frozen samples, not proven in<br>general.</p>
+</div>
+<div class="md"><h2>Pointer</h2>
+<p>X1 exploration doc:<br><a class="wlink" href="x1-conformance-fixtures.html">X1 — Conformance Fixtures</a> —<br>milestone M5, &quot;second-language consumer&quot;: this directory discharges it.<br>Counterpart consumer:<br><code>../fixtures/consume.mjs</code>; vector producer: <code>../fixtures/extract.mjs</code>;<br>register: <code>../fixtures/reasons.mjs</code> (v2); suite: <code>../fixtures/test.mjs</code><br>(13/13, unchanged by this build).</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-consumer-py.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

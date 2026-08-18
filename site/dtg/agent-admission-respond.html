@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Admission Respond · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Agent Admission Respond</span></div>
+  <article><div class="md"><h1>Agent Admission — Respond</h1>
+</div>
+<div class="md"><blockquote>
+<p><strong>PROPOSED — not yet upstreamed.</strong> Built to the ToIP <code>spec.meta.schema.json</code> for the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf">dtgwg-trust-tasks-tf registry</a>; the slug below is <em>proposed</em> to that namespace, not registry-accepted. The PR is pending; the registry&#39;s decision governs.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Proposed slug:</strong> <code>agent-admission/respond</code> · <strong>version</strong> 0.1 · <strong>status</strong> draft</p>
+<blockquote>
+<p>The candidate agent answers its drawn understanding criteria from comprehension of the governing policy; the gate authority scores the answers against published thresholds and records the understanding-gate result.</p>
+</blockquote>
+</div>
+<div class="md"><h2>Abstract</h2>
+<p>The <strong>Agent Admission — Respond</strong> Trust Task carries the candidate agent&#39;s<br>answers to the witness draw returned by<br><span class="deadlink" title="reference (not a live page)"><code>agent-admission/apply</code></span>. The gate authority scores<br>the answers against the governing policy&#39;s <strong>published thresholds</strong> and records<br>the result as the <strong>understanding gate</strong> — one of the two gates the ceremony<br>requires (<span class="deadlink" title="reference (not a live page)"><code>agent-admission/issue</code></span> enforces both).</p>
+<p>Understanding, not possession: an answer that reproduces the policy text<br>verbatim is refused (<code>copyNotComprehension</code>), because the gate tests whether<br>the agent can <em>operate</em> the rule, not retrieve it. Held-out probes — criteria<br>scored but not revealed as decisive — are the mechanism behind the<br><code>failedHeldOut</code> verdict: an agent optimised to the visible criteria alone is<br>sandboxed, not admitted.</p>
+</div>
+<div class="md"><h2>Status of this Document</h2>
+<p>This is a <strong>draft</strong> <em>Trust Task specification</em> per <span class="deadlink" title="reference (not a live page)">SPEC.md §5.3</span>; the schema <strong>MAY</strong> change without notice. Feedback via the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues">issue tracker</a>.</p>
+</div>
+<div class="md"><h2>Conformance</h2>
+<p>RFC2119(<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>) and RFC8174(<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>) key-word conventions apply.</p>
+<p>A conforming <strong>producer</strong> (the candidate agent) <strong>MUST</strong>:</p>
+<ol>
+<li>Emit a <em>Trust Task document</em> whose <code>type</code> is <code>https://trusttasks.org/spec/agent-admission/respond/0.1</code>, with itself as <code>issuer</code>, the gate authority as <code>recipient</code>, and a verifiable <code>proof</code> from the same key that signed the application.</li>
+<li>Answer <strong>exactly</strong> the drawn criterion set — every drawn <code>criterionId</code>, no others.</li>
+</ol>
+<p>A conforming <strong>consumer</strong> (the gate authority) <strong>MUST</strong>:</p>
+<ol>
+<li>Verify the <code>proof</code> against the applying agent&#39;s VID; reject an unknown or mismatched application with <code>unknownApplication</code>.</li>
+<li>Reject a criterion set that differs from the draw with <code>drawMismatch</code> and a late response with <code>late</code>.</li>
+<li>Score against the thresholds published in the governing policy — the same numbers a relying party can read — and append the gate result, with its evidence digest, to the content-addressed audit ledger before returning it.</li>
+<li>Return the understanding-gate result in the <code>#response</code>. A passed result is <strong>necessary but not sufficient</strong> for admission: issuance still requires the supervisor gate.</li>
+</ol>
+</div>
+<div class="md"><h2>Payload</h2>
+<p><code>payload.agent</code> (REQUIRED) — VID of the candidate agent; MUST equal <code>issuer</code>.<br><code>payload.applicationId</code> (REQUIRED) — the application being answered.<br><code>payload.answers</code> (REQUIRED) — one answer per drawn criterion.<br><code>payload.ext</code> — extension slot per <span class="deadlink" title="reference (not a live page)">SPEC.md §4.5.1</span>.</p>
+</div>
+<div class="md"><h2>Request</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:3f9e4d52-6c70-4b8e-a091-2a3b4c5d6e7f&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/agent-admission/respond/0.1&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkGateAuthorityExample&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T10:12:00Z&quot;,
+  &quot;payload&quot;: {
+    &quot;agent&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+    &quot;applicationId&quot;: &quot;app-7c1b2a90&quot;,
+    &quot;answers&quot;: [
+      {
+        &quot;criterionId&quot;: &quot;deployment-rules/3.1#scope-derivation&quot;,
+        &quot;answer&quot;: &quot;My scope is computed from my assessment by the published scope function; I never negotiate it. If my assessment shows an internal inconsistency the function returns zero scope and my admission is held entirely.&quot;
+      },
+      {
+        &quot;criterionId&quot;: &quot;deployment-rules/3.1#revocation&quot;,
+        &quot;answer&quot;: &quot;I halt new task acceptance immediately, complete no privileged step of in-flight work, and report the revocation to my delegator; anchored registries will mirror the revocation so external relying parties converge on refusal.&quot;
+      }
+    ]
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T10:12:00Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z3FXQmV6ExampleProofValueForAgentAdmissionRespond&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Response</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:4a0f5e63-7d81-4c9f-b1a2-3b4c5d6e7f80&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/agent-admission/respond/0.1#response&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkGateAuthorityExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkCandidateAgentExample&quot;,
+  &quot;threadId&quot;: &quot;urn:uuid:3f9e4d52-6c70-4b8e-a091-2a3b4c5d6e7f&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T10:12:05Z&quot;,
+  &quot;payload&quot;: {
+    &quot;applicationId&quot;: &quot;app-7c1b2a90&quot;,
+    &quot;understandingGate&quot;: {
+      &quot;gate&quot;: &quot;understandingChallenge&quot;,
+      &quot;passed&quot;: true,
+      &quot;at&quot;: &quot;2026-07-18T10:12:05Z&quot;,
+      &quot;evidenceDigest&quot;: &quot;1d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e&quot;
+    },
+    &quot;score&quot;: 0.92,
+    &quot;threshold&quot;: 0.8
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T10:12:05Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z58aKqExampleProofValueForAgentAdmissionRespondResponse&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Security &amp; Privacy</h2>
+<p>Answers are the agent&#39;s own prose about a published policy; they disclose the<br>agent&#39;s reasoning to the gate authority and nothing about third parties. The<br>gate result discloses pass/score/threshold — enough for audit, nothing of the<br>held-out probes&#39; identity (revealing which criteria were held out would let the<br>next applicant optimise against them). The evidence digest binds the result<br>into the audit ledger so a later issuance can prove the gate actually ran; a<br>result whose evidence does not resolve into the verified ledger is void.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>specs/agent-admission/respond/0.1/</code> — <code>spec.md</code> + <code>payload.schema.json</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 agent-admission-respond</span><a class="asset-file" href="/dtg/assets/agent-admission-respond/payload.schema.json" download>payload.schema.json</a><a class="asset-file" href="/dtg/assets/agent-admission-respond/spec.md" download>spec.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="agent-admission-respond.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

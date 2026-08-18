@@ -8,7 +8,8 @@
 </head><body data-site="tomes">
 <header class="top">
     <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
-    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🧭</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>♻️</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=tomes" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
     <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
   </header>
 <main class="page">
@@ -38,7 +39,7 @@
 <li>Parse the YAML frontmatter block (delimited by a leading <code>---</code> line and a closing <code>---</code> line).</li>
 <li>Resolve a <strong>workshop id</strong> from the frontmatter — see §3 for the resolution order.</li>
 <li>Set <code>localStorage[&#39;spellweb:witnessed-shops&#39;][&lt;workshop-id&gt;] = ISO timestamp</code>.</li>
-<li>Fire the <strong>fog-of-war</strong> transition — cast members and edges tagged <code>hiddenUntilWitness: &lt;workshop-id&gt;</code> fade from 18% silhouette to full presence over 400 ms.</li>
+<li><em>(Retired, reconciled 2026-07-18 — see §11, which governs.)</em> Earlier versions fired a <strong>fog-of-war</strong> transition here — cast members and edges tagged <code>hiddenUntilWitness: &lt;workshop-id&gt;</code> fading from 18% silhouette to full presence over 400 ms. The universe is now fully visible from first load; witnessing adds presence effects to the graph, it reveals nothing previously hidden. Implementation note (2026-07-18, from code): spellweb&#39;s render path for <code>hiddenUntilWitness</code> still exists and is inert because no canonical node carries the tag — retirement was executed by de-populating the data; the mechanism is reserved for future secret-lore nodes.</li>
 <li>Build a runtime blade record from the markdown body (path, proof, dimensions) for the Sovereign&#39;s inventory.</li>
 </ol>
 <p>The frontmatter is the only part that drives <strong>identity</strong>. The rest of the markdown carries the <strong>content</strong> of the ceremony (path, proverbs, proof). Spellweb&#39;s body parser is conservative and is documented in §7.</p>
@@ -87,7 +88,7 @@
 <td><code>tailor-anything.md</code> → <code>shop-tailor</code></td>
 </tr>
 </tbody></table>
-<p>A file with <strong>none</strong> of these is still readable as a witness artefact but will not unlock a workshop. The fog-of-war on the City of Mages stays in place. The Sovereign can still trace its path; nothing is dropped.</p>
+<p>A file with <strong>none</strong> of these is still readable as a witness artefact but will not unlock a workshop. Nothing further changes on the graph (fog-of-war is retired, §11 — the universe was already fully visible). The Sovereign can still trace its path; nothing is dropped.</p>
 <hr>
 </div>
 <div class="md"><h2>§4 · Field reference</h2>
@@ -350,7 +351,7 @@ workshop: shop-tailor
 
 I walked the Cloak Weave today.
 </code></pre>
-<p>Re-importing this into spellweb unlocks <code>shop-tailor</code> and lifts the fog on Pallia and the Weavers&#39; secret nodes. Nothing else is set.</p>
+<p>Re-importing this into spellweb unlocks <code>shop-tailor</code> in witness mode (Pallia and the Weavers were already visible — fog-of-war is retired, §11). Nothing else is set.</p>
 <h3>§5.2 · A master constellation template (recommended baseline)</h3>
 <pre><code class="language-markdown">---
 constellation_id: tailor-cloak-weave-v1
@@ -607,7 +608,7 @@ Filename convention: `swordsman-&lt;name&gt;-bundle.md`. Re-importing a bundle i
 </div>
 <div class="md"><h1>Assets</h1>
 </div>
-<div class="assets-note">📎 spec-spellweb-artefact-md-format-the-contract-between-any-md-file-and-the-spellweb-witness-function</div>
+<div class="assets-box"><span class="assets-slug">📎 spec-spellweb-artefact-md-format-the-contract-between-any-md-file-and-the-spellweb-witness-function</span><a class="asset-file" href="/city/tomes/assets/spec-spellweb-artefact-md-format-the-contract-between-any-md-file-and-the-spellweb-witness-function/09-spellweb-artefact-md-format.md" download>09-spellweb-artefact-md-format.md</a></div>
 <div class="md"><h2>Navigation</h2>
 <p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-specs.html">The Specs</a></p>
 </div></article>

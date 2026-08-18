@@ -1,0 +1,106 @@
+{
+  "title": "Wiki Skill Anatomy",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "1f4074c7a43a0901",
+      "text": "# Wiki Skill Anatomy\n\n**Category** wikis · **Version** 5.5\n\nWhat a Claude Code skill is — the SKILL.md folder format, frontmatter, storage location, and how skills are invoked (auto via description, or explicitly via /skill-name). Activates when explaining skills to a newcomer, authoring a new skill, or onboarding an agent into the skill model. The conceptual entry to the Librarian's 🗃️ Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "ed21808aaeee6d36",
+      "text": "Claude Code skills are markdown files that teach Claude how to perform specific tasks — reusable, invocable instructions that extend Claude's behaviour without modifying its core settings.\n\n## What is a Skill?\n\nA skill is a folder containing a `SKILL.md` file. The frontmatter declares the skill's name and description. The body contains instructions, examples, patterns and checklists that Claude follows when the skill is invoked.\n\n## Where Skills are Stored\n\nSkills live in `~/.claude/skills/`. Each skill is a named subfolder:\n\n```\n~/.claude/skills/\n    fedwiki-page/\n        SKILL.md\n    another-skill/\n        SKILL.md\n        references/\n        assets/\n        scripts/\n```\n\n## Skill Structure\n\nA minimal `SKILL.md` looks like this:\n\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "a7c1e76d8ae612fc",
+      "text": "name: my-skill\ndescription: What this skill does and when to trigger it."
+    },
+    {
+      "type": "markdown",
+      "id": "2fd4b23e666deb9f",
+      "text": "# Instructions\n\nStep by step guidance for Claude...\n```\n\nThe `description` field is the primary triggering mechanism — Claude reads it to decide whether to use the skill for a given request. A good description is specific about both what the skill does and when it should trigger.\n\n## Invoking a Skill\n\nSkills can be invoked in two ways:\n- **Automatically** — Claude reads the description and decides the skill applies to the current request\n- **Explicitly** — by typing `/skill-name` in the prompt\n\n## Creating a Skill\n\nCreate a new folder under `~/.claude/skills/` and write a `SKILL.md` file inside it. The `/skill-creator` skill can help design, test and optimise new skills iteratively with evals.\n\nThe fedwiki-page skill on this wiki is an example — it captures the patterns for creating fedwiki page JSON files and is stored at `~/.claude/skills/fedwiki-page/SKILL.md`."
+    },
+    {
+      "type": "markdown",
+      "id": "6991e31cbb3c396c",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/claude-skills](https://skill.fedwiki.club/claude-skills) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "82bd0a6037aea53c",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-skill-anatomy`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "5a5d0b6a9cdc83e5",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "e2de7ecd4b25ebaf",
+      "text": "wiki-skill-anatomy"
+    },
+    {
+      "type": "markdown",
+      "id": "ccdb67aa54dd5908",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Skill Anatomy",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "1f4074c7a43a0901",
+            "text": "# Wiki Skill Anatomy\n\n**Category** wikis · **Version** 5.5\n\nWhat a Claude Code skill is — the SKILL.md folder format, frontmatter, storage location, and how skills are invoked (auto via description, or explicitly via /skill-name). Activates when explaining skills to a newcomer, authoring a new skill, or onboarding an agent into the skill model. The conceptual entry to the Librarian's 🗃️ Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "ed21808aaeee6d36",
+            "text": "Claude Code skills are markdown files that teach Claude how to perform specific tasks — reusable, invocable instructions that extend Claude's behaviour without modifying its core settings.\n\n## What is a Skill?\n\nA skill is a folder containing a `SKILL.md` file. The frontmatter declares the skill's name and description. The body contains instructions, examples, patterns and checklists that Claude follows when the skill is invoked.\n\n## Where Skills are Stored\n\nSkills live in `~/.claude/skills/`. Each skill is a named subfolder:\n\n```\n~/.claude/skills/\n    fedwiki-page/\n        SKILL.md\n    another-skill/\n        SKILL.md\n        references/\n        assets/\n        scripts/\n```\n\n## Skill Structure\n\nA minimal `SKILL.md` looks like this:\n\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "a7c1e76d8ae612fc",
+            "text": "name: my-skill\ndescription: What this skill does and when to trigger it."
+          },
+          {
+            "type": "markdown",
+            "id": "2fd4b23e666deb9f",
+            "text": "# Instructions\n\nStep by step guidance for Claude...\n```\n\nThe `description` field is the primary triggering mechanism — Claude reads it to decide whether to use the skill for a given request. A good description is specific about both what the skill does and when it should trigger.\n\n## Invoking a Skill\n\nSkills can be invoked in two ways:\n- **Automatically** — Claude reads the description and decides the skill applies to the current request\n- **Explicitly** — by typing `/skill-name` in the prompt\n\n## Creating a Skill\n\nCreate a new folder under `~/.claude/skills/` and write a `SKILL.md` file inside it. The `/skill-creator` skill can help design, test and optimise new skills iteratively with evals.\n\nThe fedwiki-page skill on this wiki is an example — it captures the patterns for creating fedwiki page JSON files and is stored at `~/.claude/skills/fedwiki-page/SKILL.md`."
+          },
+          {
+            "type": "markdown",
+            "id": "6991e31cbb3c396c",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/claude-skills](https://skill.fedwiki.club/claude-skills) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "82bd0a6037aea53c",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-skill-anatomy`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "5a5d0b6a9cdc83e5",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "e2de7ecd4b25ebaf",
+            "text": "wiki-skill-anatomy"
+          },
+          {
+            "type": "markdown",
+            "id": "ccdb67aa54dd5908",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1785847257947
+    }
+  ]
+}

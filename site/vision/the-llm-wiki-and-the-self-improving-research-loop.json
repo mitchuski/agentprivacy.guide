@@ -1,0 +1,51 @@
+{
+  "title": "The LLM-Wiki and the Self-Improving Research Loop",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "a1f0c3d2e4b50611",
+      "text": "# The LLM-Wiki and the Self-Improving Research Loop\n\n*A reflection filed back into the wiki, 2026-06-28. Source idea: Andrej Karpathy, [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).*"
+    },
+    {
+      "type": "markdown",
+      "id": "a1f0c3d2e4b50612",
+      "text": "## The pattern in one breath\n\nMost LLM-plus-documents work looks like RAG: upload files, retrieve chunks at query time, generate an answer, throw the answer away. Nothing accumulates. Every question rediscovers knowledge from scratch.\n\nThe LLM-Wiki inverts this. Instead of retrieving from raw sources every time, the agent **incrementally builds and maintains a persistent wiki** - a structured, interlinked collection of markdown pages that sits between you and the raw sources. The knowledge is compiled once, then kept current. The wiki is a **persistent, compounding artifact**: the cross-references are already there, the contradictions are already flagged, the synthesis already reflects everything read."
+    },
+    {
+      "type": "markdown",
+      "id": "a1f0c3d2e4b50613",
+      "text": "## Three layers\n\n- **Raw sources** - the immutable source of truth. Articles, papers, transcripts, data. The agent reads them, never edits them.\n- **The wiki** - LLM-generated markdown the agent owns entirely: summaries, entity pages, concept pages, an evolving synthesis. You read it; the agent writes it.\n- **The schema** - the configuration document (a CLAUDE.md / AGENTS.md) that tells the agent how the wiki is structured and what workflows to follow. This is what turns a generic chatbot into a disciplined wiki maintainer. You and the agent co-evolve it."
+    },
+    {
+      "type": "markdown",
+      "id": "a1f0c3d2e4b50614",
+      "text": "## Three operations - and where the loop lives\n\n- **Ingest** - drop in a source; the agent reads it, discusses takeaways, writes a summary page, updates the index and every affected entity/concept page, appends to the log. One source can touch 10-15 pages in a single pass.\n- **Query** - ask a question; the agent reads the index, drills into relevant pages, synthesizes a cited answer. The crucial move: **good answers are filed back into the wiki as new pages**, so explorations compound exactly like ingested sources.\n- **Lint** - periodically health-check: contradictions, stale claims, orphan pages, missing cross-references, gaps a search could fill.\n\nThat one move - *query answers filed back as sources* - is what closes the loop. Output becomes input. The wiki gets richer with every source added **and every question asked.**"
+    },
+    {
+      "type": "markdown",
+      "id": "a1f0c3d2e4b50615",
+      "text": "## Why an agent + a wiki is *naturally* self-improving\n\nA self-improving loop needs four things, and the LLM-Wiki supplies all four for free:\n\n1. **Durable memory the worker can both read and write.** The wiki is exactly this. The agent is not stateless between sessions; it stands on its own accumulated work.\n2. **A monotonic ratchet.** Each ingest and each filed-back answer raises the floor. Nothing has to be re-derived; the next pass starts from a higher base.\n3. **An error signal.** `lint` is the gradient - contradictions and orphans are defects the next pass corrects. The wiki critiques itself.\n4. **A trace.** `log.md` is an append-only record of every ingest, query and lint. The loop can inspect its own history and reason about what to do next.\n\nMemory + ratchet + error signal + trace = a research process that compounds instead of resetting. This is why the pattern fits research self-improvement so cleanly: it is not a trick bolted onto an agent, it is the shape an agent's workflow takes when you give it a place to keep its thinking."
+    },
+    {
+      "type": "markdown",
+      "id": "a1f0c3d2e4b50616",
+      "text": "## The evidence: this page is an instance of the thing it describes\n\nWe did not theorise this loop; we ran it. Working from Karpathy's essay we built a wiki skill, and in doing so produced [[Governing an LLM-Wiki: the Eight Gates]] - a synthesis that did not exist in any source, discovered by *querying* the pattern and then **filed back into the wiki as a new page.** That is the query-to-source move, observed in the wild.\n\nThe same loop, run at scale on a different corpus, produced [[The Hitchhiker Expression of the Same Protocol]]: dozens of session transcripts ingested, answered through five fixed lenses, cross-linked into hubs, lint-checked for coherence. Two corpora, one loop.\n\nThe lineage is older than LLMs. Vannevar Bush's **Memex** (1945) imagined a private, curated knowledge store with associative trails between documents - the connections as valuable as the documents. The part Bush could not solve was *who does the maintenance.* The agent does. Maintenance cost falls to near zero, so the wiki actually stays alive."
+    },
+    {
+      "type": "markdown",
+      "id": "a1f0c3d2e4b50617",
+      "text": "---\n**Read on:** [[Governing an LLM-Wiki: the Eight Gates]] - how the federation keeps the loop trustworthy. [[The Hitchhiker Expression of the Same Protocol]] - the same logic in mythic voice. [[One Logic, Many Skins]] - the correspondence table.\n\n<- [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "id": "a1f0c3d2e4b50610",
+      "item": {
+        "title": "The LLM-Wiki and the Self-Improving Research Loop",
+        "story": []
+      },
+      "date": 1782690100000
+    }
+  ]
+}

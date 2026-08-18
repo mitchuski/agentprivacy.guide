@@ -1,0 +1,315 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Peak Qubit Reduction · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Peak Qubit Reduction</span></div>
+  <article><div class="md"><h1>Peak Qubit Reduction</h1>
+</div>
+<div class="md"><blockquote>
+<blockquote>
+<p>-.</p>
+</blockquote>
+</blockquote>
+</div>
+<div class="md"><h1>Peak Qubit Reduction</h1>
+<p>A circuit&#39;s qubit cost is not how many qubits it <em>names</em> — it is the <strong>most qubits alive at<br>any single instant</strong>. Lay the computation out left-to-right in time and plot how many qubits<br>are live at each moment; you get a mountain range, and the <strong>single tallest peak</strong> is what you<br>pay. This skill is the playbook for finding that peak and shaving it down.</p>
+<p>The whole discipline follows from two facts of reversible/quantum computing:</p>
+<ul>
+<li><strong>You cannot delete information.</strong> A qubit holding a value can&#39;t just be discarded; the only<br>way to free it is to <strong>uncompute</strong> — run gates backward until it returns to a known |0⟩.</li>
+<li><strong>Width is a MAX over time, not a sum.</strong> Lowering qubit usage somewhere that <em>isn&#39;t</em> the peak<br>does nothing for the width score. Only the tallest moment counts.</li>
+</ul>
+<p>Together these mean: the qubit prize comes from shrinking whatever is alive at <em>one specific<br>instant</em>, and every byte of &quot;freeing&quot; you do costs gates to uncompute and recompute. That<br>trade is the heart of everything below.</p>
+</div>
+<div class="md"><h2>The core loop</h2>
+<p>Work this loop; each pass lowers the peak by one increment and usually moves it somewhere new.</p>
+<ol>
+<li><strong>Measure</strong> — get the live-qubits-vs-time profile; find the peak height and the operation/phase that owns it (the <em>binder</em>).</li>
+<li><strong>Inventory</strong> — list the qubits alive at the binder instant.</li>
+<li><strong>Classify</strong> — label each one (essential data / scratch / transcript-log / passenger / alias-candidate / truncatable).</li>
+<li><strong>Brainstorm</strong> — for each non-essential qubit at the peak, propose a shave (the moves below).</li>
+<li><strong>Cost</strong> — price the shave in gates, depth, and correctness risk via the qubit↔gate exchange rate.</li>
+<li><strong>Re-measure</strong> — apply the cheapest safe shave; the peak moves to a new owner; repeat until you hit a structural floor.</li>
+</ol>
+<p>The mistake to avoid at every step: <strong>optimizing a qubit that isn&#39;t actually at the peak.</strong> It<br>feels productive and changes nothing. Before proposing any shave, confirm the qubit you&#39;re<br>targeting is live at the binder instant.</p>
+<p>The second mistake is just as costly: <strong>treating a multi-phase plateau like a single peak.</strong> If<br>several independent phases all reach the same height, lowering only one phase can be a real local<br>win while the global number stays fixed. In that regime the unit of progress is not &quot;did the<br>reported peak move?&quot; but &quot;which plateau owners have been pushed below the old height?&quot; Keep a<br>co-binder ledger and build a package of compatible reductions across all of them.</p>
+</div>
+<div class="md"><h2>Match the method to the lever&#39;s failure mode</h2>
+<p>Before reaching for a lever, know <em>how it can fail</em> — because that decides whether you &quot;tweak<br>and iterate&quot; or &quot;prove correct, then commit.&quot; There are two fundamentally different kinds:</p>
+<ul>
+<li><p><strong>Graded-failure levers</strong> (truncate a carry/compare width, drop a loop iteration, approximate<br>a reduction). Correctness degrades <em>continuously</em>: a small, characterizable fraction of inputs<br>go wrong, by a little. These usually reduce <em>gate</em> cost, and you can <strong>iterate on the<br>dirtiness</strong> — measure the per-input error, restore one bit, re-measure — and, when the input<br>set is fixed, <strong>search for an input subset / seed that dodges the failures</strong>. This is the<br>domain of triage / search loops: low near-misses are progress.</p>
+</li>
+<li><p><strong>Binary-failure levers</strong> (free, overlap, stream, or hole a register to cut <em>peak width</em>).<br>Correctness is <strong>all-or-nothing</strong>: the edit is value-exact (right on every input) or it<br>corrupts phase/ancilla on essentially <em>every</em> input. There is <strong>no graded near-miss ladder to<br>climb.</strong> So you cannot tweak-and-triage a width cut — you must get it value-exact, <strong>validate<br>clean (e.g. classical/phase/ancilla all zero on random inputs) BEFORE any downstream search</strong>,<br>and only then proceed.</p>
+</li>
+</ul>
+<p><strong>The trap:</strong> applying the graded-failure playbook to a binary-failure lever. A structural width<br>cut that isn&#39;t value-exact yields all-dirty garbage, not near-misses — there is nothing to<br>iterate <em>toward</em>. Cutting peak width is therefore &quot;write a correct value-exact edit, validate it<br>clean, then search,&quot; not &quot;turn a knob and triage.&quot;</p>
+<p><strong>Corollary — when no parameter moves the target, the cost is allocation-bound.</strong> If <em>every</em><br>available knob leaves the peak unchanged, the registers are declared full-width and the only<br>remaining lever is a <strong>structural code change</strong> — which is the binary kind. Escalate to it<br>deliberately: inventory the binder&#39;s live set (next step), make the <em>smallest</em> value-exact edit,<br>validate, and only then re-measure/search. Don&#39;t keep turning knobs once they&#39;ve gone flat.</p>
+<p><strong>A peak can be several independent binders, not one shared floor.</strong> The inventory (Step 2) may<br>show that two or ten <em>unrelated</em> phases each independently reach the peak (e.g. an arithmetic core,<br>a fold, a final ripple, and a separate squaring), co-equal but sharing no register. Then one edit<br>that relieves one of them leaves the others still at the peak. This is not failure; it is plateau<br>decomposition. Lowering the number requires <strong>coordinated edits to every co-equal binder</strong>, and<br>you re-trace after each to see which walls remain. Budget for &quot;more than one edit&quot; before assuming<br>a single hole drops the count.</p>
+<p><strong>The deepest cuts usually end on a co-binder plateau.</strong> Once the obvious tallest owner is shaved,<br>expect several phases to tie at the same peak. A real next-qubit win then needs a package of small<br>edits whose effects land together: one codec or live-range hole for the persistent floor, one<br>streaming/recompute trick for the transient apply path, one segment/notch change for a separate<br>arithmetic phase, and selective repairs for the iterations made fragile by the cut. Treat a<br>&quot;1170 everywhere&quot; style trace as intentional: if apply ripple, special folds, compressed apply,<br>and square all hit the same height, the next reduction must move <em>all</em> of them or the peak number<br>will not budge.</p>
+</div>
+<div class="md"><h2>Step 1 — Measure: find the binder</h2>
+<p>You need a <strong>live-qubit-vs-time trace</strong>, not just a total count. Two ways to get one:</p>
+<ul>
+<li>If the framework tracks allocation/free events, instrument them: increment a counter on<br>alloc, decrement on free, and record the max along with the <em>name of the phase</em> that was<br>executing when the max was hit. The phase name is the single most useful output — it tells<br>you what to attack.</li>
+<li>If not, walk the time-ordered op list and maintain a live-set; the peak is <code>max |live-set|</code>.</li>
+</ul>
+<p>The deliverable is one line: <strong><code>peak = N at phase = &lt;owner&gt;</code></strong>. That owner is your target.<br>Everything else in the circuit is taller-than-nothing but irrelevant until the owner shrinks.</p>
+<blockquote>
+<p>Re-run this after <em>every</em> change. The peak is a whack-a-mole: shave the current owner and a<br>different phase becomes the new tallest one. You are never &quot;done with phase X&quot; in the<br>abstract — only &quot;X is no longer the binder.&quot;</p>
+</blockquote>
+</div>
+<div class="md"><h2>Step 2 — Inventory the peak&#39;s live set</h2>
+<p>Freeze the circuit at the binder instant and list every qubit alive. For each, note: what<br>value it holds, where it was allocated (how far back), and where it is next <em>used</em> (how far<br>forward). The gap between &quot;allocated&quot; and &quot;next used&quot; is the qubit&#39;s <strong>live range</strong>, and live<br>ranges that merely <em>pass through</em> the peak without being touched there are your best targets.</p>
+</div>
+<div class="md"><h2>Step 3 — Classify each live qubit</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>What it is</th>
+<th>Shrinkable?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Essential data</strong></td>
+<td>the actual inputs/outputs the peak operation reads or writes</td>
+<td>rarely — this is the real work</td>
+</tr>
+<tr>
+<td><strong>Scratch</strong></td>
+<td>temporary results (carries, partial products, comparison bits)</td>
+<td>often — uncompute/recompute, truncate</td>
+</tr>
+<tr>
+<td><strong>Transcript / log</strong></td>
+<td>decisions recorded only to stay reversible (see below)</td>
+<td>often — compress the log</td>
+</tr>
+<tr>
+<td><strong>Passenger</strong></td>
+<td>allocated before the peak, consumed after, <em>idle during</em> it</td>
+<td>yes — move its live range out of the peak window</td>
+</tr>
+<tr>
+<td><strong>Alias-candidate</strong></td>
+<td>a copy/restorable duplicate of a value already live</td>
+<td>yes — borrow the original as dirty scratch</td>
+</tr>
+<tr>
+<td><strong>Truncatable</strong></td>
+<td>holds bits that are provably zero or don&#39;t affect the result</td>
+<td>yes — just don&#39;t keep those bits</td>
+</tr>
+</tbody></table>
+<p>Most real wins come from the bottom four rows. Walk them in order; the moves below map to them.</p>
+</div>
+<div class="md"><h2>Step 4 — Shaving moves</h2>
+<h3>Live-range hole: uncompute early, recompute later (the headline move)</h3>
+<p>If a qubit holds a value that the <strong>peak instant does not need</strong>, free it <em>before</em> the peak and<br>rebuild it <em>after</em>. You punch a hole in its live range exactly across the peak window, so it is<br>no longer counted at the binder.</p>
+<pre><code>before:  ...====[VALUE held live across the peak]====...   &lt;- counted at peak
+after:   ...===]   (uncomputed)   [recompute]===...        &lt;- absent at peak
+                  ^^^^^^^^^^^^^^^^^
+                  the peak instant falls in here
+</code></pre>
+<p>Mechanically: emit the reverse of the gates that built the value (returning its qubits to |0⟩<br>and freeing them), run the peak-owning phase with that headroom, then re-emit the forward gates<br>to restore the value for its later consumer. This is the single most reliable width reducer.</p>
+<p><strong>Why it works and when it doesn&#39;t:</strong> it converts qubits into gates. The recompute is pure<br>overhead — extra Toff/CNOT and, importantly, extra <em>depth</em>. It only wins if (a) the freed qubit<br>was genuinely at the peak, and (b) the gate/depth cost is below your exchange rate (next<br>section). A value that is cheap to recompute (a few gates) and held across a tall peak is the<br>ideal candidate; a value that took thousands of gates to build is usually not worth rebuilding.</p>
+<h3>Live-range shortening / passenger relocation</h3>
+<p>A <strong>passenger</strong> is allocated early and consumed late but does nothing at the peak — it just<br>rides through. You don&#39;t need to uncompute it; just <strong>move its endpoints</strong>: allocate it as late<br>as possible (right before its first use) and free it as early as possible (right after its last<br>use). If both the first-use and last-use sit outside the peak window, the passenger vanishes<br>from the binder. This is cheaper than a live-range hole (no recompute) — always check for<br>passengers first.</p>
+<h3>Truncation: keep only the bits that matter</h3>
+<p>Scratch often holds more bits than carry information. Carry chains, high words of partial sums,<br>and intermediate registers frequently have <strong>high bits that are provably zero</strong> or that <strong>don&#39;t<br>influence the observed output</strong>. Keep only the low <em>W</em> bits that matter and don&#39;t allocate the<br>rest.</p>
+<p><strong>Per-step scheduling.</strong> When the same block runs in a loop, the <em>safe</em> truncation width usually<br>differs per iteration (early iterations need full width, late ones have shrunk and tolerate<br>aggressive trimming, or vice-versa). A single constant width must be set safe for the<br>worst iteration — over-provisioning all the others. Replacing the constant with a <strong>per-step<br>schedule</strong> <code>width(step)</code> lets each iteration be exactly as tight as it can tolerate, and in<br>particular lets you trim <em>only the iteration(s) sitting at the peak</em> without weakening the<br>delicate ones. This decouples the peak iteration from the rest, which a single global knob<br>cannot do.</p>
+<p><strong>Why it&#39;s dangerous:</strong> dropping a bit that <em>did</em> matter silently corrupts the result. Truncation<br>must be provably safe — the dropped bits are zero, or you&#39;ve verified they never reach an<br>observed output on the inputs the circuit will actually see.</p>
+<h3>Transcript / log compression</h3>
+<p>Reversibility forces the circuit to <strong>record its data-dependent decisions</strong> (&quot;did I subtract<br>here? did I swap?&quot;) into fresh qubits — because by the time you want to undo a step, the data<br>that produced the decision has changed, so you can&#39;t recompute it; you must have logged it. This<br>log (the <em>transcript</em>) is often a large, long-lived chunk of the peak live set.</p>
+<p>The log is compressible exactly when it has <strong>structure</strong>: if certain decision-patterns are<br>impossible or correlated, a naive one-qubit-per-bit encoding wastes space on combinations that<br>never occur. A denser encoding (spend bits only on reachable patterns — the Shannon / Morse-code<br>idea) stores the same information in fewer qubits.</p>
+<p><strong>The hard constraint:</strong> the codec must be <strong>bijective</strong> — a perfect, invertible 1-to-1 map. You<br>will uncompute the transcript later, so if two distinct histories ever collide to the same code,<br>the information needed to reverse the circuit is destroyed and the answer is wrong. Unlike<br>classical compression, <em>lossy is not an option.</em> Ship a self-test that proves the codec is<br>collision-free over all reachable inputs before trusting it. A related free win: bits you can<br><em>prove</em> are always a constant (e.g. a known-zero high word) need not be stored at all.</p>
+<p><strong>Finite-support tail codecs beat generic entropy arguments.</strong> Do not only ask &quot;how many bits of<br>entropy does this whole transcript have?&quot; Also isolate late/tail windows and enumerate the exact<br>reachable support there. If a tail has, say, 32 reachable patterns, encode those patterns directly<br>into five code bits and stream the apply from that code instead of re-materializing the raw tail.<br>The general tactic is:</p>
+<ol>
+<li>Identify a long-lived transcript slice that is still live at the binder.</li>
+<li>Enumerate its reachable states for the narrow phase/tail where it is used.</li>
+<li>Build an explicit reversible encoder/decoder for only that support.</li>
+<li>Stream each apply slot from the code, recomputing only the slot&#39;s local controls, then clear it.</li>
+<li>Add a self-test proving bijection, support coverage, and phase-clean forward/reverse behavior.</li>
+</ol>
+<p>This is a width lever, so it is binary-failure: if the codec or streaming apply is not exactly<br>reversible, the circuit is structurally dirty. Validate the codec first, then re-measure the peak.</p>
+<h3>Shrunken-PZ dynamic state and passenger ghosting</h3>
+<p>Read <code>references/Q980_SHRUNKEN_PZ_85D5DAE_HANDOFF.md</code> when the task mentions TrailMix,<br>Shrunken-PZ, q980, dynamic PZ widths, quotient caps, HMR ghosting, known-constant teardown,<br>thin schedules, or source-level Proos-Zalka state machines.</p>
+<p>Reusable lesson: treat Euclidean-state registers as time-varying objects instead of fixed-width<br>arrays. Resize <code>A/B/ca/cb/q</code> to the proven live support at each step, tear down terminal constants,<br>and ghost passengers that can be algebraically reconstructed later. Keep the exact structural pieces<br>separate from support-gated pieces such as thin schedules, q-caps, and nonce-dependent tails before<br>deciding whether a route is clean enough to hunt.</p>
+<h3>Aliasing / dirty-scratch borrow</h3>
+<p>If you need scratch and a register already live holds a value you can <strong>restore before it is next<br>observed</strong>, borrow it as dirty scratch instead of allocating fresh qubits: use it, then undo your<br>changes to return it to its expected value. No new qubits enter the live set. The risk is<br>dependency: be certain nothing reads that register (as data <em>or</em> as a control, and including its<br>phase) between your borrow and your restore.</p>
+</div>
+<div class="md"><h2>Step 5 — Cost the shave: the qubit↔gate exchange rate</h2>
+<p>Every move above buys qubits with gates (and usually depth). Decide <em>before</em> implementing whether<br>the trade is worth it:</p>
+<ul>
+<li>Compute your <strong>break-even rate</strong> = (gates you&#39;d add) ÷ (qubits you&#39;d save). Compare it to the<br>prevailing cost of a qubit in your objective. If your score is <code>qubits × gates</code>, a rough<br>break-even is <code>gates_total / qubits_total</code> — spend fewer gates-per-qubit than that and you win.</li>
+<li><strong>Different layers of the peak have very different exchange rates — price each reducible layer<br>separately; don&#39;t go by which <em>looks</em> most wasteful.</strong> The peak is usually a <strong>persistent floor</strong><br>(long-lived state held across the whole region) plus a <strong>transient</strong> (the current step&#39;s working<br>registers). Counter-intuitively, freeing the transient — which looks like wasteful scratch — is<br>often the <em>expensive</em> qubit, because freeing it means recompute / dirty-borrow / finer chunking,<br>i.e. lots of added gates. Meanwhile a long-lived <strong>log/transcript</strong> in the floor — which looks<br>irreducible — is often the <em>cheap</em> qubit, because a denser or <strong>streamed/partial-release</strong><br>re-encoding shrinks it for very few gates. So when more than one layer is reducible, compute<br>gates-per-qubit for <em>each</em> and take the cheap one (frequently: <strong>compress the log before you free<br>the scratch</strong>). Verified instance: on one circuit, freeing transient working registers cost ~10×<br>break-even (a qubit <em>record</em> but a score <em>loss</em>), while compressing the persistent transcript on<br>the same circuit cost <em>under</em> break-even (an actual score <em>win</em>) — same −qubits, opposite verdicts.</li>
+<li><strong>Depth is the hidden tax.</strong> Uncompute/recompute and fewer-ancilla tricks inflate circuit<br><em>depth</em>. A <code>qubits × gate-count</code> score doesn&#39;t see depth, but real error-corrected hardware<br>does (it can dominate runtime). Prefer width reductions that are depth-neutral; treat a big<br>depth blowup as a real cost even when the score ignores it.</li>
+<li><strong>Correctness/entanglement risk.</strong> The most dangerous failure is freeing a qubit that <em>looks</em><br>dead but is still entangled — used later as a control, or carrying a phase that matters.<br>Releasing it injects a silent phase error that output-value checks may not catch. Before any<br>free/reuse, confirm the qubit is genuinely disentangled (uncomputed to |0⟩), not just<br>value-unused.</li>
+</ul>
+</div>
+<div class="md"><h2>Step 6 — Re-measure and repeat</h2>
+<p>Apply the cheapest safe shave, re-run the Step-1 trace, read the new binder, and go again. Stop<br>when the binder is an irreducible structural floor (the essential data of the peak operation) or<br>when every remaining shave costs more than the exchange rate allows. Keep a short log of which<br>phase owned the peak at each height and which move dislodged it — that history is the map for the<br>next person (and tells you when you&#39;re going in circles).</p>
+<p><strong>Treat &quot;we&#39;ve hit the floor&quot; as a hypothesis to disprove, not a conclusion.</strong> Before declaring a<br>layer irreducible, re-inventory (Step 2) and ask of each persistent register: is this <em>genuinely<br>essential data</em>, or just an <strong>encoding</strong> I haven&#39;t beaten yet? A long-lived log can still shrink<br>under a tail-specific codec or a streamed/partial release even when generic entropy coding looked<br>saturated — so a &quot;this can&#39;t compress further&quot; verdict from one coding model is weak evidence.<br>Re-measure the actual composition before each floor claim; more than one published &quot;floor&quot; has<br>fallen to a better encoding of the <em>same</em> state, not to a new algorithm. The reliable signal that<br>you&#39;ve truly hit bottom is a <em>measured</em> composition where every remaining live qubit is essential<br>data of the peak operation — not an analysis that concluded a layer &quot;should be&quot; irreducible.</p>
+<h3>One-qubit frontier drops: localize before globalizing</h3>
+<p>When the current clean frontier only needs <strong>one</strong> more qubit shaved, bias hard toward localized<br>peak-window moves before inventing a new global structure. A broad codec, branch-layout rewrite,<br>or dirty-borrow sidecar may drop the peak, but if it touches hundreds of steps it can add tens of<br>thousands of Toffolis and still lose the score.</p>
+<p>ECDSA Fail TrailMix case study (<code>b310de9</code>, submission <code>175749f</code>, 2026-06-19): the clean 1164q<br>frontier fell to 1163q without cutting GCD state width. The winning patch tightened arithmetic<br>padding (<code>arith::PAD</code> 21-&gt;19, <code>schedule::PAD</code> 21-&gt;20), then applied a <strong>-1 carry-layout k trim only<br>inside the late GCD peak window</strong> (<code>TLM_GCD_K_ADJUST_AFTER=172</code>,<br><code>TLM_GCD_K_ADJUST_BEFORE=196</code>, <code>TLM_GCD_K_ADJUST=-1</code>) with small neighboring schedule deltas<br>(<code>HYB_V</code>, <code>COUT</code>, <code>FOLD</code>, <code>FFG</code>). It validated clean at 1163q with avg Toffoli about<br>1,412,401.873. A competing streamed transcript / dirty-suffix route also reached 1163q, but was<br>dirty and around 1,449,707 avg Toffoli — the wrong exchange rate for a one-qubit drop.</p>
+<p>Rule: if the measured peak is a narrow late-window plateau, first try per-step carry layout,<br>padding/support shrink, and adjacent schedule deltas on that window. Escalate to global codecs or<br>branch rewrites only after the local levers are exhausted or the required qubit drop is larger<br>than the local window can plausibly supply.</p>
+</div>
+<div class="md"><h2>Plateau decomposition: lower every co-binder together</h2>
+<p>When a trace shows many phases tied at the same peak, <strong>switch into plateau mode immediately</strong>.<br>Do not chase only the first <code>peak_qubits</code> line, and do not abandon a local reduction just because<br>the global peak stayed unchanged. Treat the peak as a <strong>plateau</strong>: several independent binders all<br>reach the current height, and the reported qubit count cannot fall until every member of that<br>plateau is pushed down.</p>
+<p>This is one of the highest-value peak-reduction techniques. Mature low-width circuits often no<br>longer have a single obvious tall tower; they have a carefully balanced skyline. The next qubit<br>usually comes from coordinated pressure on every co-binder, not from one spectacular trick.</p>
+<p>Use this protocol:</p>
+<ol>
+<li><strong>List all plateau owners.</strong> Run the detailed peak trace and write down every phase that reaches<br>the max, not just the first one. Keep a ledger with phase name, peak height, live-set suspects,<br>knobs or code paths that can affect it, correctness risk, gate-cost risk, and current status:<br><code>unmoved</code>, <code>locally lowered</code>, <code>regressed</code>, or <code>combined</code>.</li>
+<li><strong>Attack one peak family at a time.</strong> Test each lever independently. A lever is still valuable<br>if its phase drops by one qubit while the total circuit peak stays unchanged; it means another<br>plateau owner is now blocking the global number. Mark that owner <code>locally lowered</code> instead of<br>discarding the result.</li>
+<li><strong>Classify the lever.</strong> Prefer live-range holes, passenger relocation, transcript streaming,<br>carry parking, source-as-carry suffixes, and segment/notch changes that target qubits live at<br>that exact phase. Be suspicious of edits that add boundary-carry lifetime or widen a neighboring<br>phase even while they help the local phase.</li>
+<li><strong>Re-trace after every local win.</strong> Confirm whether the phase left the plateau, whether a new<br>phase joined it, and whether the edit caused an accidental taller spike elsewhere.</li>
+<li><strong>Keep the package small and orthogonal.</strong> A good plateau package usually has one lever per<br>family: one square segment notch, one carry-park map, one final-ripple low-width mode, one<br>transcript/live-range hole, one suffix-carry primitive. Avoid stacking multiple unproven edits<br>on the same phase before all other co-binders have a local answer.</li>
+<li><strong>Combine only compatible local wins.</strong> Once each co-binder has a local reduction, turn the<br>package on together and remeasure peak qubits, emitted gates, estimated average gates, score,<br>and validation dirt. If the combined route fails, bisect by family while preserving the ledger.</li>
+<li><strong>Self-test new arithmetic primitives before hunting.</strong> A plateau cut that introduces a new<br>reversible primitive is a binary-failure lever. Prove the primitive value-exact on focused tests,<br>then run full circuit validation, then consider island hunting.</li>
+</ol>
+<p>The working mental model is: <strong>one local peak reduction is a lemma; the combined package is the<br>theorem.</strong> Do not declare the route impossible just because any single lemma leaves the global peak<br>unchanged.</p>
+<p>Plateau progress report format:</p>
+<pre><code class="language-text">current plateau height: &lt;N&gt;
+owners:
+- &lt;phase A&gt;: locally lowered by &lt;lever&gt;, now &lt;N-1&gt;, cost &lt;delta gates&gt;
+- &lt;phase B&gt;: still binding at &lt;N&gt;, next lever &lt;idea&gt;
+- &lt;phase C&gt;: locally lowered but regresses &lt;neighbor phase&gt;, needs repair
+combined package:
+- enabled: &lt;lever list&gt;
+- measured peak: &lt;N or N-1&gt;
+- emitted/avg gate delta: &lt;delta&gt;
+- validation: &lt;cls/pha/anc or pending&gt;
+</code></pre>
+<h3>Example: q1170 plateau to q1169 candidate</h3>
+<p>A 1170-qubit point-addition SOTA had a wide plateau rather than one dominant owner. The tied peak<br>families included:</p>
+<ul>
+<li>Solinas square forward/inverse</li>
+<li>GCD apply chunk add/sub ripple</li>
+<li>GCD apply chunk add/sub final ripple</li>
+<li>compressed-block apply double / reverse halve</li>
+<li>materialized special overflow/underflow folds</li>
+<li>boundary-clear phases just below the top</li>
+</ul>
+<p>The one-family reductions were:</p>
+<table>
+<thead>
+<tr>
+<th>Plateau owner</th>
+<th>Lever</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Solinas square</td>
+<td>smaller square segment notch</td>
+<td>square peak 1170 -&gt; 1169</td>
+</tr>
+<tr>
+<td>apply final ripple</td>
+<td>low-qubit final ripple variant</td>
+<td>final ripple 1170 -&gt; 1162</td>
+</tr>
+<tr>
+<td>apply double / reverse halve</td>
+<td>fold carry parking plus per-step map</td>
+<td>1170 -&gt; 1169</td>
+</tr>
+<tr>
+<td>special over/underflow folds</td>
+<td>special fold parking plus per-step map</td>
+<td>1170 -&gt; 1169</td>
+</tr>
+<tr>
+<td>non-final apply ripple</td>
+<td>source-as-carry suffix for one carry lane</td>
+<td>1170 -&gt; 1169</td>
+</tr>
+</tbody></table>
+<p>The non-final apply ripple was the hard binder. Naive chunk reshaping backfired because extra<br>chunks increased boundary-carry liveness. The useful structural move was a source-as-carry suffix:<br>trade one live carry lane for extra Toffoli by using source wires as temporary suffix carries, then<br>restore them. That is a value-exact arithmetic change, so it needs primitive self-tests before any<br>serious hunt.</p>
+<p>Combined, the route reached a new 1169-qubit plateau, with higher gate count. The important lesson<br>is not the exact knobs; it is the workflow:</p>
+<ul>
+<li>isolate every co-binder</li>
+<li>prove a local one-qubit reduction for each</li>
+<li>reject local fixes that create worse neighboring peaks</li>
+<li>combine the compatible reductions</li>
+<li>then decide whether the gate cost and validation dirt justify further repair or hunting</li>
+</ul>
+</div>
+<div class="md"><h2>Worked example (this lineage, for grounding)</h2>
+<p>A reversible elliptic-curve point-add circuit, scored <code>peak_qubits × Toffoli</code>, walked down like<br>this — each step a different binder, each shave a different move:</p>
+<ul>
+<li><strong>1211 qubits</strong>, binder = a GCD-apply scratch block → <strong>live-range hole</strong> (free the block during<br>a shift sub-phase that didn&#39;t use it, reacquire after) → <strong>1193</strong>, binder moves to the modular<br>square.</li>
+<li><strong>1193</strong>, binder = the square → <strong>truncation</strong> (one segment notch tighter) → <strong>1192</strong>, binder<br>moves to a fold phase. (A follow-up that shrank the now-off-peak square was <em>peak-neutral</em> — it<br>only cut gates, 0 qubits — exactly the &quot;don&#39;t optimize off-peak for width&quot; rule.)</li>
+<li><strong>1192</strong>, binder = the fold → <strong>per-step scheduling</strong> of the fold&#39;s carry truncation + a<br><strong>denser transcript codec</strong> (head-11, with a bijectivity self-test) → <strong>1185</strong>, binder moves to<br>a GCD-apply ripple.</li>
+<li><strong>1185</strong>, binders = GCD apply/fold plus square → <strong>finite-support tail codec + streaming apply</strong><br>for a 32-state final transcript tail, <strong>partial raw transcript release</strong>, selective compare<br>repairs, deeper per-step carry parking, and a square segment rebalance → <strong>1170</strong>. The important<br>ablations were diagnostic: disabling streaming raised the GCD plateau to 1171; disabling the<br>tail codec raised it to 1177; reverting the square segmentation made square bind at 1185. The<br>win was not one magic knob — it was coordinated pressure on every co-equal binder.</li>
+</ul>
+<p>Notice the pattern: every height was unlocked by attacking <em>that height&#39;s specific binder</em> with<br>the move that fit it, and the win always came from the phase that was currently tallest.</p>
+</div>
+<div class="md"><h2>Domain specifics</h2>
+<p>This skill is the domain-agnostic method. For the concrete knob names, peak-owner traces, island<br>validation, and exchange-rate numbers of the ECDSA-fail / quantum-ECC point-addition circuit, use<br>the companion <strong>ecdsafail-circuit-optimization</strong> skill, which applies this loop to that codebase.</p>
+<hr>
+</div>
+<div class="md"><h2>Live-frontier peak levers (trailmix_ludicrous family, 2026-06)</h2>
+<p>The current <code>trailmix_ludicrous</code> SOTA sits at <strong>1159q</strong>. Its qubit levers, beyond the classic<br>free/recompute and range-bound moves above, are worth knowing verbatim. Source: per-commit analysis<br>in <code>ecdsafail-circuit-optimization/references/REPORT_1168_wall_revamp.md</code> §2.6–§2.7.</p>
+<ul>
+<li><p><strong>The dynamic live-headroom clamp — a circuit-wide &quot;do not exceed N qubits&quot; governor.</strong> Instead of<br>shaving one ancilla at a time, define <code>target_qubit_headroom(circ) = TLM_TARGET_Q − circ.active_qubits</code><br>and have <strong>every transient-allocating arithmetic primitive clamp its carry/chunk width to<br><code>min(scheduled_k, headroom)</code></strong> — so no local peak can exceed the target ceiling. The peak owner<br>(here the forward-multiply GCD apply) is auto-narrowed whenever the live count nears the ceiling. The<br>governor is the structural generalization of a static per-step carry-cap (<code>TLM_GCD_K_ADJUST</code> over a<br>window) into a dynamic per-call clamp. Knob surface: <code>TLM_TARGET_Q</code> (the ceiling — <strong>lower it by 1 to<br>drop the peak by 1</strong>, the clamp body is unchanged), plus per-call reserve tables that pay for the<br>tighter fit (<code>TLM_TARGET_FFG_RESERVE</code>, <code>TLM_TARGET_FOLD_RESERVE</code>,<br><code>TLM_TARGET_FFG_CALL_RESERVE_DELTAS</code>/<code>_OVERRIDES</code>, <code>TLM_GCD_RESELECT_LAYOUT</code> reselects a narrower<br>adder layout, <code>TLM_DIRECT_VARCHUNK</code> forces direct var-chunk carries). Reusable beyond this circuit:<br>any width-tunable arithmetic can host a headroom governor that trades Toffoli for a hard peak cap.</p>
+</li>
+<li><p><strong>Lazy carry-liveness (<code>TLM_FOLD_CHUNK_LAZY_CIN0</code>).</strong> Make a chunk&#39;s carry-in an <code>Option</code> allocated<br><strong>only inside the boundary-erase</strong> (<code>alloc_qubit()</code> … <code>zero_and_free</code>) instead of held live across the<br>whole chunk loop — deferring one carry qubit&#39;s liveness off the peak. A targeted instance of the<br>live-range-shortening move; look for any carry/scratch held live across a loop it&#39;s only used at the<br>edges of.</p>
+</li>
+<li><p><strong>⭐ The break-even gate — and the product-race caveat (read before shipping ANY peak drop).</strong> A peak<br>qubit is worth <code>avg_Toffoli / peak_qubits</code> Toffoli (~1,190 at the 1159q floor). A clamp/narrowing<br>lever is net-positive only if it removes a qubit for <strong>fewer</strong> Toffoli than that — and that cost is<br><strong>per-base</strong>: the same 1159 clamp cost ~1,514 Toffoli/qubit on the old schoolbook-square base (and<br>lost) but only ~20 Toffoli/qubit once Karatsuba made the square cheap (and won the SOTA). <strong>So<br>re-test a shelved peak lever after every arithmetic win.</strong> Sharper still: even a drop that <em>clears</em><br>break-even can lose the <strong>product</strong> race — the 1159→1157 drop (<code>6ba606a</code>) cost ~1,127 Toffoli/qubit<br>(&lt; break-even, won at landing) but was overtaken because the 1159q Toffoli-grind reached 1,378,242 and<br><code>1159 × 1,378,242 &lt; 1157 × 1,380,890</code>. <strong>Always run the qubit and Toffoli tracks together and compare<br><em>products</em> — never minimize qubit count in isolation.</strong> Full math: circuit-opt report §2.6–§2.7.</p>
+</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>Appendix — Concrete lever catalog (credit: benhuang2025)</h2>
+<blockquote>
+<p><strong>Source / credit.</strong> The lever catalog below is adapted from<br><a href="https://github.com/benhuang2025/ecdsafail-challenge/blob/main/ecdsafail-agent/peak_reduction_skill.md"><code>benhuang2025/ecdsafail-challenge</code> → <code>ecdsafail-agent/peak_reduction_skill.md</code></a>,<br>by <strong>benhuang2025</strong>. It is a frontier-tested set of named peak-shaving levers, each with the<br>exact <code>src/point_add/</code> env knob / primitive and the commit that introduced it. The commit hashes,<br>tuned values, and <code>461a4a3</code> &quot;current frontier&quot; numbers are from <em>their</em> fork&#39;s lineage<br>(1221→1220→1218→1215 dialog-GCD route) — treat them as worked examples of the method, not our<br>live frontier. Re-screen every value against whatever base you are on. (Their operational notes —<br>host <code>zan3</code>, &quot;never <code>git push</code>&quot;, <code>ecdsafail sync</code> — are their environment; ignore for ours.)</p>
+</blockquote>
+<p><strong>The peak model (their harness, <code>src/point_add/mod.rs</code>).</strong> <code>peak_qubits</code> = the <strong>max simultaneously<br>live qubits</strong> over the whole circuit, set by the single <em>widest</em> region (a persistent floor +<br>transient ancillae held live across it). So peak drops NOT by making a phase cheaper, but by<br><strong>shortening how long ancillae stay allocated across the widest region</strong>. Primitives:<br><code>b.alloc_qubit()</code>/<code>alloc_qubits(n)</code> (pulls from the free pool if non-empty — reusing a freed slot<br>without raising peak — else extends), <code>b.free(q)</code>/<code>free_vec</code> (returns to free pool; the qubit MUST<br>hold |0⟩ first), <code>b.reacquire(q)</code>/<code>reacquire_vec</code> (pull a specific freed qubit back). Between<br><code>free(q)</code> and <code>reacquire(q)</code>, slot <code>q</code> is available to the wide region. On a mature base the peak is<br>a <strong>multi-binder floor</strong> — several phases all at the same N; a single-phase cut does nothing, you<br>must lower the <strong>shared</strong> floor (free a persistent ancilla, or free an idle one in <em>every</em> co-peak<br>phase). Find binders with <code>TRACE_PEAK=1 build_circuit | grep -i peak</code>.</p>
+<p><strong>Lever A — free-and-recompute idle ancillae (the 1220→1218 win).</strong> Free an ancilla that is <em>idle<br>across the wide region</em> before that region, let the region reuse the slot (peak −1), then<br><code>reacquire</code> + re-derive it value-exact from still-live regs (aim for 0 net Toffoli: CX-only, or a<br>single self-uncomputed CCX). Recompute base controls first, then dependents. Worked example<br>(<code>arith/const_arith.rs</code>, the freed-tail fold): the secp256k1 fused fold keeps 8 fold ancillae live<br>across the wide high tail.</p>
+<ul>
+<li><code>DIALOG_GCD_FOLD_FREED_TAIL=1</code> (<code>fold_freed_tail_enabled</code>): the 4 controls derived from <code>e,d</code><br>(<code>h=e&amp;d, xed=e^d, eord=e|d, n10=¬e&amp;d</code>) are dead in the tail (fold positions ≤ <code>hi_delta=33</code>) —<br>free before the tail, recompute only for the carry-uncompute pass → tail high-water <code>+8→+4</code>.</li>
+<li><code>DIALOG_GCD_FOLD_FREED_TAIL_ED=1</code> (<code>fold_freed_tail_ed_enabled</code>): ALSO free the base controls<br><code>e,d</code>, recomputable from the live overflow lanes (<code>d=ovf1&amp;s2</code>, <code>e=ovf1^d^ovf2</code>) → <code>+4→+2</code> →<br><strong>1220→1218</strong> (at <code>W=DIALOG_GCD_FOLD_CARRY_TRUNC_W=19</code>). Cost = a few CX + 1 CCX/call. Recompute<br>order (<code>const_arith.rs</code> ~1086–1108): reacquire+derive <code>d</code> first, then <code>e</code>, then <code>h,xed,eord,n10</code>.</li>
+</ul>
+<p><strong>Lever B — range-bound a register to drop a guard qubit.</strong> A top <strong>guard bit</strong> (sign/overflow<br>holder) exists only because an <em>intermediate</em> could transiently leave <code>[0,2^k)</code>. Prove the running<br>value never leaves range — usually by <strong>operation reordering</strong> (apply additive terms before<br>subtractive so partial sums never dip negative; the final result is identical) — then delete the<br>guard bit; every phase holding it live drops by 1. Worked example (<code>arith/multiply.rs</code>,<br><code>round84_fold_hi_into_lo_aggregate</code>): the fold quotient <code>alloc_qubits(34)</code> with Solinas terms<br><code>[(0,+),(4,−),(5,−),(10,+),(32,+)]</code> dips negative (bit 33 = sign guard); reorder adds-first to<br><code>[(0,+),(10,+),(32,+),(4,−),(5,−)]</code> keeps it in <code>[0,2^33)</code> → <code>alloc_qubits(33)</code>, value-exact<br>1221→1220. <strong>Caveat:</strong> SUBSUMED on their current frontier (<code>9191f81</code> borrows <code>quotient[33]</code> as<br>scratch via <code>ROUND84_CORRECTION_WRAP_BORROW_QUOTIENT_TOP</code>) — the <em>method</em> reuses on other registers,<br>don&#39;t re-apply to this quotient on a base that already borrows the top.</p>
+<p><strong>Lever C — peak-bounded segmentation + land-exactly + co-descend (Teddy Pender 1226q route,<br><code>08c5068</code>).</strong> Segment a wide op (the round84 Solinas square) so its peak is a tunable segment width,<br>making it a <em>bounded</em> binder you can dial. Recipe: (1) make ONE phase the single global binder, (2)<br>co-descend every other co-binder strictly below it, (3) tighten the bound so the peak lands exactly<br>at the binder. Knobs:</p>
+<ul>
+<li><code>SQUARE_ROW_MAX_SEG=&lt;n&gt;</code> — square segment width (primary peak dial once the square is the binder);<br>lower = lower peak until value-correctness breaks. Trail 199→194→193→191→188 (<code>420e0c2</code>)→<strong>186<br>(<code>461a4a3</code>)</strong>; try 184 next.</li>
+<li><code>DIALOG_GCD_APPLY_CHUNKED_F_BLOCKS=&lt;n&gt;</code> — apply-ripple chunk count; raise to push apply peak below<br>the square binder. Trail 11→12 (<code>420e0c2</code>)→<strong>16 (<code>461a4a3</code>)</strong>.</li>
+<li><code>ROUND84_QPROD_VENT_PAD=1</code> — pad the round84 quotient×c product so it vents below peak.<br><code>TRACE_PEAK</code> first: if multiple co-binders are tied, decrementing one knob doesn&#39;t move the global peak.</li>
+</ul>
+<p><strong>Lever D — keep-alive instead of uncompute-recompute (the dual of Lever A).</strong> If the<br>uncompute+recompute round-trip <em>transiently allocates a WIDER intermediate</em> than just holding the<br>value, do the opposite — <strong>keep the wide intermediate LIVE</strong> across the middle op, skip the<br>round-trip. <code>ROUND84_KEEP_QUOTIENT_PRODUCT=1</code> (<code>997dbd6</code>, 1221→1220): keep the 66-bit quotient×c<br>product live across the middle subtraction; the recompute would re-expand it to full width (above<br>peak), so holding it is −1 peak. <strong>Pick A vs D by comparing two transient widths</strong>: recompute peak<br>transient &lt; holding footprint → free+recompute (A); holding footprint &lt; recompute transient → keep<br>alive (D). Both value-exact — flip the flag and <code>TRACE_PEAK</code> both.</p>
+<p><strong>Lever E — buy peak-relief more cheaply (top-clean carry split).</strong> Peak relief bought by streaming<br>high bits through controlled suffix adders costs Toffoli. The same live-scratch reduction can be a<br><strong>top-clean carry split</strong>: keep only ~2 streamed suffix bits, replace the removed stream bits with<br>coherent top-clean MAJ/UMA carry positions in the materialized prefix — live scratch flat (peak<br>unchanged), emitted Toffoli drops (<code>2a87f33</code>). A peak-neutral Toffoli win (see the carry-relief<br>exchange in the toffoli-reduction skill).</p>
+<p><strong>Lever F — in-place decode to free a persistent block (the 1218→1215 win).</strong> Keep a register block<br>alive <strong>compressed</strong> and decode it <strong>in place</strong> only for the phase that needs it, freeing the<br>persistent full-width block exactly across the peak. <code>DIALOG_GCD_K2_APPLY_INPLACE_RAW_BLOCK=1</code><br>(<code>420e0c2</code>): decode the K2 pair block in place from its 5 compressed cells + one zero lane, freeing<br>the persistent 6-lane raw block during apply (clean scratch only around the chunked add/sub) → −1 at<br>peak (with <code>SQUARE_ROW_MAX_SEG</code> 191→188 + <code>APPLY_CHUNKED_F_BLOCKS</code> 11→12, net −3 → 1215). The<br>persistent-qubit version of Lever A: carry any persistent multi-lane block (raw GCD blocks, K2 pairs,<br>materialized operands) compressed, reconstruct transiently in place at its single use site.</p>
+<p><strong>Lever G — borrowed-carry fusion (in-place scratch reuse, value-exact).</strong> A truncated-carry<br><code>cadd</code>/<code>csub</code> normally allocates a fresh carry/borrow vector then frees it. If an adjacent<br><code>inner_scratch</code> is live with enough width, the carry vector <strong>borrows from that scratch</strong> — no fresh<br>alloc, peak −k for k borrowed slots; only the <em>owned</em> fresh suffix is freed afterward (the borrowed<br>prefix was never yours). Mechanism (<code>const_arith.rs</code>, <code>461a4a3</code>): helper<br><code>borrowed_const_fold_carries(b, need, borrowed) -&gt; (full_vec, owned_vec)</code>; callers<br><code>cadd/csub_nbit_const_direct_trunc_fast_borrowed_carries(…, borrowed_carries)</code>.</p>
+<ul>
+<li><code>DIALOG_GCD_SPECIAL_FOLD_BORROW_CARRIES=1</code> (<code>461a4a3</code>): GCD special <code>cadd</code>/<code>csub</code> borrow from<br><code>inner_scratch</code>.</li>
+<li>Comparator paths (<code>98dd2ad</code>, <code>bfd3fa6</code>): <code>cmp_lt_phase_conditioned_borrowed_carries()</code> recycles<br>existing scratch carries AND uses HMR replay (toffoli-reduction Lever H) — saves Toffoli AND avoids<br>fresh carry alloc. Hunt any <code>cmp_lt</code>/<code>cmod_add/sub</code> allocating a fresh carry vector.<br><strong>Key property:</strong> value-exact ONLY if the borrowed qubits are genuinely |0⟩ at that point (else it&#39;s<br>data corruption — verify carefully).</li>
+</ul>
+<p><strong>Verification (every lever).</strong> Value/phase-exact lifetime changes must not alter the op-stream<br><em>function</em>. After each: <code>eval_circuit</code> must show <code>qubits = N-1, 0/0/0</code>, and <code>TRACE_PEAK</code> must show<br>the floor moved to N-1. If the op bytes change, the baked <code>DIALOG_TAIL_NONCE</code> goes stale (expected) →<br>re-hunt a clean nonce. Env-gate every lever default-OFF with a byte-identical base path; only<br><code>set_default_env(...)</code> it ON once verified. <code>free</code> requires |0⟩; only <code>reacquire</code> what you freed.</p>
+<blockquote>
+<p>Note: several of these knobs (<code>DIALOG_GCD_FOLD_FREED_TAIL{,_ED}</code>, <code>SQUARE_ROW_MAX_SEG</code>,<br><code>DIALOG_GCD_APPLY_CHUNKED_F_BLOCKS</code>, <code>ROUND84_KEEP_QUOTIENT_PRODUCT</code>,<br><code>DIALOG_GCD_K2_APPLY_INPLACE_RAW_BLOCK</code>, <code>DIALOG_GCD_SPECIAL_FOLD_BORROW_CARRIES</code>) also appear in<br>our own <strong>ecdsafail-circuit-optimization</strong> notes — the benhuang catalog is an independent,<br>commit-attributed cross-check of the same lever families on the dialog-GCD route. (Note this route<br>is the pre-<code>trailmix_ludicrous</code> base; see the circuit-opt skill&#39;s &quot;1168 Wall Broke&quot; section for<br>how the current SOTA family relates.)</p>
+</blockquote>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="peak-qubit-reduction.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

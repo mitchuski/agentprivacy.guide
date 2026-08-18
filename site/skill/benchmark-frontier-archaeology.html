@@ -1,0 +1,122 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Benchmark Frontier Archaeology · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Benchmark Frontier Archaeology</span></div>
+  <article><div class="md"><h1>Benchmark Frontier Archaeology</h1>
+</div>
+<div class="md"><blockquote>
+<blockquote>
+<p>-.</p>
+</blockquote>
+</blockquote>
+</div>
+<div class="md"><h1>Benchmark Frontier Archaeology</h1>
+<p>When you compete on a benchmark whose accepted submissions are visible — a git history of<br>accepted entries, public leaderboard solutions, released configs — every time the frontier<br>advances you get a free lesson, <em>if</em> you can extract what actually changed. This skill is the<br>forensic procedure for turning &quot;they beat me by 0.1%&quot; into &quot;they pulled lever X, it transfers<br>(or doesn&#39;t), and the next target is Y.&quot;</p>
+<p>The output you want from each advance is three things:</p>
+<ol>
+<li><strong>The lever</strong> — the single change that drove the improvement (not the noise around it).</li>
+<li><strong>Whether it transfers</strong> — a reusable knob/structural idea, or a one-off search artifact.</li>
+<li><strong>The next target</strong> — where the binding constraint moved, so you know where to push.</li>
+</ol>
+</div>
+<div class="md"><h2>The core loop</h2>
+<ol>
+<li><strong>Detect &amp; sync</strong> the new frontier; verify it is really better by re-measuring, not by trusting the headline.</li>
+<li><strong>Diff consecutive winners</strong> — every adjacent accepted pair, scoped to the editable/submitted paths.</li>
+<li><strong>Isolate the lever(s)</strong> in each step; filter formatting/noise.</li>
+<li><strong>Re-measure the metrics yourself</strong> — confirm you built the circuit/artifact you think you did.</li>
+<li><strong>Decompose</strong> the score delta across factors and across levers.</li>
+<li><strong>Track the moving bottleneck</strong> — where the binding constraint went → name the next target.</li>
+<li><strong>Classify</strong> each lever: transferable (knob/structural) vs non-transferable (search artifact).</li>
+<li><strong>Record the mechanism and propagate</strong> it into your own notes/skills so the knowledge compounds.</li>
+</ol>
+</div>
+<div class="md"><h2>Step 1 — Detect, sync, and re-verify</h2>
+<p>Pull the new accepted submission onto a clean tree (stash your local diagnostics/instrumentation<br>first so they don&#39;t contaminate the diff). Then <strong>re-measure the headline number yourself.</strong> A<br>submission&#39;s claimed metric is a starting point, not ground truth — you need your own measurement<br>to decompose it. Watch for stale build caches: if the toolchain keys a build artifact on source<br>hash, an env-only change can silently measure the <em>old</em> artifact. Confirm a real rebuild happened<br>(look for the build to actually run) before trusting any number.</p>
+</div>
+<div class="md"><h2>Step 2 — Diff consecutive winners, and WALK THE INTERMEDIATES</h2>
+<p>This is the step everyone gets wrong, and it&#39;s the most important rule here:</p>
+<blockquote>
+<p><strong>Diff <em>adjacent</em> accepted submissions, never two non-adjacent endpoints.</strong></p>
+</blockquote>
+<p>Competitions advance in small steps, and each accepted submission is usually <em>one</em> lever. If you<br>diff submission N against submission N−5, you bundle five independent levers into one blob and<br>invent a false causal story — attributing the qubit win to the knob that actually only cut gates,<br>etc. Enumerate <strong>every</strong> accepted submission between your last-understood point and the new<br>frontier, and diff each adjacent pair (<code>diff &lt;S_k&gt; &lt;S_{k+1}&gt;</code>), scoped to the <strong>editable/submitted<br>paths</strong> only (ignore graders, harness, and generated files). If there are eight intermediate<br>submissions, you do eight diffs. The extra work is exactly what stops you from misreading the<br>frontier.</p>
+<p>(Hard-won example: diffing a 1192-qubit winner directly against the 1193-qubit one bundled <em>two</em><br>separate submissions and produced a wrong &quot;this one knob did both&quot; story. Walking the single<br>intermediate submission showed the qubit drop and the gate trim were two different levers in two<br>different entries.)</p>
+</div>
+<div class="md"><h2>Step 3 — Isolate the lever in each step</h2>
+<p>Within each adjacent diff, separate signal from noise:</p>
+<ul>
+<li><strong>Config/knob changes</strong> — the changed parameter values (the usual lever).</li>
+<li><strong>Structural code changes</strong> — a new function, a replaced primitive, a changed schedule.</li>
+<li><strong>Noise</strong> — formatting, comments, re-baked defaults, regenerated artifacts.</li>
+</ul>
+<p>Most steps reduce to <strong>one</strong> real lever. If a single submission genuinely changed several coupled<br>things, note that explicitly — but your prior should be &quot;one lever per accepted step,&quot; and a diff<br>that looks like five levers is usually one real change plus re-baked noise (or you skipped an<br>intermediate — go back to Step 2).</p>
+</div>
+<div class="md"><h2>Step 4 — Re-measure the metrics yourself</h2>
+<p>For each step, build/run the artifact and record the metrics <em>independently</em>: the headline score<br>plus its sub-components. Two tricks recur:</p>
+<ul>
+<li><strong>Recover sub-metrics by exact arithmetic.</strong> If the score is a product (e.g. <code>factor_A × factor_B</code>) and you can measure one factor, the other often falls out as an exact integer<br>division — a clean way to get a sub-metric the submission didn&#39;t report. If the division is<br><em>not</em> exact, your assumption about the formula or your measurement is wrong; stop and reconcile.</li>
+<li><strong>Instrument the binding constraint directly</strong> if the toolchain supports it (a peak/hot-spot<br>trace), so you can see not just <em>that</em> the metric changed but <em>which part of the artifact</em> now<br>dominates it.</li>
+</ul>
+</div>
+<div class="md"><h2>Step 5 — Decompose the score delta</h2>
+<p>A single lever can move several sub-metrics at once, especially in a multi-factor objective.<br>Attribute the change <strong>per factor</strong>:</p>
+<ul>
+<li>e.g. a knob that drops one unit of factor A while <em>raising</em> factor B — separate those, and<br>compute the <strong>effective exchange rate</strong> (units of B spent per unit of A gained) to judge whether<br>it was a real win or a near-wash that only looked good because the product moved.</li>
+<li>A follow-up submission may be <strong>factor-neutral on one axis</strong> — it shaves factor B at zero cost<br>to factor A (e.g. shrinking a component that no longer binds the constraint). Recognize these as<br><em>pure</em> single-factor plays; they tell you that component had gone slack.</li>
+</ul>
+<p>Watch for <strong>reversed/loosened knobs.</strong> A new winner sometimes <em>undoes</em> an earlier tightening —<br>loosening a component once it stops being the bottleneck, to buy back the other factor for free.<br>If you assume the frontier only ever tightens, you&#39;ll misread a loosening as a regression. The<br>direction of a knob change is only meaningful relative to whether that component currently binds.</p>
+</div>
+<div class="md"><h2>Step 6 — Track the moving bottleneck → the next target</h2>
+<p>In any constrained optimization the <strong>binding constraint migrates</strong> as it&#39;s attacked: shave the<br>component that dominates the metric and a different one becomes dominant. Build the <strong>migration<br>chain</strong> across the submissions — &quot;at score S1 the binder was phase P1; lever L moved it to P2 at<br>S2; …&quot;. The current binder is <strong>your next target</strong>, and the chain often reveals the competitor&#39;s<br>strategy (they&#39;re walking the bottleneck, one lever per entry). This is the single most actionable<br>output: not &quot;they changed knob X&quot; but &quot;the constraint is now at Y, so that&#39;s where the next lever<br>has to land.&quot;</p>
+</div>
+<div class="md"><h2>Step 7 — Classify the lever: transferable vs search artifact</h2>
+<p>Decide what you can actually reuse:</p>
+<ul>
+<li><strong>Transferable</strong> — a knob value or a structural change (a fused stage, a denser encoding, a<br>per-step schedule). These port to your own line directly.</li>
+<li><strong>Non-transferable search artifact</strong> — a value that is only valid <em>because they searched for it<br>against their exact configuration</em>: a hunted random seed/nonce, an island, a fitted constant, a<br>data-order that happens to dodge a failure on their setup. Re-using their artifact on your<br>(different) configuration will not reproduce the win and may silently break correctness. When a<br>competitor&#39;s entry is &quot;structural knob change + a re-hunted artifact,&quot; <strong>only the knob transfers</strong><br>— you must re-run the search for the artifact against your own config.</li>
+</ul>
+<p>This split is what separates &quot;I learned their technique&quot; from &quot;I copied a number that won&#39;t work<br>for me.&quot;</p>
+</div>
+<div class="md"><h2>Step 8 — Record the mechanism and propagate</h2>
+<p>Write down, per advance: the lever, the measured per-factor effect, the bottleneck it exposed, and<br>the transferable/artifact split — then fold it into your own optimization notes/skills. The point<br>of archaeology is compounding: each decoded advance should make your <em>next</em> attempt sharper and<br>stop you from re-deriving what a competitor already showed you. A decoded frontier that isn&#39;t<br>written down is a lesson you&#39;ll pay for twice.</p>
+</div>
+<div class="md"><h2>A note on scope and ethics</h2>
+<p>This is for benchmarks where the winning entries are <strong>legitimately visible</strong> — an open submission<br>history, public leaderboard solutions, released artifacts — and you&#39;re a participant learning from<br>the published state of the art. It&#39;s the quantitative-competition analog of reading a published<br>paper&#39;s method. It is <em>not</em> a method for obtaining private or access-controlled submissions.</p>
+</div>
+<div class="md"><h2>Worked example (this lineage, for grounding)</h2>
+<p>A reversible point-add benchmark scored <code>peak_qubits × avg_executed_Toffoli</code>, advancing<br>1211 → 1193 → 1192 → 1185 qubits across accepted submissions:</p>
+<ul>
+<li><strong>Sync + re-measure:</strong> synced each winner, re-derived qubits via a peak trace and <code>avg_Toffoli</code><br>via exact division of the score by the qubit count (the division being exact confirmed the<br>formula and the measurement).</li>
+<li><strong>Walk intermediates:</strong> the 1193→1192 step looked like &quot;one knob did everything&quot; when diffed<br>endpoint-to-endpoint; walking the single intermediate accepted entry split it into <em>two</em> levers<br>— a segment notch that cost the qubit (and +34 Toffoli) and a separate clean-compare trim that<br>cut 442 Toffoli at <strong>zero</strong> qubits.</li>
+<li><strong>Decompose + exchange rate:</strong> the 1192→1185 step <em>spent</em> +6,604 Toffoli to buy −7 qubits — a<br>decompose that showed it cleared the qubit↔gate exchange rate, i.e. a real win not a wash.</li>
+<li><strong>Migration chain → next target:</strong> binder moved GCD-apply-block → round84-square →<br>materialized-special-underflow-fold → GCD-apply-chunk-sub-ripple; that last phase was the named<br>next target.</li>
+<li><strong>Transferable vs artifact:</strong> each advance = a structural knob (K5 clean-block hole, per-step<br>schedule, head-11 codec) <strong>plus</strong> a re-hunted island nonce. The knobs transfer; the nonce is a<br>search artifact that must be re-hunted against your own config.</li>
+<li><strong>Loosened knob caught:</strong> the 1185 winner <em>raised</em> a segment knob it had previously lowered,<br>because that component had gone off the peak — a loosening, not a regression.</li>
+</ul>
+</div>
+<div class="md"><h2>Relationship to the other skills</h2>
+<p>Archaeology is the <strong>intake</strong> stage: it tells you which lever to pull and where the bottleneck is,<br>then you hand off to <code>peak-qubit-reduction</code> (width levers), <code>toffoli-reduction</code> (gate levers), and<br><code>reversible-circuit-validation</code> (confirm any re-hunted artifact is actually clean on your config).<br>For the ECDSA-fail domain specifics — the sync workflow, the exact knob catalogue, and the GPU<br>island re-hunt — see <code>ecdsafail-circuit-optimization</code> and <code>ecdsafail-island-hunting</code>.</p>
+</div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="benchmark-frontier-archaeology.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

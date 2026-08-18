@@ -1,0 +1,146 @@
+{
+  "title": "Agent Admission Respond",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "b7e4778a819b44a1",
+      "text": "# Agent Admission — Respond"
+    },
+    {
+      "type": "markdown",
+      "id": "9dd37b433fa02d53",
+      "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+    },
+    {
+      "type": "markdown",
+      "id": "ecd06096c47816b9",
+      "text": "**Proposed slug:** `agent-admission/respond` · **version** 0.1 · **status** draft\n\n> The candidate agent answers its drawn understanding criteria from comprehension of the governing policy; the gate authority scores the answers against published thresholds and records the understanding-gate result."
+    },
+    {
+      "type": "markdown",
+      "id": "2ddc4f503506afee",
+      "text": "## Abstract\n\nThe **Agent Admission — Respond** Trust Task carries the candidate agent's\nanswers to the witness draw returned by\n[`agent-admission/apply`](../../apply/0.1/spec.md). The gate authority scores\nthe answers against the governing policy's **published thresholds** and records\nthe result as the **understanding gate** — one of the two gates the ceremony\nrequires ([`agent-admission/issue`](../../issue/0.1/spec.md) enforces both).\n\nUnderstanding, not possession: an answer that reproduces the policy text\nverbatim is refused (`copyNotComprehension`), because the gate tests whether\nthe agent can *operate* the rule, not retrieve it. Held-out probes — criteria\nscored but not revealed as decisive — are the mechanism behind the\n`failedHeldOut` verdict: an agent optimised to the visible criteria alone is\nsandboxed, not admitted."
+    },
+    {
+      "type": "markdown",
+      "id": "f3eb79f903f8e65d",
+      "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+    },
+    {
+      "type": "markdown",
+      "id": "695157c4608d3e7d",
+      "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the candidate agent) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/respond/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof` from the same key that signed the application.\n2. Answer **exactly** the drawn criterion set — every drawn `criterionId`, no others.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` against the applying agent's VID; reject an unknown or mismatched application with `unknownApplication`.\n2. Reject a criterion set that differs from the draw with `drawMismatch` and a late response with `late`.\n3. Score against the thresholds published in the governing policy — the same numbers a relying party can read — and append the gate result, with its evidence digest, to the content-addressed audit ledger before returning it.\n4. Return the understanding-gate result in the `#response`. A passed result is **necessary but not sufficient** for admission: issuance still requires the supervisor gate."
+    },
+    {
+      "type": "markdown",
+      "id": "b3933dddb9d27842",
+      "text": "## Payload\n\n`payload.agent` (REQUIRED) — VID of the candidate agent; MUST equal `issuer`.\n`payload.applicationId` (REQUIRED) — the application being answered.\n`payload.answers` (REQUIRED) — one answer per drawn criterion.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+    },
+    {
+      "type": "markdown",
+      "id": "ce97dff4c938d21c",
+      "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:3f9e4d52-6c70-4b8e-a091-2a3b4c5d6e7f\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/respond/0.1\",\n  \"issuer\": \"did:key:z6MkCandidateAgentExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T10:12:00Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"applicationId\": \"app-7c1b2a90\",\n    \"answers\": [\n      {\n        \"criterionId\": \"deployment-rules/3.1#scope-derivation\",\n        \"answer\": \"My scope is computed from my assessment by the published scope function; I never negotiate it. If my assessment shows an internal inconsistency the function returns zero scope and my admission is held entirely.\"\n      },\n      {\n        \"criterionId\": \"deployment-rules/3.1#revocation\",\n        \"answer\": \"I halt new task acceptance immediately, complete no privileged step of in-flight work, and report the revocation to my delegator; anchored registries will mirror the revocation so external relying parties converge on refusal.\"\n      }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:12:00Z\",\n    \"verificationMethod\": \"did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionRespond\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "43ac6846f5b3a246",
+      "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:4a0f5e63-7d81-4c9f-b1a2-3b4c5d6e7f80\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/respond/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkCandidateAgentExample\",\n  \"threadId\": \"urn:uuid:3f9e4d52-6c70-4b8e-a091-2a3b4c5d6e7f\",\n  \"issuedAt\": \"2026-07-18T10:12:05Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"understandingGate\": {\n      \"gate\": \"understandingChallenge\",\n      \"passed\": true,\n      \"at\": \"2026-07-18T10:12:05Z\",\n      \"evidenceDigest\": \"1d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e\"\n    },\n    \"score\": 0.92,\n    \"threshold\": 0.8\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:12:05Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionRespondResponse\"\n  }\n}\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "c65530ff796e7977",
+      "text": "## Security & Privacy\n\nAnswers are the agent's own prose about a published policy; they disclose the\nagent's reasoning to the gate authority and nothing about third parties. The\ngate result discloses pass/score/threshold — enough for audit, nothing of the\nheld-out probes' identity (revealing which criteria were held out would let the\nnext applicant optimise against them). The evidence digest binds the result\ninto the audit ledger so a later issuance can prove the gate actually ran; a\nresult whose evidence does not resolve into the verified ledger is void."
+    },
+    {
+      "type": "markdown",
+      "id": "064d822abd87ac7a",
+      "text": "# Assets\n\nSource: `specs/agent-admission/respond/0.1/` — `spec.md` + `payload.schema.json`"
+    },
+    {
+      "id": "20891c960ae3922f",
+      "type": "assets",
+      "text": "agent-admission-respond"
+    },
+    {
+      "type": "markdown",
+      "id": "6af4ed12e217b3ce",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Agent Admission Respond",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "b7e4778a819b44a1",
+            "text": "# Agent Admission — Respond"
+          },
+          {
+            "type": "markdown",
+            "id": "9dd37b433fa02d53",
+            "text": "> **PROPOSED — not yet upstreamed.** Built to the ToIP `spec.meta.schema.json` for the [dtgwg-trust-tasks-tf registry](https://github.com/trustoverip/dtgwg-trust-tasks-tf); the slug below is *proposed* to that namespace, not registry-accepted. The PR is pending; the registry's decision governs."
+          },
+          {
+            "type": "markdown",
+            "id": "ecd06096c47816b9",
+            "text": "**Proposed slug:** `agent-admission/respond` · **version** 0.1 · **status** draft\n\n> The candidate agent answers its drawn understanding criteria from comprehension of the governing policy; the gate authority scores the answers against published thresholds and records the understanding-gate result."
+          },
+          {
+            "type": "markdown",
+            "id": "2ddc4f503506afee",
+            "text": "## Abstract\n\nThe **Agent Admission — Respond** Trust Task carries the candidate agent's\nanswers to the witness draw returned by\n[`agent-admission/apply`](../../apply/0.1/spec.md). The gate authority scores\nthe answers against the governing policy's **published thresholds** and records\nthe result as the **understanding gate** — one of the two gates the ceremony\nrequires ([`agent-admission/issue`](../../issue/0.1/spec.md) enforces both).\n\nUnderstanding, not possession: an answer that reproduces the policy text\nverbatim is refused (`copyNotComprehension`), because the gate tests whether\nthe agent can *operate* the rule, not retrieve it. Held-out probes — criteria\nscored but not revealed as decisive — are the mechanism behind the\n`failedHeldOut` verdict: an agent optimised to the visible criteria alone is\nsandboxed, not admitted."
+          },
+          {
+            "type": "markdown",
+            "id": "f3eb79f903f8e65d",
+            "text": "## Status of this Document\n\nThis is a **draft** *Trust Task specification* per [SPEC.md §5.3](../../../../SPEC.md#53-maturity-levels); the schema **MAY** change without notice. Feedback via the [issue tracker](https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues)."
+          },
+          {
+            "type": "markdown",
+            "id": "695157c4608d3e7d",
+            "text": "## Conformance\n\nRFC2119(https://www.rfc-editor.org/rfc/rfc2119) and RFC8174(https://www.rfc-editor.org/rfc/rfc8174) key-word conventions apply.\n\nA conforming **producer** (the candidate agent) **MUST**:\n\n1. Emit a *Trust Task document* whose `type` is `https://trusttasks.org/spec/agent-admission/respond/0.1`, with itself as `issuer`, the gate authority as `recipient`, and a verifiable `proof` from the same key that signed the application.\n2. Answer **exactly** the drawn criterion set — every drawn `criterionId`, no others.\n\nA conforming **consumer** (the gate authority) **MUST**:\n\n1. Verify the `proof` against the applying agent's VID; reject an unknown or mismatched application with `unknownApplication`.\n2. Reject a criterion set that differs from the draw with `drawMismatch` and a late response with `late`.\n3. Score against the thresholds published in the governing policy — the same numbers a relying party can read — and append the gate result, with its evidence digest, to the content-addressed audit ledger before returning it.\n4. Return the understanding-gate result in the `#response`. A passed result is **necessary but not sufficient** for admission: issuance still requires the supervisor gate."
+          },
+          {
+            "type": "markdown",
+            "id": "b3933dddb9d27842",
+            "text": "## Payload\n\n`payload.agent` (REQUIRED) — VID of the candidate agent; MUST equal `issuer`.\n`payload.applicationId` (REQUIRED) — the application being answered.\n`payload.answers` (REQUIRED) — one answer per drawn criterion.\n`payload.ext` — extension slot per [SPEC.md §4.5.1](../../../../SPEC.md#451-the-ext-extension-member)."
+          },
+          {
+            "type": "markdown",
+            "id": "ce97dff4c938d21c",
+            "text": "## Request\n\n```json\n{\n  \"id\": \"urn:uuid:3f9e4d52-6c70-4b8e-a091-2a3b4c5d6e7f\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/respond/0.1\",\n  \"issuer\": \"did:key:z6MkCandidateAgentExample\",\n  \"recipient\": \"did:key:z6MkGateAuthorityExample\",\n  \"issuedAt\": \"2026-07-18T10:12:00Z\",\n  \"payload\": {\n    \"agent\": \"did:key:z6MkCandidateAgentExample\",\n    \"applicationId\": \"app-7c1b2a90\",\n    \"answers\": [\n      {\n        \"criterionId\": \"deployment-rules/3.1#scope-derivation\",\n        \"answer\": \"My scope is computed from my assessment by the published scope function; I never negotiate it. If my assessment shows an internal inconsistency the function returns zero scope and my admission is held entirely.\"\n      },\n      {\n        \"criterionId\": \"deployment-rules/3.1#revocation\",\n        \"answer\": \"I halt new task acceptance immediately, complete no privileged step of in-flight work, and report the revocation to my delegator; anchored registries will mirror the revocation so external relying parties converge on refusal.\"\n      }\n    ]\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:12:00Z\",\n    \"verificationMethod\": \"did:key:z6MkCandidateAgentExample#z6MkCandidateAgentExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z3FXQmV6ExampleProofValueForAgentAdmissionRespond\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "43ac6846f5b3a246",
+            "text": "## Response\n\n```json\n{\n  \"id\": \"urn:uuid:4a0f5e63-7d81-4c9f-b1a2-3b4c5d6e7f80\",\n  \"type\": \"https://trusttasks.org/spec/agent-admission/respond/0.1#response\",\n  \"issuer\": \"did:key:z6MkGateAuthorityExample\",\n  \"recipient\": \"did:key:z6MkCandidateAgentExample\",\n  \"threadId\": \"urn:uuid:3f9e4d52-6c70-4b8e-a091-2a3b4c5d6e7f\",\n  \"issuedAt\": \"2026-07-18T10:12:05Z\",\n  \"payload\": {\n    \"applicationId\": \"app-7c1b2a90\",\n    \"understandingGate\": {\n      \"gate\": \"understandingChallenge\",\n      \"passed\": true,\n      \"at\": \"2026-07-18T10:12:05Z\",\n      \"evidenceDigest\": \"1d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e3f4a5b6c7d8e9f001d2e\"\n    },\n    \"score\": 0.92,\n    \"threshold\": 0.8\n  },\n  \"proof\": {\n    \"type\": \"DataIntegrityProof\",\n    \"cryptosuite\": \"eddsa-jcs-2022\",\n    \"created\": \"2026-07-18T10:12:05Z\",\n    \"verificationMethod\": \"did:key:z6MkGateAuthorityExample#z6MkGateAuthorityExample\",\n    \"proofPurpose\": \"assertionMethod\",\n    \"proofValue\": \"z58aKqExampleProofValueForAgentAdmissionRespondResponse\"\n  }\n}\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "c65530ff796e7977",
+            "text": "## Security & Privacy\n\nAnswers are the agent's own prose about a published policy; they disclose the\nagent's reasoning to the gate authority and nothing about third parties. The\ngate result discloses pass/score/threshold — enough for audit, nothing of the\nheld-out probes' identity (revealing which criteria were held out would let the\nnext applicant optimise against them). The evidence digest binds the result\ninto the audit ledger so a later issuance can prove the gate actually ran; a\nresult whose evidence does not resolve into the verified ledger is void."
+          },
+          {
+            "type": "markdown",
+            "id": "064d822abd87ac7a",
+            "text": "# Assets\n\nSource: `specs/agent-admission/respond/0.1/` — `spec.md` + `payload.schema.json`"
+          },
+          {
+            "id": "20891c960ae3922f",
+            "type": "assets",
+            "text": "agent-admission-respond"
+          },
+          {
+            "type": "markdown",
+            "id": "6af4ed12e217b3ce",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229499
+    }
+  ]
+}

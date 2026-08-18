@@ -1,0 +1,129 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lab — quiet-presentation · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Lab — quiet-presentation</span></div>
+  <article><div class="md"><h1>quiet-presentation — X4 observable-event minimisation as a runnable reference</h1>
+<p><em>Lab model of X4&#39;s design layer (research root: <a class="wlink" href="x4-observable-event-minimisation.html">X4 — Observable Event Minimisation</a>). Reference model of the decision rules over event traces — not real networking, not crypto.</em></p>
+</div>
+<div class="md"><h2>What it demonstrates</h2>
+<p><strong>Unlinkability, not undetectability — made testable.</strong> §20 rules the narrow claim: a presentation<br>event remains observable, and the request pattern itself discloses behaviour. This lane does not<br>weaken that ruling; it turns §20&#39;s SHOULD-level minimisation measures into checkable properties and<br>makes the honest part structural: <code>checkQuietTier</code> <strong>never returns without a non-empty residue<br>list</strong> (<code>presentation-occurrence</code>, <code>coarse-timing</code>, <code>status-fetch-cadence</code>,<br><code>co-resident-app-signals-bounded-not-eliminated</code>). The tier is a <strong>posture, not a promise</strong> — a<br>declared, testable deployment class in the §6.4 spirit, and a passing result still says what the<br>verifier sees.</p>
+<p>Two deployments over logical-tick event traces (<code>{type, t, shape, surface}</code>, no <code>Date.now()</code><br>anywhere):</p>
+<ul>
+<li><strong>quiet</strong> — status roots fetched on a fixed schedule <em>independent of presentations</em> (M-STATUS),<br>shapes padded to a profile constant (M-SHAPE), ONE uniform external error string with detailed<br>reason codes routed to the holder only (M-ERROR), retries bounded and on the timing grid<br>(M-RETRY);</li>
+<li><strong>naive</strong> — the anti-model: per-show status lookup, per-show proof shape, internal reason codes<br>on the external surface, immediate off-grid retries. It fails the tier by name.</li>
+</ul>
+</div>
+<div class="md"><h2>Budget table summary (budget.mjs — M1)</h2>
+<p>One row per §19 observer (imported from show-composition&#39;s <code>OBSERVERS</code> — the list is not<br>restated), for MLP and EPP, each row in §2.4 three-parameter form<br>(<code>{againstWhom, forHowLong, alongsideWhat}</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Observer</th>
+<th>Sees per presentation (quiet tier holding)</th>
+<th>Horizon (MLP → EPP)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>verifier</td>
+<td>occurrence, coarse time on grid, bundle id, step-up frequency, uniform error surface, constant shape</td>
+<td>session → epoch (nullifier dominates)</td>
+</tr>
+<tr>
+<td>issuer</td>
+<td>nothing per-show (local mirror)</td>
+<td>root-cache validity window</td>
+</tr>
+<tr>
+<td>issuer+verifier colluding</td>
+<td>occurrence + issuer class; EPP adds within-context nullifier join</td>
+<td>session → epoch-within-context</td>
+</tr>
+<tr>
+<td>multiple verifiers colluding</td>
+<td>timing intersection; EPP adds shared-context nullifier linkage (by design, §2.3)</td>
+<td>session → epoch-within-context</td>
+</tr>
+<tr>
+<td>registry operator</td>
+<td>scheduled cadence only, not shows</td>
+<td>root-cache window</td>
+</tr>
+<tr>
+<td>accreditation authority</td>
+<td>nothing per-show (mirrored snapshot)</td>
+<td>snapshot window</td>
+</tr>
+<tr>
+<td>mediated prover</td>
+<td>where used: full stream under §21.2; switch never silent (§21.3)</td>
+<td>session only (non-retention)</td>
+</tr>
+<tr>
+<td>wallet/agent operator</td>
+<td>full local view incl. holder-routed reason codes</td>
+<td>holder retention policy</td>
+</tr>
+<tr>
+<td>network observer</td>
+<td>fixed-cadence contact pattern, padded sizes, grid timing</td>
+<td>profile version lifetime</td>
+</tr>
+<tr>
+<td>auditor/log processor</td>
+<td>exactly the log-field register fields (§6.6)</td>
+<td>per-field retention</td>
+</tr>
+<tr>
+<td>co-resident app</td>
+<td>occurrence via device signals — <strong>declared residue, bounded not eliminated</strong></td>
+<td>co-residency period</td>
+</tr>
+</tbody></table>
+<p><code>validateBudget</code> requires every §19 observer to have a row (<code>missing-observer-row:&lt;name&gt;</code>), all<br>three §2.4 parameters per row (<code>incomplete-claim-form:...</code>), and refuses an empty &quot;sees&quot; list<br>(<code>empty-sees-claims-undetectability:...</code>) — an empty row would claim undetectability.</p>
+</div>
+<div class="md"><h2>Tier properties (quiet.mjs — M2)</h2>
+<p>X4 names 7 required properties. Modelled here, at event-trace altitude:</p>
+<ol>
+<li><strong>status pattern presentation-independent</strong> — the mixed trace&#39;s status-fetch tick pattern must<br>equal the same deployment&#39;s idle-window pattern (a comparison of two traces, not a property of<br>one) → <code>status-correlated-with-presentation</code>;</li>
+<li><strong>no per-show authority contact</strong> — no <em>off-schedule</em> status-fetch within k ticks of a<br>presentation; on-schedule ticks that land near a show are exempt (that is what independence<br>means) → <code>per-show-authority-contact</code>;</li>
+<li><strong>uniform external error surface</strong> — one distinct external string, and never a string drawn from<br>the internal v1 reason register; internal codes stay distinct and holder-routed →<br><code>error-surface-nonuniform</code>, <code>unknown-internal-reason:&lt;code&gt;</code>;</li>
+<li><strong>shape constant per profile</strong> → <code>shape-fingerprint</code>;</li>
+<li><strong>retries within budget and on-grid</strong> → <code>retry-off-grid</code>, <code>retry-over-budget</code>.</li>
+</ol>
+<p><strong>Deferred — could not be modelled honestly at this altitude:</strong> the <em>statistical</em> halves of tier<br>properties 1 and 3 (traffic-trace <strong>distribution</strong> indistinguishability across credential choices,<br>and error <strong>timing</strong> indistinguishability over the §26.1 negative corpus — those need real traces<br>and a distinguisher, not tick equality); tier property 6 (mediated path §21.2 controls — no<br>mediator is modelled here; it appears only as a budget row); packet-level network shape (the<br><code>shape</code> field is a size-class stand-in). Named as gaps, not silently capped.</p>
+</div>
+<div class="md"><h2>Named failure codes emitted (the X1 seam)</h2>
+<p><code>missing-observer-row:&lt;observer&gt;</code> · <code>unknown-observer:&lt;name&gt;</code> · <code>incomplete-claim-form:&lt;observer&gt;:&lt;param&gt;</code> ·<br><code>empty-sees-claims-undetectability:&lt;observer&gt;</code> · <code>status-correlated-with-presentation</code> ·<br><code>per-show-authority-contact</code> · <code>error-surface-nonuniform</code> · <code>shape-fingerprint</code> · <code>retry-off-grid</code> ·<br><code>retry-over-budget</code> · <code>unknown-internal-reason:&lt;code&gt;</code> · <code>prohibited-log-field:&lt;name&gt;</code> ·<br><code>unregistered-log-field:&lt;name&gt;</code></p>
+<p>These are <strong>fixture-register candidates for a future v2</strong> of the fixtures lane&#39;s reason register<br>(v1 is append-only; this lane does NOT edit <code>../fixtures/</code>). The consumption direction today is the<br>reverse: quiet.mjs <em>imports</em> <code>isKnownReason</code> to require holder-routed codes to be register vocabulary<br>and to forbid register vocabulary on the external surface — the fixture-visible internal vocabulary<br>vs. external surface separation X4&#39;s M-ERROR requires.</p>
+</div>
+<div class="md"><h2>Prohibited log fields (logregister.mjs — M3)</h2>
+<p><code>exactPresentationTimestamp</code> (coarsen; §6.6/§20) · <code>holderDeviceId</code> · <code>stableHolderId</code> (§6.6) ·<br><code>retryCountByPseudonym</code> (§10.4) · <code>proofSizeBytes</code> (§10.4/§19 — logging it un-pads the padding) ·<br><code>internalReasonCode</code> (holder-routed only) · <code>mediatorSessionId</code> (§21.2 non-retention).</p>
+<p>The compliant register carries 7 fields (<code>presentationEpoch</code>, <code>bundleId</code>, <code>profileVersion</code>,<br><code>rootEpoch</code>, <code>outcome</code>, <code>retryWithinBudget</code>, <code>externalErrorSurface</code>) each with purpose, retention,<br>cardinality, correlation risk, and responsible authority — the §23 accountability route for excess<br>correlation is the party controlling the correlating surface.</p>
+</div>
+<div class="md"><h2>Pointers</h2>
+<ul>
+<li><strong>Research root:</strong> <a class="wlink" href="x4-observable-event-minimisation.html">X4 — Observable Event Minimisation</a><br>(M1 budget → budget.mjs; M2 property tests → quiet.mjs; M3 register → logregister.mjs; M4 tier<br>declaration text = upstream work, not lab code).</li>
+<li><strong>Upstream surface:</strong> §25 gate item 7 — &quot;composition and observable-event assumptions&quot;. The tier<br>declaration plus these fixtures are the gate input; the budget rows are §19 disclosure-boundary<br>record rows in §2.4 form, ready to be quoted.</li>
+<li><strong>Siblings:</strong> <code>../show-composition/</code> (OBSERVERS, the presentations being wrapped),<br><code>../fixtures/reasons.mjs</code> (v1 internal vocabulary, READ-ONLY), <code>../canonical/</code> (shared encodings).</li>
+</ul>
+<p>Run: <code>node test.mjs</code> → 8/8.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="lab-quiet-presentation.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

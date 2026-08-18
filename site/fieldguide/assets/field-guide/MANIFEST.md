@@ -1,0 +1,69 @@
+# Field Guide × TrustGraph — working files
+
+Working files behind the pages in this space, plus the ARWorld documents they answer. Digests are here so you can tell whether what you downloaded is what was published. Everything under source/ came down the Field Guide strand and is unaltered; everything else came back down the trust-graph strand. Two halves of one team's work, kept distinguishable rather than separate.
+
+61 files · 410.5 kB · suites green
+
+| file | size | sha256 |
+| --- | --- | --- |
+| `docs/counter-spec-meet-and-overlay.md` | 30.1 kB | `0025f84813f09401…` |
+| `docs/note-oasis-cred-spec-alignment.md` | 13.6 kB | `f80050af6a9cfe60…` |
+| `docs/note-zk-path-for-arworld.md` | 9.0 kB | `b7c181fc8fadfb02…` |
+| `docs/question-map.md` | 6.5 kB | `fce3d4311dec4905…` |
+| `docs/reflection-map.md` | 9.9 kB | `b3344029fb43e363…` |
+| `QUESTION-MAP.md` | 6.5 kB | `fce3d4311dec4905…` |
+| `REFLECTION-MAP.md` | 9.9 kB | `b3344029fb43e363…` |
+| `reports/verify.txt` | 753 B | `1a47095f8d0da3b7…` |
+| `runtimes/acceptance/src/fixture.mjs` | 4.5 kB | `8afc9bb826aa6f2b…` |
+| `runtimes/acceptance/src/ranking.mjs` | 3.0 kB | `89f7f56c6d4c7c69…` |
+| `runtimes/acceptance/test.mjs` | 8.1 kB | `0149f98fe7fe559b…` |
+| `runtimes/consumer-py/consume.py` | 5.5 kB | `c65d2e5cb0233826…` |
+| `runtimes/fixtures/generate.mjs` | 8.3 kB | `5350cc856f3b1c1f…` |
+| `runtimes/fixtures/register.mjs` | 3.4 kB | `5f9d647314f7770a…` |
+| `runtimes/fixtures/test.mjs` | 4.0 kB | `eb091ec69bdfcc3c…` |
+| `runtimes/fixtures/vectors.json` | 18.0 kB | `8a2637fbca1d59fb…` |
+| `runtimes/lab-bridge/test.mjs` | 10.0 kB | `4349be196e3ee303…` |
+| `runtimes/meet-overlay/NOTES.md` | 5.9 kB | `9b9bbb34d37db4ef…` |
+| `runtimes/meet-overlay/src/canonical.mjs` | 2.1 kB | `f11ce3d615fb6fb2…` |
+| `runtimes/meet-overlay/src/erosion.mjs` | 1.2 kB | `47f2b2ccd41e8c7f…` |
+| `runtimes/meet-overlay/src/geo.mjs` | 736 B | `6eb4e465c79afa63…` |
+| `runtimes/meet-overlay/src/hash.mjs` | 674 B | `951eac0dbd8d1139…` |
+| `runtimes/meet-overlay/src/identity.mjs` | 853 B | `a800eb28d9f7609b…` |
+| `runtimes/meet-overlay/src/knowledge.mjs` | 5.6 kB | `237507b92be0714b…` |
+| `runtimes/meet-overlay/src/meet.mjs` | 9.5 kB | `d0b49405da89c1ef…` |
+| `runtimes/meet-overlay/src/nearby.mjs` | 4.5 kB | `c097fa1ae035bc60…` |
+| `runtimes/meet-overlay/src/promise.mjs` | 6.0 kB | `513a3d9269c9be65…` |
+| `runtimes/meet-overlay/src/story.mjs` | 4.1 kB | `d243084a28bbdbbe…` |
+| `runtimes/meet-overlay/src/time.mjs` | 681 B | `1a62a628cee80be4…` |
+| `runtimes/meet-overlay/test.mjs` | 20.7 kB | `68f8e5a19d34e49a…` |
+| `runtimes/open-questions/src/answers.mjs` | 4.6 kB | `efedede43f59c628…` |
+| `runtimes/open-questions/test.mjs` | 4.7 kB | `7d01fc0f0c17b399…` |
+| `runtimes/questions/test.mjs` | 3.7 kB | `84779c5652de53cf…` |
+| `runtimes/reflection/test.mjs` | 4.2 kB | `7b06b72807eb13fb…` |
+| `runtimes/verify.mjs` | 2.9 kB | `89705e2dbfc93192…` |
+| `source/arworld_discovery.md` | 9.6 kB | `69009aabce93fdfa…` |
+| `source/arworld_trust_weighted_poi.md` | 10.4 kB | `eea86cae21022209…` |
+| `source/mitch_arworld_field_guide_handoff.md` | 16.6 kB | `a7890e9fb0800572…` |
+| `tools/author.mjs` | 73.8 kB | `bd5751bad2cacf82…` |
+| `wiki/2026-08-15-the-predicate-walks-to-islington.md` | 10.8 kB | `f3749987e35ec213…` |
+| `wiki/2026-08-16-the-checklist-answers-back.md` | 6.7 kB | `3aacd7536232d9bf…` |
+| `wiki/a-wiki-fork-is-not-an-audience.md` | 2.3 kB | `ec152c500ab5ae68…` |
+| `wiki/audience-is-granted-not-computed.md` | 1.7 kB | `411f122b24caee02…` |
+| `wiki/could-this-be-zero-knowledge.md` | 5.3 kB | `d90e69554b3833ed…` |
+| `wiki/erosion-is-a-rate-not-a-cliff.md` | 1.3 kB | `c5b7fa2bdc0a7826…` |
+| `wiki/field-guide-trust-overlay.md` | 3.9 kB | `0998068de926bfa9…` |
+| `wiki/hitchhikers-field-guide.md` | 3.6 kB | `65cdaf60a79929ec…` |
+| `wiki/oasis-and-the-cred-spec.md` | 4.0 kB | `e2fe8c151ec7dcf4…` |
+| `wiki/phase-0-acceptance.md` | 2.2 kB | `4dbbcbf95884837f…` |
+| `wiki/proverbs-of-the-trust-overlay.md` | 2.5 kB | `d8c583f1e7fdf74f…` |
+| `wiki/rounding-is-not-a-detail.md` | 1.7 kB | `4a7adffd80ff74bc…` |
+| `wiki/shared-quest-is-not-consent.md` | 1.5 kB | `61f708d4027536e1…` |
+| `wiki/the-arworld-pack.md` | 2.0 kB | `dd71766d449e39b3…` |
+| `wiki/the-dtg-credentials-core-specification.md` | 3.0 kB | `a2415cd8f6e1ee81…` |
+| `wiki/the-dtg-zkp-task-force.md` | 2.1 kB | `be8296a33e01c09e…` |
+| `wiki/the-meet-rite.md` | 2.1 kB | `f35f655ff99715b0…` |
+| `wiki/the-overlay-ranking.md` | 1.9 kB | `5511e0b008607b8d…` |
+| `wiki/the-pairwise-peer-reference.md` | 1.7 kB | `ba4aeeb1faa98b17…` |
+| `wiki/the-question-map.md` | 2.0 kB | `62b5d2e73d66a636…` |
+| `wiki/the-rejection-register.md` | 1.4 kB | `a69120d5aee01555…` |
+| `wiki/the-working-files.md` | 2.7 kB | `2d0d2c19a2003e2a…` |

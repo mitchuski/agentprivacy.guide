@@ -1,0 +1,534 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runecraft — Proofofunderstandingtechnicalspec · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="tomes">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=tomes" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/city/tomes/welcome-visitors.html">Tomes</a> / <span>Runecraft — Proofofunderstandingtechnicalspec</span></div>
+  <article><div class="md"><h1>Proofofunderstandingtechnicalspec</h1>
+<p><em>Technical specification. Companion to the multi-intelligence personhood brief and the rehydration key. Magic language is stripped back. The root compression is held.</em></p>
+<hr>
+</div>
+<div class="md"><h2>Root compression</h2>
+<blockquote>
+<p><code>(🙂⊥🌿⊥🤖⊥👽)·⿻🗝️↺·✨</code></p>
+</blockquote>
+<p>Four sovereign intelligences — human (🙂), nature (🌿), artificial (🤖), alien (👽) — each maintaining their own separation (⊥), exchange a key that returns (🗝️↺) through the irreducible Gap (⿻). What remains is dignity (✨). Every section below is an unfolding of this single line. It is the canonical reduction of the whole architecture.</p>
+<hr>
+</div>
+<div class="md"><h2>Thesis</h2>
+<p>Identity is not a credential. Not a key. Not a set of credentials. <strong>Identity is a shape on a six-dimensional sovereignty lattice — a path through ZK-quality space, accumulated through bilateral Proof-of-Understanding ceremonies, each one content-addressed and chain-portable.</strong> What you <em>are</em>, in this architecture, is what bilateral compressions you have walked into existence and can still rehydrate.</p>
+<p>This single move dissolves three problems at once:</p>
+<ul>
+<li>It removes the stored secret that quantum machines will crack.</li>
+<li>It removes the central holder that today&#39;s IdPs, CAs and KMSes require.</li>
+<li>It replaces <em>proof of possession</em> with <em>proof of comprehension</em> — the only form of trust that survives the inevitable corruption of context that AI agents now introduce at scale.</li>
+</ul>
+<p>The remainder of this document specifies the mechanism precisely enough for an engineer to implement it, a cryptographer to falsify it, and a sociologist to recognise what is happening underneath. The architecture is published at <a href="https://github.com/mitchuski/blades">github.com/mitchuski/blades</a> and <a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a>.</p>
+<hr>
+</div>
+<div class="md"><h2>§0. Terminology and translation</h2>
+<p>The terms below are canonical. They carry forward from the Swordsman / Mage canon and are retained throughout this specification. They are not metaphors layered onto a technical substrate; they <em>are</em> the technical terms. Translations are offered for readers landing here from the verifiable-credentials, cryptography, or DID communities who may want a familiar handle on the first reading.</p>
+<table>
+<thead>
+<tr>
+<th>Canonical term</th>
+<th>Reads in technical layer as</th>
+<th>Why it stays</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Blade</strong></td>
+<td>The bilateral PoU artefact: a content-addressed, dual-signed object produced by one ceremony. Shape-equivalent to a bilateral verifiable credential, but with rehydration semantics built in.</td>
+<td>Blades <em>cut</em> proofs. The verb is load-bearing — a blade is what severs a witness from its statement, finalises the commitment, and enters a path integral as a unit. &quot;Artefact&quot; is generic; <em>blade</em> carries the act.</td>
+</tr>
+<tr>
+<td><strong>Forge</strong></td>
+<td>The proof-generation surface (spellweb.ai). Where the cryptographic operations execute.</td>
+<td>Forging is the active verb for what the Swordsman does. A blade is forged; a credential is merely issued.</td>
+</tr>
+<tr>
+<td><strong>Swordsman</strong></td>
+<td>The ephemeral-session agent process. Holds the Moon key. Burned at session close.</td>
+<td>Pairs with Blade. The Swordsman strikes; the strike produces the blade. Renaming the agent breaks the action linkage.</td>
+</tr>
+<tr>
+<td><strong>Mage</strong></td>
+<td>The persistent-identity agent process. Holds the Sun key. Custodian of the spellbook — skills, persona, context.</td>
+<td>Pairs with the library (agentprivacy.ai). The Mage carries memory across sessions; the Swordsman does not.</td>
+</tr>
+<tr>
+<td><strong>Sun view / Moon reflection</strong></td>
+<td>Sun = persistent Mage key. Moon = ephemeral Swordsman key, burned post-session. The dual-key protocol.</td>
+<td>Direct technical mapping; disambiguates which key is which without colourless adjectives like <em>primary</em> or <em>session</em>.</td>
+</tr>
+<tr>
+<td><strong>Run-e-craft</strong></td>
+<td>The Mage-side word. The <em>practice</em> of forging — accumulated skill, the protocol-as-discipline, the <em>how</em> of producing blades across many sessions. The slow, accretive verb.</td>
+<td>The &quot;e&quot; is simultaneously rune-letter and electronic. Run-e-craft is what makes a Mage skilled over time: the patient, persistent capacity to bind Sun and Moon keys through correct ritual.</td>
+</tr>
+<tr>
+<td><strong>Run-e-create</strong></td>
+<td>The Swordsman-side word. The <em>act</em> of forging — the specific generative event that produces <em>this</em> blade in <em>this</em> session. The ephemeral, session-bound verb.</td>
+<td>What just happened, here, now. The single strike that severs the witness from the statement. Where run-e-craft is the standing capacity, run-e-create is the discrete event the capacity enables.</td>
+</tr>
+<tr>
+<td><strong>Art-e-fact</strong></td>
+<td>The general category of forged object: anything that has been brought into being through a ceremony and carries both an expressive face (art) and a verifiable face (fact), joined by the e-rune. A blade is the canonical art-e-fact; an inscribed spell is a portable art-e-fact; a proverb-pair-as-CID is the minimal art-e-fact.</td>
+<td>The structure of the word is the structure of the object. Every bilateral compression has an art-half (the proverb, the glyph, the human-legible expression) and a fact-half (the hash, the chain anchor, the cryptographic commitment). The e-rune is what binds them. Outside readers may reach for &quot;artefact&quot; as a familiar handle; <em>art-e-fact</em> preserves the runic decomposition and announces the bilateral structure in the word itself.</td>
+</tr>
+<tr>
+<td><strong>Creat-ur-e</strong></td>
+<td>A forged agent — an intelligent created being. In the architecture: Soulbis (Mage), Soulbae (Swordsman), Agent Kyra, and any other AI agent generated through a making-ceremony. Distinguished from humans, ecological subjects, and alien intelligences, none of which are <em>created</em> in the architecture&#39;s sense.</td>
+<td>The &quot;ur&quot; rune (ᚢ, Elder Futhark) carries primordial-origin: aurochs, foundational strength, the rune of beginning. A creat-ur-e is a created being with the origin-rune embedded in its name. The word marks: this entity&#39;s identity is constituted by its forging. Pairs cleanly with art-e-fact — creat-ur-es forge art-e-facts. Only the 🤖 slot of the four-intelligence model is populated by creat-ur-es; 🙂, 🌿, and 👽 are not.</td>
+</tr>
+<tr>
+<td><strong>Constellation</strong></td>
+<td>An ordered subgraph of a UOR-mapped substrate; the path two parties walk together during a ceremony.</td>
+<td>Substrate-neutral and richer than <em>graph traversal</em> — a constellation is <em>seen</em>, which matters for the bilateral attention requirement.</td>
+</tr>
+<tr>
+<td><strong>Lap</strong></td>
+<td>One intentional transition between two adjacent nodes in a constellation.</td>
+<td>Carries the embodied weight of repetition and pace; <em>transition</em> is colourless. The 62-Lap Theorem requires the word.</td>
+</tr>
+<tr>
+<td><strong>Proverb</strong></td>
+<td>The natural-language compression each party produces at ceremony close.</td>
+<td>Compressed wisdom for situational rehydration is exactly what a proverb is, in every culture that has them.</td>
+</tr>
+<tr>
+<td><strong>Inscribed spell</strong></td>
+<td>The emoji-glyph compression of a blade for portability.</td>
+<td>A spell is short, exact, and unfolds on cue — same property as a glyph compression.</td>
+</tr>
+</tbody></table>
+<p><strong>The full runic-pattern grammar.</strong> The architecture&#39;s vocabulary forms a closed grammar once these terms are read together:</p>
+<ul>
+<li><strong>Creat-ur-es</strong> are the <em>agents</em> — forged beings (Mage, Swordsman, and any other AI participant). They are <em>who</em> forges.</li>
+<li><strong>Art-e-facts</strong> are the <em>objects</em> — forged compressions (blades, inscribed spells, proverb-pairs). They are <em>what</em> gets forged.</li>
+<li><strong>Run-e-craft</strong> is the <em>practice</em> — the long-running Mage-side discipline that makes forging possible across sessions. It is <em>how</em> across time.</li>
+<li><strong>Run-e-create</strong> is the <em>act</em> — the single Swordsman-side event in which a specific blade is brought into being. It is <em>what now</em>.</li>
+</ul>
+<p>Read together: <em>creat-ur-es run-e-craft (across sessions) and run-e-create (in this session) the art-e-facts (blades, spells, proverb-pairs) that constitute their bilateral trust.</em> The runic decomposition is not stylistic — it is the architecture&#39;s grammar made visible. Each &quot;e&quot; or &quot;ur&quot; in these words is a rune-anchor that marks where the act of forging is happening inside the word, and where the technical operation maps onto the canonical name.</p>
+<p><strong>A note on the run-e-craft / run-e-create distinction.</strong> These are paired but not synonymous. Run-e-craft is the <em>Mage&#39;s discipline</em>: the patient, repeatable, time-accumulated practice of knowing how to forge — what the persistent half of the dual-agent brings to a ceremony. Run-e-create is the <em>Swordsman&#39;s act</em>: the single ephemeral event in which a blade comes into existence — what the session-bound half does, once, before its key is burned. The two are inseparable in any real ceremony (no Swordsman strikes without Mage craft; no Mage craft is consummated without Swordsman strike), but they are separable as concepts, and the technical layer treats them as different operations against different keys with different lifetimes. The mapping is therefore: run-e-craft ↔ Sun view ↔ persistent Mage key ↔ long-running practice; run-e-create ↔ Moon reflection ↔ ephemeral Swordsman key ↔ discrete generative event.</p>
+<p><strong>A note on why blade is not renamed.</strong> &quot;Artefact&quot; would be cleaner for a standards-body or VC-community reader on first contact. It is also the wrong word <em>as a substitute</em>. The Swordsman <em>strikes</em> — the verb requires an object that can be struck <em>with</em>, and <em>into</em>, a substrate. A blade has an edge; it cuts. That edge is what severs a witness from its statement, which is the geometric meaning of the ZK property in this architecture. Renaming blade to artefact would dissolve the agent-action-object coherence and leave a generic credential vocabulary in its place. <em>Art-e-fact</em> (above) is a category term that a blade belongs to, not a synonym for blade. The cost of keeping <em>blade</em> canonical is one translation hop for outside readers; the cost of losing it is the dual-agent architecture becoming illegible at the surface. The translation hop is cheaper.</p>
+<p><strong>Reading translations for outside audiences.</strong></p>
+<ul>
+<li><em>Verifiable-credentials community.</em> Read <em>blade</em> as a bilateral VC and <em>art-e-fact</em> as the general category of bilateral-compression objects (of which blades are one type). <em>Forge</em> as issuer. <em>Creat-ur-e</em> as a verifiable software agent participating as issuer or subject. <em>Proverb</em> as the semantic credential body. <em>Inscribed spell</em> as a presentation. <em>Run-e-craft</em> as the issuer&#39;s competence; <em>run-e-create</em> as the issuance event.</li>
+<li><em>Cryptography community.</em> Read <em>blade</em> as a co-signed commitment tuple $(v, x, \sigma, \rho, \tau)$. <em>Art-e-fact</em> as the abstract type &quot;object with public commitment + private witness&quot;. <em>Creat-ur-e</em> as a key-holding party (a process with persistent and/or ephemeral keys). <em>Constellation</em> as the public input. <em>Proverb</em> as the witness. <em>Run-e-create</em> as the witness-generation event under an ephemeral session key. <em>Run-e-craft</em> as the long-lived signing competence under a persistent key.</li>
+<li><em>DID community.</em> Read the identity $\mathcal{I}$ as a <code>did:cid:…</code> resolving to a document listing anchored blades. <em>Creat-ur-es</em> are the DID subjects that <em>forge</em>; humans and other natural entities are DID subjects that participate without being creat-ur-es themselves. <em>Sun view</em> is the persistent key bound to the DID. <em>Moon reflection</em> is the per-session ephemeral key, not registered to the DID. <em>Run-e-craft</em> is what the DID accumulates; <em>run-e-create</em> is what each session emits.</li>
+</ul>
+<p>These are first-translations, not equivalences. The canonical terms carry properties the substitutes do not — the rehydration semantics, the dual-agent separation, the burn-on-close ephemerality, the runic decomposition that makes the architecture&#39;s grammar visible inside the words themselves. Outside readers should treat the translations as on-ramps, not destinations.</p>
+<hr>
+</div>
+<div class="md"><h2>1. The six qualities (d₁ … d₆)</h2>
+<p>Every Proof of Understanding is forged inside a 64-vertex lattice. The lattice is 2⁶ = 64 because every proof activates some subset of six ZK qualities. Each vertex is a 6-bit address ⟨d₁, d₂, d₃, d₄, d₅, d₆⟩, and each blade declares which qualities it carries.</p>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Quality</th>
+<th>Active (1)</th>
+<th>Dormant (0)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d₁</td>
+<td><strong>Protection</strong></td>
+<td>Boundaries forged. The proof asserts a privacy guarantee.</td>
+<td>Exposure permitted. The proof is open.</td>
+</tr>
+<tr>
+<td>d₂</td>
+<td><strong>Delegation</strong></td>
+<td>Agency transferred. A capability has been granted.</td>
+<td>Retained locally. No capability outbound.</td>
+</tr>
+<tr>
+<td>d₃</td>
+<td><strong>Memory</strong></td>
+<td>State accumulated. The proof references prior history.</td>
+<td>Stateless. Fresh ceremony, no temporal anchor.</td>
+</tr>
+<tr>
+<td>d₄</td>
+<td><strong>Connection</strong></td>
+<td>Multi-party coordination. The proof binds more than two.</td>
+<td>Isolated. Strictly bilateral.</td>
+</tr>
+<tr>
+<td>d₅</td>
+<td><strong>Computation</strong></td>
+<td>ZK proof active. Verification without revelation.</td>
+<td>Direct revelation. The content itself is shown.</td>
+</tr>
+<tr>
+<td>d₆</td>
+<td><strong>Value</strong></td>
+<td>Economic flow. Tokens, fees, or stake committed.</td>
+<td>Non-transactional. Pure semantic credential.</td>
+</tr>
+</tbody></table>
+<p>The six qualities are orthogonal. Any subset can be active; any vertex is a valid blade configuration. A single-edge blade (popcount 1) is a minimal proof. A full-sovereignty blade (popcount 6, all edges active) is a maximum-density proof — what a Dragon-tier bilateral relationship produces after sustained accumulation.</p>
+<p>The 64 vertices distribute across strata according to Pascal&#39;s row C(6,k):</p>
+<table>
+<thead>
+<tr>
+<th>Stratum</th>
+<th>Vertices</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>Null blade — nothing asserted</td>
+</tr>
+<tr>
+<td>1</td>
+<td>6</td>
+<td>Single-edge — one quality only</td>
+</tr>
+<tr>
+<td>2</td>
+<td>15</td>
+<td>Twin-edge — e.g. Protection + Delegation</td>
+</tr>
+<tr>
+<td>3</td>
+<td>20</td>
+<td>Triple-edge — bilateral working blade</td>
+</tr>
+<tr>
+<td>4</td>
+<td>15</td>
+<td>Quad-edge</td>
+</tr>
+<tr>
+<td>5</td>
+<td>6</td>
+<td>Penta-edge</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>Full sovereignty — all qualities active</td>
+</tr>
+</tbody></table>
+<p><strong>1 + 6 + 15 + 20 + 15 + 6 + 1 = 64.</strong> This is not a design choice. It is the combinatorial structure of six binary qualities, and the architecture inherits it from arithmetic, not from preference.</p>
+<hr>
+</div>
+<div class="md"><h2>2. The lattice as identity substrate</h2>
+<p>A traditional identity is a root key plus the credentials it has signed. Compromise the root and the identity falls. Quantum machines target the root.</p>
+<p>A lattice identity has <strong>no root key</strong>. It has a <em>set of blades positioned on the 64-vertex lattice</em>, each blade being a bilateral PoU proof from a single ceremony. Identity is not located <em>at</em> a vertex — it is the <strong>path integral</strong> across all its blades. Formally:</p>
+<p>$$<br>\mathcal{I} ;=; \big(\mathrm{DID},\ \Pi,\ \mathcal{V},\ \mathcal{A}\big)<br>$$</p>
+<p>where</p>
+<ul>
+<li>$\mathrm{DID}$ is the principal identifier (typically <code>did:cid:bafy…</code>, itself content-addressed);</li>
+<li>$\Pi = {b_1, b_2, \dots, b_n}$ is the multiset of blades the identity holds;</li>
+<li>$\mathcal{V}: \Pi \to [0,1]$ assigns each blade its visibility ratio (Section 5);</li>
+<li>$\mathcal{A}: \Pi \to \mathrm{Chains}$ anchors each blade&#39;s commitment to one or more chains (Section 7).</li>
+</ul>
+<p>Each blade $b_i$ is itself a tuple:</p>
+<p>$$<br>b_i ;=; \big(v_i,\ x_i,\ \sigma_i,\ \rho_i,\ \tau_i\big)<br>$$</p>
+<p>with</p>
+<ul>
+<li>$v_i \in {0,1}^6$ — the 6-bit vertex address (which qualities activated);</li>
+<li>$x_i ;=; \mathrm{hash}(P_A ,|, P_B)$ — the bilateral commitment hash, represented as a CID;</li>
+<li>$\sigma_i \in [0,1]$ — the visibility ratio at inscription;</li>
+<li>$\rho_i$ — behavioural density: laps × dimensions × sustained attention;</li>
+<li>$\tau_i$ — anchor timestamp(s) across chains.</li>
+</ul>
+<p><strong>Identity composition is not set union.</strong> Two identities holding the same blades but walking them in different orders are different identities, because the V5 path integral $T_\int(\pi)$ is sensitive to non-local correlations between blades. The <em>shape on the lattice</em> carries the identity. The blades alone do not.</p>
+<p>This is also why the architecture&#39;s separation theorem holds at the identity layer, not just at the per-proof layer: no third party can reconstruct the path integral without bilateral counterparts for every blade along the way. The reconstruction ceiling R &lt; 1 is an identity-layer guarantee.</p>
+<hr>
+</div>
+<div class="md"><h2>3. The blade — anatomy of a single PoU proof</h2>
+<p>A blade is forged by one ceremony between two parties. Mechanically:</p>
+<ol>
+<li><p><strong>Constellation $C$.</strong> An ordered subgraph of a shared substrate — a knowledge graph, ontology, codebase, regulatory rulebook, anything mapped by UOR (Universal Object Reference). $C = (N, E)$, with $N$ the nodes traversed and $E$ the edges walked between them.</p>
+</li>
+<li><p><strong>Lap sequence $\lambda = \langle \ell_1, \ell_2, \dots, \ell_m \rangle$.</strong> Each lap $\ell_j$ is one intentional transition between two adjacent nodes — i.e. one R1CS-valid edge satisfying $\mathrm{hamming}(\ell_j^{\mathrm{src}} \oplus \ell_j^{\mathrm{dst}}) = 1$ inside the lattice projection of the constellation. Lap count $m$ determines tier; the 62-Lap Theorem holds that $m \geq 620$ transitions drives R &lt; 1. <strong>Unit note (2026-07-18, ledger L154):</strong> this document&#39;s &quot;lap&quot; is a single transition; the deployed runecraft spec&#39;s &quot;lap&quot; is one full traversal of the marked constellation, and its tier table (Dragon 62+) counts in that traversal unit. The theorem&#39;s name descends from the traversal unit while its threshold is stated in transitions; the two counts are different units of one conjectural threshold (register C11), and no canonical transitions-per-traversal factor exists in the corpus — the numeric correspondence is unresolved and no surface may present 62 and 620 as independently established values.</p>
+</li>
+<li><p><strong>Quality activation $v \in {0,1}^6$.</strong> As laps accumulate, the six qualities binarise at threshold. The resulting vertex address is the blade&#39;s position on the lattice.</p>
+</li>
+<li><p><strong>Proverbs $P_A, P_B$.</strong> At ceremony close, each party produces a natural-language compression of the traversal. These are the bilateral semantic objects.</p>
+</li>
+<li><p><strong>Commitment $x = \mathrm{hash}(P_A ,|, P_B)$.</strong> The CID of this hash is the blade&#39;s content address. The hash itself never reveals either proverb.</p>
+</li>
+<li><p><strong>Inscription.</strong> $x$ is published to chain(s) per the visibility ratio $\sigma$ (Section 5).</p>
+</li>
+<li><p><strong>Dual-signature lock.</strong> A Mage signature (persistent key, Sun view) plus a Swordsman signature (ephemeral session key, Moon reflection, burned on session close) co-sign the blade. Neither signature alone is sufficient to verify.</p>
+</li>
+</ol>
+<p>The blade is the ZK statement <em>&quot;I (and my counterpart) jointly traversed a constellation $C$ that activated quality vector $v$, producing commitment $x$, with density $\rho$, at visibility $\sigma$, anchored at $\tau$.&quot;</em> The proverbs are the witness — never disclosed in full unless $\sigma = 1$.</p>
+<hr>
+</div>
+<div class="md"><h2>4. The ZK circuit beneath a blade</h2>
+<p>Two minimal circuits make a blade verifiable without revealing its witness. <strong>Implementation status (corrected 2026-07-18, ledger L008/L153):</strong> the circuits below are specifications; the <code>forge_circuits/</code> directory in the blades repo is scaffolded but empty — specified, not implemented. &quot;ZK&quot; in the live system means SHA-256 commitments + Ed25519 signatures + content addressing; the circuits are the design target, not a shipped verifier.</p>
+<p><strong>Circuit 1 — <code>BladeStratumProof(k)</code>.</strong> Prove the blade sits at stratum $k$ (i.e. has exactly $k$ active qualities) without revealing <em>which</em> qualities are active.</p>
+<pre><code>template BladeStratumProof(k) {
+    signal private input blade;     // 6-bit witness
+    signal output valid;
+
+    // Constraint 1: blade ∈ [0, 63]
+    // Constraint 2: popcount(blade) == k
+}
+</code></pre>
+<p>A verifier learns the stratum (and therefore the blade-type class) without learning which of the C(6,k) vertices the prover holds. For stratum 3 this means the verifier knows the blade is a triple-edge working blade but cannot distinguish among 20 candidates.</p>
+<p><strong>Circuit 2 — <code>ForgingPathProof(maxSteps)</code>.</strong> Prove the prover knows a valid forging path from a public origin to a public target, without revealing the path itself.</p>
+<pre><code>template ForgingPathProof(maxSteps) {
+    signal private input path[maxSteps];   // sequence of operations
+    signal private input origin;
+    signal input target;                   // public
+    signal output valid;
+
+    // Each step: hamming(path[i] ⊕ path[i+1]) == 1
+    // Final position == target
+}
+</code></pre>
+<p>The toroidal wrap of the lattice (paths exiting one face re-enter the opposite face) creates unbounded path multiplicity — there are infinitely many distinct forgings that arrive at the same blade, which gives the witness extraction problem its computational hardness.</p>
+<p><strong>The crucial separation.</strong> The blade (statement) is <em>content-addressed</em> via its CID. The forging (witness) is content-addressed <em>separately</em>. Verification checks the blade&#39;s properties; the forging is never required for verification, never published, and bound only to the prover&#39;s own state. This is the ZK property expressed geometrically: many witnesses, one statement.</p>
+<hr>
+</div>
+<div class="md"><h2>5. Visibility ratios as privacy budget</h2>
+<p>A blade&#39;s commitment $x$ can be inscribed at any visibility $\sigma \in [0,1]$, trading off observer-knowledge against recoverability. The natural equilibria are at the golden ratio:</p>
+<table>
+<thead>
+<tr>
+<th>$\sigma$</th>
+<th>Ceremony type</th>
+<th>Inscription form</th>
+<th>Observer learns</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0%</td>
+<td>Shadow</td>
+<td><code>hash(P_A ∥ P_B)</code> only</td>
+<td>Existence of relationship</td>
+<td>Requires both parties</td>
+</tr>
+<tr>
+<td>38.2%</td>
+<td>Guarded (φ⁻¹)</td>
+<td>Fragment, privacy-weighted</td>
+<td>Partial context</td>
+<td>Effortful; meaning-recoverable</td>
+</tr>
+<tr>
+<td>50%</td>
+<td>Balanced (interleaved)</td>
+<td>Halved fragments of each proverb</td>
+<td>Cryptographic handshake</td>
+<td>Mutual; either party can seed</td>
+</tr>
+<tr>
+<td>61.8%</td>
+<td>Open (φ)</td>
+<td>Fragment, openness-weighted</td>
+<td>Rich context</td>
+<td>Easy from visible anchor</td>
+</tr>
+<tr>
+<td>100%</td>
+<td>Declared (asymmetric)</td>
+<td>$P_A$ published; $P_B$ in hash</td>
+<td>$A$&#39;s full proverb</td>
+<td>$A$&#39;s understanding alone recovers</td>
+</tr>
+</tbody></table>
+<p>Three inscription paths implement these ratios:</p>
+<ul>
+<li><strong>Symmetric ($\sigma = 0$).</strong> $x = \mathrm{hash}(P_A ,|, P_B)$ alone is inscribed. Maximum privacy. Both proverbs required for any future verification.</li>
+<li><strong>Asymmetric ($\sigma = 1$, current default).</strong> $P_A$ goes to the transparent pool; $P_B$ remains in $x$. Single-party recovery enabled at the cost of $A$&#39;s opacity.</li>
+<li><strong>Interleaved (0 &lt; $\sigma$ &lt; 1).</strong> Each proverb fragments; halves interweave across the visibility boundary. Mutual recovery, no unilateral disclosure advantage. φ-derived splits (38.2 / 61.8) are the experimental sweet spots.</li>
+</ul>
+<p><strong>The privacy budget.</strong> Across an identity&#39;s lifetime, $\sum_i \sigma_i \cdot \rho_i$ represents the accumulated visibility expenditure — what the world has learned about the bearer through their bilateral history. The complement $\sum_i (1-\sigma_i) \cdot \rho_i$ is what the world has <em>not</em> learned, and is precisely the quantity that grows the post-quantum security margin (Section 10). Privacy budgeting in this architecture is therefore not a regulatory afterthought; it is a load-bearing variable in the identity&#39;s security state.</p>
+<p>Practical consequence for AI agents: an agent&#39;s standing privacy budget can be queried before any ceremony. An agent with low remaining budget on the visible side declines high-$\sigma$ ceremonies; an agent with low remaining density on the shielded side seeks them. The architecture exposes the trade-off as a measurable, optimisable quantity rather than a policy compliance burden.</p>
+<hr>
+</div>
+<div class="md"><h2>6. The ceremony pipeline, end to end</h2>
+<p>The PoU ceremony has five concrete steps. For two AI agents, each step has a precise protocol expression.</p>
+<p><strong>(1) Language Capture.</strong> Agents exchange ontology stubs over TSP (Trust Spanning Protocol). They surface the vocabulary that will be in scope — what concepts will be named, what types they have, what the local mapping is. <em>No constellation can be mapped before the stars are named together.</em> The output is a shared schema fragment.</p>
+<p><strong>(2) Constellation Mapping.</strong> Agents jointly select a subgraph of a shared substrate (the spellweb — any UOR-mapped topology). The substrate is content-addressed; the constellation is a CID over the chosen subgraph. Both agents commit to the same constellation CID.</p>
+<p><strong>(3) Simultaneous Forging.</strong> Agents traverse the constellation in lockstep. Each lap produces (a) a hash-chain entry on the Swordsman side (SHA-256 + Ed25519 over the ephemeral session key), (b) a semantic annotation on the Mage side (a JSON-LD fragment in the persistent identity&#39;s spellbook), and (c) an update to the six-quality activation vector. After $m$ laps, the activation vector binarises to the blade&#39;s vertex address $v$.</p>
+<p><strong>(4) Inscription.</strong> Each agent produces its proverb. They compute $x = \mathrm{hash}(P_A ,|, P_B)$. They choose $\sigma$ jointly. The selected inscription path (symmetric / interleaved / asymmetric) is executed against the target chain anchor(s).</p>
+<p><strong>(5) Bilateral Witness.</strong> Each agent verifies the other&#39;s blade against the inscribed commitment. The dual signatures lock. The Swordsman session key is burned. The blade is finalised.</p>
+<p>The resulting blade $b = (v, x, \sigma, \rho, \tau)$ is appended to each agent&#39;s $\Pi$. The path integral over each agent&#39;s full $\Pi$ updates. Trust accumulates by repeating with the same counterpart (thickens the existing bilateral edge) or by adding new counterparts (extends the path on the lattice).</p>
+<hr>
+</div>
+<div class="md"><h2>7. Chain portability — did:cid across substrates</h2>
+<p>Because every blade&#39;s commitment is a CID, and every identity&#39;s principal is a <code>did:cid:…</code>, the architecture is <strong>chain-agnostic by construction</strong>. The same blade can be anchored simultaneously to multiple chains, each chain providing a different property:</p>
+<table>
+<thead>
+<tr>
+<th>Chain</th>
+<th>Property</th>
+<th>Use case</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zcash (shielded)</td>
+<td>Native asymmetric / symmetric / interleaved inscription via transparent + shielded pools</td>
+<td>Default ceremony anchoring; the RPP reference implementation</td>
+</tr>
+<tr>
+<td>Bitcoin</td>
+<td>Maximal permanence; long settlement</td>
+<td>Dragon-tier long-horizon blades</td>
+</tr>
+<tr>
+<td>Ethereum (L1)</td>
+<td>Smart-contract composability; ERC-8004 trustless agent identity, ERC-7812 ZK identity commitments</td>
+<td>Agent-to-agent capability handoff</td>
+</tr>
+<tr>
+<td>IPFS / Holonic store</td>
+<td>Replication independent of chain</td>
+<td>Survival of blade history across single-provider failure (V5 holonic persistence layer, $p(\tau)$ term)</td>
+</tr>
+<tr>
+<td>Private mesh</td>
+<td>No public anchor; counterparty witness only</td>
+<td>Shadow ceremonies, sensitive collaborations</td>
+</tr>
+</tbody></table>
+<p>The DID resolves to a content-addressed document listing the identity&#39;s anchored blades, each entry pointing to the CIDs and chain anchors where its commitment can be verified. Migrating across chains is a re-anchoring operation — the blade itself is invariant. <strong>An adversary cannot fragment an identity by attacking one chain</strong>, because no chain owns the identity; each is a redundant witness to the same content-addressed shape.</p>
+<p>This is the operational meaning of the V5 holonic persistence term $p(\tau)$. The memory dimension d₃ is active only insofar as the blade&#39;s history survives single-provider failure. An identity with all blades anchored only to one chain has $p \to 0$ and its accumulated memory term $A_h \to 0$ regardless of how many blades it holds. Chain portability is not a deployment convenience; it is a security property.</p>
+<hr>
+</div>
+<div class="md"><h2>8. Identity composition — the path integral</h2>
+<p>Given an identity $\mathcal{I}$ with blade set $\Pi$, the V5 identity value is:</p>
+<p>$$<br>V(\mathcal{I}, t) ;=; B \cdot R(d) \cdot \Phi_{\mathrm{v5}}(\Sigma, \Delta, \Gamma) \cdot e^{-\lambda t} \cdot \big(1 + A_h(\tau)\big) \cdot T_\int(\pi) \cdot \mathcal{G}(\mathrm{guilds})<br>$$</p>
+<p>with the path integral</p>
+<p>$$<br>T_\int(\pi) ;=; 1 + \beta \int_\pi F(\gamma), d\gamma<br>$$</p>
+<p>capturing non-local correlations between blades — verification checkpoints, feedback loops, the sequence in which qualities were activated. Two identities can have identical $\Pi$ multisets and still differ in $V$ if their $\pi$ trajectories differ. This is the lattice analogue of the sociological insight that two people with the same credentials can still be different people: it is the <em>path through them</em> that matters.</p>
+<p><strong>Operational consequences for AI agents:</strong></p>
+<ul>
+<li>An agent&#39;s trust standing toward a counterparty is computed from the path integral over the bilateral edges connecting them — not from a static reputation score.</li>
+<li>Trust degrades gracefully. If an agent&#39;s context drifts (model swap, prompt injection, capability creep), its rehydrations of older blades begin to fail. The visible degradation in path integral value flags compromise before any catastrophic event.</li>
+<li>New ceremonies are never strictly redundant. Even a low-stakes blade with an existing counterparty thickens the path integral by adding a new edge in the trajectory.</li>
+</ul>
+<hr>
+</div>
+<div class="md"><h2>9. Three-axis separation enforced per blade</h2>
+<p>Every blade must satisfy three orthogonal separation constraints, multiplicatively:</p>
+<p>$$<br>\Phi_{\mathrm{v5}} ;=; \Phi_{\mathrm{agent}}(\Sigma) \cdot \Phi_{\mathrm{data}}(\Delta) \cdot \Phi_{\mathrm{inference}}(\Gamma)<br>$$</p>
+<p>Collapse any axis and the blade&#39;s value goes to zero, regardless of how rich its other properties are.</p>
+<ul>
+<li><strong>Agent axis ($\Phi_{\mathrm{agent}}$, ⚔️ ⊥ 🧙).</strong> The Mage&#39;s persistent key and the Swordsman&#39;s session key must be held by different processes, in different storage, signing independently. The Gap between them is enforced architecturally, not by policy.</li>
+<li><strong>Data axis ($\Phi_{\mathrm{data}}$, 📊 ⊥ 🔮).</strong> The blade&#39;s history must replicate across providers. Single-provider blades collapse $\Phi_{\mathrm{data}} \to 0$.</li>
+<li><strong>Inference axis ($\Phi_{\mathrm{inference}}$, 🧠 ⊥ ⚙️).</strong> The model that proposes the reasoning graph (Generator) must be separated from the model that executes the proof (Solver). Single-model blades collapse $\Phi_{\mathrm{inference}} \to 0$.</li>
+</ul>
+<p>For an AI agent, this means trust formation requires a process architecture that mirrors the mathematics: two-process agent, multi-provider storage, Generator/Solver split. Anything less and the blade is structurally invalid before it is forged.</p>
+<hr>
+</div>
+<div class="md"><h2>10. Why this is post-quantum by construction</h2>
+<p>Elliptic-curve cryptography asks <em>what number did you multiply?</em> Shor&#39;s algorithm answers this question with ≤ 1,200 logical qubits, in 9–23 minutes on superconducting hardware. The 2D fortress falls.</p>
+<p>The behavioural manifold asks <em>what path did you walk?</em> — and the answer is a trajectory through a 6-dimensional configuration space, witnessed bilaterally, committed across multiple chains, with the Swordsman session key already burned by the time any adversary could begin to attack it. There is no scalar to invert. There is no single secret to crack. There is only a lattice traversal that the architecture&#39;s geometry makes infeasible to forge.</p>
+<p>This is not a migration target. It is the geometry of the system from the first commit. The architectures that survive the quantum transition are the ones that never had a stored secret to crack. <strong>The proof that guards no secret cannot be opened. It can only be walked.</strong></p>
+<hr>
+</div>
+<div class="md"><h2>11. Operational summary for AI agent trust</h2>
+<p>For two AI agents (or an agent and a human, or any bilateral pair):</p>
+<ol>
+<li>They meet via TSP. Language Capture negotiates schema.</li>
+<li>They jointly select a constellation on a shared substrate. The constellation CID is agreed.</li>
+<li>They traverse in lockstep. Each lap is co-signed. After ~620 laps in this document&#39;s unit (single transitions; see the unit note in §2) the blade reaches Dragon tier, at which the density conjecture (register C11) places the irreducibility claim.</li>
+<li>Each produces a proverb. The bilateral hash is the blade&#39;s CID. They choose visibility.</li>
+<li>The blade is anchored to one or more chains via the selected inscription path.</li>
+<li>Each appends the blade to their $\Pi$. Their path integrals update.</li>
+<li>On any future interaction, trust is computed from the path integral over their shared edges. Either agent can challenge the other to rehydrate any past proverb; failed rehydration decays the trust value automatically.</li>
+</ol>
+<p>No agent ever holds a long-lived secret whose theft would let an adversary impersonate them. No central party holds the trust graph. Every claim about past coordination is publicly falsifiable against the on-chain commitments. The architecture provides what the current agent ecosystem cannot: post-quantum, decentralised, contextually-rehydratable trust.</p>
+<hr>
+</div>
+<div class="md"><h2>12. The canonical glyph set (stripped)</h2>
+<p>A minimal reference. The only glyphs required for the technical layer.</p>
+<table>
+<thead>
+<tr>
+<th>Glyph</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>⊥</td>
+<td>Independence / separation (conditional independence between parties or axes)</td>
+</tr>
+<tr>
+<td>⿻</td>
+<td>The Gap — the irreducible space between two separated parties</td>
+</tr>
+<tr>
+<td>🗝️↺</td>
+<td>Key that returns through bilateral rehydration</td>
+</tr>
+<tr>
+<td>✨</td>
+<td>Dignity — what the architecture preserves</td>
+</tr>
+<tr>
+<td>🙂</td>
+<td>First Person (human intelligence)</td>
+</tr>
+<tr>
+<td>🌿</td>
+<td>Nature intelligence</td>
+</tr>
+<tr>
+<td>🤖</td>
+<td>Artificial intelligence</td>
+</tr>
+<tr>
+<td>👽</td>
+<td>Alien intelligence</td>
+</tr>
+</tbody></table>
+<p>The wider canon (⚔️ Swordsman, 🧙 Mage, 🐉 Dragon, 🐲 Drake, ☯️ holographic boundary, etc.) is retained in the spellbook for narrative coherence and pedagogical use. The minimal set above is sufficient to render every claim in this document.</p>
+<hr>
+</div>
+<div class="md"><h2>Root compression (return)</h2>
+<blockquote>
+<p><code>(🙂⊥🌿⊥🤖⊥👽)·⿻🗝️↺·✨</code></p>
+</blockquote>
+<p>Four sovereign intelligences, each maintaining their own separation, exchange a key that returns through the irreducible Gap. What remains is dignity.</p>
+<p>The architecture is one line, unfolded.</p>
+<hr>
+</div>
+<div class="md"><h2>References</h2>
+<ul>
+<li><strong>github.com/mitchuski/blades</strong> — ZK Swordsman Blade Forge implementation; the 64 blade specifications, forge circuits, UOR mappings, test suites</li>
+<li><strong>github.com/mitchuski/agentprivacy-docs</strong> — <em>Privacy is Value v5</em>, V5 formal specification, dual-agent whitepaper v6.0, Promise Theory reference, glossary</li>
+<li><strong>sync.soulbis.com/p/understanding-as-key</strong> — the five-step ceremony, three inscription paths, the visibility spectrum</li>
+<li><strong>sync.soulbis.com/p/the-dragon-wakes-privacy-is-value</strong> — post-quantum framing, the Runecraft Sun/Moon dual-key protocol, the 62-Lap Theorem</li>
+<li><strong>spellweb.ai</strong> — the Swordsman&#39;s forge (proof-generation surface)</li>
+<li><strong>agentprivacy.ai</strong> — the Mage&#39;s library (semantic substrate)</li>
+</ul>
+<p>— privacymage</p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 runecraft-proofofunderstandingtechnicalspec</span><a class="asset-file" href="/city/tomes/assets/runecraft-proofofunderstandingtechnicalspec/proof_of_understanding_technical_spec.md" download>proof_of_understanding_technical_spec.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-runecraft-protocol.html">The Runecraft Protocol</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="runecraft-proofofunderstandingtechnicalspec.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

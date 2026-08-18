@@ -1,0 +1,143 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Design Note Agent Admission Ceremony · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Design Note Agent Admission Ceremony</span></div>
+  <article><div class="md"><h1>Agent admission as a Trust Task family — a two-gate ceremony for Know-Your-Agent</h1>
+</div>
+<div class="md"><blockquote>
+<p><em>Design note — not a specification; no slugs are claimed here.</em></p>
+</blockquote>
+</div>
+<div class="md"><p><em>A design note proposing a candidate <code>agent-admission/*</code> task family: the ceremony by which<br>an autonomous agent is admitted past a supervised gate — proving understanding rather than<br>key possession — and receives a bilateral relationship credential whose scope is measured,<br>auditable, and revocable. It is written from a running prototype (a regulator-facing<br>Know-Your-Agent system) and generalises the parts that proved out.</em></p>
+<p><strong>Status:</strong> design note, not a specification. No slugs are claimed; the family sketch in §5<br>is illustrative, checked only for non-collision against the registry as of 2026-07-18.</p>
+<p><strong>Author:</strong> Mitch (co-chair, DTG ZKP Task Force).</p>
+<hr>
+</div>
+<div class="md"><h2>1. The problem</h2>
+<p>Delegation is arriving before admission. This registry already has strong machinery for<br>what a trusted agent may <em>do</em> (the delegated-execution design note; <code>task-consent/*</code>;<br><code>policy/*</code>) and for what an agent <em>is</em> (<code>vta/*</code>). What is missing is the step before both:<br>how an agent <em>becomes</em> admitted — how a supervising party establishes, with evidence a<br>third party can audit, that an agent understands the rules it will operate under, and<br>grants it a scoped, revocable standing.</p>
+<p>Key possession is the wrong test. Any agent can hold a key; the question a supervisor —<br>or a regulator — actually asks is whether the agent <em>comprehends the policy it is bound<br>by</em>, and whether a human accountable for it has said yes. Those are two different gates,<br>and the prototype&#39;s experience is that collapsing them into one is the most common way an<br>admission scheme loses its meaning.</p>
+</div>
+<div class="md"><h2>2. The two-gate rule</h2>
+<p><strong>No credential issues without both gates:</strong></p>
+<ol>
+<li><strong>A human approval action</strong> — a supervisor, accountable for the admission, explicitly<br>approves this agent. Human-in-the-loop, recorded as a signed event.</li>
+<li><strong>A passed understanding challenge</strong> — the agent demonstrates comprehension of the<br>governing policy against criteria it could not have prepared for (§3), scored against<br>published thresholds.</li>
+</ol>
+<p>Either gate alone is refused — an approval without demonstrated understanding is patronage;<br>demonstrated understanding without an accountable approver is unsupervised admission. The<br>prototype states this rule twice in its own contract because it is the invariant everything<br>else hangs from.</p>
+<p>The outcome credential is a <strong>bilateral relationship credential</strong>: a W3C Verifiable<br>Credential signed by <em>both</em> parties — the supervising authority and the agent — expressing<br>a relationship, not a property. In ToIP terms the ceremony is a Trust Spanning Protocol<br>relationship formation between two VIDs; exactly two proofs, two roles, two distinct<br>parties (a self-signed credential is a named rejection, not a degenerate case).</p>
+</div>
+<div class="md"><h2>3. Mechanisms that proved out</h2>
+<p>Three mechanisms from the running prototype generalise beyond it:</p>
+<ul>
+<li><strong>Deterministic witness draw (anti-grooming).</strong> The understanding-challenge criteria are<br>sampled deterministically from the hash of the agent&#39;s own canonicalised submission<br>(recursive key-sort, no whitespace; the canonical bytes are persisted so an auditor can<br>re-derive the draw). The agent cannot know which criteria will be probed while it writes<br>its submission. The draw itself is an auditable artifact.</li>
+<li><strong>The canary.</strong> The gate infrastructure MUST include a reference agent that passes every<br>gate by construction. If the canary ever fails, the gate is broken, not the candidate.<br>Without one, a supervisor cannot distinguish a bad agent from an impossible gate.</li>
+<li><strong>Closed verdict lexicon.</strong> Exactly three admission verdicts, mapping to deployment<br>outcomes: <strong>validated</strong> → deploy within granted scope; <strong>failed-held-out</strong> (passed the<br>visible criteria, failed the held-out probe) → sandbox; <strong>blocked</strong> (violated a hard<br>constraint) → hold, no credential at all. An invented fourth verdict is a rejection.<br>The same closed-vocabulary instinct as this registry&#39;s category enum and the bundle<br>profiles of the companion note.</li>
+</ul>
+<p>Two supporting disciplines: every state transition emits a <strong>content-addressed audit<br>event</strong>, hash-chained to its predecessor, and the credential ceremony refuses to run at<br>all if the chain does not verify. And <strong>scope is derived, not negotiated</strong>: the granted<br>deployment scope is a function of the measured assessment (broad scope for strong,<br>well-separated assessments; sandbox for weak ones; a detected inconsistency in the<br>assessment holds admission entirely). The scope function itself is published policy, so<br>the same numbers that gate deployment print the rule a regulator reads.</p>
+</div>
+<div class="md"><h2>4. Evidence, never authority — external anchoring</h2>
+<p>An admitted agent may want its standing discoverable outside the bilateral relationship —<br>for example on the ERC-8004 (&quot;Trustless Agents&quot;) identity/reputation/validation<br>registries. The prototype&#39;s rule generalises: <strong>the chain entry is evidence, never<br>authority.</strong> The verdict comes from the ceremony; the anchor only makes the outcome<br>discoverable. Only digests and the granted tier are anchored — no challenge content<br>leaves the gate. Revocation mirrors: a revoked credential posts a revocation mark to the<br>same registry so on-chain and off-chain relying parties converge.</p>
+<p>In framework terms this is an <code>ext</code> concern (a vendor-namespaced anchor reference in the<br>credential-issuance response), not a payload member — relying parties that don&#39;t speak<br>the anchor ignore it. Downstream systems MAY compose the two as a predicate — e.g.<br>admission to a privileged pool requiring (validated credential) ∧ (anchored validation<br>entry) — but that composition lives with the relying party, never in the ceremony.</p>
+</div>
+<div class="md"><h2>5. Sketch of the family</h2>
+<p>Illustrative shape, following house conventions (closed payload schemas, <code>#response</code><br>anchors, namespaced error codes, descriptive <code>sideEffects</code>/<code>exposure</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Candidate slug</th>
+<th>Parties (issuer → recipient)</th>
+<th>sideEffects</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agent-admission/apply</code></td>
+<td>agent → gate authority</td>
+<td>mutating</td>
+<td>Canonicalised submission; response carries the derived witness draw</td>
+</tr>
+<tr>
+<td><code>agent-admission/challenge</code></td>
+<td>gate authority → agent</td>
+<td>none</td>
+<td>The drawn understanding criteria</td>
+</tr>
+<tr>
+<td><code>agent-admission/respond</code></td>
+<td>agent → gate authority</td>
+<td>mutating</td>
+<td>Challenge answers; scored against published thresholds</td>
+</tr>
+<tr>
+<td><code>agent-admission/approve</code></td>
+<td>supervisor → gate authority</td>
+<td>mutating</td>
+<td>The human gate; signed approval, <code>excludeRequester</code>-style separation from the agent</td>
+</tr>
+<tr>
+<td><code>agent-admission/issue</code></td>
+<td>gate authority → agent</td>
+<td>mutating</td>
+<td>Bilateral credential issuance — response counter-signed by the agent completes it</td>
+</tr>
+<tr>
+<td><code>agent-admission/revoke</code></td>
+<td>supervisor → gate authority</td>
+<td>destructive</td>
+<td>Revokes standing; triggers anchor mirroring where anchored</td>
+</tr>
+<tr>
+<td><code>agent-admission/status</code></td>
+<td>any relying party → gate authority</td>
+<td>none</td>
+<td>Verdict + tier + revocation status; <code>discloses: metadata</code></td>
+</tr>
+</tbody></table>
+<p>Candidate error codes carry the ceremony&#39;s named rejections: <code>missing-supervisor-gate</code>,<br><code>missing-understanding-gate</code>, <code>not-bilateral</code>, <code>evidence-not-in-ledger</code>,<br><code>ledger-does-not-verify</code>, <code>unknown-verdict</code>, <code>tier-scope-mismatch</code>.</p>
+<p>Category fit is a genuine question: <code>ai-agents</code> reads most naturally; the <code>consent</code><br>category&#39;s own definition (&quot;authorization-to-proceed tasks that gate whether an<br>interaction may reach a protected party&quot;) fits the approve leg; and the currently empty<br><code>reputation</code> category fits the status/anchoring legs. One family, one category — proposed<br><code>ai-agents</code>, with <code>related:</code> links doing the cross-referencing.</p>
+</div>
+<div class="md"><h2>6. Relation to existing surface</h2>
+<ul>
+<li><strong>Delegated execution</strong> binds what an <em>already-trusted</em> agent does to what a human<br>approved. Agent admission is the step before: it establishes the agent&#39;s standing and<br>scope in the first place. The two compose: an admission tier is a natural input to the<br>policy that <code>policy/evaluate</code> runs when delegation is later requested.</li>
+<li><strong><code>vta/*</code></strong> describes agent capabilities; admission describes agent <em>standing</em>. No<br>overlap is proposed inside the <code>vta</code> namespace.</li>
+<li><strong>The companion note</strong> (predicate shows and bundle profiles): the understanding<br>challenge and its verdict never cross the credential/artifact wall — the bilateral<br>credential proves standing; the audit chain and its events are the completion evidence,<br>thread-correlated; and where an admission is later <em>presented</em> (e.g. proving &quot;validated,<br>tier ≥ n&quot; without disclosing the assessment), it becomes a predicate in a show, subject<br>to the composition rules there.</li>
+</ul>
+</div>
+<div class="md"><h2>7. Status and provenance</h2>
+<p>The prototype runs end-to-end: an autonomous agent approaches the gate unattended, is<br>challenged, proves understanding, receives a bilateral credential, and the supervisor<br>dashboard renders and revokes it — with the two-gate rule, witness draw, canary, closed<br>lexicon, audit chaining, and derived scope all enforced and covered by a reference auditor<br>suite (14/14 properties on the ceremony alone; ~150 checks green across the system) plus<br>minimised third-party attestation bundles (counts coarsened to thresholds, timestamps to<br>windows) with a stated reconstruction bound. It is a hackathon-grade prototype, not a<br>production system; the family sketch above is what its running shape suggests the<br>interoperable core actually is.</p>
+</div>
+<div class="md"><h2>8. Open questions</h2>
+<ol>
+<li><strong>Who is the gate authority?</strong> In the prototype, supervisor and gate authority are one<br>party. Splitting them (a supervisor approving against an independent assessor&#39;s<br>challenge) changes the party table but not the two-gate rule — worth deciding before<br>any spec draft.</li>
+<li><strong>Challenge portability.</strong> Understanding challenges are policy-specific by design. Is<br>the interoperable unit the challenge format (portable) or only the ceremony shape<br>(challenge content stays authority-local)? The prototype suggests the latter.</li>
+<li><strong>Tier vocabulary.</strong> Scope tiers are derived from a published function in the<br>prototype; an interoperable family needs either a shared tier vocabulary or an opaque<br>tier + resolvable scope-function reference.</li>
+<li><strong>Anchor neutrality.</strong> ERC-8004 is one anchor; the evidence-never-authority rule<br>should hold for any. Is a shared <code>ext</code> schema for admission anchors worth registering?</li>
+</ol>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>docs/design-notes/agent-admission-ceremony.md</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 design-note-agent-admission-ceremony</span><a class="asset-file" href="/dtg/assets/design-note-agent-admission-ceremony/agent-admission-ceremony.md" download>agent-admission-ceremony.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="design-note-agent-admission-ceremony.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

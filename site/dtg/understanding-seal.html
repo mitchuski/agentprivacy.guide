@@ -1,0 +1,124 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Seal · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Understanding Seal</span></div>
+  <article><div class="md"><h1>Understanding — Seal</h1>
+</div>
+<div class="md"><blockquote>
+<p><strong>PROPOSED — not yet upstreamed.</strong> Built to the ToIP <code>spec.meta.schema.json</code> for the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf">dtgwg-trust-tasks-tf registry</a>; the slug below is <em>proposed</em> to that namespace, not registry-accepted. The PR is pending; the registry&#39;s decision governs.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Proposed slug:</strong> <code>understanding/seal</code> · <strong>version</strong> 0.1 · <strong>status</strong> draft</p>
+<blockquote>
+<p>The joining party proposes the bilateral agreement — machine-readable personal privacy terms per IEEE 7012, selected from a standard roster — and the host&#39;s signed acceptance seals it, with a content-addressed witness record outside both parties.</p>
+</blockquote>
+</div>
+<div class="md"><h2>Abstract</h2>
+<p>The <strong>Understanding — Seal</strong> Trust Task reaches the object the ceremony exists<br>for: a <strong>bilateral agreement</strong> between exactly two parties. The direction of<br>proposal is the point — the <em>joining party proposes</em> the terms, selected from a<br>standard roster, and the host accepts or declines. This is the<br>machine-readable-personal-privacy-terms pattern of <strong>IEEE Std 7012-2025</strong>: the<br>individual proposes; acceptance precedes any further relationship; the<br>agreement is strictly two-party (agents, devices, and credentials are the<br>fabric around it, never parties to it); and the terms keep three registers in<br>correspondence — plain language, legal, and machine-readable.</p>
+<p>One structural rule guards the seal: it is never self-issued, and it SHOULD be<br>witnessed from outside. A content-addressed <strong>witness record</strong> — resolvable by<br>digest by either party or a third — attests that the ceremony happened without<br>becoming an authority over what it means. An agreement complete enough to need<br>no one outside it has either stopped listening or begun to lie.</p>
+</div>
+<div class="md"><h2>Status of this Document</h2>
+<p>This is a <strong>draft</strong> <em>Trust Task specification</em> per <span class="deadlink" title="reference (not a live page)">SPEC.md §5.3</span>; the schema <strong>MAY</strong> change without notice. Feedback via the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues">issue tracker</a>.</p>
+</div>
+<div class="md"><h2>Conformance</h2>
+<p>RFC2119(<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>) and RFC8174(<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>) key-word conventions apply.</p>
+<p>A conforming <strong>producer</strong> (the joining party) <strong>MUST</strong>:</p>
+<ol>
+<li>Emit a <em>Trust Task document</em> whose <code>type</code> is <code>https://trusttasks.org/spec/understanding/seal/0.1</code>, carrying a verifiable <code>proof</code> — this signed proposal is the joiner&#39;s half of the seal.</li>
+<li>Propose terms by roster and term identifier, pinned by digest, so the three registers of the term are fixed rather than paraphrased.</li>
+</ol>
+<p>A conforming <strong>consumer</strong> (the host) <strong>MUST</strong>:</p>
+<ol>
+<li>Refuse a proposal without a passed exchange (<code>exchangeNotPassed</code>) — understanding precedes agreement, in that order, always.</li>
+<li>Refuse a proposal where proposer and acceptor are, or resolve to, the same controller (<code>selfIssuedSeal</code>).</li>
+<li>Accept only roster terms it recognises (<code>termNotInRoster</code>); a counter-proposal is a new <code>understanding/seal</code> in the opposite direction, never an edit of this one.</li>
+<li>On acceptance, sign the <code>#response</code> (the host&#39;s half of the seal), emit the witness record, and return its digest. The pair of signed halves, correlated by <code>threadId</code>, IS the agreement.</li>
+</ol>
+</div>
+<div class="md"><h2>Payload</h2>
+<p><code>payload.agreement</code> (REQUIRED) — roster, term, and digest of the proposed terms.<br><code>payload.ext</code> — extension slot per <span class="deadlink" title="reference (not a live page)">SPEC.md §4.5.1</span>.</p>
+</div>
+<div class="md"><h2>Request</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:17d02b30-4a5e-4d0c-ce7f-6879809ab2c3&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/understanding/seal/0.1&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkJoiningPartyExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkHostExample&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T16:40:00Z&quot;,
+  &quot;payload&quot;: {
+    &quot;agreement&quot;: {
+      &quot;roster&quot;: &quot;https://customercommons.org/roster&quot;,
+      &quot;term&quot;: &quot;SD-BASE&quot;,
+      &quot;termsDigest&quot;: &quot;6c7d8e9f2021324354e6c7d8e9f2021324354e6c7d8e9f2021324354e6c7d8e9&quot;,
+      &quot;termsRef&quot;: &quot;https://customercommons.org/roster/SD-BASE&quot;
+    }
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T16:40:00Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z3FXQmV6ExampleProposalHalfOfTheSeal&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Response</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:28e13c41-5b6f-4e1d-df80-79809ab2c3d4&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/understanding/seal/0.1#response&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkHostExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkJoiningPartyExample&quot;,
+  &quot;threadId&quot;: &quot;urn:uuid:17d02b30-4a5e-4d0c-ce7f-6879809ab2c3&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T16:40:04Z&quot;,
+  &quot;payload&quot;: {
+    &quot;accepted&quot;: true,
+    &quot;agreementId&quot;: &quot;seal-17d02b30&quot;,
+    &quot;sealedAt&quot;: &quot;2026-07-18T16:40:04Z&quot;,
+    &quot;witnessRef&quot;: {
+      &quot;digest&quot;: &quot;7d8e9f202132435465f7d8e9f202132435465f7d8e9f202132435465f7d8e9f2&quot;,
+      &quot;uri&quot;: &quot;https://host.example.com/witness/seal-17d02b30&quot;
+    }
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T16:40:04Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkHostExample#z6MkHostExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z58aKqExampleAcceptanceHalfOfTheSeal&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Security &amp; Privacy</h2>
+<p>The seal discloses which roster term the parties agreed — metadata by<br>construction, since roster terms are published. The witness record MUST carry<br>digests and party VIDs only, never the exchange answers or any negotiated<br>content; it exists so either party (or a relying party the agreement concerns)<br>can later prove the ceremony happened, not to disclose its content. Because<br>the proposal direction is the individual&#39;s, a host MUST NOT pre-fill or<br>require a specific term as a condition of the ceremony beyond declining and<br>letting the joiner re-propose — acceptance pressure inverts the pattern the<br>seal encodes.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>specs/understanding/seal/0.1/</code> — <code>spec.md</code> + <code>payload.schema.json</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 understanding-seal</span><a class="asset-file" href="/dtg/assets/understanding-seal/payload.schema.json" download>payload.schema.json</a><a class="asset-file" href="/dtg/assets/understanding-seal/spec.md" download>spec.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="understanding-seal.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

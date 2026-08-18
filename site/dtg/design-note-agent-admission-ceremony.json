@@ -1,0 +1,156 @@
+{
+  "title": "Design Note Agent Admission Ceremony",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "d75ef8e66011d076",
+      "text": "# Agent admission as a Trust Task family — a two-gate ceremony for Know-Your-Agent"
+    },
+    {
+      "type": "markdown",
+      "id": "418898bb70342dff",
+      "text": "> *Design note — not a specification; no slugs are claimed here.*"
+    },
+    {
+      "type": "markdown",
+      "id": "69560c0a9c1de7b2",
+      "text": "*A design note proposing a candidate `agent-admission/*` task family: the ceremony by which\nan autonomous agent is admitted past a supervised gate — proving understanding rather than\nkey possession — and receives a bilateral relationship credential whose scope is measured,\nauditable, and revocable. It is written from a running prototype (a regulator-facing\nKnow-Your-Agent system) and generalises the parts that proved out.*\n\n**Status:** design note, not a specification. No slugs are claimed; the family sketch in §5\nis illustrative, checked only for non-collision against the registry as of 2026-07-18.\n\n**Author:** Mitch (co-chair, DTG ZKP Task Force).\n\n---"
+    },
+    {
+      "type": "markdown",
+      "id": "9bb671a08591793c",
+      "text": "## 1. The problem\n\nDelegation is arriving before admission. This registry already has strong machinery for\nwhat a trusted agent may *do* (the delegated-execution design note; `task-consent/*`;\n`policy/*`) and for what an agent *is* (`vta/*`). What is missing is the step before both:\nhow an agent *becomes* admitted — how a supervising party establishes, with evidence a\nthird party can audit, that an agent understands the rules it will operate under, and\ngrants it a scoped, revocable standing.\n\nKey possession is the wrong test. Any agent can hold a key; the question a supervisor —\nor a regulator — actually asks is whether the agent *comprehends the policy it is bound\nby*, and whether a human accountable for it has said yes. Those are two different gates,\nand the prototype's experience is that collapsing them into one is the most common way an\nadmission scheme loses its meaning."
+    },
+    {
+      "type": "markdown",
+      "id": "9d9b54b065ef9917",
+      "text": "## 2. The two-gate rule\n\n**No credential issues without both gates:**\n\n1. **A human approval action** — a supervisor, accountable for the admission, explicitly\n   approves this agent. Human-in-the-loop, recorded as a signed event.\n2. **A passed understanding challenge** — the agent demonstrates comprehension of the\n   governing policy against criteria it could not have prepared for (§3), scored against\n   published thresholds.\n\nEither gate alone is refused — an approval without demonstrated understanding is patronage;\ndemonstrated understanding without an accountable approver is unsupervised admission. The\nprototype states this rule twice in its own contract because it is the invariant everything\nelse hangs from.\n\nThe outcome credential is a **bilateral relationship credential**: a W3C Verifiable\nCredential signed by *both* parties — the supervising authority and the agent — expressing\na relationship, not a property. In ToIP terms the ceremony is a Trust Spanning Protocol\nrelationship formation between two VIDs; exactly two proofs, two roles, two distinct\nparties (a self-signed credential is a named rejection, not a degenerate case)."
+    },
+    {
+      "type": "markdown",
+      "id": "358983b851301026",
+      "text": "## 3. Mechanisms that proved out\n\nThree mechanisms from the running prototype generalise beyond it:\n\n- **Deterministic witness draw (anti-grooming).** The understanding-challenge criteria are\n  sampled deterministically from the hash of the agent's own canonicalised submission\n  (recursive key-sort, no whitespace; the canonical bytes are persisted so an auditor can\n  re-derive the draw). The agent cannot know which criteria will be probed while it writes\n  its submission. The draw itself is an auditable artifact.\n- **The canary.** The gate infrastructure MUST include a reference agent that passes every\n  gate by construction. If the canary ever fails, the gate is broken, not the candidate.\n  Without one, a supervisor cannot distinguish a bad agent from an impossible gate.\n- **Closed verdict lexicon.** Exactly three admission verdicts, mapping to deployment\n  outcomes: **validated** → deploy within granted scope; **failed-held-out** (passed the\n  visible criteria, failed the held-out probe) → sandbox; **blocked** (violated a hard\n  constraint) → hold, no credential at all. An invented fourth verdict is a rejection.\n  The same closed-vocabulary instinct as this registry's category enum and the bundle\n  profiles of the companion note.\n\nTwo supporting disciplines: every state transition emits a **content-addressed audit\nevent**, hash-chained to its predecessor, and the credential ceremony refuses to run at\nall if the chain does not verify. And **scope is derived, not negotiated**: the granted\ndeployment scope is a function of the measured assessment (broad scope for strong,\nwell-separated assessments; sandbox for weak ones; a detected inconsistency in the\nassessment holds admission entirely). The scope function itself is published policy, so\nthe same numbers that gate deployment print the rule a regulator reads."
+    },
+    {
+      "type": "markdown",
+      "id": "5a2bd96c2168ba86",
+      "text": "## 4. Evidence, never authority — external anchoring\n\nAn admitted agent may want its standing discoverable outside the bilateral relationship —\nfor example on the ERC-8004 (\"Trustless Agents\") identity/reputation/validation\nregistries. The prototype's rule generalises: **the chain entry is evidence, never\nauthority.** The verdict comes from the ceremony; the anchor only makes the outcome\ndiscoverable. Only digests and the granted tier are anchored — no challenge content\nleaves the gate. Revocation mirrors: a revoked credential posts a revocation mark to the\nsame registry so on-chain and off-chain relying parties converge.\n\nIn framework terms this is an `ext` concern (a vendor-namespaced anchor reference in the\ncredential-issuance response), not a payload member — relying parties that don't speak\nthe anchor ignore it. Downstream systems MAY compose the two as a predicate — e.g.\nadmission to a privileged pool requiring (validated credential) ∧ (anchored validation\nentry) — but that composition lives with the relying party, never in the ceremony."
+    },
+    {
+      "type": "markdown",
+      "id": "308fe0a2d5589ca8",
+      "text": "## 5. Sketch of the family\n\nIllustrative shape, following house conventions (closed payload schemas, `#response`\nanchors, namespaced error codes, descriptive `sideEffects`/`exposure`):\n\n| Candidate slug | Parties (issuer → recipient) | sideEffects | Notes |\n|---|---|---|---|\n| `agent-admission/apply` | agent → gate authority | mutating | Canonicalised submission; response carries the derived witness draw |\n| `agent-admission/challenge` | gate authority → agent | none | The drawn understanding criteria |\n| `agent-admission/respond` | agent → gate authority | mutating | Challenge answers; scored against published thresholds |\n| `agent-admission/approve` | supervisor → gate authority | mutating | The human gate; signed approval, `excludeRequester`-style separation from the agent |\n| `agent-admission/issue` | gate authority → agent | mutating | Bilateral credential issuance — response counter-signed by the agent completes it |\n| `agent-admission/revoke` | supervisor → gate authority | destructive | Revokes standing; triggers anchor mirroring where anchored |\n| `agent-admission/status` | any relying party → gate authority | none | Verdict + tier + revocation status; `discloses: metadata` |\n\nCandidate error codes carry the ceremony's named rejections: `missing-supervisor-gate`,\n`missing-understanding-gate`, `not-bilateral`, `evidence-not-in-ledger`,\n`ledger-does-not-verify`, `unknown-verdict`, `tier-scope-mismatch`.\n\nCategory fit is a genuine question: `ai-agents` reads most naturally; the `consent`\ncategory's own definition (\"authorization-to-proceed tasks that gate whether an\ninteraction may reach a protected party\") fits the approve leg; and the currently empty\n`reputation` category fits the status/anchoring legs. One family, one category — proposed\n`ai-agents`, with `related:` links doing the cross-referencing."
+    },
+    {
+      "type": "markdown",
+      "id": "7bfe6a689e2e6d34",
+      "text": "## 6. Relation to existing surface\n\n- **Delegated execution** binds what an *already-trusted* agent does to what a human\n  approved. Agent admission is the step before: it establishes the agent's standing and\n  scope in the first place. The two compose: an admission tier is a natural input to the\n  policy that `policy/evaluate` runs when delegation is later requested.\n- **`vta/*`** describes agent capabilities; admission describes agent *standing*. No\n  overlap is proposed inside the `vta` namespace.\n- **The companion note** (predicate shows and bundle profiles): the understanding\n  challenge and its verdict never cross the credential/artifact wall — the bilateral\n  credential proves standing; the audit chain and its events are the completion evidence,\n  thread-correlated; and where an admission is later *presented* (e.g. proving \"validated,\n  tier ≥ n\" without disclosing the assessment), it becomes a predicate in a show, subject\n  to the composition rules there."
+    },
+    {
+      "type": "markdown",
+      "id": "c112b00857664f12",
+      "text": "## 7. Status and provenance\n\nThe prototype runs end-to-end: an autonomous agent approaches the gate unattended, is\nchallenged, proves understanding, receives a bilateral credential, and the supervisor\ndashboard renders and revokes it — with the two-gate rule, witness draw, canary, closed\nlexicon, audit chaining, and derived scope all enforced and covered by a reference auditor\nsuite (14/14 properties on the ceremony alone; ~150 checks green across the system) plus\nminimised third-party attestation bundles (counts coarsened to thresholds, timestamps to\nwindows) with a stated reconstruction bound. It is a hackathon-grade prototype, not a\nproduction system; the family sketch above is what its running shape suggests the\ninteroperable core actually is."
+    },
+    {
+      "type": "markdown",
+      "id": "5dd334593f7f3271",
+      "text": "## 8. Open questions\n\n1. **Who is the gate authority?** In the prototype, supervisor and gate authority are one\n   party. Splitting them (a supervisor approving against an independent assessor's\n   challenge) changes the party table but not the two-gate rule — worth deciding before\n   any spec draft.\n2. **Challenge portability.** Understanding challenges are policy-specific by design. Is\n   the interoperable unit the challenge format (portable) or only the ceremony shape\n   (challenge content stays authority-local)? The prototype suggests the latter.\n3. **Tier vocabulary.** Scope tiers are derived from a published function in the\n   prototype; an interoperable family needs either a shared tier vocabulary or an opaque\n   tier + resolvable scope-function reference.\n4. **Anchor neutrality.** ERC-8004 is one anchor; the evidence-never-authority rule\n   should hold for any. Is a shared `ext` schema for admission anchors worth registering?"
+    },
+    {
+      "type": "markdown",
+      "id": "a9c4290d9aea473a",
+      "text": "# Assets\n\nSource: `docs/design-notes/agent-admission-ceremony.md`"
+    },
+    {
+      "id": "67638ff45bc6150d",
+      "type": "assets",
+      "text": "design-note-agent-admission-ceremony"
+    },
+    {
+      "type": "markdown",
+      "id": "43384f39880a5f30",
+      "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Design Note Agent Admission Ceremony",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "d75ef8e66011d076",
+            "text": "# Agent admission as a Trust Task family — a two-gate ceremony for Know-Your-Agent"
+          },
+          {
+            "type": "markdown",
+            "id": "418898bb70342dff",
+            "text": "> *Design note — not a specification; no slugs are claimed here.*"
+          },
+          {
+            "type": "markdown",
+            "id": "69560c0a9c1de7b2",
+            "text": "*A design note proposing a candidate `agent-admission/*` task family: the ceremony by which\nan autonomous agent is admitted past a supervised gate — proving understanding rather than\nkey possession — and receives a bilateral relationship credential whose scope is measured,\nauditable, and revocable. It is written from a running prototype (a regulator-facing\nKnow-Your-Agent system) and generalises the parts that proved out.*\n\n**Status:** design note, not a specification. No slugs are claimed; the family sketch in §5\nis illustrative, checked only for non-collision against the registry as of 2026-07-18.\n\n**Author:** Mitch (co-chair, DTG ZKP Task Force).\n\n---"
+          },
+          {
+            "type": "markdown",
+            "id": "9bb671a08591793c",
+            "text": "## 1. The problem\n\nDelegation is arriving before admission. This registry already has strong machinery for\nwhat a trusted agent may *do* (the delegated-execution design note; `task-consent/*`;\n`policy/*`) and for what an agent *is* (`vta/*`). What is missing is the step before both:\nhow an agent *becomes* admitted — how a supervising party establishes, with evidence a\nthird party can audit, that an agent understands the rules it will operate under, and\ngrants it a scoped, revocable standing.\n\nKey possession is the wrong test. Any agent can hold a key; the question a supervisor —\nor a regulator — actually asks is whether the agent *comprehends the policy it is bound\nby*, and whether a human accountable for it has said yes. Those are two different gates,\nand the prototype's experience is that collapsing them into one is the most common way an\nadmission scheme loses its meaning."
+          },
+          {
+            "type": "markdown",
+            "id": "9d9b54b065ef9917",
+            "text": "## 2. The two-gate rule\n\n**No credential issues without both gates:**\n\n1. **A human approval action** — a supervisor, accountable for the admission, explicitly\n   approves this agent. Human-in-the-loop, recorded as a signed event.\n2. **A passed understanding challenge** — the agent demonstrates comprehension of the\n   governing policy against criteria it could not have prepared for (§3), scored against\n   published thresholds.\n\nEither gate alone is refused — an approval without demonstrated understanding is patronage;\ndemonstrated understanding without an accountable approver is unsupervised admission. The\nprototype states this rule twice in its own contract because it is the invariant everything\nelse hangs from.\n\nThe outcome credential is a **bilateral relationship credential**: a W3C Verifiable\nCredential signed by *both* parties — the supervising authority and the agent — expressing\na relationship, not a property. In ToIP terms the ceremony is a Trust Spanning Protocol\nrelationship formation between two VIDs; exactly two proofs, two roles, two distinct\nparties (a self-signed credential is a named rejection, not a degenerate case)."
+          },
+          {
+            "type": "markdown",
+            "id": "358983b851301026",
+            "text": "## 3. Mechanisms that proved out\n\nThree mechanisms from the running prototype generalise beyond it:\n\n- **Deterministic witness draw (anti-grooming).** The understanding-challenge criteria are\n  sampled deterministically from the hash of the agent's own canonicalised submission\n  (recursive key-sort, no whitespace; the canonical bytes are persisted so an auditor can\n  re-derive the draw). The agent cannot know which criteria will be probed while it writes\n  its submission. The draw itself is an auditable artifact.\n- **The canary.** The gate infrastructure MUST include a reference agent that passes every\n  gate by construction. If the canary ever fails, the gate is broken, not the candidate.\n  Without one, a supervisor cannot distinguish a bad agent from an impossible gate.\n- **Closed verdict lexicon.** Exactly three admission verdicts, mapping to deployment\n  outcomes: **validated** → deploy within granted scope; **failed-held-out** (passed the\n  visible criteria, failed the held-out probe) → sandbox; **blocked** (violated a hard\n  constraint) → hold, no credential at all. An invented fourth verdict is a rejection.\n  The same closed-vocabulary instinct as this registry's category enum and the bundle\n  profiles of the companion note.\n\nTwo supporting disciplines: every state transition emits a **content-addressed audit\nevent**, hash-chained to its predecessor, and the credential ceremony refuses to run at\nall if the chain does not verify. And **scope is derived, not negotiated**: the granted\ndeployment scope is a function of the measured assessment (broad scope for strong,\nwell-separated assessments; sandbox for weak ones; a detected inconsistency in the\nassessment holds admission entirely). The scope function itself is published policy, so\nthe same numbers that gate deployment print the rule a regulator reads."
+          },
+          {
+            "type": "markdown",
+            "id": "5a2bd96c2168ba86",
+            "text": "## 4. Evidence, never authority — external anchoring\n\nAn admitted agent may want its standing discoverable outside the bilateral relationship —\nfor example on the ERC-8004 (\"Trustless Agents\") identity/reputation/validation\nregistries. The prototype's rule generalises: **the chain entry is evidence, never\nauthority.** The verdict comes from the ceremony; the anchor only makes the outcome\ndiscoverable. Only digests and the granted tier are anchored — no challenge content\nleaves the gate. Revocation mirrors: a revoked credential posts a revocation mark to the\nsame registry so on-chain and off-chain relying parties converge.\n\nIn framework terms this is an `ext` concern (a vendor-namespaced anchor reference in the\ncredential-issuance response), not a payload member — relying parties that don't speak\nthe anchor ignore it. Downstream systems MAY compose the two as a predicate — e.g.\nadmission to a privileged pool requiring (validated credential) ∧ (anchored validation\nentry) — but that composition lives with the relying party, never in the ceremony."
+          },
+          {
+            "type": "markdown",
+            "id": "308fe0a2d5589ca8",
+            "text": "## 5. Sketch of the family\n\nIllustrative shape, following house conventions (closed payload schemas, `#response`\nanchors, namespaced error codes, descriptive `sideEffects`/`exposure`):\n\n| Candidate slug | Parties (issuer → recipient) | sideEffects | Notes |\n|---|---|---|---|\n| `agent-admission/apply` | agent → gate authority | mutating | Canonicalised submission; response carries the derived witness draw |\n| `agent-admission/challenge` | gate authority → agent | none | The drawn understanding criteria |\n| `agent-admission/respond` | agent → gate authority | mutating | Challenge answers; scored against published thresholds |\n| `agent-admission/approve` | supervisor → gate authority | mutating | The human gate; signed approval, `excludeRequester`-style separation from the agent |\n| `agent-admission/issue` | gate authority → agent | mutating | Bilateral credential issuance — response counter-signed by the agent completes it |\n| `agent-admission/revoke` | supervisor → gate authority | destructive | Revokes standing; triggers anchor mirroring where anchored |\n| `agent-admission/status` | any relying party → gate authority | none | Verdict + tier + revocation status; `discloses: metadata` |\n\nCandidate error codes carry the ceremony's named rejections: `missing-supervisor-gate`,\n`missing-understanding-gate`, `not-bilateral`, `evidence-not-in-ledger`,\n`ledger-does-not-verify`, `unknown-verdict`, `tier-scope-mismatch`.\n\nCategory fit is a genuine question: `ai-agents` reads most naturally; the `consent`\ncategory's own definition (\"authorization-to-proceed tasks that gate whether an\ninteraction may reach a protected party\") fits the approve leg; and the currently empty\n`reputation` category fits the status/anchoring legs. One family, one category — proposed\n`ai-agents`, with `related:` links doing the cross-referencing."
+          },
+          {
+            "type": "markdown",
+            "id": "7bfe6a689e2e6d34",
+            "text": "## 6. Relation to existing surface\n\n- **Delegated execution** binds what an *already-trusted* agent does to what a human\n  approved. Agent admission is the step before: it establishes the agent's standing and\n  scope in the first place. The two compose: an admission tier is a natural input to the\n  policy that `policy/evaluate` runs when delegation is later requested.\n- **`vta/*`** describes agent capabilities; admission describes agent *standing*. No\n  overlap is proposed inside the `vta` namespace.\n- **The companion note** (predicate shows and bundle profiles): the understanding\n  challenge and its verdict never cross the credential/artifact wall — the bilateral\n  credential proves standing; the audit chain and its events are the completion evidence,\n  thread-correlated; and where an admission is later *presented* (e.g. proving \"validated,\n  tier ≥ n\" without disclosing the assessment), it becomes a predicate in a show, subject\n  to the composition rules there."
+          },
+          {
+            "type": "markdown",
+            "id": "c112b00857664f12",
+            "text": "## 7. Status and provenance\n\nThe prototype runs end-to-end: an autonomous agent approaches the gate unattended, is\nchallenged, proves understanding, receives a bilateral credential, and the supervisor\ndashboard renders and revokes it — with the two-gate rule, witness draw, canary, closed\nlexicon, audit chaining, and derived scope all enforced and covered by a reference auditor\nsuite (14/14 properties on the ceremony alone; ~150 checks green across the system) plus\nminimised third-party attestation bundles (counts coarsened to thresholds, timestamps to\nwindows) with a stated reconstruction bound. It is a hackathon-grade prototype, not a\nproduction system; the family sketch above is what its running shape suggests the\ninteroperable core actually is."
+          },
+          {
+            "type": "markdown",
+            "id": "5dd334593f7f3271",
+            "text": "## 8. Open questions\n\n1. **Who is the gate authority?** In the prototype, supervisor and gate authority are one\n   party. Splitting them (a supervisor approving against an independent assessor's\n   challenge) changes the party table but not the two-gate rule — worth deciding before\n   any spec draft.\n2. **Challenge portability.** Understanding challenges are policy-specific by design. Is\n   the interoperable unit the challenge format (portable) or only the ceremony shape\n   (challenge content stays authority-local)? The prototype suggests the latter.\n3. **Tier vocabulary.** Scope tiers are derived from a published function in the\n   prototype; an interoperable family needs either a shared tier vocabulary or an opaque\n   tier + resolvable scope-function reference.\n4. **Anchor neutrality.** ERC-8004 is one anchor; the evidence-never-authority rule\n   should hold for any. Is a shared `ext` schema for admission anchors worth registering?"
+          },
+          {
+            "type": "markdown",
+            "id": "a9c4290d9aea473a",
+            "text": "# Assets\n\nSource: `docs/design-notes/agent-admission-ceremony.md`"
+          },
+          {
+            "id": "67638ff45bc6150d",
+            "type": "assets",
+            "text": "design-note-agent-admission-ceremony"
+          },
+          {
+            "type": "markdown",
+            "id": "43384f39880a5f30",
+            "text": "---\n*upstream: `~/dtgwg-trust-tasks-tf-mage` (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Trust Tasks]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229504
+    }
+  ]
+}

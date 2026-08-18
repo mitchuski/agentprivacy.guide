@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O9 — VRC Promise Bundle · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>O9 — VRC Promise Bundle</span></div>
+  <article><div class="md"><h1>O9 — VRC as promise bundle: the economic extension</h1>
+<p><em>The spec&#39;s VRC is deliberately minimal. Agentprivacy&#39;s VRC carries promise-theoretic and economic<br>semantics. Propose the richer reading as an extension the minimal schema can carry — a contribution, not a<br>fork of the name.</em></p>
+<p><strong>Register:</strong> O9 · leverage 🟠 · <strong>Ladder:</strong> design doc<br><strong>Anchor (cred-spec):</strong> VRC minimal schema (bare relationship attestation between two R-DIDs) · &quot;minimal<br>schemas enable common predicates&quot; · extension room in <code>credentialSubject</code>.<br><strong>Anchor (decision doc):</strong> §18 schema governance (every field = assurance surface + correlation surface) ·<br>§2.4 three-parameter claims · §27.2 (trust tasks compose predicates; bundled proofs may leak jointly).</p>
+<hr>
+</div>
+<div class="md"><h2>The drift that becomes a contribution</h2>
+<p>The coherence pass flagged it as Gap 2: agentprivacy&#39;s whitepapers define VRC richer than the spec —<br><strong>promise bundle</strong> (promise-theory: what each party has voluntarily promised the other), <strong>mutual<br>comprehension</strong> (&quot;proof of bilateral comprehension without central authority&quot;), and <strong>ERC-7812 bilateral<br>commitment</strong> anchoring. The ruling then: don&#39;t rewrite our canon to match; the richness is a <em>contribution<br>surface</em>. This doc is that contribution, shaped.</p>
+<p>The spec kept the VRC minimal so predicates stay simple — correct instinct, and the extension must honor<br>it: <strong>the base VRC stays untouched; the bundle rides as an extension block, and every base-level predicate<br>keeps working on an extended VRC.</strong></p>
+</div>
+<div class="md"><h2>The extension, sketched</h2>
+<pre><code>credentialSubject: {
+  …minimal VRC fields (untouched)…,
+  ext_promiseBundle: {
+    version,
+    promises: [ { promiseType, scope, direction (a→b | b→a | mutual), commitment } ],
+    comprehension: { commitment },        // the mutual-comprehension attestation, committed not disclosed
+    anchor: { scheme: &quot;erc7812&quot; | …, ref } // optional on-chain bilateral commitment
+  }
+}
+</code></pre>
+<p>Design rules, from §18 discipline:</p>
+<ul>
+<li><strong>Committed, not disclosed.</strong> Promise contents are commitments; presentations reveal <em>predicates over</em><br>the bundle (&quot;a promise of type T with scope ⊇ S exists, mutual, unexpired&quot;), never the bundle. The<br>economic layer must not become the correlation layer.</li>
+<li><strong>Cardinality control.</strong> <code>promiseType</code> is a small governed vocabulary, not free text — rare promise<br>types fingerprint a relationship exactly the way rare assurance classes fingerprint an issuer (§18.4).</li>
+<li><strong>The anchor is optional and one-way.</strong> An on-chain ERC-7812 reference must not become a stable<br>cross-context identifier for the pair (§6.6) — the anchor is a commitment the parties can <em>open toward a<br>chain record</em>, not a pointer a verifier can follow.</li>
+</ul>
+</div>
+<div class="md"><h2>The ZK predicates the extension enables</h2>
+<p>Riding the <strong>pairwise construction</strong>, same as the base VRC:</p>
+<ul>
+<li><strong>PR-PRM (promise existence):</strong> a promise of type T, direction d, scope ⊇ S exists in the bundle and is<br>unexpired. <em>Negative meaning:</em> not that the promise was kept; not the promise&#39;s terms; not the bundle&#39;s<br>size. (Promise-<em>keeping</em> is outcome evidence — the spec&#39;s outcome-interpretability rule applies: a<br>taskContext-bearing credential is not evidence of completion. Kept-ness lives in trust-task protocols,<br>§27.2 — out of scope here, on purpose.)</li>
+<li><strong>PR-CMP (comprehension):</strong> the mutual-comprehension commitment verifies against both parties&#39;<br>contributions — the ZK form of the whitepaper&#39;s &quot;bilateral comprehension without central authority.&quot;<br>This is vrc-identity SKILL open problem #5 (&quot;bilateral proverb as ZK proof of shared context&quot;) given its<br>predicate name.</li>
+<li><strong>Economic composition:</strong> a trust-task can require &quot;≥ n mutual promises of type T across distinct<br>counterparties&quot; — composed from PR-PRM instances. §27.2&#39;s warning governs: individually sound bundle<br>proofs may leak jointly (n distinct-counterparty proofs reveal degree ≥ n — degree <em>is</em> the disclosure;<br>state it in the boundary record, three-parameter form per §2.4).</li>
+</ul>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li>The promise protocol: <code>agentprivacy-docs/specs/vrc_promise_protocol_v3_3.md</code> + the swordsman/mage<br>whitepaper&#39;s VRC semantics — the <em>source</em> semantics this extension carries.</li>
+<li>The dual-agent harness promise-theory lineage (promises as the harness&#39;s trust substrate).</li>
+<li>rt 07: an extended VRC is still one edge — G1–G8 hold unchanged over an extended VRC (worth one<br>regression property when the extension lands in the reference model).</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — mapping table:</strong> our-VRC-fields → spec-minimal-fields → extension block; confirm zero collisions<br>with the base schema (the &quot;extends, never redefines&quot; proof).</li>
+<li><strong>M2 — extension schema draft</strong> + §18.1 field register (each extension field: purpose, disclosure mode,<br>cardinality, correlation risk).</li>
+<li><strong>M3 — PR-PRM/PR-CMP boundary records</strong> (assurance + disclosure pairs; the degree-leakage analysis).</li>
+<li><strong>M4 — reference predicates</strong> over the extended VRC in the lab (extend rt 07&#39;s edge object; one new<br>property: base predicates unaffected by the extension).</li>
+<li><strong>M5 — Credentials TF surface:</strong> propose as a registered extension (&quot;relationship semantics&quot; extension<br>class) — the cred-spec reserves new credential <em>types</em> for trust-task protocols, but an extension block<br>on an existing type is the door it leaves open.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Extension registry: does the cred-spec want a governed extension vocabulary (like the context-authority<br>model, §6.7) or per-ecosystem extensions? Our proposal should offer the governed shape.</li>
+<li>Promise expiry vs VRC validity: separate clocks (§22.1 discipline) — a promise may lapse inside a live<br>relationship; the extension carries its own validity fields.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="o9-vrc-promise-bundle.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

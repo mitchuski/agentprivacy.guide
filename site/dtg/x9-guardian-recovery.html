@@ -1,0 +1,134 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X9 — Guardian Recovery · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X9 — Guardian Recovery</span></div>
+  <article><div class="md"><h1>X9 — Guardian recovery: the social-threshold pattern</h1>
+<p><em>X5 named it pattern 3 and deferred it; the rotation build (10/10) deferred it again — &quot;needs its own<br>boundary pair + §22.2 guardian-epoch answer.&quot; This is that design: guardians attest continuity, the<br>correlator moves from issuer to guardian set, and every trade that move creates is stated in §2.4 form.</em></p>
+<p><strong>Register:</strong> X5 pattern 3 (deferred) · §29 recovery research item, social leg · leverage 🟠<br><strong>Ladder:</strong> <strong>CIRCUIT BUILT 2026-07-18</strong> — <a class="wlink" href="lab-circom-gadget.html">Lab — circom-gadget</a> guardian-threshold 8/8:<br>GuardianThreshold(20, 3), <strong>16,078 constraints</strong> (= 3 membership legs + 3 distinctness + 1 claim<br>binding; 306 headroom under ptau 2^14 — t=4 needs pot15), ~790 ms prove; duplicate seat =<br>unsatisfiable witness; seat nullifiers claim-independent in-context (rival-claim double-vouch<br>detectable) + cross-context unlinkable; GUARDIAN_TAG pinned. Out-of-circuit: set-commitment↔Merkle<br>reconciliation (the promote-lane task), epoch lapse, personhood gating, contest/freeze, t as profile<br>parameter. Reference: <a class="wlink" href="lab-guardian-recovery.html">Lab — guardian-recovery</a> 12/12:<br>committed sets with personhood-gated seats, t-of-n → authorization input (never completion),<br>contest-freeze provably leaves issuer state untouched, signer-set hiding audited for all n,<br>guardian-attestation epoch as its own clock, rt07-candidates demo. Boundary pair drafted in its<br>NOTES.md; threshold signatures/ZK membership = circuit work<br><strong>Anchor (cred-spec):</strong> VWC (witness credential, <code>taskContext</code> REQUIRED) · VEC · community-anchored<br>construction · credential-vs-artifact test · <a class="wlink" href="vwc-witness-seat.html">VWC — Witness Seat</a> (the witness seat X9&#39;s<br>guardian is structurally kin to — authority over recovery, never over edges).<br><strong>Anchor (decision doc):</strong> §13.3 (&quot;recovery, rotation, and exception rules&quot;) · §13.4 recovery-domain<br>input · §13.6 redress · §22.2 bounded epochs · §2.4 three parameters · §6.5/§6.6 · §7.3 structured<br>evidence · §19 observers · §23 redress matrix · §29.</p>
+<hr>
+</div>
+<div class="md"><h2>Scope guard (X5&#39;s case split, kept verbatim)</h2>
+<p>Routine epoch rotation is holder-side one-way derivation and <strong>never touches issuer, biometric, or<br>guardians</strong>. Guardians are a <strong>catastrophic-loss mechanism only</strong>: the master secret is gone or<br>compromised, and t-of-n guardians attest &quot;this new commitment belongs to the person we knew under the<br>old one&quot; — the biometric is never re-touched. A profile that routes routine rotation through guardians<br>has built a periodic social correlator into its lifecycle, the same defect X5 names for re-enrolment.</p>
+</div>
+<div class="md"><h2>The guardian attestation as a credential</h2>
+<p>Each guardian signs, individually: <code>{new_commitment, revoked_commitment_ref, recovery_domain_descriptor (§13.4/§6.2 canonical — context authority, purpose, scope, recovery epoch), guardian_membership_ref (the guardian&#39;s own personhood anchor), transcript_digest}</code>. Structurally this is a <strong>taskContext-bound<br>witness-class credential over the recovery ceremony</strong> — the VWC pattern, one hop over: a witness attests<br>that an encounter <em>occurred</em>; a guardian attests that a <em>continuity claim holds</em>.</p>
+<p>Does it want to be a VWC subtype or its own shape? The cred-spec&#39;s test: <strong>credential</strong> = true standing<br>alone; <strong>artifact</strong> = only meaningful inside its exchange. One guardian attestation <em>is</em> true standing<br>alone (&quot;I attest this continuity claim&quot;) — credential, and VWC-shaped (witness M-DID → observed DID,<br><code>taskContext</code> REQUIRED). But the <em>aggregate</em> is not a bigger witness statement: at threshold t it becomes<br>an input the issuer&#39;s re-issuance policy acts on — gate power, exactly what the VWC seat&#39;s separation<br>property (W4: a witness cannot mint anything alone) exists to forbid. Verdict: <strong>its own shape</strong> — a<br><em>recovery-witness credential</em>, VWC-structured per attestation, with threshold semantics defined at the<br>profile layer, never smuggled into VWC. It is structured evidence kept separate from holder-key control<br>(§7.3 discipline): guardians attest, the issuer authorizes, the holder&#39;s new key does the rest.</p>
+</div>
+<div class="md"><h2>The correlator trade, stated fully (§2.4)</h2>
+<ul>
+<li><strong>Against whom.</strong> Resistant to issuer and verifier as linkers — neither ever holds an old→new pair;<br>the issuer sees a threshold met, not who vouched. <strong>Not resistant to t colluding guardians</strong>, who can<br>jointly link pre- and post-recovery commitments and know the person behind both. Guardians are a new<br>§19 observer class (add the row): they learn that a recovery happened, when, and for whom.</li>
+<li><strong>For how long.</strong> The guardian set&#39;s memory — unbounded, <strong>unless the attestation is epoch-scoped</strong>.<br>Answering §22.2&#39;s deferred question: guardian attestations get their own epoch/cryptoperiod.<br>Guardianship <em>expires</em> and MUST be re-affirmed; a stale guardian set cannot attest a live recovery.<br>&quot;Permanent&quot; or &quot;unbounded&quot; MUST NOT be accepted as an implicit default (§22.2) — a lifelong guardian<br>is exactly such a default. Usability cost, stated honestly: re-affirmation is a recurring human<br>ceremony, and a person who lets it lapse has silently lost their recovery path — the profile MUST<br>surface lapse (§6.8 legibility) rather than discover it at recovery time.</li>
+<li><strong>Alongside what.</strong> Guardian-selection metadata IS a social graph — who guards whom is who trusts<br>whom. Mitigations: <strong>guardian-set commitments</strong> — the holder commits to a guardian set; recovery<br>proves t-of-n attestations from the committed set <em>without revealing which guardians signed</em><br>(membership + threshold in zero knowledge); plus the <strong>k-out-of-n distinctness discipline</strong> — k<br>distinct guardian nullifiers, so one guardian cannot sign twice under two seats.</li>
+</ul>
+</div>
+<div class="md"><h2>Personhood-gating the guardians</h2>
+<p>The attack that breaks naive social recovery: a Sybil enrols sock-puppet guardians and self-recovers —<br>the guardian set is only as real as its members. So each guardian MUST themselves be personhood-anchored<br>(the PHC leg, rt 01), and each carries a <strong>guardian nullifier scoped to the recovery domain</strong> (§13.4&#39;s<br>recovery-domain input, reused): one guardian seat per human per recovery context. Within that governed<br>context this is intentional linkage (§6.5 — a count threshold); across contexts the guardian nullifier<br>MUST NOT link (§6.6). Distinctness of the k signatures reduces to k distinct nullifiers — mechanical.</p>
+</div>
+<div class="md"><h2>The ceremony as a trust task</h2>
+<p>Recovery is a governed trust task under the recovery-domain descriptor as <code>taskContext</code>. The<br>outcome-interpretability rule applies with force: a guardian attestation — even t of them — <strong>is not<br>evidence that recovery completed</strong>. Verifiers MUST NOT read it as completion evidence; the <strong>issuer&#39;s<br>re-issuance is the outcome artifact</strong>, and only its reachability closes the ceremony. Redress (§23 gains<br>a row):</p>
+<table>
+<thead>
+<tr>
+<th>Failure</th>
+<th>Primary accountable party</th>
+<th>Supporting parties</th>
+<th>Required remedy path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Contested recovery (guardians disagree, stale set attests, or holder disputes)</td>
+<td>recovery-context authority</td>
+<td>issuer, guardian set, verifier state operator</td>
+<td>freeze re-issuance, adjudicate via challenge route, correct state, restore or re-run ceremony</td>
+</tr>
+</tbody></table>
+<p>Per §13.6, adopted verbatim: a person MUST NOT be permanently excluded by an opaque uniqueness result<br>without correction and appeal mechanisms — a person whose guardians are dead, lapsed, or hostile still<br>gets the challenge route (falling back to pattern 1&#39;s issuer-blind re-enrolment where dedup permits).</p>
+</div>
+<div class="md"><h2>Against X5&#39;s patterns 1–2</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1 issuer-blind</th>
+<th>2 recovery-domain nullifier</th>
+<th>3 guardians</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>re-touches biometric</td>
+<td>yes</td>
+<td>yes (dedup)</td>
+<td><strong>no — the template is never re-touched</strong></td>
+</tr>
+<tr>
+<td>survives issuer death</td>
+<td>no</td>
+<td>no</td>
+<td><strong>yes — issuer-independence is the unique property</strong></td>
+</tr>
+<tr>
+<td>correlator holder</td>
+<td>issuer (timing residual)</td>
+<td>issuer (rate view)</td>
+<td>t colluding guardians</td>
+</tr>
+<tr>
+<td>new disclosure</td>
+<td>timing adjacency</td>
+<td>recovery frequency</td>
+<td>social graph (who guards whom)</td>
+</tr>
+<tr>
+<td>liveness dependency</td>
+<td>issuer up</td>
+<td>issuer up</td>
+<td>t guardians alive, affirmed, willing</td>
+</tr>
+</tbody></table>
+<p>Guardians WIN when the biometric must not be re-presented or the issuer is gone; they LOSE on collusion<br>surface, social-graph disclosure, and guardian-set liveness. A profile picks per threat model — and says so.</p>
+</div>
+<div class="md"><h2>Trust-graph synergy (the agentprivacy angle)</h2>
+<p>The trust graph the person already built IS the guardian candidate set: standing VRC counterparties are<br>personhood-checkable (community-anchored construction), have proven-collision history (rt 07), and their<br>edges are exactly the relationships a guardian claim rides on. A guardian is a witness (VWC seat) whose<br>authority is over <em>recovery</em>, never over <em>edges</em> — the seat&#39;s separation carried up one level. Edge<br>formation becomes guardianship substrate: recovery bootstraps from relationships, not from re-enrolment.</p>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 —</strong> guardian-set commitment + t-of-n check in <a class="wlink" href="lab-rotation.html">Lab — rotation</a> (additive; imports rt 01 for<br>guardian personhood, rt 07 for candidate edges); properties: threshold met, signer-set hidden,<br>duplicate-guardian-nullifier refused, stale-epoch attestation refused by name.</li>
+<li><strong>M2 —</strong> the boundary pair the build deferred: assurance + disclosure records for &quot;recovery by<br>guardian attestation,&quot; Appendix-B format, §19 guardian-observer row included.</li>
+<li><strong>M3 —</strong> clock-table extension: <code>guardian-attestation epoch</code> row (certification family; touched by<br>catastrophic + by re-affirmation), wired into <code>validateClocks</code> (§22.2).</li>
+<li><strong>M4 —</strong> failure codes: <code>guardian-threshold-not-met</code>, <code>guardian-epoch-lapsed</code>,<br><code>duplicate-guardian-seat</code>, <code>contested-recovery</code> → §13.6 challenge route.</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<ul>
+<li>§29&#39;s recovery item, social leg: pattern 3 moves from &quot;named and deferred&quot; to a decidable profile<br>choice with the full §2.4 statement and the §22.2 guardian-epoch answer.</li>
+<li>To the Credentials TF: candidate <strong>recovery-witness credential</strong> shape — VWC-structured per<br>attestation, threshold semantics profile-level, <code>taskContext</code> = the recovery-domain descriptor;<br>plus the credential-vs-artifact argument for why it is not a VWC subtype.</li>
+<li>§23: the contested-recovery redress row; §19: the guardian-set observer row.</li>
+</ul>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li>Must guardians hold VMCs in the <em>same</em> VTC as the recovering person (stronger community anchoring,<br>smaller pool — the VWC seat&#39;s same question, inherited)?</li>
+<li>Threshold choice t, n as profile parameters: who is the §6.7 authority that sets them, and is a<br>holder-chosen t below the profile floor a conformance failure or a disclosed weaker claim?</li>
+<li>Can re-affirmation piggyback on live VRC activity (an active edge as implicit affirmation) without<br>turning edge traffic into a guardianship signal — a §20 observable-event question?</li>
+<li>Compromise (old secret held by an attacker) during a guardian ceremony: does the attacker racing the<br>guardians need its own freshness rule, extending X5&#39;s attacker-window open question?</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x9-guardian-recovery.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

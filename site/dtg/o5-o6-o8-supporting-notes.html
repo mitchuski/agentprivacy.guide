@@ -1,0 +1,76 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O5 O6 O8 — Supporting Notes · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>O5 O6 O8 — Supporting Notes</span></div>
+  <article><div class="md"><h1>O5 · O6 · O8 — Supporting explorations</h1>
+<p><em>Three lower-cost lines: the freshness/transcript conformance harness, the pools cross-pollination, and the<br>post-quantum path. Each is mostly reuse of what already exists.</em></p>
+<p><strong>Register:</strong> O5, O6, O8 · leverage 🟡 · <strong>Ladder:</strong> design notes</p>
+<hr>
+</div>
+<div class="md"><h2>O5 — Runtime 05 as the transcript-conformance harness</h2>
+<p><strong>Anchor:</strong> cred-spec <code>taskContext</code> + outcome-interpretability · decision doc <strong>PR-FRE</strong> (§15).</p>
+<p>The decision doc upgraded this exploration&#39;s target. The original idea bound the freshness nonce to<br><code>witnessContext.sessionId</code>; §15.2 now rules that <strong>a bare nonce is insufficient</strong> — freshness means binding<br>to a <strong>canonical transcript</strong>: protocol/profile versions, verifier/audience, governed context descriptor,<br>purpose, scope, challenge, session, requested predicates, policy requirements, delegation reference, expiry,<br>snapshot requirements, proving mode, encoding version.</p>
+<p>So runtime 05 becomes the <strong>conformance harness for PR-FRE</strong>:</p>
+<ul>
+<li>implement canonical-transcript formation + digest (one implementation, shared with the VWC seat&#39;s<br><code>transcript_digest</code> and O7&#39;s step-up binding);</li>
+<li>property tests from §26.1&#39;s negative list: replay into another verifier/context/purpose/scope/transcript<br>must fail; a materially different transcript with the same nonce must fail; transcript-field observation<br>is recorded as disclosure (§15.4), not treated as free.</li>
+</ul>
+<p>Cheapest full deliverable in the lab: PR-FRE is required by both MLP and EPP, so the harness serves every<br>profile. <strong>Negative meaning</strong> carried: PR-FRE establishes only binding-to-current-transcript — never<br>liveness, personhood, identity, or authority (§15.3).</p>
+</div>
+<div class="md"><h2>O6 — Correlation architecture ↔ privacy-pools / mana-pools lineage</h2>
+<p><strong>Anchor:</strong> cred-spec four-DID model (R/M/C/P) with mandatory R-DID uniqueness · decision doc §6<br>(context = governed linkability domain) · §6.6 prohibited cross-context linkage.</p>
+<p>The pools lineage (privacy-pools withdraw folding, mana-pools, the runtime-01 nullifier itself) is the same<br>unlinkability discipline the spec&#39;s correlation architecture demands. Two directions of transfer:</p>
+<ul>
+<li><strong>Pools → DTG:</strong> domain-separated derivation as the R/M/C/P-DID minting discipline — each R-DID is a<br>per-counterparty derivation from the holder secret, exactly the pools&#39; per-context pseudonym pattern;<br>the pools&#39; association-set reasoning maps to registry epoch roots (O4).</li>
+<li><strong>DTG → pools:</strong> the decision doc&#39;s context machinery (§6.2 canonical descriptors, §6.7 context<br>authority + change control, §6.6 prohibited-linkage list) is a <em>governance</em> layer the pools story never<br>formalized — &quot;which withdrawals may be linked, by whom, under whose authority&quot; is a context decision<br>record. The 0xbow/ASP world would recognize every row of it.</li>
+</ul>
+<p>Deliverable: a two-page derivation-discipline note (how one holder secret safely mints R/M/C/P-DIDs with<br>provable non-correlation, pools-style) — feeds O2&#39;s descriptor upgrade and any TF question about DID<br>derivation. Low urgency; write when O2&#39;s M2 lands.</p>
+</div>
+<div class="md"><h2>O8 — The post-quantum path</h2>
+<p><strong>Anchor:</strong> strawman §8 (&quot;pre-quantum acceptable for v1, documented PQ path&quot;) · decision doc §24 (&quot;MUST NOT<br>make post-quantum support a blocker for the first implementable release&quot;) + §29 (PQ migration = an<br>implementation question &quot;requiring layer separability and evidence, not only algorithm identifiers&quot;) +<br>§22.3 (migration must be a concrete mechanism).</p>
+<p>The TF can lead the PQ story for the whole DTG stack precisely because the decision doc keeps it out of<br>V1&#39;s critical path. The deliverable is a <strong>layer-separability analysis</strong>, not a scheme swap:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>PQ status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hash commitments, nullifiers, Merkle roots (the shared gadget)</td>
+<td>already PQ-safe (symmetric/hash assumptions)</td>
+</tr>
+<tr>
+<td>Proof system (Groth16/PLONK-class over pairings)</td>
+<td>not PQ; the layer that must be swappable (STARK-class successors)</td>
+</tr>
+<tr>
+<td>Issuer signatures on attestations (IDVC, VWC, delegation)</td>
+<td>migrate with issuer PKI (ML-DSA et al.) — an O3 schema-versioning concern, not a circuit concern</td>
+</tr>
+<tr>
+<td>Long-lived artefacts (enrolment roots, §22.2 cryptoperiods)</td>
+<td>the real exposure: harvest-now-decrypt-later applies to anything retained; cryptoperiods are the control</td>
+</tr>
+</tbody></table>
+<p>Threat-model credibility comes from the ecdsa.fail / quantum-ECC lineage (shor_mage): concrete cost models<br>for the classical-breaks timeline rather than hand-waving. Deliverable: a &quot;PQ considerations&quot; section for<br>the V1 draft doing §22.3 properly — profile identifiers, version negotiation, overlap periods, downgrade<br>protection, and what happens to enrolment roots at migration. Write once the construction gate (§25) has<br>named actual proof systems; before that it has nothing concrete to separate.</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="o5-o6-o8-supporting-notes.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

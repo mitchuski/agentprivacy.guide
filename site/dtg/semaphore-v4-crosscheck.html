@@ -1,0 +1,202 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Semaphore v4 Crosscheck · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Semaphore v4 Crosscheck</span></div>
+  <article><div class="md"><h1>SEMAPHORE V4 CROSS-CHECK — nullifier-membership gadget vs Semaphore v4</h1>
+<p><strong>Register:</strong> O2 · <strong>Milestone:</strong> M5 (Semaphore v4 cross-check) · <strong>Ladder:</strong> research note<br><strong>Date:</strong> 2026-07-18<br><strong>Our construction (ground truth):</strong> <code>~/dtgwg-zkp-tf-mage/runtimes/circom-gadget/circuits/nullifier_membership.circom</code><br>(+ <code>harness.mjs</code>, <code>NOTES.md</code> — 8/8 real groth16 proofs, 11,522 constraints)<br><strong>Anchors:</strong> O2 exploration (<a class="wlink" href="o2-phc-by-nullifier.html">O2 — PHC by Nullifier</a>) ·<br>decision doc PR-UNQ §13 (narrow claim: <strong>scoped reuse detection, not unique-human</strong>) · §6.2 canonical<br>context descriptor · §13.4 binding list · §15.2 canonical transcript · rt01 NOTES item &quot;cross-check<br>the nullifier definition against Semaphore v4 so we can say conformant-with / diverges-from precisely.&quot;<br><strong>Semaphore v4 ground truth:</strong> <code>packages/circuits/src/semaphore.circom</code> @ semaphore-protocol/semaphore<br><code>main</code> (v4 line), verified 2026-07-18 against the sources listed at the end.</p>
+<hr>
+</div>
+<div class="md"><h2>0. The two statements, exactly</h2>
+<p><strong>Ours</strong> (<code>NullifierMembership(20)</code>, circom 2.2.3, groth16/bn128):</p>
+<pre><code>public:  context (§6.2 canonical descriptor digest mod p), root, nullifier
+private: secret s, blinding r, pathElements[20], pathIndices[20]
+statement: Poseidon(2)([s, r]) ∈ root  ∧  nullifier = Poseidon(3)([DOMAIN_TAG, s, context])
+DOMAIN_TAG = sha256(&#39;dtg-zkp/nullifier/v0&#39;) mod p
+           = 8848404101512072295265332932144711420998576661229779766032777478684075272373
+</code></pre>
+<p><strong>Semaphore v4</strong> (<code>Semaphore(MAX_DEPTH)</code>, verbatim from the circuit source):</p>
+<pre><code>private: secret, merkleProofLength, merkleProofIndex, merkleProofSiblings[MAX_DEPTH]
+public in:  message, scope
+public out: merkleRoot, nullifier
+statement: secret &lt; l   (l = Baby Jubjub prime subgroup order
+                          = 2736030358979909402780800718157159386076813972158567259200215660948447373041,
+                          enforced via LessThan(251))
+           (Ax, Ay) = BabyPbk()(secret)          // EdDSA pubkey point from secret scalar
+           identityCommitment = Poseidon(2)([Ax, Ay])
+           merkleRoot &lt;== BinaryMerkleRoot(MAX_DEPTH)(identityCommitment,
+                              merkleProofLength, merkleProofIndex, merkleProofSiblings)
+           nullifier &lt;== Poseidon(2)([scope, secret])   // scope FIRST, then secret
+           signal dummySquare &lt;== message * message      // binds message into the proof
+</code></pre>
+<p>JS side (verified in <code>@semaphore-protocol/identity</code> + <code>@zk-kit/eddsa-poseidon</code>): the user-held<br>private key is an arbitrary byte string; <code>secretScalar = (leBufferToBigInt(pruneBuffer(hash(privateKey) .slice(0,32))) &gt;&gt; 3) mod subOrder</code> (BLAKE by default, BLAKE2 optional — EdDSA key clamping);<br><code>publicKey = mulPointEscalar(Base8, secretScalar)</code> on Baby Jubjub; <code>commitment = Poseidon(2)(publicKey)</code>.<br>The circuit&#39;s <code>secret</code> input IS this secret scalar.</p>
+</div>
+<div class="md"><h2>1. Side-by-side</h2>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Semaphore v4</th>
+<th>DTG gadget (ours)</th>
+<th>Match?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Identity secret</td>
+<td>EdDSA private key → derived <strong>secret scalar</strong> (BLAKE-hash, pruned, <code>&gt;&gt;3</code>, mod Baby Jubjub suborder); circuit range-checks <code>secret &lt; l</code> via <code>LessThan(251)</code></td>
+<td>Raw BN254 field element <code>s</code> + independent <strong>blinding</strong> <code>r</code> (no key structure, no range check beyond field)</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Identity commitment</td>
+<td><code>Poseidon(2)([Ax, Ay])</code> — hash of the <strong>public key</strong> point derived in-circuit by <code>BabyPbk()</code></td>
+<td><code>Poseidon(2)([s, r])</code> — hash of <strong>secret + blinding</strong> directly</td>
+<td>✗ (same hash, same arity, different preimage semantics)</td>
+</tr>
+<tr>
+<td>Hiding of commitment</td>
+<td>No blinding factor; hiding rests on unpredictability of the pubkey (preimage resistance over the keyspace)</td>
+<td>Explicit blinding <code>r</code> — commitment is hiding even if <code>s</code> is low-entropy or structured</td>
+<td>✗ (deliberate on our side)</td>
+</tr>
+<tr>
+<td>Group tree</td>
+<td><strong>LeanIMT</strong>: binary Poseidon(2) tree, <strong>dynamic depth</strong> (grows with leaf count), <strong>no zero padding</strong> — a node missing its right child <em>adopts the left child&#39;s value unhashed</em>; proof carries <code>merkleProofLength</code></td>
+<td>Fixed <strong>depth 20</strong> Poseidon(2) tree, <strong>zero-leaf padding</strong> (<code>zeros[0]=0</code>, <code>zeros[i+1]=Poseidon(zeros[i],zeros[i])</code>)</td>
+<td>✗ (same node hash; different shape, padding, and proof format)</td>
+</tr>
+<tr>
+<td>Nullifier</td>
+<td><code>Poseidon(2)([scope, secret])</code> — <strong>arity 2, scope first, no domain tag</strong></td>
+<td><code>Poseidon(3)([DOMAIN_TAG, secret, context])</code> — <strong>arity 3, versioned tag first, context last</strong></td>
+<td>✗ — order AND arity differ; values can never coincide</td>
+</tr>
+<tr>
+<td>Scope vs context</td>
+<td><code>scope</code> is an <strong>arbitrary app-chosen field element</strong> (&quot;each user may only generate one valid proof&quot; per scope); no canonical encoding mandated</td>
+<td><code>context</code> is the <strong>§6.2 canonical governed descriptor digest</strong> (11 required fields — protocol/profile versions, authority, policy, purpose, scope, verifier-set, epoch, nullifier version, retention — sorted-key canonical JSON, domain-separated SHA-256, reduced mod p). Governance of the scope IS the decision doc&#39;s point</td>
+<td>✗ (protocol-layer; their circuit would accept our digest as a scope)</td>
+</tr>
+<tr>
+<td>Epoch</td>
+<td>None — scope is the only scoping mechanism</td>
+<td>Epoch + epochPolicy inside the descriptor digest (§22.2 bounded cryptoperiods); separate epoch input is a candidate v1 change</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Message / action binding</td>
+<td>Public <code>message</code> input bound in-circuit via <code>dummySquare &lt;== message * message</code> (1 constraint) — proof is bound to an arbitrary payload</td>
+<td><strong>No in-circuit message input.</strong> Presentation binding deferred to the protocol layer (§15.2 canonical transcript)</td>
+<td>✗ — see WHY-FLAG below</td>
+</tr>
+<tr>
+<td>Proof system</td>
+<td>groth16 over BN254 (snarkjs); <code>SemaphoreVerifier.sol</code> = extended snarkjs groth16 verifier holding VK parameters for every <code>MAX_DEPTH</code> 1–32</td>
+<td>groth16 over BN254 (snarkjs), single circuit instance at depth 20</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Trusted setup</td>
+<td>Real <strong>MPC phase-2 ceremony</strong> (&quot;Semaphore V4 Ceremony&quot;, p0tion/DefinitelySetup infrastructure; completed 13 July 2024, 400+ participants); artifacts distributed via the snark-artifacts mechanism</td>
+<td><strong>Lab-only</strong> local ptau + single contribution with fixed entropy — explicitly NOT a production ceremony (NOTES caveat)</td>
+<td>✓ in kind, ✗ in maturity</td>
+</tr>
+<tr>
+<td>Sizes</td>
+<td>Depths 1–32 supported; v4 adds <code>BabyPbk</code> + <code>LessThan(251)</code> over v3&#39;s hash-only identity (&quot;slightly slower… by a few milliseconds&quot;). Published constraint counts: <strong>unconfirmed</strong> — the docs benchmarks page renders charts as images (env: MacBook M2 Pro); numbers live in the linked benchmark repo, not verified here</td>
+<td><strong>11,522 constraints</strong> (5,427 non-linear) at depth 20; ~640 ms prove, ~10 ms verify, 722 B proof (Windows 11 consumer machine)</td>
+<td>n/a</td>
+</tr>
+</tbody></table>
+</div>
+<div class="md"><h2>2. Conformant with</h2>
+<p>We are a <strong>compatible member of the Semaphore family of constructions</strong> — the shape is identical:</p>
+<ol>
+<li><strong>Same skeleton.</strong> A Poseidon-committed identity, enrolled as a leaf in a Poseidon binary Merkle<br>group, proving membership + a deterministic per-scope nullifier in one groth16/BN254 statement.<br>Same hash family (circomlib Poseidon), same node arity (2), same proof system, same curve.</li>
+<li><strong>Same nullifier semantics.</strong> Deterministic function of (secret, scoping value); same secret +<br>same scope ⇒ same nullifier (their per-scope one-proof property = our Z4 duplicate check);<br>different scope ⇒ unlinkable (our Z3 = their cross-scope unlinkability). Semaphore&#39;s docs state<br>the nullifier is &quot;used to check whether a proof with that scope has already been generated by that<br>user&quot; — exactly our decision-doc language: <strong>scoped reuse detection</strong>, not unique-human. Both<br>constructions leave one-person-one-leaf to enrolment governance.</li>
+<li><strong>Same anonymity-set logic.</strong> Verifier learns membership-in-root + nullifier, never which leaf.</li>
+<li><strong>Their <code>scope</code> and our <code>context</code> occupy the same slot in the algebra.</strong> Our §6.2 digest is a<br>valid Semaphore scope value; we govern what they leave free.</li>
+</ol>
+</div>
+<div class="md"><h2>3. Diverges from</h2>
+<p>Each divergence tagged <strong>WHY</strong> (deliberate, per the decision doc) or <strong>WHY-FLAG</strong> (accidental /<br>needs a TF decision).</p>
+<ol>
+<li><strong>Explicit domain tag in the nullifier preimage</strong> — ours <code>Poseidon(3)([TAG, s, ctx])</code>, theirs<br><code>Poseidon(2)([scope, secret])</code> with no tag. <strong>WHY:</strong> §13.4 requires the nullifier to bind<br>protocol/profile/nullifier <strong>versions</strong>; the versioned tag (<code>dtg-zkp/nullifier/v0</code>) is the hash<br>pin made explicit in-circuit, and gives explicit domain separation from the commitment hash<br>(Semaphore separates commitment vs nullifier only structurally — both are arity-2 Poseidon).<br>Nuance for the TF: our §6.2 digest already contains <code>protocol</code>/<code>profile</code>/<code>nullifierVersion</code><br>fields, so the in-preimage tag is partially redundant with the digest — the tag is still the<br>only version binding that survives a descriptor-encoding change.</li>
+<li><strong>Blinding in the commitment</strong> — ours <code>Poseidon(s, r)</code>, theirs <code>Poseidon(Ax, Ay)</code> unblinded.<br><strong>WHY:</strong> deliberate hiding independent of secret entropy/structure; matters if enrolment secrets<br>are ever derived (e.g. biometric-derived, §29) rather than uniformly random.</li>
+<li><strong>EdDSA identity — what we give up.</strong> Semaphore&#39;s secret is a signing key: the same identity can<br>sign and verify messages <strong>outside the circuit</strong>, enabling ownership/holder-binding proofs and<br>off-circuit auth with no extra machinery. Our raw field secret can do nothing but be hashed.<br><strong>WHY (for now):</strong> simplicity + zero-dep discipline; but this is a real capability gap with<br>PR-HLD synergy — see recommendation 3.</li>
+<li><strong>Fixed depth 20 + zero padding vs LeanIMT dynamic depth, no padding.</strong> LeanIMT propagates a<br>lone left child upward unhashed and carries <code>merkleProofLength</code> in the proof; ours pads with an<br>explicit zeros chain at fixed depth. Proof formats and roots are incompatible even for identical<br>leaf sets. <strong>WHY:</strong> a fixed, pinned tree shape is simpler to specify as a conformance object and<br>costs nothing at our scale; LeanIMT&#39;s wins are dynamic-group gas/insert costs (v4 release: ~$8000<br>→ &lt;$1000 for a 1000-member on-chain migration) which we don&#39;t yet need.</li>
+<li><strong>Governed context vs free scope.</strong> Theirs: any field element, app&#39;s problem. Ours: the §6.2<br>canonical descriptor digest — canonicalization is a <strong>conformance requirement</strong> because<br>unlinkability (Z3) and stability (Z4) hinge on it. <strong>WHY:</strong> this is the decision doc&#39;s central<br>move; not a gap on their side so much as a layer they don&#39;t standardize.</li>
+<li><strong>No epoch machinery on their side.</strong> §22.2 bounded cryptoperiods have no Semaphore equivalent;<br>an unbounded nullifier is non-conformant for us. <strong>WHY:</strong> deliberate (governance requirement).</li>
+<li><strong>No in-circuit message binding on our side.</strong> Semaphore binds an arbitrary <code>message</code> into the<br>proof for one constraint (<code>message * message</code>); our circuit has no such input, so a DTG proof is<br>not cryptographically bound to the action payload it authorizes — replay of a captured proof<br>within the same context/epoch is only stopped registry-side once the nullifier is recorded, and<br>the §15.2 canonical transcript binding currently lives entirely outside the proof. <strong>WHY-FLAG:</strong><br>this looks accidental, not chosen. Adding a public <code>transcriptDigest</code> (or <code>message</code>) input with<br>the dummy-square idiom costs ~1 constraint and closes it. TF decision needed.</li>
+<li><strong>Setup maturity.</strong> Their artifacts come from a real 400+-participant MPC ceremony; ours from a<br>lab rig with fixed entropy. <strong>WHY:</strong> known and documented (NOTES caveat); becomes a WHY-FLAG the<br>moment anything leaves the lab.</li>
+</ol>
+</div>
+<div class="md"><h2>4. Interop verdict</h2>
+<p><strong>No — in both directions, as-is.</strong> Said plainly:</p>
+<ul>
+<li>A Semaphore verifier (JS or <code>SemaphoreVerifier.sol</code>) cannot verify a DTG proof: different circuit,<br>different verification key, and their VK set only covers their own circuit at depths 1–32.</li>
+<li>Even at the value level nothing lines up: our commitment <code>Poseidon(s,r)</code> is not a Semaphore<br>identity commitment <code>Poseidon(Ax,Ay)</code>; our zero-padded depth-20 root is not a LeanIMT root for the<br>same leaves; our arity-3 tagged nullifier can never equal their arity-2 untagged one.</li>
+<li>A Semaphore identity cannot enrol in our tree or vice versa without re-deriving everything.</li>
+</ul>
+<p><strong>What a compatibility profile would require</strong> (cheapest path first):<br>adopt <strong>unmodified Semaphore v4</strong> — circuit, ceremony artifacts, LeanIMT, EdDSA identities — and set<br><code>scope := §6.2 descriptor digest mod p</code>. Because their scope is app-defined, ALL of our context<br>governance (§6.2 canonicalization, epoch-in-digest, version fields) survives at the protocol layer;<br>what we lose is the explicit in-preimage domain tag (version binding then rests solely on the<br>digest&#39;s version fields) and the commitment blinding. Anything short of wholesale adoption (e.g.<br>keeping our preimages but their tree) buys no interop at all — preimage layout is the whole game.</p>
+</div>
+<div class="md"><h2>5. Recommendations for the TF</h2>
+<ol>
+<li><strong>Keep the explicit domain tag; document the divergence as deliberate.</strong> §13.4&#39;s version-binding<br>requirement is our named reason; record the nuance that the §6.2 digest also carries versions, so<br>the tag&#39;s unique job is surviving descriptor-encoding changes. Do not silently adopt Semaphore&#39;s<br><code>(scope, secret)</code> layout — that would trade a stated conformance property for ecosystem<br>compatibility we can get another way (see 2).</li>
+<li><strong>Define a &quot;Semaphore-compat profile&quot; as a second, optional profile</strong> rather than converging the<br>native gadget: unmodified Semaphore v4 with <code>scope = descriptorDigest mod p</code>. This gets audited<br>circuits + a real trusted-setup ceremony + existing tooling for deployments that want them, while<br>the native gadget remains the reference for the full §13.4 binding list. A one-page mapping<br>(descriptor→scope, enrolment→identity) is the entire spec cost.</li>
+<li><strong>Evaluate EdDSA-based identity for v1</strong> (PR-HLD synergy): a signing-capable enrolment secret<br>gives holder-binding and off-circuit ownership proofs for the cost of <code>BabyPbk</code> + <code>LessThan(251)</code><br>in-circuit. If adopted, keep our blinding: <code>commitment = Poseidon(Ax, Ay, r)</code> (arity 3) preserves<br>hiding — noting that this is again a deliberate divergence from Semaphore&#39;s unblinded commitment.</li>
+<li><strong>Add an in-circuit <code>transcriptDigest</code> public input now</strong> (the dummy-square idiom, ~1 constraint)<br>to bind the §15.2 canonical transcript into the proof — this closes the one accidental gap this<br>cross-check found (divergence 7).</li>
+<li><strong>LeanIMT: defer.</strong> Revisit only if an on-chain, dynamically-growing registry becomes a<br>requirement; for spec-pinned enrolment sets, fixed depth-20 + zeros chain is easier to make a<br>conformance object.</li>
+</ol>
+</div>
+<div class="md"><h2>6. Honesty notes / unconfirmed</h2>
+<ul>
+<li>Semaphore v4 <strong>constraint counts were not confirmed</strong> from a primary text source (benchmarks page<br>charts are images; numbers live in the external benchmark repo). Do not cite v4 constraint numbers<br>until read from that repo.</li>
+<li>Ceremony details verified only to: MPC phase-2, completed 13 July 2024, 400+ participants,<br>artifacts via the snark-artifacts distribution mechanism. Contribution count / transcript hash not<br>independently verified.</li>
+<li>The <code>hashInput</code> default in <code>@zk-kit/eddsa-poseidon</code> is &quot;BLAKE by default, BLAKE2 if specified&quot;<br>(README); the exact BLAKE variant naming (BLAKE-1 512) is inferred from the EdDSA convention and<br>the 32-byte slice — treat the variant name as unconfirmed, the pipeline (hash → prune → <code>&gt;&gt;3</code> →<br>mod subOrder) as confirmed from source.</li>
+<li>Throughout, the claim stays PR-UNQ-narrow: both constructions provide <strong>scoped reuse detection</strong>;<br>neither proves unique-human — that is enrolment governance in both ecosystems.</li>
+</ul>
+</div>
+<div class="md"><h2>Sources</h2>
+<p><strong>Ours (local):</strong></p>
+<ul>
+<li><code>C:\Users\mitch\dtgwg-zkp-tf-mage\runtimes\circom-gadget\circuits\nullifier_membership.circom</code></li>
+<li><a class="wlink" href="lab-circom-gadget.html">Lab — circom-gadget</a> (measurements, §13.4 table)</li>
+<li><code>C:\Users\mitch\dtgwg-zkp-tf-mage\runtimes\circom-gadget\harness.mjs</code></li>
+<li><a class="wlink" href="lab-01-uniqueness-nullifier.html">Lab — 01-uniqueness-nullifier</a></li>
+<li><a class="wlink" href="o2-phc-by-nullifier.html">O2 — PHC by Nullifier</a></li>
+</ul>
+<p><strong>Semaphore v4 (primary):</strong></p>
+<ul>
+<li>Circuit source (all quoted lines): http<code>s://github.com/semaphore-protocol/semaphore/blob/main/packages/circuits/src/semaphore.circom</code></li>
+<li>v4.0.0 release notes (EdDSA, LeanIMT left-child rule, signal→message / externalNullifier→scope, gas numbers, &quot;not backward compatible&quot;): http<code>s://github.com/semaphore-protocol/semaphore/releases/tag/v4.0.0</code></li>
+<li>Identity guide (&quot;EdDSA to generate the identity keys&quot;; identity = private key, public key, commitment): http<code>s://docs.semaphore.pse.dev/guides/identities</code></li>
+<li>Identity package (&quot;commitment… is the Poseidon hash of the public key&quot;): http<code>s://github.com/semaphore-protocol/semaphore/tree/main/packages/identity</code></li>
+<li>Proofs guide (scope semantics, nullifier = f(scope, private key)): http<code>s://docs.semaphore.pse.dev/guides/proofs</code></li>
+<li>Circuits technical reference (three parts; nullifier = hash of secret with scope; dummy square): http<code>s://docs.semaphore.pse.dev/technical-reference/circuits</code></li>
+<li>Contracts reference (<code>SemaphoreVerifier.sol</code> = extended snarkjs groth16 verifier; VKs for MAX_DEPTH 1–32): http<code>s://docs.semaphore.pse.dev/technical-reference/contracts</code></li>
+<li>Benchmarks page (env; depths 1–32 vs v3&#39;s 16–32; identity &quot;slightly slower&quot;): http<code>s://docs.semaphore.pse.dev/benchmarks</code></li>
+<li>LeanIMT (dynamic depth; &quot;directly adopts the left child&#39;s value when a node lacks a right counterpart&quot;; no zero values): http<code>s://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/lean-imt</code></li>
+<li>EdDSA-Poseidon source (secret-scalar derivation: hash → slice(0,32) → pruneBuffer → <code>&gt;&gt;3</code> → mod subOrder; <code>mulPointEscalar(Base8, s)</code>): http<code>s://github.com/privacy-scaling-explorations/zk-kit/blob/main/packages/eddsa-poseidon/src/eddsa-poseidon-factory.ts</code></li>
+<li>Ceremony attestation (Semaphore V4 Ceremony, MPC phase 2): http<code>s://gist.github.com/NicoSerranoP/10b09d0539cb87445fee2d3d98cda96a</code> · completion (13 July 2024, 400+ participants): http<code>s://semaphore.pse.dev/</code></li>
+<li>snark-artifacts distribution: http<code>s://github.com/privacy-ethereum/snark-artifacts</code></li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="semaphore-v4-crosscheck.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

@@ -1,0 +1,176 @@
+{
+  "title": "Benchmark Frontier Archaeology",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "06392686e1e9eb41",
+      "text": "# Benchmark Frontier Archaeology"
+    },
+    {
+      "type": "markdown",
+      "id": "2a4599fc66642da5",
+      "text": "> >-."
+    },
+    {
+      "type": "markdown",
+      "id": "fc35bfd9af37b45a",
+      "text": "# Benchmark Frontier Archaeology\n\nWhen you compete on a benchmark whose accepted submissions are visible — a git history of\naccepted entries, public leaderboard solutions, released configs — every time the frontier\nadvances you get a free lesson, *if* you can extract what actually changed. This skill is the\nforensic procedure for turning \"they beat me by 0.1%\" into \"they pulled lever X, it transfers\n(or doesn't), and the next target is Y.\"\n\nThe output you want from each advance is three things:\n1. **The lever** — the single change that drove the improvement (not the noise around it).\n2. **Whether it transfers** — a reusable knob/structural idea, or a one-off search artifact.\n3. **The next target** — where the binding constraint moved, so you know where to push."
+    },
+    {
+      "type": "markdown",
+      "id": "ed1fe44be9ea7594",
+      "text": "## The core loop\n\n1. **Detect & sync** the new frontier; verify it is really better by re-measuring, not by trusting the headline.\n2. **Diff consecutive winners** — every adjacent accepted pair, scoped to the editable/submitted paths.\n3. **Isolate the lever(s)** in each step; filter formatting/noise.\n4. **Re-measure the metrics yourself** — confirm you built the circuit/artifact you think you did.\n5. **Decompose** the score delta across factors and across levers.\n6. **Track the moving bottleneck** — where the binding constraint went → name the next target.\n7. **Classify** each lever: transferable (knob/structural) vs non-transferable (search artifact).\n8. **Record the mechanism and propagate** it into your own notes/skills so the knowledge compounds."
+    },
+    {
+      "type": "markdown",
+      "id": "7ef3330e3d4a547c",
+      "text": "## Step 1 — Detect, sync, and re-verify\n\nPull the new accepted submission onto a clean tree (stash your local diagnostics/instrumentation\nfirst so they don't contaminate the diff). Then **re-measure the headline number yourself.** A\nsubmission's claimed metric is a starting point, not ground truth — you need your own measurement\nto decompose it. Watch for stale build caches: if the toolchain keys a build artifact on source\nhash, an env-only change can silently measure the *old* artifact. Confirm a real rebuild happened\n(look for the build to actually run) before trusting any number."
+    },
+    {
+      "type": "markdown",
+      "id": "a395c059e431d499",
+      "text": "## Step 2 — Diff consecutive winners, and WALK THE INTERMEDIATES\n\nThis is the step everyone gets wrong, and it's the most important rule here:\n\n> **Diff *adjacent* accepted submissions, never two non-adjacent endpoints.**\n\nCompetitions advance in small steps, and each accepted submission is usually *one* lever. If you\ndiff submission N against submission N−5, you bundle five independent levers into one blob and\ninvent a false causal story — attributing the qubit win to the knob that actually only cut gates,\netc. Enumerate **every** accepted submission between your last-understood point and the new\nfrontier, and diff each adjacent pair (`diff <S_k> <S_{k+1}>`), scoped to the **editable/submitted\npaths** only (ignore graders, harness, and generated files). If there are eight intermediate\nsubmissions, you do eight diffs. The extra work is exactly what stops you from misreading the\nfrontier.\n\n(Hard-won example: diffing a 1192-qubit winner directly against the 1193-qubit one bundled *two*\nseparate submissions and produced a wrong \"this one knob did both\" story. Walking the single\nintermediate submission showed the qubit drop and the gate trim were two different levers in two\ndifferent entries.)"
+    },
+    {
+      "type": "markdown",
+      "id": "be3ed7ed7ddd3471",
+      "text": "## Step 3 — Isolate the lever in each step\n\nWithin each adjacent diff, separate signal from noise:\n- **Config/knob changes** — the changed parameter values (the usual lever).\n- **Structural code changes** — a new function, a replaced primitive, a changed schedule.\n- **Noise** — formatting, comments, re-baked defaults, regenerated artifacts.\n\nMost steps reduce to **one** real lever. If a single submission genuinely changed several coupled\nthings, note that explicitly — but your prior should be \"one lever per accepted step,\" and a diff\nthat looks like five levers is usually one real change plus re-baked noise (or you skipped an\nintermediate — go back to Step 2)."
+    },
+    {
+      "type": "markdown",
+      "id": "75d822a39a05f299",
+      "text": "## Step 4 — Re-measure the metrics yourself\n\nFor each step, build/run the artifact and record the metrics *independently*: the headline score\nplus its sub-components. Two tricks recur:\n- **Recover sub-metrics by exact arithmetic.** If the score is a product (e.g. `factor_A ×\n  factor_B`) and you can measure one factor, the other often falls out as an exact integer\n  division — a clean way to get a sub-metric the submission didn't report. If the division is\n  *not* exact, your assumption about the formula or your measurement is wrong; stop and reconcile.\n- **Instrument the binding constraint directly** if the toolchain supports it (a peak/hot-spot\n  trace), so you can see not just *that* the metric changed but *which part of the artifact* now\n  dominates it."
+    },
+    {
+      "type": "markdown",
+      "id": "97e55c04f90e1a50",
+      "text": "## Step 5 — Decompose the score delta\n\nA single lever can move several sub-metrics at once, especially in a multi-factor objective.\nAttribute the change **per factor**:\n- e.g. a knob that drops one unit of factor A while *raising* factor B — separate those, and\n  compute the **effective exchange rate** (units of B spent per unit of A gained) to judge whether\n  it was a real win or a near-wash that only looked good because the product moved.\n- A follow-up submission may be **factor-neutral on one axis** — it shaves factor B at zero cost\n  to factor A (e.g. shrinking a component that no longer binds the constraint). Recognize these as\n  *pure* single-factor plays; they tell you that component had gone slack.\n\nWatch for **reversed/loosened knobs.** A new winner sometimes *undoes* an earlier tightening —\nloosening a component once it stops being the bottleneck, to buy back the other factor for free.\nIf you assume the frontier only ever tightens, you'll misread a loosening as a regression. The\ndirection of a knob change is only meaningful relative to whether that component currently binds."
+    },
+    {
+      "type": "markdown",
+      "id": "836e81445f449181",
+      "text": "## Step 6 — Track the moving bottleneck → the next target\n\nIn any constrained optimization the **binding constraint migrates** as it's attacked: shave the\ncomponent that dominates the metric and a different one becomes dominant. Build the **migration\nchain** across the submissions — \"at score S1 the binder was phase P1; lever L moved it to P2 at\nS2; …\". The current binder is **your next target**, and the chain often reveals the competitor's\nstrategy (they're walking the bottleneck, one lever per entry). This is the single most actionable\noutput: not \"they changed knob X\" but \"the constraint is now at Y, so that's where the next lever\nhas to land.\""
+    },
+    {
+      "type": "markdown",
+      "id": "cc4b21364edfd71c",
+      "text": "## Step 7 — Classify the lever: transferable vs search artifact\n\nDecide what you can actually reuse:\n- **Transferable** — a knob value or a structural change (a fused stage, a denser encoding, a\n  per-step schedule). These port to your own line directly.\n- **Non-transferable search artifact** — a value that is only valid *because they searched for it\n  against their exact configuration*: a hunted random seed/nonce, an island, a fitted constant, a\n  data-order that happens to dodge a failure on their setup. Re-using their artifact on your\n  (different) configuration will not reproduce the win and may silently break correctness. When a\n  competitor's entry is \"structural knob change + a re-hunted artifact,\" **only the knob transfers**\n  — you must re-run the search for the artifact against your own config.\n\nThis split is what separates \"I learned their technique\" from \"I copied a number that won't work\nfor me.\""
+    },
+    {
+      "type": "markdown",
+      "id": "08006875de8b5a8d",
+      "text": "## Step 8 — Record the mechanism and propagate\n\nWrite down, per advance: the lever, the measured per-factor effect, the bottleneck it exposed, and\nthe transferable/artifact split — then fold it into your own optimization notes/skills. The point\nof archaeology is compounding: each decoded advance should make your *next* attempt sharper and\nstop you from re-deriving what a competitor already showed you. A decoded frontier that isn't\nwritten down is a lesson you'll pay for twice."
+    },
+    {
+      "type": "markdown",
+      "id": "fed5f258018fe4a3",
+      "text": "## A note on scope and ethics\n\nThis is for benchmarks where the winning entries are **legitimately visible** — an open submission\nhistory, public leaderboard solutions, released artifacts — and you're a participant learning from\nthe published state of the art. It's the quantitative-competition analog of reading a published\npaper's method. It is *not* a method for obtaining private or access-controlled submissions."
+    },
+    {
+      "type": "markdown",
+      "id": "a882994a3e0ba2a2",
+      "text": "## Worked example (this lineage, for grounding)\n\nA reversible point-add benchmark scored `peak_qubits × avg_executed_Toffoli`, advancing\n1211 → 1193 → 1192 → 1185 qubits across accepted submissions:\n- **Sync + re-measure:** synced each winner, re-derived qubits via a peak trace and `avg_Toffoli`\n  via exact division of the score by the qubit count (the division being exact confirmed the\n  formula and the measurement).\n- **Walk intermediates:** the 1193→1192 step looked like \"one knob did everything\" when diffed\n  endpoint-to-endpoint; walking the single intermediate accepted entry split it into *two* levers\n  — a segment notch that cost the qubit (and +34 Toffoli) and a separate clean-compare trim that\n  cut 442 Toffoli at **zero** qubits.\n- **Decompose + exchange rate:** the 1192→1185 step *spent* +6,604 Toffoli to buy −7 qubits — a\n  decompose that showed it cleared the qubit↔gate exchange rate, i.e. a real win not a wash.\n- **Migration chain → next target:** binder moved GCD-apply-block → round84-square →\n  materialized-special-underflow-fold → GCD-apply-chunk-sub-ripple; that last phase was the named\n  next target.\n- **Transferable vs artifact:** each advance = a structural knob (K5 clean-block hole, per-step\n  schedule, head-11 codec) **plus** a re-hunted island nonce. The knobs transfer; the nonce is a\n  search artifact that must be re-hunted against your own config.\n- **Loosened knob caught:** the 1185 winner *raised* a segment knob it had previously lowered,\n  because that component had gone off the peak — a loosening, not a regression."
+    },
+    {
+      "type": "markdown",
+      "id": "7f1fbe23db648559",
+      "text": "## Relationship to the other skills\n\nArchaeology is the **intake** stage: it tells you which lever to pull and where the bottleneck is,\nthen you hand off to `peak-qubit-reduction` (width levers), `toffoli-reduction` (gate levers), and\n`reversible-circuit-validation` (confirm any re-hunted artifact is actually clean on your config).\nFor the ECDSA-fail domain specifics — the sync workflow, the exact knob catalogue, and the GPU\nisland re-hunt — see `ecdsafail-circuit-optimization` and `ecdsafail-island-hunting`."
+    },
+    {
+      "type": "markdown",
+      "id": "bb22e28f4ba333e0",
+      "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Benchmark Frontier Archaeology",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "06392686e1e9eb41",
+            "text": "# Benchmark Frontier Archaeology"
+          },
+          {
+            "type": "markdown",
+            "id": "2a4599fc66642da5",
+            "text": "> >-."
+          },
+          {
+            "type": "markdown",
+            "id": "fc35bfd9af37b45a",
+            "text": "# Benchmark Frontier Archaeology\n\nWhen you compete on a benchmark whose accepted submissions are visible — a git history of\naccepted entries, public leaderboard solutions, released configs — every time the frontier\nadvances you get a free lesson, *if* you can extract what actually changed. This skill is the\nforensic procedure for turning \"they beat me by 0.1%\" into \"they pulled lever X, it transfers\n(or doesn't), and the next target is Y.\"\n\nThe output you want from each advance is three things:\n1. **The lever** — the single change that drove the improvement (not the noise around it).\n2. **Whether it transfers** — a reusable knob/structural idea, or a one-off search artifact.\n3. **The next target** — where the binding constraint moved, so you know where to push."
+          },
+          {
+            "type": "markdown",
+            "id": "ed1fe44be9ea7594",
+            "text": "## The core loop\n\n1. **Detect & sync** the new frontier; verify it is really better by re-measuring, not by trusting the headline.\n2. **Diff consecutive winners** — every adjacent accepted pair, scoped to the editable/submitted paths.\n3. **Isolate the lever(s)** in each step; filter formatting/noise.\n4. **Re-measure the metrics yourself** — confirm you built the circuit/artifact you think you did.\n5. **Decompose** the score delta across factors and across levers.\n6. **Track the moving bottleneck** — where the binding constraint went → name the next target.\n7. **Classify** each lever: transferable (knob/structural) vs non-transferable (search artifact).\n8. **Record the mechanism and propagate** it into your own notes/skills so the knowledge compounds."
+          },
+          {
+            "type": "markdown",
+            "id": "7ef3330e3d4a547c",
+            "text": "## Step 1 — Detect, sync, and re-verify\n\nPull the new accepted submission onto a clean tree (stash your local diagnostics/instrumentation\nfirst so they don't contaminate the diff). Then **re-measure the headline number yourself.** A\nsubmission's claimed metric is a starting point, not ground truth — you need your own measurement\nto decompose it. Watch for stale build caches: if the toolchain keys a build artifact on source\nhash, an env-only change can silently measure the *old* artifact. Confirm a real rebuild happened\n(look for the build to actually run) before trusting any number."
+          },
+          {
+            "type": "markdown",
+            "id": "a395c059e431d499",
+            "text": "## Step 2 — Diff consecutive winners, and WALK THE INTERMEDIATES\n\nThis is the step everyone gets wrong, and it's the most important rule here:\n\n> **Diff *adjacent* accepted submissions, never two non-adjacent endpoints.**\n\nCompetitions advance in small steps, and each accepted submission is usually *one* lever. If you\ndiff submission N against submission N−5, you bundle five independent levers into one blob and\ninvent a false causal story — attributing the qubit win to the knob that actually only cut gates,\netc. Enumerate **every** accepted submission between your last-understood point and the new\nfrontier, and diff each adjacent pair (`diff <S_k> <S_{k+1}>`), scoped to the **editable/submitted\npaths** only (ignore graders, harness, and generated files). If there are eight intermediate\nsubmissions, you do eight diffs. The extra work is exactly what stops you from misreading the\nfrontier.\n\n(Hard-won example: diffing a 1192-qubit winner directly against the 1193-qubit one bundled *two*\nseparate submissions and produced a wrong \"this one knob did both\" story. Walking the single\nintermediate submission showed the qubit drop and the gate trim were two different levers in two\ndifferent entries.)"
+          },
+          {
+            "type": "markdown",
+            "id": "be3ed7ed7ddd3471",
+            "text": "## Step 3 — Isolate the lever in each step\n\nWithin each adjacent diff, separate signal from noise:\n- **Config/knob changes** — the changed parameter values (the usual lever).\n- **Structural code changes** — a new function, a replaced primitive, a changed schedule.\n- **Noise** — formatting, comments, re-baked defaults, regenerated artifacts.\n\nMost steps reduce to **one** real lever. If a single submission genuinely changed several coupled\nthings, note that explicitly — but your prior should be \"one lever per accepted step,\" and a diff\nthat looks like five levers is usually one real change plus re-baked noise (or you skipped an\nintermediate — go back to Step 2)."
+          },
+          {
+            "type": "markdown",
+            "id": "75d822a39a05f299",
+            "text": "## Step 4 — Re-measure the metrics yourself\n\nFor each step, build/run the artifact and record the metrics *independently*: the headline score\nplus its sub-components. Two tricks recur:\n- **Recover sub-metrics by exact arithmetic.** If the score is a product (e.g. `factor_A ×\n  factor_B`) and you can measure one factor, the other often falls out as an exact integer\n  division — a clean way to get a sub-metric the submission didn't report. If the division is\n  *not* exact, your assumption about the formula or your measurement is wrong; stop and reconcile.\n- **Instrument the binding constraint directly** if the toolchain supports it (a peak/hot-spot\n  trace), so you can see not just *that* the metric changed but *which part of the artifact* now\n  dominates it."
+          },
+          {
+            "type": "markdown",
+            "id": "97e55c04f90e1a50",
+            "text": "## Step 5 — Decompose the score delta\n\nA single lever can move several sub-metrics at once, especially in a multi-factor objective.\nAttribute the change **per factor**:\n- e.g. a knob that drops one unit of factor A while *raising* factor B — separate those, and\n  compute the **effective exchange rate** (units of B spent per unit of A gained) to judge whether\n  it was a real win or a near-wash that only looked good because the product moved.\n- A follow-up submission may be **factor-neutral on one axis** — it shaves factor B at zero cost\n  to factor A (e.g. shrinking a component that no longer binds the constraint). Recognize these as\n  *pure* single-factor plays; they tell you that component had gone slack.\n\nWatch for **reversed/loosened knobs.** A new winner sometimes *undoes* an earlier tightening —\nloosening a component once it stops being the bottleneck, to buy back the other factor for free.\nIf you assume the frontier only ever tightens, you'll misread a loosening as a regression. The\ndirection of a knob change is only meaningful relative to whether that component currently binds."
+          },
+          {
+            "type": "markdown",
+            "id": "836e81445f449181",
+            "text": "## Step 6 — Track the moving bottleneck → the next target\n\nIn any constrained optimization the **binding constraint migrates** as it's attacked: shave the\ncomponent that dominates the metric and a different one becomes dominant. Build the **migration\nchain** across the submissions — \"at score S1 the binder was phase P1; lever L moved it to P2 at\nS2; …\". The current binder is **your next target**, and the chain often reveals the competitor's\nstrategy (they're walking the bottleneck, one lever per entry). This is the single most actionable\noutput: not \"they changed knob X\" but \"the constraint is now at Y, so that's where the next lever\nhas to land.\""
+          },
+          {
+            "type": "markdown",
+            "id": "cc4b21364edfd71c",
+            "text": "## Step 7 — Classify the lever: transferable vs search artifact\n\nDecide what you can actually reuse:\n- **Transferable** — a knob value or a structural change (a fused stage, a denser encoding, a\n  per-step schedule). These port to your own line directly.\n- **Non-transferable search artifact** — a value that is only valid *because they searched for it\n  against their exact configuration*: a hunted random seed/nonce, an island, a fitted constant, a\n  data-order that happens to dodge a failure on their setup. Re-using their artifact on your\n  (different) configuration will not reproduce the win and may silently break correctness. When a\n  competitor's entry is \"structural knob change + a re-hunted artifact,\" **only the knob transfers**\n  — you must re-run the search for the artifact against your own config.\n\nThis split is what separates \"I learned their technique\" from \"I copied a number that won't work\nfor me.\""
+          },
+          {
+            "type": "markdown",
+            "id": "08006875de8b5a8d",
+            "text": "## Step 8 — Record the mechanism and propagate\n\nWrite down, per advance: the lever, the measured per-factor effect, the bottleneck it exposed, and\nthe transferable/artifact split — then fold it into your own optimization notes/skills. The point\nof archaeology is compounding: each decoded advance should make your *next* attempt sharper and\nstop you from re-deriving what a competitor already showed you. A decoded frontier that isn't\nwritten down is a lesson you'll pay for twice."
+          },
+          {
+            "type": "markdown",
+            "id": "fed5f258018fe4a3",
+            "text": "## A note on scope and ethics\n\nThis is for benchmarks where the winning entries are **legitimately visible** — an open submission\nhistory, public leaderboard solutions, released artifacts — and you're a participant learning from\nthe published state of the art. It's the quantitative-competition analog of reading a published\npaper's method. It is *not* a method for obtaining private or access-controlled submissions."
+          },
+          {
+            "type": "markdown",
+            "id": "a882994a3e0ba2a2",
+            "text": "## Worked example (this lineage, for grounding)\n\nA reversible point-add benchmark scored `peak_qubits × avg_executed_Toffoli`, advancing\n1211 → 1193 → 1192 → 1185 qubits across accepted submissions:\n- **Sync + re-measure:** synced each winner, re-derived qubits via a peak trace and `avg_Toffoli`\n  via exact division of the score by the qubit count (the division being exact confirmed the\n  formula and the measurement).\n- **Walk intermediates:** the 1193→1192 step looked like \"one knob did everything\" when diffed\n  endpoint-to-endpoint; walking the single intermediate accepted entry split it into *two* levers\n  — a segment notch that cost the qubit (and +34 Toffoli) and a separate clean-compare trim that\n  cut 442 Toffoli at **zero** qubits.\n- **Decompose + exchange rate:** the 1192→1185 step *spent* +6,604 Toffoli to buy −7 qubits — a\n  decompose that showed it cleared the qubit↔gate exchange rate, i.e. a real win not a wash.\n- **Migration chain → next target:** binder moved GCD-apply-block → round84-square →\n  materialized-special-underflow-fold → GCD-apply-chunk-sub-ripple; that last phase was the named\n  next target.\n- **Transferable vs artifact:** each advance = a structural knob (K5 clean-block hole, per-step\n  schedule, head-11 codec) **plus** a re-hunted island nonce. The knobs transfer; the nonce is a\n  search artifact that must be re-hunted against your own config.\n- **Loosened knob caught:** the 1185 winner *raised* a segment knob it had previously lowered,\n  because that component had gone off the peak — a loosening, not a regression."
+          },
+          {
+            "type": "markdown",
+            "id": "7f1fbe23db648559",
+            "text": "## Relationship to the other skills\n\nArchaeology is the **intake** stage: it tells you which lever to pull and where the bottleneck is,\nthen you hand off to `peak-qubit-reduction` (width levers), `toffoli-reduction` (gate levers), and\n`reversible-circuit-validation` (confirm any re-hunted artifact is actually clean on your config).\nFor the ECDSA-fail domain specifics — the sync workflow, the exact knob catalogue, and the GPU\nisland re-hunt — see `ecdsafail-circuit-optimization` and `ecdsafail-island-hunting`."
+          },
+          {
+            "type": "markdown",
+            "id": "bb22e28f4ba333e0",
+            "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847280971
+    }
+  ]
+}

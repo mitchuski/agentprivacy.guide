@@ -1,0 +1,170 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide Gatehouse · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Guide Gatehouse</span></div>
+  <article><div class="md"><h1>Guide Gatehouse</h1>
+<p><strong>Category</strong> wikis · <strong>Alignment</strong> swordsman · <strong>Version</strong> 5.5</p>
+<p>Operate the Gatehouse — sigil-gates that hide documents encrypted inside the public guide.agentprivacy.ai static site behind a two-token trust ceremony (emoji sigil + canon proverb → PBKDF2 → AES-GCM, decrypted client-side at /gates/). The Swordsman guards the gate; the visitor is the mage who casts the spell. Activates when adding a gate for new documents (letters, meeting prep, mageletters, agentic outputs), rebuilding or deploying the guide (the gate build is a MANDATORY post-snapshot step), choosing or minting sigil+proverb token pairs, testing that gates open, or auditing for token leaks before a push. Encodes the crypto/normalization spec, the letter-keyed vs canon-keyed gate classes, the deploy path (Workers, NOT Pages), and the honesty limits. Kept by the Gatekeeper 🗡️👤 — the first non-Librarian keeper in the wikis category, because this skill IS a gate.</p>
+</div>
+<div class="md"><p><strong>🗝️⚔️ The Gatehouse — sigil-gates for shared agentic outputs</strong><br>Keeper: the Gatekeeper 🗡️👤 · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: distribution</p>
+<blockquote>
+<p>&quot;a trust that certifies itself is the one you cannot trust&quot;</p>
+</blockquote>
+<p>Documents sealed <strong>inside the public static site</strong>, opened by a two-token<br>ceremony. Live at <a href="https://guide.agentprivacy.ai/gates/">guide.agentprivacy.ai/gates/</a>.</p>
+<p><strong>The lore enters the Swordsman here.</strong> Every other door into the canon is<br>Mage-side — read the wiki, walk the tomes, fork a page. The Gatehouse is the<br>first door where the visitor meets the <em>Swordsman</em>: a refusal that can only be<br>overcome by reading. The boundary is the pedagogy — the Swordsman&#39;s first<br>lesson, taught as lore rather than spec. This is why the skill is<br>Swordsman-aligned and Gatekeeper-kept inside a Librarian category: the<br>Librarian shelves the letters; the Swordsman decides when the shelf opens.</p>
+</div>
+<div class="md"><h2>The design in three lines</h2>
+<ul>
+<li><strong>sigil</strong> (emoji string) = address + entropy: <code>id = hex(SHA-256(sigilN))[:12]</code><br>names the blob and salts the key.</li>
+<li><strong>proverb</strong> (canon line) = proof of reading.</li>
+<li>key = <code>PBKDF2-SHA256(sigilN + &quot;\n&quot; + proverbN, salt &quot;gatehouse:&quot;+id, 310000 iters)</code> → AES-256-GCM. Neither token opens anything alone.</li>
+</ul>
+<p><strong>The founding move:</strong> the first gate&#39;s documents carried both tokens as their<br>shared epigraph — the letters go into the world carrying their own keys.<br>Anyone who <em>reads</em> a letter can open the vault holding its siblings.<br><strong>Reading is the rite.</strong></p>
+<p>Normalization (identical in builder and door — never fork it):</p>
+<ul>
+<li>sigil: <code>NFC</code> → strip all whitespace → strip <code>U+FE0F</code> (write it <code>️</code> in<br>regexes; the literal char is invisible and fragile). ZWJ kept.</li>
+<li>proverb: <code>NFC</code> → lowercase → non-letter/digit runs (Unicode-aware) → single<br>space → trim. Case/punctuation/spacing can never fork the key.</li>
+</ul>
+<h2>The persona assignment</h2>
+<table>
+<thead>
+<tr>
+<th>aspect</th>
+<th>persona</th>
+<th>holds</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>the door</td>
+<td><strong>Gatekeeper 🗡️👤</strong> (keeper)</td>
+<td>the ceremony itself — the refusal (<em>the Swordsman does not stir</em>), the standing-aside, proof-of-reading without identification. No unlock telemetry: the gate never learns <em>who</em> walked through, only that the spell was true.</td>
+</tr>
+<tr>
+<td>the seal</td>
+<td><strong>Cipher 🗡️🔐</strong></td>
+<td>the crypto spec — KDF parameters, GCM, the normalization law, the honest limits (token entropy is the wall, not the cipher)</td>
+</tr>
+<tr>
+<td>the letters</td>
+<td><strong>Herald 🧙📡</strong></td>
+<td>the correspondence layer — mageletters as supply line, epigraph-as-key, which class a new vault belongs to</td>
+</tr>
+<tr>
+<td>the register</td>
+<td><strong>Registry-keeper ⚚</strong></td>
+<td>GATES.md&#39;s public half (ids · hints · classes) and the LOCAL-ONLY key register discipline</td>
+</tr>
+</tbody></table>
+<h2>File map (<code>agentprivacy.guide</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>path</th>
+<th>committed?</th>
+<th>role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>GATES.md</code></td>
+<td>yes</td>
+<td>plan + public gate register (ids + hints ONLY)</td>
+</tr>
+<tr>
+<td><code>flow/gates.local.json</code></td>
+<td><strong>NO — gitignored</strong></td>
+<td>plaintext sigil, proverb, doc paths</td>
+</tr>
+<tr>
+<td><code>tools/gate.mjs</code></td>
+<td>yes</td>
+<td>builder: md→HTML, encrypt, emit door</td>
+</tr>
+<tr>
+<td><code>site/gates/index.html</code></td>
+<td>yes</td>
+<td>the door (self-contained inline WebCrypto)</td>
+</tr>
+<tr>
+<td><code>site/gates/manifest.json</code></td>
+<td>yes</td>
+<td>public <code>[{id, hint}]</code></td>
+</tr>
+<tr>
+<td><code>site/gates/&lt;id&gt;.json</code></td>
+<td>yes</td>
+<td>sealed blob <code>{v, id, iv, ct}</code></td>
+</tr>
+</tbody></table>
+<p>Source documents stay OUTSIDE the repo. Only ciphertext is committed.</p>
+<h2>Operations</h2>
+<h3>Add a gate</h3>
+<ol>
+<li>Pick tokens. Prefer tokens the documents already carry (epigraph sigil +<br>proverb). If minting: sigil = 4–6 distinctive emoji; proverb = a real line<br>of the canon. Declare the <strong>class</strong> (below).</li>
+<li>Append to <code>flow/gates.local.json</code>:<br><code>{name, title, note, hint, sigil, proverb, docs: [{path, title}]}</code>.<br>The hint is PUBLIC — it points a reader at where the tokens live without<br>containing them.</li>
+<li>Build · test · deploy:</li>
+</ol>
+<pre><code class="language-sh">cd C:\Users\mitch\agentprivacy.guide
+node tools/snapshot.mjs     # only if wiki content changed (clears site/!)
+node tools/gate.mjs         # MANDATORY after every snapshot
+node flow/run.mjs verify    # integrity gate — must PASS
+# round-trip: decrypt every gate door-identically; wrong-token, cross-gate,
+# and manifest-leak checks (pattern in the chronicle)
+npx wrangler deploy --assets site --name agentprivacy-guide --compatibility-date 2026-07-01
+</code></pre>
+<p><strong>Deploy truth: guide.agentprivacy.ai is a WORKERS project<br>(<code>agentprivacy-guide</code>, account privacymage), NOT Cloudflare Pages.</strong> Its<br>git-connected Workers Builds freeze at &quot;Initializing build environment&quot;<br>(Cloudflare-side). The wrangler direct deploy is the standing path (~30 s).</p>
+<h3>Pre-push leak sweep (ALWAYS)</h3>
+<p>Every grep hit for any sigil or proverb must be <code>flow/gates.local.json</code> —<br>nothing else. (The sweep once caught GATES.md itself closing with half a<br>proverb as a flourish.) Confirm <code>git check-ignore flow/gates.local.json</code>.</p>
+<h2>Gate classes — declare one per gate</h2>
+<ul>
+<li><strong>letter-keyed</strong> (gate 001 · TIG × AIDDA): tokens travel only inside sent<br>documents. Proof of receipt. Genuinely strong.</li>
+<li><strong>canon-keyed</strong> (gate 002 · the Archon Exchange — sigil <code>(⚔️⊥⿻⊥🧙)😊</code>,<br>proverb <em>three solar systems, one teaching</em>): both tokens public canon.<br>Zero secrecy BY DESIGN — a reading rite. Never gate anything canon-keyed<br>you&#39;d mind a diligent stranger reading.</li>
+</ul>
+<h2>Honest limits</h2>
+<ul>
+<li>Encryption is real (live blob: no plaintext fragments, ~7.999 bits/byte<br>entropy) but the wall is TOKEN ENTROPY: blobs are public, offline guessing<br>works, GCM confirms hits; PBKDF2 only prices each guess.</li>
+<li>Deferred-public: opened plaintext is re-shareable; blob size leaks length.</li>
+<li>NEVER credential-class or cookie-class material behind a gate.</li>
+<li>No unlock telemetry. If a gate needs a witness, that is the myTerms arc.</li>
+</ul>
+<h2>Gotchas (each cost a round)</h2>
+<ol>
+<li><code>snapshot.mjs</code> clears <code>site/</code> → gate build is mandatory afterwards; the<br>site-wide ⚔️ Gatehouse nav item 404s without it.</li>
+<li>The door must contain <code>&lt;article&gt;</code> (audit empty-page rule).</li>
+<li>Literal <code>href=&quot;</code> in the door&#39;s inline JS trips the audit link-scanner —<br>keep it split in source.</li>
+<li><code>deadLinkSweep</code> runs before the gate build and must exempt <code>/gates/</code><br>(patched); the audit enforces existence afterwards.</li>
+</ol>
+<h2>Future arcs</h2>
+<p>City Key PNG on unlock (tEXt + κ machinery) · myTerms agreement step between<br>decrypt and render · tileglyph tiles whose glyph IS the sigil ·<br>per-recipient sigils · a gates roster page in the guide.</p>
+</div>
+<div class="md"><p><em>Operational twin: <code>~/.claude/skills/agentprivacy-guide-gatehouse/SKILL.md</code>.<br>Chronicle: <code>~/.wiki/chronicles/2026-07-02_gatehouse_sigil_gates.md</code>.</em></p>
+<p><code>(⚔️⊥⿻⊥🧙)😊</code></p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-guide-gatehouse</code>, v5.5).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 guide-gatehouse</span><a class="asset-file" href="/skill/assets/guide-gatehouse/SKILL.md" download>SKILL.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="guide-gatehouse.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

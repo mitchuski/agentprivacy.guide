@@ -41,7 +41,7 @@ When a `.md` is dropped into spellweb's **👁️ Witness Constellation** picker
 2. Parse the YAML frontmatter block (delimited by a leading `---` line and a closing `---` line).
 3. Resolve a **workshop id** from the frontmatter — see §3 for the resolution order.
 4. Set `localStorage['spellweb:witnessed-shops'][<workshop-id>] = ISO timestamp`.
-5. Fire the **fog-of-war** transition — cast members and edges tagged `hiddenUntilWitness: <workshop-id>` fade from 18% silhouette to full presence over 400 ms.
+5. *(Retired, reconciled 2026-07-18 — see §11, which governs.)* Earlier versions fired a **fog-of-war** transition here — cast members and edges tagged `hiddenUntilWitness: <workshop-id>` fading from 18% silhouette to full presence over 400 ms. The universe is now fully visible from first load; witnessing adds presence effects to the graph, it reveals nothing previously hidden. Implementation note (2026-07-18, from code): spellweb's render path for `hiddenUntilWitness` still exists and is inert because no canonical node carries the tag — retirement was executed by de-populating the data; the mechanism is reserved for future secret-lore nodes.
 6. Build a runtime blade record from the markdown body (path, proof, dimensions) for the Sovereign's inventory.
 
 The frontmatter is the only part that drives **identity**. The rest of the markdown carries the **content** of the ceremony (path, proverbs, proof). Spellweb's body parser is conservative and is documented in §7.
@@ -73,7 +73,7 @@ Spellweb tries three sources, in order. The first that yields a value wins.
 | 3 | `constellation_id:` field, root prefix promoted to `shop-<root>` | `constellation_id: tailor-cloak-weave-v1` → `shop-tailor` |
 | 4 (fallback) | Filename prefix before the first `-` | `tailor-anything.md` → `shop-tailor` |
 
-A file with **none** of these is still readable as a witness artefact but will not unlock a workshop. The fog-of-war on the City of Mages stays in place. The Sovereign can still trace its path; nothing is dropped.
+A file with **none** of these is still readable as a witness artefact but will not unlock a workshop. Nothing further changes on the graph (fog-of-war is retired, §11 — the universe was already fully visible). The Sovereign can still trace its path; nothing is dropped.
 
 ---
 
@@ -173,7 +173,7 @@ workshop: shop-tailor
 I walked the Cloak Weave today.
 ```
 
-Re-importing this into spellweb unlocks `shop-tailor` and lifts the fog on Pallia and the Weavers' secret nodes. Nothing else is set.
+Re-importing this into spellweb unlocks `shop-tailor` in witness mode (Pallia and the Weavers were already visible — fog-of-war is retired, §11). Nothing else is set.
 
 ### §5.2 · A master constellation template (recommended baseline)
 

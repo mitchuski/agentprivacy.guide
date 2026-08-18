@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Journal",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "8e70d1b182359ad7",
+      "text": "# Wiki Journal\n\n**Category** wikis · **Version** 5.5\n\nStrip the accumulated edit/fork history from a federated-wiki page's journal, replacing it with a single clean create entry while preserving title and story. Activates on \"strip the journal\", \"clean the journal\", \"reset the journal\", \"remove fork history\", or \"make this page look freshly created\". Kept by the Librarian 🗃️ in the Tower's Wikis."
+    },
+    {
+      "type": "markdown",
+      "id": "3de7f6cd4fa65d68",
+      "text": "The `fedwiki-journal` skill removes accumulated edit history from a federated wiki page. It preserves the page's `title` and `story` content while replacing the entire `journal` array with a single `create` entry — making the page look freshly created.\n\n## Why Journals Accumulate\n\nEvery edit made through the wiki UI appends an entry to the `journal` array. When pages are forked between sites, they carry their complete history along with them. A page like *Changes to this Site* may have been forked through half a dozen sites over many years, dragging a long attribution chain with it.\n\nStripping the journal is valuable when:\n- Creating template copies of a page\n- Removing irrelevant attribution chains from remote sources\n- Preparing a page for clean publication\n\n## What the Skill Does\n\nIt keeps `title` and `story` unchanged and replaces the journal with a single `create` entry containing the current timestamp and certificate:\n\n```json\n\"journal\": [{\n  \"type\": \"create\",\n  \"item\": {\n    \"title\": \"Page Title\",\n    \"story\": [ /* the complete, unchanged story array — every item, same order */ ]\n  },\n  \"date\": 1781004226000,\n  \"certificate\": \"from marvin\"\n}]\n```\n\nThe `date` uses Unix milliseconds. The `item.story` must be the **complete** story array (every item, identical order) — exactly as in the create-journal rule of the page skill.\n\n## Trigger Phrases\n\n- \"Strip the journal from X\"\n- \"Clean the journal on this page\"\n- \"Reset the journal for X\"\n- \"Make this page look freshly created\"\n- \"Remove the fork history from X\"\n\n## File Locations\n\n- **Public wiki:** `~/Nextcloud/fedwiki/{domain}/pages/{slug}`\n- **Private wiki:** `~/Music/Guides/Private/{domain}/pages/{slug}`\n\nPrivate wiki edits require running the reindex skill afterward so the server picks up the change.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — the full page JSON format\n- `agentprivacy-wiki-reindex` — reindex after editing a private wiki\n- `agentprivacy-wiki-welcome` — create the landing page"
+    },
+    {
+      "type": "markdown",
+      "id": "ed35c96932bb6558",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/journal-skill](https://skill.fedwiki.club/journal-skill) — vendored + re-framed; not original agentprivacy authorship"
+    },
+    {
+      "type": "markdown",
+      "id": "c48e3c004dc3e50f",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-journal`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "1b2e4b412d129351",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "103579abb1d41611",
+      "text": "wiki-journal"
+    },
+    {
+      "type": "markdown",
+      "id": "89e59faf9e49d48b",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Journal",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "8e70d1b182359ad7",
+            "text": "# Wiki Journal\n\n**Category** wikis · **Version** 5.5\n\nStrip the accumulated edit/fork history from a federated-wiki page's journal, replacing it with a single clean create entry while preserving title and story. Activates on \"strip the journal\", \"clean the journal\", \"reset the journal\", \"remove fork history\", or \"make this page look freshly created\". Kept by the Librarian 🗃️ in the Tower's Wikis."
+          },
+          {
+            "type": "markdown",
+            "id": "3de7f6cd4fa65d68",
+            "text": "The `fedwiki-journal` skill removes accumulated edit history from a federated wiki page. It preserves the page's `title` and `story` content while replacing the entire `journal` array with a single `create` entry — making the page look freshly created.\n\n## Why Journals Accumulate\n\nEvery edit made through the wiki UI appends an entry to the `journal` array. When pages are forked between sites, they carry their complete history along with them. A page like *Changes to this Site* may have been forked through half a dozen sites over many years, dragging a long attribution chain with it.\n\nStripping the journal is valuable when:\n- Creating template copies of a page\n- Removing irrelevant attribution chains from remote sources\n- Preparing a page for clean publication\n\n## What the Skill Does\n\nIt keeps `title` and `story` unchanged and replaces the journal with a single `create` entry containing the current timestamp and certificate:\n\n```json\n\"journal\": [{\n  \"type\": \"create\",\n  \"item\": {\n    \"title\": \"Page Title\",\n    \"story\": [ /* the complete, unchanged story array — every item, same order */ ]\n  },\n  \"date\": 1781004226000,\n  \"certificate\": \"from marvin\"\n}]\n```\n\nThe `date` uses Unix milliseconds. The `item.story` must be the **complete** story array (every item, identical order) — exactly as in the create-journal rule of the page skill.\n\n## Trigger Phrases\n\n- \"Strip the journal from X\"\n- \"Clean the journal on this page\"\n- \"Reset the journal for X\"\n- \"Make this page look freshly created\"\n- \"Remove the fork history from X\"\n\n## File Locations\n\n- **Public wiki:** `~/Nextcloud/fedwiki/{domain}/pages/{slug}`\n- **Private wiki:** `~/Music/Guides/Private/{domain}/pages/{slug}`\n\nPrivate wiki edits require running the reindex skill afterward so the server picks up the change.\n\n## Related Skills\n\n- `agentprivacy-wiki-page` — the full page JSON format\n- `agentprivacy-wiki-reindex` — reindex after editing a private wiki\n- `agentprivacy-wiki-welcome` — create the landing page"
+          },
+          {
+            "type": "markdown",
+            "id": "ed35c96932bb6558",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis (the git-less onboarding layer)\n**Upstream:** [skill.fedwiki.club/journal-skill](https://skill.fedwiki.club/journal-skill) — vendored + re-framed; not original agentprivacy authorship"
+          },
+          {
+            "type": "markdown",
+            "id": "c48e3c004dc3e50f",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-journal`, v5.5).\nSource of truth: `agentprivacy-skills-v5`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "1b2e4b412d129351",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "103579abb1d41611",
+            "text": "wiki-journal"
+          },
+          {
+            "type": "markdown",
+            "id": "89e59faf9e49d48b",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1785847257930
+    }
+  ]
+}

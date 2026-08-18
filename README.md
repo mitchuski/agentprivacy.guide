@@ -1,7 +1,8 @@
 # agentprivacy.guide
 
 The **published, static** projection of the agentprivacy guide federation —
-served at **[guide.agentprivacy.ai](https://guide.agentprivacy.ai)** (Cloudflare Pages).
+served at **[guide.agentprivacy.ai](https://guide.agentprivacy.ai)** (a Cloudflare
+Workers project, `agentprivacy-guide`, serving these static assets).
 
 This repo holds the generated static site (`site/`) plus the tooling that builds
 it (`tools/`, `flow/`). It is a *snapshot*: the living, editable wiki runs locally
@@ -13,9 +14,10 @@ from `~/.wiki` and is the source of truth; this repo is the public face.
 
 ```
 source repos ──build──▶ live ~/.wiki ──snapshot──▶ ./site ──push──▶ guide.agentprivacy.ai
-  (canon)              (FedWiki farm)            (this repo)         (Cloudflare Pages)
+  (canon)              (FedWiki farm)            (this repo)        (Cloudflare Workers)
                             │
-                       (workshops / live governance — optional Cloudflare Tunnel)
+                (workshops / live governance — shared tailnet-only; see
+                 /guide/the-private-knowledge-network on the published site)
 ```
 
 - **`~/.wiki`** — the live [FedWiki](http://fed.wiki.org/) farm. Private, editable,
@@ -38,19 +40,33 @@ relative paths. Two spellbooks frame the canon:
 
 | path | site | role |
 |------|------|------|
-| `/` | guide | the front door — website directory + federation map |
+| `/` | guide | the front door — website directory + federation map + the Star Chart card |
 | `/spellbooks/` | **First Person Spellbook** ("I") | privacymage's narrative — Story · Zero · Canon · Society · Plurality + Selene's poems |
-| `/city/` → `/city/tomes/` | **City of Mages** / **Second Person Spellbook** ("you") | the Tomes (acts I–IX), cast, City grimoire |
+| `/city/` → `/city/tomes/` | **City of Mages** / **Second Person Spellbook** ("you") | the Tomes (acts I–X), cast, specs, workshops, the Runecraft Protocol |
 | `/grimoire/` | grimoire | the privacymage grimoire v10.4 as atoms — spells · vertices · incantations · blades · proverbs · principles |
-| `/research/` | research | the privacy-value model V(π,t) + the conjecture register C1–C93 |
+| `/research/` | research | the privacy-value model V(π,t) + the conjecture register C1–C97 |
 | `/atlas/` | atlas | the knowledge graph — one page per node, edges as wikilinks |
-| `/skill/` | skill | the skill library — 165 skills + 42 personas |
+| `/skill/` | skill | the skill library — 163 skills + 42 personas |
+| `/harness/` | harness | the dual-agent harness — the loop, seven seats, six trusts, the default distribution |
+| `/lexon/` | lexon | the Grammar Workshop — the PVM in Lexon controlled legal-English |
+| `/myterms/` | myterms | the Agreement Layer — MyTerms / IEEE 7012 |
+| `/dtg/` | dtg | the Trust Graph Lab — the DTG ZKP research corpus |
+| `/kyra/` | kyra | KYRA Gate — Know Your Runtime Agent |
+| `/fieldguide/` | fieldguide | the Field Guide trust overlay — the Meet rite and the rulings |
 
 **Sibling wikis** (own hosts, folded into the snapshot, single source each):
-`/game42/` and `/mouse-spellbook/`.
+`/improbable-engine/` · `/game42/` · `/mouse-spellbook/` · `/vision/` (the
+Hitchhiker timelines) · `/tiles/` (the TileGlyph lab + native-plugins shelf).
 
-Source hosts live at `~/.wiki/<host>.localhost/pages/` (`spellbooks`, `tomes`,
-`grimoire`, `research`, `atlas`, `skill`, `guide`, `city`, `game42`, `spellbook`).
+**Two rooms built after the snapshot** (see §3): **`/star-chart/`** — the whole
+federation as a walkable constellation map (every page a star on the 64-vertex
+sovereignty lattice; ✨ Visualise on any page deep-links its strand; keepsake
+PNGs carry a City Key) — and **`/gates/`** — the Gatehouse, documents sealed
+behind a sigil + proverb ceremony.
+
+Source hosts live at `~/.wiki/<host>.localhost/pages/`; the excluded hosts
+(working chronicles, the tailnet-facing embassy, the timeline mirrors) are
+named in `tools/snapshot.mjs` beside the SITES table.
 
 ---
 
@@ -79,6 +95,20 @@ What it handles:
 
 Output is anchored to the repo (`<repo>/site`), and the build clears the
 directory *contents* (not the dir) so it works while a preview server holds it.
+
+**Post-snapshot builders** (the snapshot clears `site/`, so both run after it,
+every time):
+
+- **`tools/star-chart.mjs`** — bakes the improbable engine (`~/transmediale`)
+  into `/star-chart/`: every site's sitemap (with links, so the Promise Graph
+  weaves) frozen into `data/sitemaps/`, the six strands remapped to the guide's
+  constellation groups with canonical `(1, bit)` windings, bit-flip axis
+  crystals, UOR slug-seating, κ link-lift, focus mode, the palette, ▶ run-your-
+  path, and 📷 keepsake (a PNG with a `citykey` iTXt chunk inside). Patches are
+  asserted single-match — drift in the engine source fails the build loudly.
+- **`tools/gate.mjs`** — the Gatehouse: encrypts the registered documents
+  (AES-GCM, keys derived from sigil + proverb) and emits the door at `/gates/`.
+  Keys live in `flow/gates.local.json` (gitignored); only ciphertext commits.
 
 ---
 
@@ -153,7 +183,9 @@ Not committed (local-only): `flow/.farm-backups/`, `flow/.hub-backups/`,
 
 ```sh
 npm install                 # once — installs marked
-node tools/snapshot.mjs     # build ./site from ~/.wiki
+node tools/snapshot.mjs     # build ./site from ~/.wiki   (clears site/!)
+node tools/star-chart.mjs   # MANDATORY after every snapshot — /star-chart/
+node tools/gate.mjs         # MANDATORY after every snapshot — /gates/
 node flow/run.mjs verify    # integrity gate — must PASS before deploy
 
 # preview locally (serve from a cwd OUTSIDE ./site):
@@ -164,21 +196,24 @@ python -m http.server 3200 --directory site
 git add -A && git commit -m "snapshot: <date>" && git push
 ```
 
-**Cloudflare Pages** (serves the prebuilt `site/` — no cloud build, since it
-can't reach `~/.wiki`):
+**Deploy — Cloudflare Workers**, not Pages: the project is `agentprivacy-guide`
+(account privacymage), serving the prebuilt `site/` as static assets (no cloud
+build — it can't reach `~/.wiki`; `package.json` carries a no-op `build`).
+Git-connected Workers Builds redeploy on push to `main`; when the cloud builder
+stalls, the standing direct path is:
 
-- Connect this repo · Production branch `main`
-- Framework preset **None** · Build command **(empty)** · Output directory **`site`**
-- Custom domain → `guide.agentprivacy.ai`
-
-Every push to `main` redeploys.
+```sh
+npx wrangler deploy --assets site --name agentprivacy-guide --compatibility-date 2026-07-01
+```
 
 ---
 
 ## 7. Status
 
-~1,840 pages across the federation, **0 broken links** (integrity-audited). Built
-from the live `~/.wiki` farm; canon at grimoire v10.4 / conjecture register C93.
+**2,195 pages** across 14 federation sites + 5 sibling wikis, **0 broken links /
+0 empty pages / 0 dev-host leaks** (integrity-audited every build). Built from
+the live `~/.wiki` farm; canon at grimoire v10.4 / conjecture register **C97**.
+Two gates stand in the Gatehouse; the Star Chart seats every page as a star.
 
 *The git repositories remain the source of truth; this wiki is a projection that
 records its origin. Read it, fork it, carry it away with its lineage.*

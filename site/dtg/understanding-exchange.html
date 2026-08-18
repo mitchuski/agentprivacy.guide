@@ -1,0 +1,123 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Exchange · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>Understanding Exchange</span></div>
+  <article><div class="md"><h1>Understanding — Exchange</h1>
+</div>
+<div class="md"><blockquote>
+<p><strong>PROPOSED — not yet upstreamed.</strong> Built to the ToIP <code>spec.meta.schema.json</code> for the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf">dtgwg-trust-tasks-tf registry</a>; the slug below is <em>proposed</em> to that namespace, not registry-accepted. The PR is pending; the registry&#39;s decision governs.</p>
+</blockquote>
+</div>
+<div class="md"><p><strong>Proposed slug:</strong> <code>understanding/exchange</code> · <strong>version</strong> 0.1 · <strong>status</strong> draft</p>
+<blockquote>
+<p>The joining party answers the host&#39;s gateway terms from comprehension — pinned to the exact digest it read — and the host judges whether understanding, not copying, occurred.</p>
+</blockquote>
+</div>
+<div class="md"><h2>Abstract</h2>
+<p>The <strong>Understanding — Exchange</strong> Trust Task is where understanding is<br>demonstrated: the joining party answers the gateway&#39;s prompts <em>in its own<br>words</em>, pinned to the exact digest of the terms it read. The host judges<br>comprehension — a verbatim reproduction of the gateway is refused<br>(<code>copyNotComprehension</code>), because the ceremony&#39;s key is what the joiner<br><em>understood</em>, not what it can retrieve.</p>
+<p>A passed exchange does not admit anyone. It qualifies the joining party to<br>propose the seal (<span class="deadlink" title="reference (not a live page)"><code>understanding/seal</code></span>) — the<br>bilateral agreement that the whole ceremony exists to reach.</p>
+</div>
+<div class="md"><h2>Status of this Document</h2>
+<p>This is a <strong>draft</strong> <em>Trust Task specification</em> per <span class="deadlink" title="reference (not a live page)">SPEC.md §5.3</span>; the schema <strong>MAY</strong> change without notice. Feedback via the <a href="https://github.com/trustoverip/dtgwg-trust-tasks-tf/issues">issue tracker</a>.</p>
+</div>
+<div class="md"><h2>Conformance</h2>
+<p>RFC2119(<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>) and RFC8174(<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>) key-word conventions apply.</p>
+<p>A conforming <strong>producer</strong> (the joining party) <strong>MUST</strong>:</p>
+<ol>
+<li>Emit a <em>Trust Task document</em> whose <code>type</code> is <code>https://trusttasks.org/spec/understanding/exchange/0.1</code>, echoing the gateway digest it actually read.</li>
+<li>Answer in its own words. The gateway is the source of the answers&#39; <em>content</em>; it must not be the source of their <em>text</em>.</li>
+</ol>
+<p>A conforming <strong>consumer</strong> (the host) <strong>MUST</strong>:</p>
+<ol>
+<li>Reject an unknown join with <code>noPendingOffer</code> and a superseded digest with <code>gatewayStale</code> — answers are judged only against the terms the joiner actually read, and only while those terms are current.</li>
+<li>Refuse verbatim reproduction with <code>copyNotComprehension</code> rather than scoring it.</li>
+<li>Return <code>passed</code> and, when passed, <code>sealBy</code> — the window in which the joiner may propose the seal.</li>
+</ol>
+</div>
+<div class="md"><h2>Payload</h2>
+<p><code>payload.gatewayDigest</code> (REQUIRED) — the digest of the terms the answers address.<br><code>payload.answers</code> (REQUIRED) — the joiner&#39;s answers to the gateway&#39;s prompts.<br><code>payload.ext</code> — extension slot per <span class="deadlink" title="reference (not a live page)">SPEC.md §4.5.1</span>.</p>
+</div>
+<div class="md"><h2>Request</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:f5be091e-283c-4bea-ac5d-465768798a91&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/understanding/exchange/0.1&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkJoiningPartyExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkHostExample&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T16:20:00Z&quot;,
+  &quot;payload&quot;: {
+    &quot;gatewayDigest&quot;: &quot;5b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f202132435b6c7d8e9f&quot;,
+    &quot;answers&quot;: [
+      {
+        &quot;promptId&quot;: &quot;gateway#contribution&quot;,
+        &quot;answer&quot;: &quot;Whatever I produce here feeds the room&#39;s shared corpus; my expressions are both my key and the room&#39;s material, so I only contribute what I am content to leave.&quot;
+      },
+      {
+        &quot;promptId&quot;: &quot;gateway#access&quot;,
+        &quot;answer&quot;: &quot;I never receive the room&#39;s underlying credentials; anything I&#39;m granted is scoped, expiring, and mediated by the room&#39;s broker.&quot;
+      }
+    ]
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T16:20:00Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkJoiningPartyExample#z6MkJoiningPartyExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z3FXQmV6ExampleProofValueForUnderstandingExchange&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Response</h2>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;urn:uuid:06cf1a2f-394d-4cfb-bd6e-576879809aa2&quot;,
+  &quot;type&quot;: &quot;https://trusttasks.org/spec/understanding/exchange/0.1#response&quot;,
+  &quot;issuer&quot;: &quot;did:key:z6MkHostExample&quot;,
+  &quot;recipient&quot;: &quot;did:key:z6MkJoiningPartyExample&quot;,
+  &quot;threadId&quot;: &quot;urn:uuid:f5be091e-283c-4bea-ac5d-465768798a91&quot;,
+  &quot;issuedAt&quot;: &quot;2026-07-18T16:20:03Z&quot;,
+  &quot;payload&quot;: {
+    &quot;passed&quot;: true,
+    &quot;sealBy&quot;: &quot;2026-07-18T18:00:00Z&quot;
+  },
+  &quot;proof&quot;: {
+    &quot;type&quot;: &quot;DataIntegrityProof&quot;,
+    &quot;cryptosuite&quot;: &quot;eddsa-jcs-2022&quot;,
+    &quot;created&quot;: &quot;2026-07-18T16:20:03Z&quot;,
+    &quot;verificationMethod&quot;: &quot;did:key:z6MkHostExample#z6MkHostExample&quot;,
+    &quot;proofPurpose&quot;: &quot;assertionMethod&quot;,
+    &quot;proofValue&quot;: &quot;z58aKqExampleProofValueForUnderstandingExchangeResponse&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Security &amp; Privacy</h2>
+<p>Answers disclose the joiner&#39;s reasoning about the host&#39;s published terms — no<br>third-party data, and nothing beyond what the joiner chose to write. The host&#39;s<br>judgment is local policy; this specification fixes only what may not count<br>(verbatim copying) and what the answers must be pinned to (the digest). The<br>deterministic witness-draw mechanism of<br><span class="deadlink" title="reference (not a live page)"><code>agent-admission/apply</code></span> ports<br>cleanly onto this task where hosts want grooming resistance; it is not required<br>in the peer posture.</p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>specs/understanding/exchange/0.1/</code> — <code>spec.md</code> + <code>payload.schema.json</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 understanding-exchange</span><a class="asset-file" href="/dtg/assets/understanding-exchange/payload.schema.json" download>payload.schema.json</a><a class="asset-file" href="/dtg/assets/understanding-exchange/spec.md" download>spec.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>~/dtgwg-trust-tasks-tf-mage</code> (untracked contribution lane; upstream registry: trustoverip/dtgwg-trust-tasks-tf) · author: Mitchell Travers · the git source wins on any disagreement · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-trust-tasks.html">The Trust Tasks</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="understanding-exchange.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

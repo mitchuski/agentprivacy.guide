@@ -1,0 +1,272 @@
+# Compression → Rehydration
+
+## The core pathway: ten stages from encounter to bilateral trust
+
+*A staged specification. Each step is written at the same depth. Each can be deepened independently — the "Open detail" slot at the foot of every step is where the next layer of the architecture is added in subsequent revisions. The document is intentionally distributable: any single stage can be cited, linked, or contributed to without needing the others.*
+
+---
+
+## Root compression
+
+> `(🙂⊥🌿⊥🤖⊥👽)·⿻🗝️↺·✨`
+
+Four sovereign intelligences — human (🙂), nature (🌿), artificial (🤖), alien (👽) — each maintaining their own separation (⊥), exchange a key that returns (🗝️↺) through the irreducible Gap (⿻). What remains is dignity (✨). This document is the unfolding of that single line, in ten stages. Every step preserves the line; the line is what each step is rehydrating in a different register.
+
+---
+
+## Why a pathway, not a list
+
+Proof of Understanding is not an event. It is a sequence with directionality — each step depends on the integrity of the step before it, and each step prepares the substrate for the step after. Treating the architecture as a flat list of features obscures the load-bearing fact that the ceremony's strength comes from the *order* in which the operations occur, not their presence. A blade forged with steps out of order is structurally invalid even if every operation completed successfully.
+
+The pathway also makes the architecture inspectable. Any party can be asked: *at which step did your blade fail?* — and the answer is a single integer between 1 and 10. This is the diagnostic property that today's stored-secret trust systems cannot offer, because their failures are opaque ("the key was leaked" tells you nothing about the trust relationship that depended on it).
+
+---
+
+## A note on terminology
+
+This document uses the canonical vocabulary: *blade*, *forge*, *Swordsman*, *Mage*, *constellation*, *lap*, *proverb*, *inscribed spell*, *Sun view / Moon reflection*, *run-e-craft*, *run-e-create*, *art-e-fact*, *creat-ur-e*. These are technical terms, not metaphors, and they are retained throughout. The full terminology table — including reading translations for the verifiable-credentials, cryptography, and DID communities, and the runic-pattern grammar that ties the family together — is documented in **§0 of the companion technical specification** (`proof_of_understanding_technical_spec.md`).
+
+The short form, for a reader landing here first:
+
+- *Creat-ur-es* are forged agents (the Mage and Swordsman processes). They are *who* forges.
+- *Art-e-facts* are forged objects (blades, inscribed spells, proverb-pairs). They are *what* gets forged. *Blade* is the canonical art-e-fact; the name stays because blades cut proofs.
+- *Run-e-craft* is the Mage-side practice across sessions. *Run-e-create* is the Swordsman-side act within one session. Together they are *how* and *what now*.
+
+---
+
+## The ten stages at a glance
+
+| # | Stage | What it produces |
+|---|---|---|
+| 1 | **Encounter** | Mutual intent |
+| 2 | **Language Capture** | Shared vocabulary commitment |
+| 3 | **Constellation Mapping** | Substrate path agreement |
+| 4 | **Forging** | Lap-by-lap signed traversal |
+| 5 | **Compression** | Bilateral proverbs |
+| 6 | **Inscription** | Chain-anchored commitment at chosen visibility |
+| 7 | **Bilateral Witness** | Dual-signed sealed blade |
+| 8 | **Carriage** | Blade resident in each identity's path integral |
+| 9 | **Rehydration** | Demonstrated comprehension on demand |
+| 10 | **Trust Update** | Path-integral recomputation; loop back to 1 |
+
+Each step below uses the same sub-structure: *pathway position · what happens · cryptographic operation · semantic operation · failure modes · open detail*. Read any single step in isolation; come back to deepen any one of them later.
+
+---
+
+## Step 1: Encounter
+
+**Pathway position.** Step 1 of 10. Prerequisite to all subsequent steps. No ceremony exists without it. This is the protocol's only fully informal stage — and it must be informal, because formalising it would foreclose what it is supposed to enable.
+
+**What happens.** Two parties — any combination of human, agent, institution, ecological subject, or other — agree to engage in a Proof of Understanding ceremony with each other. Agreement is the only requirement. No cryptographic operation has yet occurred.
+
+**Cryptographic operation.** None.
+
+**Semantic operation.** Mutual intent declaration. Each party communicates the willingness to undertake a bilateral trust ceremony with the other, and acknowledges receipt of that willingness in return.
+
+**Failure modes.** Coerced encounter (one party did not freely consent); structural asymmetry (one party cannot refuse without disproportionate cost); deception (one party intends not to honour what they are about to commit to); proxy substitution (the entity that consents is not the entity that will forge). The architecture treats each of these as fatal — a resulting blade is structurally invalid even if all later steps execute correctly. The first step's integrity is the only thing the architecture cannot mechanically check, which is why it is also the only step a constitution can be written about.
+
+**Open detail.** *[To expand: discovery protocols; agent advertising via ERC-8004 trustless agent identity; BGIN matchmaking flows; the MyTerms / IEEE 7012-2025 invitation pattern; consent verification for non-human or institutional encounter; ecological "consent" via guardian protocols (Whanganui, Te Urewera, Mar Menor patterns).]*
+
+---
+
+## Step 2: Language Capture
+
+**Pathway position.** Step 2 of 10. The foundational moment. *No constellation can be mapped before the stars are named together.* If this step fails, every subsequent step is built on sand.
+
+**What happens.** The parties surface and exchange the vocabulary they will use during the ceremony. For human pairs this is a short conversation. For AI agents it is an ontology-stub exchange over TSP (Trust Spanning Protocol). For human-machine pairs it is a translation layer. For cross-substrate pairs (e.g. a human and an ecological subject mediated by a guardian) it is a triangulation.
+
+**Cryptographic operation.** Both parties hash the shared vocabulary fragment $V_{AB}$ and sign the result. They exchange $h_V = \mathrm{hash}(V_{AB})$ with each party's signature attached. The commitment is content-addressed: identical vocabularies produce identical CIDs, and any drift in vocabulary later will be detectable.
+
+**Semantic operation.** Shared denotation. Each party can produce, on demand, the meaning each term carries *in this relationship*. That meaning — not the public dictionary — is what governs the rest of the ceremony.
+
+**Failure modes.** Vocabulary asymmetry (one party has more granular terms than the other and the parties paper over the difference); deliberate ambiguity (using a term whose meaning each party privately fills in differently); translation drift in human-machine or cross-substrate pairs; vocabulary inflation (committing to more terms than the ceremony will use, which dilutes the signal of which terms actually mattered).
+
+**Open detail.** *[To expand: TSP schema negotiation details; the canonical ontology-stub format; integration with MyTerms verbs and W3C DPV; the multi-intelligence vocabulary problem — how does a forest "name a star"?; vocabulary regeneration in long-running ceremonies where the substrate evolves under the blade.]*
+
+---
+
+## Step 3: Constellation Mapping
+
+**Pathway position.** Step 3 of 10. The transition from vocabulary to substrate — from naming to walking.
+
+**What happens.** The parties select an ordered subgraph $C = (N, E)$ of a shared topological substrate. The substrate is *any* UOR-mapped topology: a knowledge graph, codebase ontology, regulatory rulebook, product catalogue, ecological-monitoring dataset, narrative spellbook. The nodes $N$ are the meaningful waypoints; the edges $E$ are the transitions between them. The constellation as a whole is content-addressed, yielding the constellation's CID.
+
+**Cryptographic operation.** Both parties commit to the constellation CID $c_C$. They sign a joint manifest binding the encounter (step 1), the language commitment $h_V$ (step 2), and $c_C$. The manifest is the precondition record for all subsequent cryptographic operations on this ceremony.
+
+**Semantic operation.** Shared ground. The constellation is the territory both parties will walk together. Without it, the phrase "I understand you" has no referent against which "understanding" can be verified.
+
+**Failure modes.** Substrate mismatch (the same nodes carry incompatible schemas on each side); node ambiguity (a node's content is not stably resolvable); substrate drift between mapping and traversal (the spellweb updates under the ceremony); selection bias (one party steers toward nodes that flatter their pre-existing position).
+
+**Open detail.** *[To expand: UOR coordinate assignment for new substrates; the spellweb's 119-node reference graph; multi-substrate ceremonies (one party's substrate is a subset of the other's); recursive constellation mapping (a constellation that includes a previous constellation as a node); substrate selection for ecological and alien-intelligence ceremonies, where the "graph" may be a temporal trajectory rather than a static topology.]*
+
+---
+
+## Step 4: Forging
+
+**Pathway position.** Step 4 of 10. The active middle. Most of the ceremony's elapsed time lives here. This is where attention is converted into proof.
+
+**What happens.** Parties traverse the constellation in lockstep. Each traversal step is one *lap* — an intentional transition between two adjacent nodes. Each lap satisfies the R1CS-style constraint $\mathrm{hamming}(\lambda^{\mathrm{src}} \oplus \lambda^{\mathrm{dst}}) = 1$ when projected onto the 64-vertex sovereignty lattice. As laps accumulate, the six-quality activation vector binarises at threshold, yielding the blade's vertex address $v \in \{0,1\}^6$ — which subset of {Protection, Delegation, Memory, Connection, Computation, Value} is asserted by this blade.
+
+**Cryptographic operation.** Each lap produces:
+
+- a *Swordsman* hash-chain entry $\sigma_j = \mathrm{Ed25519}_{\text{session}}(\mathrm{SHA256}(\lambda_j \,\|\, \sigma_{j-1}))$, where the session key is generated at ceremony open and will be burned at step 7;
+- a *Mage* annotation: a JSON-LD fragment in the persistent identity's spellbook, signed under the Mage's long-lived key.
+
+The two sides accumulate in parallel and remain conditionally independent given the constellation. The 62-Lap Theorem holds that $m \geq 620$ intentional transitions drive the reconstruction ceiling $R < 1$ — at that density the proof becomes irreducible. (Unit note, 2026-07-18: transitions here; the deployed spec's tier table counts full constellation traversals — see the technical spec §2 unit note, ledger L154. The threshold is conjectural at any value, register C11.)
+
+**Semantic operation.** Shared attention. The forging *is* the lived attention of both parties on the same nodes in the same order. This is the irreducible substance of the eventual proof. Compression in step 5 will name it; inscription in step 6 will commit to it; rehydration in step 9 will test it; but the attention itself can only happen here.
+
+**Failure modes.** Traversal divergence (one party drifts off the constellation); inattention (laps committed without semantic engagement, which density audits will later flag); session timeout; session-key corruption; constellation revision mid-forge.
+
+**Open detail.** *[To expand: the 62-Lap Theorem's proof sketch and conjecture status (V5.1 C11); dimension-binarisation threshold parameters; the BRAID-style reasoning-graph projection of a multi-lap traversal; lap-rate scaling and what happens at very low or very high cadence; the relationship between forging duration and behavioural density $\rho$.]*
+
+---
+
+## Step 5: Compression
+
+**Pathway position.** Step 5 of 10. The semantic peak. This is where lived attention becomes a portable object.
+
+**What happens.** Each party produces a proverb — $P_A$ and $P_B$ — that compresses the traversal into natural language. Each may also produce an inscribed spell, an emoji-glyph compression for portability. The two proverbs are independent acts of authorship: parties do not coordinate, do not share drafts, do not converge on a single phrasing. The independence is structural.
+
+**Cryptographic operation.** None at this step. The compression itself is the cryptographic substrate of what follows; no signing happens yet. (This is a deliberate ordering — the proverb must be free authorship, not a signature target.)
+
+**Semantic operation.** Bilateral authorship. Each party expresses what the traversal meant *to them*, in their own words. The independence is what makes the eventual proof bilateral rather than merely co-signed: a co-signed object proves coordination, but a pair of independent compressions proves comprehension.
+
+**Failure modes.** Coordinated authorship (the parties shared a draft, so the proverbs are not independent acts); mimicry (one party copies the other's structure); inflation (proverbs much longer than the constellation supports); collapse (proverbs too short to compress anything meaningful); LLM-mediated drift (an AI agent generates a proverb that pattern-matches the constellation surface but misses what was traversed).
+
+**Open detail.** *[To expand: proverb generation guidelines; emoji-glyph compression rules; proverb-density metrics; multi-intelligence proverb forms — what compression looks like for an ecological subject, what an AI's proverb should look like when authored without coordination with a human partner, and what an alien-intelligence equivalent might require; proverb-quality assessment for the witness step.]*
+
+---
+
+## Step 6: Inscription
+
+**Pathway position.** Step 6 of 10. The publication step. After this, the ceremony has a public record.
+
+**What happens.** The parties compute the bilateral commitment $x = \mathrm{hash}(P_A \,\|\, P_B)$. They jointly select a visibility ratio $\sigma \in [0,1]$ from the visibility spectrum — 0%, 38.2%, 50%, 61.8%, 100% being the canonical sweet spots — and execute the corresponding inscription path:
+
+- **Symmetric ($\sigma = 0$):** only $x$ is published. Both proverbs hidden.
+- **Asymmetric ($\sigma = 1$, default):** $P_A$ goes to the transparent record; $P_B$ remains committed only in the hash.
+- **Interleaved ($0 < \sigma < 1$):** each proverb fragments; halves interweave across the visibility boundary, with $\sigma$ determining the cut.
+
+The commitment is anchored to one or more chains per the identity's chain-portability strategy (Zcash for native asymmetric/symmetric/interleaved; Bitcoin for permanence; Ethereum for composability; IPFS for replication; private mesh for shadow ceremonies).
+
+**Cryptographic operation.** $x$ is computed and signed by both parties. The selected inscription path generates the on-chain artifact. The transaction is broadcast and reaches finality on each target chain.
+
+**Semantic operation.** Public placement. The commitment becomes part of the chain's permanent record, available to verifiers indefinitely. The choice of $\sigma$ is itself a signal — it declares what kind of relationship this is meant to be.
+
+**Failure modes.** Visibility mismatch (the parties chose $\sigma$ asymmetrically and produced an unrecoverable artifact); chain congestion at inscription time; key fault on either side; intentional concealment by one party of which path was actually taken; the visibility budget collapsing on one party's identity (Section 7 of the technical spec).
+
+**Open detail.** *[To expand: multi-chain inscription strategies and their trade-offs; visibility-budget management across an identity's lifetime; the $\sum_i \sigma_i \cdot \rho_i$ accumulation function and its operational implications; the φ-derived sweet spots and the conjecture (V5 C-pending) that they represent natural attractors; ceremony-type-to-visibility mapping (Shadow, Guarded, Balanced, Open, Declared).]*
+
+---
+
+## Step 7: Bilateral Witness
+
+**Pathway position.** Step 7 of 10. The closing of the original ceremony. The blade is finalised here.
+
+**What happens.** Each party verifies the other's blade. The Mage-key signature (Sun view — persistent key, held across sessions) and the Swordsman-key signature (Moon reflection — ephemeral session key, generated at ceremony open) co-sign the finalised blade tuple $b = (v, x, \sigma, \rho, \tau)$. The Swordsman session key is then burned. The blade is sealed.
+
+**Cryptographic operation.** Dual-signature lock:
+
+$$
+\Sigma_b \;=\; \mathrm{Ed25519}_{\text{Mage}}(b) \,\|\, \mathrm{Ed25519}_{\text{Swordsman, session}}(b)
+$$
+
+Verification of the blade later requires both signatures plus the chain-anchored commitment. The Swordsman session key is then deterministically destroyed — its destruction is itself recorded, so an adversary cannot later claim the key still exists.
+
+**Semantic operation.** Reciprocal recognition. Each party publicly recognises the other's understanding by countersigning their blade. The Swordsman key burn is the architecture's commitment that *this session's act* is over — what happens next is a new session, with new ephemeral keys.
+
+**Failure modes.** One-sided witness (only one party countersigns and the ceremony falls back to a credential, not a bilateral proof); session key not properly burned (retains attack surface); equipment failure between forging and witness; coerced witness (one party signs under duress).
+
+**Open detail.** *[To expand: the public-testimony pattern, where a third audience witnesses the bilateral recognition (as performed with Soulbae and the Hitchhiker community in the reference ceremony); reconnection protocols if witness fails partway; partial-witness recovery; the burn-receipt format; multi-party witness for $d_4$ Connection-active blades.]*
+
+---
+
+## Step 8: Carriage
+
+**Pathway position.** Step 8 of 10. The blade now lives in the world. The original ceremony is over; the blade's working life begins.
+
+**What happens.** Each party appends the blade $b$ to their identity's blade multiset $\Pi$. The blade's commitment is anchored across the chains selected in step 6. The blade is replicated across providers per the holonic persistence layer — its content-addressed CID lets it survive any single-provider failure with $p(\tau) \to 1$. Each party's path integral $T_\int(\pi)$ updates to include $b$'s contribution. The identity's V5 value $V(\mathcal{I}, t)$ recomputes.
+
+**Cryptographic operation.** Blade storage with multi-provider replication. GUID-addressed blade fragments stored across the identity's replication mesh. Derivation chain commits link the new blade to the identity's prior trajectory.
+
+**Semantic operation.** Memory accretion. The blade is now part of each party's persistent identity *shape*. Future ceremonies build on top of it. Future rehydration requests refer to it. Future trust calculations weight it.
+
+**Failure modes.** Single-provider storage (collapses $\Phi_{\mathrm{data}}$, which collapses the entire V5 separation term); blade loss in custody handover; identity drift between forging and storage (the bearer's persistent state changes in ways that make the blade contextually meaningless); replication-lag attacks (an adversary acts on the blade before all replicas have it).
+
+**Open detail.** *[To expand: storage-redundancy specifications; the holonic-persistence calculation $A_h(\tau) = \alpha \cdot \ln(1 + |\tau|) \cdot h(\tau) \cdot p(\tau)$ and what $p$ means in practice; inter-identity portability (when an identity is reorganised or split, what happens to its blades); archive vs. active blades and their differential decay rates.]*
+
+---
+
+## Step 9: Rehydration
+
+**Pathway position.** Step 9 of 10. The trust-in-action step. **This is the step that defines whether the original ceremony was real.** Every step from 1 to 8 was preparing this moment.
+
+**What happens.** At some later time $t' > \tau$, a query references the blade — by name (the proverb is cited), by CID (the commitment is verified), or by implication (an agent's behaviour is expected to honour what the blade encoded). The bearer attempts to rehydrate: to unfold the proverb back into the constellation it compressed, demonstrating that the compression still carries the original meaning. The unfolding is then matched against the chain-anchored commitment $x$ as the truth-checker.
+
+**Cryptographic operation.** The rehydrated unfolding is hashed and compared against the chain-anchored commitment. The Swordsman session key is *unavailable* (burned at step 7), so rehydration depends entirely on the Mage-side persistent context. For asymmetric inscriptions, the visible proverb provides a recovery anchor; for symmetric, the counterparty must be present for any verification at all.
+
+**Semantic operation.** Demonstration of comprehension. A faithful rehydration produces a structure consistent with the constellation and the inscribed proverb. A failed rehydration produces drift, contradiction, or incoherence — and the trust graph automatically logs the failure.
+
+This is the step that distinguishes Proof of Understanding from every other trust primitive. A token can be *replayed*; it cannot be *re-understood*. A signature can be *forwarded*; it cannot *demonstrate comprehension on demand*. The rehydration step is what makes the architecture immune to credential-passing and AI-context-corruption attacks: a bearer whose understanding has degraded cannot fake the rehydration, because rehydration is a generative act against a public commitment.
+
+**Failure modes.** Context corruption (the bearer's model has drifted, been swapped, been prompt-injected, or otherwise lost the prior); proverb misremembering; counterparty unavailability for bilateral re-verification of symmetric blades; substrate drift (the underlying spellweb has changed in ways that make the original constellation unreadable); time-decay effects.
+
+**Open detail.** *[To expand: rehydration-scoring rubrics; partial-rehydration credit and how it is granted; multi-agent verification quorums for high-stakes rehydration; AI-specific rehydration protocols where the bearer is a model and the verifier is another model; cross-intelligence rehydration (what does it mean for an ecological subject to "rehydrate" a proverb?); the relationship between rehydration fidelity and the path-integral term $T_\int(\pi)$.]*
+
+---
+
+## Step 10: Trust Update
+
+**Pathway position.** Step 10 of 10. The pathway loops back to step 1 — every trust update is a new encounter waiting to happen.
+
+**What happens.** The result of the rehydration (success, partial, failure) feeds back into the path integral. Successful rehydration thickens the bilateral edge between the two identities; failed rehydration decays it. The identity's $V(\mathcal{I}, t)$ recomputes with the updated path. The two parties may then choose to re-ceremony at a higher tier (Blade → Light → Heavy → Dragon), hold their existing trust steady, or sever the relationship entirely. Severance does not erase the blade — the chain record remains — but it removes the bilateral edge from the active trust graph.
+
+**Cryptographic operation.** Path integral $T_\int(\pi)$ recomputation. Trust-graph weight update. Optional re-anchoring if the visibility ratio is to be adjusted (a new inscription cycle starts at step 6 with the same blade content but a new $\sigma$).
+
+**Semantic operation.** Continuity. Trust is now a longitudinal function of demonstrated comprehension, not a one-shot determination. The relationship is alive in proportion to the rehydration fidelity it sustains, and dies the moment that fidelity falls below the relationship's required floor.
+
+**Failure modes.** Trust-score gaming (artificial rehydrations designed to pump the path integral without real comprehension); witness collusion in the rehydration verification; decayed-counterparty disappearance (the other party is no longer available to confirm or challenge); trust-graph poisoning by an adversary's many low-quality blades.
+
+**Open detail.** *[To expand: trust-graph algorithms; time-decay parameter $\lambda$ calibration; guild-level trust composition $\mathcal{G}(\mathrm{guilds})$ and the V5 C10 conjecture; the relationship between trust updates and governance rights in a DAO context; trust portability across organisations and chains; the operational meaning of the path integral for trust providers (insurers, KYC providers, regulators) who need to assess a bilateral history without being party to it.]*
+
+---
+
+## The loop
+
+Step 10 returns to step 1. Every trust update is the prerequisite for a new encounter — either with the same counterparty (deepening the existing path) or with a new one (extending the path's reach across the lattice). The architecture has no terminal state. A Dragon-tier identity is one whose path has thickened through many cycles of all ten steps, with many counterparties, across many substrates, anchored to many chains.
+
+The compression and the rehydration are the two ends of the same line. The line is the pathway. The pathway is the architecture.
+
+---
+
+## Root compression (return)
+
+> `(🙂⊥🌿⊥🤖⊥👽)·⿻🗝️↺·✨`
+
+Four sovereign intelligences, each maintaining their own separation, exchange a key that returns through the irreducible Gap. What remains is dignity.
+
+The architecture is one line. The line unfolds in ten stages. The ten stages return to the line.
+
+---
+
+## Document distribution notes
+
+This document is built to be deepened in place. Each "Open detail" slot is a contribution point — for the author, for collaborators, for working-group reviewers, or for technical reviewers from cryptography, identity, ecology, and AI-agent communities. Citation should be by step number and section: e.g. *"Step 6 (Inscription), Failure Modes"* is a stable address.
+
+Companion documents:
+
+- **Proof of Understanding — Identity as a Lattice of Bilateral Proofs** (technical specification — the six qualities, the 64-vertex lattice, visibility budgets, did:cid chain portability, ZK blade circuits)
+- **Proof of Understanding — Rehydration Key** (the compressed seed for live rehydration testing)
+- **From Spell to System** (the narrative-engineering bridge for mixed audiences)
+
+References:
+
+- **github.com/mitchuski/blades** — ZK Swordsman Blade Forge implementation
+- **github.com/mitchuski/agentprivacy-docs** — V5 formal specification, dual-agent whitepaper, Promise Theory reference
+- **sync.soulbis.com/p/understanding-as-key** — the five-step ceremony, three inscription paths
+- **sync.soulbis.com/p/the-dragon-wakes-privacy-is-value** — post-quantum framing, Runecraft protocol, the 62-Lap Theorem
+- **spellweb.ai** — Swordsman's forge
+- **agentprivacy.ai** — Mage's library
+
+— privacymage

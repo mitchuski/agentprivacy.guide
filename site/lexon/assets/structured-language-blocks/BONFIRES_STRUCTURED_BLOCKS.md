@@ -133,3 +133,44 @@ design, and it is why the boundary at the top of this note holds.
    keystone-buildable on request; it reuses check() and probeRelation()
    outputs directly.
 3. Contact with bonfires.ai, like the Diedrich brief, waits at the door.
+
+## The block is a κ-addressed holon (2026-07-12)
+
+The block gained the piece the write-path was missing: a **content-address**.
+Every block now carries
+
+```
+κ = "sha256:" + sha256( canonicalJson( block with the κ field removed ) )
+```
+
+the City Key / sigil Law L5 convention imported from the dual-agent-harness
+holon layer (HOLONS.md): *a κ-label is never trusted, only re-derived*. This
+turns the write-path from "trust the emitter" into "re-derive the address": a
+Bonfire (or any mesh) does not have to believe `blocks_emit.mjs` computed the
+triples and claim honestly; it re-hashes the block and checks. The block's
+**relation claim gives it a checkable constraint; its κ gives it a checkable
+identity** — the two compose into a unit whose content and whose address are
+both re-derivable, which is exactly what a shared public graph needs to carry
+a stranger's contribution without trusting the stranger.
+
+- **The κ law is a shared primitive, not an independent check.** `tools/kappa.mjs`
+  is byte-identical to the harness reference, and the cross-producer identity is
+  verified: a Lexon block and a harness artefact hash the same way, so the same
+  mesh auditor carries both. (This is the opposite of the gate discipline, where
+  two independent auditors are a feature; for an address, divergence just breaks
+  interoperability.)
+- **The mesh verifier is an auditor, not a harness.** `tools/blocks_audit.mjs`
+  re-derives every block's κ and the corpus manifest's κ deterministically —
+  the holon layer's own call (HOLONS.md: a holon's interoperability claims are
+  enumerable, so sampling would be the universe-builder mistake). It matches the
+  rest of the repo's discipline: lexon_check re-parses, relation_check re-builds
+  the twin, coverage re-counts, blocks_audit re-hashes. Never trust, re-derive.
+- **Relational edges follow the harness edge rule.** A κ→κ reference between
+  blocks (or between a block and another party's holon) is a *candidate* until a
+  counterparty signature mints it — identical to the constitution's T6 door and
+  to the VRC term itself. The membrane crossing is a proposed edge; the First
+  Person's signature is what makes it real.
+
+`blocks/INDEX.json` is itself a κ-addressed holon (one address over the whole
+189-block corpus), so the entire cargo has a single verifiable manifest — the
+"signed cargo" a Diedrich or bonfires packet would carry.

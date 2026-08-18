@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trusttasks.org/spec/understanding/seal/0.1",
+  "title": "Understanding Seal — payload",
+  "description": "The joining party's proposal of a bilateral agreement (IEEE 7012 pattern: individual proposes, from a standard roster); the host's signed acceptance in the response completes the seal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["agreement"],
+  "properties": {
+    "agreement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roster", "term", "termsDigest"],
+      "properties": {
+        "roster": { "type": "string", "format": "uri", "description": "The standard roster the term is selected from." },
+        "term": { "type": "string", "description": "Roster identifier of the proposed term (e.g. SD-BASE)." },
+        "termsDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Lowercase hex SHA-256 pinning the term's three registers (plain-language, legal, machine-readable) as proposed." },
+        "termsRef": { "type": "string", "format": "uri", "description": "Optional retrieval reference for the pinned term." }
+      },
+      "description": "The proposed terms. A counter-proposal is a new seal task in the opposite direction, never an edit."
+    },
+    "ext": { "$ref": "../../../_framework/0.1/framework.schema.json#/$defs/Ext" }
+  },
+  "$defs": {
+    "Response": {
+      "$anchor": "response",
+      "title": "Understanding Seal — response payload",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accepted"],
+      "properties": {
+        "accepted": { "type": "boolean" },
+        "agreementId": { "type": "string", "description": "Present when accepted: the sealed agreement's identifier, carried by understanding/grant." },
+        "sealedAt": { "type": "string", "format": "date-time" },
+        "witnessRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["digest"],
+          "properties": {
+            "digest": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Content digest of the witness record — the attestation from outside both parties that the ceremony happened." },
+            "uri": { "type": "string", "format": "uri", "description": "Optional retrieval reference for the witness record." }
+          },
+          "description": "Content-addressed witness record: digests and party VIDs only, never ceremony content."
+        },
+        "ext": { "$ref": "../../../_framework/0.1/framework.schema.json#/$defs/Ext" }
+      }
+    }
+  }
+}

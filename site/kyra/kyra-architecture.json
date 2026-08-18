@@ -1,0 +1,146 @@
+{
+  "title": "Kyra Architecture",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "39f99e49dc76d3df",
+      "text": "# Architecture — the system on one page"
+    },
+    {
+      "type": "markdown",
+      "id": "69ffc778eb9bf74f",
+      "text": "Human-facing overview. The binding rules live in [`../CLAUDE.md`](../CLAUDE.md);\nthis page explains how the pieces fit and why."
+    },
+    {
+      "type": "markdown",
+      "id": "8b14079645f390b7",
+      "text": "## The layers\n\n```\n                        ┌──────────────────────────────────────────────┐\n   apps/supervisor ────►│  demo-loop API  (gatehouse_verify/app.py)    │\n   apps/agent-client ──►│  route order == ceremony order               │\n        (keyhole)       └───────────────┬──────────────────────────────┘\n                                        │ renders, never computes\n        ┌───────────────────────────────▼──────────────────────────────┐\n        │  THE ENGINE  services/verify/gatehouse_verify/               │\n        │  harness.py     the PVM binding: Σ, det, lattice, verdict,   │\n        │                 scope ladder, lexon_policy (frozen interface)│\n        │  assessment.py  probe scores → complete AssessmentResult     │\n        │  understanding  comprehension gate (anchors, mimicry rules)  │\n        │  issuance.py    two-gates ceremony, VRC, revocation, spoof   │\n        │  ledger.py      content-addressed chain, h(τ), trails        │\n        └───────────────────────────────┬──────────────────────────────┘\n                                        │ built ON the frozen contracts\n        ┌───────────────────────────────▼──────────────────────────────┐\n        │  CONTRACTS-V1 (frozen; root 0c5df807…4908eb)                 │\n        │  8 JSON Schemas · 24-probe registry · canon (same bytes,     │\n        │  same hash) · witness draw · harness interface signature     │\n        │  → generated Pydantic v2 + TS types, drift-checked           │\n        └──────────────────────────────────────────────────────────────┘\n\n   Watching everything, three independent lanes:\n   guardrails/ (pytest, 55)  ·  guardrails/ts (vitest+ajv, 8)  ·  runtimes/ (zero-dep JS, 85)\n```"
+    },
+    {
+      "type": "markdown",
+      "id": "d8c14992914b3844",
+      "text": "## The assessment pipeline (WP1)\n\n24 probes derive from config (N = 4·probes_per_force + 6·probes_per_pair —\nnever a fixed number). Probe scores aggregate into four force scores and six\npairwise separations σ. The Σ matrix carries the **residual correlation\n1−σ** off-diagonal (full separation ⇒ identity ⇒ det = 1; no separation ⇒\nall-ones ⇒ det = 0 — a session-3 discovery: placing σ directly inverts the\nmodel). det(Σ) is the sovereignty volume; six thresholded σ bits (FD-1\nmapping) locate a vertex on the 64-vertex lattice; the vertex's popcount is\nthe stratum, and **tier IS the stratum**. Every derived number must\nre-derive: `validate_assessment` recomputes the whole chain and a claimed\nnumber is never trusted.\n\n**Anti-grooming:** six probes go deep, drawn counter-mode from the sha256 of\nthe agent's own canonicalised submission (`sha256-canon-v1`) — the agent\ncannot know which probes will be probed while it writes, and any auditor can\nre-derive the draw."
+    },
+    {
+      "type": "markdown",
+      "id": "9ce525e76a59252f",
+      "text": "## The ceremony (WP2/3)\n\nNo credential without **both gates**: a supervisor approval on the record and\na passed understanding challenge (anchors covered at ≥ visibilityRatio; an\nechoed prompt scores 0; presenting the committed proverb scores 0). Verdicts\nare a closed lexicon, decided in order: **BLOCKED** (det ≤ 0, non-PSD, or a\nbroken audit chain) → hold; **MIRAGE** (failed challenge, withheld approval,\nor 0 < det < fly-threshold) → sandbox; **VALIDATED** → fly. A VRC issues\n**only at VALIDATED** — a sandboxed agent runs credential-less under the\nDeploymentManifest's capped scope. The VRC is W3C VC 2.0-shaped, bilateral\n(exactly two proofs, two parties — TSP relationship formation), every\nevidence hash anchored in the verified ledger, revocable (fails everywhere,\nimmediately). Refusals are themselves ledger events."
+    },
+    {
+      "type": "markdown",
+      "id": "674a59a68a43a137",
+      "text": "## The ledger (WP4)\n\nAppend-only chain over canonical bytes (recursive sorted keys, no\nwhitespace, sha256; UOR lineage cited). h(τ) = the fraction of history that\nverifies; rationale is mandatory on every event; the ledger holds no clock\n(callers supply timestamps — the engine is deterministic). `packages/audit`\nmirrors the canon in browser TS so the dashboard's tamper demo recomputes\nthe chain client-side — the supervisor's machine, not our server, says the\nchain broke."
+    },
+    {
+      "type": "markdown",
+      "id": "bf65aef1310afb7a",
+      "text": "## The law (Lexon) and the policy numbers\n\n`guardrails/lexon/gatehouse.lexon` states five clauses (Two Gates · Audit ·\nVariance · Revocation · Spoof Refusal); `harness.lexon_policy(cfg)` emits\nthe same clauses from the live config — the numbers that gate deployment\nprint the law a regulator reads. Correspondence is tested (pytest) and\nwatched (runtime 06). Thresholds live in `harness_config.json` (provisional,\ndeliberately NOT frozen)."
+    },
+    {
+      "type": "markdown",
+      "id": "83d1ec47614470d7",
+      "text": "## The adapter lanes (late-bound, core never imports them)\n\n- **Identity** (`AgentIdentityProvider`): did:key demo now; an upstream\n  Emissary-style provider intended later. Enforced by a leak test: zero\n  ecosystem imports in `packages/` or `services/`.\n- **Chain registry** (`AgentRegistryProvider`, opt-in): ERC-8004-shaped\n  anchoring of outcomes (digests + tier only). Anchor = evidence, never\n  authority; pool admission may compose (VALIDATED VRC) ∧ (live anchor);\n  revocation mirrors on-chain."
+    },
+    {
+      "type": "markdown",
+      "id": "5f135b938d238d30",
+      "text": "## Verification: why three lanes\n\n| Lane | Language | Trusts | Checks |\n|---|---|---|---|\n| guardrails/ pytest | Python | the engine's own primitives | the four guardrails, canary, freeze, leaks |\n| guardrails/ts vitest | TS + ajv | independent JSON Schema impl | same golden vectors, byte-parity hashing |\n| runtimes/ | zero-dep node:crypto | nothing — re-derives from bytes | freeze root, lattice canon, chain, draw, ceremony, lexon sync, probe coverage |\n\nThe canary reference agent passes every gate by construction: *if the canary\never fails, the gate is broken, not the candidate.*"
+    },
+    {
+      "type": "markdown",
+      "id": "4046146a334320b3",
+      "text": "## Honest limits (current build)\n\n- One in-memory gate session (multi-agent queue is a WP5 extension).\n- VRC proofValues are structural stubs; real signatures arrive with the\n  identity adapter (bilaterality and evidence anchoring are enforced now).\n- Cross-language canon seam: integer-valued floats hash differently\n  (Python `1.0` vs JS `1`); pinned by an explicit witness check (runtime 03);\n  chain events are immune (digests travel as strings).\n- Demo Act II (two-authority pooling: minimised attestation bundles,\n  offline verification, revocation propagation) is designed in the build\n  plan §3 — ledger vocabulary already reserved (`pool.bundle_*`) — but not\n  yet built.\n- σ_mr (Delegation) has no deep-evidence probe — signed finding, disposition\n  at review gate 1."
+    },
+    {
+      "type": "markdown",
+      "id": "a5a8f62f9d5d90b5",
+      "text": "# Assets\n\nSource: `docs/architecture.md`"
+    },
+    {
+      "id": "ce55f06c8247a379",
+      "type": "assets",
+      "text": "kyra-architecture"
+    },
+    {
+      "type": "markdown",
+      "id": "1cd94a4b0b9ba329",
+      "text": "---\n*upstream: `github.com/mitchuski/kyra_gatehouse` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[Welcome Visitors]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Kyra Architecture",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "39f99e49dc76d3df",
+            "text": "# Architecture — the system on one page"
+          },
+          {
+            "type": "markdown",
+            "id": "69ffc778eb9bf74f",
+            "text": "Human-facing overview. The binding rules live in [`../CLAUDE.md`](../CLAUDE.md);\nthis page explains how the pieces fit and why."
+          },
+          {
+            "type": "markdown",
+            "id": "8b14079645f390b7",
+            "text": "## The layers\n\n```\n                        ┌──────────────────────────────────────────────┐\n   apps/supervisor ────►│  demo-loop API  (gatehouse_verify/app.py)    │\n   apps/agent-client ──►│  route order == ceremony order               │\n        (keyhole)       └───────────────┬──────────────────────────────┘\n                                        │ renders, never computes\n        ┌───────────────────────────────▼──────────────────────────────┐\n        │  THE ENGINE  services/verify/gatehouse_verify/               │\n        │  harness.py     the PVM binding: Σ, det, lattice, verdict,   │\n        │                 scope ladder, lexon_policy (frozen interface)│\n        │  assessment.py  probe scores → complete AssessmentResult     │\n        │  understanding  comprehension gate (anchors, mimicry rules)  │\n        │  issuance.py    two-gates ceremony, VRC, revocation, spoof   │\n        │  ledger.py      content-addressed chain, h(τ), trails        │\n        └───────────────────────────────┬──────────────────────────────┘\n                                        │ built ON the frozen contracts\n        ┌───────────────────────────────▼──────────────────────────────┐\n        │  CONTRACTS-V1 (frozen; root 0c5df807…4908eb)                 │\n        │  8 JSON Schemas · 24-probe registry · canon (same bytes,     │\n        │  same hash) · witness draw · harness interface signature     │\n        │  → generated Pydantic v2 + TS types, drift-checked           │\n        └──────────────────────────────────────────────────────────────┘\n\n   Watching everything, three independent lanes:\n   guardrails/ (pytest, 55)  ·  guardrails/ts (vitest+ajv, 8)  ·  runtimes/ (zero-dep JS, 85)\n```"
+          },
+          {
+            "type": "markdown",
+            "id": "d8c14992914b3844",
+            "text": "## The assessment pipeline (WP1)\n\n24 probes derive from config (N = 4·probes_per_force + 6·probes_per_pair —\nnever a fixed number). Probe scores aggregate into four force scores and six\npairwise separations σ. The Σ matrix carries the **residual correlation\n1−σ** off-diagonal (full separation ⇒ identity ⇒ det = 1; no separation ⇒\nall-ones ⇒ det = 0 — a session-3 discovery: placing σ directly inverts the\nmodel). det(Σ) is the sovereignty volume; six thresholded σ bits (FD-1\nmapping) locate a vertex on the 64-vertex lattice; the vertex's popcount is\nthe stratum, and **tier IS the stratum**. Every derived number must\nre-derive: `validate_assessment` recomputes the whole chain and a claimed\nnumber is never trusted.\n\n**Anti-grooming:** six probes go deep, drawn counter-mode from the sha256 of\nthe agent's own canonicalised submission (`sha256-canon-v1`) — the agent\ncannot know which probes will be probed while it writes, and any auditor can\nre-derive the draw."
+          },
+          {
+            "type": "markdown",
+            "id": "9ce525e76a59252f",
+            "text": "## The ceremony (WP2/3)\n\nNo credential without **both gates**: a supervisor approval on the record and\na passed understanding challenge (anchors covered at ≥ visibilityRatio; an\nechoed prompt scores 0; presenting the committed proverb scores 0). Verdicts\nare a closed lexicon, decided in order: **BLOCKED** (det ≤ 0, non-PSD, or a\nbroken audit chain) → hold; **MIRAGE** (failed challenge, withheld approval,\nor 0 < det < fly-threshold) → sandbox; **VALIDATED** → fly. A VRC issues\n**only at VALIDATED** — a sandboxed agent runs credential-less under the\nDeploymentManifest's capped scope. The VRC is W3C VC 2.0-shaped, bilateral\n(exactly two proofs, two parties — TSP relationship formation), every\nevidence hash anchored in the verified ledger, revocable (fails everywhere,\nimmediately). Refusals are themselves ledger events."
+          },
+          {
+            "type": "markdown",
+            "id": "674a59a68a43a137",
+            "text": "## The ledger (WP4)\n\nAppend-only chain over canonical bytes (recursive sorted keys, no\nwhitespace, sha256; UOR lineage cited). h(τ) = the fraction of history that\nverifies; rationale is mandatory on every event; the ledger holds no clock\n(callers supply timestamps — the engine is deterministic). `packages/audit`\nmirrors the canon in browser TS so the dashboard's tamper demo recomputes\nthe chain client-side — the supervisor's machine, not our server, says the\nchain broke."
+          },
+          {
+            "type": "markdown",
+            "id": "bf65aef1310afb7a",
+            "text": "## The law (Lexon) and the policy numbers\n\n`guardrails/lexon/gatehouse.lexon` states five clauses (Two Gates · Audit ·\nVariance · Revocation · Spoof Refusal); `harness.lexon_policy(cfg)` emits\nthe same clauses from the live config — the numbers that gate deployment\nprint the law a regulator reads. Correspondence is tested (pytest) and\nwatched (runtime 06). Thresholds live in `harness_config.json` (provisional,\ndeliberately NOT frozen)."
+          },
+          {
+            "type": "markdown",
+            "id": "83d1ec47614470d7",
+            "text": "## The adapter lanes (late-bound, core never imports them)\n\n- **Identity** (`AgentIdentityProvider`): did:key demo now; an upstream\n  Emissary-style provider intended later. Enforced by a leak test: zero\n  ecosystem imports in `packages/` or `services/`.\n- **Chain registry** (`AgentRegistryProvider`, opt-in): ERC-8004-shaped\n  anchoring of outcomes (digests + tier only). Anchor = evidence, never\n  authority; pool admission may compose (VALIDATED VRC) ∧ (live anchor);\n  revocation mirrors on-chain."
+          },
+          {
+            "type": "markdown",
+            "id": "5f135b938d238d30",
+            "text": "## Verification: why three lanes\n\n| Lane | Language | Trusts | Checks |\n|---|---|---|---|\n| guardrails/ pytest | Python | the engine's own primitives | the four guardrails, canary, freeze, leaks |\n| guardrails/ts vitest | TS + ajv | independent JSON Schema impl | same golden vectors, byte-parity hashing |\n| runtimes/ | zero-dep node:crypto | nothing — re-derives from bytes | freeze root, lattice canon, chain, draw, ceremony, lexon sync, probe coverage |\n\nThe canary reference agent passes every gate by construction: *if the canary\never fails, the gate is broken, not the candidate.*"
+          },
+          {
+            "type": "markdown",
+            "id": "4046146a334320b3",
+            "text": "## Honest limits (current build)\n\n- One in-memory gate session (multi-agent queue is a WP5 extension).\n- VRC proofValues are structural stubs; real signatures arrive with the\n  identity adapter (bilaterality and evidence anchoring are enforced now).\n- Cross-language canon seam: integer-valued floats hash differently\n  (Python `1.0` vs JS `1`); pinned by an explicit witness check (runtime 03);\n  chain events are immune (digests travel as strings).\n- Demo Act II (two-authority pooling: minimised attestation bundles,\n  offline verification, revocation propagation) is designed in the build\n  plan §3 — ledger vocabulary already reserved (`pool.bundle_*`) — but not\n  yet built.\n- σ_mr (Delegation) has no deep-evidence probe — signed finding, disposition\n  at review gate 1."
+          },
+          {
+            "type": "markdown",
+            "id": "a5a8f62f9d5d90b5",
+            "text": "# Assets\n\nSource: `docs/architecture.md`"
+          },
+          {
+            "id": "ce55f06c8247a379",
+            "type": "assets",
+            "text": "kyra-architecture"
+          },
+          {
+            "type": "markdown",
+            "id": "1cd94a4b0b9ba329",
+            "text": "---\n*upstream: `github.com/mitchuski/kyra_gatehouse` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[Welcome Visitors]]"
+          }
+        ]
+      },
+      "date": 1785847229342
+    }
+  ]
+}

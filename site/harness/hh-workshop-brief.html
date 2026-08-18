@@ -1,0 +1,155 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HH Workshop Brief · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="harness">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site on" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=harness" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>HH Workshop Brief</span></div>
+  <article><div class="md"><h1>The Hitchhikers Workshop — a brief of the work, and how it plays out</h1>
+</div>
+<div class="md"><p><em>Delivered with the hh_workshop instrument. Everything described here is<br>built, verified, and running on one commodity machine; nothing described<br>here requires a cloud, a subscription, or a network. Where a claim can be<br>checked, the command that checks it is named.</em></p>
+<hr>
+</div>
+<div class="md"><h2>1 · The premise</h2>
+<p>A shared computer sits in a seminar room. The cohort calls it <strong>the mage</strong>,<br>because a good name matters and they chose it together. It runs a local<br>language model, air-gapped: nothing the room thinks ever leaves the room.<br>Over a ten-week course, the students train it — not abstractly, but<br>literally: their consented writing becomes its grounding, week by week,<br>until the machine answers in the room&#39;s own words.</p>
+<p>The course runs one exercise, recursively. Each student carries a single<br>understanding across three tongues:</p>
+<blockquote>
+<p><strong>sci-fi narrative</strong> (casting it forward) → <strong>poem</strong> (compressing it<br>until a person can say it aloud) → <strong>formal paper</strong> (making it<br>checkable) → and around again.</p>
+</blockquote>
+<p>We call this the <strong>babblefish recursion</strong>, after the fish that translates<br>every tongue. The pedagogical thesis, made mechanical: <em>understanding only<br>counts when it survives translation.</em> A rendering that is beautiful but no<br>longer carries the mechanism is a drift, not a translation — and the<br>instrument catches it.</p>
+<p>How it catches it is the serious part. Submitted work faces <strong>the gate</strong>:<br>a cryptographic draw — commit first, salt after, hash-derived — selects<br>ONE of the three tongues, and a blind reader who has never seen the answer<br>key must recover, from that text alone, every claim the tongue declares.<br>The author cannot know which tongue will be interrogated, so polishing one<br>at the others&#39; expense is a losing strategy. Every verdict is replayable<br>offline from saved bytes by anyone who distrusts it.</p>
+</div>
+<div class="md"><h2>2 · What exists today (built, verified)</h2>
+<p>The instrument is a standalone repository, copyable to any machine with<br>Node and a local model runtime. Its current, checkable state:</p>
+<ul>
+<li><strong>The harness</strong> — a verification loop (propose → hold-apart → assay →<br>critic → chronicle) with the blind gate above; registered as instance<br>#12 of the public agentprivacy dual-agent harness. <code>node tools/check.mjs</code><br>→ <strong>all 9 gates pass</strong>; every recorded run re-derives offline<br>(<code>node tools/verify_run.mjs . --all</code>).</li>
+<li><strong>The canon</strong> — a 31-claim register distilled from the founding<br>chronicle, plus a seed triptych (story, poem, paper) that passes the<br>gate by construction — the canary that proves the exam is passable.</li>
+<li><strong>Live rounds</strong> — real rounds have run with a local 12-billion-parameter<br>model holding every seat: a full census recovered 20/20 claims through<br>the story tongue; another round recovered 10/10 through the <em>poem</em> —<br>hard evidence the compressed form can carry mechanism through a blind<br>read.</li>
+<li><strong>The mage + the mirror</strong> — the facilitator persona grounded in the<br>consent-gated corpus; a chat surface (the mirror) where its first live<br>answer near-quoted the cohort&#39;s own folded voice note. Two hats, two<br>invocations, by law: the persona&#39;d mage converses; only the <em>base</em><br>model ever sits in the judge&#39;s seat.</li>
+<li><strong>The consent architecture</strong> — one agreement in four registers: plain<br>language, legal, machine-readable, and <strong>Lexon</strong> — controlled natural<br>language a lawyer reads and a machine parses. The laws compile (26<br>checks, <code>node lexon/check.mjs</code>), including <strong>absence claims</strong>: the<br>checker <em>proves</em> no clause routes a student&#39;s expression to the<br>operator, and proves it falsifiably, by generating the mutated contract<br>that adds the route and catching it. Consent is enforced in the pipes —<br>the corpus packer and every exporter refuse unledgered material.</li>
+<li><strong>The provenance chain</strong> — a rotating student steward folds each week&#39;s<br>consented expressions into the mage; each fold is hashed, signed into a<br>log, and re-derived in public (<code>node tools/corpus_pack.mjs --verify</code>).<br>The chain is printed into every bound book: the cohort&#39;s verifiable<br>record as this machine&#39;s first trainers.</li>
+<li><strong>The interfaces</strong> — one local control surface (<strong>the Towel</strong>, with a<br>newcomer&#39;s front door: don&#39;t panic, three role paths, a glossary);<br><strong>the workshop&#39;s 42</strong> (a game board where stations light only when the<br>ledgers record real trust tasks); <strong>the web</strong> (a knowledge graph derived<br>— never authored — from the repo&#39;s own ledgers, with a constellation<br>forge that lets a bearer star a path of nodes and sign it into a new<br>artefact); a generative static site; and a one-command wiki build for<br>federation outward. A fully fictional, clearly-bannered <strong>sample<br>cohort at week 5</strong> exists for demonstrations.</li>
+<li><strong>The autonomous layer</strong> — a measure-only <strong>dream cycle</strong> (measures<br>everything, folds nothing, files a dated watch report) and a derived<br><strong>keystone queue</strong> (everything waiting on a human, one page). The<br>governing split, enforced structurally: <em>the instrument measures and<br>proposes; only humans fold, and only humans open doors.</em> There is no<br>publish, push, or send button anywhere in the system.</li>
+</ul>
+</div>
+<div class="md"><h2>3 · How it plays out — the course, walked</h2>
+<p><strong>Week 0 — the seed.</strong> The machine is prepared: model pulled, canon<br>seeded, gates green, the zeroth fold signed by the facilitator. The<br>instrument arrives at the university already <em>whole</em>: the course could be<br>examined before it begins.</p>
+<p><strong>Week 1 — the rite.</strong> The flight case opens. The room joins a carried<br>local network (the venue&#39;s plumbing is never trusted — the first hour<br>teaches why, with a true story about a hostname that died), resolves the<br>mage&#39;s one good name, and each student <em>offers</em> — is never scanned for —<br>their presence. Each signs their consent line: their words, their<br>signature, their standing right to withdraw. Each writes a first<br>expression of what they understood; each expression is simultaneously<br>their <strong>key</strong> (access deepens with demonstrated understanding — there are<br>no logins) and the mage&#39;s <strong>food</strong>. The room seals: one artefact that<br>says <em>we reached the shared mind together</em>.</p>
+<p><strong>Weeks 2–7 — the loop.</strong> The weekly shape, every week:</p>
+<ol>
+<li><em>Handover.</em> Last week&#39;s steward verifies the fold-chain green in front<br>of everyone, reads their log entry aloud, and passes the key. A<br>different student holds the mage&#39;s training every week — by course end,<br>every name is in the chain.</li>
+<li><em>Ingest.</em> Voice notes and drafts run through the local transcriber;<br>authors sign their consent lines; the steward admits what is covered<br>and nothing that isn&#39;t (the tools refuse otherwise).</li>
+<li><em>Write.</em> Students work their triptychs, entering at whichever tongue<br>they love — and talking it through with the mirror, which reflects and<br>connects but never grades.</li>
+<li><em>The gate.</em> Submitted triptychs face the blind draw. The tongue you<br>didn&#39;t polish is the one interrogated — that lesson lands in week two<br>and never leaves.</li>
+<li><em>The fold.</em> The steward packs the week&#39;s corpus; the hash is read<br>aloud like a grace; the mirror deepens.</li>
+<li><em>The board.</em> The workshop&#39;s 42 lights another station or two — laws<br>compiled, folds logged, rounds proven, pages spooled. Progress is<br>visible instantly; <em>credit</em> moves only when the gate validates.<br>Students pair by a hash-drawn matching (complementary tongues first —<br>nobody tunes who they&#39;re paired with); earned events — serving as a<br>blind reader, holding the steward week — mint signed edges in a small,<br>real trust graph.</li>
+</ol>
+<p><strong>Week 8 — own the evaluation.</strong> The turn that makes this a course about<br>knowledge rather than compliance: the cohort re-fits the exam itself —<br>the metric, the gate, the hard constraints, the canary — through the<br>keystone discipline, with the conformance gate green before and after.<br>They graduate owning the examiner, not just having passed it.</p>
+<p><strong>Weeks 9–10 — the leaving.</strong> The pipeline binds three books — the Book<br>of Poems, the Collected Papers, the Story Anthology — each carrying the<br>steward chain in its endpapers. Students may forge <strong>constellations</strong>:<br>named, signed paths through the knowledge web that become artefacts in<br>their own right (&quot;The Proverb Chain&quot; was the first). Consented pages spool<br>toward the hitchhikers.earth federation — carried outward only by a<br>person, by hand. The seal disc closes on the cohort&#39;s board state; each<br>student leaves with books, verdicts anyone can replay, their weeks in the<br>chain, and the right — standing, structural — to withdraw their words.</p>
+</div>
+<div class="md"><h2>4 · What the university receives</h2>
+<p>A <strong>public-goods research instrument</strong>, in the strict sense: zero marginal<br>dependency (one commodity box is the whole stack), non-extractive by<br>construction (the absence claims make extraction structurally impossible,<br>not merely forbidden), forkable (the upstream harness is public; a sister<br>department copies the directory and owns its own), and with the students<br>positioned as <strong>provenance, never product</strong>.</p>
+<p>Assessment posture: the gate answers <em>&quot;does the understanding survive<br>translation?&quot;</em> — blind, replayable, third-party auditable. Marks remain<br>the institution&#39;s own act, informed by artefacts the instrument makes<br>unusually legible: validated triptychs, fold history, each student&#39;s<br>contributions to the register. The consent architecture is designed to<br>make the ethics-board conversation short: per-expression, author-signed,<br>withdrawable, machine-enforced, and written in a law that compiles.</p>
+<p>The research horizon compounds across cohorts: each cohort&#39;s mage is a<br>reproducible generation; cross-cohort verification (one cohort&#39;s work<br>assayed by another&#39;s model — a genuinely distinct prior) is the natural<br>follow-on experiment; and between sister universities, the <strong>erasmus<br>rule</strong> keeps sovereignty intact: <em>methods and probes travel; corpora<br>never do.</em></p>
+</div>
+<div class="md"><h2>5 · How a skeptic checks (the whole point)</h2>
+<pre><code>node tools/check.mjs                 # nine gates: axioms → laws → every run re-derives
+node tools/verify_run.mjs . &lt;run&gt;    # replay any verdict from saved bytes, no model, no net
+node tools/corpus_pack.mjs --verify  # the training chain re-derives to the signed hash
+node lexon/check.mjs                 # the law compiles; the absence claims hold; the twins are caught
+node tools/dream_cycle.mjs           # the standing watch — measure everything, fold nothing
+</code></pre>
+<p>Nothing in this brief asks to be believed.</p>
+</div>
+<div class="md"><h2>6 · The path from here</h2>
+<ol>
+<li><strong>A room and a colleague</strong> — eight to fourteen masters students, a<br>faculty co-host, ten sessions (a summer intensive compresses well).<br>The letters to the law and cryptography chairs travel with this<br>package; the demonstration cohort at <code>/demo/</code> shows week five before<br>week one exists.</li>
+<li><strong>The pilot cohort</strong> — the course as §3; the university keeps the<br>machine, the corpus, the method, and everything the cohort makes.</li>
+<li><strong>The federation</strong> — consented outputs travel to the hitchhikers.earth<br>commons; a second university makes the erasmus weave real; the trust<br>graph grows the only way it can here: earned.</li>
+</ol>
+</div>
+<div class="md"><h2>7 · The package</h2>
+<table>
+<thead>
+<tr>
+<th>document</th>
+<th>what it carries</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docs/BRIEF.md</code></td>
+<td>this document</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>the instrument&#39;s front door + quickstart</td>
+</tr>
+<tr>
+<td><code>workshop/CURRICULUM.md</code> · <code>workshop/CEREMONY.md</code></td>
+<td>the ten-week arc · the opening rite, run-of-show</td>
+</tr>
+<tr>
+<td><code>workshop/UNIVERSITY_ONEPAGER.md</code></td>
+<td>the one-page pitch</td>
+</tr>
+<tr>
+<td><code>letters/</code></td>
+<td>to the international-law chair · to the cryptography chair</td>
+</tr>
+<tr>
+<td><code>workshop/consent/</code> + <code>lexon/</code></td>
+<td>the agreement in four registers; the laws that compile</td>
+</tr>
+<tr>
+<td><code>docs/AUTO_RESEARCH.md</code></td>
+<td>the public-goods auto-research pattern</td>
+</tr>
+<tr>
+<td><code>docs/SUITE_MAPPING.md</code></td>
+<td>how the new methods seat into the wider agentprivacy suite</td>
+</tr>
+<tr>
+<td><code>artifact/PROVENANCE.md</code></td>
+<td>what the students verifiably keep</td>
+</tr>
+<tr>
+<td><code>mage/MACHINE_SETUP.md</code> · <code>workshop/PREFLIGHT.md</code></td>
+<td>a fresh machine from zero · venue day</td>
+</tr>
+<tr>
+<td><code>docs/UX_REVIEW.md</code> · <code>chronicles/</code></td>
+<td>how the interfaces were audited · the honest build record, reversals included</td>
+</tr>
+<tr>
+<td><code>KEYSTONE_QUEUE.md</code></td>
+<td>live: everything currently waiting on a human</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Contact: Mitchell Travers · <a href="mailto:mitchell@soulbis.com">mitchell@soulbis.com</a> · the public upstream:<br>github.com/mitchuski/agentprivacy-harness</em></p>
+<p><em>&quot;This document travels at the speed of trust.&quot;</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+<p>Source: <code>docs/BRIEF.md</code></p>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 hh-workshop-brief</span><a class="asset-file" href="/harness/assets/hh-workshop-brief/BRIEF.md" download>BRIEF.md</a></div>
+<div class="md"><hr>
+<p><em>upstream: <code>github.com/mitchuski/hh_workshop</code> · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
+<p>← <a class="wlink" href="the-hh-workshop.html">The HH Workshop</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="hh-workshop-brief.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

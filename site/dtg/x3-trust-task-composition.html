@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X3 — Trust Task Composition · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="dtg">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site on" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=dtg" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/dtg/welcome-visitors.html">DTG</a> / <span>X3 — Trust Task Composition</span></div>
+  <article><div class="md"><h1>X3 — Trust-task composition and joint leakage: the show is one transcript</h1>
+<p><em>A real trust task never requests one predicate. It composes several PR-</em> predicates into a single<br>presentation — a <strong>show</strong> — and §27.2 states the danger plainly: &quot;Bundled proofs that are individually<br>sound may leak jointly.&quot; This doc gives the composition its algebra, its joint disclosure boundary, and a<br>governed remedy: named bundle profiles instead of à-la-carte predicate requests.*</p>
+<p><strong>Register:</strong> X-series (new, beyond the nine-item register) · leverage 🔴 · <strong>Ladder:</strong> reference built<br>2026-07-17 — <a class="wlink" href="lab-show-composition.html">Lab — show-composition</a> 10/10; bundle registry v0 (5 bundles);<br>M1 worksheet + M5 joint session remain design-doc work (see its NOTES.md)<br><strong>Anchor (cred-spec):</strong> trust-task boundary — credential = true standing alone; artifact = <code>threadId</code>-<br>correlated exchange object; <code>taskContext</code> binds a credential to its ceremony, never completion evidence.<br><strong>Anchor (decision doc):</strong> §2.6 composition can defeat an individually sound proof · §27.2 trust tasks ·<br>§15.2 canonical transcript (&quot;requested predicates&quot; is a required field) · §18.4 combination analysis ·<br>§19 disclosure-boundary observers · §20 observable events · §2.4 three-parameter claims.</p>
+<hr>
+</div>
+<div class="md"><h2>The gap the decision doc names but does not fill</h2>
+<p>Every PR-* entry in the register (§9) carries a <em>paired</em> boundary analysis — per predicate. But a<br>representative trust-task show composes PR-LIV + PR-ISS + PR-UNQ + PR-FRE, possibly + PR-DEL, and the<br>decision doc rules the failure mode without ruling the model: &quot;an individually zero-knowledge transcript<br>can participate in a system that is correlatable or reconstructive&quot; (§2.6); &quot;leave proof composition<br>undocumented&quot; is a prohibited construction (§24); &quot;the transcript, purpose, scope, and multi-proof<br>composition model require joint definition&quot; with Trust Tasks (§27.2). This doc drafts that joint model<br>from our side of the table.</p>
+</div>
+<div class="md"><h2>The claim</h2>
+<p><strong>A show&#39;s disclosure boundary is a property of the predicate set, and it is strictly wider than the<br>union of the per-predicate disclosure boundaries.</strong> Three mechanisms, all already latent in the baseline:</p>
+<ol>
+<li><strong>Intersection narrowing.</strong> Each predicate&#39;s derived disclosure (assurance class, policy version,<br>issuer-set choice, epoch, proof shape) is a population filter; the show intersects the filters. §18.4<br>states the rule for schema fields — &quot;non-identifying separately but identifying together&quot; — and it<br>applies unchanged to composed predicates.</li>
+<li><strong>Request-pattern leakage.</strong> The predicate set requested is itself an observable event: transcript<br>fields &quot;can reveal verifier, audience, purpose, requested predicates, risk posture&quot; (§15.4), and &quot;the<br>request pattern can itself disclose behaviour&quot; (§20). A rare combination (e.g. +PR-DEL, or PR-RNG with<br>a narrow range) fingerprints the vertical, the verifier&#39;s risk posture, and hence the holder&#39;s activity.</li>
+<li><strong>Cross-show correlation.</strong> Two shows in different contexts sharing <em>no</em> identifiers still present a<br>correlatable pair (bundle shape, proof sizes, timing, retry pattern) to the §19 observers — multiple<br>verifiers colluding and the network observer foremost. Context separation (§6) can be defeated by<br>bundle shape alone.</li>
+</ol>
+</div>
+<div class="md"><h2>The composition algebra, sketched</h2>
+<ul>
+<li><strong>Atomicity.</strong> All predicates in one show bind ONE canonical transcript — §15.2 already lists<br>&quot;requested predicates&quot; as a required field, so the baseline quietly makes the show, not the predicate,<br>the unit of freshness. Rule: a show verifies as a whole or fails as a whole; no partial acceptance, no<br>transplanting a member proof into a different transcript (§15.1).</li>
+<li><strong>Boundary records at show level.</strong> Per §26 each predicate carries assurance + disclosure records; a<br>composed show additionally carries a <strong>joint disclosure record</strong> in three-parameter form (§2.4):<br>against whom (the §19 observer list, per bundle), for how long (the longest-lived member linkage —<br>PR-UNQ&#39;s epoch dominates), alongside what (the other members, explicitly enumerated).</li>
+<li><strong>Bundle profiles.</strong> Instead of verifiers composing à la carte, the profile registers <strong>named,<br>versioned predicate bundles</strong> — MLP-BASE = {PR-LIV, PR-ISS, PR-HLD, PR-FRE}, EPP-UNIQ = MLP-BASE ∪<br>{PR-PER, PR-UNQ}, +DEL variants — exactly as cipher suites replaced à-la-carte algorithm negotiation.<br>Small governed vocabulary, large anonymity set per bundle; a request outside the registry is a §26.1<br>negative-test rejection. This is the same cardinality-control instinct as §18.3&#39;s prohibition on<br>high-cardinality extensions, lifted to the request layer.</li>
+<li><strong>The credential/artifact wall.</strong> Composition MUST NOT let a <code>taskContext</code>-bearing credential (VWC and<br>kin) stand in for outcome evidence: a bundle may <em>include</em> a ceremony-bound credential but the show&#39;s<br>established statement never crosses into task completion — that lives with the reachable outcome<br>artifact, <code>threadId</code>-correlated, on the Trust Task side of the boundary. Negative meaning, stated: a<br>valid show does not establish that any task was performed, completed, or performed well.</li>
+</ul>
+</div>
+<div class="md"><h2>What exists</h2>
+<ul>
+<li>O9&#39;s &quot;economic composition&quot; note is the seed: n distinct-counterparty PR-PRM proofs reveal degree ≥ n —<br>degree <em>is</em> the disclosure. This doc generalises that from one extension to the whole register.</li>
+<li>§15.2&#39;s transcript field list — the atomicity anchor is already normative text, not new machinery.</li>
+<li>rt 07 trust-graph-formation: shows are the edge-formation events; a bundle-profile field on the show<br>object is a small extension with existing property-test scaffolding.</li>
+<li>O5&#39;s transcript conformance harness — the natural place for joint negative tests.</li>
+</ul>
+</div>
+<div class="md"><h2>Build plan</h2>
+<ul>
+<li><strong>M1 — joint-disclosure worksheet:</strong> for the four-predicate representative show, run the full §19<br>observer × §19 surface matrix once, honestly; publish the delta over the union of per-predicate records.</li>
+<li><strong>M2 — bundle-profile registry draft:</strong> named bundles, versioning, change control on the §6.7<br>context-authority pattern; à-la-carte requests as a profile violation.</li>
+<li><strong>M3 — show-level boundary record schema</strong> (extends Appendix B&#39;s compact form with <code>bundleId</code>,<br>memberPredicates, joint three-parameter claim).</li>
+<li><strong>M4 — reference model in the lab:</strong> show object binding one transcript; properties: atomicity<br>(partial acceptance rejected), replay-across-transcript rejected (§26.1), bundle-outside-registry<br>rejected, taskContext-as-outcome rejected.</li>
+<li><strong>M5 — joint session with Trust Tasks:</strong> the composition model is explicitly a §27.2 co-owned<br>deliverable; bring M1+M2 as the ZKP-side draft.</li>
+</ul>
+</div>
+<div class="md"><h2>Upstream surface</h2>
+<p>Joint work with the Trust Task workstream (§27.2): they own request semantics and outcome artifacts; we<br>own transcript binding and the disclosure calculus. The bundle-profile registry is the shared object —<br>proposed as a section of the profile spec plus a governed registry, mirroring the context-authority model.</p>
+</div>
+<div class="md"><h2>Open questions</h2>
+<ul>
+<li><strong>Uniformity vs honesty:</strong> padding proof sizes and coarsening timing (§20 minimisation) shrinks bundle<br>fingerprints but costs mobile provers — where is the floor for the consumer-device envelope (§25)?</li>
+<li><strong>Recursive composition:</strong> if folding makes an n-predicate show one proof (§29 open item), bundle shape<br>collapses to one size — does that <em>solve</em> fingerprinting, or move it into proving-time side channels?</li>
+<li><strong>Bundle registry authority:</strong> same body as context authority (§6.7), or Trust-Task-owned? The two<br>registries interlock — a context descriptor may need to name its admissible bundles.</li>
+<li><strong>Cross-show budget:</strong> should a profile state a linkage budget (how many shows per context per epoch<br>before intersection narrowing defeats the anonymity-set claim)? §2.4&#39;s &quot;for how long&quot; hints yes.</li>
+</ul>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="x3-trust-task-composition.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

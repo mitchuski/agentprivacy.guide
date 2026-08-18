@@ -14,7 +14,8 @@ const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 's
 const htmls = [];
 (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
   const p = path.join(d, e.name);
-  if (e.isDirectory()) walk(p); else if (e.name.endsWith('.html')) htmls.push(p);
+  // assets/ carries attachments (source .md, PDFs, standalone .html decks) — not emitted pages
+  if (e.isDirectory()) { if (e.name !== 'assets') walk(p); } else if (e.name.endsWith('.html')) htmls.push(p);
 } })(SITE);
 
 const rel = p => path.relative(SITE, p).replace(/\\/g, '/');

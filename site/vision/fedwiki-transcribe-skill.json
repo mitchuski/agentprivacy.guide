@@ -1,0 +1,78 @@
+{
+  "title": "FedWiki Transcribe Skill",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a20001",
+      "text": "# FedWiki Transcribe Skill\n\nA Claude Code skill that turns a [[Federated Wiki]] assets folder full of recordings into finished wiki pages. It enumerates the videos, transcribes them locally with whisper.cpp, writes an AI summary, embeds the full transcript, and publishes each as a page. Built during the [[Mouse House Workshop]], where it produced 17 session pages."
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a20002",
+      "text": "## What it does\n\n1. **List** the videos in a FedWiki assets folder (via the assets plugin's list endpoint).\n2. **Extract** audio by streaming each video over the network with ffmpeg (no multi-GB download kept on disk) to 16 kHz mono WAV.\n3. **Transcribe** with whisper.cpp (large-v3-turbo) to .txt / .srt / .vtt.\n4. **Summarise** each transcript (title, abstract, key points, action items).\n5. **Publish** a FedWiki page per video: video embed, summary, and a collapsible transcript."
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a20003",
+      "text": "## Prerequisites\n\n- **whisper.cpp** built (MSVC / CMake) with a model such as large-v3-turbo-q5_0.\n- **ffmpeg** on PATH (audio extraction; whisper's miniaudio reads WAV/MP3 but not video containers).\n- **node + wiki** for the local wiki (see [[Wiki Here]])."
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a20004",
+      "text": "## The enumeration trick\n\nFedWiki's assets plugin renders the file list client-side, so the folder URL just returns the page shell. The real listing endpoint (found in /plugins/assets/assets.js) is:"
+    },
+    {
+      "type": "code",
+      "id": "f3a1c0de01a20005",
+      "text": "GET {wiki}/plugin/assets/list?assets={folder}\n  -> { \"error\": null, \"files\": [ ... ] }\n\n# files are served (no auth) at:\n{wiki}/assets/{folder}/{filename}   # URL-encode spaces & apostrophes"
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a20006",
+      "text": "## The scripts\n\n- **transcribe-assets.ps1** - enumerate a FedWiki assets folder, stream + extract audio, transcribe. Resumable (skips done) with per-file logs.\n- **make-wiki-page.ps1** - assemble a FedWiki page JSON from content (and optionally embed a transcript as a collapsible section). Writes UTF-8 without BOM.\n- **stage-wiki-pages.ps1** - rename page JSON to FedWiki slugs (no extension) ready to drop into pages/.\n- **build-index-page.ps1** - build a hub page linking every session and link it from the home page.\n- **build-workshop-page.ps1** - bundle all artifacts into a wiki assets folder and build a master workshop page."
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a20007",
+      "text": "## Usage\n\nTranscribe a whole assets folder:"
+    },
+    {
+      "type": "code",
+      "id": "f3a1c0de01a20008",
+      "text": "./transcribe-assets.ps1 -WikiBase http://david.local -AssetsFolder workshop-videos"
+    },
+    {
+      "type": "code",
+      "id": "f3a1c0de01a20009",
+      "text": "# single file, by hand\nffmpeg -y -i \"{wiki}/assets/{folder}/clip.mov\" -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav\nwhisper-cli -m ggml-large-v3-turbo-q5_0.bin -f out.wav -t 16 -otxt -osrt -ovtt -of out"
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a2000a",
+      "text": "## Gotchas\n\n- **BOM** - FedWiki's JSON.parse rejects a leading byte-order mark; PowerShell's `Out-File -Encoding utf8` adds one. Write UTF-8 without BOM (a bad page gets auto-recycled).\n- **Reading UTF-8** - `Get-Content` on PS 5.1 misreads BOM-less UTF-8 as ANSI and corrupts em dashes / curly quotes; read with `[IO.File]::ReadAllText(path, [Text.Encoding]::UTF8)`.\n- **Video plugin** - the wiki needs wiki-plugin-video to render the embeds.\n- **Writes need auth** - the default security module 403s anonymous writes; seed pages by file, or run friends security ([[Wiki Here]]) to edit in the browser.\n- **PowerShell 5.1** - keep scripts ASCII; a stray em dash mangles when the script is read as ANSI."
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a2000b",
+      "text": "# Files\n\nThe five scripts and SKILL.md are attached below. (They are also bundled with [[Mouse House Workshop]] under its /skill folder.)"
+    },
+    {
+      "type": "assets",
+      "id": "f3a1c0de01a2000e",
+      "text": "fedwiki-transcribe-skill"
+    },
+    {
+      "type": "markdown",
+      "id": "f3a1c0de01a2000c",
+      "text": "# See\n\n- [[Mouse House Workshop]]\n- [[Workshop Videos]]\n- [[Wiki Here]]\n- [[Federated Wiki]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "id": "f3a1c0de01a2000d",
+      "item": { "title": "FedWiki Transcribe Skill", "story": [] },
+      "date": 1782070000000
+    }
+  ]
+}
