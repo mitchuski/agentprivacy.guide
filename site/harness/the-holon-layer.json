@@ -3,62 +3,62 @@
   "story": [
     {
       "type": "markdown",
-      "id": "6f06129b269760c9",
+      "id": "8a17f545719ebda9",
       "text": "# 🪩 The Holon Layer"
     },
     {
       "type": "markdown",
-      "id": "24c7c273da247d73",
+      "id": "8fe64a9fe1dc8584",
       "text": "This is the plan and the contract for the holon layer: how the results this\nharness produces become **interoperable, verifiable units** that other systems\n— the model instruments, the graph, `hologram-technologies` — can each speak,\ncarry, and check without trusting anyone.\n\nIt is written to the repo's own standard. In particular it makes, up front, the\ncall that `ADOPTION.md` demands: **is this a harness or an auditor?** — and\nanswers *auditor*, with the reason."
     },
     {
       "type": "markdown",
-      "id": "8826775cab8a5cb6",
+      "id": "c6da0dfd761ce514",
       "text": "## What a holon is\n\nA **holon** is a whole that is also a part: a self-contained record that can\nstand alone *and* compose into a larger mesh. Here, a holon is any object that\ncarries a **κ-label**:\n\n```\nκ = \"sha256:\" + sha256( canonicalJson( object with the κ field removed ) )\n```\n\nwhere `canonicalJson` is JSON with recursively sorted keys and no whitespace.\nThis is the City Key / sigil **Law L5** convention, unchanged: *a κ-label is\nnever trusted, only re-derived.* The label is excluded from its own preimage so\nthe object can carry its own address.\n\nThe harness already mints holons. Every one of these is a κ-addressed holon\ntoday:\n\n- an **artefact** (`artefact.v1`) — a sealed, evidence-bearing result;\n- a **runtime feed** (`runtime-feed.v1`) — a workshop's produced math;\n- anything else a producer stamps with `kappaOf(...)` from `tools/kappa.mjs`.\n\n`tools/kappa.mjs` is the single reference implementation of the κ law. It is a\n**shared primitive**, not a redundant auditor: content-addressing requires that\nevery producer compute the *identical* κ, so the mint, the feed, the console,\nand the auditor all import one function. (This is the opposite of the\nindependent-copy idiom used for *gate* logic, where divergence is a feature —\nthere, two auditors catch each other; here, two κ functions would just break\naddressing. The independent check for κ lives in the test layer and in the\nlanguage-agnostic spec, which has been cross-derived in a second language.)"
     },
     {
       "type": "markdown",
-      "id": "97b9a56c6485f66c",
+      "id": "2de55cef8091da04",
       "text": "## Edges: how holons compose\n\nA holon references another **by κ**. Two kinds of edge:\n\n- **Content edges** — a hash reference to bytes. An artefact's\n  `evidenceManifest` is exactly this: each entry maps a path to the sha256 of\n  its bytes. A content edge is *verified by re-hashing*; it needs no signature,\n  because the content is its own witness.\n- **Relational edges (VRC)** — a κ→κ reference between holons, possibly across\n  parties. Governed by the edge rule already in `universe/`:\n\n  > *A validated round proposes an edge. Only the counterparty's signature mints\n  > it.* An unsigned edge is a candidate, not a result — a mirage at the social\n  > layer.\n\n  **IMPLEMENTED** (`tools/vrc.mjs`): an edge is `{ target: <κ>, relation, by:\n  <did:key>, sig }`. The signature is real **ed25519** (`node:crypto`, zero\n  dependencies) over the exact tuple `(source κ, target κ, relation)` — move any\n  of the three and it no longer verifies. The signer is content-addressed too:\n  an ed25519 public key encoded as a proper `did:key:z6Mk…` (multicodec\n  `0xed01` + base58btc), so the whole edge is self-certifying and interoperates\n  with the DID ecosystem. Keys are ephemeral by design (the amnesia protocol):\n  sign once, keep the signature and the public `did:key`, discard the private\n  key — the signature outlives the key.\n\nA relational edge is verified in two deterministic steps: both κ endpoints\nre-derive, and the signature checks against the signer's `did:key`. A valid\nsignature **mints** the edge; no signature is a **proposal**; a signature that\ndoes not verify is a **failure**. All three are facts, not judgements.\n\n**Edges are relations, not identity.** A holon's `edges` field is excluded from\nits own κ preimage (`tools/kappa.mjs`), so a holon's address stays stable as it\naccrues signed edges — otherwise signing an edge whose source is this holon's κ\nwould change that very κ.\n\n### The identity application\n\nA signed relational edge is exactly a **delegation between agents**, and that is\nthe substrate the House of Archon identity runtime seats on (`../hearthold_mage/\nSLOT.md`): a `did:cid` identity is a holon (content-addressed), a `did:key` is\nits signer, and a delegation — *this agent may act for that one* — is a signed\nκ→κ edge the mesh auditor mints or rejects. `did:cid` = a κ-address; the VRC =\nthe delegation. The identity runtime is this layer, named for people."
     },
     {
       "type": "markdown",
-      "id": "f20b631fc486839e",
+      "id": "ca0699e7045339f8",
       "text": "## The call: this layer is an AUDITOR, not a harness\n\n`ADOPTION.md` step 0: *count your claims.* If everything a thing asserts can be\nenumerated and checked exhaustively, write an auditor and stop — you get\ncertainty for zero adversarial cost. Reach for a harness only when the claim\nspace is too large to check and generated candidates must survive *adversarial*\nscrutiny.\n\nA holon's **interoperability claims are all enumerable**:\n\n- does its κ re-derive from its bytes? — one hash.\n- do its content edges resolve and re-hash? — one hash each.\n- do its relational edges' endpoints re-derive and signatures check? — bounded.\n\nThere is nothing to *tune to*: you cannot craft a holon whose κ re-derives to a\nvalue it does not have. So the mesh verifier is a deterministic, agent-free\n**auditor** — `tools/holon_audit.mjs` — exactly as `universe/audit.mjs` is. A\nharness here would spend real tokens sampling a space you can check in full for\nfree; it is the universe-builder mistake, and this document exists partly to not\nrepeat it.\n\n**Where the harness still lives:** a holon's *substantive* claim — \"this\ncircuit is 40% smaller and still correct\", \"this guide lost no fact\" — is large\nand adversarial, and *that* is verified by the harness that **minted** the\nholon. So the division is clean and total:\n\n> **the harness mints the holons; the auditor verifies the mesh.**"
     },
     {
       "type": "markdown",
-      "id": "f64784e94835aff8",
+      "id": "64a0c83fc9848e38",
       "text": "## `tools/holon_audit.mjs` — the mesh auditor\n\n```\nnode tools/holon_audit.mjs <dir>\n```\n\nWalks a directory for holon records, and for each one deterministically:\n\n1. **κ integrity** — re-derives `kappaOf(holon)` and asserts it equals the\n   stored κ. A mismatch is a tampered or mis-addressed holon; the run fails.\n2. **content edges** — for every `evidenceManifest` entry, resolves the file\n   and re-hashes it, asserting the bytes still carry the recorded hash.\n3. **relational edges** — for every κ→κ reference, asserts the target κ is\n   present in the mesh (or flagged external) and re-derives; reports signed\n   (minted) vs unsigned (proposed) per the edge rule.\n\nIt prints `HOLON AUDIT PASS` with a census, or names every corpse and exits\nnon-zero. Zero dependencies, zero agents. `tools/check.mjs` runs it over every\ninstance that has minted holons, so the whole shipped mesh is re-verified in one\ncommand."
     },
     {
       "type": "markdown",
-      "id": "ab538545bdf2f8ef",
+      "id": "ce32be6b0b3a1087",
       "text": "## The path to `hologram-technologies`\n\nThe site is the *application* and a separate property (its door is yours). It\ndoes not need a copy of the harness — it needs the **contract**: this file, plus\n`tools/kappa.mjs` and `tools/holon_audit.mjs`, vendored or imported. A holon\nminted here re-derives there byte-for-byte, because both compute one κ. That is\nthe interoperability, and it is why the primitives stay in one repo while the\nsites multiply."
     },
     {
       "type": "markdown",
-      "id": "d52812b62cb4b480",
+      "id": "41455ac5ba7b9d42",
       "text": "## Order of work\n\n**Done — the κ law is baked into the runtime:**\n\n1. `tools/kappa.mjs` — the single κ primitive. The mint, feed, and console all\n   import it; the three drifting copies are gone, and the refactor kept every\n   existing κ byte-identical.\n2. `tools/holon_audit.mjs` — the mesh auditor. Wired into `check.mjs` over every\n   instance's minted holons and pinned by a tamper test (flip one evidence byte,\n   the mesh no longer re-derives).\n3. **κ as state, first cut** — the runtime feed self-addresses: `buildFeed`\n   stamps `κ = kappaOf(feed)`, so a state snapshot is a verifiable holon. And\n   the universe head carries a `holon_layer` section (`universe/universe.json`),\n   so the corpus knows κ is the interoperability substrate.\n4. This spec.\n\n**Next — κ as the *whole* runtime state, and across the corpus:**\n\n5. **Every runtime object a holon.** `frontier.json`, each `verdict`, each\n   `gap` gains its own κ, so an entire run is a mesh of content-addressed holons\n   the auditor verifies end to end. Because `kappa.mjs` lives in the shared core,\n   this reaches **every instance — lexon, the pools, hearthold — the moment it\n   re-bundles**: one κ, computed the same everywhere, as the state.\n6. **Relational edges with real signatures** (the VRC) — **DONE** (`tools/vrc.mjs`):\n   ed25519 signed κ→κ edges, signer as `did:key`, verified by the mesh auditor\n   (mint / propose / fail), pinned by a forge-detection test. Cross-party holon\n   interop is now verifiable, not just single-party integrity — and this is the\n   `did:cid` delegation substrate the hearthold identity runtime seats on.\n7. **Map the layer across the corpus** — a κ / holon node and edges in the\n   spellweb graph, a reference in the docs, and the skill, so the corpus speaks\n   one content-addressing law. (Cross-repo; the First Person's door.)\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```"
     },
     {
       "type": "markdown",
-      "id": "a723c2f626b48176",
+      "id": "abacf6d54b7f30eb",
       "text": "# Assets"
     },
     {
-      "id": "b9c4530b828634cf",
+      "id": "b85ca05ba4e821fd",
       "type": "assets",
       "text": "the-holon-layer"
     },
     {
       "type": "markdown",
-      "id": "8e96ee3633daad8d",
+      "id": "0655cc4352ec0236",
       "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
     },
     {
       "type": "markdown",
-      "id": "6ed4eb9dbffda344",
+      "id": "68ca22842ff0631a",
       "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
     }
   ],
@@ -70,67 +70,67 @@
         "story": [
           {
             "type": "markdown",
-            "id": "6f06129b269760c9",
+            "id": "8a17f545719ebda9",
             "text": "# 🪩 The Holon Layer"
           },
           {
             "type": "markdown",
-            "id": "24c7c273da247d73",
+            "id": "8fe64a9fe1dc8584",
             "text": "This is the plan and the contract for the holon layer: how the results this\nharness produces become **interoperable, verifiable units** that other systems\n— the model instruments, the graph, `hologram-technologies` — can each speak,\ncarry, and check without trusting anyone.\n\nIt is written to the repo's own standard. In particular it makes, up front, the\ncall that `ADOPTION.md` demands: **is this a harness or an auditor?** — and\nanswers *auditor*, with the reason."
           },
           {
             "type": "markdown",
-            "id": "8826775cab8a5cb6",
+            "id": "c6da0dfd761ce514",
             "text": "## What a holon is\n\nA **holon** is a whole that is also a part: a self-contained record that can\nstand alone *and* compose into a larger mesh. Here, a holon is any object that\ncarries a **κ-label**:\n\n```\nκ = \"sha256:\" + sha256( canonicalJson( object with the κ field removed ) )\n```\n\nwhere `canonicalJson` is JSON with recursively sorted keys and no whitespace.\nThis is the City Key / sigil **Law L5** convention, unchanged: *a κ-label is\nnever trusted, only re-derived.* The label is excluded from its own preimage so\nthe object can carry its own address.\n\nThe harness already mints holons. Every one of these is a κ-addressed holon\ntoday:\n\n- an **artefact** (`artefact.v1`) — a sealed, evidence-bearing result;\n- a **runtime feed** (`runtime-feed.v1`) — a workshop's produced math;\n- anything else a producer stamps with `kappaOf(...)` from `tools/kappa.mjs`.\n\n`tools/kappa.mjs` is the single reference implementation of the κ law. It is a\n**shared primitive**, not a redundant auditor: content-addressing requires that\nevery producer compute the *identical* κ, so the mint, the feed, the console,\nand the auditor all import one function. (This is the opposite of the\nindependent-copy idiom used for *gate* logic, where divergence is a feature —\nthere, two auditors catch each other; here, two κ functions would just break\naddressing. The independent check for κ lives in the test layer and in the\nlanguage-agnostic spec, which has been cross-derived in a second language.)"
           },
           {
             "type": "markdown",
-            "id": "97b9a56c6485f66c",
+            "id": "2de55cef8091da04",
             "text": "## Edges: how holons compose\n\nA holon references another **by κ**. Two kinds of edge:\n\n- **Content edges** — a hash reference to bytes. An artefact's\n  `evidenceManifest` is exactly this: each entry maps a path to the sha256 of\n  its bytes. A content edge is *verified by re-hashing*; it needs no signature,\n  because the content is its own witness.\n- **Relational edges (VRC)** — a κ→κ reference between holons, possibly across\n  parties. Governed by the edge rule already in `universe/`:\n\n  > *A validated round proposes an edge. Only the counterparty's signature mints\n  > it.* An unsigned edge is a candidate, not a result — a mirage at the social\n  > layer.\n\n  **IMPLEMENTED** (`tools/vrc.mjs`): an edge is `{ target: <κ>, relation, by:\n  <did:key>, sig }`. The signature is real **ed25519** (`node:crypto`, zero\n  dependencies) over the exact tuple `(source κ, target κ, relation)` — move any\n  of the three and it no longer verifies. The signer is content-addressed too:\n  an ed25519 public key encoded as a proper `did:key:z6Mk…` (multicodec\n  `0xed01` + base58btc), so the whole edge is self-certifying and interoperates\n  with the DID ecosystem. Keys are ephemeral by design (the amnesia protocol):\n  sign once, keep the signature and the public `did:key`, discard the private\n  key — the signature outlives the key.\n\nA relational edge is verified in two deterministic steps: both κ endpoints\nre-derive, and the signature checks against the signer's `did:key`. A valid\nsignature **mints** the edge; no signature is a **proposal**; a signature that\ndoes not verify is a **failure**. All three are facts, not judgements.\n\n**Edges are relations, not identity.** A holon's `edges` field is excluded from\nits own κ preimage (`tools/kappa.mjs`), so a holon's address stays stable as it\naccrues signed edges — otherwise signing an edge whose source is this holon's κ\nwould change that very κ.\n\n### The identity application\n\nA signed relational edge is exactly a **delegation between agents**, and that is\nthe substrate the House of Archon identity runtime seats on (`../hearthold_mage/\nSLOT.md`): a `did:cid` identity is a holon (content-addressed), a `did:key` is\nits signer, and a delegation — *this agent may act for that one* — is a signed\nκ→κ edge the mesh auditor mints or rejects. `did:cid` = a κ-address; the VRC =\nthe delegation. The identity runtime is this layer, named for people."
           },
           {
             "type": "markdown",
-            "id": "f20b631fc486839e",
+            "id": "ca0699e7045339f8",
             "text": "## The call: this layer is an AUDITOR, not a harness\n\n`ADOPTION.md` step 0: *count your claims.* If everything a thing asserts can be\nenumerated and checked exhaustively, write an auditor and stop — you get\ncertainty for zero adversarial cost. Reach for a harness only when the claim\nspace is too large to check and generated candidates must survive *adversarial*\nscrutiny.\n\nA holon's **interoperability claims are all enumerable**:\n\n- does its κ re-derive from its bytes? — one hash.\n- do its content edges resolve and re-hash? — one hash each.\n- do its relational edges' endpoints re-derive and signatures check? — bounded.\n\nThere is nothing to *tune to*: you cannot craft a holon whose κ re-derives to a\nvalue it does not have. So the mesh verifier is a deterministic, agent-free\n**auditor** — `tools/holon_audit.mjs` — exactly as `universe/audit.mjs` is. A\nharness here would spend real tokens sampling a space you can check in full for\nfree; it is the universe-builder mistake, and this document exists partly to not\nrepeat it.\n\n**Where the harness still lives:** a holon's *substantive* claim — \"this\ncircuit is 40% smaller and still correct\", \"this guide lost no fact\" — is large\nand adversarial, and *that* is verified by the harness that **minted** the\nholon. So the division is clean and total:\n\n> **the harness mints the holons; the auditor verifies the mesh.**"
           },
           {
             "type": "markdown",
-            "id": "f64784e94835aff8",
+            "id": "64a0c83fc9848e38",
             "text": "## `tools/holon_audit.mjs` — the mesh auditor\n\n```\nnode tools/holon_audit.mjs <dir>\n```\n\nWalks a directory for holon records, and for each one deterministically:\n\n1. **κ integrity** — re-derives `kappaOf(holon)` and asserts it equals the\n   stored κ. A mismatch is a tampered or mis-addressed holon; the run fails.\n2. **content edges** — for every `evidenceManifest` entry, resolves the file\n   and re-hashes it, asserting the bytes still carry the recorded hash.\n3. **relational edges** — for every κ→κ reference, asserts the target κ is\n   present in the mesh (or flagged external) and re-derives; reports signed\n   (minted) vs unsigned (proposed) per the edge rule.\n\nIt prints `HOLON AUDIT PASS` with a census, or names every corpse and exits\nnon-zero. Zero dependencies, zero agents. `tools/check.mjs` runs it over every\ninstance that has minted holons, so the whole shipped mesh is re-verified in one\ncommand."
           },
           {
             "type": "markdown",
-            "id": "ab538545bdf2f8ef",
+            "id": "ce32be6b0b3a1087",
             "text": "## The path to `hologram-technologies`\n\nThe site is the *application* and a separate property (its door is yours). It\ndoes not need a copy of the harness — it needs the **contract**: this file, plus\n`tools/kappa.mjs` and `tools/holon_audit.mjs`, vendored or imported. A holon\nminted here re-derives there byte-for-byte, because both compute one κ. That is\nthe interoperability, and it is why the primitives stay in one repo while the\nsites multiply."
           },
           {
             "type": "markdown",
-            "id": "d52812b62cb4b480",
+            "id": "41455ac5ba7b9d42",
             "text": "## Order of work\n\n**Done — the κ law is baked into the runtime:**\n\n1. `tools/kappa.mjs` — the single κ primitive. The mint, feed, and console all\n   import it; the three drifting copies are gone, and the refactor kept every\n   existing κ byte-identical.\n2. `tools/holon_audit.mjs` — the mesh auditor. Wired into `check.mjs` over every\n   instance's minted holons and pinned by a tamper test (flip one evidence byte,\n   the mesh no longer re-derives).\n3. **κ as state, first cut** — the runtime feed self-addresses: `buildFeed`\n   stamps `κ = kappaOf(feed)`, so a state snapshot is a verifiable holon. And\n   the universe head carries a `holon_layer` section (`universe/universe.json`),\n   so the corpus knows κ is the interoperability substrate.\n4. This spec.\n\n**Next — κ as the *whole* runtime state, and across the corpus:**\n\n5. **Every runtime object a holon.** `frontier.json`, each `verdict`, each\n   `gap` gains its own κ, so an entire run is a mesh of content-addressed holons\n   the auditor verifies end to end. Because `kappa.mjs` lives in the shared core,\n   this reaches **every instance — lexon, the pools, hearthold — the moment it\n   re-bundles**: one κ, computed the same everywhere, as the state.\n6. **Relational edges with real signatures** (the VRC) — **DONE** (`tools/vrc.mjs`):\n   ed25519 signed κ→κ edges, signer as `did:key`, verified by the mesh auditor\n   (mint / propose / fail), pinned by a forge-detection test. Cross-party holon\n   interop is now verifiable, not just single-party integrity — and this is the\n   `did:cid` delegation substrate the hearthold identity runtime seats on.\n7. **Map the layer across the corpus** — a κ / holon node and edges in the\n   spellweb graph, a reference in the docs, and the skill, so the corpus speaks\n   one content-addressing law. (Cross-repo; the First Person's door.)\n\n```\n(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\n```"
           },
           {
             "type": "markdown",
-            "id": "a723c2f626b48176",
+            "id": "abacf6d54b7f30eb",
             "text": "# Assets"
           },
           {
-            "id": "b9c4530b828634cf",
+            "id": "b85ca05ba4e821fd",
             "type": "assets",
             "text": "the-holon-layer"
           },
           {
             "type": "markdown",
-            "id": "8e96ee3633daad8d",
+            "id": "0655cc4352ec0236",
             "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
           },
           {
             "type": "markdown",
-            "id": "6ed4eb9dbffda344",
+            "id": "68ca22842ff0631a",
             "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
           }
         ]
       },
-      "date": 1787079851575
+      "date": 1787093563946
     }
   ]
 }

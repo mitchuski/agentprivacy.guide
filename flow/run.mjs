@@ -25,6 +25,7 @@ const BUILDERS = {
   crosslinks: B('crosslinks.mjs'),        // prev/next on sequential acts (tomes + spellbooks)
   'skills-cleanup': B('skills-cleanup.mjs'), // linkify reverts + dup-block removal on skill pages
   proverbs: B('proverbs.mjs'),            // the grimoire's ~177 proverbs as grouped collections
+  'vta-lane': B('vta-lane.mjs'),          // the Verifiable Trust Agent lane (harness · guide · dtg pages, manifest-first)
 };
 
 const [cmd, arg] = process.argv.slice(2);

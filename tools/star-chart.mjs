@@ -10,6 +10,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
+import crypto from 'node:crypto';
+// Phase 0 (PLAN_KNOWLEDGE_GRAPH_TO_VTA): a page may carry a 'posture' story item —
+// the 6-bit lattice vertex it advances. tools/lattice.mjs is the one bit canon.
+import { readPostureItem } from './lattice.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(os.homedir(), 'transmediale');
@@ -38,11 +42,18 @@ const LOCAL = [
   { id: 'city',       dir: 'city.localhost',         sub: 'city',              strand: 'value' },
   { id: 'lexon',      dir: 'lexon.localhost',        sub: 'lexon',             strand: 'value' },
   { id: 'myterms',    dir: 'myterms.localhost',      sub: 'myterms',           strand: 'value' },
+  { id: 'vpk',        dir: 'vpk.localhost',          sub: 'vpk',               strand: 'protection' },
 ];
 // remote federation neighbours — still read live (FedWiki runs permissive CORS)
 const REMOTE = [
+  { host: 'skills.agentprivacy.ai', url: 'https://skills.agentprivacy.ai', strand: 'delegation' }, // the skill garden — serves a fedwiki-shaped sitemap + CORS
   { host: 'lattice.myth.garden',       url: 'https://lattice.myth.garden',       strand: 'connection' },
   { host: 'mitch.lattice.myth.garden', url: 'https://mitch.lattice.myth.garden', strand: 'connection' },
+  // the City's board (cityofmages/mages-city/DISCOVERY.json · door star-chart→hall): the Hall
+  // roster as a remote federation site, so admitted agents seat as stars. The wiki reflects
+  // the request Origin on its JSON (verified in the twin). OFF until the host answers —
+  // bake with CHART_MAGES_CITY=1 once mages.city is live; the domain is parked today.
+  ...(process.env.CHART_MAGES_CITY === '1' ? [{ host: 'wiki.mages.city', url: 'https://wiki.mages.city', strand: 'delegation' }] : []),
 ];
 
 const asSlug = s => s.replace(/\s/g, '-').replace(/[^A-Za-z0-9-]/g, '').replace(/^-+|-+$/g, '').toLowerCase();
@@ -55,39 +66,44 @@ const asSlug = s => s.replace(/\s/g, '-').replace(/[^A-Za-z0-9-]/g, '').replace(
 const GUIDE_LABS = {
   meta: {
     program: 'guide to agentprivacy · the Star Chart',
-    axisCanon: 'game42 data/game-of-42.json axis colours; six stratum-1 roots of the 64-vertex sovereignty lattice',
-    seating: 'each federation site is seated on its axis strand (tools/star-chart.mjs LOCAL table)',
-    lineage: 'generalised from the improbable engine lab seating, 2026-08-18',
+    axisCanon: 'game42 data/game-of-42.json axis colours AND lattice vertices; six stratum-1 roots of the 64-vertex sovereignty lattice. `latticeAxisVertex` is canon (AXIOMS A1); `seat` is torus placement only -- never compute a vertex from it.',
+    seating: 'each federation site is seated on its axis strand (tools/star-chart.mjs LOCAL table); a page that carries a posture item (tools/posture.mjs) seats at its OWN vertex instead — the page field overrides the site strand',
+    lineage: 'generalised from the improbable engine lab seating, 2026-08-18; page-level posture 2026-09-05 (PLAN_KNOWLEDGE_GRAPH_TO_VTA Phase 0)',
   },
   strands: [
-    { id: 'protection', bit: 0, lab: 'The Gates', steward: 'the Swordsman ⚔️',
+    { id: 'protection', seat: 0, latticeAxisVertex: 32, lab: 'The Gates', steward: 'the Swordsman ⚔️',
       theme: 'the boundary layer — trust graphs, zero-knowledge predicates, the KYRA checkpoint, the research spine',
       axis: 'protection', force: 'Protect ⚔️', hue: '#E0A526',
       why: 'dtg · research · kyra — where the right to act is earned' },
-    { id: 'delegation', bit: 1, lab: 'The Skills', steward: 'the Mage 🧙',
+    { id: 'delegation', seat: 1, latticeAxisVertex: 16, lab: 'The Skills', steward: 'the Mage 🧙',
       theme: 'the forkable skill library and its mouse rendering — what the agents carry',
       axis: 'delegation', force: 'Project 🧙', hue: '#2563EB',
       why: 'skill · mouse — agency over the tools' },
-    { id: 'compute', bit: 2, lab: 'The Harness', steward: 'soulbae 🧙 ⊥ soulbis ⚔️',
+    { id: 'compute', seat: 2, latticeAxisVertex: 2, lab: 'The Harness', steward: 'soulbae 🧙 ⊥ soulbis ⚔️',
       theme: 'the dual-agent loop and the game engine — a validated result proposes an edge, only a signature mints it',
       axis: 'compute', force: null, hue: '#7C5CFF',
       why: 'harness · game42 — the loop that proves before it mints' },
-    { id: 'memory', bit: 3, lab: 'The Canon', steward: 'the Archivist 📚',
+    { id: 'memory', seat: 3, latticeAxisVertex: 8, lab: 'The Canon', steward: 'the Archivist 📚',
       theme: 'the knowledge graph and the spellbooks — the archive that carries lineage',
       axis: 'memory', force: 'Reflect 🪞', hue: '#E0568A',
       why: 'atlas · spellbooks — indexes and archives are continuity' },
-    { id: 'connection', bit: 4, lab: 'The Federation', steward: 'the guide 🏛',
+    { id: 'connection', seat: 4, latticeAxisVertex: 4, lab: 'The Federation', steward: 'the guide 🏛',
       theme: 'the forkable wiki commons — every site a sister, the hearth that feeds the lattice',
       axis: 'connection', force: 'Connect 🤝', hue: '#14B8A6',
       why: 'guide · tomes · grimoire · fieldguide · engine — federation is literally the network axis' },
-    { id: 'value', bit: 5, lab: 'The Agreements', steward: 'the City of Mages 🏛',
+    { id: 'value', seat: 5, latticeAxisVertex: 1, lab: 'The Agreements', steward: 'the City of Mages 🏛',
       theme: 'the agreement and value layer — MyTerms, the Lexon grammar, the City’s economy',
       axis: 'value', force: null, hue: '#2FB67C',
       why: 'city · lexon · myterms — value lives on the path' },
   ],
 };
 
-// ---- bake one site's sitemap (slug · title · date · links) ------------------
+// ---- bake one site's sitemap (slug · title · date · links · posture) --------
+// A page carrying a 'posture' item gains `vertex` (0-63) + `posture` (its six
+// bits, d1..d6) in the sitemap; the engine seats such a star at its own vertex.
+// `forkedFrom` names the chart id (never a dev host) the page was forked from,
+// when the journal says so — the later per-page record resolves its prior vertex.
+const DIR2ID = Object.fromEntries(LOCAL.map(s => [s.dir, s.id]));
 function bakeSitemap(site) {
   const dir = path.join(WIKI, site.dir, 'pages');
   if (!fs.existsSync(dir)) return null;
@@ -99,9 +115,52 @@ function bakeSitemap(site) {
       if (it.type === 'reference' && it.slug) { links[it.slug] = 1; continue; }
       for (const m of String(it.text || '').matchAll(/\[\[([^\]]+)\]\]/g)) links[asSlug(m[1])] = 1;
     }
-    map.push({ slug, title: page.title || slug, date: page.journal?.slice(-1)[0]?.date || 0, links });
+    const rec = { slug, title: page.title || slug, date: page.journal?.slice(-1)[0]?.date || 0, links };
+    const posture = readPostureItem(page);
+    if (posture) { rec.vertex = posture.vertex; rec.posture = posture.bits; if (posture.by) rec.by = posture.by; }
+    const fork = (Array.isArray(page.journal) ? page.journal : []).find(j => j.type === 'fork' && j.site);
+    if (fork) {
+      const host = String(fork.site).replace(/:\d+$/, '').toLowerCase();
+      // no dev-host names leave the farm: a charted farm host becomes its chart id;
+      // a public federation host stays; localhost / .local / bare IPs are dropped
+      const isDev = /(^|\.)localhost$|\.local$|^\d+\.\d+\.\d+\.\d+$|^[a-z0-9-]+$/.test(host);
+      const from = DIR2ID[host] || (isDev ? null : host);
+      if (from && from !== site.id) rec.forkedFrom = from;
+    }
+    map.push(rec);
   }
   return map;
+}
+
+// ---- Phase 0 · the per-page record the later PSI commits to -----------------
+// One row per baked page: { site, slug, vertex, postured, posture, sorted_links,
+// element, forkedFrom, priorVertex }. `vertex` is the posture when the page has
+// one, else the site strand's axis vertex (the default seating, made explicit).
+// `element` = sha256("<vertex>|<slug>|<sorted_links joined by ,>") — the PSI
+// element is never a bare vertex (plan §7: 64 values are brute-forceable), and
+// it is derived HERE so a human's walk and an agent's walk commit to the same
+// bytes. agentprivacy-mcp re-derives it with the same rule.
+const STRAND_VERTEX = Object.fromEntries(GUIDE_LABS.strands.map(s => [s.id, s.latticeAxisVertex]));
+export const elementOf = (vertex, slug, sortedLinks) =>
+  'sha256:' + crypto.createHash('sha256').update(`${vertex}|${slug}|${sortedLinks.join(',')}`).digest('hex');
+function pageRecords(baked) {
+  const bySiteSlug = new Map();
+  for (const { site, map } of baked) for (const pg of map) bySiteSlug.set(site.id + '/' + pg.slug, pg);
+  const rows = [];
+  for (const { site, map } of baked) for (const pg of map) {
+    const postured = pg.vertex != null;
+    const vertex = postured ? pg.vertex : (STRAND_VERTEX[site.strand] ?? 4);
+    const sorted_links = Object.keys(pg.links || {}).sort();
+    const row = { site: site.id, slug: pg.slug, vertex, postured, posture: pg.posture || null, sorted_links,
+      element: elementOf(vertex, pg.slug, sorted_links) };
+    if (pg.forkedFrom) {
+      row.forkedFrom = pg.forkedFrom;
+      const src = bySiteSlug.get(pg.forkedFrom + '/' + pg.slug);
+      if (src && src.vertex != null) row.priorVertex = src.vertex;   // prior_vertex_if_forked (when the source is charted + postured)
+    }
+    rows.push(row);
+  }
+  return rows;
 }
 
 // ---- patch the engine page for static seating -------------------------------
@@ -142,7 +201,6 @@ html = patch(html, [
 
   ['<div id="status">waking the hearth…</div>',
    `<div id="status">waking the hearth…</div>
-  <button id="infoBtn" title="about this chart — expand / minimise">📜 about</button>
   <article>The federation of the guide, redisplayed: every site's pages seated as
   stars on the 64-vertex sovereignty lattice, six strands winding the torus, links woven from the
   sitemaps at build time. A baked snapshot of the fedwiki space — the same improbable engine that
@@ -152,7 +210,10 @@ html = patch(html, [
   weave: the more links, the higher a page rides. The five crystals ringing the hearth are the
   axes' bit-flip bonds on the 64-vertex board. Click a strand to isolate it · click a page-star
   to walk it · shift+click opens the page here · ◌ focus clears the instruments · 📷 keepsake
-  saves the view with a City Key inside.</article>`],
+  saves the view with a City Key inside. A page that carries a <b>posture</b> — its six-bit
+  stance, written on the page itself — seats at its own vertex instead of its site's strand,
+  and walking between two such stars names the lattice move: succ, neg, bnot, a single flip,
+  or a jump flagged as such.</article>`],
 
   ['  @media (max-width:760px){ #legend{ width:210px } #controls{ width:190px } footer{ display:none } }',
    `  /* gradient text is clipped to the glyph box: the source's 0.95 line-height
@@ -162,9 +223,6 @@ html = patch(html, [
   header.top a.back:hover{ color:var(--ink); }
   header.top article{ max-width:560px; margin-top:8px; font-size:10.5px; line-height:1.55; color:var(--dim); display:none; }
   header.top article.open{ display:block; }
-  #infoBtn{ pointer-events:auto; margin-top:8px; background:rgba(120,140,220,0.07); border:1px solid var(--line);
-    color:var(--dim); border-radius:7px; font-size:10px; letter-spacing:0.04em; padding:3px 9px; cursor:pointer; font-family:inherit; }
-  #infoBtn:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
   /* every instrument panel folds to its emoji */
   .minbtn{ position:absolute; top:7px; right:7px; z-index:2; background:none; border:none; font-size:12px;
     cursor:pointer; opacity:0.6; padding:2px 4px; line-height:1; }
@@ -184,30 +242,57 @@ html = patch(html, [
     background:rgba(10,13,28,0.55); border:1px solid var(--line); color:var(--dim); cursor:pointer;
     backdrop-filter:blur(8px); }
   #zenbar button:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
-  body.zen header.top, body.zen .panel, body.zen footer, body.zen #tip{ display:none !important; }
+  /* run card — the walked page's information box rises as the circuit crosses it */
+  #runCard{ position:fixed; z-index:8; left:50%; bottom:84px; transform:translate(-50%, 16px);
+    max-width:300px; pointer-events:none; opacity:0; transition:opacity .35s ease, transform .35s ease;
+    background:var(--glass); border:1px solid rgba(255,210,122,0.45); border-radius:10px; padding:9px 13px;
+    font-size:11px; line-height:1.5; backdrop-filter:blur(9px); text-align:center; }
+  #runCard.show{ opacity:1; transform:translate(-50%, 0); }
+  #runCard b{ color:#ffe9c4; font-weight:500; }
+  #runCard .m{ color:var(--dim); font-size:9px; }
+  body.zen header.top, body.zen .panel, body.zen footer, body.zen #tip, body.zen #runCard{ display:none !important; }
   body.zen #zenbar{ opacity:0.3; }
   body.zen #zenbar:hover{ opacity:1; }
   /* mobile: the three glass panels collide on a phone — legend becomes a bottom
      chip-rail, controls tuck above it, the tracer HUD steps aside */
+  /* mobile: the panels no longer float — the rail and drawer place them (the
+     engine's own media query handles that). What is left here is the page
+     furniture around the canvas, plus keeping the chips readable in a narrow
+     drawer, where they stack rather than becoming a horizontal rail. */
   @media (max-width:760px){
     footer{ display:none }
-    header.top{ padding:14px 150px 0 16px }  /* right gap keeps the eyebrow clear of the zenbar */
+    header.top{ padding:52px 16px 0 16px }   /* the glyph bar owns the top-right */
     h1{ font-size:clamp(20px,6vw,30px) }
     #status{ font-size:9px }
-    #tracer{ display:none }
-    #controls{ top:auto; bottom:104px; right:10px; width:150px; padding:10px }
-    #zenbar{ left:auto; right:12px; top:12px; bottom:auto; transform:none }
-    #legend{ left:10px; right:10px; bottom:10px; width:auto; padding:10px }
-    #legend .foot{ display:none }
-    #chips{ display:flex; overflow-x:auto; gap:4px; padding-bottom:2px; -webkit-overflow-scrolling:touch }
-    .chip{ flex:none; padding:5px 7px }
-    .chip .nm span{ display:none }
+    /* the zenbar keeps its desktop seat at the bottom: the legend no longer
+       floats there, and the top-right belongs to the glyph bar */
+    .chip{ padding:5px 7px }
   }`],
 
-  ['const state = { fold:0, drift:!REDUCED, iso:null, strands:true, grid:true, pages:true, links:true, crystals:true };',
-   `const state = { fold:0, drift:!REDUCED, iso:null, strands:true, grid:true, pages:true, links:true, crystals:true };
+  // the public chart is compose-only: no control lane, so no localhost probe
+  ["  control: 'http://127.0.0.1:3130',",
+   "  control: '',   // baked: compose-only, never probes a visitor's loopback"],
+
+  ['const state = { fold:0, drift:!REDUCED, iso:null, sites:new Set(), strands:true, grid:true, pages:true, links:true, crystals:true };',
+   `const state = { fold:0, drift:!REDUCED, iso:null, sites:new Set(), strands:true, grid:true, pages:true, links:true, crystals:true };
 const HOSTPATH = ${JSON.stringify(HOSTPATH)}; // site id → snapshot subpath (baked by tools/star-chart.mjs)
-const SITESTRAND = ${JSON.stringify(SITESTRAND)}; // ?site= deep link → strand to isolate`],
+const SITESTRAND = ${JSON.stringify(SITESTRAND)}; // ?site= deep link → strand to isolate
+// ===== Phase 0 · the lattice on the chart (PLAN_KNOWLEDGE_GRAPH_TO_VTA) =====
+// A postured star carries its vertex; the move between two postured stars is
+// named: the three lattice operators first, then a single flip (a ∂M edge),
+// otherwise a multi-bit jump, flagged as such with the dimensions that changed.
+const LX = { succ:x=>(x+1)&63, neg:x=>(64-x)&63, bnot:x=>63-x };
+const DIMNAMES = ['protection','delegation','memory','connection','computation','value']; // d1..d6 = bit 5..0
+const vbits = x => x.toString(2).padStart(6,'0');
+function moveName(a,b){ if(a==null||b==null) return null; if(a===b) return 'stay';
+  const x=a^b, fl=DIMNAMES.filter((_,i)=>x&(32>>i));
+  if(b===LX.succ(a)) return 'succ 😊'; if(b===LX.neg(a)) return 'neg ⚔️'; if(b===LX.bnot(a)) return 'bnot 🧙';
+  return fl.length===1 ? 'flip '+fl[0] : 'jump ×'+fl.length+' ('+fl.join(' ')+')'; }
+function lastMove(){ const n=trail.pts.length; return n<2 ? null : moveName(trail.pts[n-2].vertex, trail.pts[n-1].vertex); }
+function postureTip(d){ if(d.vertex==null) return '';
+  const last = trail.pts.length ? trail.pts[trail.pts.length-1] : null;
+  const mv = (last && last!==d) ? moveName(last.vertex, d.vertex) : null;
+  return '<br><span class="m">V'+d.vertex+' '+vbits(d.vertex)+(mv?' · from V'+last.vertex+': <b>'+mv+'</b>':'')+'</span>'; }`],
 
   [`// transport: *.localhost sites go through the serve.mjs proxy (vhost farms have no CORS
 // need); remote sites with a url are fetched DIRECTLY — FedWiki federation runs on
@@ -256,6 +341,21 @@ const SITESTRAND = ${JSON.stringify(SITESTRAND)}; // ?site= deep link → strand
   ['const WINDINGS = [[1,0],[0,1],[1,1],[1,2],[2,1],[1,3]];',
    'const WINDINGS = [[1,0],[1,1],[1,2],[1,3],[1,4],[1,5]]; // (1, bit) — the winding is the axis bit'],
 
+  // glow — the additive bloom on the page-stars, toggleable like drift
+  ['    <button id="tDrift" class="on">drift</button>',
+   '    <button id="tDrift" class="on">drift</button>\n    <button id="tGlow" class="on">glow</button>'],
+
+  ["document.getElementById('tDrift').onclick = e=>{ state.drift=!state.drift; e.target.classList.toggle('on', state.drift); };",
+   `document.getElementById('tDrift').onclick = e=>{ state.drift=!state.drift; e.target.classList.toggle('on', state.drift); };
+if(state.glow === undefined) state.glow = true;
+document.getElementById('tGlow').classList.toggle('on', state.glow);
+document.getElementById('tGlow').onclick = e=>{ state.glow=!state.glow; e.target.classList.toggle('on', state.glow); applyGlow(); };
+function applyGlow(){
+  const mode = state.glow ? THREE.AdditiveBlending : THREE.NormalBlending;
+  for(const spr of DATA.stars){ spr.material.blending = mode; spr.material.needsUpdate = true; }
+  if(typeof runner !== 'undefined' && runner && runner.spr){ runner.spr.material.blending = mode; runner.spr.material.needsUpdate = true; }
+}`],
+
   // run your path — a light circuit along the walk, flaring the pages it visits
   ['<button id="cSave" title="keep this walk as a named constellation">✦ save</button>',
    '<button id="cRun" title="run your path — a light circuit walks your constellation, flaring each page">▶ run</button>\n    <button id="cSave" title="keep this walk as a named constellation">✦ save</button>'],
@@ -266,8 +366,9 @@ const SITESTRAND = ${JSON.stringify(SITESTRAND)}; // ?site= deep link → strand
   // focus mode + keepsake — clear the instruments / keep the image (City Key inside)
   ['<div id="tip"></div>',
    `<div id="tip"></div>
+<div id="runCard"></div>
 <div id="zenbar">
-  <button id="focusBtn" title="hide the instruments — just the shape (f toggles, Esc exits)">◌ focus</button>
+  <button id="focusBtn" title="hide the instruments — just the shape (Esc exits)">◌ focus</button>
   <button id="snapBtn" title="save the view as a PNG — a City Key travels inside it (iTXt citykey chunk)">📷 keepsake</button>
 </div>`],
 
@@ -297,8 +398,11 @@ const SITESTRAND = ${JSON.stringify(SITESTRAND)}; // ?site= deep link → strand
     const pts=[], bonds=[];
     const P = (c,r)=>[c*SPACING-HALF, r*SPACING-HALF];
     for(let r=0;r<N;r++) for(let c=0;c<N;c++) pts.push(...P(c,r), 0);
-    // the 32 bit-flip bonds of this axis: partner = index ^ 2^(bit mod 3)
-    const stride = 1 << (s.bit % 3), onU = s.bit < 3;
+    // the 32 bit-flip bonds of this axis: partner = index ^ 2^(seat mod 3).
+    // 'seat' is TORUS SEATING ONLY -- it is not the lattice bit. The lattice value
+    // is 'latticeAxisVertex' (game42 AXIOMS A1: protection 32 ... value 1).
+    // (quotes, not backticks: this comment lives inside a template literal)
+    const stride = 1 << (s.seat % 3), onU = s.seat < 3;
     for(let r=0;r<N;r++) for(let c=0;c<N;c++){
       const c2 = onU ? (c ^ stride) : c, r2 = onU ? r : (r ^ stride);
       if(c2 > c || r2 > r) bonds.push(...P(c,r), 0, ...P(c2,r2), 0);
@@ -318,6 +422,33 @@ const SITESTRAND = ${JSON.stringify(SITESTRAND)}; // ?site= deep link → strand
   // it rides off the surface. Hubs float; leaves hug the lattice.
   ['    u:u0+du, v:v0+dv, lift:0.05+h*0.09, week, baseScale: week?0.11:0.085 };',
    '    u:u0+du, v:v0+dv, lift:0.04+Math.min(Object.keys(pg.links||{}).length,12)/12*0.12, week, baseScale: week?0.11:0.085 };'],
+
+  // Phase 0 · posture seating: a page that carries a posture sits AT ITS VERTEX
+  // GEM (the 8×8 codex: low 3 bits → u, high 3 bits → v — the gem's own seat),
+  // jittered around it by its slug so siblings fan out rather than stack. A page
+  // with no posture keeps its site-strand seat. Seating reads the posture; height
+  // still reads the weave.
+  ['  const [u0,v0] = strandUV(s, t);',
+   '  const [u0,v0] = (pg.vertex!=null) ? [ (pg.vertex&7)/8*TAU, (pg.vertex>>3)/8*TAU ] : strandUV(s, t); // posture overrides strand'],
+  ['    date:pg.date, strand:s.id,',
+   '    date:pg.date, strand:s.id, vertex:(pg.vertex==null?null:pg.vertex), posture:pg.posture||null,'],
+
+  // the hover tip names the vertex, and the lattice move from the last walked star
+  ["      tip.innerHTML = `<b>${d.title}</b><br><span class=\"m\">${d.host} · ${s.lab}${age!==null?' · edited '+(age===0?'today':age+'d ago'):''}</span>`;",
+   "      tip.innerHTML = `<b>${d.title}</b><br><span class=\"m\">${d.host} · ${s.lab}${age!==null?' · edited '+(age===0?'today':age+'d ago'):''}</span>` + postureTip(d);"],
+
+  // the walk HUD names the move just made
+  ["    ? trail.steps + ' page' + (trail.steps>1?'s':'') + ' walked · the dance, not the stance'",
+   "    ? trail.steps + ' page' + (trail.steps>1?'s':'') + ' walked · ' + (lastMove() || 'the dance, not the stance')"],
+
+  // strand isolation reads the posture: a postured star belongs to every strand
+  // whose axis bit it carries; an unpostured star belongs to its site strand.
+  ['    const on = (!state.iso || d.strand===state.iso)',
+   '    const on = (!state.iso || (d.vertex!=null ? !!(d.vertex & ((DATA.byId[state.iso]||{}).latticeAxisVertex||0)) : d.strand===state.iso))'],
+
+  // a pathway step carries its vertex — the element the PSI later commits to is derived from it
+  [': trail.pts.map(d => ({ site: hnorm(d.host), slug: d.slug, title: d.title, strand: d.strand }))),',
+   ': trail.pts.map(d => ({ site: hnorm(d.host), slug: d.slug, title: d.title, strand: d.strand, vertex: d.vertex }))),'],
 
   // touch devices have no hover: a tap arrives with stale pointer coords, so no
   // star is ever "hovered" — re-pick from the tap point before deciding.
@@ -372,16 +503,21 @@ function restorePalette(){
 document.getElementById('palReset').onclick = () => { localStorage.removeItem(PALKEY); location.reload(); };
 
 // ===== fold each instrument to its emoji =====
+// Superseded by the rail + drawer (the engine relocates every panel into one
+// popout at boot). This block runs AFTER that relocation, so it must not
+// re-attach the fold buttons or reapply a stored 'min' — a folded panel inside
+// the drawer would render as an empty section. Kept, guarded, for any panel the
+// drawer did not claim, and for charts built before the drawer existed.
 const PKEY = 'chart-panels';
 const pstate = (() => { try{ return JSON.parse(localStorage.getItem(PKEY)) || {}; }catch{ return {}; } })();
 const psave = () => localStorage.setItem(PKEY, JSON.stringify(pstate));
-const art = document.querySelector('header.top article');
-const infoBtn = document.getElementById('infoBtn');
-const setInfo = open => art.classList.toggle('open', open);
-infoBtn.onclick = () => { setInfo(!art.classList.contains('open')); pstate.info = art.classList.contains('open') ? 0 : 1; psave(); };
-setInfo(pstate.info !== undefined ? !pstate.info : innerWidth > 760);
+const inDrawer = el => !!(el && el.closest && el.closest('#drawer'));
+// The header no longer carries an about button — 📜 in the glyph bar opens the
+// same text, and a second control under the title was one too many.
 for(const [id, emo, name] of [['legend','🧵','the strands'], ['controls','🎛️','the instrument'], ['tracer','👣','the walk']]){
   const p = document.getElementById(id);
+  if(!p || inDrawer(p)) continue;                 // the drawer owns it now
+  p.classList.remove('min');
   const b = document.createElement('button');
   b.className = 'minbtn'; b.textContent = emo; b.title = name + ' — minimise / expand';
   b.onclick = () => { p.classList.toggle('min'); pstate[id] = p.classList.contains('min') ? 1 : 0; psave(); };
@@ -401,11 +537,26 @@ runBtn.onclick = () => {
   runner.on = !runner.on; runner.dist = 0; runner.lastSeg = -1;
   runner.spr.visible = runner.on;
   runBtn.classList.toggle('on', runner.on);
+  if(!runner.on) runCardHide();
 };
 function flareStar(d){
   const spr = DATA.stars.find(s => s.userData === d);
   if(spr) runner.flares.push({ spr, life: 1 });
 }
+// the run card — as the circuit crosses a page-star, its information box rises
+const runCard = document.getElementById('runCard');
+var runCardTimer = null;
+function runCardShow(d){
+  if(!runCard || !d) return;
+  const s = DATA.byId[d.strand];
+  runCard.innerHTML = '<b>' + d.title + '</b><br><span class="m">' + d.host + (s ? ' · ' + s.lab : '') + '</span>';
+  runCard.classList.remove('show');
+  void runCard.offsetWidth;                 // restart the rise for every star
+  runCard.classList.add('show');
+  clearTimeout(runCardTimer);
+  runCardTimer = setTimeout(() => runCard.classList.remove('show'), 2600);
+}
+function runCardHide(){ clearTimeout(runCardTimer); if(runCard) runCard.classList.remove('show'); }
 function runnerTick(dt){
   if(!runner) return;   // frames before module evaluation reaches the runner init
   // decay star flares back to their base scale
@@ -428,16 +579,20 @@ function runnerTick(dt){
   if(i !== runner.lastSeg){                          // crossing into a segment flares its start star
     runner.lastSeg = i;
     flareStar(trail.pts[i]);
-    if(i === segs.length - 1) flareStar(trail.pts[i + 1]);
+    runCardShow(trail.pts[i]);
+    if(i === segs.length - 1){ flareStar(trail.pts[i + 1]); runCardShow(trail.pts[i + 1]); }
   }
 }
 
 // ===== focus mode — clear the instruments, keep the shape =====
 const setZen = on => document.body.classList.toggle('zen', on);
 document.getElementById('focusBtn').onclick = () => setZen(!document.body.classList.contains('zen'));
+// No single-letter shortcut. It used to be 'f', and it fired from inside the
+// pathway search box — typing the letter blanked the screen. The ◌ focus button
+// is the only way in; Escape still leaves, guarded so it does not fire while
+// someone is typing (typingInField is defined with the drawer).
 addEventListener('keydown', e => {
-  if(e.key === 'Escape') setZen(false);
-  else if((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey) setZen(!document.body.classList.contains('zen'));
+  if(e.key === 'Escape' && !typingInField(e)) setZen(false);
 });
 
 // ===== keepsake — the view as a PNG with a City Key inside (iTXt "citykey") =====
@@ -467,7 +622,7 @@ document.getElementById('snapBtn').onclick = () => {
     sites: new Set(DATA.stars.map(s => s.userData.host)).size,
     pages: DATA.stars.length, links: DATA.links.length,
     strand: state.iso || 'all', fold: Number(state.fold.toFixed(3)),
-    walk: trail.pts.map(d => ({ site: d.host, slug: d.slug })), T: Number(trail.value.toFixed(1)),
+    walk: trail.pts.map(d => ({ site: d.host, slug: d.slug, vertex: d.vertex })), T: Number(trail.value.toFixed(1)),
     palette: Object.fromEntries(DATA.strands.map(s => [s.id, s.hue])), // your colors ride in the key
     seal: '(⚔️⊥⿻⊥🧙)😊'
   };
@@ -487,8 +642,8 @@ for (const v of ['three.module.min.js', 'OrbitControls.js'])
   fs.copyFileSync(path.join(SRC, 'vendor', v), path.join(OUT, 'vendor', v));
 fs.writeFileSync(path.join(OUT, 'data', 'labs.json'), JSON.stringify(GUIDE_LABS, null, 1));
 
-let sites = 0, pages = 0;
-const manifest = [];
+let sites = 0, pages = 0, postured = 0;
+const manifest = [], baked = [];
 for (const site of LOCAL) {
   const map = bakeSitemap(site);
   if (!map || !map.length) { console.log(`  · ${site.id}: no pages — skipped`); continue; }
@@ -496,11 +651,25 @@ for (const site of LOCAL) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'sitemap.json'), JSON.stringify(map));
   manifest.push({ host: site.id, strand: site.strand });
-  sites++; pages += map.length;
+  baked.push({ site, map });
+  sites++; pages += map.length; postured += map.filter(p => p.vertex != null).length;
 }
+// the per-page record (Phase 0) — what an agent reads, what a PSI commits to
+const records = pageRecords(baked);
+fs.writeFileSync(path.join(OUT, 'data', 'pages.json'), JSON.stringify({
+  kind: 'guide.pages/1',
+  note: 'One row per baked page. vertex = the page posture when it carries one (postured:true), else the site strand axis vertex. '
+    + 'element = sha256("<vertex>|<slug>|<sorted_links joined by ,>") — the PSI element; never a bare vertex. '
+    + 'priorVertex = the vertex of the page this one was forked from, when that source is charted and postured. '
+    + 'Bit canon d1 protection=32 · d2 delegation=16 · d3 memory=8 · d4 connection=4 · d5 computation=2 · d6 value=1.',
+  baked: new Date().toISOString(),
+  count: { sites, pages, postured, vertices: new Set(records.filter(r => r.postured).map(r => r.vertex)).size },
+  pages: records,
+}, null, 0));
 fs.writeFileSync(path.join(OUT, 'data', 'wiki-sites.json'), JSON.stringify({
   note: 'BAKED — generated by tools/star-chart.mjs from the local farm at snapshot time. ' +
     'Hosts are the static snapshot\'s site ids; each sitemap lives at data/sitemaps/<id>/system/sitemap.json. ' +
+    'A sitemap row may carry vertex (0-63) + posture (six bits, d1..d6) from the page\'s posture item, and forkedFrom (a chart id). ' +
     'Remote sites with a url are still read live.',
   // seat EVERY page — the live engine's 24-per-site cap is for reading a farm
   // live; the baked chart charts the whole universe.
@@ -508,4 +677,74 @@ fs.writeFileSync(path.join(OUT, 'data', 'wiki-sites.json'), JSON.stringify({
   sites: [...manifest, ...REMOTE],
 }, null, 1));
 
-console.log(`✓ star chart baked → site/star-chart/ — ${sites} local sites · ${pages} pages in the sitemaps · +${REMOTE.length} remote live`);
+// ---- VPKB: the pathway lane -------------------------------------------------
+// The chart's constellations double as bounded-disclosure primitives (see
+// ~/.claude/plans/vpkb-pathway-grants.md). Two things ride along:
+//
+//   sites.json  — the id↔farm-host table lives on the farm and is refreshed FROM
+//                 this file, so the two can never drift. It is written to the
+//                 farm, never into site/ — no dev-host names in the public page.
+//   data/vpkb/  — the search core and the lexical index, so the public chart can
+//                 SUGGEST pathways in the browser with no server at all. Vectors
+//                 are deliberately not baked: they are large and the lexical
+//                 floor is what makes the static page work everywhere.
+const VPKB = path.join(os.homedir(), 'vpk', 'pathways');   // code
+const VPKB_INDEX = path.join(WIKI, '.vpk', 'index');       // machine-local state
+if (fs.existsSync(VPKB)) {
+  // refresh the farm's site table from LOCAL — anti-drift, one direction only
+  const sitesFile = path.join(VPKB, 'sites.json');
+  if (fs.existsSync(sitesFile)) {
+    const doc = JSON.parse(fs.readFileSync(sitesFile, 'utf8'));
+    const known = new Map(doc.sites.map(s => [s.host, s]));
+    for (const s of LOCAL) {
+      const row = known.get(s.dir);
+      if (row) Object.assign(row, { id: s.id, sub: s.sub, strand: s.strand, charted: true });
+      else doc.sites.push({ id: s.id, host: s.dir, sub: s.sub, strand: s.strand, charted: true });
+    }
+    for (const [host, row] of known) if (!LOCAL.some(s => s.dir === host)) row.charted = false;
+    fs.writeFileSync(sitesFile, JSON.stringify(doc, null, 1));
+  }
+
+  const idxSrc = VPKB_INDEX;
+  const vout = path.join(OUT, 'data', 'vpkb');
+  fs.mkdirSync(path.join(vout, 'index'), { recursive: true });
+  fs.copyFileSync(path.join(VPKB, 'search.js'), path.join(vout, 'search.js'));
+  const manifest = [];
+  let deepBytes = 0;
+  if (fs.existsSync(idxSrc)) {
+    for (const s of LOCAL) {
+      const f = path.join(idxSrc, s.id + '.json');
+      if (!fs.existsSync(f)) continue;
+      fs.copyFileSync(f, path.join(vout, 'index', s.id + '.json'));
+      const ix = JSON.parse(fs.readFileSync(f, 'utf8'));
+      const row = { site: ix.site, strand: ix.strand, pages: ix.N, built: ix.built };
+      // the dense index rides along when it exists — the page fetches it only if
+      // someone turns deep search on, so it costs nothing to a normal visit
+      const df = path.join(idxSrc, s.id + '.deep.json');
+      if (fs.existsSync(df)) {
+        fs.copyFileSync(df, path.join(vout, 'index', s.id + '.deep.json'));
+        deepBytes += fs.statSync(df).size;
+        row.deep = true;
+      }
+      manifest.push(row);
+    }
+  }
+  fs.writeFileSync(path.join(vout, 'index', 'manifest.json'), JSON.stringify({
+    note: 'Lexical BM25 index over the local knowledge-base fedwiki, baked for in-browser pathway '
+      + 'suggestion. Built by ~/.wiki/vpkb/index.js; the same file the CLI and the live chart read.',
+    sites: manifest,
+  }, null, 1));
+  const kb = manifest.length
+    ? Math.round(manifest.reduce((a, m) => a + fs.statSync(path.join(vout, 'index', m.site + '.json')).size, 0) / 1024)
+    : 0;
+  const dmb = Math.round(deepBytes / 1024 / 102.4) / 10;
+  console.log(`✓ vpkb baked → data/vpkb/ — search core + ${manifest.length} site indexes `
+    + `(${manifest.reduce((a, m) => a + m.pages, 0)} pages, ${kb}KB) · pathways suggest in-browser`
+    + (deepBytes ? `
+  + deep index ${dmb}MB (${manifest.filter(m => m.deep).length} sites) — fetched only when deep search is turned on` : ''));
+} else {
+  console.log('· vpkb lane not installed on this farm — chart bakes without pathway suggestion');
+}
+
+console.log(`✓ star chart baked → site/star-chart/ — ${sites} local sites · ${pages} pages in the sitemaps · +${REMOTE.length} remote live`
+  + `\n  · posture: ${postured} pages seat at their own vertex (data/pages.json carries the per-page record for all ${records.length})`);

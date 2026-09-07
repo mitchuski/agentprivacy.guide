@@ -26,6 +26,65 @@
 
   .panel{ position:fixed; z-index:6; background:var(--glass); border:1px solid var(--line); border-radius:14px;
     padding:14px; backdrop-filter:blur(10px); }
+  /* ===== the glyph bar + stacking drawer ===================================
+     Five instruments outgrew a canvas with floating panels on all four corners.
+     The bar across the top picks what is open; the drawer on the right stacks
+     whatever is open, in a fixed order, so two instruments can be watched at
+     once without either moving. Panels are RELOCATED at boot, not rewritten —
+     every handler that already knew where its buttons were still does. */
+  #rail{ position:fixed; right:18px; top:18px; z-index:9; display:flex; gap:6px;
+    padding:5px; border-radius:14px; background:rgba(10,13,28,0.5);
+    border:1px solid var(--line); backdrop-filter:blur(10px); }
+  #rail button{ width:34px; height:34px; border-radius:10px; cursor:pointer; font-size:14px; line-height:1;
+    background:none; border:1px solid transparent; color:var(--dim);
+    transition:all .16s; display:grid; place-items:center; }
+  #rail button:hover{ color:var(--ink); background:rgba(120,140,220,0.1); }
+  #rail button.on{ border-color:rgba(255,210,122,0.5); background:rgba(255,210,122,0.12);
+    box-shadow:0 0 14px rgba(255,210,122,0.16); }
+  #rail .railx{ width:auto; padding:0 9px; font-size:9px; letter-spacing:0.1em; opacity:0; pointer-events:none; }
+  #rail.any .railx{ opacity:1; pointer-events:auto; }
+
+  #drawer{ position:fixed; right:18px; top:64px; bottom:18px; width:340px; z-index:8;
+    display:none; flex-direction:column; background:var(--glass); border:1px solid var(--line);
+    border-radius:16px; backdrop-filter:blur(14px); box-shadow:0 14px 50px rgba(0,0,0,0.34);
+    opacity:0; transform:translateX(10px); transition:opacity .18s ease, transform .18s ease; }
+  #drawer.open{ display:flex; opacity:1; transform:none; }
+  #drawerBody{ flex:1; overflow-y:auto; overflow-x:hidden; padding:14px 15px 16px; }
+
+  /* the stack: hidden sections take no space, and every section after the first
+     visible one carries a rule above it, so the seams follow what is open */
+  #drawerBody section{ display:none; }
+  #drawerBody section.on{ display:block; }
+  #drawerBody section.on ~ section.on{ border-top:1px solid var(--line); margin-top:14px; padding-top:14px; }
+  #drawerBody section > header.sh{ display:flex; align-items:center; gap:8px; margin-bottom:11px; }
+  #drawerBody section > header.sh .g{ font-size:12px; line-height:1; }
+  #drawerBody section > header.sh .l{ flex:1; font-size:8.5px; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--dim); }
+  #drawerBody section > header.sh .sx{ background:none; border:none; color:var(--dim);
+    cursor:pointer; font-size:14px; line-height:1; padding:0 2px; }
+  #drawerBody section > header.sh .sx:hover{ color:var(--ink); }
+
+  /* inside the drawer a panel is content, not a window: it drops its own frame,
+     its fixed corner, and the right-alignment it only had because it used to
+     live in the bottom-right */
+  #drawer .panel{ position:static !important; width:auto !important; max-width:none !important;
+    background:none; border:none; backdrop-filter:none; border-radius:0; padding:0; display:block !important; }
+  #drawer .minbtn{ display:none; }
+  #drawer #tracer{ text-align:left; }
+  #drawer .cbar{ justify-content:flex-start; flex-wrap:wrap; }
+  #drawer .crow2{ justify-content:flex-start; }
+  #drawer #legend .foot{ margin-top:12px; }
+  #drawer article{ display:block !important; max-width:none; margin:0; font-size:10.5px;
+    line-height:1.6; color:var(--dim); }
+  #drawer #vpkb .vx{ display:none; }       /* each section header carries its own close */
+  #drawer #vpkb .vh{ display:none; }       /* the section header names it */
+  body.zen #rail, body.zen #drawer{ display:none !important; }
+
+  @media (max-width:760px){
+    #rail{ right:10px; top:10px; gap:3px; padding:4px; }
+    #rail button{ width:30px; height:30px; font-size:13px; }
+    #drawer{ left:10px; right:10px; top:52px; bottom:auto; width:auto; max-height:62vh; }
+  }
   #legend{ left:22px; bottom:22px; width:265px; }
   .sect{ font-size:9px; letter-spacing:0.26em; text-transform:uppercase; color:var(--dim); margin-bottom:10px; }
   .chip{ display:flex; align-items:center; gap:9px; padding:6px 8px; border-radius:9px; cursor:pointer;
@@ -37,6 +96,32 @@
   .chip .nm{ font-size:10.5px; letter-spacing:0.02em; line-height:1.3; }
   .chip .nm b{ font-weight:500; color:var(--ink); display:block; }
   .chip .nm span{ color:var(--dim); font-size:9px; }
+  /* why six — the scheme, stated once above the chips, and the selected strand
+     explained below them. The data carried `theme` and `why` from the start and
+     nothing ever showed them. */
+  /* site filter — 19 sites is more than six strands can separate, so this is the
+     finer sieve: pick the handful you are actually working with. */
+  #siteFilter .sfx{ font-size:8.5px; line-height:1.55; color:var(--dim); margin-bottom:9px; }
+  #sfList{ display:flex; flex-wrap:wrap; gap:4px; margin-top:9px; }
+  .sfc{ display:flex; align-items:center; gap:5px; padding:4px 7px; border-radius:8px; cursor:pointer;
+    border:1px solid var(--line); background:rgba(8,10,22,0.5); font-size:9px; color:var(--dim);
+    transition:all .14s; }
+  .sfc:hover{ color:var(--ink); }
+  .sfc .d{ width:7px; height:7px; border-radius:50%; background:currentColor; flex:none; opacity:0.55; }
+  .sfc.on{ color:var(--ink); border-color:rgba(255,210,122,0.5); background:rgba(255,210,122,0.1); }
+  .sfc.on .d{ opacity:1; box-shadow:0 0 8px currentColor; }
+  .sfc .n{ font-size:8px; opacity:0.6; font-variant-numeric:tabular-nums; }
+  #why6{ font-size:8.5px; line-height:1.6; color:var(--dim); margin-bottom:11px;
+    padding-bottom:10px; border-bottom:1px solid var(--line); }
+  #why6 b{ color:var(--ink); font-weight:500; }
+  #strandWhy{ display:none; margin-top:11px; padding-top:10px; border-top:1px solid var(--line); }
+  #strandWhy.on{ display:block; }
+  #strandWhy .sw-h{ font-size:10.5px; font-weight:500; margin-bottom:2px; }
+  #strandWhy .sw-k{ font-size:8.5px; color:var(--dim); margin-bottom:7px; }
+  #strandWhy .sw-t{ font-size:9.5px; line-height:1.55; color:var(--ink); margin-bottom:6px; }
+  #strandWhy .sw-w{ font-size:9px; line-height:1.5; color:var(--dim); }
+  #strandWhy .sw-g{ font-size:8px; color:var(--dim); margin-top:7px; padding-top:6px;
+    border-top:1px dashed var(--line); font-variant-numeric:tabular-nums; }
   #legend .foot{ margin-top:10px; padding-top:9px; border-top:1px solid var(--line); font-size:8.5px; color:var(--dim); line-height:1.5; }
   #legend .foot b{ color:#ffd6a0; font-weight:500; }
 
@@ -65,6 +150,66 @@
   .crow2 .cn{ color:#ffe6c2; cursor:pointer; }
   .crow2 .cn:hover{ text-decoration:underline; }
   .crow2 .cm{ color:var(--dim); font-size:8.5px; font-variant-numeric:tabular-nums; }
+  /* the pathway panel — compose · suggest · request. Opens on demand so the
+     torus is never crowded by an instrument nobody is using right now. */
+  #vpkb{ left:22px; top:96px; width:302px; display:none; text-align:left; padding:13px 15px 14px; }
+  #vpkb.open{ display:block; }
+  #vpkb .vh{ font-size:11px; letter-spacing:0.06em; color:#ffe6c2; margin-bottom:3px; }
+  #vpkb .vmode{ font-size:8.5px; color:var(--dim); line-height:1.5; margin-bottom:9px; }
+  #vpkb .vmode b{ color:#9ff0d4; font-weight:500; }
+  #vpkb .vmode i{ color:#ffd27a; font-style:normal; }
+  #vpkb .vx{ position:absolute; top:8px; right:10px; background:none; border:none; color:var(--dim);
+    font-size:14px; cursor:pointer; line-height:1; }
+  #vpkb .vx:hover{ color:var(--ink); }
+  #vpkb .vsec{ border-top:1px solid var(--line); margin-top:9px; padding-top:9px; }
+  #vpkb .vrow{ display:flex; gap:7px; align-items:center; margin-bottom:6px; }
+  #vpkb label{ flex:none; width:58px; font-size:8.5px; color:var(--dim); letter-spacing:0.04em; }
+  #vpkb input, #vpkb select{ flex:1; min-width:0; font-family:inherit; font-size:9.5px; padding:4px 7px;
+    border-radius:6px; background:rgba(8,10,22,0.6); border:1px solid var(--line); color:var(--ink); }
+  #vpkb input:focus, #vpkb select:focus{ outline:none; border-color:rgba(255,210,122,0.5); }
+  #vpkb #vTtl{ flex:0 0 52px; }
+  #vpkb .vbtns{ display:flex; gap:5px; align-items:center; margin-top:7px; }
+  #vpkb .vbtns button{ font-family:inherit; font-size:9px; letter-spacing:0.03em; padding:5px 9px; border-radius:7px;
+    cursor:pointer; background:rgba(120,140,220,0.07); border:1px solid var(--line); color:var(--dim); }
+  #vpkb .vbtns button:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
+  #vpkb .vbtns button:disabled{ opacity:0.35; cursor:default; }
+  #vpkb .vhint{ font-size:8px; color:var(--dim); }
+  #vpkb .vask{ margin-top:10px; font-size:9px; line-height:1.6; color:var(--dim); }
+  #vpkb .vask b{ color:#ffe9c4; font-weight:500; }
+  #vpkb .vask .s{ display:flex; justify-content:space-between; gap:8px; }
+  #vpkb .vask .s span:last-child{ color:#9ff0d4; font-variant-numeric:tabular-nums; }
+  /* the result list — what the search chose, and what it passed over. Both are
+     rows you can take or leave, because the line auto-selection draws is a guess
+     and the page just under it is often the one you wanted. */
+  #vResults{ margin-top:10px; }
+  #vResults .rh{ display:flex; justify-content:space-between; align-items:baseline; gap:8px;
+    font-size:8px; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim);
+    margin:12px 0 5px; padding-top:8px; border-top:1px solid var(--line); }
+  #vResults .rh:first-child{ margin-top:2px; padding-top:0; border-top:none; }
+  #vResults .rh b{ color:#9ff0d4; font-weight:500; letter-spacing:0; text-transform:none; font-size:9px; }
+  .vrow{ display:flex; gap:6px; align-items:flex-start; padding:4px 5px; border-radius:7px;
+    border:1px solid transparent; }
+  .vrow:hover{ border-color:var(--line); background:rgba(120,140,220,0.05); }
+  .vrow .tk{ flex:none; width:14px; height:14px; margin-top:2px; border-radius:4px; cursor:pointer;
+    border:1px solid var(--line); background:rgba(8,10,22,0.6); display:grid; place-items:center;
+    font-size:9px; line-height:1; color:#04050b; }
+  .vrow.on .tk{ background:linear-gradient(120deg,#ffd27a,#ffe6c2); border-color:transparent; }
+  .vrow .ord{ flex:none; width:13px; text-align:right; font-size:8px; color:#ffd27a; margin-top:3px;
+    font-variant-numeric:tabular-nums; }
+  .vrow .bd{ flex:1; min-width:0; cursor:pointer; }
+  .vrow .t{ font-size:10px; line-height:1.35; color:var(--dim); }
+  .vrow.on .t{ color:var(--ink); }
+  .vrow .m{ font-size:8px; color:var(--dim); opacity:0.8; margin-top:1px; }
+  .vrow.gone .t{ text-decoration:line-through; }
+  .vrow .mv{ flex:none; display:flex; flex-direction:column; gap:0; opacity:0; transition:opacity .12s; }
+  .vrow:hover .mv{ opacity:1; }
+  .vrow .mv button{ background:none; border:none; color:var(--dim); cursor:pointer; font-size:8px;
+    line-height:1; padding:1px 2px; }
+  .vrow .mv button:hover{ color:#ffd27a; }
+  #vDeep.on{ color:#04050b; background:linear-gradient(120deg,#ffd27a,#ffe6c2); border-color:transparent; }
+  #vpkb .vlog{ margin-top:9px; font-size:8.5px; line-height:1.55; color:var(--dim); max-height:132px; overflow:auto; }
+  #vpkb .vlog .ok{ color:#9ff0d4; } #vpkb .vlog .no{ color:#ff9d9d; }
+  @media (max-width:760px){ #vpkb{ left:10px; right:10px; width:auto; top:auto; bottom:10px; max-height:56vh; overflow:auto } }
   .crow2 .cx{ color:var(--dim); cursor:pointer; padding:0 3px; }
   .crow2 .cx:hover{ color:#e8523a; }
 
@@ -84,9 +229,6 @@
   header.top a.back:hover{ color:var(--ink); }
   header.top article{ max-width:560px; margin-top:8px; font-size:10.5px; line-height:1.55; color:var(--dim); display:none; }
   header.top article.open{ display:block; }
-  #infoBtn{ pointer-events:auto; margin-top:8px; background:rgba(120,140,220,0.07); border:1px solid var(--line);
-    color:var(--dim); border-radius:7px; font-size:10px; letter-spacing:0.04em; padding:3px 9px; cursor:pointer; font-family:inherit; }
-  #infoBtn:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
   /* every instrument panel folds to its emoji */
   .minbtn{ position:absolute; top:7px; right:7px; z-index:2; background:none; border:none; font-size:12px;
     cursor:pointer; opacity:0.6; padding:2px 4px; line-height:1; }
@@ -106,24 +248,31 @@
     background:rgba(10,13,28,0.55); border:1px solid var(--line); color:var(--dim); cursor:pointer;
     backdrop-filter:blur(8px); }
   #zenbar button:hover{ color:var(--ink); border-color:rgba(120,140,220,0.45); }
-  body.zen header.top, body.zen .panel, body.zen footer, body.zen #tip{ display:none !important; }
+  /* run card — the walked page's information box rises as the circuit crosses it */
+  #runCard{ position:fixed; z-index:8; left:50%; bottom:84px; transform:translate(-50%, 16px);
+    max-width:300px; pointer-events:none; opacity:0; transition:opacity .35s ease, transform .35s ease;
+    background:var(--glass); border:1px solid rgba(255,210,122,0.45); border-radius:10px; padding:9px 13px;
+    font-size:11px; line-height:1.5; backdrop-filter:blur(9px); text-align:center; }
+  #runCard.show{ opacity:1; transform:translate(-50%, 0); }
+  #runCard b{ color:#ffe9c4; font-weight:500; }
+  #runCard .m{ color:var(--dim); font-size:9px; }
+  body.zen header.top, body.zen .panel, body.zen footer, body.zen #tip, body.zen #runCard{ display:none !important; }
   body.zen #zenbar{ opacity:0.3; }
   body.zen #zenbar:hover{ opacity:1; }
   /* mobile: the three glass panels collide on a phone — legend becomes a bottom
      chip-rail, controls tuck above it, the tracer HUD steps aside */
+  /* mobile: the panels no longer float — the rail and drawer place them (the
+     engine's own media query handles that). What is left here is the page
+     furniture around the canvas, plus keeping the chips readable in a narrow
+     drawer, where they stack rather than becoming a horizontal rail. */
   @media (max-width:760px){
     footer{ display:none }
-    header.top{ padding:14px 150px 0 16px }  /* right gap keeps the eyebrow clear of the zenbar */
+    header.top{ padding:52px 16px 0 16px }   /* the glyph bar owns the top-right */
     h1{ font-size:clamp(20px,6vw,30px) }
     #status{ font-size:9px }
-    #tracer{ display:none }
-    #controls{ top:auto; bottom:104px; right:10px; width:150px; padding:10px }
-    #zenbar{ left:auto; right:12px; top:12px; bottom:auto; transform:none }
-    #legend{ left:10px; right:10px; bottom:10px; width:auto; padding:10px }
-    #legend .foot{ display:none }
-    #chips{ display:flex; overflow-x:auto; gap:4px; padding-bottom:2px; -webkit-overflow-scrolling:touch }
-    .chip{ flex:none; padding:5px 7px }
-    .chip .nm span{ display:none }
+    /* the zenbar keeps its desktop seat at the bottom: the legend no longer
+       floats there, and the top-right belongs to the glyph bar */
+    .chip{ padding:5px 7px }
   }
 </style>
 </head>
@@ -134,7 +283,6 @@
   <div class="eyebrow"><a class="back" href="/">← the guide</a> · six strands × the knowledge hearth</div>
   <h1>privacy guide star chart</h1>
   <div id="status">waking the hearth…</div>
-  <button id="infoBtn" title="about this chart — expand / minimise">📜 about</button>
   <article>The federation of the guide, redisplayed: every site's pages seated as
   stars on the 64-vertex sovereignty lattice, six strands winding the torus, links woven from the
   sitemaps at build time. A baked snapshot of the fedwiki space — the same improbable engine that
@@ -144,7 +292,10 @@
   weave: the more links, the higher a page rides. The five crystals ringing the hearth are the
   axes' bit-flip bonds on the 64-vertex board. Click a strand to isolate it · click a page-star
   to walk it · shift+click opens the page here · ◌ focus clears the instruments · 📷 keepsake
-  saves the view with a City Key inside.</article>
+  saves the view with a City Key inside. A page that carries a <b>posture</b> — its six-bit
+  stance, written on the page itself — seats at its own vertex instead of its site's strand,
+  and walking between two such stars names the lattice move: succ, neg, bnot, a single flip,
+  or a jump flagged as such.</article>
 </header>
 
 <div id="legend" class="panel">
@@ -165,6 +316,7 @@
     <button id="tLinks" class="on">links</button>
     <button id="tCrystals" class="on">crystals</button>
     <button id="tDrift" class="on">drift</button>
+    <button id="tGlow" class="on">glow</button>
   </div>
   <div class="row" style="margin:10px 0 0">
     <div class="lbl"><span>palette — yours to keep</span><span class="v" id="palReset" style="cursor:pointer" title="back to the canon hues">reset</span></div>
@@ -180,13 +332,68 @@
     <button id="cSave" title="keep this walk as a named constellation">✦ save</button>
     <button id="cClear" title="let the current walk go">clear</button>
     <button id="cExport" title="download all saved constellations as JSON">⬇ export</button>
+    <button id="cImport" title="import a pathway — relight someone else's walk on this torus">⬆ import</button>
+  </div>
+  <div class="cbar">
+    <button id="cSuggest" title="build a pathway by searching the knowledge base">🔎 suggest</button>
+    <button id="cGrant" title="ask for this walk to be served over the tailnet as a private knowledge base">🔑 request</button>
   </div>
   <div id="cList"></div>
 </div>
 
+<div id="vpkb" class="panel">
+  <button class="vx" title="close">×</button>
+  <div class="vh">🔑 pathway</div>
+  <div class="vmode" id="vMode">looking for the keeper…</div>
+
+  <div class="vrow"><label>name</label><input id="vName" placeholder="name this knowledge package"></div>
+
+  <div class="vsec" id="vSuggestBox">
+    <div class="vrow"><label>search</label><input id="vQuery" placeholder="what should this pathway teach?"></div>
+    <div class="vrow"><label>sites</label><input id="vSites" placeholder="all charted sites (or: kyra,dtg)"></div>
+    <div class="vbtns">
+      <button id="vGo">build the walk</button>
+      <button id="vDream" title="no query — let the walk find itself from where you have already been">&#127769; dream</button>
+      <button id="vDeep" title="search every word of every page, not just each page's strongest terms">deep</button>
+    </div>
+    <div class="vhint" id="vScan"></div>
+  </div>
+
+  <div class="vsec" id="vGrantBox">
+    <div class="vrow"><label>peer</label><select id="vPeer"></select></div>
+    <div class="vrow"><label>purpose</label><input id="vPurpose" placeholder="why this peer needs this walk"></div>
+    <div class="vrow"><label>tier · ttl</label>
+      <select id="vTier">
+        <option value="D0">D0 · RAW — the pages as written</option>
+        <option value="D1">D1 · ACTIONS</option>
+        <option value="D2">D2 · PRINCIPLES</option>
+        <option value="D3">D3 · MATHS</option>
+        <option value="D4">D4 · ADDRESS — shape only, no page bodies</option>
+      </select>
+      <input id="vTtl" type="number" min="1" max="8760" value="72" title="hours">
+    </div>
+    <div class="vbtns"><button id="vSend">ask the keeper</button><button id="vDl">⬇ request file</button></div>
+  </div>
+
+  <div class="vask" id="vAsk"></div>
+  <div id="vResults"></div>
+  <div class="vlog" id="vLog"></div>
+</div>
+<div id="siteFilter" class="panel">
+  <div class="sfx">Show only the sites you are working with. Nothing selected means the whole
+  federation is lit — this narrows the torus, it does not change what a pathway may ask for.</div>
+  <div class="vbtns"><button id="sfAll">all</button><button id="sfNone">none</button>
+    <span class="vhint" id="sfCount"></span></div>
+  <div id="sfList"></div>
+</div>
+<nav id="rail"></nav>
+<aside id="drawer">
+  <div id="drawerBody"></div>
+</aside>
 <div id="tip"></div>
+<div id="runCard"></div>
 <div id="zenbar">
-  <button id="focusBtn" title="hide the instruments — just the shape (f toggles, Esc exits)">◌ focus</button>
+  <button id="focusBtn" title="hide the instruments — just the shape (Esc exits)">◌ focus</button>
   <button id="snapBtn" title="save the view as a PNG — a City Key travels inside it (iTXt citykey chunk)">📷 keepsake</button>
 </div>
 <footer><div class="pv">(⚔️⊥⿻⊥🧙)😊</div></footer>
@@ -203,9 +410,25 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ease = p => p*p*(3-2*p);                       // smoothstep — the game42 fold easing
 const hash01 = s => { let h=2166136261; for(const c of s){ h^=c.charCodeAt(0); h=Math.imul(h,16777619); } return ((h>>>0)%100000)/100000; };
 
-const state = { fold:0, drift:!REDUCED, iso:null, strands:true, grid:true, pages:true, links:true, crystals:true };
-const HOSTPATH = {"guide":"guide","tomes":"city/tomes","grimoire":"grimoire","fieldguide":"fieldguide","engine":"improbable-engine","atlas":"atlas","spellbooks":"spellbooks","skill":"skill","mouse":"mouse-spellbook","game42":"game42","harness":"harness","dtg":"dtg","research":"research","kyra":"kyra","vision":"vision","tiles":"tiles","city":"city","lexon":"lexon","myterms":"myterms"}; // site id → snapshot subpath (baked by tools/star-chart.mjs)
-const SITESTRAND = {"guide":"connection","tomes":"connection","grimoire":"connection","fieldguide":"connection","engine":"connection","atlas":"memory","spellbooks":"memory","skill":"delegation","mouse":"delegation","game42":"compute","harness":"compute","dtg":"protection","research":"protection","kyra":"protection","vision":"connection","tiles":"delegation","city":"value","lexon":"value","myterms":"value","spellbook":"delegation","transmediale":"connection","plugin":"delegation"}; // ?site= deep link → strand to isolate
+const state = { fold:0, drift:!REDUCED, iso:null, sites:new Set(), strands:true, grid:true, pages:true, links:true, crystals:true };
+const HOSTPATH = {"guide":"guide","tomes":"city/tomes","grimoire":"grimoire","fieldguide":"fieldguide","engine":"improbable-engine","atlas":"atlas","spellbooks":"spellbooks","skill":"skill","mouse":"mouse-spellbook","game42":"game42","harness":"harness","dtg":"dtg","research":"research","kyra":"kyra","vision":"vision","tiles":"tiles","city":"city","lexon":"lexon","myterms":"myterms","vpk":"vpk"}; // site id → snapshot subpath (baked by tools/star-chart.mjs)
+const SITESTRAND = {"guide":"connection","tomes":"connection","grimoire":"connection","fieldguide":"connection","engine":"connection","atlas":"memory","spellbooks":"memory","skill":"delegation","mouse":"delegation","game42":"compute","harness":"compute","dtg":"protection","research":"protection","kyra":"protection","vision":"connection","tiles":"delegation","city":"value","lexon":"value","myterms":"value","vpk":"protection","spellbook":"delegation","transmediale":"connection","plugin":"delegation"}; // ?site= deep link → strand to isolate
+// ===== Phase 0 · the lattice on the chart (PLAN_KNOWLEDGE_GRAPH_TO_VTA) =====
+// A postured star carries its vertex; the move between two postured stars is
+// named: the three lattice operators first, then a single flip (a ∂M edge),
+// otherwise a multi-bit jump, flagged as such with the dimensions that changed.
+const LX = { succ:x=>(x+1)&63, neg:x=>(64-x)&63, bnot:x=>63-x };
+const DIMNAMES = ['protection','delegation','memory','connection','computation','value']; // d1..d6 = bit 5..0
+const vbits = x => x.toString(2).padStart(6,'0');
+function moveName(a,b){ if(a==null||b==null) return null; if(a===b) return 'stay';
+  const x=a^b, fl=DIMNAMES.filter((_,i)=>x&(32>>i));
+  if(b===LX.succ(a)) return 'succ 😊'; if(b===LX.neg(a)) return 'neg ⚔️'; if(b===LX.bnot(a)) return 'bnot 🧙';
+  return fl.length===1 ? 'flip '+fl[0] : 'jump ×'+fl.length+' ('+fl.join(' ')+')'; }
+function lastMove(){ const n=trail.pts.length; return n<2 ? null : moveName(trail.pts[n-2].vertex, trail.pts[n-1].vertex); }
+function postureTip(d){ if(d.vertex==null) return '';
+  const last = trail.pts.length ? trail.pts[trail.pts.length-1] : null;
+  const mv = (last && last!==d) ? moveName(last.vertex, d.vertex) : null;
+  return '<br><span class="m">V'+d.vertex+' '+vbits(d.vertex)+(mv?' · from V'+last.vertex+': <b>'+mv+'</b>':'')+'</span>'; }
 
 // ===== seating — every position exists in BOTH forms; fold lerps between them =====
 // torus: P = ((R + (r+lift)·cos v)·cos u, …, (r+lift)·sin v)   ·   codex: 8×8 plane, lift → +z
@@ -369,8 +592,11 @@ function buildCrystals(){
     const pts=[], bonds=[];
     const P = (c,r)=>[c*SPACING-HALF, r*SPACING-HALF];
     for(let r=0;r<N;r++) for(let c=0;c<N;c++) pts.push(...P(c,r), 0);
-    // the 32 bit-flip bonds of this axis: partner = index ^ 2^(bit mod 3)
-    const stride = 1 << (s.bit % 3), onU = s.bit < 3;
+    // the 32 bit-flip bonds of this axis: partner = index ^ 2^(seat mod 3).
+    // 'seat' is TORUS SEATING ONLY -- it is not the lattice bit. The lattice value
+    // is 'latticeAxisVertex' (game42 AXIOMS A1: protection 32 ... value 1).
+    // (quotes, not backticks: this comment lives inside a template literal)
+    const stride = 1 << (s.seat % 3), onU = s.seat < 3;
     for(let r=0;r<N;r++) for(let c=0;c<N;c++){
       const c2 = onU ? (c ^ stride) : c, r2 = onU ? r : (r ^ stride);
       if(c2 > c || r2 > r) bonds.push(...P(c,r), 0, ...P(c2,r2), 0);
@@ -451,10 +677,10 @@ function addStar(site, pg){
   const spr = new THREE.Sprite(starMats[s.id].clone());
   const h = hash01(pg.slug); // UOR: the reference seats the star, the host is incidental
   const t = h, du = (hash01(pg.slug+'u')-0.5)*0.55, dv = (hash01(pg.slug+'v')-0.5)*0.55;
-  const [u0,v0] = strandUV(s, t);
+  const [u0,v0] = (pg.vertex!=null) ? [ (pg.vertex&7)/8*TAU, (pg.vertex>>3)/8*TAU ] : strandUV(s, t); // posture overrides strand
   const week = (Date.now()-(pg.date||0)) < 7*864e5;
   spr.userData = { star:true, title:pg.title, slug:pg.slug, host:site.host, siteUrl:site.url||null,
-    date:pg.date, strand:s.id,
+    date:pg.date, strand:s.id, vertex:(pg.vertex==null?null:pg.vertex), posture:pg.posture||null,
     u:u0+du, v:v0+dv, lift:0.04+Math.min(Object.keys(pg.links||{}).length,12)/12*0.12, week, baseScale: week?0.11:0.085 };
   spr.scale.setScalar(spr.userData.baseScale);
   graphGroup.add(spr); DATA.stars.push(spr);
@@ -497,7 +723,7 @@ function walkTo(spr){
 function tHud(){
   document.getElementById('tVal').textContent = 'T∫(π) ' + trail.value.toFixed(1);
   document.getElementById('tSteps').textContent = trail.steps
-    ? trail.steps + ' page' + (trail.steps>1?'s':'') + ' walked · the dance, not the stance'
+    ? trail.steps + ' page' + (trail.steps>1?'s':'') + ' walked · ' + (lastMove() || 'the dance, not the stance')
     : 'value lives on the path, not the vertex';
 }
 
@@ -548,12 +774,115 @@ function rebuildTrail(){
 // ===== legend / isolation =====
 function buildLegend(){
   const box = document.getElementById('chips');
+
+  // the scheme, once, above the chips — six is not a design choice, it is how
+  // many axes the lattice has, and the order is seating rather than ranking
+  if(!document.getElementById('why6')){
+    const w = document.createElement('div');
+    w.id = 'why6';
+    w.innerHTML = '<b>Six, because the sovereignty lattice has six axes.</b> Every page sits '
+      + 'somewhere on all of them; a strand is one axis asking its own question of the whole '
+      + 'federation, so the same page can be read six ways. They are drawn as windings: '
+      + 'protection is the equator, and each strand after it threads the hole once more, so '
+      + 'value winds it five times. <b>Protection to value is that seating, not a ranking</b> — '
+      + 'no axis outranks another, and nothing has to travel them in order.';
+    box.parentNode.insertBefore(w, box);
+  }
+
   for(const s of DATA.strands){
     const el = document.createElement('div'); el.className='chip'; el.style.color = s.hue;
     el.innerHTML = `<span class="gem"></span><span class="nm"><b>${s.lab}</b><span>${s.steward} · ${s.axis}${s.force?' · '+s.force:''}</span></span>`;
-    el.onclick = ()=>{ state.iso = state.iso===s.id ? null : s.id; applyIso(); };
+    el.onclick = ()=>{ state.iso = state.iso===s.id ? null : s.id; applyIso(); strandWhy(); };
     el.dataset.id = s.id; box.appendChild(el);
   }
+
+  if(!document.getElementById('strandWhy')){
+    const d = document.createElement('div'); d.id = 'strandWhy';
+    box.parentNode.insertBefore(d, box.nextSibling);
+  }
+}
+
+const siteKey = h => String(h||'').replace(/\.localhost$/,'').toLowerCase();
+
+// The site filter is built from the stars that actually loaded, so it lists what
+// this chart really holds rather than what a config says it should. Stars arrive
+// asynchronously, and the source and the baked build finish loading by different
+// routes, so it waits for them rather than hooking either one's completion.
+let sfTries = 0;
+function buildSiteFilter(){
+  const list = document.getElementById('sfList');
+  if(!list) return;
+  if(!DATA.stars.length){ if(sfTries++ < 40) setTimeout(buildSiteFilter, 300); return; }
+
+  const count = new Map();
+  for(const spr of DATA.stars){
+    const k = siteKey(spr.userData.host);
+    count.set(k, (count.get(k)||0) + 1);
+  }
+  const hue = {};
+  for(const spr of DATA.stars){
+    const k = siteKey(spr.userData.host);
+    if(!hue[k]){ const st = DATA.byId[spr.userData.strand]; if(st) hue[k] = st.hue; }
+  }
+
+  list.innerHTML = '';
+  for(const [k, n] of [...count.entries()].sort((a,b)=>b[1]-a[1])){
+    const el = document.createElement('div');
+    el.className = 'sfc' + (state.sites.has(k) ? ' on' : '');
+    el.style.color = hue[k] || 'var(--dim)';
+    el.innerHTML = '<span class="d"></span><span class="s"></span><span class="n"></span>';
+    el.querySelector('.s').textContent = k;
+    el.querySelector('.n').textContent = n;
+    el.onclick = ()=>{
+      if(state.sites.has(k)) state.sites.delete(k); else state.sites.add(k);
+      sfSync();
+    };
+    list.appendChild(el);
+  }
+  sfSync();
+}
+
+function sfSync(){
+  for(const el of document.querySelectorAll('#sfList .sfc'))
+    el.classList.toggle('on', state.sites.has(el.querySelector('.s').textContent));
+  const c = document.getElementById('sfCount');
+  if(c) c.textContent = state.sites.size ? `${state.sites.size} of ${document.querySelectorAll('#sfList .sfc').length} lit`
+    : 'all lit';
+  applyIso();
+}
+
+document.getElementById('sfAll').onclick = ()=>{ state.sites.clear(); sfSync(); };
+document.getElementById('sfNone').onclick = ()=>{
+  state.sites.clear();
+  for(const el of document.querySelectorAll('#sfList .sfc')) state.sites.add(el.querySelector('.s').textContent);
+  // "none" means none hidden is wrong here: selecting every site is the same as
+  // selecting none, so it lights exactly one to make the sieve visible
+  const first = document.querySelector('#sfList .sfc .s');
+  if(first){ state.sites.clear(); state.sites.add(first.textContent); }
+  sfSync();
+};
+
+// what an isolated strand is FOR. theme and why have been in labs.json since the
+// chart was built and were never rendered anywhere.
+function strandWhy(){
+  const el = document.getElementById('strandWhy');
+  if(!el) return;
+  const s = state.iso && DATA.byId[state.iso];
+  el.classList.toggle('on', !!s);
+  if(!s) return;
+  const winds = s.seat == null ? null : s.seat;
+  el.style.color = s.hue;
+  el.innerHTML = '<div class="sw-h"></div><div class="sw-k"></div>'
+    + '<div class="sw-t"></div><div class="sw-w"></div><div class="sw-g"></div>';
+  el.querySelector('.sw-h').textContent = s.lab;
+  el.querySelector('.sw-k').textContent = s.steward + ' · ' + s.axis + (s.force ? ' · ' + s.force : '');
+  el.querySelector('.sw-t').textContent = s.theme || '';
+  el.querySelector('.sw-w').textContent = s.why || '';
+  el.querySelector('.sw-g').textContent = [
+    winds === 0 ? 'winds the torus once, as the equator'
+      : winds != null ? `threads the hole ${winds}×` : null,
+    s.latticeAxisVertex != null ? `lattice vertex ${s.latticeAxisVertex}` : null,
+  ].filter(Boolean).join('  ·  ');
 }
 function applyIso(){
   document.querySelectorAll('.chip').forEach(el=>{
@@ -561,7 +890,12 @@ function applyIso(){
     el.classList.toggle('dim', !!state.iso && el.dataset.id!==state.iso);
   });
   updateStrandOpacities();
-  for(const spr of DATA.stars){ const on = !state.iso || spr.userData.strand===state.iso;
+  // two sieves, both must pass: the strand (an axis) and the site filter (a
+  // handful of wikis). Either alone is a view; together they are a workspace.
+  for(const spr of DATA.stars){
+    const d = spr.userData;
+    const on = (!state.iso || (d.vertex!=null ? !!(d.vertex & ((DATA.byId[state.iso]||{}).latticeAxisVertex||0)) : d.strand===state.iso))
+      && (!state.sites.size || state.sites.has(siteKey(d.host)));
     spr.material.opacity = on?1:0.06; }
   for(const c of crystals){ const on = !state.iso || c.userData.strand===state.iso;
     c.userData.points.material.opacity = on?0.95:0.10;
@@ -594,7 +928,7 @@ function pickStars(){
     hovered = spr;
     if(spr){ const d=spr.userData, s=DATA.byId[d.strand];
       const age = d.date ? Math.round((Date.now()-d.date)/864e5) : null;
-      tip.innerHTML = `<b>${d.title}</b><br><span class="m">${d.host} · ${s.lab}${age!==null?' · edited '+(age===0?'today':age+'d ago'):''}</span>`;
+      tip.innerHTML = `<b>${d.title}</b><br><span class="m">${d.host} · ${s.lab}${age!==null?' · edited '+(age===0?'today':age+'d ago'):''}</span>` + postureTip(d);
       tip.style.display='block'; canvas.style.cursor='pointer';
     } else { tip.style.display='none'; canvas.style.cursor='grab'; }
   }
@@ -618,6 +952,14 @@ for(const [id,[key,grp]] of Object.entries(togs)){
 }
 document.getElementById('tDrift').classList.toggle('on', state.drift);
 document.getElementById('tDrift').onclick = e=>{ state.drift=!state.drift; e.target.classList.toggle('on', state.drift); };
+if(state.glow === undefined) state.glow = true;
+document.getElementById('tGlow').classList.toggle('on', state.glow);
+document.getElementById('tGlow').onclick = e=>{ state.glow=!state.glow; e.target.classList.toggle('on', state.glow); applyGlow(); };
+function applyGlow(){
+  const mode = state.glow ? THREE.AdditiveBlending : THREE.NormalBlending;
+  for(const spr of DATA.stars){ spr.material.blending = mode; spr.material.needsUpdate = true; }
+  if(typeof runner !== 'undefined' && runner && runner.spr){ runner.spr.material.blending = mode; runner.spr.material.needsUpdate = true; }
+}
 
 // ===== tick =====
 const clock = new THREE.Clock();
@@ -642,6 +984,506 @@ function tick(){
 }
 function resize(){ renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize();
+
+// ===== VPKB — pathways: import · suggest · request ==========================
+// A constellation is already a bounded-disclosure primitive: it names exactly
+// which pages cross a wire, in what order, to whom. This panel gives it the
+// other three verbs. Compose here, ask here — but GRANT is a keeper act at the
+// CLI on the farm machine, deliberately never a button on a web page.
+//
+// Two modes, decided by whether the local control lane answers:
+//   keeper  — running on the farm; peers listed, requests filed straight in
+//   compose — anywhere else (incl. the public static chart); the page can only
+//             build a pathway and hand you the request file to send on
+const V = {
+  control: '',   // baked: compose-only, never probes a visitor's loopback
+  mode: 'compose', status: null,
+  searchBase: null, indexBase: null, Search: null, indexes: null, manifest: null,
+};
+
+const hnorm = h => String(h || '').replace(/\.localhost$/, '').toLowerCase();
+const $ = id => document.getElementById(id);
+const vlog = (msg, cls) => { const l = $('vLog');
+  l.insertAdjacentHTML('afterbegin', `<div class="${cls || ''}">${msg}</div>`); };
+
+// A pathway names pages by chart id; the live engine seats them by farm vhost.
+// Normalising both ends means one pathway file works in both charts.
+function findStar(site, slug) {
+  const want = hnorm(site);
+  for (const spr of DATA.stars) {
+    const d = spr.userData;
+    if (d.slug === slug && hnorm(d.host) === want) return d;
+  }
+  return null;
+}
+
+// relight — the missing half of ✦ save. Someone elses walk, on your torus.
+function relight(steps) {
+  const pts = [], missing = [];
+  for (const st of steps) {
+    const d = findStar(st.site || st.host, st.slug);
+    if (d) pts.push(d); else missing.push((st.site || st.host) + '/' + st.slug);
+  }
+  trail.pts = pts; trail.steps = pts.length;
+  trail.value = pts.reduce((a, d) => a + 1 + d.lift * 4, 0);
+  rebuildTrail(); tHud(); askSummary();
+  return missing;
+}
+
+// what the current walk would ask for, stated plainly before anyone grants it
+function askSummary() {
+  const box = $('vAsk');
+  if (!trail.pts.length) { box.innerHTML = '<i>walk some pages first — click a star to add it</i>'; return; }
+  const bySite = new Map();
+  for (const d of trail.pts) {
+    const k = hnorm(d.host);
+    if (!bySite.has(k)) bySite.set(k, new Set());
+    bySite.get(k).add(d.slug);
+  }
+  const rows = [...bySite.entries()].map(([site, set]) =>
+    `<div class="s"><span>${site}</span><span>${set.size} page${set.size > 1 ? 's' : ''}</span></div>`).join('');
+  box.innerHTML = `<b>asks for ${bySite.size} site${bySite.size > 1 ? 's' : ''} · `
+    + `${trail.pts.length} step${trail.pts.length > 1 ? 's' : ''}</b>${rows}`;
+}
+
+function pathwayNow(name) {
+  return {
+    kind: 'vpkb.pathway/1',
+    name: name || $('vName').value.trim() || 'pathway',
+    note: '', composed: new Date().toISOString(), origin: location.href,
+    // the selection, not the trail: a step this chart cannot seat still belongs
+    // in the request, and reading it back off the torus would silently drop it
+    steps: (V.rows && V.rows.some(r => r.on)
+      ? V.rows.filter(r => r.on).map(r => ({ site: r.site, slug: r.slug, title: r.title, strand: r.strand }))
+      : trail.pts.map(d => ({ site: hnorm(d.host), slug: d.slug, title: d.title, strand: d.strand, vertex: d.vertex }))),
+  };
+}
+
+// ---- panel ------------------------------------------------------------------
+const vPanel = $('vpkb');
+const openPanel = which => {
+  vPanel.classList.add('open');
+  $('vSuggestBox').style.display = which === 'suggest' ? '' : 'none';
+  $('vGrantBox').style.display = which === 'grant' ? '' : 'none';
+  askSummary();
+  drawerShow('pathway');          // hoisted below — the drawer owns visibility now
+};
+vPanel.querySelector('.vx').onclick = () => vPanel.classList.remove('open');
+$('cSuggest').onclick = () => openPanel('suggest');
+$('cGrant').onclick = () => openPanel('grant');
+
+// ---- probe: which mode are we in? -------------------------------------------
+function loadScript(src) {
+  return new Promise((ok, no) => {
+    const el = document.createElement('script');
+    el.src = src; el.onload = ok; el.onerror = () => no(new Error('cannot load ' + src));
+    document.head.appendChild(el);
+  });
+}
+
+async function probe() {
+  // A build with no control address is compose-only BY CONSTRUCTION — the
+  // public static chart sets this empty, so it never so much as looks at a
+  // visitor's loopback. The trust split stops being a happy accident of
+  // mixed-content rules and becomes a property of the build.
+  if (V.control) {
+  // keeper mode — the control lane on the farm machine
+  try {
+    const r = await fetch(V.control + '/vpkb/status', { mode: 'cors' });
+    if (r.ok) {
+      V.status = await r.json(); V.mode = 'keeper';
+      V.searchBase = V.control + '/vpkb/search.js';
+      V.indexBase = V.control + '/vpkb/index/';
+      const peers = (V.status.peers || []).filter(p => p.online);
+      $('vPeer').innerHTML = peers.map(p => `<option value="${p.name}">${p.name}</option>`).join('')
+        + (peers.length ? '' : '<option value="">no peers online</option>')
+        + '<option value="any">any tailnet peer ⚠</option>';
+      const n = (V.status.grants || []).length;
+      $('vMode').innerHTML = `<b>keeper mode</b> — ${V.status.self ? V.status.self.dns : 'this farm'} · `
+        + `${peers.length} peer${peers.length === 1 ? '' : 's'} online · ${n} active grant${n === 1 ? '' : 's'}. `
+        + `A request filed here still needs <i>grant.js approve</i> at the CLI.`;
+      return;
+    }
+  } catch (e) { /* not the farm — fall through to compose mode */ }
+  }
+  // compose mode — the static chart, or any browser that is not the farm
+  V.mode = 'compose';
+  V.searchBase = 'data/vpkb/search.js';
+  V.indexBase = 'data/vpkb/index/';
+  $('vPeer').innerHTML = '<option value="">(name the peer in the request file)</option>';
+  $('vMode').innerHTML = '<b>compose mode</b> — this page can build a pathway and hand you the '
+    + 'request file. Only the keepers own machine can grant it, which is the point.';
+}
+
+// ---- suggest ----------------------------------------------------------------
+async function ensureSearch() {
+  if (V.Search && V.indexes) return;
+  $('vScan').textContent = 'loading the index…';
+  if (!V.Search) { await loadScript(V.searchBase); V.Search = globalThis.VPKBSearch; }
+  const man = await (await fetch(V.indexBase + 'manifest.json')).json();
+  V.manifest = man.sites || [];
+  V.indexes = [];
+  let deepCount = 0;
+  for (const m of V.manifest) {
+    // deep falls back per site: a site with no dense index is still searched at
+    // normal density, and the count below says how many were actually deep
+    if (V.deep) {
+      try {
+        const r = await fetch(V.indexBase + m.site + '.deep.json');
+        if (r.ok) { V.indexes.push(await r.json()); deepCount++; continue; }
+      } catch (e) { /* fall through */ }
+    }
+    try { V.indexes.push(await (await fetch(V.indexBase + m.site + '.json')).json()); } catch (e) { /* skip */ }
+  }
+  const pages = V.indexes.reduce((a, i) => a + i.N, 0);
+  const terms = V.indexes.reduce((a, i) => a + i.vocab.length, 0);
+  $('vScan').textContent = `${V.indexes.length} sites · ${pages} pages · ${terms.toLocaleString()} terms`
+    + (V.deep ? ` · ${deepCount} deep` : '');
+}
+
+// ---- the result list --------------------------------------------------------
+// A search result is a proposal, not a verdict. Every row here — chosen or
+// passed over — is a toggle, and the walk on the torus follows the selection
+// live. Order is editable too, because in a pathway the order IS the teaching.
+V.rows = [];
+
+function setResults(w) {
+  V.rows = [
+    ...(w.steps || []).map(x => ({ ...x, on: true })),
+    ...(w.candidates || []).map(x => ({ ...x, on: false })),
+  ];
+  renderResults();
+  syncTrail();
+}
+
+function syncTrail() { relight(V.rows.filter(r => r.on)); }
+
+function moveRow(row, dir) {
+  const on = V.rows.filter(r => r.on);
+  const at = on.indexOf(row);
+  const to = at + dir;
+  if (at < 0 || to < 0 || to >= on.length) return;
+  const i = V.rows.indexOf(row), j = V.rows.indexOf(on[to]);
+  V.rows[i] = on[to]; V.rows[j] = row;
+  renderResults(); syncTrail();
+}
+
+function renderResults() {
+  const box = $('vResults');
+  box.innerHTML = '';
+  if (!V.rows.length) return;
+
+  const chosen = V.rows.filter(r => r.on);
+  const rest = V.rows.filter(r => !r.on);
+  const words = chosen.reduce((a, r) => a + (r.words || 0), 0);
+  const sites = new Set(chosen.map(r => r.site)).size;
+
+  const head = (label, extra) => {
+    const d = document.createElement('div');
+    d.className = 'rh';
+    d.innerHTML = '<span></span><b></b>';
+    d.children[0].textContent = label;
+    d.children[1].textContent = extra || '';
+    box.appendChild(d);
+  };
+
+  head('in the walk', `${chosen.length} steps · ${sites} site${sites === 1 ? '' : 's'} · ~${words} words`);
+  let n = 0;
+  for (const r of V.rows) {
+    if (!r.on) continue;
+    box.appendChild(rowEl(r, ++n));
+  }
+  if (rest.length) {
+    head('found, not chosen', `${rest.length} more`);
+    for (const r of rest) box.appendChild(rowEl(r, null));
+  }
+}
+
+function rowEl(r, n) {
+  const seated = !!findStar(r.site, r.slug);
+  const el = document.createElement('div');
+  el.className = 'vrow' + (r.on ? ' on' : '') + (seated ? '' : ' gone');
+  el.innerHTML = '<span class="tk"></span><span class="ord"></span>'
+    + '<div class="bd"><div class="t"></div><div class="m"></div></div>'
+    + '<span class="mv"></span>';
+  el.querySelector('.tk').textContent = r.on ? '\u2713' : '';
+  el.querySelector('.ord').textContent = n == null ? '' : n;
+  el.querySelector('.t').textContent = r.title || r.slug;
+  el.querySelector('.m').textContent = [
+    r.site,
+    r.words ? r.words + 'w' : null,
+    r.score != null ? 'score ' + r.score : null,
+    r.via,
+    seated ? null : 'not on this chart',
+  ].filter(Boolean).join(' \u00b7 ');
+
+  const toggle = () => { r.on = !r.on; renderResults(); syncTrail(); };
+  el.querySelector('.tk').onclick = toggle;
+  el.querySelector('.bd').onclick = toggle;
+
+  if (r.on) {
+    const mv = el.querySelector('.mv');
+    for (const [glyph, dir, tip] of [['\u25b2', -1, 'earlier in the walk'], ['\u25bc', 1, 'later in the walk']]) {
+      const b = document.createElement('button');
+      b.textContent = glyph; b.title = tip;
+      b.onclick = e => { e.stopPropagation(); moveRow(r, dir); };
+      mv.appendChild(b);
+    }
+  }
+  return el;
+}
+
+// ---- deep search ------------------------------------------------------------
+// The normal index keeps each page's strongest 80 terms — a signature. Deep
+// keeps every term, so a word that appears once on one page becomes findable.
+// Loaded only when asked, because it is several times the size.
+V.deep = false;
+$('vDeep').onclick = () => {
+  V.deep = !V.deep;
+  $('vDeep').classList.toggle('on', V.deep);
+  V.indexes = null;                       // force a reload at the new density
+  $('vScan').textContent = V.deep ? 'deep — the dense index loads on the next search' : '';
+};
+
+// ---- dream ------------------------------------------------------------------
+// Everything walked before, as context for a walk with no query behind it.
+function dreamTraces() {
+  const out = [];
+  try {
+    for (const c of (JSON.parse(localStorage.getItem('lattice-constellations')) || []))
+      for (const st of (c.steps || [])) out.push({ site: hnorm(st.site || st.host), slug: st.slug });
+  } catch (e) {}
+  for (const d of trail.pts) out.push({ site: hnorm(d.host), slug: d.slug });
+  return out;
+}
+
+$('vDream').onclick = async () => {
+  try {
+    await ensureSearch();
+    const only = $('vSites').value.split(',').map(x => x.trim()).filter(Boolean);
+    const use = only.length ? V.indexes.filter(i => only.includes(i.site)) : V.indexes;
+    const traces = dreamTraces();
+    const d = V.Search.dream(use, { length: 9, traces });
+    if (!d || !d.steps.length) return vlog('the dream found nothing', 'no');
+    setResults(d);
+    if (!$('vName').value.trim()) $('vName').value = 'dream-' + d.steps[0].slug.slice(0, 22);
+    vlog(`<span class="ok">dreamt ${d.steps.length} steps</span> from ${d.scanned} pages`
+      + (traces.length ? ` · ${traces.length} traces, ${d.frontier} pages on their frontier`
+        : ' · no traces yet, so this one wandered from cold'));
+  } catch (e) { vlog('\u2717 ' + e.message, 'no'); }
+};
+
+$('vGo').onclick = async () => {
+  const q = $('vQuery').value.trim();
+  if (!q) return;
+  try {
+    await ensureSearch();
+    const only = $('vSites').value.split(',').map(x => x.trim()).filter(Boolean);
+    const use = only.length ? V.indexes.filter(i => only.includes(i.site)) : V.indexes;
+    if (!use.length) return vlog('no index for those sites', 'no');
+    const w = V.Search.walk(use, q, { limit: 9, perSite: 3, candidates: 14 });
+    if (!w) return vlog('nothing matched "' + q + '"', 'no');
+    setResults(w);
+    if (!$('vName').value.trim())
+      $('vName').value = V.Search.terms(q).slice(0, 4).join('-').slice(0, 48) || 'pathway';
+    vlog(`<span class="ok">${w.steps.length} chosen</span> of ${w.matched} matched`
+      + ` \u00b7 ${w.candidates.length} more offered below`);
+  } catch (e) { vlog('✗ ' + e.message, 'no'); }
+};
+
+// ---- import -----------------------------------------------------------------
+// Accepts a pathway.v1, a raw constellation, or a whole constellations.json
+// bundle — whatever the other end happened to export.
+function importPayload(raw, label) {
+  const list = Array.isArray(raw) ? raw : (raw.constellations || [raw.pathway || raw]);
+  const one = list[0];
+  if (!one || !(one.steps || one.walk)) return vlog('✗ no steps in ' + label, 'no');
+  if (list.length > 1) vlog(`${list.length} constellations in ${label} — relighting the first`);
+  setResults({ steps: (one.steps || one.walk).map(st => ({
+    site: hnorm(st.site || st.host), slug: st.slug, title: st.title, strand: st.strand, via: 'imported' })) });
+  const missing = V.rows.filter(r => r.on && !findStar(r.site, r.slug)).map(r => r.site + '/' + r.slug);
+  $('vName').value = one.name || $('vName').value;
+  vlog(`<span class="ok">imported ${one.name || label}</span> — ${trail.pts.length} seated`
+    + (missing.length ? ` · <span class="no">${missing.length} missing:</span> ${missing.slice(0, 4).join(', ')}` : ''));
+  openPanel('grant');
+}
+
+const vFile = document.createElement('input');
+vFile.type = 'file'; vFile.accept = '.json,application/json';
+vFile.onchange = () => {
+  const f = vFile.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { try { importPayload(JSON.parse(rd.result), f.name); }
+    catch (e) { vPanel.classList.add('open'); vlog('✗ ' + f.name + ': ' + e.message, 'no'); } };
+  rd.readAsText(f);
+  vFile.value = '';
+};
+$('cImport').onclick = () => { openPanel('grant'); vFile.click(); };
+
+addEventListener('dragover', e => e.preventDefault());
+addEventListener('drop', e => {
+  e.preventDefault();
+  const f = e.dataTransfer.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { vPanel.classList.add('open');
+    try { importPayload(JSON.parse(rd.result), f.name); } catch (err) { vlog('✗ ' + err.message, 'no'); } };
+  rd.readAsText(f);
+});
+
+// ---- request ----------------------------------------------------------------
+function requestBody() {
+  return {
+    pathway: pathwayNow(),
+    peer: $('vPeer').value || '',
+    purpose: $('vPurpose').value.trim(),
+    tier: $('vTier').value,
+    ttlHours: Number($('vTtl').value) || 72,
+    by: 'star-chart',
+  };
+}
+
+$('vSend').onclick = async () => {
+  if (!trail.pts.length) return vlog('walk some pages first', 'no');
+  if (V.mode !== 'keeper') return vlog('no control lane here — use the request file and send it on', 'no');
+  const body = requestBody();
+  if (!body.peer) return vlog('name a peer', 'no');
+  try {
+    const r = await fetch(V.control + '/vpkb/request', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    vlog(`<span class="ok">filed as ${j.token}</span> — pending. The keeper approves with:<br>`
+      + `<code>node vpkb/grant.js approve ${j.token}</code>`);
+  } catch (e) { vlog('✗ ' + e.message, 'no'); }
+};
+
+$('vDl').onclick = () => {
+  if (!trail.pts.length) return vlog('walk some pages first', 'no');
+  const body = requestBody();
+  const blob = new Blob([JSON.stringify({ kind: 'vpkb.request/1', ...body }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (body.pathway.name || 'pathway') + '.request.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  vlog('<span class="ok">request written</span> — send it to the keeper, who reviews it with '
+    + '<code>grant.js request</code> and decides.');
+};
+
+probe();
+
+// ===== the glyph bar + stacking drawer =====================================
+// The panels are MOVED, not rebuilt. Each keeps its id, its markup and its
+// handlers; only its parent changes.
+//
+// Open is a SET, not a selection: the bar toggles sections in and out, and the
+// drawer stacks whatever is open in one fixed order. Fixed order matters — if
+// the stack reshuffled by whatever you touched last, the thing you were reading
+// would move while you read it. Anything the chart grows later gets a glyph and
+// a section, and the canvas stays the canvas.
+const DRAWER_TABS = [
+  { id: 'about',      glyph: '\u{1F4DC}', label: 'about this chart', pick: () => document.querySelector('header.top article') },
+  { id: 'strands',    glyph: '\u{1F9F5}', label: 'the strands',      pick: () => document.getElementById('legend') },
+  { id: 'sites',      glyph: '\u{1F310}', label: 'sites',            pick: () => document.getElementById('siteFilter') },
+  { id: 'instrument', glyph: '\u{1F39B}\uFE0F', label: 'the instrument',  pick: () => document.getElementById('controls') },
+  { id: 'walk',       glyph: '\u{1F463}', label: 'the walk',         pick: () => document.getElementById('tracer') },
+  { id: 'pathway',    glyph: '\u{1F511}', label: 'pathway',          pick: () => document.getElementById('vpkb') },
+];
+
+const drawerEl = document.getElementById('drawer');
+const railEl = document.getElementById('rail');
+const drawerBody = document.getElementById('drawerBody');
+const DKEY = 'chart-drawer-open';
+const drawerOpen = new Set();
+
+// Build only the sections whose panel actually exists — the About article is
+// added by the guide bake and is absent from the live engine, so the list is
+// derived from the page rather than assumed.
+for (const t of DRAWER_TABS) {
+  const node = t.pick();
+  if (!node) continue;
+
+  const sec = document.createElement('section');
+  sec.dataset.tab = t.id;
+  const head = document.createElement('header');
+  head.className = 'sh';
+  head.innerHTML = '<span class="g"></span><span class="l"></span>';
+  head.querySelector('.g').textContent = t.glyph;
+  head.querySelector('.l').textContent = t.label;
+  const x = document.createElement('button');
+  x.className = 'sx'; x.textContent = '\u00d7'; x.title = 'close ' + t.label;
+  x.onclick = () => drawerSet(t.id, false);
+  head.appendChild(x);
+  sec.appendChild(head);
+  sec.appendChild(node);
+  drawerBody.appendChild(sec);
+
+  const b = document.createElement('button');
+  b.dataset.tab = t.id; b.textContent = t.glyph; b.title = t.label;
+  b.onclick = () => drawerSet(t.id, !drawerOpen.has(t.id));
+  railEl.appendChild(b);
+  t.built = true;
+}
+
+// close-all, revealed only once something is open
+const closeAll = document.createElement('button');
+closeAll.className = 'railx'; closeAll.textContent = 'clear'; closeAll.title = 'close every instrument (Esc)';
+closeAll.onclick = () => { for (const id of [...drawerOpen]) drawerSet(id, false); };
+railEl.appendChild(closeAll);
+
+function drawerSet(tab, open) {
+  if (!DRAWER_TABS.some(t => t.built && t.id === tab)) return;
+  if (open) drawerOpen.add(tab); else drawerOpen.delete(tab);
+  for (const sec of drawerBody.children)
+    if (sec.dataset.tab) sec.classList.toggle('on', drawerOpen.has(sec.dataset.tab));
+  for (const b of railEl.children)
+    if (b.dataset.tab) b.classList.toggle('on', drawerOpen.has(b.dataset.tab));
+  drawerEl.classList.toggle('open', drawerOpen.size > 0);
+  railEl.classList.toggle('any', drawerOpen.size > 0);
+  try { localStorage.setItem(DKEY, JSON.stringify([...drawerOpen])); } catch (e) {}
+}
+
+// the pathway panel opens itself when its buttons are pressed; it must ADD to
+// the stack rather than replace it, and scroll itself into view if the stack is
+// already deep
+function drawerShow(tab) {
+  const wasOpen = drawerOpen.has(tab);
+  drawerSet(tab, true);
+  if (!wasOpen) {
+    const sec = [...drawerBody.children].find(x => x.dataset.tab === tab);
+    if (sec) sec.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+}
+
+// A page-wide key handler must never steal a key from a text field. The chart
+// grew search and naming inputs, and a bare single-letter shortcut then makes
+// them unusable — typing "f" in the pathway search used to blank the screen into
+// focus mode. Single-letter shortcuts are gone; what is left is guarded, and
+// anything added later must use this same check.
+function typingInField(e) {
+  const el = e.target;
+  return !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
+    || el.tagName === 'SELECT' || el.isContentEditable);
+}
+
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  // Escape inside a field means "leave the field", not "close everything I was
+  // reading" — otherwise a mistyped search costs you the whole stack
+  if (typingInField(e)) { e.target.blur(); return; }
+  if (drawerOpen.size) { for (const id of [...drawerOpen]) drawerSet(id, false); }
+});
+
+// reopen what was open last; a first visit gets the strands, so the legend is
+// still the first thing a newcomer meets
+(() => {
+  let last = null;
+  try { last = JSON.parse(localStorage.getItem(DKEY)); } catch (e) {}
+  if (!Array.isArray(last)) last = innerWidth > 760 ? ['strands'] : [];
+  for (const id of last) drawerSet(id, true);
+})();
+
+
+buildSiteFilter();
 
 // ===== ignite =====
 await loadLabs();
@@ -688,16 +1530,21 @@ function restorePalette(){
 document.getElementById('palReset').onclick = () => { localStorage.removeItem(PALKEY); location.reload(); };
 
 // ===== fold each instrument to its emoji =====
+// Superseded by the rail + drawer (the engine relocates every panel into one
+// popout at boot). This block runs AFTER that relocation, so it must not
+// re-attach the fold buttons or reapply a stored 'min' — a folded panel inside
+// the drawer would render as an empty section. Kept, guarded, for any panel the
+// drawer did not claim, and for charts built before the drawer existed.
 const PKEY = 'chart-panels';
 const pstate = (() => { try{ return JSON.parse(localStorage.getItem(PKEY)) || {}; }catch{ return {}; } })();
 const psave = () => localStorage.setItem(PKEY, JSON.stringify(pstate));
-const art = document.querySelector('header.top article');
-const infoBtn = document.getElementById('infoBtn');
-const setInfo = open => art.classList.toggle('open', open);
-infoBtn.onclick = () => { setInfo(!art.classList.contains('open')); pstate.info = art.classList.contains('open') ? 0 : 1; psave(); };
-setInfo(pstate.info !== undefined ? !pstate.info : innerWidth > 760);
+const inDrawer = el => !!(el && el.closest && el.closest('#drawer'));
+// The header no longer carries an about button — 📜 in the glyph bar opens the
+// same text, and a second control under the title was one too many.
 for(const [id, emo, name] of [['legend','🧵','the strands'], ['controls','🎛️','the instrument'], ['tracer','👣','the walk']]){
   const p = document.getElementById(id);
+  if(!p || inDrawer(p)) continue;                 // the drawer owns it now
+  p.classList.remove('min');
   const b = document.createElement('button');
   b.className = 'minbtn'; b.textContent = emo; b.title = name + ' — minimise / expand';
   b.onclick = () => { p.classList.toggle('min'); pstate[id] = p.classList.contains('min') ? 1 : 0; psave(); };
@@ -717,11 +1564,26 @@ runBtn.onclick = () => {
   runner.on = !runner.on; runner.dist = 0; runner.lastSeg = -1;
   runner.spr.visible = runner.on;
   runBtn.classList.toggle('on', runner.on);
+  if(!runner.on) runCardHide();
 };
 function flareStar(d){
   const spr = DATA.stars.find(s => s.userData === d);
   if(spr) runner.flares.push({ spr, life: 1 });
 }
+// the run card — as the circuit crosses a page-star, its information box rises
+const runCard = document.getElementById('runCard');
+var runCardTimer = null;
+function runCardShow(d){
+  if(!runCard || !d) return;
+  const s = DATA.byId[d.strand];
+  runCard.innerHTML = '<b>' + d.title + '</b><br><span class="m">' + d.host + (s ? ' · ' + s.lab : '') + '</span>';
+  runCard.classList.remove('show');
+  void runCard.offsetWidth;                 // restart the rise for every star
+  runCard.classList.add('show');
+  clearTimeout(runCardTimer);
+  runCardTimer = setTimeout(() => runCard.classList.remove('show'), 2600);
+}
+function runCardHide(){ clearTimeout(runCardTimer); if(runCard) runCard.classList.remove('show'); }
 function runnerTick(dt){
   if(!runner) return;   // frames before module evaluation reaches the runner init
   // decay star flares back to their base scale
@@ -744,16 +1606,20 @@ function runnerTick(dt){
   if(i !== runner.lastSeg){                          // crossing into a segment flares its start star
     runner.lastSeg = i;
     flareStar(trail.pts[i]);
-    if(i === segs.length - 1) flareStar(trail.pts[i + 1]);
+    runCardShow(trail.pts[i]);
+    if(i === segs.length - 1){ flareStar(trail.pts[i + 1]); runCardShow(trail.pts[i + 1]); }
   }
 }
 
 // ===== focus mode — clear the instruments, keep the shape =====
 const setZen = on => document.body.classList.toggle('zen', on);
 document.getElementById('focusBtn').onclick = () => setZen(!document.body.classList.contains('zen'));
+// No single-letter shortcut. It used to be 'f', and it fired from inside the
+// pathway search box — typing the letter blanked the screen. The ◌ focus button
+// is the only way in; Escape still leaves, guarded so it does not fire while
+// someone is typing (typingInField is defined with the drawer).
 addEventListener('keydown', e => {
-  if(e.key === 'Escape') setZen(false);
-  else if((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey) setZen(!document.body.classList.contains('zen'));
+  if(e.key === 'Escape' && !typingInField(e)) setZen(false);
 });
 
 // ===== keepsake — the view as a PNG with a City Key inside (iTXt "citykey") =====
@@ -783,7 +1649,7 @@ document.getElementById('snapBtn').onclick = () => {
     sites: new Set(DATA.stars.map(s => s.userData.host)).size,
     pages: DATA.stars.length, links: DATA.links.length,
     strand: state.iso || 'all', fold: Number(state.fold.toFixed(3)),
-    walk: trail.pts.map(d => ({ site: d.host, slug: d.slug })), T: Number(trail.value.toFixed(1)),
+    walk: trail.pts.map(d => ({ site: d.host, slug: d.slug, vertex: d.vertex })), T: Number(trail.value.toFixed(1)),
     palette: Object.fromEntries(DATA.strands.map(s => [s.id, s.hue])), // your colors ride in the key
     seal: '(⚔️⊥⿻⊥🧙)😊'
   };

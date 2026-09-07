@@ -3,57 +3,57 @@
   "story": [
     {
       "type": "markdown",
-      "id": "04b11846df5aaaec",
+      "id": "977fcd19e6a82573",
       "text": "# VENDOR.md — provenance of the vendored skeleton"
     },
     {
       "type": "markdown",
-      "id": "2894157e3e2308e7",
+      "id": "a41381ae18b1ae9e",
       "text": "**Vendored work is not authored.** Everything listed here was copied verbatim\nfrom the dual-agent harness framework so this instance can run standalone\n(no network, no framework checkout) — per the engine's own note: the root\n\"defaults to the instance itself, which is only correct if the instance\ncarries its own copies (T3).\"\n\n- **Source repo:** `C:\\Users\\mitch\\dual-agent-harness`\n  (public: github.com/mitchuski/agentprivacy-harness)\n- **Source commit:** `c4443c7a072e6a3550bd22114eeb329b5f549483`\n- **Vendored on:** 2026-07-17"
     },
     {
       "type": "markdown",
-      "id": "5f51488c481b2ed1",
+      "id": "a3a19ecd8dd813da",
       "text": "## Verbatim copies\n\n| here | from | what |\n|---|---|---|\n| `TRUSTS.md` | root | T1–T6, the constitution — keep verbatim, never edit here |\n| `GROUND_RULES.md` | root | GR-1..GR-10 |\n| `seats/*.md` | `seats/` | the seven seat cards |\n| `engine/dual_agent_loop.mjs` | `engine/` | the loop |\n| `engine/gap.mjs` | `engine/` | the Gap as code (pure-JS SHA-256) |\n| `engine/conform.mjs` | `engine/` | the conformance gate (G0) |\n| `engine/{gap,loop,loop.salt}.test.mjs` | `engine/` | the engine's own tests |\n| `tools/kappa.mjs` | `tools/` | the κ law (canonicalJson) |\n| `tools/verify_run.mjs` | `tools/` | offline run verifier (D5) |\n| `tools/mint_artefact.mjs` | `tools/` | artefact minting |\n| `tools/render_run.mjs` | `tools/` | static run render |\n| `tools/console.html` + `workshop.html` + `frontier.html` | `tools/` | the Workshop Console pages |\n| `tools/emit_feed.mjs`, `tools/vrc.mjs` | `tools/` | feed + signed-edge helpers the console imports |\n| `tools/bundle.mjs` | `tools/` | config+engine → self-contained .workflow.mjs |\n| `tools/check_claims.mjs` | `tools/` | claims-register enforced-by gate |\n| `templates/*` | `templates/` | the blank an instance is copied from (required to FAIL conform) |"
     },
     {
       "type": "markdown",
-      "id": "ef0296e96ba757d6",
+      "id": "ff535fb066de6f24",
       "text": "## Adapted (not verbatim — divergences named)\n\n| here | divergence |\n|---|---|\n| `tools/check.mjs` | framework version discovers instances in subdirectories; here the instance IS the repo root, so discovery is replaced by a direct `conform.mjs .` gate. Order and discipline otherwise identical. |\n| `tools/console.mjs` | one-line adaptation of the instance-id mapping (the instance at the repo root would get the empty id); marked ADAPTED at the edit site. Otherwise verbatim — the GET-only Workshop Console (127.0.0.1:4242). |\n| `tools/console.roots.json` | machine-local by design (gitignored in the framework); points at this instance's root. |"
     },
     {
       "type": "markdown",
-      "id": "d7bf95b0858bdd12",
+      "id": "3ff5bbf107abcaed",
       "text": "## Second source: the Lexon spec-checker (from lexon_pvm)\n\n- **Source repo:** `C:\\Users\\mitch\\lexon_pvm` · **commit:** `4d9a3ad740843d7deb802a5877f3f6e8817ca0b2` · **vendored:** 2026-07-17\n\n| here | from | what |\n|---|---|---|\n| `lexon/tools/lexon_check.mjs` | `tools/` | the base grammar gate (attested Lexon subset: parse → binding → round-trip → promise typing) |\n| `lexon/tools/relation_check.mjs` | `tools/` | the mutation probe (relation claims + falsifiability twins) |\n| `lexon/tools/golden/*` | `tools/golden/` | the lexon.org golden fixtures + mutants + relation fixture (the selftest canary) |\n\nThe three `.lex` laws, their `.claims.json`, and `lexon/check.mjs` are\nauthored here."
     },
     {
       "type": "markdown",
-      "id": "9482b2d186f09e75",
+      "id": "03b7650a1cc79580",
       "text": "## Third source: the Game of 42 (built dist)\n\n- **Source repo:** `C:\\Users\\mitch\\game42` (public: github.com/mitchuski/game42) · **commit:** `2dc4255` (dated-seal) · **vendored:** 2026-07-18\n- `game/dist/*` = the app's own `npm run build` output (conform gate + 21 vitest + vite, run fresh at vendor time). Served air-gapped at **`/game/full/`** — the elder sibling, reachable but not the front door.\n- **`game/board.html` is authored here** (2026-07-18, per the First Person: the game \"reset for this use case\"): the workshop's own 42 — 6 axes × 7 stations DERIVED from the ledgers by `boardState()` in `tools/workshop_ui.mjs`, κ-addressed, served at `/game/`. The roster/edges lane (`game/roster.json`, `game/edges.jsonl`, `game/keys/`) is also authored here, on the vendored `tools/vrc.mjs` + `tools/kappa.mjs`."
     },
     {
       "type": "markdown",
-      "id": "c0165586776867be",
+      "id": "fd8f34429ce53024",
       "text": "## Everything else is authored here\n\n`harness.config.mjs` (filled), `canon/`, `corpus/`, `ingest/`, `driver/`,\n`mage/`, `fedwiki/`, `workshop/`, `tools/measure_debt.mjs`,\n`tools/corpus_pack.mjs`, `tools/bind_book.mjs` — hh_workshop's own work."
     },
     {
       "type": "markdown",
-      "id": "179d76834b0b5288",
+      "id": "6fdc09c67d1cee83",
       "text": "## Re-sync (when the framework moves)\n\nFrom `C:\\Users\\mitch\\dual-agent-harness`, re-copy the verbatim rows above,\nre-read the two adapted files for drift, then update the commit hash here and\nrun `node tools/check.mjs` — it must stay green. Never edit a verbatim file in\nplace; fix upstream and re-vendor."
     },
     {
       "type": "markdown",
-      "id": "99429ab0afdd147f",
+      "id": "dfba43abfff8dacf",
       "text": "# Assets\n\nSource: `VENDOR.md`"
     },
     {
-      "id": "6ed46993239e68e6",
+      "id": "f37203a2737e97a8",
       "type": "assets",
       "text": "hh-workshop-vendor"
     },
     {
       "type": "markdown",
-      "id": "1b3ce36e691db334",
+      "id": "513e6fbb6428dbaa",
       "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
     }
   ],
@@ -65,62 +65,62 @@
         "story": [
           {
             "type": "markdown",
-            "id": "04b11846df5aaaec",
+            "id": "977fcd19e6a82573",
             "text": "# VENDOR.md — provenance of the vendored skeleton"
           },
           {
             "type": "markdown",
-            "id": "2894157e3e2308e7",
+            "id": "a41381ae18b1ae9e",
             "text": "**Vendored work is not authored.** Everything listed here was copied verbatim\nfrom the dual-agent harness framework so this instance can run standalone\n(no network, no framework checkout) — per the engine's own note: the root\n\"defaults to the instance itself, which is only correct if the instance\ncarries its own copies (T3).\"\n\n- **Source repo:** `C:\\Users\\mitch\\dual-agent-harness`\n  (public: github.com/mitchuski/agentprivacy-harness)\n- **Source commit:** `c4443c7a072e6a3550bd22114eeb329b5f549483`\n- **Vendored on:** 2026-07-17"
           },
           {
             "type": "markdown",
-            "id": "5f51488c481b2ed1",
+            "id": "a3a19ecd8dd813da",
             "text": "## Verbatim copies\n\n| here | from | what |\n|---|---|---|\n| `TRUSTS.md` | root | T1–T6, the constitution — keep verbatim, never edit here |\n| `GROUND_RULES.md` | root | GR-1..GR-10 |\n| `seats/*.md` | `seats/` | the seven seat cards |\n| `engine/dual_agent_loop.mjs` | `engine/` | the loop |\n| `engine/gap.mjs` | `engine/` | the Gap as code (pure-JS SHA-256) |\n| `engine/conform.mjs` | `engine/` | the conformance gate (G0) |\n| `engine/{gap,loop,loop.salt}.test.mjs` | `engine/` | the engine's own tests |\n| `tools/kappa.mjs` | `tools/` | the κ law (canonicalJson) |\n| `tools/verify_run.mjs` | `tools/` | offline run verifier (D5) |\n| `tools/mint_artefact.mjs` | `tools/` | artefact minting |\n| `tools/render_run.mjs` | `tools/` | static run render |\n| `tools/console.html` + `workshop.html` + `frontier.html` | `tools/` | the Workshop Console pages |\n| `tools/emit_feed.mjs`, `tools/vrc.mjs` | `tools/` | feed + signed-edge helpers the console imports |\n| `tools/bundle.mjs` | `tools/` | config+engine → self-contained .workflow.mjs |\n| `tools/check_claims.mjs` | `tools/` | claims-register enforced-by gate |\n| `templates/*` | `templates/` | the blank an instance is copied from (required to FAIL conform) |"
           },
           {
             "type": "markdown",
-            "id": "ef0296e96ba757d6",
+            "id": "ff535fb066de6f24",
             "text": "## Adapted (not verbatim — divergences named)\n\n| here | divergence |\n|---|---|\n| `tools/check.mjs` | framework version discovers instances in subdirectories; here the instance IS the repo root, so discovery is replaced by a direct `conform.mjs .` gate. Order and discipline otherwise identical. |\n| `tools/console.mjs` | one-line adaptation of the instance-id mapping (the instance at the repo root would get the empty id); marked ADAPTED at the edit site. Otherwise verbatim — the GET-only Workshop Console (127.0.0.1:4242). |\n| `tools/console.roots.json` | machine-local by design (gitignored in the framework); points at this instance's root. |"
           },
           {
             "type": "markdown",
-            "id": "d7bf95b0858bdd12",
+            "id": "3ff5bbf107abcaed",
             "text": "## Second source: the Lexon spec-checker (from lexon_pvm)\n\n- **Source repo:** `C:\\Users\\mitch\\lexon_pvm` · **commit:** `4d9a3ad740843d7deb802a5877f3f6e8817ca0b2` · **vendored:** 2026-07-17\n\n| here | from | what |\n|---|---|---|\n| `lexon/tools/lexon_check.mjs` | `tools/` | the base grammar gate (attested Lexon subset: parse → binding → round-trip → promise typing) |\n| `lexon/tools/relation_check.mjs` | `tools/` | the mutation probe (relation claims + falsifiability twins) |\n| `lexon/tools/golden/*` | `tools/golden/` | the lexon.org golden fixtures + mutants + relation fixture (the selftest canary) |\n\nThe three `.lex` laws, their `.claims.json`, and `lexon/check.mjs` are\nauthored here."
           },
           {
             "type": "markdown",
-            "id": "9482b2d186f09e75",
+            "id": "03b7650a1cc79580",
             "text": "## Third source: the Game of 42 (built dist)\n\n- **Source repo:** `C:\\Users\\mitch\\game42` (public: github.com/mitchuski/game42) · **commit:** `2dc4255` (dated-seal) · **vendored:** 2026-07-18\n- `game/dist/*` = the app's own `npm run build` output (conform gate + 21 vitest + vite, run fresh at vendor time). Served air-gapped at **`/game/full/`** — the elder sibling, reachable but not the front door.\n- **`game/board.html` is authored here** (2026-07-18, per the First Person: the game \"reset for this use case\"): the workshop's own 42 — 6 axes × 7 stations DERIVED from the ledgers by `boardState()` in `tools/workshop_ui.mjs`, κ-addressed, served at `/game/`. The roster/edges lane (`game/roster.json`, `game/edges.jsonl`, `game/keys/`) is also authored here, on the vendored `tools/vrc.mjs` + `tools/kappa.mjs`."
           },
           {
             "type": "markdown",
-            "id": "c0165586776867be",
+            "id": "fd8f34429ce53024",
             "text": "## Everything else is authored here\n\n`harness.config.mjs` (filled), `canon/`, `corpus/`, `ingest/`, `driver/`,\n`mage/`, `fedwiki/`, `workshop/`, `tools/measure_debt.mjs`,\n`tools/corpus_pack.mjs`, `tools/bind_book.mjs` — hh_workshop's own work."
           },
           {
             "type": "markdown",
-            "id": "179d76834b0b5288",
+            "id": "6fdc09c67d1cee83",
             "text": "## Re-sync (when the framework moves)\n\nFrom `C:\\Users\\mitch\\dual-agent-harness`, re-copy the verbatim rows above,\nre-read the two adapted files for drift, then update the commit hash here and\nrun `node tools/check.mjs` — it must stay green. Never edit a verbatim file in\nplace; fix upstream and re-vendor."
           },
           {
             "type": "markdown",
-            "id": "99429ab0afdd147f",
+            "id": "dfba43abfff8dacf",
             "text": "# Assets\n\nSource: `VENDOR.md`"
           },
           {
-            "id": "6ed46993239e68e6",
+            "id": "f37203a2737e97a8",
             "type": "assets",
             "text": "hh-workshop-vendor"
           },
           {
             "type": "markdown",
-            "id": "1b3ce36e691db334",
+            "id": "513e6fbb6428dbaa",
             "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
           }
         ]
       },
-      "date": 1787079880723
+      "date": 1787093564117
     }
   ]
 }

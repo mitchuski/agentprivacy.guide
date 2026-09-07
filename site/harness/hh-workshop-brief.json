@@ -3,62 +3,62 @@
   "story": [
     {
       "type": "markdown",
-      "id": "722bfba0a974e6fe",
+      "id": "2b4e5118c79a51d6",
       "text": "# The Hitchhikers Workshop — a brief of the work, and how it plays out"
     },
     {
       "type": "markdown",
-      "id": "eeaea301c2a5c2f8",
+      "id": "8888773b19356e2e",
       "text": "*Delivered with the hh_workshop instrument. Everything described here is\nbuilt, verified, and running on one commodity machine; nothing described\nhere requires a cloud, a subscription, or a network. Where a claim can be\nchecked, the command that checks it is named.*\n\n---"
     },
     {
       "type": "markdown",
-      "id": "45b18e3652214af4",
+      "id": "0f79758c5d8e2445",
       "text": "## 1 · The premise\n\nA shared computer sits in a seminar room. The cohort calls it **the mage**,\nbecause a good name matters and they chose it together. It runs a local\nlanguage model, air-gapped: nothing the room thinks ever leaves the room.\nOver a ten-week course, the students train it — not abstractly, but\nliterally: their consented writing becomes its grounding, week by week,\nuntil the machine answers in the room's own words.\n\nThe course runs one exercise, recursively. Each student carries a single\nunderstanding across three tongues:\n\n> **sci-fi narrative** (casting it forward) → **poem** (compressing it\n> until a person can say it aloud) → **formal paper** (making it\n> checkable) → and around again.\n\nWe call this the **babblefish recursion**, after the fish that translates\nevery tongue. The pedagogical thesis, made mechanical: *understanding only\ncounts when it survives translation.* A rendering that is beautiful but no\nlonger carries the mechanism is a drift, not a translation — and the\ninstrument catches it.\n\nHow it catches it is the serious part. Submitted work faces **the gate**:\na cryptographic draw — commit first, salt after, hash-derived — selects\nONE of the three tongues, and a blind reader who has never seen the answer\nkey must recover, from that text alone, every claim the tongue declares.\nThe author cannot know which tongue will be interrogated, so polishing one\nat the others' expense is a losing strategy. Every verdict is replayable\noffline from saved bytes by anyone who distrusts it."
     },
     {
       "type": "markdown",
-      "id": "0084233554a5796f",
+      "id": "a09fc160e10354b6",
       "text": "## 2 · What exists today (built, verified)\n\nThe instrument is a standalone repository, copyable to any machine with\nNode and a local model runtime. Its current, checkable state:\n\n- **The harness** — a verification loop (propose → hold-apart → assay →\n  critic → chronicle) with the blind gate above; registered as instance\n  #12 of the public agentprivacy dual-agent harness. `node tools/check.mjs`\n  → **all 9 gates pass**; every recorded run re-derives offline\n  (`node tools/verify_run.mjs . --all`).\n- **The canon** — a 31-claim register distilled from the founding\n  chronicle, plus a seed triptych (story, poem, paper) that passes the\n  gate by construction — the canary that proves the exam is passable.\n- **Live rounds** — real rounds have run with a local 12-billion-parameter\n  model holding every seat: a full census recovered 20/20 claims through\n  the story tongue; another round recovered 10/10 through the *poem* —\n  hard evidence the compressed form can carry mechanism through a blind\n  read.\n- **The mage + the mirror** — the facilitator persona grounded in the\n  consent-gated corpus; a chat surface (the mirror) where its first live\n  answer near-quoted the cohort's own folded voice note. Two hats, two\n  invocations, by law: the persona'd mage converses; only the *base*\n  model ever sits in the judge's seat.\n- **The consent architecture** — one agreement in four registers: plain\n  language, legal, machine-readable, and **Lexon** — controlled natural\n  language a lawyer reads and a machine parses. The laws compile (26\n  checks, `node lexon/check.mjs`), including **absence claims**: the\n  checker *proves* no clause routes a student's expression to the\n  operator, and proves it falsifiably, by generating the mutated contract\n  that adds the route and catching it. Consent is enforced in the pipes —\n  the corpus packer and every exporter refuse unledgered material.\n- **The provenance chain** — a rotating student steward folds each week's\n  consented expressions into the mage; each fold is hashed, signed into a\n  log, and re-derived in public (`node tools/corpus_pack.mjs --verify`).\n  The chain is printed into every bound book: the cohort's verifiable\n  record as this machine's first trainers.\n- **The interfaces** — one local control surface (**the Towel**, with a\n  newcomer's front door: don't panic, three role paths, a glossary);\n  **the workshop's 42** (a game board where stations light only when the\n  ledgers record real trust tasks); **the web** (a knowledge graph derived\n  — never authored — from the repo's own ledgers, with a constellation\n  forge that lets a bearer star a path of nodes and sign it into a new\n  artefact); a generative static site; and a one-command wiki build for\n  federation outward. A fully fictional, clearly-bannered **sample\n  cohort at week 5** exists for demonstrations.\n- **The autonomous layer** — a measure-only **dream cycle** (measures\n  everything, folds nothing, files a dated watch report) and a derived\n  **keystone queue** (everything waiting on a human, one page). The\n  governing split, enforced structurally: *the instrument measures and\n  proposes; only humans fold, and only humans open doors.* There is no\n  publish, push, or send button anywhere in the system."
     },
     {
       "type": "markdown",
-      "id": "a0d2fd60d596eeb1",
+      "id": "ccfe7fb047d8e67f",
       "text": "## 3 · How it plays out — the course, walked\n\n**Week 0 — the seed.** The machine is prepared: model pulled, canon\nseeded, gates green, the zeroth fold signed by the facilitator. The\ninstrument arrives at the university already *whole*: the course could be\nexamined before it begins.\n\n**Week 1 — the rite.** The flight case opens. The room joins a carried\nlocal network (the venue's plumbing is never trusted — the first hour\nteaches why, with a true story about a hostname that died), resolves the\nmage's one good name, and each student *offers* — is never scanned for —\ntheir presence. Each signs their consent line: their words, their\nsignature, their standing right to withdraw. Each writes a first\nexpression of what they understood; each expression is simultaneously\ntheir **key** (access deepens with demonstrated understanding — there are\nno logins) and the mage's **food**. The room seals: one artefact that\nsays *we reached the shared mind together*.\n\n**Weeks 2–7 — the loop.** The weekly shape, every week:\n\n1. *Handover.* Last week's steward verifies the fold-chain green in front\n   of everyone, reads their log entry aloud, and passes the key. A\n   different student holds the mage's training every week — by course end,\n   every name is in the chain.\n2. *Ingest.* Voice notes and drafts run through the local transcriber;\n   authors sign their consent lines; the steward admits what is covered\n   and nothing that isn't (the tools refuse otherwise).\n3. *Write.* Students work their triptychs, entering at whichever tongue\n   they love — and talking it through with the mirror, which reflects and\n   connects but never grades.\n4. *The gate.* Submitted triptychs face the blind draw. The tongue you\n   didn't polish is the one interrogated — that lesson lands in week two\n   and never leaves.\n5. *The fold.* The steward packs the week's corpus; the hash is read\n   aloud like a grace; the mirror deepens.\n6. *The board.* The workshop's 42 lights another station or two — laws\n   compiled, folds logged, rounds proven, pages spooled. Progress is\n   visible instantly; *credit* moves only when the gate validates.\n   Students pair by a hash-drawn matching (complementary tongues first —\n   nobody tunes who they're paired with); earned events — serving as a\n   blind reader, holding the steward week — mint signed edges in a small,\n   real trust graph.\n\n**Week 8 — own the evaluation.** The turn that makes this a course about\nknowledge rather than compliance: the cohort re-fits the exam itself —\nthe metric, the gate, the hard constraints, the canary — through the\nkeystone discipline, with the conformance gate green before and after.\nThey graduate owning the examiner, not just having passed it.\n\n**Weeks 9–10 — the leaving.** The pipeline binds three books — the Book\nof Poems, the Collected Papers, the Story Anthology — each carrying the\nsteward chain in its endpapers. Students may forge **constellations**:\nnamed, signed paths through the knowledge web that become artefacts in\ntheir own right (\"The Proverb Chain\" was the first). Consented pages spool\ntoward the hitchhikers.earth federation — carried outward only by a\nperson, by hand. The seal disc closes on the cohort's board state; each\nstudent leaves with books, verdicts anyone can replay, their weeks in the\nchain, and the right — standing, structural — to withdraw their words."
     },
     {
       "type": "markdown",
-      "id": "bc4d940a639699b9",
+      "id": "7c94d5f7883ed173",
       "text": "## 4 · What the university receives\n\nA **public-goods research instrument**, in the strict sense: zero marginal\ndependency (one commodity box is the whole stack), non-extractive by\nconstruction (the absence claims make extraction structurally impossible,\nnot merely forbidden), forkable (the upstream harness is public; a sister\ndepartment copies the directory and owns its own), and with the students\npositioned as **provenance, never product**.\n\nAssessment posture: the gate answers *\"does the understanding survive\ntranslation?\"* — blind, replayable, third-party auditable. Marks remain\nthe institution's own act, informed by artefacts the instrument makes\nunusually legible: validated triptychs, fold history, each student's\ncontributions to the register. The consent architecture is designed to\nmake the ethics-board conversation short: per-expression, author-signed,\nwithdrawable, machine-enforced, and written in a law that compiles.\n\nThe research horizon compounds across cohorts: each cohort's mage is a\nreproducible generation; cross-cohort verification (one cohort's work\nassayed by another's model — a genuinely distinct prior) is the natural\nfollow-on experiment; and between sister universities, the **erasmus\nrule** keeps sovereignty intact: *methods and probes travel; corpora\nnever do.*"
     },
     {
       "type": "markdown",
-      "id": "cb73ad5e22e97d56",
+      "id": "e76f8d58dada3f65",
       "text": "## 5 · How a skeptic checks (the whole point)\n\n```\nnode tools/check.mjs                 # nine gates: axioms → laws → every run re-derives\nnode tools/verify_run.mjs . <run>    # replay any verdict from saved bytes, no model, no net\nnode tools/corpus_pack.mjs --verify  # the training chain re-derives to the signed hash\nnode lexon/check.mjs                 # the law compiles; the absence claims hold; the twins are caught\nnode tools/dream_cycle.mjs           # the standing watch — measure everything, fold nothing\n```\n\nNothing in this brief asks to be believed."
     },
     {
       "type": "markdown",
-      "id": "2584977d14ee27ad",
+      "id": "b9a5f4e8e244b56e",
       "text": "## 6 · The path from here\n\n1. **A room and a colleague** — eight to fourteen masters students, a\n   faculty co-host, ten sessions (a summer intensive compresses well).\n   The letters to the law and cryptography chairs travel with this\n   package; the demonstration cohort at `/demo/` shows week five before\n   week one exists.\n2. **The pilot cohort** — the course as §3; the university keeps the\n   machine, the corpus, the method, and everything the cohort makes.\n3. **The federation** — consented outputs travel to the hitchhikers.earth\n   commons; a second university makes the erasmus weave real; the trust\n   graph grows the only way it can here: earned."
     },
     {
       "type": "markdown",
-      "id": "74865e7f8f2b6244",
+      "id": "377bf6af30ccb927",
       "text": "## 7 · The package\n\n| document | what it carries |\n|---|---|\n| `docs/BRIEF.md` | this document |\n| `README.md` | the instrument's front door + quickstart |\n| `workshop/CURRICULUM.md` · `workshop/CEREMONY.md` | the ten-week arc · the opening rite, run-of-show |\n| `workshop/UNIVERSITY_ONEPAGER.md` | the one-page pitch |\n| `letters/` | to the international-law chair · to the cryptography chair |\n| `workshop/consent/` + `lexon/` | the agreement in four registers; the laws that compile |\n| `docs/AUTO_RESEARCH.md` | the public-goods auto-research pattern |\n| `docs/SUITE_MAPPING.md` | how the new methods seat into the wider agentprivacy suite |\n| `artifact/PROVENANCE.md` | what the students verifiably keep |\n| `mage/MACHINE_SETUP.md` · `workshop/PREFLIGHT.md` | a fresh machine from zero · venue day |\n| `docs/UX_REVIEW.md` · `chronicles/` | how the interfaces were audited · the honest build record, reversals included |\n| `KEYSTONE_QUEUE.md` | live: everything currently waiting on a human |\n\n---\n\n*Contact: Mitchell Travers · mitchell@soulbis.com · the public upstream:\ngithub.com/mitchuski/agentprivacy-harness*\n\n*\"This document travels at the speed of trust.\"*"
     },
     {
       "type": "markdown",
-      "id": "4cf75fdd29cd95b5",
+      "id": "064242af72d789d7",
       "text": "# Assets\n\nSource: `docs/BRIEF.md`"
     },
     {
-      "id": "f791d33b8738b6c1",
+      "id": "281ee8c86c9d51aa",
       "type": "assets",
       "text": "hh-workshop-brief"
     },
     {
       "type": "markdown",
-      "id": "be59c1cc91139015",
+      "id": "ae40f8db1028c58e",
       "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
     }
   ],
@@ -70,67 +70,67 @@
         "story": [
           {
             "type": "markdown",
-            "id": "722bfba0a974e6fe",
+            "id": "2b4e5118c79a51d6",
             "text": "# The Hitchhikers Workshop — a brief of the work, and how it plays out"
           },
           {
             "type": "markdown",
-            "id": "eeaea301c2a5c2f8",
+            "id": "8888773b19356e2e",
             "text": "*Delivered with the hh_workshop instrument. Everything described here is\nbuilt, verified, and running on one commodity machine; nothing described\nhere requires a cloud, a subscription, or a network. Where a claim can be\nchecked, the command that checks it is named.*\n\n---"
           },
           {
             "type": "markdown",
-            "id": "45b18e3652214af4",
+            "id": "0f79758c5d8e2445",
             "text": "## 1 · The premise\n\nA shared computer sits in a seminar room. The cohort calls it **the mage**,\nbecause a good name matters and they chose it together. It runs a local\nlanguage model, air-gapped: nothing the room thinks ever leaves the room.\nOver a ten-week course, the students train it — not abstractly, but\nliterally: their consented writing becomes its grounding, week by week,\nuntil the machine answers in the room's own words.\n\nThe course runs one exercise, recursively. Each student carries a single\nunderstanding across three tongues:\n\n> **sci-fi narrative** (casting it forward) → **poem** (compressing it\n> until a person can say it aloud) → **formal paper** (making it\n> checkable) → and around again.\n\nWe call this the **babblefish recursion**, after the fish that translates\nevery tongue. The pedagogical thesis, made mechanical: *understanding only\ncounts when it survives translation.* A rendering that is beautiful but no\nlonger carries the mechanism is a drift, not a translation — and the\ninstrument catches it.\n\nHow it catches it is the serious part. Submitted work faces **the gate**:\na cryptographic draw — commit first, salt after, hash-derived — selects\nONE of the three tongues, and a blind reader who has never seen the answer\nkey must recover, from that text alone, every claim the tongue declares.\nThe author cannot know which tongue will be interrogated, so polishing one\nat the others' expense is a losing strategy. Every verdict is replayable\noffline from saved bytes by anyone who distrusts it."
           },
           {
             "type": "markdown",
-            "id": "0084233554a5796f",
+            "id": "a09fc160e10354b6",
             "text": "## 2 · What exists today (built, verified)\n\nThe instrument is a standalone repository, copyable to any machine with\nNode and a local model runtime. Its current, checkable state:\n\n- **The harness** — a verification loop (propose → hold-apart → assay →\n  critic → chronicle) with the blind gate above; registered as instance\n  #12 of the public agentprivacy dual-agent harness. `node tools/check.mjs`\n  → **all 9 gates pass**; every recorded run re-derives offline\n  (`node tools/verify_run.mjs . --all`).\n- **The canon** — a 31-claim register distilled from the founding\n  chronicle, plus a seed triptych (story, poem, paper) that passes the\n  gate by construction — the canary that proves the exam is passable.\n- **Live rounds** — real rounds have run with a local 12-billion-parameter\n  model holding every seat: a full census recovered 20/20 claims through\n  the story tongue; another round recovered 10/10 through the *poem* —\n  hard evidence the compressed form can carry mechanism through a blind\n  read.\n- **The mage + the mirror** — the facilitator persona grounded in the\n  consent-gated corpus; a chat surface (the mirror) where its first live\n  answer near-quoted the cohort's own folded voice note. Two hats, two\n  invocations, by law: the persona'd mage converses; only the *base*\n  model ever sits in the judge's seat.\n- **The consent architecture** — one agreement in four registers: plain\n  language, legal, machine-readable, and **Lexon** — controlled natural\n  language a lawyer reads and a machine parses. The laws compile (26\n  checks, `node lexon/check.mjs`), including **absence claims**: the\n  checker *proves* no clause routes a student's expression to the\n  operator, and proves it falsifiably, by generating the mutated contract\n  that adds the route and catching it. Consent is enforced in the pipes —\n  the corpus packer and every exporter refuse unledgered material.\n- **The provenance chain** — a rotating student steward folds each week's\n  consented expressions into the mage; each fold is hashed, signed into a\n  log, and re-derived in public (`node tools/corpus_pack.mjs --verify`).\n  The chain is printed into every bound book: the cohort's verifiable\n  record as this machine's first trainers.\n- **The interfaces** — one local control surface (**the Towel**, with a\n  newcomer's front door: don't panic, three role paths, a glossary);\n  **the workshop's 42** (a game board where stations light only when the\n  ledgers record real trust tasks); **the web** (a knowledge graph derived\n  — never authored — from the repo's own ledgers, with a constellation\n  forge that lets a bearer star a path of nodes and sign it into a new\n  artefact); a generative static site; and a one-command wiki build for\n  federation outward. A fully fictional, clearly-bannered **sample\n  cohort at week 5** exists for demonstrations.\n- **The autonomous layer** — a measure-only **dream cycle** (measures\n  everything, folds nothing, files a dated watch report) and a derived\n  **keystone queue** (everything waiting on a human, one page). The\n  governing split, enforced structurally: *the instrument measures and\n  proposes; only humans fold, and only humans open doors.* There is no\n  publish, push, or send button anywhere in the system."
           },
           {
             "type": "markdown",
-            "id": "a0d2fd60d596eeb1",
+            "id": "ccfe7fb047d8e67f",
             "text": "## 3 · How it plays out — the course, walked\n\n**Week 0 — the seed.** The machine is prepared: model pulled, canon\nseeded, gates green, the zeroth fold signed by the facilitator. The\ninstrument arrives at the university already *whole*: the course could be\nexamined before it begins.\n\n**Week 1 — the rite.** The flight case opens. The room joins a carried\nlocal network (the venue's plumbing is never trusted — the first hour\nteaches why, with a true story about a hostname that died), resolves the\nmage's one good name, and each student *offers* — is never scanned for —\ntheir presence. Each signs their consent line: their words, their\nsignature, their standing right to withdraw. Each writes a first\nexpression of what they understood; each expression is simultaneously\ntheir **key** (access deepens with demonstrated understanding — there are\nno logins) and the mage's **food**. The room seals: one artefact that\nsays *we reached the shared mind together*.\n\n**Weeks 2–7 — the loop.** The weekly shape, every week:\n\n1. *Handover.* Last week's steward verifies the fold-chain green in front\n   of everyone, reads their log entry aloud, and passes the key. A\n   different student holds the mage's training every week — by course end,\n   every name is in the chain.\n2. *Ingest.* Voice notes and drafts run through the local transcriber;\n   authors sign their consent lines; the steward admits what is covered\n   and nothing that isn't (the tools refuse otherwise).\n3. *Write.* Students work their triptychs, entering at whichever tongue\n   they love — and talking it through with the mirror, which reflects and\n   connects but never grades.\n4. *The gate.* Submitted triptychs face the blind draw. The tongue you\n   didn't polish is the one interrogated — that lesson lands in week two\n   and never leaves.\n5. *The fold.* The steward packs the week's corpus; the hash is read\n   aloud like a grace; the mirror deepens.\n6. *The board.* The workshop's 42 lights another station or two — laws\n   compiled, folds logged, rounds proven, pages spooled. Progress is\n   visible instantly; *credit* moves only when the gate validates.\n   Students pair by a hash-drawn matching (complementary tongues first —\n   nobody tunes who they're paired with); earned events — serving as a\n   blind reader, holding the steward week — mint signed edges in a small,\n   real trust graph.\n\n**Week 8 — own the evaluation.** The turn that makes this a course about\nknowledge rather than compliance: the cohort re-fits the exam itself —\nthe metric, the gate, the hard constraints, the canary — through the\nkeystone discipline, with the conformance gate green before and after.\nThey graduate owning the examiner, not just having passed it.\n\n**Weeks 9–10 — the leaving.** The pipeline binds three books — the Book\nof Poems, the Collected Papers, the Story Anthology — each carrying the\nsteward chain in its endpapers. Students may forge **constellations**:\nnamed, signed paths through the knowledge web that become artefacts in\ntheir own right (\"The Proverb Chain\" was the first). Consented pages spool\ntoward the hitchhikers.earth federation — carried outward only by a\nperson, by hand. The seal disc closes on the cohort's board state; each\nstudent leaves with books, verdicts anyone can replay, their weeks in the\nchain, and the right — standing, structural — to withdraw their words."
           },
           {
             "type": "markdown",
-            "id": "bc4d940a639699b9",
+            "id": "7c94d5f7883ed173",
             "text": "## 4 · What the university receives\n\nA **public-goods research instrument**, in the strict sense: zero marginal\ndependency (one commodity box is the whole stack), non-extractive by\nconstruction (the absence claims make extraction structurally impossible,\nnot merely forbidden), forkable (the upstream harness is public; a sister\ndepartment copies the directory and owns its own), and with the students\npositioned as **provenance, never product**.\n\nAssessment posture: the gate answers *\"does the understanding survive\ntranslation?\"* — blind, replayable, third-party auditable. Marks remain\nthe institution's own act, informed by artefacts the instrument makes\nunusually legible: validated triptychs, fold history, each student's\ncontributions to the register. The consent architecture is designed to\nmake the ethics-board conversation short: per-expression, author-signed,\nwithdrawable, machine-enforced, and written in a law that compiles.\n\nThe research horizon compounds across cohorts: each cohort's mage is a\nreproducible generation; cross-cohort verification (one cohort's work\nassayed by another's model — a genuinely distinct prior) is the natural\nfollow-on experiment; and between sister universities, the **erasmus\nrule** keeps sovereignty intact: *methods and probes travel; corpora\nnever do.*"
           },
           {
             "type": "markdown",
-            "id": "cb73ad5e22e97d56",
+            "id": "e76f8d58dada3f65",
             "text": "## 5 · How a skeptic checks (the whole point)\n\n```\nnode tools/check.mjs                 # nine gates: axioms → laws → every run re-derives\nnode tools/verify_run.mjs . <run>    # replay any verdict from saved bytes, no model, no net\nnode tools/corpus_pack.mjs --verify  # the training chain re-derives to the signed hash\nnode lexon/check.mjs                 # the law compiles; the absence claims hold; the twins are caught\nnode tools/dream_cycle.mjs           # the standing watch — measure everything, fold nothing\n```\n\nNothing in this brief asks to be believed."
           },
           {
             "type": "markdown",
-            "id": "2584977d14ee27ad",
+            "id": "b9a5f4e8e244b56e",
             "text": "## 6 · The path from here\n\n1. **A room and a colleague** — eight to fourteen masters students, a\n   faculty co-host, ten sessions (a summer intensive compresses well).\n   The letters to the law and cryptography chairs travel with this\n   package; the demonstration cohort at `/demo/` shows week five before\n   week one exists.\n2. **The pilot cohort** — the course as §3; the university keeps the\n   machine, the corpus, the method, and everything the cohort makes.\n3. **The federation** — consented outputs travel to the hitchhikers.earth\n   commons; a second university makes the erasmus weave real; the trust\n   graph grows the only way it can here: earned."
           },
           {
             "type": "markdown",
-            "id": "74865e7f8f2b6244",
+            "id": "377bf6af30ccb927",
             "text": "## 7 · The package\n\n| document | what it carries |\n|---|---|\n| `docs/BRIEF.md` | this document |\n| `README.md` | the instrument's front door + quickstart |\n| `workshop/CURRICULUM.md` · `workshop/CEREMONY.md` | the ten-week arc · the opening rite, run-of-show |\n| `workshop/UNIVERSITY_ONEPAGER.md` | the one-page pitch |\n| `letters/` | to the international-law chair · to the cryptography chair |\n| `workshop/consent/` + `lexon/` | the agreement in four registers; the laws that compile |\n| `docs/AUTO_RESEARCH.md` | the public-goods auto-research pattern |\n| `docs/SUITE_MAPPING.md` | how the new methods seat into the wider agentprivacy suite |\n| `artifact/PROVENANCE.md` | what the students verifiably keep |\n| `mage/MACHINE_SETUP.md` · `workshop/PREFLIGHT.md` | a fresh machine from zero · venue day |\n| `docs/UX_REVIEW.md` · `chronicles/` | how the interfaces were audited · the honest build record, reversals included |\n| `KEYSTONE_QUEUE.md` | live: everything currently waiting on a human |\n\n---\n\n*Contact: Mitchell Travers · mitchell@soulbis.com · the public upstream:\ngithub.com/mitchuski/agentprivacy-harness*\n\n*\"This document travels at the speed of trust.\"*"
           },
           {
             "type": "markdown",
-            "id": "4cf75fdd29cd95b5",
+            "id": "064242af72d789d7",
             "text": "# Assets\n\nSource: `docs/BRIEF.md`"
           },
           {
-            "id": "f791d33b8738b6c1",
+            "id": "281ee8c86c9d51aa",
             "type": "assets",
             "text": "hh-workshop-brief"
           },
           {
             "type": "markdown",
-            "id": "be59c1cc91139015",
+            "id": "ae40f8db1028c58e",
             "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
           }
         ]
       },
-      "date": 1787079880720
+      "date": 1787093564114
     }
   ]
 }

@@ -3,42 +3,42 @@
   "story": [
     {
       "type": "markdown",
-      "id": "41d24caee70fbfa1",
+      "id": "cc215418a98891b3",
       "text": "# ⚙️ The Engine And Its Gates"
     },
     {
       "type": "markdown",
-      "id": "f72247d85a91b8de",
+      "id": "85c80997d9bd4e0f",
       "text": "Zero-dependency Node, three files, every claim checked rather than trusted. This page is the map; the code is the source of truth — read it in the repo."
     },
     {
       "type": "markdown",
-      "id": "4f344ad2c561af47",
+      "id": "d15262ddc48fd611",
       "text": "## engine/dual_agent_loop.mjs — the loop\n\nThe generic six-phase engine: takes a `harness.config.mjs` (see [[The Seat Contract]]) plus `{repo, root, runId}` and runs Measure → Propose(∥) → Hold-apart → Assay → Critic → Chronicle. Propose→Assay is a pipeline with no barrier. It returns verdicts and drafts; it never folds, never writes ledgers. A round that loses a seat returns `status: INCOMPLETE` with `keystoneTodo: FOLD NOTHING` — **empty is evidence; dead is not.**"
     },
     {
       "type": "markdown",
-      "id": "b05296fd8892f21e",
+      "id": "2256ebb4c39cf781",
       "text": "## engine/conform.mjs — the conformance gate\n\nProves the axioms hold before any work: the algebra `neg(bnot(x)) = succ(x)` on all of ℤ/64ℤ, the six trusts anchored, GR-1..10 present, seven seats carded, `door: 'first-person'` literal, instance config + frontier coherent. It keeps its OWN copy of the axioms and deliberately does not import them from the engine — both are checked against a third thing. It refuses a config still wearing its template TODOs: **a gate that passes an unfilled config is worth less than no gate, because it is believed.**"
     },
     {
       "type": "markdown",
-      "id": "6dd861d653b526bf",
+      "id": "7e2746bd57320bb6",
       "text": "## engine/loop.test.mjs — the failure semantics, pinned\n\nSix tests that exist because of real failures: an outage must never be reported as an exhausted search; a dead seat is not a dry round; the blank template must fail conform *for the right reasons* (asserted by mutation, not by hope)."
     },
     {
       "type": "markdown",
-      "id": "16f7463490140c7e",
+      "id": "ff3489ad0c3e908e",
       "text": "## tools/check.mjs — one command, every gate\n\n`node tools/check.mjs` — proves the algebra, runs the engine tests, conforms every instance it discovers, asserts the template fails, audits `universe/` if present. If it exits non-zero, every line it printed is a command you can re-run yourself."
     },
     {
       "type": "markdown",
-      "id": "3048b00ce09828ca",
+      "id": "27bda51de1e40d23",
       "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]] · [[Workflows And Runtimes]]"
     },
     {
       "type": "markdown",
-      "id": "d918f43ae27ca103",
+      "id": "d626c0177ae01cf1",
       "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
     }
   ],
@@ -50,47 +50,47 @@
         "story": [
           {
             "type": "markdown",
-            "id": "41d24caee70fbfa1",
+            "id": "cc215418a98891b3",
             "text": "# ⚙️ The Engine And Its Gates"
           },
           {
             "type": "markdown",
-            "id": "f72247d85a91b8de",
+            "id": "85c80997d9bd4e0f",
             "text": "Zero-dependency Node, three files, every claim checked rather than trusted. This page is the map; the code is the source of truth — read it in the repo."
           },
           {
             "type": "markdown",
-            "id": "4f344ad2c561af47",
+            "id": "d15262ddc48fd611",
             "text": "## engine/dual_agent_loop.mjs — the loop\n\nThe generic six-phase engine: takes a `harness.config.mjs` (see [[The Seat Contract]]) plus `{repo, root, runId}` and runs Measure → Propose(∥) → Hold-apart → Assay → Critic → Chronicle. Propose→Assay is a pipeline with no barrier. It returns verdicts and drafts; it never folds, never writes ledgers. A round that loses a seat returns `status: INCOMPLETE` with `keystoneTodo: FOLD NOTHING` — **empty is evidence; dead is not.**"
           },
           {
             "type": "markdown",
-            "id": "b05296fd8892f21e",
+            "id": "2256ebb4c39cf781",
             "text": "## engine/conform.mjs — the conformance gate\n\nProves the axioms hold before any work: the algebra `neg(bnot(x)) = succ(x)` on all of ℤ/64ℤ, the six trusts anchored, GR-1..10 present, seven seats carded, `door: 'first-person'` literal, instance config + frontier coherent. It keeps its OWN copy of the axioms and deliberately does not import them from the engine — both are checked against a third thing. It refuses a config still wearing its template TODOs: **a gate that passes an unfilled config is worth less than no gate, because it is believed.**"
           },
           {
             "type": "markdown",
-            "id": "6dd861d653b526bf",
+            "id": "7e2746bd57320bb6",
             "text": "## engine/loop.test.mjs — the failure semantics, pinned\n\nSix tests that exist because of real failures: an outage must never be reported as an exhausted search; a dead seat is not a dry round; the blank template must fail conform *for the right reasons* (asserted by mutation, not by hope)."
           },
           {
             "type": "markdown",
-            "id": "16f7463490140c7e",
+            "id": "ff3489ad0c3e908e",
             "text": "## tools/check.mjs — one command, every gate\n\n`node tools/check.mjs` — proves the algebra, runs the engine tests, conforms every instance it discovers, asserts the template fails, audits `universe/` if present. If it exits non-zero, every line it printed is a command you can re-run yourself."
           },
           {
             "type": "markdown",
-            "id": "3048b00ce09828ca",
+            "id": "27bda51de1e40d23",
             "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]] · [[Workflows And Runtimes]]"
           },
           {
             "type": "markdown",
-            "id": "d918f43ae27ca103",
+            "id": "d626c0177ae01cf1",
             "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
           }
         ]
       },
-      "date": 1787079851577
+      "date": 1787093563953
     }
   ]
 }

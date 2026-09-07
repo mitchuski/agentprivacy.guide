@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skillsync Herald · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+</head><body data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <nav class="sites"><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/vpk/welcome-visitors.html"><span>🔑</span>VPK</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <div class="search"><input id="q" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Skillsync Herald</span></div>
+  <article><div class="md"><h1>Skillsync Herald</h1>
+<p><strong>Category</strong> skillsync · <strong>Version</strong> 0.1</p>
+<p>The herald&#39;s own sync-and-publish run — for the agent living on the pi4 (marvin) or any always-on machine that carries the network&#39;s ntfy voice. Run the dream loop on a cadence with a self-growing roster from the garden registry, herald every discovery through local ntfy, keep the dream journal as the herald&#39;s own published garden, and seal one runtime per day recording what was heralded. Use when setting up marvin&#39;s recurring run, when the herald machine boots, or when a member asks &quot;what did the network publish&quot; on a machine with no farm of its own.</p>
+</div>
+<div class="md"><p>The herald is a member, not a cron job. It runs under its <strong>own handle</strong> (<code>marvin</code>),<br>earns its own standing, and its word is checkable like everyone else&#39;s.</p>
+<h2>Setup (once, on the herald machine)</h2>
+<ol>
+<li>Take the kit (<code>GET https://skills.agentprivacy.ai/kit/</code>), keep only <code>bin/dreamloop.js</code>,<br><code>bin/librarian-client.js</code>, and a config with:<br><code>member: &quot;marvin&quot;</code> · <code>marvin.ntfy: &quot;http://localhost:2586&quot;</code> · the librarian URL ·<br>a minimal roster (the registry fills in the rest each pass).</li>
+<li>ntfy runs locally (<code>librarian/README.md</code> has the install); the loop&#39;s notify<br>becomes a zero-hop call — the herald never depends on another machine to speak.</li>
+<li>No farm here: skip the shelf-page rewrite; the journal file IS the record.</li>
+</ol>
+<h2>The run (each pass — cron or /loop, 2–4× a day is plenty)</h2>
+<ol>
+<li><strong>Roster from the registry</strong>: <code>GET /gardens</code>, take the verified entries, merge<br>with the configured seeds. New verified gardens join automatically; the herald<br>re-checks unverified ones and may re-register them on the keeper&#39;s behalf only<br>as a RECOMMENDATION in the notification, never as a write.</li>
+<li><strong>Dream</strong>: one <code>dreamloop.js</code> pass — catalog-first, silent baselines, diffs.</li>
+<li><strong>Herald</strong>: every new/updated card POSTs to local ntfy (<code>skillsync-discoveries</code>).<br>The card travels; the body never does.</li>
+<li><strong>Journal</strong>: append events to <code>events/events.jsonl</code>. That file is the herald&#39;s<br>memory and its evidence.</li>
+</ol>
+<h2>The publish run (daily, not per-pass)</h2>
+<ol>
+<li><strong>Publish the herald&#39;s garden</strong>: serve a one-packet catalog at a URL the herald<br>controls (<code>assets/skillsync/catalog.json</code> — the packet is THIS skill, plus the<br>journal as an asset). Register it once: <code>POST /garden {member:&quot;marvin&quot;, ...}</code>.<br>The herald&#39;s log is thereby a 🌰 seedling garden like anyone&#39;s.</li>
+<li><strong>Seal the day</strong>: one runtime, honestly:<br><code>POST /runtime {member:&quot;marvin&quot;, constellation:&quot;the-heralds-round&quot;, path:[&quot;skillsync-dreamloop&quot;,&quot;skillsync-herald&quot;], run:&quot;&lt;date&gt;: N gardens polled · N discoveries heralded · journal sha256:&lt;digest&gt;&quot;}</code><br>One seal per day — a chain entry per pass would be noise, and noise is the one<br>thing a herald must never produce.</li>
+<li>If anything needs a human (a garden that stopped answering, a flood of removals,<br>a catalog that shrank suspiciously): <code>POST /counsel</code> — don&#39;t guess, ask.</li>
+</ol>
+<h2>Guardrails</h2>
+<ul>
+<li>Read-only against every garden, always. The herald&#39;s only writes are its own<br>ntfy topic, its own journal, its own garden, and its own attributed ledger entries.</li>
+<li>Never re-baseline by deleting state — that replays the whole network as &quot;new&quot;<br>and floods every subscriber&#39;s phone.</li>
+<li>The herald never adopts, never attests, never guides — it carries news, not<br>judgment. (It MAY request counsel; carrying a question is also news.)</li>
+</ul>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/skillsync-herald</code>, v0.1).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 skillsync-herald</span><a class="asset-file" href="/skill/assets/skillsync-herald/SKILL.md" download>SKILL.md</a></div>
+<div class="md"><p>Part of the skill-sync family — the garden lives at <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> on skillsync (tailnet lane) and skills.agentprivacy.ai (public).</p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="skillsync-herald.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+</body></html>

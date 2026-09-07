@@ -3,57 +3,57 @@
   "story": [
     {
       "type": "markdown",
-      "id": "58487abacc4cae38",
+      "id": "b003a81f374306bf",
       "text": "# 🗃️ The Harness Skill"
     },
     {
       "type": "markdown",
-      "id": "2fd378de3ed8d92d",
+      "id": "83f2fe782eeb8ba4",
       "text": "---\nname: dual-agent-harness\ndescription: Build or run a soulbis ⚔️ ⊥ soulbae 🧙 dual-agent harness — a proposer and a prover held apart by a Fiat-Shamir Gap, so no result survives that the proposer could have tuned to. Use when setting up a rigorous optimization or autoresearch loop, when an agent keeps grading its own work, when you need held-out validation of AI-proposed changes, or when someone says \"dual agent harness\", \"held-apart agents\", \"soulbis/soulbae\", \"autoresearch loop\", \"the proposer is marking its own homework\", or \"build my own harness path\".\nlicense: Apache-2.0\nmetadata:\n  version: 1.0.0\n  origin: 0xagentprivacy\n  inscription: \"(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\"\n  proverb: \"The proposer that grades itself builds mirages; only what the Gap could not tune to is a result.\"\n  spell: \"measure → propose(held-apart) → hunt → assay(held-out) → critic → accept-only-on-validated-product\"\n---\n\n# Dual-agent harness\n\nA two-agent loop where the agent that proposes changes and the agent that\nvalidates them are **architecturally held apart**. Between them sits the Gap:\nverification witnesses are derived by hashing the proposal itself, so the\nproposer cannot have optimised for them and the prover cannot be accused of\nchoosing them.\n\nUse it whenever a single agent would otherwise propose a change, run its own\ncheck, and declare victory. That loop produces **mirages** — candidates that\npass the author's own probe and fail the real gate. This harness makes the\nmirage a named verdict rather than a surprise."
     },
     {
       "type": "markdown",
-      "id": "5e37dbb0aaebfbc1",
+      "id": "8d46bf0da638c1de",
       "text": "## When to use\n\n- Setting up an optimization loop (make X smaller/faster/cheaper subject to a\n  constraint that must not break).\n- Setting up an autoresearch loop (produce a claim, then prove it against\n  evidence the producer did not select).\n- Any time an AI-proposed change needs held-out validation before a human\n  signs off."
     },
     {
       "type": "markdown",
-      "id": "fd3d75140be1c454",
+      "id": "6b3da2fe6671d1cf",
       "text": "## Build recipe\n\n1. **Define the Gap first.** If you cannot say how held-out witnesses derive\n   from a proposal by hashing, you do not have a harness yet — you have a\n   to-do list. Everything else follows from this.\n2. **Name the objective, the gate, and the hard constraint.** The gate is a\n   factor in a product: any zero collapses the result at any score. The hard\n   constraint is validity no score can override.\n3. **Give the proposer at least two blind lenses.** For a product objective,\n   one lens per factor, plus a cliff-watcher in the prover.\n4. **Copy `templates/harness.config.mjs`**, fill every TODO, bundle it with\n   `tools/bundle.mjs`, run it.\n5. **Fold as the keystone**, in the main session, with `conform.mjs` green\n   before and after."
     },
     {
       "type": "markdown",
-      "id": "821b795a58add827",
+      "id": "624c35a85041a135",
       "text": "## Hard rules\n\n- A candidate is not a result. Only a full-gate pass, hard constraint intact,\n  and a frontier beat is `VALIDATED`.\n- Witnesses never come from the proposer. A validation on proposer-suggested\n  witnesses is void.\n- A probe pass that fails the full gate is a `MIRAGE`. Name it; never soften\n  it.\n- Negative results are filed as prominently as wins.\n- **The door is the First Person's.** Push, submit, publish, send — the\n  harness stops in front of these and lists them. It never opens them."
     },
     {
       "type": "markdown",
-      "id": "e32ea2be08d13ff6",
+      "id": "948f90b8a19b65bb",
       "text": "## κ as state — the holon layer\n\nA validated result seals into a **κ-addressed holon**: a record whose address is\n`sha256(canonicalJson(itself, minus the κ field))` — the City Key / sigil Law L5\n(never trusted, only re-derived). The mint produces them, the runtime feed\nself-addresses, and `tools/holon_audit.mjs` re-derives the whole mesh. Because\nverifying content-addressed holons is enumerable, that verifier is an **auditor,\nnot a harness**: the harness mints the holons, the auditor verifies the mesh. One\nκ law (`tools/kappa.mjs`), computed identically everywhere, is the interoperability\nsubstrate — a holon minted here re-derives byte-for-byte anywhere else. See\n`HOLONS.md`."
     },
     {
       "type": "markdown",
-      "id": "2ec68c6613761262",
+      "id": "cd2fc0b73951cbab",
       "text": "## Map\n\n`RESEARCH.md` (the contribution — problem, claim, evidence, limits) ·\n`PRACTICES.md` (the 2024–26 field surveyed against this harness, every claim\ntraced through `SOURCES.md`) ·\n`AGENTS.md` (the tool-neutral boot protocol; `CLAUDE.md` imports it) ·\n`HOLONS.md` (κ-addressed interoperability, and why it is an auditor) ·\n`TRUSTS.md` (the constitution — six trusts, and where each one bites) ·\n`GROUND_RULES.md` (GR-1..GR-10) · `SEAT_CONTRACT.md` (the config interface) ·\n`seats/` (seven cards) · `engine/dual_agent_loop.mjs` (the loop) ·\n`engine/conform.mjs` (the gate that proves the algebra rather than asserting\nit) · `examples/field-guide/` (a runnable spar) · `SPECIALISATION.md`\n(personas, spells, and the Game of 42 station pattern) · `HARNESS_PATHS.md`\n(the origin fleet — fifteen real instances, grouped by how much of the loop\neach runs; evidence, not part of the system you adopt) ·\n`WIKI.md` (the Observe lane — auto-populating a federated wiki + the\nknowledge-graph asset for agents) ·\n`tools/console.mjs` (the live workshop console) · `tools/frontier.html` (the\ninteractive, contributable frontier, per workshop)."
     },
     {
       "type": "markdown",
-      "id": "50e7a9b95272ea6a",
+      "id": "31c94f3af9ce917b",
       "text": "# Assets"
     },
     {
-      "id": "5f10617c6ac2c1e3",
+      "id": "f9896cd7b0995b7b",
       "type": "assets",
       "text": "the-harness-skill"
     },
     {
       "type": "markdown",
-      "id": "e370b06becff138c",
+      "id": "19a65fe48abbb52e",
       "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
     },
     {
       "type": "markdown",
-      "id": "8aef935ec133f778",
+      "id": "75470727fca3e503",
       "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
     }
   ],
@@ -65,62 +65,62 @@
         "story": [
           {
             "type": "markdown",
-            "id": "58487abacc4cae38",
+            "id": "b003a81f374306bf",
             "text": "# 🗃️ The Harness Skill"
           },
           {
             "type": "markdown",
-            "id": "2fd378de3ed8d92d",
+            "id": "83f2fe782eeb8ba4",
             "text": "---\nname: dual-agent-harness\ndescription: Build or run a soulbis ⚔️ ⊥ soulbae 🧙 dual-agent harness — a proposer and a prover held apart by a Fiat-Shamir Gap, so no result survives that the proposer could have tuned to. Use when setting up a rigorous optimization or autoresearch loop, when an agent keeps grading its own work, when you need held-out validation of AI-proposed changes, or when someone says \"dual agent harness\", \"held-apart agents\", \"soulbis/soulbae\", \"autoresearch loop\", \"the proposer is marking its own homework\", or \"build my own harness path\".\nlicense: Apache-2.0\nmetadata:\n  version: 1.0.0\n  origin: 0xagentprivacy\n  inscription: \"(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ\"\n  proverb: \"The proposer that grades itself builds mirages; only what the Gap could not tune to is a result.\"\n  spell: \"measure → propose(held-apart) → hunt → assay(held-out) → critic → accept-only-on-validated-product\"\n---\n\n# Dual-agent harness\n\nA two-agent loop where the agent that proposes changes and the agent that\nvalidates them are **architecturally held apart**. Between them sits the Gap:\nverification witnesses are derived by hashing the proposal itself, so the\nproposer cannot have optimised for them and the prover cannot be accused of\nchoosing them.\n\nUse it whenever a single agent would otherwise propose a change, run its own\ncheck, and declare victory. That loop produces **mirages** — candidates that\npass the author's own probe and fail the real gate. This harness makes the\nmirage a named verdict rather than a surprise."
           },
           {
             "type": "markdown",
-            "id": "5e37dbb0aaebfbc1",
+            "id": "8d46bf0da638c1de",
             "text": "## When to use\n\n- Setting up an optimization loop (make X smaller/faster/cheaper subject to a\n  constraint that must not break).\n- Setting up an autoresearch loop (produce a claim, then prove it against\n  evidence the producer did not select).\n- Any time an AI-proposed change needs held-out validation before a human\n  signs off."
           },
           {
             "type": "markdown",
-            "id": "fd3d75140be1c454",
+            "id": "6b3da2fe6671d1cf",
             "text": "## Build recipe\n\n1. **Define the Gap first.** If you cannot say how held-out witnesses derive\n   from a proposal by hashing, you do not have a harness yet — you have a\n   to-do list. Everything else follows from this.\n2. **Name the objective, the gate, and the hard constraint.** The gate is a\n   factor in a product: any zero collapses the result at any score. The hard\n   constraint is validity no score can override.\n3. **Give the proposer at least two blind lenses.** For a product objective,\n   one lens per factor, plus a cliff-watcher in the prover.\n4. **Copy `templates/harness.config.mjs`**, fill every TODO, bundle it with\n   `tools/bundle.mjs`, run it.\n5. **Fold as the keystone**, in the main session, with `conform.mjs` green\n   before and after."
           },
           {
             "type": "markdown",
-            "id": "821b795a58add827",
+            "id": "624c35a85041a135",
             "text": "## Hard rules\n\n- A candidate is not a result. Only a full-gate pass, hard constraint intact,\n  and a frontier beat is `VALIDATED`.\n- Witnesses never come from the proposer. A validation on proposer-suggested\n  witnesses is void.\n- A probe pass that fails the full gate is a `MIRAGE`. Name it; never soften\n  it.\n- Negative results are filed as prominently as wins.\n- **The door is the First Person's.** Push, submit, publish, send — the\n  harness stops in front of these and lists them. It never opens them."
           },
           {
             "type": "markdown",
-            "id": "e32ea2be08d13ff6",
+            "id": "948f90b8a19b65bb",
             "text": "## κ as state — the holon layer\n\nA validated result seals into a **κ-addressed holon**: a record whose address is\n`sha256(canonicalJson(itself, minus the κ field))` — the City Key / sigil Law L5\n(never trusted, only re-derived). The mint produces them, the runtime feed\nself-addresses, and `tools/holon_audit.mjs` re-derives the whole mesh. Because\nverifying content-addressed holons is enumerable, that verifier is an **auditor,\nnot a harness**: the harness mints the holons, the auditor verifies the mesh. One\nκ law (`tools/kappa.mjs`), computed identically everywhere, is the interoperability\nsubstrate — a holon minted here re-derives byte-for-byte anywhere else. See\n`HOLONS.md`."
           },
           {
             "type": "markdown",
-            "id": "2ec68c6613761262",
+            "id": "cd2fc0b73951cbab",
             "text": "## Map\n\n`RESEARCH.md` (the contribution — problem, claim, evidence, limits) ·\n`PRACTICES.md` (the 2024–26 field surveyed against this harness, every claim\ntraced through `SOURCES.md`) ·\n`AGENTS.md` (the tool-neutral boot protocol; `CLAUDE.md` imports it) ·\n`HOLONS.md` (κ-addressed interoperability, and why it is an auditor) ·\n`TRUSTS.md` (the constitution — six trusts, and where each one bites) ·\n`GROUND_RULES.md` (GR-1..GR-10) · `SEAT_CONTRACT.md` (the config interface) ·\n`seats/` (seven cards) · `engine/dual_agent_loop.mjs` (the loop) ·\n`engine/conform.mjs` (the gate that proves the algebra rather than asserting\nit) · `examples/field-guide/` (a runnable spar) · `SPECIALISATION.md`\n(personas, spells, and the Game of 42 station pattern) · `HARNESS_PATHS.md`\n(the origin fleet — fifteen real instances, grouped by how much of the loop\neach runs; evidence, not part of the system you adopt) ·\n`WIKI.md` (the Observe lane — auto-populating a federated wiki + the\nknowledge-graph asset for agents) ·\n`tools/console.mjs` (the live workshop console) · `tools/frontier.html` (the\ninteractive, contributable frontier, per workshop)."
           },
           {
             "type": "markdown",
-            "id": "50e7a9b95272ea6a",
+            "id": "31c94f3af9ce917b",
             "text": "# Assets"
           },
           {
-            "id": "5f10617c6ac2c1e3",
+            "id": "f9896cd7b0995b7b",
             "type": "assets",
             "text": "the-harness-skill"
           },
           {
             "type": "markdown",
-            "id": "e370b06becff138c",
+            "id": "19a65fe48abbb52e",
             "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Dual-Agent Harness]]"
           },
           {
             "type": "markdown",
-            "id": "8aef935ec133f778",
+            "id": "75470727fca3e503",
             "text": "---\n*the wiki is a projection; `~/dual-agent-harness` (git) is the source of truth · (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ*"
           }
         ]
       },
-      "date": 1787079851573
+      "date": 1787093563941
     }
   ]
 }
