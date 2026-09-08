@@ -217,3 +217,7 @@ Two gates stand in the Gatehouse; the Star Chart seats every page as a star.
 
 *The git repositories remain the source of truth; this wiki is a projection that
 records its origin. Read it, fork it, carry it away with its lineage.*
+
+## VTA + Star: agent knowledge spaces (2026-09-08)
+
+[Federation and page context](flow/VTA_STAR_KNOWLEDGE_SPACES.md) records this surface's responsibilities and acceptance gates. The shared design places FedWiki records, browser-carried Star state, first-contact intent, MCP Trust Tasks, VTA permission enforcement and earned Mages City names in one continuing journey. Status is explicitly partial; follow the note's source and deployment distinctions.

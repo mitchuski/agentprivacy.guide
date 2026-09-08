@@ -1,0 +1,238 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Layered Runtime · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+    .guide-collections{position:relative}.guide-collections summary,.guide-directory summary{cursor:pointer;color:var(--cyan);padding:8px 0}
+    .guide-collections:not([open])>.sites{display:none!important}
+    .guide-collections[open]>.sites{position:absolute;top:100%;left:0;width:min(700px,85vw);max-height:65vh;overflow:auto;display:flex!important;flex-wrap:wrap;background:var(--navy);padding:18px;border:1px solid var(--border-hi);box-shadow:0 12px 40px #0008}
+    .star-connection{position:relative}.star-connection summary{cursor:pointer;color:var(--cyan)}.star-connection-body{position:absolute;right:0;top:100%;width:min(360px,85vw);padding:18px;background:var(--navy);border:1px solid var(--border-hi);box-shadow:0 12px 40px #0008;font-size:14px;z-index:25}.star-connection:not([open])>.star-connection-body{display:none}.star-connect{padding:8px 12px;border:1px solid var(--border-hi);border-radius:8px;white-space:nowrap;font-size:13px}
+    .guide-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+    .guide-paths a{border:1px solid var(--border-hi);border-radius:12px;padding:18px;background:var(--surface)}
+    .guide-paths strong,.guide-paths span{display:block}.guide-paths span,.guide-context{font-size:14px;color:var(--dim);margin-top:8px}
+    .guide-directory{border-top:1px solid var(--border);margin-top:24px;padding-top:12px}
+    .page article{overflow-wrap:anywhere}.page article p,.page article li{line-height:1.8}
+    :focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+    @media(max-width:700px){.guide-paths{grid-template-columns:1fr}.top{gap:10px}.guide-collections{position:static}.guide-collections[open]>.sites{left:10px;width:calc(100vw - 20px)}.star-connect{font-size:12px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style><link rel="stylesheet" href="/assets/star-connect.css"></head><body data-guidespace="1" data-site="codexmage">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <details class="guide-collections"><summary>Browse collections</summary><nav class="sites" aria-label="Guide collections"><a class="nav-site on" href="/codexmage/welcome-visitors.html"><span>🧙</span>Codex Mage</a><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/vpk/welcome-visitors.html"><span>🔑</span>VPK</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav></details>
+    <a class="nav-viz" href="/star-chart/?site=codexmage" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <details class="star-connection"><summary class="star-connect">Connect with Star</summary><div class="star-connection-body"><strong>Your VTA, your chosen perspective</strong><p>The planned connection uses your VTA and the Trust Spanning Protocol to carry a scoped exchange for you or your agent. You choose what is presented; the receiving service checks the request before a view is shared.</p><p>This guide has no VTA connection adapter yet. Opening Star does not connect an identity or send a key.</p><a href="https://soulbis.com/star">Open Star ↗</a> · <a href="https://agentprivacy.ai/city">Inspect your City Key ↗</a></div></details><div class="search"><input id="q" aria-label="Search the guide" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/codexmage/welcome-visitors.html">Codex Mage</a> / <span>Layered Runtime</span></div>
+  <article><div class="md"><pre><code class="language-json">{
+  &quot;date&quot;: &quot;2026-09-07&quot;,
+  &quot;authority&quot;: &quot;Local layered workstream; no scheduler, admission policy or canonical research authority&quot;,
+  &quot;governing&quot;: [
+    &quot;../PURPOSE.md&quot;,
+    &quot;../STAR_AS_MODEL.md&quot;
+  ],
+  &quot;approved_baseline&quot;: &quot;Keep current Labs star image and three layer controls. Rotation optional, not implemented.&quot;,
+  &quot;execution&quot;: &quot;Finish one acceptance gate per bounded runtime; one writer per source file. Parallel work only on independent lanes. Preserve broad upstream queue tasks.&quot;,
+  &quot;next_three_hour_slice&quot;: [
+    {
+      &quot;minutes&quot;: 30,
+      &quot;layer&quot;: &quot;L0&quot;,
+      &quot;deliverable&quot;: &quot;fresh source/ownership receipt&quot;
+    },
+    {
+      &quot;minutes&quot;: 60,
+      &quot;layer&quot;: &quot;L2&quot;,
+      &quot;deliverable&quot;: &quot;native carrier roundtrip evidence&quot;
+    },
+    {
+      &quot;minutes&quot;: 60,
+      &quot;layer&quot;: &quot;L5&quot;,
+      &quot;deliverable&quot;: &quot;one source-linked actual workshop rehearsal adapter&quot;
+    },
+    {
+      &quot;minutes&quot;: 30,
+      &quot;layer&quot;: &quot;L1&quot;,
+      &quot;deliverable&quot;: &quot;navigation regression and journey update&quot;
+    }
+  ],
+  &quot;layers&quot;: [
+    {
+      &quot;id&quot;: &quot;L0&quot;,
+      &quot;title&quot;: &quot;Source and continuity&quot;,
+      &quot;depends_on&quot;: [],
+      &quot;status&quot;: &quot;refreshed-this-runtime&quot;,
+      &quot;estimate_minutes&quot;: 30,
+      &quot;next_gates&quot;: [
+        &quot;Pin current source and preserved work&quot;,
+        &quot;Reconcile stale City preview and Labs status notes&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Read PURPOSE and STAR_AS_MODEL&quot;,
+        &quot;Latest City root and source ownership recorded&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L1&quot;,
+      &quot;title&quot;: &quot;Content, navigation and visual coherence&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L0&quot;
+      ],
+      &quot;status&quot;: &quot;in-progress&quot;,
+      &quot;estimate_minutes&quot;: 60,
+      &quot;next_gates&quot;: [
+        &quot;Finish guide-reader styling&quot;,
+        &quot;Verify legacy links and page journeys&quot;,
+        &quot;Preserve workshop interactions and approved star baseline&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Eight page introductions aligned previously&quot;,
+        &quot;GuideReader, Island and Fold title styling integrated; typecheck passed; Fold browser checked&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L2&quot;,
+      &quot;title&quot;: &quot;Portable identity and learning carriers&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L0&quot;
+      ],
+      &quot;status&quot;: &quot;partially-validated&quot;,
+      &quot;estimate_minutes&quot;: 60,
+      &quot;next_gates&quot;: [
+        &quot;Native JSON and PNG export/reimport on four Star/Soulbis surfaces&quot;,
+        &quot;Check import isolation, hashes, opaque fields and redacted payloads&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Prior 38 extracted + 32 browser WebCrypto checks; not native end-to-end&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L3&quot;,
+      &quot;title&quot;: &quot;Source-owned guide synchronization&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L0&quot;,
+        &quot;L1&quot;
+      ],
+      &quot;status&quot;: &quot;awaiting-source-preservation&quot;,
+      &quot;estimate_minutes&quot;: 90,
+      &quot;next_gates&quot;: [
+        &quot;Verify live farm backup and journal preservation&quot;,
+        &quot;Correct four known projection defects and integrate generator template&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Three-page prototype and 28 links checked previously&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L4&quot;,
+      &quot;title&quot;: &quot;Model data-to-geometry contract&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L0&quot;,
+        &quot;L2&quot;
+      ],
+      &quot;status&quot;: &quot;ready-for-contract-fixture&quot;,
+      &quot;estimate_minutes&quot;: 60,
+      &quot;next_gates&quot;: [
+        &quot;Separate agent, persona, source, promise and evidence types&quot;,
+        &quot;Pin geometry meanings, viewer permission, time/status&quot;,
+        &quot;Test empty and illustrative views before permitted real records&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;STAR_AS_MODEL governs; current homepage SVG remains editorial&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L5&quot;,
+      &quot;title&quot;: &quot;Agent game and City contribution rehearsal&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L0&quot;
+      ],
+      &quot;status&quot;: &quot;offline-prototype&quot;,
+      &quot;estimate_minutes&quot;: 60,
+      &quot;next_gates&quot;: [
+        &quot;Reuse guide/orb game and existing City entry mechanisms&quot;,
+        &quot;Choose craft, perform scoped work, reflect or hold, offer selected contribution&quot;,
+        &quot;Separate local completion from review and service-authorized admission&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Offline rehearsal validator and synthetic fixtures prepared; no admission&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L6&quot;,
+      &quot;title&quot;: &quot;Research, harness and skill adoption&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L0&quot;,
+        &quot;L2&quot;
+      ],
+      &quot;status&quot;: &quot;pending-scoped-packet&quot;,
+      &quot;estimate_minutes&quot;: 90,
+      &quot;next_gates&quot;: [
+        &quot;Freeze one source-linked packet&quot;,
+        &quot;Obtain actual separate-runtime review&quot;,
+        &quot;Replay one skill package and record result or failure&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Prior proposal and memory fixtures are not a paired-runtime run&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L7&quot;,
+      &quot;title&quot;: &quot;VTA, private graph, proofs and stewardship&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L4&quot;,
+        &quot;L5&quot;,
+        &quot;L6&quot;
+      ],
+      &quot;status&quot;: &quot;awaiting-current-adapters&quot;,
+      &quot;estimate_minutes&quot;: 90,
+      &quot;next_gates&quot;: [
+        &quot;Refresh farm service interfaces&quot;,
+        &quot;Test scoped allow/deny, revocation, observer changes&quot;,
+        &quot;Define supported proof predicate before proof UI&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Existing UI proposals do not implement service authority&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;L8&quot;,
+      &quot;title&quot;: &quot;Release, operational coherence and funding&quot;,
+      &quot;depends_on&quot;: [
+        &quot;L1&quot;,
+        &quot;L2&quot;,
+        &quot;L3&quot;
+      ],
+      &quot;status&quot;: &quot;review-pending&quot;,
+      &quot;estimate_minutes&quot;: 60,
+      &quot;next_gates&quot;: [
+        &quot;Browser-check current Labs menus and City root/connected routes&quot;,
+        &quot;Reconcile funding overlap and delivery period&quot;,
+        &quot;Review builds, source diffs and release order&quot;
+      ],
+      &quot;evidence&quot;: [
+        &quot;Latest other-task Labs report: 153 checks; not rerun here&quot;,
+        &quot;Campaign amounts are proposed, not raised&quot;
+      ]
+    }
+  ],
+  &quot;limits&quot;: &quot;Estimates are planning budgets. No recurring automation. Live deployment and admission are not delivered by this plan.&quot;,
+  &quot;evidence_root&quot;: &quot;master-ecosystem-2026-09-07&quot;
+}
+</code></pre>
+</div>
+<div class="md"><h2>Source</h2>
+<p><code>outputs/LAYERED_RUNTIME.json</code> · upstream: codex_mage · status: circulating</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="codex-mage-map.html">Codex Mage Map</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="layered-runtime.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+<script id="guide-star-runtime" type="module" src="/assets/star-connect.mjs"></script></body></html>

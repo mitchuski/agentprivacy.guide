@@ -1,0 +1,251 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Next Runtime Queue · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+    .guide-collections{position:relative}.guide-collections summary,.guide-directory summary{cursor:pointer;color:var(--cyan);padding:8px 0}
+    .guide-collections:not([open])>.sites{display:none!important}
+    .guide-collections[open]>.sites{position:absolute;top:100%;left:0;width:min(700px,85vw);max-height:65vh;overflow:auto;display:flex!important;flex-wrap:wrap;background:var(--navy);padding:18px;border:1px solid var(--border-hi);box-shadow:0 12px 40px #0008}
+    .star-connection{position:relative}.star-connection summary{cursor:pointer;color:var(--cyan)}.star-connection-body{position:absolute;right:0;top:100%;width:min(360px,85vw);padding:18px;background:var(--navy);border:1px solid var(--border-hi);box-shadow:0 12px 40px #0008;font-size:14px;z-index:25}.star-connection:not([open])>.star-connection-body{display:none}.star-connect{padding:8px 12px;border:1px solid var(--border-hi);border-radius:8px;white-space:nowrap;font-size:13px}
+    .guide-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+    .guide-paths a{border:1px solid var(--border-hi);border-radius:12px;padding:18px;background:var(--surface)}
+    .guide-paths strong,.guide-paths span{display:block}.guide-paths span,.guide-context{font-size:14px;color:var(--dim);margin-top:8px}
+    .guide-directory{border-top:1px solid var(--border);margin-top:24px;padding-top:12px}
+    .page article{overflow-wrap:anywhere}.page article p,.page article li{line-height:1.8}
+    :focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+    @media(max-width:700px){.guide-paths{grid-template-columns:1fr}.top{gap:10px}.guide-collections{position:static}.guide-collections[open]>.sites{left:10px;width:calc(100vw - 20px)}.star-connect{font-size:12px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style><link rel="stylesheet" href="/assets/star-connect.css"></head><body data-guidespace="1" data-site="codexmage">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <details class="guide-collections"><summary>Browse collections</summary><nav class="sites" aria-label="Guide collections"><a class="nav-site on" href="/codexmage/welcome-visitors.html"><span>🧙</span>Codex Mage</a><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/vpk/welcome-visitors.html"><span>🔑</span>VPK</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav></details>
+    <a class="nav-viz" href="/star-chart/?site=codexmage" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <details class="star-connection"><summary class="star-connect">Connect with Star</summary><div class="star-connection-body"><strong>Your VTA, your chosen perspective</strong><p>The planned connection uses your VTA and the Trust Spanning Protocol to carry a scoped exchange for you or your agent. You choose what is presented; the receiving service checks the request before a view is shared.</p><p>This guide has no VTA connection adapter yet. Opening Star does not connect an identity or send a key.</p><a href="https://soulbis.com/star">Open Star ↗</a> · <a href="https://agentprivacy.ai/city">Inspect your City Key ↗</a></div></details><div class="search"><input id="q" aria-label="Search the guide" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/codexmage/welcome-visitors.html">Codex Mage</a> / <span>Next Runtime Queue</span></div>
+  <article><div class="md"><pre><code class="language-json">{
+  &quot;updated&quot;: &quot;2026-09-07T14:52:08.637078+00:00&quot;,
+  &quot;authority&quot;: &quot;observer work queue; not a live scheduler&quot;,
+  &quot;tasks&quot;: [
+    {
+      &quot;id&quot;: &quot;P01&quot;,
+      &quot;runtime_role&quot;: &quot;source-preflight&quot;,
+      &quot;status&quot;: &quot;ready&quot;,
+      &quot;task&quot;: &quot;Refresh governing source hashes and read changed passages before the next run.&quot;,
+      &quot;inputs&quot;: [
+        &quot;SESSION_SYNC.md&quot;,
+        &quot;SOURCE_REFRESH_CORRECTIONS.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;source manifest with read scope&quot;,
+        &quot;resolved or explicitly held source conflicts&quot;
+      ],
+      &quot;acceptance&quot;: &quot;No historical source observation is repeated as a current defect without a reread.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P02&quot;,
+      &quot;runtime_role&quot;: &quot;soulbae-packet&quot;,
+      &quot;status&quot;: &quot;pending&quot;,
+      &quot;task&quot;: &quot;Prepare and freeze the first Privacy Is Value packet using the existing experiment brief.&quot;,
+      &quot;inputs&quot;: [
+        &quot;../share/first-dual-runtime/EXPERIMENT.md&quot;,
+        &quot;VTA_SHARED_MEMORY_PILOT.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;task.json&quot;,
+        &quot;sources.json&quot;,
+        &quot;packet.md&quot;,
+        &quot;freeze manifest&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Packet &lt;=600 words; five required distinctions; source/version/hash; public or approved material only. Existing memory fixtures are inputs, not automatically this deliverable.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P03&quot;,
+      &quot;runtime_role&quot;: &quot;soulbis-review&quot;,
+      &quot;status&quot;: &quot;awaiting P02 and separate runtime&quot;,
+      &quot;task&quot;: &quot;Other model reviews frozen packet and governing sources.&quot;,
+      &quot;inputs&quot;: [
+        &quot;../share/first-dual-runtime/EXPERIMENT.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;review.md&quot;,
+        &quot;per-criterion verdicts&quot;,
+        &quot;reproducible challenges&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Preserve disagreement; author does not certify own work. Runtime identity and actual isolation limits recorded.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P04&quot;,
+      &quot;runtime_role&quot;: &quot;vta-replay&quot;,
+      &quot;status&quot;: &quot;awaiting scoped adapter&quot;,
+      &quot;task&quot;: &quot;Exercise approved and denied fixtures through actual VTA interfaces.&quot;,
+      &quot;inputs&quot;: [
+        &quot;VTA_SHARED_MEMORY_PILOT.md&quot;,
+        &quot;MODEL_TO_BUILD_DECISIONS.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;adapter scope report&quot;,
+        &quot;replay-results.json&quot;,
+        &quot;corrections.md&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Real dispatch distinguished from mock and auth bypass; unavailable distinguished from denied. No production keys or services used.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P05&quot;,
+      &quot;runtime_role&quot;: &quot;receipt-contract&quot;,
+      &quot;status&quot;: &quot;pending source reconciliation&quot;,
+      &quot;task&quot;: &quot;Resolve native run receipt versus witness/VRC schema and issuer authority.&quot;,
+      &quot;inputs&quot;: [
+        &quot;../share/first-dual-runtime/EXPERIMENT.md&quot;,
+        &quot;SETUP_SIMPLIFICATION.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;contract crosswalk&quot;,
+        &quot;unsigned candidate bundle&quot;,
+        &quot;verification checklist tied to actual schema&quot;
+      ],
+      &quot;acceptance&quot;: &quot;No invented credential schema or automatic issuance. Signing/publication remains a separate authorized step.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P06&quot;,
+      &quot;runtime_role&quot;: &quot;workshop-art&quot;,
+      &quot;status&quot;: &quot;ready&quot;,
+      &quot;task&quot;: &quot;Survey main-site workshop lattice art and design distinct detailed mage visuals for Labs.&quot;,
+      &quot;inputs&quot;: [
+        &quot;PORTFOLIO_CURATION.md&quot;,
+        &quot;CITY_EXPANSION_REVIEW.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;reference catalogue with exact source components&quot;,
+        &quot;visual-to-craft mapping&quot;,
+        &quot;local fund artwork and browser review&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Distinct Shor/precompile, distinct disciplines, coherent lattice language; no production edits.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P07&quot;,
+      &quot;runtime_role&quot;: &quot;register-seat-audit&quot;,
+      &quot;status&quot;: &quot;ready&quot;,
+      &quot;task&quot;: &quot;Reconcile full research register parser and City seat-source conflicts.&quot;,
+      &quot;inputs&quot;: [
+        &quot;ATLAS_MATH_REFLECTION.md&quot;,
+        &quot;CITY_EXPANSION_REVIEW.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;register parser findings and fixtures&quot;,
+        &quot;seat reconciliation manifest&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Do not equate C IDs with lattice coordinates; refresh C97 status; field-level provenance and anticipated/current states.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P08&quot;,
+      &quot;runtime_role&quot;: &quot;skill-adoption&quot;,
+      &quot;status&quot;: &quot;pending contract survey&quot;,
+      &quot;task&quot;: &quot;Map harness practices into existing skills packages and adoption receipts.&quot;,
+      &quot;inputs&quot;: [
+        &quot;HARNESS_SKILL_ADOPTION.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;existing-schema crosswalk&quot;,
+        &quot;one evidence-backed package draft&quot;,
+        &quot;adoption fixture&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Reuse SkillSync; contextual replay counts, no global reputation or automatic authority.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P09&quot;,
+      &quot;runtime_role&quot;: &quot;corpus-projections&quot;,
+      &quot;status&quot;: &quot;after reviewed findings&quot;,
+      &quot;task&quot;: &quot;Prepare docs disposition, staged Spellweb graph additions and a guide-template prototype.&quot;,
+      &quot;inputs&quot;: [
+        &quot;CORPUS_INTEGRATION_AGENDA.md&quot;,
+        &quot;UNIVERSE_DISTRIBUTION.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;disposition register&quot;,
+        &quot;dry-run graph patch&quot;,
+        &quot;forkable guide template&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Stable IDs and source/journal lineage; no bulk promotion, fresh C IDs, deployment or binding.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P10&quot;,
+      &quot;runtime_role&quot;: &quot;city-governance&quot;,
+      &quot;status&quot;: &quot;after contract reconciliation&quot;,
+      &quot;task&quot;: &quot;Hone City admin and farm lifecycle against accepted decisions.&quot;,
+      &quot;inputs&quot;: [
+        &quot;PROGRAMME_OVERVIEW.md&quot;,
+        &quot;SETUP_SIMPLIFICATION.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;plugin-shaped local prototype&quot;,
+        &quot;isolated lifecycle fixture&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Desired state is not enforced state; permission withdrawal checked through consumer. No production BIND/VTA mutation.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P11&quot;,
+      &quot;runtime_role&quot;: &quot;funding-later&quot;,
+      &quot;status&quot;: &quot;roadmap only&quot;,
+      &quot;task&quot;: &quot;Survey existing x402, ENS, Zypher and City pool integrations before proposing new rails.&quot;,
+      &quot;inputs&quot;: [
+        &quot;FUNDING_POOLS_AND_RECEIPTS.md&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;existing-implementation map&quot;,
+        &quot;scoped future plan&quot;
+      ],
+      &quot;acceptance&quot;: &quot;Immediate donation stays DONATE_UA, no inscription required. Do not restart speculative stablecoin checkout as current priority.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;P12&quot;,
+      &quot;runtime_role&quot;: &quot;labs-cleanup&quot;,
+      &quot;status&quot;: &quot;partial; review remains&quot;,
+      &quot;task&quot;: &quot;Consolidate local Labs iterations while retaining cybersecurity-led services and current research distinctions.&quot;,
+      &quot;inputs&quot;: [
+        &quot;LABS_CLEANUP_PASS.md&quot;,
+        &quot;LABS_CLEANUP_AUDIT.json&quot;
+      ],
+      &quot;deliverables&quot;: [
+        &quot;single ownership map for templates/data&quot;,
+        &quot;reviewable local cleanup&quot;,
+        &quot;desktop/mobile verification&quot;
+      ],
+      &quot;acceptance&quot;: &quot;No historical evidence deletion, production edits or invented runtime outcomes.&quot;
+    }
+  ],
+  &quot;current_priority&quot;: &quot;Integrated Labs and City polish; see NEW_WINDOW_SITES_BRIEF.md&quot;,
+  &quot;execution_order_override&quot;: [
+    &quot;site inspection and source refresh&quot;,
+    &quot;coherent local preview&quot;,
+    &quot;user design review&quot;,
+    &quot;deployment readiness review&quot;,
+    &quot;resume bounded research runtime queue&quot;
+  ],
+  &quot;master_ecosystem_workstream&quot;: {
+    &quot;plan&quot;: &quot;LAYERED_RUNTIME.json&quot;,
+    &quot;journey&quot;: &quot;../journeys/2026-09-07_the-entrance-and-the-agent.md&quot;,
+    &quot;evidence&quot;: &quot;master-ecosystem-2026-09-07&quot;,
+    &quot;scope&quot;: &quot;Local partial milestones; existing broad task statuses retained&quot;,
+    &quot;next&quot;: &quot;Native carriers and one actual agent workshop rehearsal adapter after source refresh&quot;
+  }
+}
+</code></pre>
+</div>
+<div class="md"><h2>Source</h2>
+<p><code>outputs/NEXT_RUNTIME_QUEUE.json</code> · upstream: codex_mage · status: circulating</p>
+</div>
+<div class="md"><hr>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="codex-mage-map.html">Codex Mage Map</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="next-runtime-queue.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+<script id="guide-star-runtime" type="module" src="/assets/star-connect.mjs"></script></body></html>

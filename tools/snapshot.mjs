@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { installStarConnect } from './star-connect-build.mjs';
 // Static snapshot of the agentprivacy guide FedWiki federation.
 // Reads the live, private farm at ~/.wiki and emits a styled, path-based,
 // hybrid static site into ./site :
@@ -9,6 +10,7 @@
 // Read-only by design; live editing/forking-in stays in ~/.wiki (local + tunnel).
 
 import fs from 'node:fs';
+import { enhanceGuidespace } from './guidespace.mjs';
 import path from 'node:path';
 import os from 'node:os';
 import { marked } from 'marked';
@@ -22,6 +24,7 @@ const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'site'
 // = standalone wiki hosts folded into the snapshot (own single source, linked,
 // not re-projected). glyph/color from the live federationmap.
 const SITES = [
+  { id: 'codexmage', label: 'Codex Mage', glyph: '🧙', color: '#8b6bb8', path: 'codexmage', group: 'federation', blurb: 'Observer continuity, source connections and bounded research work.' },
   { id: 'guide',     label: 'Guide',      glyph: '🏛', color: '#8a6d3b', path: 'guide',      group: 'federation', blurb: 'The front door — the path through the federated agentprivacy canon.' },
   { id: 'spellbooks',label: 'Spellbooks', glyph: '📚', color: '#5b6e9c', path: 'spellbooks', group: 'federation', blurb: 'The First Person Spellbook (“I”) — privacymage’s narrative: Story (Acts I–XXXI) · Zero · Canon · Society · Plurality, + Selene’s poems.',
     groups: [
@@ -273,7 +276,7 @@ function nav(active) {
 }
 
 function shell({ title, site, body, lineage, slug }) {
-  return `<!doctype html><html lang="en"><head>
+  return enhanceGuidespace(`<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)} · agentprivacy guide</title>
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
@@ -291,7 +294,7 @@ ${nav(site)}
   </footer>
 </main>
 <script src="/assets/app.js"></script>
-</body></html>`;
+</body></html>`, { home: slug === 'index' && site === 'guide' });
 }
 
 // ---- build -----------------------------------------------------------------
@@ -664,3 +667,5 @@ if(q){q.addEventListener('focus',load);q.addEventListener('input',e=>run(e.targe
   if(brand&&brand.nextSibling)top.insertBefore(b,brand.nextSibling);else top.appendChild(b);
   b.addEventListener('click',function(){var open=top.classList.toggle('nav-open');b.setAttribute('aria-expanded',open?'true':'false');});}());
 `; }
+
+installStarConnect(OUT);

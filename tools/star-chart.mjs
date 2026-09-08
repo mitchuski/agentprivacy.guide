@@ -1,3 +1,4 @@
+import { installStarConnect } from './star-connect-build.mjs';
 // tools/star-chart.mjs — bake the improbable engine (~/transmediale) into the
 // static snapshot as /star-chart/ — the fedwiki space as a walkable constellation
 // map. The live engine reads the local farm; this bake freezes each site's sitemap
@@ -23,6 +24,7 @@ const OUT = path.join(ROOT, 'site', 'star-chart');
 // id = host label shown in the engine (NO dev-host names in the public page);
 // dir = the farm host that feeds it; sub = the snapshot subpath its pages live at.
 const LOCAL = [
+  ...(fs.existsSync(path.join(ROOT,'site/codexmage/welcome-visitors.html')) ? [{ id: 'codexmage', dir: 'codexmage.localhost', sub: 'codexmage', strand: 'connection' }] : []),
   { id: 'guide',      dir: 'guide.localhost',        sub: 'guide',             strand: 'connection' },
   { id: 'tomes',      dir: 'tomes.localhost',        sub: 'city/tomes',        strand: 'connection' },
   { id: 'grimoire',   dir: 'grimoire.localhost',     sub: 'grimoire',          strand: 'connection' },
@@ -613,6 +615,11 @@ function cityKeyPNG(dataURL, meta){
   out.set(png.slice(0, cut), 0); out.set(chunk, cut); out.set(png.slice(cut), cut + chunk.length);
   return new Blob([out], { type: 'image/png' });
 }
+
+// Explicit local reading selection; no key mutation or proof claim.
+window.addEventListener('guide-star-capture-path',()=>window.dispatchEvent(new CustomEvent('guide-star-chart-path',{detail:trail.pts.map(d=>({site:d.host,slug:d.slug}))})));
+
+window.addEventListener('guide-star-show-path',e=>{if(!Array.isArray(e.detail)||e.detail.length>128)return;const pts=e.detail.map(p=>DATA.stars.find(s=>s.userData.host===p.site&&s.userData.slug===p.slug)?.userData);if(pts.some(p=>!p))return;trail.pts=pts;trail.steps=pts.length;trail.value=pts.reduce((v,p)=>v+1+p.lift*4,0);if(!pts.length)trail.line.geometry.setFromPoints([]);else rebuildTrail();tHud();});
 document.getElementById('snapBtn').onclick = () => {
   renderer.render(scene, camera); // fresh buffer in the same task — no preserveDrawingBuffer needed
   const meta = {
@@ -693,7 +700,7 @@ const VPKB_INDEX = path.join(WIKI, '.vpk', 'index');       // machine-local stat
 if (fs.existsSync(VPKB)) {
   // refresh the farm's site table from LOCAL — anti-drift, one direction only
   const sitesFile = path.join(VPKB, 'sites.json');
-  if (fs.existsSync(sitesFile)) {
+  if (fs.existsSync(sitesFile) && !process.argv.includes('--skip-vpk-site-sync')) {
     const doc = JSON.parse(fs.readFileSync(sitesFile, 'utf8'));
     const known = new Map(doc.sites.map(s => [s.host, s]));
     for (const s of LOCAL) {
@@ -748,3 +755,5 @@ if (fs.existsSync(VPKB)) {
 
 console.log(`✓ star chart baked → site/star-chart/ — ${sites} local sites · ${pages} pages in the sitemaps · +${REMOTE.length} remote live`
   + `\n  · posture: ${postured} pages seat at their own vertex (data/pages.json carries the per-page record for all ${records.length})`);
+
+installStarConnect(path.join(ROOT,'site'));

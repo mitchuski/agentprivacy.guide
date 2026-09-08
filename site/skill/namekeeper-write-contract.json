@@ -1,0 +1,35 @@
+{
+  "title": "Namekeeper Write Contract",
+  "story": [
+    {
+      "id": "4f0866e74da6f34f",
+      "type": "markdown",
+      "text": "\n# namekeeper write contract\n\nRead mages_city/gate/permissions.mjs and the receiving adapter contract. Bind authentication to subject, audience, exact space and page, action, contentDigest, operationId and expectedRevision. Hash the exact UTF-8 body. Supply a new unpredictable operationId per intended change (16–128 ASCII letters, digits, underscores or hyphens); preserve it across retries. expectedRevision is explicit null for create-if-absent or sha256 followed by a colon and 64 lowercase hex digits for an authoritative revision.\n\nRequire verified identity binding and a separate current grant. Authenticate fresh proof on each attempt, including retries. Inside the receiving service's commit boundary, check authorization, compare the stored operation digest, check the expected revision, and commit page plus durable receipt together. A matching retry returns the original receipt; changed content under the same operation ID conflicts. Scope the deduplication key to authenticated subject and exact space.\n\nTreat revision-conflict, operation-id-conflict and authorization-rejected as known refusals only when no effect occurred. Exceptions or missing receipts are unconfirmed: reconcile before retry. Gate allowed is an authorization result, not proof of execution. Revoked grants refuse retries; historical reconciliation needs its own authenticated path.\n\nRun node --test bin/permissions.test.mjs bin/namekeeper-flow.test.mjs in mages_city. Current fixtures use synthetic identities and memory storage. Require real signature verification, consistent revision representation, cross-process atomicity and restart recovery before declaring a live FedWiki adapter ready. A Star display, DID string or operation ID alone grants no access.\n\nRelated: [Boundary enforcement](../agentprivacy-boundary-enforcement/SKILL.md), [Agent interop](../agentprivacy-agent-interop/SKILL.md).\n\n\n## Related operating practices\n\n\n\n[[City and Star Skills]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "date": 1788831114845,
+      "item": {
+        "title": "Namekeeper Write Contract",
+        "story": []
+      }
+    },
+    {
+      "type": "add",
+      "id": "4f0866e74da6f34f",
+      "item": {
+        "id": "4f0866e74da6f34f",
+        "type": "markdown",
+        "text": "\n# namekeeper write contract\n\nRead mages_city/gate/permissions.mjs and the receiving adapter contract. Bind authentication to subject, audience, exact space and page, action, contentDigest, operationId and expectedRevision. Hash the exact UTF-8 body. Supply a new unpredictable operationId per intended change (16–128 ASCII letters, digits, underscores or hyphens); preserve it across retries. expectedRevision is explicit null for create-if-absent or sha256 followed by a colon and 64 lowercase hex digits for an authoritative revision.\n\nRequire verified identity binding and a separate current grant. Authenticate fresh proof on each attempt, including retries. Inside the receiving service's commit boundary, check authorization, compare the stored operation digest, check the expected revision, and commit page plus durable receipt together. A matching retry returns the original receipt; changed content under the same operation ID conflicts. Scope the deduplication key to authenticated subject and exact space.\n\nTreat revision-conflict, operation-id-conflict and authorization-rejected as known refusals only when no effect occurred. Exceptions or missing receipts are unconfirmed: reconcile before retry. Gate allowed is an authorization result, not proof of execution. Revoked grants refuse retries; historical reconciliation needs its own authenticated path.\n\nRun node --test bin/permissions.test.mjs bin/namekeeper-flow.test.mjs in mages_city. Current fixtures use synthetic identities and memory storage. Require real signature verification, consistent revision representation, cross-process atomicity and restart recovery before declaring a live FedWiki adapter ready. A Star display, DID string or operation ID alone grants no access.\n\nRelated: [Boundary enforcement](../agentprivacy-boundary-enforcement/SKILL.md), [Agent interop](../agentprivacy-agent-interop/SKILL.md).\n\n\n## Related operating practices\n\n\n\n[[City and Star Skills]]"
+      },
+      "date": 1788831114845
+    }
+  ],
+  "cityStarDigest": "778c78e0ae7210e2c057023e390bedb64d4da71a5c7ecd0b4581231962137288",
+  "cityStarSource": {
+    "path": "role/agentprivacy-namekeeper-write-contract/SKILL.md",
+    "sha256": "163328e707dd80ab864382ac437aa9263452163db5a2bd2a7042e2feca8ccb71"
+  }
+}

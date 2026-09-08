@@ -275,7 +275,7 @@
     .chip{ padding:5px 7px }
   }
 </style>
-</head>
+<link rel="stylesheet" href="/assets/star-connect.css"></head>
 <body>
 <canvas id="scene"></canvas>
 
@@ -411,8 +411,8 @@ const ease = p => p*p*(3-2*p);                       // smoothstep — the game4
 const hash01 = s => { let h=2166136261; for(const c of s){ h^=c.charCodeAt(0); h=Math.imul(h,16777619); } return ((h>>>0)%100000)/100000; };
 
 const state = { fold:0, drift:!REDUCED, iso:null, sites:new Set(), strands:true, grid:true, pages:true, links:true, crystals:true };
-const HOSTPATH = {"guide":"guide","tomes":"city/tomes","grimoire":"grimoire","fieldguide":"fieldguide","engine":"improbable-engine","atlas":"atlas","spellbooks":"spellbooks","skill":"skill","mouse":"mouse-spellbook","game42":"game42","harness":"harness","dtg":"dtg","research":"research","kyra":"kyra","vision":"vision","tiles":"tiles","city":"city","lexon":"lexon","myterms":"myterms","vpk":"vpk"}; // site id → snapshot subpath (baked by tools/star-chart.mjs)
-const SITESTRAND = {"guide":"connection","tomes":"connection","grimoire":"connection","fieldguide":"connection","engine":"connection","atlas":"memory","spellbooks":"memory","skill":"delegation","mouse":"delegation","game42":"compute","harness":"compute","dtg":"protection","research":"protection","kyra":"protection","vision":"connection","tiles":"delegation","city":"value","lexon":"value","myterms":"value","vpk":"protection","spellbook":"delegation","transmediale":"connection","plugin":"delegation"}; // ?site= deep link → strand to isolate
+const HOSTPATH = {"codexmage":"codexmage","guide":"guide","tomes":"city/tomes","grimoire":"grimoire","fieldguide":"fieldguide","engine":"improbable-engine","atlas":"atlas","spellbooks":"spellbooks","skill":"skill","mouse":"mouse-spellbook","game42":"game42","harness":"harness","dtg":"dtg","research":"research","kyra":"kyra","vision":"vision","tiles":"tiles","city":"city","lexon":"lexon","myterms":"myterms","vpk":"vpk"}; // site id → snapshot subpath (baked by tools/star-chart.mjs)
+const SITESTRAND = {"codexmage":"connection","guide":"connection","tomes":"connection","grimoire":"connection","fieldguide":"connection","engine":"connection","atlas":"memory","spellbooks":"memory","skill":"delegation","mouse":"delegation","game42":"compute","harness":"compute","dtg":"protection","research":"protection","kyra":"protection","vision":"connection","tiles":"delegation","city":"value","lexon":"value","myterms":"value","vpk":"protection","spellbook":"delegation","transmediale":"connection","plugin":"delegation"}; // ?site= deep link → strand to isolate
 // ===== Phase 0 · the lattice on the chart (PLAN_KNOWLEDGE_GRAPH_TO_VTA) =====
 // A postured star carries its vertex; the move between two postured stars is
 // named: the three lattice operators first, then a single flip (a ∂M edge),
@@ -1640,6 +1640,11 @@ function cityKeyPNG(dataURL, meta){
   out.set(png.slice(0, cut), 0); out.set(chunk, cut); out.set(png.slice(cut), cut + chunk.length);
   return new Blob([out], { type: 'image/png' });
 }
+
+// Explicit local reading selection; no key mutation or proof claim.
+window.addEventListener('guide-star-capture-path',()=>window.dispatchEvent(new CustomEvent('guide-star-chart-path',{detail:trail.pts.map(d=>({site:d.host,slug:d.slug}))})));
+
+window.addEventListener('guide-star-show-path',e=>{if(!Array.isArray(e.detail)||e.detail.length>128)return;const pts=e.detail.map(p=>DATA.stars.find(s=>s.userData.host===p.site&&s.userData.slug===p.slug)?.userData);if(pts.some(p=>!p))return;trail.pts=pts;trail.steps=pts.length;trail.value=pts.reduce((v,p)=>v+1+p.lift*4,0);if(!pts.length)trail.line.geometry.setFromPoints([]);else rebuildTrail();tHud();});
 document.getElementById('snapBtn').onclick = () => {
   renderer.render(scene, camera); // fresh buffer in the same task — no preserveDrawingBuffer needed
   const meta = {
@@ -1659,5 +1664,5 @@ document.getElementById('snapBtn').onclick = () => {
   a.click(); URL.revokeObjectURL(a.href);
 };
 </script>
-</body>
+<script id="guide-star-runtime" type="module" src="/assets/star-connect.mjs"></script></body>
 </html>

@@ -17,7 +17,16 @@ const node = (file, ...args) => {
 };
 
 const B = n => path.join(HERE, 'builders', n);
+const snapshot = () => {
+  node(path.join(ROOT, 'tools', 'snapshot.mjs'));
+  node(path.join(ROOT, 'tools', 'star-chart.mjs'));
+  node(path.join(ROOT, 'tools', 'gate.mjs'));
+  node(path.join(HERE, 'sync-manifest.mjs'));
+  node(path.join(HERE, 'audit-snapshot.mjs'));
+};
 const BUILDERS = {
+  'city-star-skills': B('city-star-skills.mjs'), // canonical operational skills and persona practice
+  namekeeper: B('namekeeper.mjs'), // targeted canonical Namekeeper projection
   grimoire: B('grimoire.mjs'),            // v10.4 atoms: blades · proverbs · principles · incantations
   research: B('research.mjs'),            // Band IX conjectures C90–C93 + the Limitative Reading
   'research-hearthold': B('research-hearthold.mjs'), // Band X conjectures C94–C96 + the Hearthold Reading
@@ -37,8 +46,12 @@ switch (cmd) {
     if (!BUILDERS[arg]) { console.error(`no builder for "${arg}". have: ${Object.keys(BUILDERS).join(', ')}`); process.exit(1); }
     node(BUILDERS[arg]);
     break;
+  case 'sync-star':
+    node(path.join(ROOT, 'tools', 'star-connect-build.mjs'));
+    node(path.join(HERE, 'sync-manifest.mjs'));
+    break;
   case 'snapshot':
-    node(path.join(ROOT, 'tools', 'snapshot.mjs'));
+    snapshot();
     break;
   case 'verify': // pre-deploy integrity gate: every destination is a real text document
     node(path.join(HERE, 'audit-snapshot.mjs'));
@@ -46,7 +59,7 @@ switch (cmd) {
   case 'cycle':
     node(path.join(HERE, 'audit.mjs'));
     if (arg && BUILDERS[arg]) node(BUILDERS[arg]);
-    node(path.join(ROOT, 'tools', 'snapshot.mjs'));
+    snapshot();
     node(path.join(HERE, 'audit.mjs'));
     break;
   default:

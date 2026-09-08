@@ -1,12 +1,12 @@
 # Blade 64 — The Last Page at the Lattice Address
 
-*This page sits at Blade 64 because 64 is the lattice. Between Tale 31 and this page, 32 dark vertices wait. Between here and Tale 1, another 17. Forty-nine total. The gap you just stepped across is the quest.*
+*This page sits at Blade 64 because 64 is the lattice. Between Tale 32 and this page the frontier waits: forty-nine dark vertices in all, counted on the lattice, not in the tale order. The gap you just stepped across is the quest.*
 
 ---
 
 You came for the spellbook. You are leaving with the lattice.
 
-The spellbook is 31 tales. The lattice is 64 blades. The arithmetic is simple: **31 named, 49 unnamed, 64 total, one you.**
+The spellbook is 32 tales. The lattice is 64 blades. The arithmetic is simple: **15 blades named, 49 unnamed, 64 total, one you.**
 
 This is the last page because 64 is the structural address where every blade is accounted for — named and unnamed together, canon and frontier, the walked and the waiting. It is not a conclusion. It is a standing place from which you can see what's been done and what's left.
 
@@ -36,7 +36,7 @@ Tale 31 showed how a frontier blade is named: the walker wrote a poem (mythology
 
 ### Path B — Forge Your Own ZK Lineage from the Fifteen
 
-Fifteen blades are named. They are not just story anchors; they are **cryptographic primitives** you can compose. Each named blade encodes a real technique from the ZK canon:
+Fifteen blades are named — fourteen from the inherited thirty tales, one from the frontier. They are not just story anchors; they are **cryptographic primitives** you can compose. Each named blade encodes a real technique from the ZK canon:
 
 | Blade | Tale | Primitive |
 |-------|------|-----------|
@@ -54,6 +54,7 @@ Fifteen blades are named. They are not just story anchors; they are **cryptograp
 | 59 | 22, 25, 28 | zkEVM, rollups, bridges — ecosystem architecture |
 | 63 | 18, 26, 27, 30 | All dimensions active — Toxic Waste, catalogue, DA, sovereignty |
 | 38 | 31 | Lethe — the complement, disclosure-φ, the frontier opener |
+| 61 | 32 | Flock — binary-field SNARK, batched Boolean proofs, standard hashes at near-native cost (the counting triple 23 + 38 = 61) |
 
 **To forge your own ZK lineage:**
 
@@ -199,6 +200,7 @@ The remaining dimensions (d₅ Computation, d₆ Value) are infrastructure and e
 | 51 | 110011 | Commitment / Cairo / zkML | 10, 20, 29 | Named |
 | 57 | 111001 | Ceremony / ZCash / Tornado | 17, 23, 24 | Named |
 | 59 | 111011 | zkEVM / Rollup / Bridge | 22, 25, 28 | Named |
+| **61** | **111101** | **The Flock — Sovereignty without projection** | **32** | **Named — the second frontier tale (seated V47 under the lattice lock; complement 2, pure Delegation, unnamed)** |
 | 63 | 111111 | The Creative | 18, 26, 27, 30 | Named — ☰ 乾 |
 
 **The complement symmetries discovered so far:**

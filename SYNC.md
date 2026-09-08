@@ -83,3 +83,12 @@ source repos ──build──▶ live ~/.wiki ──snapshot──▶ ./site �
 - The live `~/.wiki` itself is generated from canon by `flow/` builders — don't
   sync *into* it from the guide (that would be a loop); sync into a *separate*
   carried copy.
+
+
+## City and Star skills
+
+Canonical cohort: `agentprivacy-skills/CITY_STAR_DISTRIBUTION.json`. The targeted builder preserves unrelated wiki story items and refuses changed generated items. It emits source hashes, original SKILL.md assets, a hub, search entries and forkable pages.
+
+Run `node flow/run.mjs build city-star-skills`, then `node tools/star-chart.mjs --skip-vpk-site-sync`, `node flow/sync-manifest.mjs` and `node flow/audit-snapshot.mjs`. The optional chart flag leaves the VPK source site table unchanged while rebuilding the local chart and its search assets.
+
+In Spellweb run `node scripts/sync-city-star-skills.mjs` and `node scripts/build-guide-bridge.mjs` after the Guide rebuild. Validate TypeScript and the production build. These commands prepare local output; deployment remains separate.
