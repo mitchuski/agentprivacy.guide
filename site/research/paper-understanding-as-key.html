@@ -27,9 +27,9 @@
   </header>
 <main class="page">
   <div class="crumb"><a href="/">guide</a> / <a href="/research/welcome-visitors.html">Research</a> / <span>Paper — Understanding as Key</span></div>
-  <article><div class="md"><h1>Understanding as Key</h1>
+  <article><div class="md"><h1 id="understanding-as-key">Understanding as Key</h1>
 </div>
-<div class="md"><h2>A Paper on Privacy-Preserving Trust Through Demonstrated Comprehension</h2>
+<div class="md"><h2 id="a-paper-on-privacy-preserving-trust-through-demonstrated-comprehension">A Paper on Privacy-Preserving Trust Through Demonstrated Comprehension</h2>
 <p><em>From the Signal to Sanctuary implementation at Zypherpunk Hack 2025</em></p>
 <p><strong>Version:</strong> 1.0<br><strong>Date:</strong> December 1, 2025<br><strong>Author:</strong> privacymage / 0xagentprivacy<br><strong>Status:</strong> Living Document</p>
 <p><strong>Document Alignment</strong>: </p>
@@ -48,7 +48,7 @@
 </blockquote>
 <hr>
 </div>
-<div class="md"><h2>The Core Insight</h2>
+<div class="md"><h2 id="the-core-insight">The Core Insight</h2>
 <p>This transforms <strong>&quot;what you have&quot;</strong> (a stored secret) into <strong>&quot;what you understand&quot;</strong> (demonstrated comprehension).</p>
 <p>The proverb piggybacks on natural human relational memory rather than fighting against cognitive architecture.</p>
 <pre><code>Traditional Authentication:          Proverb-Based Trust:
@@ -75,7 +75,7 @@
 <p><em>This may have unlocked the adoption curve.</em></p>
 <hr>
 </div>
-<div class="md"><h2>Overview</h2>
+<div class="md"><h2 id="overview">Overview</h2>
 <p>The Relationship Proverb Protocol (RPP) creates bilateral trust through demonstrated understanding. But how that understanding is committed onchain determines the privacy properties, recovery paths, and disclosure controls available to participants.</p>
 <p>This document describes <strong>three inscription paths</strong>—symmetric, asymmetric, and interleaved—each serving different trust and recovery needs. The <strong>Signal to Sanctuary</strong> project at Zypherpunk Hack 2025 represents the first production implementation of these primitives on Zcash.</p>
 <p><strong>Path 1 - Symmetric:</strong> Both proverbs hidden in a single commitment hash. Maximum privacy, but recovery requires both parties.</p>
@@ -83,30 +83,30 @@
 <p><strong>Path 3 - Interleaved:</strong> Proverbs fragment—first half of one combined with second half of the other across the visibility boundary. Neither party fully exposed, neither fully hidden. Mutual recovery.</p>
 <hr>
 </div>
-<div class="md"><h2>Table of Contents</h2>
-<h3>Preamble</h3>
+<div class="md"><h2 id="table-of-contents">Table of Contents</h2>
+<h3 id="preamble">Preamble</h3>
 <ul>
 <li><a href="#the-core-insight">The Core Insight</a> — From &quot;what you have&quot; to &quot;what you understand&quot;</li>
 </ul>
-<h3>Part I: The Three Paths</h3>
+<h3 id="part-i-the-three-paths">Part I: The Three Paths</h3>
 <ol>
 <li><a href="#the-three-paths">The Three Paths</a> — Overview diagram</li>
 <li><a href="#path-1-symmetric-inscription-maximum-privacy">Path 1: Symmetric Inscription</a> — Maximum privacy</li>
 <li><a href="#path-2-asymmetric-inscription-current-signal-to-sanctuary-default">Path 2: Asymmetric Inscription</a> — Current default</li>
 <li><a href="#path-3-interleaved-inscription-fragmented-commitment">Path 3: Interleaved Inscription</a> — Fragmented commitment</li>
 </ol>
-<h3>Part II: Visibility as Meaning</h3>
+<h3 id="part-ii-visibility-as-meaning">Part II: Visibility as Meaning</h3>
 <ol start="5">
 <li><a href="#visibility-as-relationship-style">Visibility as Relationship Style</a> — The spectrum of disclosure</li>
 <li><a href="#the-visibility-ratio-%CF%86-derived-experiments">The Visibility Ratio: φ-Derived Experiments</a> — Golden ratio configurations</li>
 </ol>
-<h3>Part III: VRC Ceremonies</h3>
+<h3 id="part-iii-vrc-ceremonies">Part III: VRC Ceremonies</h3>
 <ol start="7">
 <li><a href="#vrc-key-ceremonies-without-losing-privacy">VRC Key Ceremonies Without Losing Privacy</a> — Privacy-preserving ceremonies</li>
 <li><a href="#social-recovery-through-understanding">Social Recovery Through Understanding</a> — Meaning-based recovery</li>
 <li><a href="#selective-disclosure">Selective Disclosure</a> — Controlling revelation</li>
 </ol>
-<h3>Part IV: Security &amp; Implementation</h3>
+<h3 id="part-iv-security--implementation">Part IV: Security &amp; Implementation</h3>
 <ol start="10">
 <li><a href="#entropy-and-security">Entropy and Security</a> — Why proverbs aren&#39;t guessable</li>
 <li><a href="#trust-tier-integration">Trust Tier Integration</a> — Progressive path recommendations</li>
@@ -114,7 +114,7 @@
 <li><a href="#proverbiogenesis-connection">Proverbiogenesis Connection</a> — Becoming weather</li>
 <li><a href="#implementation-notes">Implementation Notes</a> — Memo formats &amp; endpoints</li>
 </ol>
-<h3>Part V: Integration</h3>
+<h3 id="part-v-integration">Part V: Integration</h3>
 <ol start="15">
 <li><a href="#the-big-picture">The Big Picture</a> — Summary</li>
 <li><a href="#further-reading">Further Reading</a> — Cross-references</li>
@@ -122,7 +122,7 @@
 </ol>
 <hr>
 </div>
-<div class="md"><h2>The Three Paths</h2>
+<div class="md"><h2 id="the-three-paths">The Three Paths</h2>
 <pre><code>                         PROVERB INSCRIPTION
                                 │
            ┌────────────────────┼────────────────────┐
@@ -143,7 +143,7 @@
 </code></pre>
 <hr>
 </div>
-<div class="md"><h2>Path 1: Symmetric Inscription (Maximum Privacy)</h2>
+<div class="md"><h2 id="path-1-symmetric-inscription-maximum-privacy">Path 1: Symmetric Inscription (Maximum Privacy)</h2>
 <p><strong>Notation:</strong> <code>🔒📝 ↔ 🔒📝</code></p>
 <p><strong>Structure:</strong></p>
 <pre><code>hash(P_first_person ∥ P_sanctuary) → onchain
@@ -192,7 +192,7 @@
 </ul>
 <hr>
 </div>
-<div class="md"><h2>Path 2: Asymmetric Inscription (Current Signal to Sanctuary Default)</h2>
+<div class="md"><h2 id="path-2-asymmetric-inscription-current-signal-to-sanctuary-default">Path 2: Asymmetric Inscription (Current Signal to Sanctuary Default)</h2>
 <p><strong>Notation:</strong> <code>🔓📝 → 🔒🗝️</code></p>
 <p><strong>Structure:</strong></p>
 <pre><code>P_first_person → onchain (visible in transparent pool)
@@ -253,7 +253,7 @@ Transparent Pool Inscription:
 </ul>
 <hr>
 </div>
-<div class="md"><h2>Path 3: Interleaved Inscription (Fragmented Commitment)</h2>
+<div class="md"><h2 id="path-3-interleaved-inscription-fragmented-commitment">Path 3: Interleaved Inscription (Fragmented Commitment)</h2>
 <p><strong>Notation:</strong> <code>🔓½📝 ↔ 🔒½🗝️</code></p>
 <p><strong>Structure:</strong></p>
 <pre><code>visible: P_fp[n/2:n] ∥ P_sanctuary[0:n/2]      (FP&#39;s ending + Sanctuary&#39;s beginning)
@@ -342,9 +342,9 @@ The direction of the φ-split signals relationship emphasis.
 </ul>
 <hr>
 </div>
-<div class="md"><h2>Visibility as Relationship Style</h2>
+<div class="md"><h2 id="visibility-as-relationship-style">Visibility as Relationship Style</h2>
 <p>The amount you reveal isn&#39;t just a technical parameter—it&#39;s a <strong>signal about the relationship itself</strong>. The cryptographic commitment structure becomes semantic.</p>
-<h3>The Spectrum</h3>
+<h3 id="the-spectrum">The Spectrum</h3>
 <pre><code>VISIBILITY SPECTRUM AS RELATIONSHIP STYLE
                            
 0%        25%       38.2%      50%       61.8%      75%       100%
@@ -358,7 +358,7 @@ The direction of the φ-split signals relationship emphasis.
   Private    Guarded    Golden    Equal     Golden    Public
   affair     intimacy   privacy   exposure  openness  commitment
 </code></pre>
-<h3>Relationship Archetypes</h3>
+<h3 id="relationship-archetypes">Relationship Archetypes</h3>
 <table>
 <thead>
 <tr>
@@ -411,7 +411,7 @@ The direction of the φ-split signals relationship emphasis.
 <td>Full FP recovery from context</td>
 </tr>
 </tbody></table>
-<h3>What You Signal</h3>
+<h3 id="what-you-signal">What You Signal</h3>
 <p><strong>0% Visible (Symmetric)</strong></p>
 <pre><code>&quot;Our relationship is no one&#39;s business but ours.&quot;
 
@@ -447,7 +447,7 @@ Style: Declared allegiance. Public endorsement. One-way visibility.
 Signal: First Person accepts full exposure. Sanctuary stays hidden.
 Recovery: FP proverb always available. Sanctuary controls verification.
 </code></pre>
-<h3>The Golden Ratio Sweet Spots</h3>
+<h3 id="the-golden-ratio-sweet-spots">The Golden Ratio Sweet Spots</h3>
 <p>The φ-derived points (38.2% and 61.8%) represent <strong>natural equilibria</strong>:</p>
 <pre><code>38.2% Visible (Privacy-Weighted):
 ├── 38.2% revealed → enough for recovery anchor
@@ -460,7 +460,7 @@ Recovery: FP proverb always available. Sanctuary controls verification.
 └── Optimal for: public collaborations, mature trust, verifiable commitment
 </code></pre>
 <p><strong>Hypothesis:</strong> These φ-derived points may represent attractors—relationship styles that naturally stabilize at golden ratio visibility because they balance competing needs optimally.</p>
-<h3>Choosing Your Style</h3>
+<h3 id="choosing-your-style">Choosing Your Style</h3>
 <pre><code>ASK YOURSELF:
 
 1. How much do I want observers to know about this relationship?
@@ -481,7 +481,7 @@ Recovery: FP proverb always available. Sanctuary controls verification.
 
 YOUR VISIBILITY RATIO = f(privacy_need, recovery_need, power_balance, signal_intent)
 </code></pre>
-<h3>Progression Over Time</h3>
+<h3 id="progression-over-time">Progression Over Time</h3>
 <p>Relationships may evolve through visibility styles:</p>
 <pre><code>RELATIONSHIP LIFECYCLE:
 
@@ -494,7 +494,7 @@ Committed: 61.8% → 100%  &quot;Public declaration of relationship&quot;
 Each signal updates the onchain record.
 History of visibility changes itself becomes meaningful.
 </code></pre>
-<h3>Notation Extension</h3>
+<h3 id="notation-extension">Notation Extension</h3>
 <p>Building on the emoji system:</p>
 <table>
 <thead>
@@ -542,9 +542,9 @@ History of visibility changes itself becomes meaningful.
 </tbody></table>
 <hr>
 </div>
-<div class="md"><h2>The Visibility Ratio: φ-Derived Experiments</h2>
+<div class="md"><h2 id="the-visibility-ratio-φ-derived-experiments">The Visibility Ratio: φ-Derived Experiments</h2>
 <p>The choice between paths isn&#39;t just binary or ternary. The <strong>golden ratio</strong> (φ ≈ 1.618) that governs the transparent/shielded fee split may also govern visibility experiments across all three paths.</p>
-<h3>Experimental Design Space</h3>
+<h3 id="experimental-design-space">Experimental Design Space</h3>
 <pre><code>                    VISIBILITY SPECTRUM
                            
     Symmetric              Interleaved              Asymmetric
@@ -559,7 +559,7 @@ History of visibility changes itself becomes meaningful.
                                 │
                          φ-derived splits
 </code></pre>
-<h3>Potential Configurations</h3>
+<h3 id="potential-configurations">Potential Configurations</h3>
 <p><strong>Configuration A: Ecosystem-Level Split</strong></p>
 <pre><code>Of all inscriptions in an ecosystem:
 ├── 38.2% → Symmetric (both hidden)
@@ -589,7 +589,7 @@ Golden ratio governs the fragment boundary.
 ├── Heavy: Interleaved (mutual skin in game)
 └── Dragon: Choice (earned the right to decide)
 </code></pre>
-<h3>Why φ?</h3>
+<h3 id="why-φ">Why φ?</h3>
 <p>The golden ratio appears throughout the architecture:</p>
 <ul>
 <li>61.8% transparent / 38.2% shielded (fee distribution) [VRC Protocol v3.0, §2.1]</li>
@@ -600,9 +600,9 @@ Golden ratio governs the fragment boundary.
 <p><strong>Status:</strong> 🔬 EXPLORATORY — These ratios are experimental hypotheses, not proven optima. Signal to Sanctuary provides the infrastructure to test them.</p>
 <hr>
 </div>
-<div class="md"><h2>VRC Key Ceremonies Without Losing Privacy</h2>
+<div class="md"><h2 id="vrc-key-ceremonies-without-losing-privacy">VRC Key Ceremonies Without Losing Privacy</h2>
 <p>Traditional key ceremonies require visible coordination—participants must reveal themselves to establish shared secrets. The proverb inscription paths enable <strong>privacy-preserving VRC ceremonies</strong> where relationships form without surveillance.</p>
-<h3>The Problem with Traditional Ceremonies</h3>
+<h3 id="the-problem-with-traditional-ceremonies">The Problem with Traditional Ceremonies</h3>
 <pre><code>Traditional Key Ceremony:
 ├── Participants must identify themselves
 ├── Coordination is visible to observers
@@ -610,7 +610,7 @@ Golden ratio governs the fragment boundary.
 ├── Recovery requires centralized backup or m-of-n schemes
 └── The ceremony itself creates a surveillance record
 </code></pre>
-<h3>Proverb-Based Ceremony Architecture</h3>
+<h3 id="proverb-based-ceremony-architecture">Proverb-Based Ceremony Architecture</h3>
 <p>The visibility spectrum enables ceremonies where <strong>understanding replaces identity</strong>:</p>
 <pre><code>Proverb Ceremony (1 ZEC) [VRC Protocol v3.0, §1.3]:
 ├── No identity disclosure required
@@ -619,7 +619,7 @@ Golden ratio governs the fragment boundary.
 ├── Recovery through meaning, not seed phrases
 └── The ceremony creates only a commitment hash (or partial visibility by choice)
 </code></pre>
-<h3>Ceremony Types by Visibility</h3>
+<h3 id="ceremony-types-by-visibility">Ceremony Types by Visibility</h3>
 <table>
 <thead>
 <tr>
@@ -660,7 +660,7 @@ Golden ratio governs the fragment boundary.
 <td>Minimal (FP visible)</td>
 </tr>
 </tbody></table>
-<h3>The Shadow Ceremony (Maximum Privacy)</h3>
+<h3 id="the-shadow-ceremony-maximum-privacy">The Shadow Ceremony (Maximum Privacy)</h3>
 <p>For relationships that must remain invisible:</p>
 <pre><code>┌─────────────────────────────────────────┐
 │         SHADOW CEREMONY (0%)            │
@@ -687,7 +687,7 @@ Golden ratio governs the fragment boundary.
 <li>Early-stage negotiations</li>
 <li>Relationships in hostile environments</li>
 </ul>
-<h3>The Declared Ceremony (Verifiable Commitment)</h3>
+<h3 id="the-declared-ceremony-verifiable-commitment">The Declared Ceremony (Verifiable Commitment)</h3>
 <p>For relationships meant to be seen:</p>
 <pre><code>┌─────────────────────────────────────────┐
 │       DECLARED CEREMONY (100%)          │
@@ -713,7 +713,7 @@ Golden ratio governs the fragment boundary.
 <li>Community membership</li>
 <li>On-record commitments</li>
 </ul>
-<h3>The Interleaved Ceremony (Mutual Binding)</h3>
+<h3 id="the-interleaved-ceremony-mutual-binding">The Interleaved Ceremony (Mutual Binding)</h3>
 <p>For relationships requiring balanced exposure:</p>
 <pre><code>┌─────────────────────────────────────────┐
 │      INTERLEAVED CEREMONY (50%)         │
@@ -739,7 +739,7 @@ Golden ratio governs the fragment boundary.
 <li>Collaborative projects</li>
 <li>Balanced power relationships</li>
 </ul>
-<h3>Key Derivation from Proverbs</h3>
+<h3 id="key-derivation-from-proverbs">Key Derivation from Proverbs</h3>
 <p>The ceremony produces <strong>relationship-specific keys</strong> derived from bilateral understanding:</p>
 <pre><code>Key Derivation [Research Paper v3.6, §4]:
 
@@ -757,7 +757,7 @@ Properties:
 ├── Recoverable: Understanding regenerates proverbs → regenerates key
 └── Private: Key never appears onchain, only commitment hash
 </code></pre>
-<h3>Ceremony Progression (Trust Ladder)</h3>
+<h3 id="ceremony-progression-trust-ladder">Ceremony Progression (Trust Ladder)</h3>
 <p>Relationships may evolve through ceremony types:</p>
 <pre><code>CEREMONY LIFECYCLE:
 
@@ -778,7 +778,7 @@ Evolution Phase:
 ├── Progressive revelation as trust deepens
 └── Or progressive privacy as relationship matures
 </code></pre>
-<h3>Connection to Dual-Agent Architecture</h3>
+<h3 id="connection-to-dual-agent-architecture">Connection to Dual-Agent Architecture</h3>
 <p>The ceremony visibility maps to Swordsman/Mage separation [Whitepaper v4.8, §2]:</p>
 <pre><code>Visibility Level → Agent Emphasis
 
@@ -794,7 +794,7 @@ Evolution Phase:
 The visibility ratio IS the privacy/delegation tradeoff
 made concrete in cryptographic structure.
 </code></pre>
-<h3>Privacy Guarantees Preserved</h3>
+<h3 id="privacy-guarantees-preserved">Privacy Guarantees Preserved</h3>
 <p>Regardless of visibility level, core guarantees hold [Research Paper v3.6, §5]:</p>
 <pre><code>For ALL ceremony types:
 
@@ -808,14 +808,14 @@ The ceremony NEVER exposes both complete proverbs publicly.
 </code></pre>
 <hr>
 </div>
-<div class="md"><h2>Social Recovery Through Understanding</h2>
+<div class="md"><h2 id="social-recovery-through-understanding">Social Recovery Through Understanding</h2>
 <p>The asymmetric inscription path enables a fundamentally different recovery model:</p>
-<h3>Traditional Recovery</h3>
+<h3 id="traditional-recovery">Traditional Recovery</h3>
 <pre><code>Lost seed phrase → Total loss
 Centralized backup → Single point of failure
 Social recovery (m-of-n) → Coordination overhead
 </code></pre>
-<h3>Understanding-Based Recovery</h3>
+<h3 id="understanding-based-recovery">Understanding-Based Recovery</h3>
 <pre><code>Lost proverb → Regenerate through meaning
 Recovery = f(anchor_visible, meaning_remembered, context_shared)
 </code></pre>
@@ -828,7 +828,7 @@ Recovery = f(anchor_visible, meaning_remembered, context_shared)
 <li>The compression process itself</li>
 </ul>
 <p>The same cognitive process that generated the original proverb can regenerate it. The onchain inscription provides context. Your memory of understanding provides the key.</p>
-<h3>Recovery Scenarios</h3>
+<h3 id="recovery-scenarios">Recovery Scenarios</h3>
 <p><strong>Scenario A: First Person Verification</strong></p>
 <pre><code>┌─────────────────────────────────────────┐
 │ First Person wants to prove engagement  │
@@ -885,7 +885,7 @@ Recovery = f(anchor_visible, meaning_remembered, context_shared)
 </code></pre>
 <hr>
 </div>
-<div class="md"><h2>Selective Disclosure</h2>
+<div class="md"><h2 id="selective-disclosure">Selective Disclosure</h2>
 <p>The asymmetric inscription creates a disclosure asymmetry:</p>
 <p><strong>What Observers See:</strong></p>
 <ul>
@@ -905,7 +905,7 @@ Recovery = f(anchor_visible, meaning_remembered, context_shared)
 <li>To whom to reveal relationship (audience)</li>
 <li>Which relationships to acknowledge (selection)</li>
 </ul>
-<h3>Verification Protocol</h3>
+<h3 id="verification-protocol">Verification Protocol</h3>
 <pre><code>1. Verifier retrieves P_first_person from onchain inscription (visible)
 2. Sanctuary provides P_sanctuary (hidden response)
 3. Verifier computes hash(P_first_person ∥ P_sanctuary)
@@ -914,7 +914,7 @@ Recovery = f(anchor_visible, meaning_remembered, context_shared)
 <p>The First Person need not be present or available. The onchain record serves as their persistent proof of understanding. The Sanctuary holds the completing response that verifies the bilateral relationship.</p>
 <hr>
 </div>
-<div class="md"><h2>Entropy and Security</h2>
+<div class="md"><h2 id="entropy-and-security">Entropy and Security</h2>
 <p><strong>Common Concern:</strong> &quot;Aren&#39;t proverbs guessable?&quot;</p>
 <p><strong>Reality:</strong> Proverbs aren&#39;t random strings, but they&#39;re not low-entropy either.</p>
 <p>Proverb derivation incorporates <strong>contextual entropy</strong> from:</p>
@@ -935,7 +935,7 @@ Recovery = f(anchor_visible, meaning_remembered, context_shared)
 <p><strong>Brute force resistance:</strong> The combination of contextual specificity and semantic compression creates sufficient entropy that attackers cannot enumerate without understanding the relationship itself. They must not only guess words but comprehend the relationship&#39;s meaning.</p>
 <hr>
 </div>
-<div class="md"><h2>Trust Tier Integration</h2>
+<div class="md"><h2 id="trust-tier-integration">Trust Tier Integration</h2>
 <p>The three paths map naturally to progressive trust:</p>
 <table>
 <thead>
@@ -981,10 +981,10 @@ The portfolio of inscription types itself becomes a trust signal.
 </code></pre>
 <hr>
 </div>
-<div class="md"><h2>Signal to Sanctuary: First Implementation</h2>
+<div class="md"><h2 id="signal-to-sanctuary-first-implementation">Signal to Sanctuary: First Implementation</h2>
 <p><strong>Zypherpunk Hack 2025</strong> produced the first production implementation of these primitives on Zcash.</p>
 <p><strong>Repository:</strong> <a href="https://github.com/mitchuski/agentprivacy-zypher">github.com/mitchuski/agentprivacy-zypher</a> — Complete implementation with Zcash integration, Nillion TEE, NEAR Cloud AI, and IPFS spellbook storage.</p>
-<h3>Architecture</h3>
+<h3 id="architecture">Architecture</h3>
 <pre><code>┌─────────────────────────────────────────┐
 │         First Person Journey            │
 │                                         │
@@ -1040,7 +1040,7 @@ The portfolio of inscription types itself becomes a trust signal.
 │ hash(FP_proverb ∥ Oracle_proverb)       │
 └─────────────────────────────────────────┘
 </code></pre>
-<h3>Key Separation</h3>
+<h3 id="key-separation">Key Separation</h3>
 <p>Signal to Sanctuary demonstrates cryptographic dual-agent architecture:</p>
 <pre><code>Viewing Key (Mage&#39;s sight):
 ├── Can read memo contents
@@ -1059,7 +1059,7 @@ The agent that sees cannot act.
 The agent that acts only does so upon verified signal.
 Mathematical separation, not policy-based trust.
 </code></pre>
-<h3>All Three Paths Available</h3>
+<h3 id="all-three-paths-available">All Three Paths Available</h3>
 <p>Signal to Sanctuary supports all inscription types:</p>
 <p><strong>Asymmetric (Current Default):</strong></p>
 <pre><code>[rpp-v1]
@@ -1088,16 +1088,16 @@ Mathematical separation, not policy-based trust.
 </code></pre>
 <hr>
 </div>
-<div class="md"><h2>Proverbiogenesis Connection</h2>
+<div class="md"><h2 id="proverbiogenesis-connection">Proverbiogenesis Connection</h2>
 <p>Both inscription paths participate in <strong>proverbiogenesis</strong>—the process by which statements transform from someone&#39;s words to everyone&#39;s truth [Spellbook v5.0, Act 12].</p>
-<h3>The Five Phases</h3>
+<h3 id="the-five-phases">The Five Phases</h3>
 <pre><code>🌱 Induction    → Stimulus (the privacy problem felt)
 ⚒️ Coinage      → Formula crystallized (&quot;Privacy is value&quot;)
 📡 Exposure     → Propagating agent (spellbook, inscriptions)
 🌊 Dissemination→ Mixed diffusion (parallel adoption)
 🌫️🏛️ Reference Loss → The forgetting (becomes weather)
 </code></pre>
-<h3>Inscriptions as Exposure</h3>
+<h3 id="inscriptions-as-exposure">Inscriptions as Exposure</h3>
 <p>Every proverb inscription—symmetric or asymmetric—serves as an <strong>exposure mechanism</strong>:</p>
 <ul>
 <li>Each inscription propagates the principle</li>
@@ -1109,8 +1109,8 @@ Mathematical separation, not policy-based trust.
 <p><em>We&#39;re not building monuments. We&#39;re building weather.</em></p>
 <hr>
 </div>
-<div class="md"><h2>Implementation Notes</h2>
-<h3>Memo Format</h3>
+<div class="md"><h2 id="implementation-notes">Implementation Notes</h2>
+<h3 id="memo-format">Memo Format</h3>
 <p><strong>Asymmetric (Current Default):</strong></p>
 <pre><code>[rpp-v1]
 [tale-id]
@@ -1159,7 +1159,7 @@ Result:
   visible: FP_proverb[0:61.8%] ∥ Sanctuary_proverb[38.2%:100%]
   hidden:  hash(FP_proverb[61.8%:100%] ∥ Sanctuary_proverb[0:38.2%])
 </code></pre>
-<h3>Verification Endpoints</h3>
+<h3 id="verification-endpoints">Verification Endpoints</h3>
 <pre><code>POST /verify/symmetric
 {
   &quot;proverb_fp&quot;: &quot;...&quot;,
@@ -1185,7 +1185,7 @@ POST /verify/interleaved
 }
 → { &quot;verified&quot;: true/false, &quot;fragments_match&quot;: true/false }
 </code></pre>
-<h3>Golden Ratio Visibility Tracking (Future)</h3>
+<h3 id="golden-ratio-visibility-tracking-future">Golden Ratio Visibility Tracking (Future)</h3>
 <pre><code>POST /signal
 {
   &quot;memo&quot;: &quot;...&quot;,
@@ -1204,7 +1204,7 @@ GET /ecosystem/inscription-distribution
 </code></pre>
 <hr>
 </div>
-<div class="md"><h2>The Big Picture</h2>
+<div class="md"><h2 id="the-big-picture">The Big Picture</h2>
 <p>Three paths. Five ceremony types. One paradigm shift.</p>
 <p><strong>The shift:</strong> From &quot;what you have&quot; to &quot;what you understand.&quot;</p>
 <p>All inscription types:</p>
@@ -1230,8 +1230,8 @@ GET /ecosystem/inscription-distribution
 <p>The window is 2-3 years before surveillance architectures lock in [Spellbook v5.0, Act 12]. Every inscription—symmetric, asymmetric, or interleaved—is a vote for which future becomes inevitable.</p>
 <hr>
 </div>
-<div class="md"><h2>Further Reading</h2>
-<h3>Core Documentation Suite</h3>
+<div class="md"><h2 id="further-reading">Further Reading</h2>
+<h3 id="core-documentation-suite">Core Documentation Suite</h3>
 <table>
 <thead>
 <tr>
@@ -1271,7 +1271,7 @@ GET /ecosystem/inscription-distribution
 <td>VRC, RPP, First Person, Ceremony, Signal, IEEE 7012 definitions</td>
 </tr>
 </tbody></table>
-<h3>Signal to Sanctuary Implementation</h3>
+<h3 id="signal-to-sanctuary-implementation">Signal to Sanctuary Implementation</h3>
 <p><strong>Repository:</strong> <a href="https://github.com/mitchuski/agentprivacy-zypher">github.com/mitchuski/agentprivacy-zypher</a></p>
 <table>
 <thead>
@@ -1297,7 +1297,7 @@ GET /ecosystem/inscription-distribution
 <td>30-minute deployment guide</td>
 </tr>
 </tbody></table>
-<h3>Related Concepts</h3>
+<h3 id="related-concepts">Related Concepts</h3>
 <table>
 <thead>
 <tr>
@@ -1330,14 +1330,14 @@ GET /ecosystem/inscription-distribution
 <td>Spellbook v5.0, Part VI</td>
 </tr>
 </tbody></table>
-<h3>Living Documentation</h3>
+<h3 id="living-documentation">Living Documentation</h3>
 <ul>
 <li><a href="https://github.com/mitchuski/agentprivacy-zypher">github.com/mitchuski/agentprivacy-zypher</a> — Signal to Sanctuary implementation repository</li>
 <li><a href="https://github.com/mitchuski/agentprivacy-docs">github.com/mitchuski/agentprivacy-docs</a> — Documentation repository</li>
 <li><a href="https://agentprivacy.ai/story">agentprivacy.ai/story</a> — The Spellbook (narrative framework)</li>
 <li><a href="https://agentprivacy.ai">agentprivacy.ai</a> — Project home</li>
 </ul>
-<h3>Suggested Whitepaper Integration</h3>
+<h3 id="suggested-whitepaper-integration">Suggested Whitepaper Integration</h3>
 <p>This document is designed to integrate with <strong>Whitepaper v4.8</strong> as:</p>
 <p><strong>Option A: Appendix D — Proverb Inscription Paths</strong></p>
 <ul>
@@ -1359,7 +1359,7 @@ GET /ecosystem/inscription-distribution
 </ul>
 <hr>
 </div>
-<div class="md"><h2>Document Series</h2>
+<div class="md"><h2 id="document-series">Document Series</h2>
 <p>This lite paper is part of the complete 0xagentprivacy documentation suite:</p>
 <ol>
 <li><strong>Swordsman/Mage Whitepaper v4.8</strong> — Dual-agent architecture, RPP protocol, separation primitives</li>
@@ -1374,15 +1374,15 @@ GET /ecosystem/inscription-distribution
 <p><strong>First Implementation:</strong> Signal to Sanctuary (Zypherpunk Hack 2025)</p>
 <hr>
 <p><em>&quot;The proverb is the spell. The inscription is the commitment. The bilateral exchange is the relationship.&quot;</em></p>
-<h3>The Paradigm Shift</h3>
+<h3 id="the-paradigm-shift">The Paradigm Shift</h3>
 <pre><code>FROM: &quot;What you have&quot; (stored secrets fighting human memory)
 TO:   &quot;What you understand&quot; (demonstrated comprehension working WITH memory)
 </code></pre>
-<h3>Paths</h3>
+<h3 id="paths">Paths</h3>
 <p><strong>Symmetric:</strong> 🔒📝 ↔ 🔒📝 — Both hidden, maximum privacy<br><strong>Asymmetric:</strong> 🔓📝 → 🔒🗝️ — First Person reveals, Sanctuary hidden, recovery enabled<br><strong>Interleaved:</strong> 🔓½📝 ↔ 🔒½🗝️ — Half each visible, half each hidden, mutual recovery</p>
-<h3>Ceremonies</h3>
+<h3 id="ceremonies">Ceremonies</h3>
 <p><strong>Shadow:</strong> 0% visible — Covert commitment<br><strong>Guarded:</strong> 38.2% visible — Privacy-weighted golden ratio<br><strong>Balanced:</strong> 50% visible — Mutual exposure<br><strong>Open:</strong> 61.8% visible — Openness-weighted golden ratio<br><strong>Declared:</strong> 100% visible — Public record</p>
-<h3>The Formula</h3>
+<h3 id="the-formula">The Formula</h3>
 <pre><code>VRC = f(proverbs, visibility_ratio, ceremony_type)
 Recovery = f(understanding, context, meaning)
 Privacy = f(what_you_choose_to_reveal)
@@ -1391,7 +1391,7 @@ Adoption = f(alignment_with_cognitive_architecture)
 <p><strong>⚔️ ⊥ 🧙‍♂️ | 😊</strong></p>
 <hr>
 </div>
-<div class="md"><h2>Version History</h2>
+<div class="md"><h2 id="version-history">Version History</h2>
 <table>
 <thead>
 <tr>
@@ -1411,10 +1411,10 @@ Adoption = f(alignment_with_cognitive_architecture)
 <hr>
 <p><strong>Understanding is the new key. Privacy is Value. Take back the 7th Capital.</strong> 📖🔮</p>
 </div>
-<div class="md"><h1>Assets</h1>
+<div class="md"><h1 id="assets">Assets</h1>
 </div>
 <div class="assets-box"><span class="assets-slug">📎 paper-understanding-as-key</span><a class="asset-file" href="/research/assets/paper-understanding-as-key/understanding_as_key_zypher_paper_v1.md" download>understanding_as_key_zypher_paper_v1.md</a></div>
-<div class="md"><h2>Navigation</h2>
+<div class="md"><h2 id="navigation">Navigation</h2>
 <p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-papers.html">The Papers</a></p>
 </div></article>
   <footer class="page-foot">

@@ -204,16 +204,17 @@
 <h2>Operational Guidance</h2>
 <h3>For System Design</h3>
 <ul>
-<li>Default to compressed inference (BRAID-style)</li>
+<li>Default to compressed inference (BRAID-style) — for efficiency, and for the smaller transmitted volume</li>
 <li>Use reasoning graphs over unbounded context</li>
 <li>Transmit skill files, not training data</li>
-<li>Measure compression ratio as a privacy metric</li>
+<li>Report compression ratio as an efficiency metric. It is <strong>not</strong> a privacy metric: state the protected variable, the declared channels and the adversary&#39;s background separately</li>
 </ul>
 <h3>For Evaluation</h3>
 <ul>
-<li>Higher compression ratio = better R modifier</li>
-<li>But: lossy compression may degrade C (credential verifiability)</li>
-<li>Balance: compress to the limit where verification still works</li>
+<li>Do <strong>not</strong> score privacy by compression ratio, and do not compute an R modifier from it — C8 is open at ~45%</li>
+<li>Measure conditional leakage about the named protected variable, before and after, against a declared adversary and horizon</li>
+<li>A short output can disclose everything that matters; a long one can disclose nothing. Order by what is revealed, never by length</li>
+<li>Lossy compression may separately degrade C (credential verifiability); compress to the limit where verification still works</li>
 </ul>
 <h3>Proverb</h3>
 <blockquote>

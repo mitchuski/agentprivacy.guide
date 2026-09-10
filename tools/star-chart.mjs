@@ -184,6 +184,97 @@ const SITESTRAND = {
   spellbook: 'delegation', transmediale: 'connection', plugin: 'delegation',
 };
 
+// ---- D4 · the constellation read as a walk shape ----------------------------
+// mages_city/docs/TRUST_TASK_CONSTELLATION.md. A saved constellation is a
+// DISPLAY object (it carries titles and a timestamp); D4 is the disclosure tier
+// an unknown peer may hold — the walk shape and its digest, no page bodies.
+//
+// The digest and the move labels below are byte-identical to the MCP's
+// (agentprivacy-mcp lib/key.mjs walkDigest over lib/kappa.mjs canonicalJSON, and
+// lib/lattice.mjs moveName/moveLabel), so a walk presented here and the same walk
+// folded by key_evolve agree on their digest. Do not "improve" either copy alone.
+//
+// Nothing here sends anything anywhere: the panel is local and the copy is manual.
+const D4_JS = `
+const D4DIMS = [['protection',32],['delegation',16],['memory',8],['connection',4],['computation',2],['value',1]];
+var D4bake = null, D4rows = null;
+function d4Canon(v){
+  if (v === null || typeof v !== 'object') return JSON.stringify(v);
+  if (Array.isArray(v)) return '[' + v.map(d4Canon).join(',') + ']';
+  return '{' + Object.keys(v).sort().map(function(k){ return JSON.stringify(k) + ':' + d4Canon(v[k]); }).join(',') + '}';
+}
+async function d4Sha(s){
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return 'sha256:' + Array.from(new Uint8Array(b)).map(function(x){ return x.toString(16).padStart(2,'0'); }).join('');
+}
+// mirrors moveName's order exactly: stay, then the three named ops, then flip, then jump
+function d4Move(a,b){
+  if (a === b) return 'stay';
+  if (b === ((a + 1) & 63)) return 'succ';
+  if (b === ((64 - a) & 63)) return 'neg';
+  if (b === (63 - a)) return 'bnot';
+  var x = a ^ b, f = D4DIMS.filter(function(d){ return x & d[1]; }).map(function(d){ return d[0]; });
+  if (f.length === 1) return 'flip ' + f[0];
+  return 'jump ×' + f.length + ' (' + f.join(' ') + ')';
+}
+async function d4Load(){
+  if (D4rows) return;
+  const response = await fetch('data/pages.json');
+  if (!response.ok) throw Error('Chart data is unavailable. Please try again.');
+  const j = await response.json();
+  D4bake = { kind: j.kind, baked: j.baked, count: j.count };
+  D4rows = new Map(j.pages.map(function(p){ return [p.site + '/' + p.slug, p]; }));
+}
+async function d4Build(pts){
+  await d4Load();
+  var steps = [], missing = [];
+  pts.forEach(function(p){
+    var row = D4rows.get(p.host + '/' + p.slug);
+    if (!row) { missing.push(p.host + '/' + p.slug); return; }
+    steps.push({ site: row.site, slug: row.slug, vertex: row.vertex, element: row.element });
+  });
+  var moves = steps.slice(1).map(function(s,i){ return d4Move(steps[i].vertex, s.vertex); });
+  return { chart: location.origin + location.pathname, steps: steps, moves: moves,
+           digest: await d4Sha(d4Canon(steps)), bake: D4bake, missing: missing };
+}
+function d4Panel(w){
+  function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+  var el = document.getElementById('d4panel');
+  if (!el) { el = document.createElement('div'); el.id = 'd4panel'; document.body.appendChild(el); }
+  el.setAttribute('style','position:fixed;right:14px;bottom:14px;width:min(560px,92vw);max-height:70vh;overflow:auto;'
+    + 'background:rgba(8,10,18,.96);border:1px solid #2b3350;border-radius:10px;padding:13px 15px;z-index:9999;'
+    + 'font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#cfd8ee;box-shadow:0 8px 40px rgba(0,0,0,.6)');
+  var rows = w.steps.map(function(s,i){
+    return '<div style="margin:7px 0">' + String(i+1).padStart(2,'0') + ' · <b style="color:#e8eefc">' + esc(s.site) + '/' + esc(s.slug)
+      + '</b> · V' + s.vertex + '<div style="opacity:.5;word-break:break-all">' + esc(s.element) + '</div>'
+      + (i < w.moves.length ? '<div style="color:#8fd0a8">↓ ' + esc(w.moves[i]) + '</div>' : '') + '</div>';
+  }).join('');
+  el.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">'
+    + '<b style="color:#e8eefc">✧ D4 · the walk shape</b>'
+    + '<span><button id="d4copy">copy</button> <button id="d4close">close</button></span></div>'
+    + '<div style="opacity:.7;margin:6px 0 4px">No titles, no page bodies — the address tier. A peer holding this '
+    + 'receives no page bodies here; source addresses may still resolve elsewhere.</div>'
+    + '<div style="opacity:.55;margin-bottom:8px">' + w.steps.length + ' steps · walked on the bake of '
+    + (w.bake ? esc(w.bake.baked) + ' (' + esc(w.bake.count.pages) + ' pages, ' + esc(w.bake.count.postured) + ' postured)' : 'unknown') + '</div>'
+    + rows
+    + '<div style="margin-top:10px;padding-top:8px;border-top:1px solid #2b3350;word-break:break-all">digest <b style="color:#e8eefc">'
+    + esc(w.digest) + '</b></div>'
+    + (w.missing.length ? '<div style="color:#e0a35c;margin-top:6px">not on this bake, omitted: ' + esc(w.missing.join(', ')) + '</div>' : '');
+  document.getElementById('d4close').onclick = function(){ el.remove(); };
+  document.getElementById('d4copy').onclick = function(){
+    navigator.clipboard.writeText(JSON.stringify({ chart:w.chart, steps:w.steps, moves:w.moves, digest:w.digest, bake:w.bake }, null, 2)).then(function(){ document.getElementById('d4copy').textContent = 'copied'; }, function(){ document.getElementById('d4copy').textContent = 'copy unavailable'; });
+  };
+}
+document.getElementById('cD4').onclick = async function(){
+  if (!trail.pts.length) return;
+  const button = document.getElementById('cD4');
+  button.disabled = true;
+  try { d4Panel(await d4Build(trail.pts)); }
+  catch (error) { button.textContent = 'retry present'; button.title = 'Could not read the chart data. Try again.'; }
+  finally { button.disabled = false; }
+};
+`;
+
 let html = fs.readFileSync(path.join(SRC, 'index.html'), 'utf8');
 html = patch(html, [
   ['<title>the lattice lab improbable engine · transmediale 2027</title>',
@@ -359,8 +450,12 @@ function applyGlow(){
 }`],
 
   // run your path — a light circuit along the walk, flaring the pages it visits
+  // ✧ present — the same walk read at D4, the tier an unknown peer may hold
   ['<button id="cSave" title="keep this walk as a named constellation">✦ save</button>',
-   '<button id="cRun" title="run your path — a light circuit walks your constellation, flaring each page">▶ run</button>\n    <button id="cSave" title="keep this walk as a named constellation">✦ save</button>'],
+   '<button id="cRun" title="run your path — a light circuit walks your constellation, flaring each page">▶ run</button>\n    <button id="cSave" title="keep this walk as a named constellation">✦ save</button>\n    <button id="cD4" title="present this walk at D4 — the shape and its digest, no page bodies">✧ present</button>'],
+
+  // the D4 reading of the current walk (see D4_JS above)
+  ['function rebuildTrail(){', D4_JS + '\nfunction rebuildTrail(){'],
 
   ['  pickStars();\n  controls.update();',
    '  runnerTick(dt);\n  pickStars();\n  controls.update();'],

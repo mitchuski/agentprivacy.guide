@@ -12,7 +12,7 @@ export function enhanceGuidespace(html, { home = false } = {}) {
     if (start >= 0 && end >= 0) html = html.slice(0, start) + `<section class="hero">
       <h1>A space<br><em>to find your way.</em></h1>
       <p class="lede">Read a source, follow a question, or find a method to try. The guide connects the model, stories and practical knowledge of agentprivacy.</p>
-      <nav class="guide-paths" aria-label="Start reading">
+      <nav class="guide-paths" aria-label="Start reading"><a href="https://skills.agentprivacy.ai/#loadouts"><strong>Practise in the Skills garden ↗</strong><span>Choose a deck, follow its Star path, then bring a scoped contribution to Mages City.</span></a>
         <a href="/research/welcome-visitors.html"><strong>Understand the model</strong><span>Research, assumptions and conjectures.</span></a>
         <a href="/spellbooks/welcome-visitors.html"><strong>Read the spellbooks</strong><span>Stories and the ideas they carry.</span></a>
         <a href="/skill/welcome-visitors.html"><strong>Use a skill</strong><span>Methods for a bounded piece of work.</span></a>

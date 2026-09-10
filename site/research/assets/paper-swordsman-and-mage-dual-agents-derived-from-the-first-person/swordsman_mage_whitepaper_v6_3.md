@@ -1,11 +1,14 @@
 # Swordsman and Mage: Dual Agents Derived from the First Person
 
+> **Operating-context revision 2026-09-09 (addendum v0.2):** [Community resources and trust tasks](https://guide.agentprivacy.ai/research/assets/spec-community-resources-and-trust-tasks-operating-model-addendum/community_resources_trust_tasks_v0_2.md) records the emerging Labs/City operating proposal. It complements this research edition without changing its formal version or adopting a funding mechanism. The operational resource ceiling and the informational reconstruction ceiling are different quantities.
+
+
 Protect or Delegate → Reflect and Connect → Three-Axis Separation (⚔️⊥⿻⊥🧙)·(📊⊥🔮)·(🧠⊥⚙️)·☯️🔷 🙂
 
 **Author:** privacymage
 **Date:** April 7, 2026
 **Version:** 6.3 (V10.0.0 Grimoire aligned)
-**V6 EDITION NOTE (2026-06-10):** under the unified-V6 labeling decision (Gate G3), this whitepaper is the **Whitepaper V6 edition** of the Privacy is Value canon: series-titled *Privacy is Value · V6: The Whitepaper (Swordsman and Mage)*, a volume of the *Privacy is Value* book. Model authority: `papers/v6/privacy_value_v6_formal_specification.md` (PVM V6.0) and `research/CONJECTURE_REGISTER_V6.md` (head C96); the full catalogue is `reference/PAPERS_INDEX.md`. Where this body cites the static reconstruction ceiling, read it as Proven-conditional with the V6 time-dependence R(t) per spec §5 and §11; conjecture citations resolve to the register.
+**V6 EDITION NOTE (2026-06-10):** under the unified-V6 labeling decision (Gate G3), this whitepaper is the **Whitepaper V6 edition** of the Privacy is Value canon: series-titled *Privacy is Value · V6: The Whitepaper (Swordsman and Mage)*, a volume of the *Privacy is Value* book. Model authority: `papers/v6/privacy_value_v6_formal_specification.md` (PVM V6.0) and `research/CONJECTURE_REGISTER_V6.md` (see the current register for its head); the full catalogue is `reference/PAPERS_INDEX.md`. Where this body cites the static reconstruction ceiling, read it as Proven-conditional with the V6 time-dependence R(t) per spec §5 and §11; conjecture citations resolve to the register.
 **External Convergence:** [UOR Foundation](https://github.com/UOR-Foundation) — independent Z/(2⁶)Z ring algebra
 
 ---

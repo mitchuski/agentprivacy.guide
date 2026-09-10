@@ -10,6 +10,8 @@
 
 ## Development Status Notice
 
+**Operating-context revision: 9 September 2026.** Read [Community resources and trust tasks v0.2](community_resources_trust_tasks_v0_2.md) for the emerging Labs funding and City operating model. This historical tokenomics design is not adopted by that proposal. Strong economic-result claims below are design-era claims, not established returns; later PVM evolution retires the headline economic multiples.
+
 > **This document presents ONE possible economic architecture for the dual-agent privacy protocol.** It is the least developed component of the documentation suite and requires significant collaboration with specific ecosystem implementers to finalize.
 >
 > The mathematical foundations (Whitepaper v5.0, Research Paper v3.8) establish architectural guarantees that hold **independent of economic implementation choices**. This tokenomics specification represents initial design thinking that must be validated, refined, and potentially restructured based on:
@@ -66,7 +68,7 @@ This economic architecture implements the mathematical foundations established i
 
 **V5 Context (February 2026):** The Privacy Value Model V5 adds **guild efficiency G(guilds)** to the network term — agents sharing a reasoning library from the same Generator coordinate at O(1) cost per guild member instead of O(N²). This directly impacts VRC economics: guilds enable scalable coordination without quadratic overhead.
 
-VRCs are edges on the Promise Graph: each formation is a traversal between sovereignty configurations, contributing to T_∫(π) — the **path integral** that replaces the additive edge value from V4. The three-graphs model (Knowledge × Promise × Trust) gives VRCs their geometric home. The 31,000× gap between sovereign and surveillance architectures is now understood as **boundary expressiveness** — the holographic bound (96 edges encoding 64 vertices).
+VRCs are edges on the Promise Graph: each formation is a traversal between sovereignty configurations, contributing to T_∫(π) — the **path integral** that replaces the additive edge value from V4. The three-graphs model (Knowledge × Promise × Trust) gives VRCs their geometric home. Earlier editions described a 31,000× economic gap through boundary expressiveness. That headline multiple is retired; see [the PVM soil/runtime evolution](../research/pvm-v6-soil-and-the-programme-runtime-evolutions.md). It must not be used as a current economic return or a derivation of funding shares.
 
 ---
 

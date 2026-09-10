@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+import { repairPublicLinks } from './public-links.mjs';
 import { installStarConnect } from './star-connect-build.mjs';
 // Static snapshot of the agentprivacy guide FedWiki federation.
 // Reads the live, private farm at ~/.wiki and emits a styled, path-based,
@@ -36,7 +36,7 @@ const SITES = [
       { label: '🪶 Poems — Selene’s Spellbook', re: /^poem-/ },
     ] },
   { id: 'grimoire',  label: 'Grimoire',   glyph: '🔮', color: '#7a3b8c', path: 'grimoire',   group: 'federation', blurb: 'The privacymage grimoire (v10.4) as atoms — spells, vertices, incantations, blades, poems.' },
-  { id: 'research',  label: 'Research',   glyph: '🧮', color: '#3d7c47', path: 'research',   group: 'federation', blurb: 'The privacy-value model V(π,t) and the conjecture register (C1–C96).' },
+  { id: 'research',  label: 'Research',   glyph: '🧮', color: '#3d7c47', path: 'research',   group: 'federation', blurb: 'The privacy-value model V(π,t) and the conjecture register (current register).' },
   { id: 'atlas',     label: 'Atlas',      glyph: '🌐', color: '#6a5acd', path: 'atlas',      group: 'federation', blurb: 'The knowledge graph — the backbone hyperlinking every site.' },
   { id: 'skill',     label: 'Skill',      glyph: '🗃️', color: '#2a7d8c', path: 'skill',      group: 'federation', blurb: '163 forkable skills — 42 personas + role / privacy-layer / meta.' },
   { id: 'harness',   label: 'Harness',    glyph: '⿻', color: '#4a7c6a', path: 'harness',    group: 'federation', blurb: 'The dual-agent harness — soulbae 🧙 proposes, soulbis ⚔️ proves, the Gap ⿻ holds them apart: seven seats, six trusts, ten ground rules — built for trust-graph construction: a validated result proposes an edge, only a signature mints it.' },
@@ -669,3 +669,5 @@ if(q){q.addEventListener('focus',load);q.addEventListener('input',e=>run(e.targe
 `; }
 
 installStarConnect(OUT);
+
+console.log('Public links repaired', repairPublicLinks(OUT));

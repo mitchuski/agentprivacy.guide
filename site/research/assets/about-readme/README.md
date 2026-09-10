@@ -12,7 +12,7 @@
 
 ## Quick Summary
 
-**0xagentprivacy** solves the privacy-delegation paradox in AI systems through mathematically-proven dual-agent architecture. When AI agents need information to act on your behalf, that same information enables surveillance. Our solution: split the function into two conditionally-independent agents—**Swordsman** (privacy/boundaries) and **Mage** (delegation/action)—creating mathematical guarantees that no adversary can fully reconstruct your private state.
+**0xagentprivacy** researches the privacy-delegation problem through a dual-agent architecture: **Swordsman** for privacy and boundaries, **Mage** for delegation and action. The papers study reconstruction bounds under stated separation, adversary and information assumptions. These conditional results are not an unconditional guarantee for every deployment.
 
 **Core Thesis:** Privacy is value. Behavioral data is the 7th capital. Architecture, not policy, protects sovereignty. *The boundary is always enough.*
 
@@ -71,7 +71,7 @@ The **Guide** at guide.agentprivacy.ai is the Librarian's *Wikis* made public �
 | **Blog Series: Privacy is Value V5** | Parts 0-5 | Research letters: Myth Before Math, Constellations, Forge & Ceremony, Dragon Wakes, Dihedral Mirror, Amnesia Protocol | All |
 | **ZK Swordsman Blade Forge** | 3.2 | OPERATIONAL + ALGEBRAICALLY GROUNDED: UOR module at swordsman-blade/src/lib/uor.ts | Researchers, Mathematicians |
 | **UOR × 64-Tetrahedra × ZK Mapping** | 2.2 | Foundational mapping; C4 RESOLVED; UOR Foundation convergence confirmed | Researchers |
-| **VRC Promise Protocol** | 3.3 | Economic architecture, guild efficiency (3.4 pending: mana economics) | Investors, Builders |
+| **VRC Promise Protocol** | 3.4 | Historical economic architecture (document header v3.4); current operating proposal in addendum v0.2 | Investors, Builders |
 | **Visual Guide** | 2.0 | Diagrams including three-axis, holographic visualisations | All |
 | **Research Proposal** | 2.2 | Collaboration invitation, UOR convergence as validation evidence | Researchers, Partners |
 | **Systems Hexagram Physics** | 1.2 | Operational physics: UOR algebraic foundation, 64-vertex lattice, forge ceremonies | Developers, Implementers |
@@ -203,7 +203,9 @@ AI agents need to know about you to act effectively on your behalf. But that kno
 
 ## Economic Model
 
-### Canonical Parameters
+**Operating-context revision: 9 September 2026.** The [community resources and trust tasks addendum v0.2](specs/community_resources_trust_tasks_v0_2.md) describes the emerging shared-pool and workshop model. Its constitution develops with participants. The older table below records a distinct ceremony/tokenomics design, not current market prices, Labs membership fees or an adopted allocation policy.
+
+### Historical design parameters (not adopted Labs policy)
 
 | Parameter | Value | Purpose |
 |-----------|-------|---------|
@@ -212,7 +214,9 @@ AI agents need to know about you to act effectively on your behalf. But that kno
 | **ZEC Price Basis** | $500 USD | Standardized for calculations |
 | **Fee Split** | 61.8% transparent / 38.2% shielded | Golden ratio constant |
 
-### Trust Tier Progression
+### Historical trust-tier proposal
+
+The table below is historical design context, not a deployed entitlement or universal reputation score. Current admission and delegated actions require verification at their actual service boundaries.
 
 | Tier | Signals | Capabilities | Trust Value |
 |------|---------|--------------|-------------|
@@ -228,7 +232,7 @@ AI agents need to know about you to act effectively on your behalf. But that kno
 - **70:1 compression efficiency** through VRC coordination
 - **O(n²) network effects** from relationship formation
 - **Per-person value capture** for active participants, denominated in protocol units (fiat estimates retired)
-- **Self-sustaining** by Year 3 through signal revenue
+- **Historical sustainability scenario:** Year 3 signal revenue was a planning assumption, not an achieved result or current funding commitment.
 
 ---
 
@@ -499,7 +503,7 @@ This documentation suite has been reviewed for terminology consistency, economic
 ### Standardizations Applied
 - **Terminology**: Ceremony (1 ZEC one-time) vs Signal (0.01 ZEC ongoing)
 - **Trust Tiers**: Blade → Light → Heavy → Dragon (no "Armor" suffix)
-- **Economic Basis**: $500/ZEC canonical, 61.8/38.2 transparent/shielded split (φ-derived)
+- **Historical economic assumptions**: $500/ZEC calculation basis and a proposed 61.8/38.2 split; not current prices or adopted Labs policy. See the operating-model addendum v0.2.
 - **Promise Theory**: Formal foundations integrated throughout documentation
 - **IEEE 7012-2025**: MyTerms standard integration, published January 20, 2026
 - **PVM V5**: Three-axis separation, holographic bound, path integral T_∫(π), guild efficiency G(guilds)
@@ -564,7 +568,7 @@ CC BY-SA 4.0
 
 **Make privacy normal again.**
 
-Not through legal mandates or corporate promises, but through **mathematical guarantees enforced by economic incentives** that make privacy profitable and surveillance costly.
+The programme combines conditional mathematical results, explicit runtime boundaries and economic designs that still require validation. The proposed operating model does not establish profitability or deploy its incentives.
 
 When the 7th capital—behavioral sovereignty—remains with First Persons rather than being extracted upward to platforms, the entire economic structure inverts.
 

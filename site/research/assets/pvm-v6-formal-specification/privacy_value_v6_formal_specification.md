@@ -1,5 +1,8 @@
 # Privacy is Value · V6: The Gathering Turn and the Moving Ceiling
 
+> **Operating-context revision 2026-09-09 (addendum v0.2):** [Community resources and trust tasks](https://guide.agentprivacy.ai/research/assets/spec-community-resources-and-trust-tasks-operating-model-addendum/community_resources_trust_tasks_v0_2.md) records the emerging Labs/City operating proposal. It complements this research edition without changing its formal version or adopting a funding mechanism. The operational resource ceiling and the informational reconstruction ceiling are different quantities.
+
+
 ## Formal Specification of the Privacy Value Model · Dual-Agent Privacy Architecture
 
 **Series:** *Privacy is Value*, one book in versioned volumes; each volume stands alone and names its place in the book. This volume succeeds *Privacy is Value · V5.4: The Amnesia Protocol*.
