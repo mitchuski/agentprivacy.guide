@@ -323,6 +323,9 @@ const siteIndexes = {};
 
 console.log('snapshot → reading', WIKI);
 fs.mkdirSync(OUT, { recursive: true }); clearContents(OUT);
+// root files (skill.md, llms.txt): the hand-written agent doors for this host.
+// They live in <repo>/root/ so a snapshot cannot wipe them — copied in first, every run.
+copyDir(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'root'), OUT);
 
 // pre-scan real page filenames + titles per site, so [[links]] resolve against truth
 for (const site of SITES) {
