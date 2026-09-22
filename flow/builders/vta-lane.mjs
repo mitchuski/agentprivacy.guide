@@ -211,6 +211,36 @@ The companion to the VTA plan. Five rungs, one rule under all of them: **the κ 
 A valid VTA record signed after *t*. A stale κ is a stale agent. Establishes **memory** (continuity) and nothing else — the first panel of the predicate atlas, since the system can already prove it.
 
 *Source: agentprivacy_master/docs/PLAN_CITY_KEY_CRYPTO_UPGRADE_2026-09-03.md. ${BUILT}. See the harness site: [[The Verifiable Trust Agent]].*`] },
+
+  { site: 'guide.localhost', slug: 'what-the-star-holds', title: 'What the Star Holds', posture: 'protection memory connection',
+    source: 'soulbis/guide/index.html §hold · agentprivacy-mcp/lib/hold.mjs · agentprivacy-mcp/fixtures/star-hold-conformance/README.md · star-key/docs/STAR_SIGNATURE_ARTEFACT_REVIEW_2026-09-11.md',
+    blocks: [
+`# 🪬 What the Star Holds
+
+Beside the City Key sits the **Hold**: the relationships others have signed with the bearer — a membership, a vouch, a relationship record, a trust task. Each item is verified where it is held, recorded as **valid · invalid · unsupported · unavailable**, and measured in bytes against the same budget the Star's Signatures room draws. The key itself carries only two things about the Hold: its **root** (a Merkle root over the items' refs) and its **count**.
+
+The first verb is **relate**, not *add*. An item enters the Hold only after it verifies, and a bearer cannot relate itself. A reader that receives the key learns how much is held and can check the root against what the bearer chooses to present; it learns nothing about who signed what.`,
+`## Measured, not argued
+
+Under a frozen list of fourteen verifier requirements, a presentation from the Hold discloses **521 bytes** to the verifier, where the route without it discloses 2,529 and the Hold itself retains 6,478. The counting rule measures the public side and the verifier's state only; the proof is transport, unmeasured. The number is a regression, not a bound.
+
+The picture came first: the Signatures room measured bytes as volumes before there was a Hold to hold them, and the Hold took the room's 24 KiB budget as its own default.`,
+`## What exists (2026-09-21)
+
+- **Three verifiers, one root.** The reference runtime (55 checks), the agentprivacy runtime (\`hold_verify\`, 44) and the Star Key extension (\`star-hold.ts\`) land on the same root and the same per-item states from one fixture. A public **conformance pack** fixes the bytes (\`agentprivacy-mcp/fixtures/star-hold-conformance\`).
+- **Proof sets.** A document carrying more than one proof composes fail-closed: any supported proof that fails → invalid; else a supported pass → valid. A hybrid Ed25519 + ML-DSA credential verifies today; the ML-DSA leg reads *unsupported* and is measured, not trusted.
+- **The runtime's verbs.** \`star relate · hold show / verify / project · present · profiles\`. \`present\` answers honestly that it is not available and names what is missing: the salts and a community root.
+- **The City reads the root.** \`gate/citykey.mjs\` reports \`holds\` as *declared* — state \`unavailable\` by construction, because the items never reach the City — and the chip prints \`held ×N\`.
+- **A pane.** The extension has a Hold pane that re-verifies a chosen Hold file locally; nothing is persisted or sent.
+
+Not yet: the Hold drawn in any Star room (the Signatures room still shows samples); the presentation itself (k distinct vouches under one community root, the root never travelling); a real first item issued by the City's community.`,
+`## Where it stands in the lane
+
+The Hold is the Star's answer to Rung 5 — relationship credentials — before the credentials exist: it holds what was signed, measures what leaves, and keeps the root beside the key the Swordsman signs. It converges with what the upstream Verifiable Trust Infrastructure shipped in September: **vetting statements**, a counted vouch a community can tally without publishing who vouched for whom — the plaintext twin of the presentation the Hold is designed to prove in zero knowledge.
+
+Two sentences travel with every telling of the Star: *appearance is not identity*, and *the geometry is a reading, never an authority*. The Star is not a wallet; the trust agent's wallet is what the Star rides on.
+
+*Source: soulbis \`guide/index.html\` §What the Star holds (the telling); \`agentprivacy-mcp/lib/hold.mjs\` and the conformance pack (the mechanism); \`star-key/docs/STAR_SIGNATURE_ARTEFACT_REVIEW_2026-09-11.md\` (the design). Chronicles: 2026-09-21 · The Signatures Fold Into the Star · The Star Becomes the Nexus (unsigned). Built 2026-09-21. See [[Star Key Selected Presentation]] · [[Star Core Artefact And Temporal View]] · [[VTA Star Knowledge Space]] · [[The City Board]] · [[Page Posture]].*`] },
 ];
 
 // ---- the City board (mages.city) — discovery in both directions ------------------------------
