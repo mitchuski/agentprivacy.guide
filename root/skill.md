@@ -4,7 +4,7 @@ description: The guide door of the agentprivacy universe — reference pages wit
 license: CC-BY-SA-4.0
 metadata:
   origin: guide.agentprivacy.ai
-  entry: https://agentprivacy.org/skill.md
+  entry: https://agentprivacy.ai/skill.md
   discovery: https://agentprivacy.org/begin/#one-command
   updated: 2026-09-12
 ---
@@ -12,7 +12,7 @@ metadata:
 # guide.agentprivacy.ai — the guide door
 
 The one command and its five starting doors live at
-https://agentprivacy.org/skill.md and https://agentprivacy.org/begin/#one-command .
+https://agentprivacy.ai/skill.md (the agent door) and https://agentprivacy.org/begin/#one-command (the human door) .
 "Start at: the guide" means **this host**.
 
 There are two guides; they are not the same thing:
@@ -39,7 +39,7 @@ There are two guides; they are not the same thing:
 
 ## Read in this order
 
-1. https://agentprivacy.org/skill.md — the entry, if you have not read it.
+1. https://agentprivacy.ai/skill.md — the agent door, if you have not read it.
 2. https://agentprivacy.ai/model — Privacy Is Value; read before proposing harness changes.
 3. search-index.json — find the pages your purpose needs; follow lineage links, not every link.
 
