@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Sphere · agentprivacy guide</title>
+<meta name="description" content="Every guide page seated by what its text says, beside the torus that seats it by where it lives.">
+<link rel="icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#dfe6fb; --dim:#8d99bd; --line:rgba(150,170,230,0.18); --glass:rgba(10,13,28,0.66); --sword:#e8523a; --mage:#4dd9e8; --gold:#E0A526; --ground:#04050b; }
+  *{ box-sizing:border-box; margin:0; }
+  html,body{ height:100%; }
+  body{ font-family:'DM Sans',system-ui,sans-serif; font-size:13px; color:var(--ink); overflow:hidden;
+    background:radial-gradient(120% 90% at 28% 14%, rgba(59,130,246,0.12), transparent 55%), var(--ground); }
+  canvas{ position:fixed; inset:0; display:block; }
+  .mono{ font-family:'JetBrains Mono',monospace; font-size:11.5px; }
+  header{ position:fixed; left:22px; top:18px; z-index:5; max-width:min(540px,calc(100vw - 44px)); }
+  header nav{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--dim); margin-bottom:8px; }
+  header nav a{ color:var(--mage); text-decoration:none; } header nav a:hover{ text-decoration:underline; }
+  h1{ font-family:'Fraunces',serif; font-weight:300; font-style:italic; font-size:clamp(24px,3.6vw,40px); line-height:1.12; padding-bottom:4px;
+    background:linear-gradient(100deg,#9fc0ff,#e8edff 44%,#7fe8d8); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  header p{ color:var(--dim); line-height:1.55; margin-top:6px; }
+  #legend{ margin-top:8px; display:flex; flex-wrap:wrap; gap:4px 12px; color:var(--dim); font-family:'JetBrains Mono',monospace; font-size:11px; }
+  .lg{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:0; }
+  #bar{ position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:6; display:flex; flex-wrap:wrap; gap:6px; justify-content:center; align-items:center;
+    max-width:calc(100vw - 24px); padding:8px; background:var(--glass); border:1px solid var(--line); border-radius:14px; backdrop-filter:blur(12px); }
+  button,select{ font:inherit; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--ink); background:rgba(10,13,28,0.55); border:1px solid var(--line); border-radius:9px; padding:7px 11px; cursor:pointer; }
+  select{ padding:6px 8px; } option{ background:#0a0d1c; }
+  button:hover,select:hover{ border-color:rgba(159,192,255,0.5); }
+  button[aria-pressed="true"]{ color:#04050b; background:linear-gradient(120deg,#9fc0ff,#7fe8d8); border-color:transparent; }
+  button.key[aria-pressed="true"]{ background:linear-gradient(120deg,#ffb3a3,var(--sword)); }
+  .sep{ width:1px; align-self:stretch; background:var(--line); margin:2px 4px; }
+  #card{ position:fixed; right:18px; top:18px; z-index:6; width:min(340px,calc(100vw - 36px)); padding:13px 14px; line-height:1.55;
+    background:var(--glass); border:1px solid var(--line); border-radius:14px; backdrop-filter:blur(12px); }
+  #card b{ font-weight:500; } .m{ color:var(--dim); } .bits i{ font-style:normal; opacity:0.22; } .bits i.on{ opacity:1; }
+  #card .t{ margin-top:6px; font-size:14px; overflow-wrap:anywhere; }
+  #card .seats{ display:grid; grid-template-columns:auto 1fr; gap:3px 10px; margin-top:8px; }
+  #card .go{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  #card .go a{ color:var(--mage); text-decoration:none; border:1px solid var(--line); border-radius:8px; padding:4px 8px; font-family:'JetBrains Mono',monospace; font-size:11px; }
+  #card .go a:hover{ border-color:var(--mage); }
+  #guide{ position:fixed; left:18px; bottom:84px; z-index:7; width:min(420px,calc(100vw - 36px)); max-height:calc(100vh - 220px); overflow:auto; padding:16px 18px 14px;
+    background:rgba(8,10,22,0.9); border:1px solid var(--line); border-radius:14px; backdrop-filter:blur(14px); line-height:1.6; }
+  #guide[hidden]{ display:none; }
+  #guide h2{ font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:22px; margin-bottom:6px; }
+  #guide ol{ padding-left:18px; } #guide li{ margin:9px 0; } #guide li::marker{ color:var(--gold); font-family:'JetBrains Mono',monospace; }
+  #guide li button{ margin-top:5px; padding:4px 9px; }
+  #guide .limit{ margin-top:12px; padding-top:10px; border-top:1px solid var(--line); color:var(--dim); }
+  #guide .close{ float:right; padding:2px 9px; }
+  @media (max-width:760px){ #card{ top:auto; bottom:178px; right:12px; left:12px; width:auto; } header{ left:14px; top:12px; } .sep{ display:none; } #legend{ display:none; } #guide{ bottom:178px; } }
+</style>
+</head>
+<body>
+<header>
+  <nav><a href="/">guide</a> · <a href="/star-chart/">← the torus</a> · the sphere</nav>
+  <h1>The sphere beside the torus</h1>
+  <p id="lede">Loading the guide…</p>
+  <div id="legend"></div>
+</header>
+<div id="card"><span class="m">Hover a star to read it. Click to keep it and see where the torus puts it.</span></div>
+<aside id="guide" hidden aria-labelledby="guide-title">
+  <button class="close" aria-label="Close the guide">×</button>
+  <h2 id="guide-title">How to read the sphere</h2>
+  <ol>
+    <li><b>A star is a page.</b> Each one is a guide page, read by a small local language model (<span class="mono" id="g-model"></span>) and turned into a direction on a sphere.
+      <br><button data-show="text">show every page</button></li>
+    <li><b>Six readings place it.</b> That direction is scored against six short sentences, one per axis of the lattice: 🛡️ protection · 🤝 delegation · 📜 memory · 🔗 connection · ⚡ computation · 💎 value. The six scores, through the star's own projection, are where the star sits.</li>
+    <li><b>Snap to a vertex.</b> The sign of each reading is one bit; six bits are one of the 64 vertices. Snapping pulls every star onto its vertex.
+      <br><button data-show="snap">snap</button></li>
+    <li><b>The torus seats it differently.</b> The torus places a page by its declared posture, or else by its site's strand: where it lives, not what it says. Switch to the torus seat and watch every star move to the vertex the torus gives it.
+      <br><button data-show="torus">torus seat</button></li>
+    <li><b>One site at a time.</b> Pick a site, or the harness lanes together (harness · lexon · fieldguide · vpk), to see how one collection spreads across the text readings.
+      <br><button data-show="lanes">harness lanes</button></li>
+    <li><b>What a host would see.</b> Rotate the six axes by a secret key: every distance between pages survives, the seats do not. A host can still match pages without learning where they sit.
+      <br><button data-show="key">host view</button></li>
+  </ol>
+  <div class="limit" id="g-limit"></div>
+</aside>
+<div id="bar">
+  <button data-seat="text" aria-pressed="true" title="where the page's text places it">text seat</button>
+  <button data-seat="torus" aria-pressed="false" title="where the torus places it: declared posture, else the site's strand">torus seat</button>
+  <span class="sep"></span>
+  <button id="snap" aria-pressed="false" title="pull every star onto its vertex: the six-bit reading">snap</button>
+  <button id="key" class="key" aria-pressed="false" title="rotate the six axes by a secret key: what a host would see">host view</button>
+  <span class="sep"></span>
+  <select id="site" aria-label="Show one site"></select>
+  <button id="help" aria-pressed="false" title="how to read this">? guide</button>
+</div>
+<script type="importmap">{ "imports": { "three": "../vendor/three.module.min.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from '../vendor/OrbitControls.js';
+
+const DATA = await (await fetch('pages.json')).json();
+const $ = s => document.querySelector(s);
+const DIMS = ['🛡️','🤝','📜','🔗','⚡','💎'], NAMES = DATA.axes;
+// the torus's strands (tools/star-chart.mjs LOCAL): one axis per collection
+const STRAND = { connection: ['codexmage','guide','tomes','grimoire','fieldguide','engine','vision'], memory: ['atlas','spellbooks'],
+  delegation: ['skill','mouse','tiles'], computation: ['game42','harness'], protection: ['dtg','research','kyra','vpk'], value: ['city','lexon','myterms'] };
+const SCOL = { protection: 0xe8523a, delegation: 0xE0A526, memory: 0xb39ddb, connection: 0x4dd9e8, computation: 0x7fe8d8, value: 0xf3d36b };
+const strandOf = Object.fromEntries(Object.entries(STRAND).flatMap(([k, v]) => v.map(s => [s, k])));
+const LANES = ['harness', 'lexon', 'fieldguide', 'vpk'];
+const urlFor = p => '/' + (DATA.paths[p.s] || p.s) + '/' + p.g + '.html';
+
+const PHI = (1 + Math.sqrt(5)) / 2;
+// the star's generators: the six five-fold axes of the icosahedron (same construction as /star)
+const KGEN = [[0,1,PHI],[0,1,-PHI],[1,PHI,0],[1,-PHI,0],[PHI,0,1],[PHI,0,-1]].map(v => { const L = Math.hypot(...v); return v.map(c => c / L); });
+const proj = y => { const p = [0,0,0]; for (let k = 0; k < 6; k++) for (let i = 0; i < 3; i++) p[i] += y[k] * KGEN[5 - k][i]; return p; };
+const corner = x => Array.from({ length: 6 }, (_, k) => ((x >> (5 - k)) & 1) - 0.5);
+const RAW = Array.from({ length: 64 }, (_, x) => proj(corner(x)));
+const S = 1.6 / Math.max(...RAW.map(p => Math.hypot(...p)));
+const VERT = RAW.map(p => p.map(c => c * S));
+const pc = x => { let c = 0; while (x) { c += x & 1; x >>= 1; } return c; };
+const b6 = x => x.toString(2).padStart(6, '0');
+function rot6(seed){ let a = seed >>> 0; const r = () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 - 0.5; };
+  const M = []; for (let i = 0; i < 6; i++){ let v = Array.from({ length: 6 }, r); for (const u of M){ const d = v.reduce((s, c, j) => s + c * u[j], 0); v = v.map((c, j) => c - d * u[j]); } const L = Math.hypot(...v); M.push(v.map(c => c / L)); } return M; }
+const KEY = rot6(63);
+const keyed = y => KEY.map(row => row.reduce((s, c, j) => s + c * y[j], 0));
+const vertexOf = y => y.reduce((v, c, k) => v | ((c > 0 ? 1 : 0) << (5 - k)), 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(42, 1, 0.1, 50);
+cam.position.set(0.6, 1.1, 4.6);
+const ctl = new OrbitControls(cam, renderer.domElement); ctl.enableDamping = true; ctl.autoRotate = true; ctl.autoRotateSpeed = 0.4;
+const fit = () => { renderer.setSize(innerWidth, innerHeight); cam.aspect = innerWidth / innerHeight; cam.position.setLength(innerWidth < 760 ? 6.4 : 4.7); cam.updateProjectionMatrix(); };
+addEventListener('resize', fit); fit();
+
+const world = new THREE.Group(); scene.add(world);
+{ const e = []; for (let x = 0; x < 64; x++) for (let b = 0; b < 6; b++){ const y = x ^ (1 << b); if (y > x) e.push(...VERT[x], ...VERT[y]); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(e, 3));
+  world.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x9fc0ff, transparent: true, opacity: 0.09, blending: THREE.AdditiveBlending, depthWrite: false }))); }
+const occ = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ size: 0.05, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false }));
+world.add(occ);
+const tether = new THREE.Line(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(6), 3)),
+  new THREE.LineBasicMaterial({ color: 0xE0A526, transparent: true, opacity: 0.95 }));
+tether.visible = false; world.add(tether);
+const ring = new THREE.Mesh(new THREE.RingGeometry(0.045, 0.06, 32), new THREE.MeshBasicMaterial({ color: 0xE0A526, side: THREE.DoubleSide, transparent: true }));
+ring.visible = false; world.add(ring);
+
+const q = new URLSearchParams(location.search);
+const state = { seat: q.get('seat') === 'torus' ? 1 : 0, t: 0, snap: 0, snapTo: 0, key: q.has('key'), site: q.get('site') || 'all', pinned: null };
+if (q.has('snap')) state.snap = state.snapTo = 1;
+state.t = state.seat;
+let items = [], cloud = null;
+
+function inView(p){ return state.site === 'all' || (state.site === 'lanes' ? LANES.includes(p.s) : p.s === state.site); }
+function build(){
+  if (cloud){ world.remove(cloud); cloud.geometry.dispose(); }
+  items = DATA.pages.map((d, i) => { const y = state.key ? keyed(d.y) : d.y; return { d, i, y, v: vertexOf(y), ty: corner(d.tv), on: inView(d) }; });
+  const g = new THREE.BufferGeometry(), col = [];
+  for (const it of items){ const c = new THREE.Color(SCOL[strandOf[it.d.s]] ?? 0x9fc0ff); if (!it.on) c.multiplyScalar(0.13); col.push(c.r, c.g, c.b); }
+  g.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(items.length * 3), 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  cloud = new THREE.Points(g, new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.95, depthWrite: false }));
+  world.add(cloud);
+  lede(); place();
+}
+function lede(){
+  const shown = items.filter(it => it.on), count = new Array(64).fill(0);
+  shown.forEach(it => count[state.seat ? it.d.tv : it.v]++);
+  const op = [], oc = []; for (let x = 0; x < 64; x++){ op.push(...VERT[x]); const f = count[x] ? 0.9 : 0.16; oc.push(0.62 * f, 0.75 * f, 1.0 * f); }
+  occ.geometry.setAttribute('position', new THREE.Float32BufferAttribute(op, 3)); occ.geometry.setAttribute('color', new THREE.Float32BufferAttribute(oc, 3));
+  const which = state.site === 'all' ? `all ${shown.length} guide pages` : state.site === 'lanes' ? `the ${shown.length} pages of the harness lanes` : `the ${shown.length} pages of /${DATA.paths[state.site] || state.site}/`;
+  $('#lede').innerHTML = (state.seat
+    ? `The torus seat: ${which}, each at the vertex the torus gives it, its declared posture or else its site's strand.`
+    : `The text seat: ${which}, each placed by what its text says, read along six axes by ${DATA.model} through the star's own projection.`)
+    + ` <b>${count.filter(Boolean).length}</b> of 64 vertices occupied` + (state.key && !state.seat ? ', as a host sees it under the key.' : '.');
+}
+function pos(it){ const s = state.snap, t = state.t;
+  const y = it.y.map((c, k) => { const a = c + ((c > 0 ? 0.5 : -0.5) - c) * s; return a + (it.ty[k] - a) * t; });
+  return proj(y).map(c => c * S); }
+function place(){ const p = cloud.geometry.getAttribute('position');
+  items.forEach((it, i) => { it.p = pos(it); p.setXYZ(i, ...it.p); }); p.needsUpdate = true;
+  const it = state.pinned != null && items[state.pinned];
+  tether.visible = ring.visible = !!it;
+  if (it){ const a = proj(it.y).map(c => c * S), b = VERT[it.d.tv], tp = tether.geometry.getAttribute('position');
+    tp.setXYZ(0, ...a); tp.setXYZ(1, ...b); tp.needsUpdate = true; ring.position.set(...it.p); ring.quaternion.copy(cam.quaternion); } }
+
+const card = $('#card');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const bits = x => `<span class="bits">${DIMS.map((e, k) => `<i class="${(x >> (5 - k)) & 1 ? 'on' : ''}" title="${NAMES[k]}">${e}</i>`).join('')}</span>`;
+function show(it, pinned){ const d = it.d, flips = pc(it.v ^ d.tv), st = strandOf[d.s];
+  card.innerHTML = `<span class="m mono"><span class="lg" style="background:#${(SCOL[st] ?? 0x9fc0ff).toString(16).padStart(6, '0')}"></span>/${esc(DATA.paths[d.s] || d.s)}/ · ${st} strand</span>`
+    + `<div class="t">${esc(d.n)}</div>`
+    + `<div class="seats mono"><span class="m">text</span><span>V${it.v} ${b6(it.v)} ${bits(it.v)}</span>`
+    + `<span class="m">torus</span><span>V${d.tv} ${b6(d.tv)} ${bits(d.tv)}</span>`
+    + `<span class="m"></span><span class="m">${flips === 0 ? 'the two seats agree' : `${flips} bit${flips > 1 ? 's' : ''} apart`} · torus by ${d.p ? 'declared posture' : 'site strand'}</span></div>`
+    + `<div class="m mono" style="margin-top:6px">${it.y.map((c, k) => `${DIMS[k]}${c >= 0 ? '+' : ''}${c.toFixed(2)}`).join(' ')}</div>`
+    + (pinned ? `<div class="go"><a href='${urlFor(d)}'>read the page ↗</a><a href="/star-chart/?site=${encodeURIComponent(d.s)}">on the torus ↗</a></div>` : `<div class="m" style="margin-top:6px">click to keep</div>`); }
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+function hit(e){ mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(mouse, cam); ray.params.Points.threshold = 0.03;
+  return (cloud && ray.intersectObject(cloud).find(h => items[h.index].on)) || null; }
+renderer.domElement.addEventListener('pointermove', e => { if (state.pinned != null) return; const h = hit(e); if (h) show(items[h.index], false); });
+let down = null;
+renderer.domElement.addEventListener('pointerdown', e => { ctl.autoRotate = false; down = [e.clientX, e.clientY]; });
+renderer.domElement.addEventListener('pointerup', e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return; const h = hit(e);
+  if (h){ pin(h.index); } else { state.pinned = null; place(); card.innerHTML = '<span class="m">Hover a star to read it. Click to keep it and see where the torus puts it.</span>'; } });
+function pin(i){ state.pinned = i; show(items[i], true); place();
+  const d = items[i].d; history.replaceState(null, '', '?' + new URLSearchParams({ ...Object.fromEntries(q), page: d.s + '/' + d.g })); }
+
+// controls
+const setSeat = s => { state.seat = s; document.querySelectorAll('[data-seat]').forEach(b => b.setAttribute('aria-pressed', String(+(b.dataset.seat === 'torus') === s))); lede(); };
+document.querySelectorAll('[data-seat]').forEach(b => b.onclick = () => setSeat(b.dataset.seat === 'torus' ? 1 : 0));
+const setSnap = on => { state.snapTo = on ? 1 : 0; $('#snap').setAttribute('aria-pressed', String(on)); };
+$('#snap').onclick = () => setSnap(!state.snapTo);
+const setKey = on => { state.key = on; $('#key').setAttribute('aria-pressed', String(on)); build(); if (state.pinned != null) show(items[state.pinned], true); };
+$('#key').onclick = () => setKey(!state.key);
+const sites = [...new Set(DATA.pages.map(p => p.s))].sort();
+$('#site').innerHTML = `<option value="all">all sites</option><option value="lanes">harness lanes</option>` + sites.map(s => `<option value="${s}">/${DATA.paths[s] || s}/ (${DATA.pages.filter(p => p.s === s).length})</option>`).join('');
+const setSite = s => { state.site = s; $('#site').value = s; build(); };
+$('#site').onchange = e => setSite(e.target.value);
+const guide = $('#guide'), help = $('#help');
+const setHelp = on => { guide.hidden = !on; help.setAttribute('aria-pressed', String(on)); };
+help.onclick = () => setHelp(guide.hidden); guide.querySelector('.close').onclick = () => setHelp(false);
+const SHOW = { text: () => { setSeat(0); setSnap(false); setKey(false); setSite('all'); }, snap: () => { setSeat(0); setSnap(true); },
+  torus: () => { setSeat(1); }, lanes: () => { setSeat(0); setSite('lanes'); }, key: () => { setSeat(0); setKey(true); } };
+guide.querySelectorAll('[data-show]').forEach(b => b.onclick = () => SHOW[b.dataset.show]());
+$('#legend').innerHTML = Object.entries(SCOL).map(([k, c]) => `<span><span class="lg" style="background:#${c.toString(16).padStart(6, '0')}"></span>${k}</span>`).join('');
+const st = DATA.stats;
+$('#g-model').textContent = DATA.model;
+$('#g-limit').innerHTML = `<b>What this does not show.</b> The two seats are different readings, not one right answer and one wrong. Across ${st.pages} pages they mostly disagree: `
+  + `the ${st.postured} pages with a declared posture sit ${st.postured_mean_flips} bits from it on average (${st.postured_mean_flips_shuffled} for a random pairing), `
+  + `and for the rest the strongest text reading falls on the site's strand ${Math.round(st.strand_axis_strongest * 100)}% of the time, about chance (${Math.round(st.strand_axis_chance * 100)}%). `
+  + `A collection says where a page lives; its text says what it talks about. Six readings are a seat, not a distance; a single model, a single wording of the six axes.`;
+
+for (const b of document.querySelectorAll('[data-seat]')) b.setAttribute('aria-pressed', String(+(b.dataset.seat === 'torus') === state.seat));
+setSnap(!!state.snapTo); $('#key').setAttribute('aria-pressed', String(state.key)); $('#site').value = state.site;
+if (q.has('guide')) setHelp(true);
+build();
+if (q.get('page')){ const i = DATA.pages.findIndex(p => p.s + '/' + p.g === q.get('page')); if (i >= 0){ if (state.site !== 'all' && !items[i].on) setSite('all'); pin(i); } }
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches || q.has('still'); if (still) ctl.autoRotate = false;
+const ease = (a, b) => still ? b : a + (b - a) * 0.12;
+renderer.setAnimationLoop(() => { let moved = false;
+  if (Math.abs(state.snap - state.snapTo) > 0.001){ state.snap = ease(state.snap, state.snapTo); moved = true; }
+  if (Math.abs(state.t - state.seat) > 0.001){ state.t = ease(state.t, state.seat); moved = true; }
+  if (moved || state.pinned != null) place(); ctl.update(); renderer.render(scene, cam); });
+window.__ready = true;
+</script>
+</body>
+</html>

@@ -20,6 +20,7 @@ const B = n => path.join(HERE, 'builders', n);
 const snapshot = () => {
   node(path.join(ROOT, 'tools', 'snapshot.mjs'));
   node(path.join(ROOT, 'tools', 'star-chart.mjs'));
+  node(path.join(ROOT, 'tools', 'sphere.mjs'));
   node(path.join(ROOT, 'tools', 'gate.mjs'));
   node(path.join(HERE, 'sync-manifest.mjs'));
   node(path.join(HERE, 'audit-snapshot.mjs'));
