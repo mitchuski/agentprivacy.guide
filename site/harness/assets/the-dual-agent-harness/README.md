@@ -1,29 +1,82 @@
-# dual-agent-harness
+# agentprivacy dual-agent harness
 
-**A verification harness for AI-agent work: one agent proposes, a second
-independently proves, and the tests that decide are derived by hashing the
-proposal together with a secret the proposer never sees — so it cannot grind
-them — and, where the fact set is enumerable, every fact is probed. Config-
-driven, zero dependencies, every axiom checked at runtime.**
-
-**soulbae 🧙** proposes. **soulbis ⚔️** proves. Between them sits **the Gap
-⿻**: the witnesses are derived by hashing soulbae's own proposal with a run
-secret it cannot see, so soulbae cannot tune or grind them and soulbis cannot
-be accused of choosing them. Above them both is **the First Person 😊** — you
-— who alone opens the door to anything outward-facing.
-
-That is the entire idea. Everything in this repo is machinery for keeping
-those two apart, and a ledger discipline for what survives.
+**Tooling for your own agentic research.** One agent proposes. A second, held
+apart, proves. The tests that decide are drawn by hashing the proposal with a
+secret the proposer never sees, so the check an agent invents can never be the
+check its work was built to survive. A person holds the only door outward.
 
 ```
 (⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ
 ```
 
-The Swordsman is negation, the Mage is complement, and composed across the
-Gap they produce the successor — the step forward. On Z/64Z this is a
-theorem, and `engine/conform.mjs` computes it for all sixty-four values every
-time it runs rather than taking it on faith. A result exists only where the
-two were genuinely held apart.
+The shape, in one line: **it is a zero-knowledge proof turned inside out.** The
+agent that proposes is the untrusted claimant, the agent that proves is the
+check, and a Fiat-Shamir challenge drawn from the sealed proposal keeps the
+claimant from ever tuning to the gate. The labels are mirrored from
+cryptography's — what the harness calls the *prover* is the checker a
+cryptographer calls the *verifier* — but the trust is identical: the generative
+claimant is the one you do not trust, and the held-out gate is what makes a
+claim safe.
+
+This is the public repository: the workshop where the harness is built, and
+what you clone. Apache-2.0. Node 18 or later, zero dependencies, no network
+unless a driver you choose makes one.
+
+Start with [ENTRY.md](ENTRY.md): explore the method, connect your research
+repository, or follow an agentprivacy path. The websites and skill references
+lead here; arrival does not start a research round.
+
+## Run it: five commands
+
+```bash
+node tools/check.mjs                                                    # 1 · every gate: the algebra on Z/64Z, the engine tests, every instance, the template that must fail
+node drivers/run.mjs --instance examples/field-guide --driver stub --run smoke   # 2 · one round, no model: the loop runs, the seeds derive, the files land
+node tools/verify_run.mjs examples/field-guide smoke                    # 3 · re-derive every seed from the saved bytes, offline
+node tools/render_run.mjs examples/field-guide smoke                    # 4 · runs/smoke/run.html — the round as a page, seeds re-derived at render time
+node drivers/run.mjs --instance examples/field-guide --driver ollama --model <m> --run r1   # 5 · a real round on a local model (or --driver anthropic with ANTHROPIC_API_KEY)
+```
+
+Command 2 writes `runs/smoke/<round>/p<i>-<lever>/{proposal_canon.json, gap.json, candidate.md, verdict.json}` and `runs/smoke/run.json`; a stub round folds nothing and says so. Command 5 is where a fold can happen. `--proposals <file>` hands the proposer's seat to an agent that already answered elsewhere; the engine still derives every seed after the proposals are committed.
+
+## Adopt it in steps
+
+1. **The auditor.** Your own documents under a census, no model at all: `examples/corpus`. If every claim you make is enumerable, this is the whole tool (`ADOPTION.md`, step 0).
+2. **The spar.** `examples/field-guide`: compress a 730-word guide while a held-out gate stays 8/8. Run it with the stub, then with a model.
+3. **Your instance.** `node tools/new_instance.mjs ../my-harness my-harness`, then answer five questions in `harness.config.mjs`: the artefact, the number that must move, the gate it must fully pass, the line it must never cross, the door. `node engine/conform.mjs ../my-harness` refuses until every answer is real.
+4. **A second model in the prover's seat** (`--assay-model`), the separation the design wants: pass `--propose-model <a> --assay-model <b>`, or `--driver split` for the proposer on the Claude API and everything else on Ollama; `--driver multi` names a provider per seat (`anthropic:` · `ollama:` · `openai:` · `serv:`), `drivers/openai.mjs` speaks any OpenAI-compatible endpoint, and `--driver serv` seats the proposer on OpenServ's SERV Reasoning API (BRAID as a service) with the prover local — one seat, never both, never the default; `node tools/test_serv_driver.mjs` proves the wire shape against a mock, and the live call needs `SERV_API_KEY`. The conformance gate reports Φ_inference = 0 when both seats are the same model; the duel begins when they are not.
+5. **The arena.** A referee you cannot tune: a public board, a test suite you did not write, a stranger who rebuilds your artefact byte for byte (`tools/mint_artefact.mjs` seals it; `tools/vrc.mjs` lets a signature mint the edge).
+6. **Optional layers.** Seats dressed with personas (`SPECIALISATION.md`), the graph dialect and content addressing (`GRAPH.md`, `HOLONS.md`), wiki federation (`WIKI.md`). Each names this workshop's own ecosystem; none is needed to run a round.
+
+`node tools/make_default.mjs` emits the system alone — engine, seats, tools, drivers, three examples, the constitution, the four optional layers behind `optional/`, no results, no fleet — for handing to someone; it re-proves every gate inside the emitted tree. `examples/self` is the harness folding its own newcomer path — the default README above is its artefact, and r2 (Claude proposing, a local 27B proving) folded it 1,115 → 1,069 words at a 95/95 census; its `runs/` and `chronicles/` hold both sample rounds.
+
+## Reconstruction research
+
+[Reconstruction assay](RECONSTRUCTION_ASSAY.md) defines a privacy experiment
+with sensitive-fact recovery, a matched background-only baseline and a task-utility
+floor. Its offline scorer measures supplied observations; it does not establish
+an information-theoretic ceiling or certify runtime isolation. The intake came
+via the VKP working group; the primary paper is registered in SOURCES.md.
+
+## The constitution
+
+Do not change these; everything else is yours.
+
+- `TRUSTS.md` — T1 the four promises (protection, delegation, authorization, separation) · T2 the separation bound, the proposer never sees the witnesses · T3 the shared root, both seats boot from the same three files and nothing else · T4 consent first, terms before exchange · T5 the multiplicative gate, one zero collapses the product · T6 the door, every outward action is the First Person's.
+- `GROUND_RULES.md` — GR-1 numbers live in the frontier · GR-2 claims carry a tier · GR-3 validity no score overrides · GR-4 re-derive, never trust · GR-5 an outage is not exhaustion · GR-6 kills are filed, with a re-open condition · GR-7 every session ends in a chronicle · GR-8 the door is named, not walked · GR-9 trace or delete · GR-10 keystone-only writes.
+
+## For an agent working here
+
+`AGENTS.md` is the boot file (`CLAUDE.md` imports it): one session, one seat, read your card and nothing past it. The instance you are booted into belongs to whoever cloned this. Documents below that name this workshop's sites, lanes, fleet or people are upstream context, never your mandate.
+
+## Pathways
+
+`HARNESS_PATHS.md` is the origin fleet — nineteen embodiments, grouped by how much of the loop they run; `CHALLENGE_LANES.md` is what the arena lanes taught (rules A1-A40, seats, templates). `RESEARCH.md` states the claim, what is borrowed, the evidence and its limits. `chronicles/` records every defect found by running (numbered; fifteen at the last count) and every fold. `universe/` is one project's corpus behind a seam; delete it and every gate still passes. The fleet's numbers, census-traced, live in a sibling instance and are rendered at agentprivacy.org/harness. To name the harness in public: *Harness: <your runtime> with the agentprivacy dual-agent harness (<your instance> instance)*.
+
+---
+
+# The workshop
+
+Everything below is the long form: why the design is shaped as it is, where it stands, and how the spar was fought. Read it when the five commands have run.
 
 ## Why this matters for AI
 
@@ -66,7 +119,7 @@ The runnable spar has a real advancing frontier: its guide compressed from a
 each held to an 8/8 held-out gate on independent witness draws, the last two
 closed by an exhaustive fact census
 (`examples/field-guide/frontier.json` is the authority; its `chronicles/`
-tell the story). Fifteen real embodiments — quantum circuits, ZK constraint
+tell the story). Nineteen real embodiments — quantum circuits, ZK constraint
 systems, research pipelines, consent agreements, an acceptance registry
 whose first external run came from another organisation's machine, and one
 deliberate failure — are catalogued in `HARNESS_PATHS.md`. **That catalogue
@@ -119,10 +172,10 @@ wizard, academic, federation, lattice, myth — with your local state filled
 in, and `WORKFLOW.md` is the operator's loop end to end, including the
 BYO-interface contracts and the small-machine notes.
 
-**Requirements:** Node ≥ 18, nothing else (zero npm dependencies). Running
-rounds multi-agent needs a driver for the seven seats — Claude Code's
-Workflow tool is the reference runtime; `engine/dual_agent_loop.mjs` also
-accepts any `rt = { agent, parallel, pipeline, phase, log }` you supply.
+**Requirements:** Node ≥ 18, nothing else (zero npm dependencies). Rounds run
+through `drivers/run.mjs` (stub · ollama · anthropic · openai · split · multi · serv · --proposals; `serv` is OpenServ's SERV Reasoning API holding one seat, never both, never the default — the prover stays local), through
+Claude Code's Workflow tool (the reference multi-agent runtime), or through any
+`rt = { agent, parallel, pipeline, phase, log }` you supply to `engine/dual_agent_loop.mjs`.
 
 1. **Prove the axioms** — one command, every gate this repo has:
    ```bash
@@ -175,7 +228,7 @@ accepts any `rt = { agent, parallel, pipeline, phase, log }` you supply.
    a harness yet (and may want an auditor instead).
 8. **When it earns it, specialise** — `SPECIALISATION.md` binds personas and
    spells to seats and seats instances on the Game-of-42 lattice;
-   `HARNESS_PATHS.md` shows fifteen real configs at every weight — including
+   `HARNESS_PATHS.md` shows nineteen real configs at every weight — including
    one seat that was held open by invitation until its acceptor signed, which
    is also a thing a harness can be.
 
@@ -183,8 +236,8 @@ accepts any `rt = { agent, parallel, pipeline, phase, log }` you supply.
 end to end: `examples/field-guide/frontier.json` records three audited folds
 (730 → 573 → 526 → 472, every step at gate 8/8, the last two closed by
 exhaustive census), its `chronicles/` tell each round verdict-first, and the
-repo's `chronicles/` tell the system's story — including the eleven defects
-found by running and the one round that was watched live. Reading them in
+repo's `chronicles/` tell the system's story — including the defects
+found by running (numbered in the chronicles; fifteen at the last count) and the one round that was watched live. Reading them in
 date order is the fastest way to learn what the discipline feels like in
 practice.
 
@@ -319,7 +372,7 @@ strike real, nothing at stake but the frontier. It is the first rung of the
 |---|---|---|---|
 | **the spar** 🤺 | practice, one workshop | its own frontier only | `examples/field-guide/` |
 | **the duel** | the formal bout — *reserved* | a result a counterparty will rely on: signed verdicts, minted artefacts exchanged | the formal runtime to come |
-| **the arena** 🏟️ | against a live external benchmark, other fighters on the board | a public leaderboard the workshop does not control | shor_mage vs ecdsa.fail |
+| **the arena** 🏟️ | against a live external benchmark, other fighters on the board | a public leaderboard the workshop does not control | shor_mage vs ecdsa.fail; the Yukon lanes (hashsmash_mage, sig_mage and five more) — the rules they taught are `CHALLENGE_LANES.md` |
 | **the open world** 🌍 | against a real upstream, in the wild | consequences beyond any ledger | privacy_pools_v2 vs the 0xbow suite; hearthold, its seat taken by the House of Archon on disclosure-debt |
 
 The trusts do not change between tiers — the door is the First Person's at
@@ -412,7 +465,7 @@ here any more than it moves in the loop.
    nothing, and reports `VALIDATED`. Measure your baseline before you claim a
    best — the template ships both `null` on purpose.
 4. Bundle and run: `node tools/bundle.mjs my/harness.config.mjs my/harness.workflow.mjs`
-5. Read `HARNESS_PATHS.md` for fifteen real instances — quantum circuits, ZK
+5. Read `HARNESS_PATHS.md` for nineteen real instances — quantum circuits, ZK
    constraint systems, research papers, consent agreements, a publishing
    loop, an acceptance registry, a lit-review adversary, and a descendant
    lane that inherited the constitution whole — the same skeleton under very
@@ -439,7 +492,8 @@ GROUND_RULES.md    GR-1..GR-10, pasted into every seat at boot
 ADOPTION.md        why the duality is topic-free + the mapping procedure
 SEAT_CONTRACT.md   what a config provides
 SPECIALISATION.md  personas, spells, the Game of 42
-HARNESS_PATHS.md   the origin fleet — fifteen instances of work done WITH the harness; evidence, not the system
+HARNESS_PATHS.md   the origin fleet — nineteen instances of work done WITH the harness; evidence, not the system
+CHALLENGE_LANES.md the arena tier — rules A1-A40 from seven leaderboard lanes; seats, templates, what shipped
 WORKFLOW.md        the operator's loop · choose-your-adventure · BYO-interface contracts
 GRAPH.md           the trust-graph dialect — proposed vs minted edges, the lattice, credential alignment
 EVOLUTION.md       the plan — data spine · observe lane · the registry pattern · contribute-or-clone

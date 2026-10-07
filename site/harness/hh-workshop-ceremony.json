@@ -3,67 +3,67 @@
   "story": [
     {
       "type": "markdown",
-      "id": "62e83d149b533aba",
+      "id": "3c145f3c90805559",
       "text": "# CEREMONY.md — the Portable Proof-of-Understanding Ceremony"
     },
     {
       "type": "markdown",
-      "id": "3907b5b0aafa9edc",
+      "id": "3f23c7d98fa8f4cd",
       "text": "*The 8-section spec proposed in the LAN-ceremony chronicle (2026-06-28, §5),\nfilled. This is the rite that opens the course and re-opens every venue.*"
     },
     {
       "type": "markdown",
-      "id": "c2ef6222734f34d4",
+      "id": "f13b663e3436fef0",
       "text": "## 1 · Premise & myth\n\nA shared local mage — an air-gapped model in a flight case — sits on the\ntable. The room co-holds it: a witness the group bears together, like a bowl\ntoo wide for one pair of hands (C10, C11). The ceremony's output is not a\ndeployment; it is **proof of understanding** — shared comprehension made\nlegible as a seal (C9). The myth the room steps into is the babblefish: one\ntruth, many tongues, and the joy of hearing it speak in each (C1–C3)."
     },
     {
       "type": "markdown",
-      "id": "965a45a1021995bc",
+      "id": "b85c45426526f6b9",
       "text": "## 2 · The trust/sync rite\n\nThe human sequence, in order — each rung consent-gated, understanding is what\nclimbs (LAN §4¾):\n\n1. **Arrive** — the room assembles; the steward of the week uncrates the mage.\n2. **Join the local net** — the carried network (§3), never the venue's Wi-Fi\n   as a dependency.\n3. **Resolve the mage's one good name** — every client, identically (C24, C25).\n   The room *says the name together*; thirteen of fourteen resolving is a\n   failure state, not a quorum.\n4. **Offer, don't probe** — each participant *offers* their address to the\n   roster (C16). Nobody is scanned.\n5. **Read the gateway with your own agency** — the front-door page carries the\n   rite; understanding-as-key begins at the moment of reading (C5).\n6. **First shared exchange** — each participant expresses, in their own words,\n   what they understood; the expression is admitted through the consent gate\n   and becomes both key and food (C7).\n7. **The seal** — when every participant is synced and expressed, the group\n   seals: one artefact that says *this room reached the shared mind together*\n   (C9). The seal is logged; the trust artefact (§4 below) opens the cookie\n   jar (C8)."
     },
     {
       "type": "markdown",
-      "id": "c3e8fb91765e50b7",
+      "id": "5d0f3a928c7f1286",
       "text": "## 3 · The portable substrate\n\nWhat physically travels (C14):\n\n- **the mage machine** — the local LLM host (mage/MACHINE_SETUP.md);\n- **the carried naming layer** — our own resolver answering the one good\n  name deterministically (C25); venue mDNS is never load-bearing;\n- **participant clients** — mixed PC/Mac laptops; must Just Work against the\n  carried layer;\n- **the flight-case extras** — cables, a small switch/AP if the venue's\n  network is hostile (client isolation = reach for the overlay), the steward's\n  key."
     },
     {
       "type": "markdown",
-      "id": "c5ac646fcfe977a3",
+      "id": "c45d5c87bac77801",
       "text": "## 4 · The naming contract\n\n- ONE good name per mage instance; whoever holds the mage names it; there is\n  no canonical string (C24). Everything else is a **path** under the name\n  (`/mage`, `/roster`, `/gateway`), never a second name.\n- Never `.localhost` for a shared name (RFC 6761 — C27).\n- The front door serves a **catch-all** so near-misses degrade soft (C28).\n- The trust artefact issued on sealing is a **myTerms (IEEE 7012) agreement**\n  — bilateral, First Person ↔ workshop-holder; the mage and every agent are\n  fabric, not parties (C17–C19). Registers in `workshop/consent/`."
     },
     {
       "type": "markdown",
-      "id": "694d1a03e5c2ae1c",
+      "id": "3c13deef8b0b89b1",
       "text": "## 5 · Failure-mode playbook\n\nSeeded from the canonical live case (\"the name that worked in the browser\"):\n\n| symptom the room sees | trap | move |\n|---|---|---|\n| one laptop resolves, the next doesn't; or it worked five minutes ago | mDNS/`.local` intermittency (C26) | never trust a warm browser; test from a clean shell (`ping`, `nslookup`) on ≥2 clients; fail over to the carried resolver |\n| name dead AND raw IP returns 502 | name-keyed routing (C23) | the catch-all front door (C28); never serve only one literal string |\n| devices can't see each other at all | client/AP isolation | no LAN trick helps — carried switch/AP, or the overlay/tunnel |\n| yesterday's address is wrong today | DHCP drift | static/reserved address for the mage; the naming layer leans on it |"
     },
     {
       "type": "markdown",
-      "id": "e5e4918e50e1c980",
+      "id": "30245c762d142b3d",
       "text": "## 6 · Pre-flight checklist\n\nRun on arrival, before participants enter (2 minutes): see\n`workshop/PREFLIGHT.md` — resolution from a clean resolver on two clients,\ncatch-all answering, roster empty, steward's `--verify` green."
     },
     {
       "type": "markdown",
-      "id": "a478b4f540801995",
+      "id": "e056a14991a50194",
       "text": "## 7 · Ceremony script (run-of-show)\n\n1. Steward's opening: last week's fold read aloud; `corpus_pack --verify`\n   green in front of the room (the chain is public to itself).\n2. The rite of §2, walked.\n3. The week's babblefish round: entries, renderings, the blind gate\n   (workshop/CURRICULUM.md carries the session arc).\n4. Steward's fold: the week's consented expressions eaten; new pack hash\n   logged and read aloud.\n5. Handover: next week's steward takes the key."
     },
     {
       "type": "markdown",
-      "id": "8e2250e784615cb3",
+      "id": "47997f3eb8b3fbc3",
       "text": "## 8 · Canon binding\n\n- Every session ends with a chronicle draft (the harness's Chronicle seat, or\n  the steward's hand) filed in `chronicles/`.\n- Outputs that should travel are spooled (`fedwiki/export_page.mjs`) and walk\n  the Oasis loop home (`fedwiki/OASIS_LOOP.md`) — fork → cast → transmit,\n  with the outward legs at the First Person's door (T6).\n- The course's lineage lands in the City's canon the way the first oasis did:\n  as a named, real link — never an abstract placeholder."
     },
     {
       "type": "markdown",
-      "id": "bc953dea434e6d21",
+      "id": "c2f43a473cce9d38",
       "text": "# Assets\n\nSource: `workshop/CEREMONY.md`"
     },
     {
-      "id": "f99ec5adc86f6c78",
+      "id": "f4c2aecaa1b97207",
       "type": "assets",
       "text": "hh-workshop-ceremony"
     },
     {
       "type": "markdown",
-      "id": "792bf05804e5128a",
+      "id": "7fdc3e48408c3964",
       "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
     }
   ],
@@ -75,72 +75,72 @@
         "story": [
           {
             "type": "markdown",
-            "id": "62e83d149b533aba",
+            "id": "3c145f3c90805559",
             "text": "# CEREMONY.md — the Portable Proof-of-Understanding Ceremony"
           },
           {
             "type": "markdown",
-            "id": "3907b5b0aafa9edc",
+            "id": "3f23c7d98fa8f4cd",
             "text": "*The 8-section spec proposed in the LAN-ceremony chronicle (2026-06-28, §5),\nfilled. This is the rite that opens the course and re-opens every venue.*"
           },
           {
             "type": "markdown",
-            "id": "c2ef6222734f34d4",
+            "id": "f13b663e3436fef0",
             "text": "## 1 · Premise & myth\n\nA shared local mage — an air-gapped model in a flight case — sits on the\ntable. The room co-holds it: a witness the group bears together, like a bowl\ntoo wide for one pair of hands (C10, C11). The ceremony's output is not a\ndeployment; it is **proof of understanding** — shared comprehension made\nlegible as a seal (C9). The myth the room steps into is the babblefish: one\ntruth, many tongues, and the joy of hearing it speak in each (C1–C3)."
           },
           {
             "type": "markdown",
-            "id": "965a45a1021995bc",
+            "id": "b85c45426526f6b9",
             "text": "## 2 · The trust/sync rite\n\nThe human sequence, in order — each rung consent-gated, understanding is what\nclimbs (LAN §4¾):\n\n1. **Arrive** — the room assembles; the steward of the week uncrates the mage.\n2. **Join the local net** — the carried network (§3), never the venue's Wi-Fi\n   as a dependency.\n3. **Resolve the mage's one good name** — every client, identically (C24, C25).\n   The room *says the name together*; thirteen of fourteen resolving is a\n   failure state, not a quorum.\n4. **Offer, don't probe** — each participant *offers* their address to the\n   roster (C16). Nobody is scanned.\n5. **Read the gateway with your own agency** — the front-door page carries the\n   rite; understanding-as-key begins at the moment of reading (C5).\n6. **First shared exchange** — each participant expresses, in their own words,\n   what they understood; the expression is admitted through the consent gate\n   and becomes both key and food (C7).\n7. **The seal** — when every participant is synced and expressed, the group\n   seals: one artefact that says *this room reached the shared mind together*\n   (C9). The seal is logged; the trust artefact (§4 below) opens the cookie\n   jar (C8)."
           },
           {
             "type": "markdown",
-            "id": "c3e8fb91765e50b7",
+            "id": "5d0f3a928c7f1286",
             "text": "## 3 · The portable substrate\n\nWhat physically travels (C14):\n\n- **the mage machine** — the local LLM host (mage/MACHINE_SETUP.md);\n- **the carried naming layer** — our own resolver answering the one good\n  name deterministically (C25); venue mDNS is never load-bearing;\n- **participant clients** — mixed PC/Mac laptops; must Just Work against the\n  carried layer;\n- **the flight-case extras** — cables, a small switch/AP if the venue's\n  network is hostile (client isolation = reach for the overlay), the steward's\n  key."
           },
           {
             "type": "markdown",
-            "id": "c5ac646fcfe977a3",
+            "id": "c45d5c87bac77801",
             "text": "## 4 · The naming contract\n\n- ONE good name per mage instance; whoever holds the mage names it; there is\n  no canonical string (C24). Everything else is a **path** under the name\n  (`/mage`, `/roster`, `/gateway`), never a second name.\n- Never `.localhost` for a shared name (RFC 6761 — C27).\n- The front door serves a **catch-all** so near-misses degrade soft (C28).\n- The trust artefact issued on sealing is a **myTerms (IEEE 7012) agreement**\n  — bilateral, First Person ↔ workshop-holder; the mage and every agent are\n  fabric, not parties (C17–C19). Registers in `workshop/consent/`."
           },
           {
             "type": "markdown",
-            "id": "694d1a03e5c2ae1c",
+            "id": "3c13deef8b0b89b1",
             "text": "## 5 · Failure-mode playbook\n\nSeeded from the canonical live case (\"the name that worked in the browser\"):\n\n| symptom the room sees | trap | move |\n|---|---|---|\n| one laptop resolves, the next doesn't; or it worked five minutes ago | mDNS/`.local` intermittency (C26) | never trust a warm browser; test from a clean shell (`ping`, `nslookup`) on ≥2 clients; fail over to the carried resolver |\n| name dead AND raw IP returns 502 | name-keyed routing (C23) | the catch-all front door (C28); never serve only one literal string |\n| devices can't see each other at all | client/AP isolation | no LAN trick helps — carried switch/AP, or the overlay/tunnel |\n| yesterday's address is wrong today | DHCP drift | static/reserved address for the mage; the naming layer leans on it |"
           },
           {
             "type": "markdown",
-            "id": "e5e4918e50e1c980",
+            "id": "30245c762d142b3d",
             "text": "## 6 · Pre-flight checklist\n\nRun on arrival, before participants enter (2 minutes): see\n`workshop/PREFLIGHT.md` — resolution from a clean resolver on two clients,\ncatch-all answering, roster empty, steward's `--verify` green."
           },
           {
             "type": "markdown",
-            "id": "a478b4f540801995",
+            "id": "e056a14991a50194",
             "text": "## 7 · Ceremony script (run-of-show)\n\n1. Steward's opening: last week's fold read aloud; `corpus_pack --verify`\n   green in front of the room (the chain is public to itself).\n2. The rite of §2, walked.\n3. The week's babblefish round: entries, renderings, the blind gate\n   (workshop/CURRICULUM.md carries the session arc).\n4. Steward's fold: the week's consented expressions eaten; new pack hash\n   logged and read aloud.\n5. Handover: next week's steward takes the key."
           },
           {
             "type": "markdown",
-            "id": "8e2250e784615cb3",
+            "id": "47997f3eb8b3fbc3",
             "text": "## 8 · Canon binding\n\n- Every session ends with a chronicle draft (the harness's Chronicle seat, or\n  the steward's hand) filed in `chronicles/`.\n- Outputs that should travel are spooled (`fedwiki/export_page.mjs`) and walk\n  the Oasis loop home (`fedwiki/OASIS_LOOP.md`) — fork → cast → transmit,\n  with the outward legs at the First Person's door (T6).\n- The course's lineage lands in the City's canon the way the first oasis did:\n  as a named, real link — never an abstract placeholder."
           },
           {
             "type": "markdown",
-            "id": "bc953dea434e6d21",
+            "id": "c2f43a473cce9d38",
             "text": "# Assets\n\nSource: `workshop/CEREMONY.md`"
           },
           {
-            "id": "f99ec5adc86f6c78",
+            "id": "f4c2aecaa1b97207",
             "type": "assets",
             "text": "hh-workshop-ceremony"
           },
           {
             "type": "markdown",
-            "id": "792bf05804e5128a",
+            "id": "7fdc3e48408c3964",
             "text": "---\n*upstream: `github.com/mitchuski/hh_workshop` · the repo is the source of truth; this page is a projection that records its origin · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The HH Workshop]] · [[Welcome Visitors]]"
           }
         ]
       },
-      "date": 1787093564118
+      "date": 1791386011020
     }
   ]
 }

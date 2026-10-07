@@ -29,7 +29,7 @@
   <div class="crumb"><a href="/">guide</a> / <a href="/harness/welcome-visitors.html">Harness</a> / <span>The Seat Contract</span></div>
   <article><div class="md"><h1>📋 The Seat Contract</h1>
 </div>
-<div class="md"><p>The engine (<code>engine/dual_agent_loop.mjs</code>) is target-agnostic. A concrete<br>harness is a <strong>config object</strong> that fills the seats for one domain. You<br>should never need to touch the engine; you write a config, bundle it with<br><code>tools/bundle.mjs</code>, and run it.</p>
+<div class="md"><p>The engine (<code>engine/dual_agent_loop.mjs</code>) is target-agnostic. A concrete<br>harness is a <strong>config object</strong> that fills the seats for one domain. You<br>should never need to touch the engine; you write a config and run it with<br><code>drivers/run.mjs</code> (or bundle it with <code>tools/bundle.mjs</code> for a runtime that<br>provides the Workflow interface).</p>
 </div>
 <div class="md"><h2>The seven seats</h2>
 <table>
@@ -101,6 +101,7 @@
 </tr>
 </tbody></table>
 <p>The three algebra seats are the core: soulbae proposes (<code>bnot</code>, complement —<br>reduce, reshape), the Gap separates (<code>xor</code>, the held-apart derivation),<br>soulbis proves (<code>neg</code>, negation — the verdict that does not flatter). Their<br>composition is the successor: <code>neg(bnot(x)) = succ(x)</code>. The keystone is not a<br>third agent — it is the pair itself, operating in the main session where the<br>ledgers live, with the door (G4) always the First Person&#39;s.</p>
+<p><strong>Support seats for the arena tier</strong> (<code>CHALLENGE_LANES.md</code>): <code>constants-refuter</code><br>(before a build: the record&#39;s constants at the named commit), <code>judge-rehearsal</code><br>(assay B: the external judge&#39;s verdict predicted from its own record) and<br><code>ship-gate</code> (the last negation before submit; its NO-GO is final). None of them<br>writes a ledger; all return data. They do not change the seven-seat algebra:<br>they are more <code>neg</code>, placed where an external judge makes the cost of a wrong<br>VALIDATED public.</p>
 </div>
 <div class="md"><h2>The config shape</h2>
 <pre><code class="language-js">export default {

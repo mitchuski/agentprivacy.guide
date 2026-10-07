@@ -2,8 +2,9 @@
 
 The engine (`engine/dual_agent_loop.mjs`) is target-agnostic. A concrete
 harness is a **config object** that fills the seats for one domain. You
-should never need to touch the engine; you write a config, bundle it with
-`tools/bundle.mjs`, and run it.
+should never need to touch the engine; you write a config and run it with
+`drivers/run.mjs` (or bundle it with `tools/bundle.mjs` for a runtime that
+provides the Workflow interface).
 
 ## The seven seats
 
@@ -23,6 +24,14 @@ soulbis proves (`neg`, negation — the verdict that does not flatter). Their
 composition is the successor: `neg(bnot(x)) = succ(x)`. The keystone is not a
 third agent — it is the pair itself, operating in the main session where the
 ledgers live, with the door (G4) always the First Person's.
+
+**Support seats for the arena tier** (`CHALLENGE_LANES.md`): `constants-refuter`
+(before a build: the record's constants at the named commit), `judge-rehearsal`
+(assay B: the external judge's verdict predicted from its own record) and
+`ship-gate` (the last negation before submit; its NO-GO is final). None of them
+writes a ledger; all return data. They do not change the seven-seat algebra:
+they are more `neg`, placed where an external judge makes the cost of a wrong
+VALIDATED public.
 
 ## The config shape
 

@@ -10,6 +10,32 @@
 
 ---
 
+<!-- MTC-RESEARCH-2026-09-29 -->
+## New research · Merkle Tree Certificates and the Hold
+
+[V7 research note](research/2026-09-29_v7_merkle_tree_certificates_and_the_hold.md) reads the
+post-quantum WebPKI design (issue by logging, cosigned roots, landmark-relative
+inclusion proofs) against the Star Key Hold and the root-only City Key rule.
+Related work and six candidates, 29 September 2026; no promotion, no runtime change.
+
+<!-- JEV-RESEARCH-2026-09-23 -->
+## New research · bounded decision models
+
+[Jev-style models and agentprivacy](research/2026-09-23_jev_style_models_architecture_note.md)
+opens a research strand across the current sites, City, graph and guide.
+[V7 note](research/2026-09-23_v7_typed_decisions_and_sovereign_composition.md) ·
+[research programme](plans/JEV_STYLE_MODELS_RESEARCH_PROGRAMME_2026-09-23.md) ·
+[whitepaper impact](research/2026-09-23_jev_whitepaper_and_corpus_impact.md) ·
+[The Council of Small Questions](tomes/proposed/the-council-of-small-questions.md).
+Research and narrative proposals, 23 September 2026; no inference run or V7 release.
+
+<!-- JEV-ENGINEERING-2026-09-24 -->
+The [24 September engineering follow-through](research/2026-09-24_jev_engineering_context_and_routing.md)
+adds role-scoped context selection, complete routing economics and reusable state
+to the Jev research path. The downloaded source is an independent study synthesis;
+its proposals enter as experiments, not deployed capabilities.
+
+
 ## Quick Summary
 
 **0xagentprivacy** researches the privacy-delegation problem through a dual-agent architecture: **Swordsman** for privacy and boundaries, **Mage** for delegation and action. The papers study reconstruction bounds under stated separation, adversary and information assumptions. These conditional results are not an unconditional guarantee for every deployment.
@@ -71,7 +97,7 @@ The **Guide** at guide.agentprivacy.ai is the Librarian's *Wikis* made public �
 | **Blog Series: Privacy is Value V5** | Parts 0-5 | Research letters: Myth Before Math, Constellations, Forge & Ceremony, Dragon Wakes, Dihedral Mirror, Amnesia Protocol | All |
 | **ZK Swordsman Blade Forge** | 3.2 | OPERATIONAL + ALGEBRAICALLY GROUNDED: UOR module at swordsman-blade/src/lib/uor.ts | Researchers, Mathematicians |
 | **UOR × 64-Tetrahedra × ZK Mapping** | 2.2 | Foundational mapping; C4 RESOLVED; UOR Foundation convergence confirmed | Researchers |
-| **VRC Promise Protocol** | 3.4 | Historical economic architecture (document header v3.4); current operating proposal in addendum v0.2 | Investors, Builders |
+| **VRC Promise Protocol** | 3.4 | Historical economic architecture (document header v3.4); current operating proposal in addendum v0.3 | Investors, Builders |
 | **Visual Guide** | 2.0 | Diagrams including three-axis, holographic visualisations | All |
 | **Research Proposal** | 2.2 | Collaboration invitation, UOR convergence as validation evidence | Researchers, Partners |
 | **Systems Hexagram Physics** | 1.2 | Operational physics: UOR algebraic foundation, 64-vertex lattice, forge ceremonies | Developers, Implementers |
@@ -203,7 +229,7 @@ AI agents need to know about you to act effectively on your behalf. But that kno
 
 ## Economic Model
 
-**Operating-context revision: 9 September 2026.** The [community resources and trust tasks addendum v0.2](specs/community_resources_trust_tasks_v0_2.md) describes the emerging shared-pool and workshop model. Its constitution develops with participants. The older table below records a distinct ceremony/tokenomics design, not current market prices, Labs membership fees or an adopted allocation policy.
+**Operating-context revision: 9 September 2026.** The [community resources and trust tasks addendum v0.3](specs/community_resources_trust_tasks_v0_3.md) describes the emerging shared-pool and workshop model. Its constitution develops with participants. The older table below records a distinct ceremony/tokenomics design, not current market prices, Labs membership fees or an adopted allocation policy.
 
 ### Historical design parameters (not adopted Labs policy)
 
@@ -503,7 +529,7 @@ This documentation suite has been reviewed for terminology consistency, economic
 ### Standardizations Applied
 - **Terminology**: Ceremony (1 ZEC one-time) vs Signal (0.01 ZEC ongoing)
 - **Trust Tiers**: Blade → Light → Heavy → Dragon (no "Armor" suffix)
-- **Historical economic assumptions**: $500/ZEC calculation basis and a proposed 61.8/38.2 split; not current prices or adopted Labs policy. See the operating-model addendum v0.2.
+- **Historical economic assumptions**: $500/ZEC calculation basis and a proposed 61.8/38.2 split; not current prices or adopted Labs policy. See the operating-model addendum v0.3.
 - **Promise Theory**: Formal foundations integrated throughout documentation
 - **IEEE 7012-2025**: MyTerms standard integration, published January 20, 2026
 - **PVM V5**: Three-axis separation, holographic bound, path integral T_∫(π), guild efficiency G(guilds)
@@ -587,3 +613,8 @@ When the 7th capital—behavioral sovereignty—remains with First Persons rathe
 ---
 
 ![Soulbis & Soulbae: Agent Privacy](assets/soulbisoulbae_agentprivacy.jpg)
+
+
+## V7 research intake
+
+[The V7 research index](research/V7_RESEARCH_INDEX.md) brings together formal review, agent experiments, VTA/DTG work, manuscript revisions, key projections, community resources and further research as it arrives. OPH is one strand: [Public Agreement and Private Ambiguity](research/2026-09-11_v7_oph_public_agreement_private_ambiguity.md) supplies a related-work note and atlas experiment specification. [Conjecture dispositions](research/oph-v7-conjecture-dispositions.json) add references without promotions; C97 remains the register head and V6 the formal volume.

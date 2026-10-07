@@ -47,7 +47,7 @@ Going forward, this document is the canonical reference when a new vertex comes 
 > **V2** (Computation · the Logos Circle). Where a row below still shows an old seat or a CORPUS
 > dimension label, this banner supersedes it.
 >
-> **Errata in the tables below:** V48 `110000` is Protection+Computation (not "Connection+Protection");
+> **Errata in the tables below:** V48 `110000` is Protection+Delegation (not "Connection+Protection");
 > V31 `011111` is "all except Protection" (not "all except Value").
 
 ---

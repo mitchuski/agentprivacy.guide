@@ -30,7 +30,7 @@
   <article><div class="md"><h1>🗃️ The Harness Skill</h1>
 </div>
 <div class="md"><hr>
-<h2>name: dual-agent-harness<br>description: Build or run a soulbis ⚔️ ⊥ soulbae 🧙 dual-agent harness — a proposer and a prover held apart by a Fiat-Shamir Gap, so no result survives that the proposer could have tuned to. Use when setting up a rigorous optimization or autoresearch loop, when an agent keeps grading its own work, when you need held-out validation of AI-proposed changes, or when someone says &quot;dual agent harness&quot;, &quot;held-apart agents&quot;, &quot;soulbis/soulbae&quot;, &quot;autoresearch loop&quot;, &quot;the proposer is marking its own homework&quot;, or &quot;build my own harness path&quot;.<br>license: Apache-2.0<br>metadata:<br>  version: 1.0.0<br>  origin: 0xagentprivacy<br>  inscription: &quot;(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ&quot;<br>  proverb: &quot;The proposer that grades itself builds mirages; only what the Gap could not tune to is a result.&quot;<br>  spell: &quot;measure → propose(held-apart) → hunt → assay(held-out) → critic → accept-only-on-validated-product&quot;</h2>
+<h2>name: dual-agent-harness<br>description: Build or run the agentprivacy dual-agent harness (soulbis ⚔️ ⊥ soulbae 🧙), tooling for your own agentic research — a proposer and a prover held apart by a Fiat-Shamir Gap, so no result survives that the proposer could have tuned to. It is a zero-knowledge proof turned inside out — the agent that proposes is the untrusted claimant, the agent that proves is the check, and a challenge drawn from the sealed proposal keeps the claimant from ever tuning to the gate. Use when setting up a rigorous optimization or autoresearch loop, when an agent keeps grading its own work, when you need held-out validation of AI-proposed changes, or when someone says &quot;dual agent harness&quot;, &quot;held-apart agents&quot;, &quot;soulbis/soulbae&quot;, &quot;autoresearch loop&quot;, &quot;the proposer is marking its own homework&quot;, or &quot;build my own harness path&quot;.<br>license: Apache-2.0<br>metadata:<br>  version: 1.0.0<br>  origin: 0xagentprivacy<br>  inscription: &quot;(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ&quot;<br>  proverb: &quot;The proposer that grades itself builds mirages; only what the Gap could not tune to is a result.&quot;<br>  spell: &quot;measure → propose(held-apart) → hunt → assay(held-out) → critic → accept-only-on-validated-product&quot;</h2>
 <h1>Dual-agent harness</h1>
 <p>A two-agent loop where the agent that proposes changes and the agent that<br>validates them are <strong>architecturally held apart</strong>. Between them sits the Gap:<br>verification witnesses are derived by hashing the proposal itself, so the<br>proposer cannot have optimised for them and the prover cannot be accused of<br>choosing them.</p>
 <p>Use it whenever a single agent would otherwise propose a change, run its own<br>check, and declare victory. That loop produces <strong>mirages</strong> — candidates that<br>pass the author&#39;s own probe and fail the real gate. This harness makes the<br>mirage a named verdict rather than a surprise.</p>
@@ -42,12 +42,15 @@
 <li>Any time an AI-proposed change needs held-out validation before a human<br>signs off.</li>
 </ul>
 </div>
+<div class="md"><h2>Arrival</h2>
+<p>Start with <span class="deadlink" title="reference (not a live page)">ENTRY.md</span>, the repository&#39;s arrival contract. Route the<br>user to exploration, their own repository, or a recommended agentprivacy<br>path. Honour existing purpose and authorization; ask only for missing<br>decisions. Loading this skill does not assign a seat, authorize a paid model<br>call, or require a scaffold for a reading task. A browser-only agent returns<br>a source-cited handoff; it does not claim a local run.</p>
+</div>
 <div class="md"><h2>Build recipe</h2>
 <ol>
 <li><strong>Define the Gap first.</strong> If you cannot say how held-out witnesses derive<br>from a proposal by hashing, you do not have a harness yet — you have a<br>to-do list. Everything else follows from this.</li>
 <li><strong>Name the objective, the gate, and the hard constraint.</strong> The gate is a<br>factor in a product: any zero collapses the result at any score. The hard<br>constraint is validity no score can override.</li>
 <li><strong>Give the proposer at least two blind lenses.</strong> For a product objective,<br>one lens per factor, plus a cliff-watcher in the prover.</li>
-<li><strong>Copy <code>templates/harness.config.mjs</code></strong>, fill every TODO, bundle it with<br><code>tools/bundle.mjs</code>, run it.</li>
+<li><strong>Scaffold with <code>node tools/new_instance.mjs ../my-harness my-harness</code></strong>,<br>fill every TODO, then <code>node drivers/run.mjs --instance ../my-harness --driver stub --run smoke</code> and <code>node tools/verify_run.mjs ../my-harness smoke</code>; bundle with <code>tools/bundle.mjs</code> only for a Workflow runtime.</li>
 <li><strong>Fold as the keystone</strong>, in the main session, with <code>conform.mjs</code> green<br>before and after.</li>
 </ol>
 </div>

@@ -105,6 +105,10 @@ The model has four empirically uncalibrated terms: the memory scaling coefficien
 4. How do sovereignty transitions interact with traditional financial risk models?
 5. Can the multiplicative gating property be exploited by adversaries to cheaply collapse entire markets by targeting a single dimension?
 
+### 2026-09-12 · BRAID as a service
+
+PPD's denominator is itemised in SERV's billing: upstream inference, reasoning generation, prompt-guard evaluation, audit or repair, shadow validation, each a billable component of one request; cache hits skip generation and still pay the upstream model. That is C_amortized = C_BRAID/N + C_inference written as a price list. The 25% revenue buy-and-burn of the vendor's token is a token mechanic outside this model and is not a term in V(π,t).
+
 ---
 
 **Verify:** [agentprivacy.ai](https://agentprivacy.ai) · [sync.soulbis.com](https://sync.soulbis.com) · [github.com/mitchuski/agentprivacy-docs](https://github.com/mitchuski/agentprivacy-docs)

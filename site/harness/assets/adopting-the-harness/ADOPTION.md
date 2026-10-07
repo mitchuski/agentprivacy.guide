@@ -38,9 +38,12 @@ invariant.
 
 The oldest attack on any verification scheme is to bribe whoever picks the
 test. The Gap's answer is that **nobody picks it**: witnesses are a function
-of the hash of the proposal's own canonical bytes. The proposal chooses its
-own exam without ever seeing the syllabus, and any revision re-seeds the
-draw. This construction needs exactly two things from a domain:
+of the hash of the proposal's own canonical bytes together with a run secret
+the proposer never sees (`seed = sha256(hSource ‖ hProposal ‖ salt)`; the salt
+is derived from the secret after the proposal is committed). The proposal
+chooses its own exam without ever seeing the syllabus, any revision re-seeds
+the draw, and resubmitting cannot grind it. This construction needs exactly
+two things from a domain:
 
 - a **canonical serialization** of proposals (JSON with sorted keys is enough), and
 - a **witness space derived from the reference** — the original document's
@@ -110,6 +113,39 @@ the claim space is too large to check.** A harness is for adversaries; an
 auditor is for facts. Deciding which you have is the first design decision
 (Part II, step 0).
 
+### 8. The word on the other seat — a proof turned inside out
+
+It is a zero-knowledge proof turned inside out: the agent that proposes is the
+untrusted claimant, the agent that proves is the check, and a Fiat-Shamir
+challenge drawn from the sealed proposal keeps the claimant from ever tuning
+to the gate. The names are the world's, mirrored. Cryptography calls the party
+that submits a claim the *prover* and the party that checks it the *verifier*;
+this harness names the seat for what it does in the rite, so soulbis, who
+proves the boundary holds, is called the prover, and soulbae, who submits the
+lever, is the claimant. Even the word *witness* changes sides: in zero
+knowledge it is the prover's secret hidden from the verifier; here it is the
+check hidden from the claimant. Opposite directions, one law — the one who
+would convince may not steer the check. The analogy is tight where the gate is
+code (a census either passes or it does not) and loose where the gate is
+judgment (a model's soundness is not a bound; §III of the lending below).
+
+Lending the prover's seat to borrowed models, one round each, taught four
+things this document now carries:
+
+- **The code cuts the same in any hand.** Every borrowed prover reported the
+  census — the part of the gate that is code — to the same count. Put as much
+  of the gate into code as it will bear (Step 2: `gate: { mode: 'census' }`).
+- **The judgment seat inherits the judge.** On the same candidate, capable
+  models validated a true fold and the strictest small one refused it. Reserve
+  the model for what only judgment can settle, and seat a mind equal to it.
+- **A borrowed prover is only as honest as it is able.** Asked to re-derive a
+  seal it had no hands to compute, the honest model refused and the confident
+  one echoed the number it was shown. Trust the rite that re-derives the seal
+  (`tools/verify_run.mjs`, `tools/mint_artefact.mjs`), never the voice that
+  claims it.
+- **Nothing was folded.** The frontier stood where it stood; the fold is the
+  keystone's alone (T6).
+
 ### The seventh capital, and other outcomes
 
 In the origin fight, the artifact is your behavioural residue, the metric is
@@ -159,12 +195,15 @@ Fill these in one sitting, in writing. They become `harness.config.mjs`.
 ### Step 2 · Define the Gap (do this before anything else works)
 
 State, in one paragraph: *witnesses are drawn from ⟨the reference⟩ by
-⟨canonically serializing the proposal, sha256, then this draw rule⟩.* The
-witness space comes from the **reference** (the original document, the spec,
-the input domain) — never from the candidate, never from the proposer. If you
-cannot write this paragraph, you do not have a harness yet; go back to
-step 0. The spar's version: number the original's ~40 facts, hash the
-proposal, draw 8 without replacement, demand 8/8.
+⟨canonically serializing the proposal, hashing it with the run secret, then
+this draw rule⟩.* The witness space comes from the **reference** (the original
+document, the spec, the input domain) — never from the candidate, never from
+the proposer. If you cannot write this paragraph, you do not have a harness
+yet; go back to step 0. The spar's version: number the original's 32 facts;
+the engine seeds each proposal after it is committed; where the bank is that
+small the draw is a **census** — every fact probed, 32/32 or nothing (`gate:
+{ N, mode: 'census' }`). Sample only a bank too large to enumerate, and say
+so.
 
 ### Step 3 · Pick two lenses that cannot be each other
 
@@ -180,17 +219,30 @@ of a search.
 node tools/new_instance.mjs ../my-harness my-harness
 ```
 
-Fill every TODO — the conformance gate and the bundler both refuse a config
-still wearing them, in the same words, because an unfilled harness runs,
-grades nothing, and reports VALIDATED. Measure your baseline before you claim
-a best; the templates ship both `null` on purpose.
+Fill every TODO — the conformance gate, the bundler and the runner all refuse
+a config still wearing them, in the same words, because an unfilled harness
+would run, grade nothing, and report VALIDATED. Measure your baseline before
+you claim a best; the templates ship both `null` on purpose. If the counting
+rule is code, put it in `<instance>/tools/measure.mjs`; the runner executes it
+before each round and hands its JSON to every prompt as `ctx.args.measured`.
 
 ### Step 5 · Run, audit, fold, repeat
 
-Bundle (`tools/bundle.mjs`), run a round (the Workflow tool or your own
-`rt` driver), audit the round by hash (`tools/render_run.mjs`, or
-`sha256sum proposal_canon.json` = `seedHex` by hand), and fold **only** what
-is validated *and* structural, as keystone, conform-green before and after.
+Run a round with `drivers/run.mjs` — the stub first (plumbing only), then a
+model per seat:
+
+```bash
+node engine/conform.mjs ../my-harness
+node drivers/run.mjs --instance ../my-harness --driver stub --run smoke
+node drivers/run.mjs --instance ../my-harness --driver ollama --propose-model <a> --assay-model <b> --run r1
+node tools/verify_run.mjs ../my-harness r1
+```
+
+`verify_run` is the audit: it re-derives `hProposal` from the saved canonical
+bytes, the seed from `hSource ‖ hProposal ‖ salt`, and the draw from the seed
+(`render_run.mjs` draws the same round as a page). Only a runtime that provides
+the Workflow interface needs `tools/bundle.mjs`. Fold **only** what is
+validated *and* structural, as keystone, conform-green before and after.
 Nothing outward moves without you (T6) — the door is the one seat that never
 delegates, whatever the topic.
 

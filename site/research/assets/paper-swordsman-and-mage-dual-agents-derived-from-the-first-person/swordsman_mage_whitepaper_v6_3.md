@@ -1,6 +1,6 @@
 # Swordsman and Mage: Dual Agents Derived from the First Person
 
-> **Operating-context revision 2026-09-09 (addendum v0.2):** [Community resources and trust tasks](https://guide.agentprivacy.ai/research/assets/spec-community-resources-and-trust-tasks-operating-model-addendum/community_resources_trust_tasks_v0_2.md) records the emerging Labs/City operating proposal. It complements this research edition without changing its formal version or adopting a funding mechanism. The operational resource ceiling and the informational reconstruction ceiling are different quantities.
+> **Operating-context revision 2026-09-09 (addendum v0.3):** [Community resources and trust tasks](../../specs/community_resources_trust_tasks_v0_3.md) records the emerging Labs/City operating proposal. It complements this research edition without changing its formal version or adopting a funding mechanism. The operational resource ceiling and the informational reconstruction ceiling are different quantities.
 
 
 Protect or Delegate → Reflect and Connect → Three-Axis Separation (⚔️⊥⿻⊥🧙)·(📊⊥🔮)·(🧠⊥⚙️)·☯️🔷 🙂
@@ -1948,3 +1948,51 @@ This architecture is being developed now. This is the inflection point.
 | 6.2 | 2026 (date not separately recorded) | V6-era body revision preceding 6.3; carried in Document Metadata until the 2026-07-02 reconciliation. Change record not retained; row backfilled 2026-07-02 (ledger L015). |
 | **6.3** | **April 7, 2026** | **V10.0.0 Grimoire alignment** (header version). Body version of the present document; row backfilled 2026-07-02 (ledger L015). |
 | 6.3 (V6 edition) | June 10, 2026 | **V6 edition note added** under the unified-V6 labeling decision (Gate G3): designated *Privacy is Value · V6: The Whitepaper (Swordsman and Mage)*; model authority PVM V6.0 + `research/CONJECTURE_REGISTER_V6.md`; static-ceiling citations read as Proven-conditional with R(t). Body version and date retained (the April 7, 2026 date is the body's; June 10, 2026 is the edition's). Document Metadata reconciled 6.2 → 6.3 on 2026-07-02 per `reference/PAPERS_INDEX.md` (ledger L015, L016). |
+
+
+<!-- OPH-V7-REFERENCE-2026-09-11 -->
+## Related research · V7 intake
+
+The [open V7 research index](../../research/V7_RESEARCH_INDEX.md) places this reference alongside the wider programme of formal review, experiments and implementation research.
+
+[Public Agreement and Private Ambiguity](../../research/2026-09-11_v7_oph_public_agreement_private_ambiguity.md) adds a related-work reference for task-relative boundary sufficiency (C9), consistency obstructions (C16), compression experiments (C8) and refinement comparisons (C15). Public-result uniqueness and private-state reconstruction are distinct obligations. OPH supplies no new validation of multiplicative separation, leakage rates, ownability, geometric identity or quantum resistance. The [register](../../research/CONJECTURE_REGISTER_V6.md#v7-research-intake--oph-2026-09-11) and [disposition overlay](../../research/oph-v7-conjecture-dispositions.json) preserve every affected status and confidence; no conjecture is minted. This reference addendum does not revise the V6 formal model or its proofs.
+
+<!-- JEV-RESEARCH-2026-09-23 -->
+## Related research · bounded decision models · 23 September 2026
+
+The [Jev-style models architectural note](../../research/2026-09-23_jev_style_models_architecture_note.md)
+opens an implementation research direction for the dual-agent system: separate
+generative planning, bounded semantic judgments, deterministic checks, current
+authorization and actual execution. A role can use several kinds of model while
+retaining its own data and capability boundary.
+
+The immediate application map is the current agentprivacy experience, Mages City,
+org/Labs, spellweb and the guide. Candidate uses include source and skill selection,
+claim-support review, graph navigation, request/offer matching and preparation of
+scoped actions. The earlier browser extensions supply historical context rather
+than the deployment target for this research.
+
+The [whitepaper impact assessment](../../research/2026-09-23_jev_whitepaper_and_corpus_impact.md)
+names section-level revision candidates. The [V7 note](../../research/2026-09-23_v7_typed_decisions_and_sovereign_composition.md)
+and [programme](../../plans/JEV_STYLE_MODELS_RESEARCH_PROGRAMME_2026-09-23.md) ask whether
+this decomposition improves usefulness at a measured error and disclosure budget.
+Typed answers and confidence do not establish permission, truth or independence;
+provider inputs and accumulated decision transcripts remain part of the threat model.
+
+This is a related-research addendum. No Jev experiment has run in this intake;
+the V6 formal model, version and conjecture statuses are unchanged. The proposed
+City tome [The Council of Small Questions](../../tomes/proposed/the-council-of-small-questions.md)
+provides a narrative companion without presenting its imagined workshop as evidence.
+
+<!-- JEV-ENGINEERING-2026-09-24 -->
+### Engineering follow-through · 24 September 2026
+
+The [engineering intake](../../research/2026-09-24_jev_engineering_context_and_routing.md)
+extends this research to role-scoped context assembly: addressable source chunks,
+query-dependent detail, preserved governing instructions, complete cache/handoff
+accounting and purpose-bound retrieval reuse. It assesses a supplied independent
+study synthesis, not an official deployed TypeSafe harness. The central research
+question is whether a smaller, better-chosen view preserves useful judgment while
+respecting access boundaries. Mandatory instructions, current authorization and
+exact verification remain outside a learned relevance score. No runtime or formal
+model adoption follows from this reference.

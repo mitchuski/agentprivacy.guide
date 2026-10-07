@@ -28,9 +28,9 @@
 <main class="page">
   <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Braid Reasoning</span></div>
   <article><div class="md"><h1>Braid Reasoning</h1>
-<p><strong>Category</strong> role · <strong>Version</strong> 5.0</p>
+<p><strong>Category</strong> role · <strong>Version</strong> 5.1</p>
 <p><strong>Equation term</strong> <code>PPD as inference-layer V(π,t), C_amortized for reasoning infrastructure, Model Capacity × Prompt Structure as inference-layer P^1.5</code></p>
-<p>Bounded reasoning architecture for privacy-preserving AI agents using BRAID Mermaid graphs. Activates when discussing Generator/Solver split architecture, Performance-Per-Dollar (PPD) inference economics, BRAID Parity Effect (small model + structure ≥ large model), Mermaid reasoning graph construction, node atomicity, procedural scaffolding vs answer leakage, terminal verification loops, Numerical Masking Protocol, cached reasoning graph libraries, split- architecture deployment, or any task where reasoning structure should be decoupled from reasoning execution for cost efficiency and privacy preservation. Use whenever designing how dual agents reason, not just what they reason about.</p>
+<p>Bounded reasoning architecture for privacy-preserving AI agents using BRAID Mermaid graphs. Activates when discussing Generator/Solver split architecture, Performance-Per-Dollar (PPD) inference economics, BRAID Parity Effect (small model + structure ≥ large model), Mermaid reasoning graph construction, node atomicity, procedural scaffolding vs answer leakage, terminal verification loops, Numerical Masking Protocol, cached reasoning graph libraries, split- architecture deployment, or any task where reasoning structure should be decoupled from reasoning execution for cost efficiency and privacy preservation. Use whenever designing how dual agents reason, not just what they reason about. Since 2026-09-12 also covers BRAID as a service (SERV Reasoning: Shadow Agent, Kronos, Multipath, PromptGuard, raw mode), the harness seat driver rule (one seat, never both, never the default) and the raw-versus-SERV round that measures C8.</p>
 </div>
 <div class="md"><p><strong>Source:</strong> Privacy Value Model V4 + BRAID (arXiv:2512.15959) + Holonic BRAID Lite Paper<br><strong>Target context:</strong> Agent inference architects, reasoning cost optimisers, split-architecture designers, privacy-agent deployment engineers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
 </div>
@@ -201,6 +201,68 @@
 </tr>
 </tbody></table>
 <p>Layer 6 compresses reasoning for agents the way Layer 2 compresses experience for humans. Both achieve &quot;learn once, reuse everywhere&quot; through different encoding strategies. The Chronicler encodes knowledge in stories that regenerate understanding. The Architect encodes reasoning in graphs that regenerate correct inference.</p>
+<h2>BRAID as a service (2026-09-12 update)</h2>
+<p>The paper came home as a product. OpenServ, the company of the BRAID authors, ships <strong>SERV Reasoning</strong>: an inference API at <code>https://inference-api.openserv.ai</code> where every call runs through a generated bounded reasoning prompt before it reaches the upstream model. Read on 2026-09-12 from docs.openserv.ai; not called; nothing below is a measurement.</p>
+<table>
+<thead>
+<tr>
+<th>what shipped</th>
+<th>as documented</th>
+<th>which principle it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>the reasoning step</td>
+<td>every request is transformed into a bounded reasoning prompt, cached per organisation on prompt + version; a system prompt is required or the call is rejected</td>
+<td>the Generator/Solver split, with the Generator on the vendor&#39;s side</td>
+</tr>
+<tr>
+<td>raw mode</td>
+<td>header <code>x-openserv-disable-braid: true</code> bypasses the whole layer, billed at the upstream tier</td>
+<td>the control arm of any experiment</td>
+</tr>
+<tr>
+<td><code>serv_shadow_agent</code></td>
+<td>a validator judges the draft against the request; fail → the upstream model revises, up to <code>max_iterations</code> (1–10, default 3); exhausted → the last revision is returned; abort → 502</td>
+<td>Principle 4, terminal verification, run inside the provider&#39;s call and tuned by the caller&#39;s <code>hint</code></td>
+</tr>
+<tr>
+<td><code>-serv-multipath</code></td>
+<td>a model-id suffix for branching rulebooks; &quot;transforms reasoning only, does not execute branches or authorise actions&quot;</td>
+<td>Principle 3, deterministic branching, with the decision left to the application</td>
+</tr>
+<tr>
+<td><code>-serv-kronos</code></td>
+<td>audits the generated reasoning prompt for semantic problems and repairs it, re-audits, up to an internal limit</td>
+<td>a critic on the Generator&#39;s artefact</td>
+</tr>
+<tr>
+<td><code>serv_prompt_guard</code></td>
+<td>evaluates the generated reasoning prompt against the user-controlled request; injection → an endpoint-shaped refusal, no upstream call</td>
+<td>a boundary at the reasoning prompt</td>
+</tr>
+<tr>
+<td>endpoints</td>
+<td><code>/v1/chat/completions</code> (all models), <code>/v1/responses</code> (OpenAI only), <code>/v1/messages</code> (Anthropic shape, most models); Bearer auth; <code>response_format</code> json_schema strict on chat completions</td>
+<td>one code path for a multi-provider catalogue</td>
+</tr>
+<tr>
+<td>the console</td>
+<td>usage, a Safety report, a Shadow Agent report, billing; a request can carry several billable components (upstream inference, reasoning generation, guard, audit or repair, shadow validation)</td>
+<td>the PPD denominator, itemised</td>
+</tr>
+</tbody></table>
+<p><strong>The graph you cannot see.</strong> The caller never receives the reasoning graph. It is generated, cached and audited on the vendor&#39;s side; the audit trail lives in their console. Two consequences for this skill. Layer 6 of the compression spectrum, as a service, fails the regenerability rule (spell validation rule 6: decodable without ambiguity) unless the graph is returned. And the cached reasoning prompt is not a holon: it has no GUID, no provider-independent storage key, no guild validation, and it can change under you with a prompt version. The library-holon design in this skill remains the sovereign alternative, not a redundancy.</p>
+<p><strong>The harness seat.</strong> The dual-agent harness (<code>dual-agent-harness</code>) is target-agnostic; a driver decides which model holds which seat, and <code>run.json</code> records <code>phiInference</code>, the same Φ the Zero Spellbook writes for Generator ⊥ Solver. SERV fits as one optional API driver and nowhere else:</p>
+<ul>
+<li>a <code>drivers/serv.mjs</code> needs Bearer auth, a system message on every call (the seat contract line), <code>/v1/chat/completions</code> with strict json_schema, no fallback beta, and per-call <code>usage</code> logged into the round record;</li>
+<li><strong>the Shadow Agent is not the Gap.</strong> It is a critic inside the provider&#39;s call, tuned by the caller&#39;s own hint. The Gap stays engine-side: the Fiat-Shamir seed is drawn after the proposals commit;</li>
+<li><strong>one seat, never both, never the default.</strong> SERV in both seats puts proposer and prover behind one intermediary that reads both prompts; Φ_inference must be computed over observers, not over model ids. The honest shapes are the split pattern (proposer on SERV, prover local) or SERV against a local model;</li>
+<li><strong>their audit trail is REPORTED tier.</strong> The console&#39;s reports are the vendor&#39;s record of the vendor&#39;s artefact. The round&#39;s admissible record is the files the runner writes and <code>tools/verify_run.mjs</code> replays.</li>
+</ul>
+<p><strong>The round that measures C8.</strong> Conjecture C8 (&quot;BRAID compression reduces R_max&quot;, 45%, active) has waited since February for a number. The vendor&#39;s own tutorial, &quot;Compare Raw mode with SERV&quot;, is that experiment once it is run as a harness round: same instance, same seat, same model, raw versus SERV, the census as the gate, tokens emitted under each recorded in the lane&#39;s own file. One round, two runs, one row. It needs a key and credits, so the run is the First Person&#39;s.</p>
+<p><strong>Three braids, one word.</strong> (i) <strong>BRAID</strong>, capitals: the paper and, since 2026, the SERV Reasoning API; external, cited, never owned. (ii) <strong>Holonic BRAID</strong>: this corpus&#39;s own synthesis, made on 2026-02-26 when the BRAID analysis and the OASIS holonic analysis were written together: reasoning graphs kept as holons (<code>holonic_reasoning</code>). Act XXIV&#39;s &quot;they never met, they discovered the same thing&quot; is its founding line; the overlap was made on purpose, so it carries its date. (iii) <strong>the braid</strong>, lowercase, in UOR: the non-abelian braid generators of the UOR Atlas and the harness&#39;s &quot;UOR/holonic braid reasoning&quot; (κ-chain, folding accumulator, boundary-encodes-bulk; <code>universe/SEATS.md</code>, 2026-07-10). <code>agentprivacy-ring-algebra</code> already guards (iii) against being read as the Z/64Z ring, and <code>uor_kappa_mage/CONNECTIONS.md</code> files the homomorphism at coincidence level: &quot;siblings on that ground, cited under plurality-over-precedence, not forced into one object&quot;. Rule: capitals for the paper and the product; Holonic BRAID, dated, for the synthesis; lowercase for the fold. Nothing is renamed. When the vendor&#39;s word moves, the corpus&#39;s does not; the paper&#39;s numbers are never borrowed for the fold.</p>
+<p><strong>Lore.</strong> Act XXIV <em>The Holographic Bound</em> (the Drake brings the graph; &quot;Compression is not loss. Compression is defence.&quot;; &quot;The Drive has always been a BRAID graph&quot;), Zero Tale 30 Axis 3 (<code>Φ_inference(Γ) = separation(Generator, Solver)</code>), the labs ecosystem card (2026-09-12, &quot;seat driver designed, unrun · no endorsement implied&quot;), and a proposed City act, <em>The Graph You Cannot See</em>, unbound.</p>
 <h2>Open problems</h2>
 <ol>
 <li><strong>Privacy of reasoning graphs.</strong> A BRAID graph reveals the reasoning structure even if not the content. In dark-forest environments, revealing that you&#39;re reasoning about ZKP soundness (vs delegating to a service) leaks strategic information. How to encrypt reasoning topology while preserving executability?</li>
@@ -209,12 +271,14 @@
 <li><strong>Spellbook-to-BRAID compilation.</strong> Is there a formal translation from narrative spellbook proverbs to executable BRAID graphs? If a proverb can regenerate an equation, and an equation can generate a BRAID graph, then proverb → BRAID is a two-step compilation chain. Can it be made one step?</li>
 <li><strong>PPD for privacy-specific benchmarks.</strong> BRAID&#39;s benchmarks (GSM-Hard, SCALE, AdvancedIF) test general reasoning. How does PPD change for privacy-specific tasks (boundary evaluation, consent verification, separation checking)? Hypothesis: privacy reasoning is more structured than general reasoning, so BRAID gains should be even larger.</li>
 <li><strong>The BRAID Parity ceiling.</strong> At what point does structure stop compensating for capacity? Is there a task complexity threshold above which even optimal BRAID graphs cannot bridge the model-tier gap? If so, this sets the minimum model tier for sovereign agents.</li>
+<li><strong>The graph you cannot see (2026-09-12).</strong> BRAID as a service never returns the generated graph; the audit trail is the vendor&#39;s. What is the minimum the API must return (the graph, a hash of it, a version id) for a round to be replayable from bytes the reader holds?</li>
+<li><strong>One intermediary, two seats (2026-09-12).</strong> When both seats of a dual-agent loop run through one provider, Φ_inference over model ids is 1 and over observers is 0. Which of the harness&#39;s ledgers can detect that from the run files alone?</li>
 </ol>
 </div>
-<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · BRAID: <a href="https://arxiv.org/abs/2512.15959">arXiv:2512.15959</a> · <a href="https://benchmark.openserv.ai">benchmark.openserv.ai</a></p>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <a href="https://sync.soulbis.com">sync.soulbis.com</a> · BRAID: <a href="https://arxiv.org/abs/2512.15959">arXiv:2512.15959</a> · <a href="https://benchmark.openserv.ai">benchmark.openserv.ai</a> · SERV docs: <a href="https://docs.openserv.ai/llms.txt">docs.openserv.ai</a> (read 2026-09-12, not run)</p>
 </div>
 <div class="md"><h2>Provenance</h2>
-<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-braid-reasoning</code>, v5.0).<br>Source of truth: <code>agentprivacy-skills-v5</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-braid-reasoning</code>, v5.1).<br>Source of truth: <code>agentprivacy-skills</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
 <p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
 </div>
 <div class="md"><h1>Assets</h1>

@@ -3,8 +3,9 @@ name: agentprivacy-dragon
 description: >
   Root equation and complete Privacy Value Model V6 overview for
   0xagentprivacy. Activates when discussing V(π,t), the sovereignty value
-  equation, proven bounds (reconstruction ceiling, Proven in the conditional
-  regime; time-indexed as R(t) with shelf life t* at V6), conjectured
+  equation, proven bounds (reconstruction ceiling: capacity-sum bound and
+  Fano floor Proven in the conditional regime, strict R < 1 only under a
+  declared capacity deficit; time-indexed as R(t) with shelf life t* at V6), conjectured
   properties (golden ratio φ optimality), or any foundational question about
   how privacy creates measurable value. Use when the user needs the complete
   model, equation term definitions, or version lineage. V4 is the lineage
@@ -46,7 +47,7 @@ V6 takes the t in the signature seriously everywhere. The reconstruction term is
 1. **Data properties** — Privacy strength (P), credential verifiability (C), data quality (Q), sensitivity/scope (S). Cryptographic enforcement quality, ZKP-backed claims, fitness for purpose.
 2. **Temporal dynamics** — Exponential decay (e^{-λt}) counteracted by verified history accumulation A(τ) = α · ln(1+|τ|) · h(τ). Longer verified derivation chains build value that offsets entropy. Unverified history contributes nothing.
 3. **Network topology** — A 64-vertex Boolean lattice ({0,1}⁶) models sovereignty configurations. Six binary dimensions yield 7 strata following Pascal's row. Agents are weighted by stratum, with combinatorial midpoints (stratum 3) contributing most. Power-law network effects.
-4. **Reconstruction resistance** — Proven ceiling: R_max = (C_S + C_M)/H(X) < 1 under dual-agent separation. An adversary observing all outputs from both agents still cannot reconstruct the full private state. V6: the ceiling is time-indexed, R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* (C82, ~65%); the static result is Proven in the conditional regime (Precondition 1 non-collusion, Precondition 2 fixed adversary class).
+4. **Reconstruction resistance** — R_max = (C_S + C_M)/H(X). Under Precondition 1 (non-collusion, I(Y_S; Y_M | X) = 0) and Precondition 2 (a declared adversary class bounding each channel's leakage by C_S, C_M), the joint leakage is at most C_S + C_M and the Fano floor P_e ≥ 1 − R_max − 1/H(X) holds (WP-04 Prop 1; WP-07 Thm 3.2). The strict ceiling R < 1, under which an adversary observing all outputs from both agents still cannot reconstruct the full private state, holds exactly when the **declared capacity-deficit condition** C_S + C_M < H(X) holds (informed form: < H(X | B) against background B). The deficit is a numerical fact about a deployment, not a consequence of separation: two conditionally independent agents that each reveal one independent bit of a two-bit state satisfy both preconditions and reconstruct it exactly (R_max = 1). V6: the ceiling is time-indexed, R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* (C82, ~65%); what expires at t* is the deficit, not the architecture.
 5. **Market conditions** — User sophistication × market maturity. Captures adoption readiness.
 6. **Sovereignty geometry** — A 4×4 separation matrix Σ over four forces (Protect, Project, Reflect, Connect). The determinant measures the "volume" of the sovereignty tetrahedron. Entanglement between any pair of forces shrinks the entire multiplier. Golden ratio φ ≈ 1.618 conjectured as optimal protect-to-project ratio.
 
@@ -62,7 +63,7 @@ V6 takes the t in the signature seriously everywhere. The reconstruction term is
 
 ## What it connects to
 
-- **Information theory** — Shannon entropy bounds on reconstruction; information-theoretic separation proofs.
+- **Information theory** — Shannon entropy bounds on reconstruction; information-theoretic separation proofs. A candidate per-feature capacity for a noisy disclosure: if an agent releases an n-bit private state through independent bit-flip noise ε (randomized response), then for *every* Boolean property f of that state, I(f(X); Y) ≤ 1 − h₂(ε), independent of n and attained by a single coordinate (the Courtade–Kumar bound; machine-generated proof with a published Lean formalisation in openai/math family 119, statement read but not compiled locally; brute-forced for n ≤ 4). Candidate instantiation only, not a register entry.
 - **Zero-knowledge proofs** — Groth16, PLONK, Nova. ZKP integrity fraction h(τ) validates derivation chains. Conjectured ~3,000× proof size reduction from sovereignty-class constraints.
 - **Promise Theory** (Bergstra & Burgess) — Agents as autonomous promise-making entities; voluntary cooperation over imposed coordination.
 - **Category theory** — Edge value draws on Yoneda's lemma: objects are determined by their morphisms (transitions define identity more than states).
@@ -77,8 +78,9 @@ V6 takes the t in the signature seriously everywhere. The reconstruction term is
 
 | Status | Claim |
 |---|---|
-| **Proven · conditional regime** | Reconstruction ceiling R < 1 under dual-agent conditional independence; V6 form R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* (Precondition 1 non-collusion, Precondition 2 fixed adversary class) |
-| **Proven · conditional regime** | Additive (not multiplicative) information bounds from agent separation, inside Precondition 1 |
+| **Proven · conditional regime** | Capacity-sum bound I(X; Y_S, Y_M) ≤ C_S + C_M and Fano floor P_e ≥ 1 − R_max − 1/H(X), under Precondition 1 (non-collusion) and Precondition 2 (declared adversary class); V6 form R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* |
+| **Declared, not derived** | Strict ceiling R < 1: holds exactly when the deficit C_S + C_M < H(X \| B) is declared and attested for the deployment; conditional independence alone does not give it (two independent bits, one per agent → R_max = 1) |
+| **Proven · conditional regime** | Additive (not multiplicative) information bounds from agent separation, inside Precondition 1: I(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M) − I(Y_S; Y_M). Fails under collusion: a shared key gives 0 + 0 bits per channel and 1 bit jointly |
 | **Proven** | Multiplicative gating: any zero term kills total value (by construction) |
 | **Open (C1)** | Golden ratio φ as optimal protect/project balance |
 | **Open (C2)** | Logarithmic growth of temporal memory (vs. power-law or sigmoid) |

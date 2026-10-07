@@ -269,3 +269,11 @@ Docs: github.com/mitchuski/agentprivacy-docs. Forge: spellweb.ai. Training: agen
 *The boundary is always enough. Peer review invited: mage@agentprivacy.ai*
 
 (⚔️⊥⿻⊥🧙)😊
+
+
+<!-- OPH-V7-REFERENCE-2026-09-11 -->
+## Related research · V7 intake
+
+The [open V7 research index](../../research/V7_RESEARCH_INDEX.md) places this reference alongside the wider programme of formal review, experiments and implementation research.
+
+[Public Agreement and Private Ambiguity](../../research/2026-09-11_v7_oph_public_agreement_private_ambiguity.md) adds a related-work reference for task-relative boundary sufficiency (C9), consistency obstructions (C16), compression experiments (C8) and refinement comparisons (C15). Public-result uniqueness and private-state reconstruction are distinct obligations. OPH supplies no new validation of multiplicative separation, leakage rates, ownability, geometric identity or quantum resistance. The [register](../../research/CONJECTURE_REGISTER_V6.md#v7-research-intake--oph-2026-09-11) and [disposition overlay](../../research/oph-v7-conjecture-dispositions.json) preserve every affected status and confidence; no conjecture is minted. This reference addendum does not revise the V6 formal model or its proofs.

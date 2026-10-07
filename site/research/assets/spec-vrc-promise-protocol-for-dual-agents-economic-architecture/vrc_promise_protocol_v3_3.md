@@ -10,7 +10,7 @@
 
 ## Development Status Notice
 
-**Operating-context revision: 9 September 2026.** Read [Community resources and trust tasks v0.2](community_resources_trust_tasks_v0_2.md) for the emerging Labs funding and City operating model. This historical tokenomics design is not adopted by that proposal. Strong economic-result claims below are design-era claims, not established returns; later PVM evolution retires the headline economic multiples.
+**Operating-context revision: 9 September 2026.** Read [Community resources and trust tasks v0.3](community_resources_trust_tasks_v0_3.md) for the emerging Labs funding and City operating model. This historical tokenomics design is not adopted by that proposal. Strong economic-result claims below are design-era claims, not established returns; later PVM evolution retires the headline economic multiples.
 
 > **This document presents ONE possible economic architecture for the dual-agent privacy protocol.** It is the least developed component of the documentation suite and requires significant collaboration with specific ecosystem implementers to finalize.
 >

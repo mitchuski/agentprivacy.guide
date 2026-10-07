@@ -23,7 +23,7 @@ invitation — was signed on 2026-07-14; a twelfth carries the skeleton whole
 as a standalone sibling; two later runtimes carried the hold-apart into an
 agent-operated acceptance flow and into literature review, and the sixteenth
 accession is the first **descendant lane** — no loop at all, but the
-constitution inherited whole. **Fifteen entries stand**; numbering is by
+constitution inherited whole. **Nineteen entries stand** (three arena lanes and a second descendant joined on 2026-10-07; see `CHALLENGE_LANES.md`); numbering is by
 accession and never reused, so one number sits empty (withdrawn before its
 counterpart work published — the door decides what is named here, and when).
 Grouping is by weight.
@@ -53,6 +53,10 @@ reading a complete one.
 | the DTG verification registry | ZK ceremony suite acceptance | registry rows, honestly accepted | digest-manifest byte-match; the decision consumes only `pinned` | acceptance flow, **human-gated** — first external run accepted |
 | the litreview runtime | prior-art novelty (Programme WP-14) | residues surviving refutation | context isolation: refuters never see the prover's argument (D3) | full, non-numeric — sweep ⊥ refute ⊥ judge |
 | uor_kappa_mage | upstream substrate convergence (kappa-registry) | *(no metric)* — a P-gated research lane | *(inherited, not drawn)* — TRUSTS + GROUND_RULES govern every session | **descendant lane** — the constitution inherited whole |
+| star-hold (+ harness-disclosure) | claims register over a ZK runtime | unbacked claims, ↓ (baseline 4/19); disclosure-debt beside it | census over every row; a falsification is a WIN filed as a K-id | coherence instance, **unrun** (added 2026-09-11) |
+| hashsmash_mage | reduced-round hash collision claims (Yukon hashsmash, AI-judged) | the judge's score, ↓ (crown 47.6 at sha256-r32) | the organiser's own replay + a split assay (A re-derives, B rehearses the judge) | **arena** — the fully measured route search, 59 calls charged |
+| sig_mage | signature golf (Yukon sig.golf, Lean-certified) | S + charged C, ↓ | the differential emulator gate (honest / exhaust / tamper / cross), then Lean | **arena** — promoted entries, the witness trim in the record with credit |
+| kappa_evidence_mage | κ-addressed evidence ledgers for the fleet | *(no metric)* — bundles that re-derive from a root | the verifier that sees only the bundle | **descendant lane** — tooling folded into `tools/kappa_evidence.mjs` |
 
 ---
 
@@ -652,11 +656,104 @@ of the engine.
 > **the Gap:** not drawn — inherited: the constitution holds the seats apart, and the planned refuter fleet (designed, unrun) is where the lane's theses will face an adversary · **lenses:** fourteen Programme roles, A0–A13 — drafter never verifies its own citations · **canary:** the correction record itself — a first run that returned no corrections would indict the fleet, not flatter the notes
 > **weight:** descendant lane · public · **the lesson it carries:** the skeleton's deepest export is not the loop but the constitution — a lane with no metric, no engine, and no Gap can still inherit every trust, and the proof is behavioural: the door held twice before it opened.
 
+### 17 · star-hold — a coherence instance over a ZK construction (added 2026-09-11)
+
+*(instance at `~/dtgwg-zkp-tf-mage/runtimes/star-hold/harness/`, over the
+runtime beside it; the DTG ZKP task force's lab, the author as co-chair)*
+
+The artifact is not prose and not a circuit: it is a **claims register** over a
+reference runtime — nineteen load-bearing claims about a sidecar of signed
+envelopes beside a City Key (the "Hold") and its k-of-n community-vouch
+presentation, each row naming the H-test that backs it or the condition that
+would settle it. The objective is **unbacked claims**: rows whose enforcement is
+`prompt`, `manual` or `nothing` — a claim stronger than its enforcement, the
+claims checker's own rule made the frontier. Baseline 4 of 19 (the X3 cost of
+Ed25519 in-circuit, unlinkability beyond commitment freshness, whether
+hidden-value equality is carded as its own primitive, the pairwise-freshness
+chokepoint that lives at issuance). The gate is a **census**: every row probed,
+so a claim silently weakened or a test silently renamed cannot hide; the
+canary is the runtime's own 45/45. Two lenses: a *circuit-mapper* backs an
+OPEN claim with a runnable check or a measurement; a *refuter* tries to make
+a PROVEN claim's test print FAIL — and a confirmed falsification is a WIN filed
+as a K-id, which is the hard constraint's whole point: a claim leaves the
+register only by being falsified, never by being relabelled. Conform PASS;
+no round has run.
+
+A **second instance** sits beside it, `harness-disclosure/`, and it is #11's
+seat brought to the Star: hearthold_mage's *disclosure-debt* rule — canonical
+bytes of what a verifier learns, against a frozen requirement census checked
+one entry at a time from the public side only — applied to the Star's k-of-n
+presentation instead of a Warden's attestation bundle. Baseline 521 bytes
+disclosed against 2,529 for the same two credentials shown whole and 6,478
+held; a 14-requirement census frozen by sha256; canary 14/14. The seat's own
+signed acceptance rides in the Hold as an item the Hold cannot yet verify and
+says so.
+
+> **At a glance** —
+> **objective:** unbacked claims, lower is better · **gate:** census over `claims_register.md` — PROVEN/DERIVED rows must name H-ids that PASS in `node ../test.mjs`, OPEN/REPORTED rows must state their settling condition · **hard constraint:** no claim leaves except by a falsifying K-id; the disclosure set and the rejection register only grow by a live-triggered test
+> **the Gap:** the census draw over the ORIGINAL register — the proposer never sees which probe checks which claim · **canary:** the register + `test.mjs` as they stand (36/36) · **lenses:** circuit-mapper · refuter · **frontier:** 4/19 → OT-1 = a first measurement for the spec's case X3
+> **weight:** full loop, unrun · local lab, git-excluded · **the lesson it carries:** a claims register is an artifact a harness can fold — the metric is honesty about enforcement, and a refuter's win lowers nothing, which is what keeps the register from being gamed by deletion.
+
 ---
 
+
+### 18 · hashsmash_mage — the arena, with an AI judge (added 2026-10-07)
+
+*(instance at `~/hashsmash_mage/`; Yukon hashsmash, reduced-round collision
+claims judged by an AI reviewer the organiser runs)*
+
+The first lane where the judge is itself a model, so the prover seat was
+split: assay A re-derives every number from per-call CPU ledgers in which
+everything is charged (abandoned calls, stopped calls, the watcher's kills);
+assay B rehearses the judge from its own archived dossiers and its
+aggregation rule (one `unsupported` anywhere sinks a package). Three packages
+passed: 1ded36a8 at 52.1 first try, then 8bad82c1 at 47.6, the only entry on
+the board whose route search is fully measured (59 solver calls, 593,858.32
+CPU-s, callgrind-calibrated unit, itemised margin); sha3-r6 02d6a703 at
+125.58. One package failed on "participant-reported only" and was repaired by
+shipping an organiser-executed replay and a credited certificate. The
+measurement was then copied verbatim by others, which is where the κ evidence
+ledger (#20) was born. Rules A9-A12, A17, A19, A27-A34 of `CHALLENGE_LANES.md`
+come from here. On HOLD awaiting owner review.
+
+### 19 · sig_mage — the arena, Lean-certified (added 2026-10-07)
+
+*(instance at `~/sig_mage/sigmage/`; Yukon sig.golf, signature size plus
+charged verification cycles under a Lean kernel)*
+
+When the prover is a kernel, drawing witnesses against it is theatre; the Gap
+moved forward into a differential emulator gate run before any Lean: base and
+new images on the same key and message, honest runs byte-identical in witness
+and zero in verify delta, exhaustion rejecting, random flips matching base,
+each side's signature rejected by the other's expander, JSON out, a NO-GO
+halting everything. The Mage proposes and prices; the Swordsman attacks and
+alone holds the sign-off. Two entries promoted (62479bf4, c49fc5a6), the
+witness trim in the record since #574 with coauthor credit, the credit filter
+adopted field-wide; a re-apply kit (snapshot / apply / relocate) after a stale
+base cost 35+ cycles; a handoff discipline of stacked dated blocks and a
+research ledger with a verdict and a reopen condition per pathway; two
+stale-constant misses that became the constants-refuter seat. Rules A2, A4,
+A5, A21-A22, A25-A26, A36-A38, A40 come from here. PAUSED on a win-condition check.
+
+### 20 · kappa_evidence_mage — the second descendant (added 2026-10-07)
+
+*(instance at `~/kappa_evidence_mage/`; lineage #16, the kappa-registry
+survey, applied to the fleet's own evidence)*
+
+Every number a lane reports becomes an object with a κ on the registry's own
+axis (sha256 over canonical dCBOR), linked by typed edges under one run root,
+so a reader holding only the bundle recomputes the totals and never trusts the
+lane. Minted the hashsmash r32 ledger and the sig_mage H2 gate the day it was
+built; its verifier's first act on the second lane was to refuse a stale
+layout file. The tooling folded into this repo the same day
+(`tools/dcbor.mjs`, `tools/kappa_evidence.mjs`, the `Evidence root:` line in
+the chronicle template, `HOLONS.md`'s second axis). Every κ is labelled
+"kappa-compatible (unverified)" until the cross-implementation check against
+the compiled registry crate passes; no public note quotes a root before then.
+Proverb minted under: *the decimal travels; the root stays.*
 ## What travels, what stays, and how the fleet syncs
 
-Read these fifteen and you will notice the same skeleton under fifteen
+Read these nineteen and you will notice the same skeleton under nineteen
 unrecognisably different bodies: an objective (or an honest absence of one), a
 hard constraint, a gate the proposer cannot choose, a ledger only one seat
 writes, and a door only a person opens. And one body carries no skeleton at

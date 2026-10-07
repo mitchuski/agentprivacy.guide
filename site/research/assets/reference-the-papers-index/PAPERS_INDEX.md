@@ -2,7 +2,7 @@
 
 **What this is:** the catalogue of every paper in the agentprivacy-docs corpus, each made known for its purpose. The V6 documents cite siblings by name; this file is where every name resolves. When a new paper enters the corpus, it enters this index in the same commit.
 **Naming convention (First Person, 2026-06-10):** the canon papers are one book, ***Privacy is Value***, in versioned volumes. Each volume stands alone and carries the series title plus its own direct title: *Privacy is Value · V5.4: The Amnesia Protocol* · *Privacy is Value · V6: The Gathering Turn and the Moving Ceiling*. Same book, different volumes, readable independently.
-**Updated:** 2026-07-01 · register head C96
+**Updated:** 2026-09-11 · current register remains the numbering authority
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Series title | File | Purpose | Status |
 |---|---|---|---|
-| *Privacy is Value · V6: The Gathering Turn and the Moving Ceiling* | `papers/v6/privacy_value_v6_formal_specification.md` | THE formal specification and current authority: the full model, R(t) and t*, the preconditions, C1 to C89 reproduced in §17 (register since advanced to C96 — Bands IX–X), the narrative corpus, full references | **CURRENT HEAD** |
+| *Privacy is Value · V6: The Gathering Turn and the Moving Ceiling* | `papers/v6/privacy_value_v6_formal_specification.md` | THE formal specification and current authority: the full model, R(t) and t*, the preconditions, C1 to C89 reproduced in §17 (register since advanced to C97 — Bands IX–XI), the narrative corpus, full references | **CURRENT HEAD** |
 | *Privacy is Value · V6: The Swordsman Reading* | `papers/v6/pvm_v6_compressed.md` | the compressed specification: every equation, eight pages, for agents and reviewers who need the shape before the proofs | current |
 | *Privacy is Value · V6: The Mage Reading* | `papers/v6/pvm_v6_companion_guide.md` | the companion guide: what the mathematics means, Promise Theory, economics, ceremonies, standards, reading paths by role, glossary bridge | current |
 | *Privacy is Value · V6: The Research Paper Edition* | `papers/v6/dualprivacy_researchpaper_v6.md` | what changed in the mathematics at V6, plus the provenance reconciliation; builds on the v4.3 proof body below | current |
@@ -24,11 +24,36 @@
 
 > **Class and Part assignments (phase 1, 2026-06-11):** Class S, standalone volumes: the V4/V5.4/V6 formal specs (Parts I, II, IV) · the whitepaper (IV) · the Zypher paper (unbound, candidate annex). Class R, volume-bound: each era's readings, essays, notes, the crosswalk, the research-paper edition layer, the proof body v4.3 (serves I to IV). Class A, spine: the register · this index · the glossary · Promise Theory · the visual guide. Class M, by pin: the dark/light JSONs per era, the grimoire JSONs. Class N, sister body: the tomes, grimoire texts, Selene's Spellbook (see the compendium front matter, *One Work, Many Expressions*). The compendium manifests (`compendium/part-*/PART.md`) carry the per-document rows.
 
+<!-- JEV-RESEARCH-2026-09-23 -->
+## Research encounter · Jev-style models
+
+23 September 2026: [architectural note](../research/2026-09-23_jev_style_models_architecture_note.md),
+[V7 research note](../research/2026-09-23_v7_typed_decisions_and_sovereign_composition.md),
+[whitepaper impact](../research/2026-09-23_jev_whitepaper_and_corpus_impact.md), and
+[programme](../plans/JEV_STYLE_MODELS_RESEARCH_PROGRAMME_2026-09-23.md).
+Open research on semantic decisions, useful delegation and cumulative disclosure.
+These are research notes and proposed experiments, not new formal volumes or
+submitted manuscripts. The [City tome](../tomes/proposed/the-council-of-small-questions.md)
+is an unbound narrative companion hosted in docs.
+
+<!-- JEV-ENGINEERING-2026-09-24 -->
+### Engineering source intake · 24 September 2026
+
+[Context selection, routing and governed state](../research/2026-09-24_jev_engineering_context_and_routing.md)
+assesses the supplied independent Jev coding-agent synthesis and extends the above
+research package. Context selection, cache economics and scoped retrieval are
+proposed experiments; the source is not an official TypeSafe publication.
+
+
+## Operating context · separately versioned
+
+[Community resources and trust tasks — addendum v0.3](../specs/community_resources_trust_tasks_v0_3.md), 9 September 2026: proposed Labs funding, workshop and pledge model. Complements the Whitepaper V6 edition; does not revise its formal model or proofs.
+
 ## The authority files (not papers, but every paper leans on them)
 
 | File | Purpose |
 |---|---|
-| `research/CONJECTURE_REGISTER_V6.md` | the single conjecture-numbering authority, C1 to C96 plus CM-C47; when any paper and the register disagree, the register wins |
+| `research/CONJECTURE_REGISTER_V6.md` | the single conjecture-numbering authority, C1 to C97 plus CM-C47; when any paper and the register disagree, the register wins |
 | `models/privacy_value_model_v6_dark.json` · `_light.json` | the machine-readable model: full (learning path, register, equations) and runtime-compact |
 | `research/privacy_value_v6_draft.md` | the V6 working record: Parts I to V as drafted on the autopath, full honest-limits sections |
 
@@ -40,6 +65,14 @@
 | `papers/lineage/understanding_as_key_zypher_paper_v1.md` | the Zypher paper: comprehension as a key primitive | standalone, current |
 | `papers/lineage/research_proposal_v2_0.md` | the collaboration invitation (v2.2 content) | standing invitation |
 | `papers/whitepapers/MAGE_EXTENSION_WHITEPAPER.md` · `SWORDSMAN_EXTENSION_WHITEPAPER.md` | the two browser-extension product whitepapers | product papers |
+
+## V7 research intake
+
+[Open research index](../research/V7_RESEARCH_INDEX.md): the wider intake across guarantees, experiments, VTA/DTG, manuscript revisions, keys and operating proposals. Each source retains its own status; OPH is one contribution to this open programme.
+
+[Public Agreement and Private Ambiguity](../research/2026-09-11_v7_oph_public_agreement_private_ambiguity.md) (2026-09-11, v7.0.0-research.1): OPH related work, exact finite teaching model, atlas prototypes, references and conjecture dispositions. Canon research note; the V6 formal specification remains the current volume. No status promotion or new C-number. [Disposition overlay](../research/oph-v7-conjecture-dispositions.json).
+
+[Merkle Tree Certificates and the Hold](../research/2026-09-29_v7_merkle_tree_certificates_and_the_hold.md) (2026-09-29, v7.0.0-research.1): the post-quantum WebPKI design (Cloudflare CA, IETF PLANTS draft-06) as related work for the Hold, the root-only City Key rule and the k-of-n presentation; finite proof-size arithmetic; six unnumbered candidates; no promotion. [Dispositions](../research/mtc-v7-conjecture-dispositions.json) · [source manifest](../research/mtc-v7-source-manifest.json).
 
 ## The research-note series (where V6 grew)
 
