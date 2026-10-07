@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const HOME = os.homedir();
 const WIKI = path.join(HOME, '.wiki');
@@ -81,7 +81,32 @@ function auditGrimoire() {
 }
 
 // ---- heuristic source-signal audits ---------------------------------------
-const SKILLS = path.join(HOME, 'agentprivacy_master', 'agentprivacy-skills', 'agentprivacy-skills-v5');
+// the canonical git upstream (G0) — the skill builder reads the same tree; count only the 5 projected categories
+const SKILLS = path.join(HOME, 'agentprivacy-skills');
+const SKILL_DIRS = ['persona', 'role', 'privacy-layer', 'meta', 'wikis'];
+const skillCount = () => SKILL_DIRS.reduce((n, d) => {
+  const base = path.join(SKILLS, d);
+  return n + (fs.existsSync(base) ? fs.readdirSync(base).filter(f => f.startsWith('agentprivacy-') && fs.existsSync(path.join(base, f, 'SKILL.md'))).length : 0);
+}, 0);
+// the register head, read from the "Register head:" line of the register(s) on disk
+const registerHead = () => {
+  const dir = path.join(HOME, 'agentprivacy-docs', 'research');
+  const regs = fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => /^CONJECTURE_REGISTER.*\.md$/.test(f)).sort() : [];
+  let head = 0;
+  for (const f of regs) {
+    const m = fs.readFileSync(path.join(dir, f), 'utf8').match(/Register head:\**\s*C(\d{1,3})/);
+    if (m) head = Math.max(head, +m[1]);
+  }
+  return head;
+};
+// exact node count: spellweb's own reader (a regex misses multi-line objects); regex fallback
+let ATLAS_NODES = 0;
+try {
+  const { readGraph } = await import(pathToFileURL(path.join(HOME, 'spellweb', 'scripts', 'read-graph.mjs')).href);
+  ATLAS_NODES = (await readGraph()).nodes.length;
+} catch {
+  ATLAS_NODES = grepCount(path.join(HOME, 'spellweb', 'src', 'data', 'nodes.ts'), /\bid:\s*['"]/g);
+}
 function signalAudit(site, source, sourceCount, note, confidence = 'heuristic') {
   const live = pagesOf(site).filter(s => s !== 'welcome-visitors').length;
   const delta = sourceCount - live;
@@ -94,14 +119,15 @@ function run() {
     generatedFor: 'guide.agentprivacy.ai',
     sites: {
       grimoire: auditGrimoire(),
-      skill: signalAudit('skill', 'agentprivacy-skills-v5', countFiles(SKILLS, /^SKILL\.md$/i),
-        'source = SKILL.md count; site has hubs on top'),
+      skill: signalAudit('skill', 'agentprivacy-skills (persona·role·privacy-layer·meta·wikis)', skillCount(),
+        'source = SKILL.md count in the 5 projected categories; site has hubs on top'),
       atlas: signalAudit('atlas', 'spellweb/src/data/nodes.ts',
-        grepCount(path.join(HOME, 'spellweb', 'src', 'data', 'nodes.ts'), /^\s*\{ id: "/gm),
-        'node object literals vs live pages (verified: atlas covers all nodes)'),
-      research: signalAudit('research', 'agentprivacy-docs (C1–C89 + papers)',
-        pagesOf('research').filter(s => /^c\d/i.test(s)).length,
-        'conjecture pages present; source register C1–C89'),
+        ATLAS_NODES,
+        'NODES exported by spellweb (read as the app reads them) vs live pages'),
+      research: (() => { const head = registerHead(); const live = pagesOf('research').filter(s => /^conjecture-c\d+$/i.test(s)).length;
+        return { ...signalAudit('research', `agentprivacy-docs conjecture register (C1–C${head})`, head,
+          `conjecture-cNN pages present: ${live} of ${head}; papers/notes sit on top`), conjecturePages: live,
+          likelyGap: Math.max(0, head - live) }; })(),
       tomes: signalAudit('tomes', 'cityofmages/tomes',
         countFiles(path.join(HOME, 'cityofmages', 'tomes'), /\.md$/),
         'tome md files; mapping to acts/cast/specs not yet precise'),

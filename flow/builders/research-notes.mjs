@@ -72,10 +72,14 @@ export function buildResearchNotes() {
   if (fs.existsSync(hubFile) && linkTitles.length) {
     const p = JSON.parse(fs.readFileSync(hubFile, 'utf8'));
     const id = rid('the-research-notes#v6-notes');
-    const text = `## V6 working notes\n\n*Companion notes behind the model — summaries pointing to the canonical \`agentprivacy-docs/research\`.*\n\n${linkTitles.map(t => `- [[${t}]]`).join('\n')}`;
+    // 2026-10-07: link by reference item (resolves by slug). The page titles ("Note — X") do not
+    // slug to the file-derived slugs, so [[title]] links never resolved; slugs kept for inbound links.
+    const text = `## V6 working notes\n\n*Companion notes behind the model — summaries pointing to the canonical \`agentprivacy-docs/research\`.*`;
     const item = { type: 'markdown', id, text };
-    p.story = (p.story || []).filter(it => it.id !== id).concat(item);
-    p.journal = (p.journal || []).filter(j => !(j.type === 'add' && j.id === id)).concat({ type: 'add', id, item, date: DATE });
+    const refs = created.map((slug, i) => ({ type: 'reference', id: rid('the-research-notes#v6-ref-' + slug), site: 'research.localhost', slug, title: linkTitles[i], text: 'a V6 working research note.' }));
+    const ours = new Set([id, ...refs.map(r => r.id)]);
+    p.story = (p.story || []).filter(it => !ours.has(it.id)).concat(item, ...refs);
+    p.journal = (p.journal || []).filter(j => !(j.type === 'add' && ours.has(j.id))).concat({ type: 'add', id, item, date: DATE }, ...refs.map(r => ({ type: 'add', id: r.id, item: r, date: DATE })));
     fs.writeFileSync(hubFile, JSON.stringify(p, null, 2));
   }
   return { created, skipped };

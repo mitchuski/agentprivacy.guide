@@ -36,6 +36,7 @@ const BUILDERS = {
   'skills-cleanup': B('skills-cleanup.mjs'), // linkify reverts + dup-block removal on skill pages
   proverbs: B('proverbs.mjs'),            // the grimoire's ~177 proverbs as grouped collections
   'vta-lane': B('vta-lane.mjs'),          // the Verifiable Trust Agent lane (harness · guide · dtg pages, manifest-first)
+  'gate-2026-10': B('gate-2026-10.mjs'),  // GATE 2026-10-07: The Boards · V7 headlines · Proposed Readings · city door
 };
 
 const [cmd, arg] = process.argv.slice(2);
