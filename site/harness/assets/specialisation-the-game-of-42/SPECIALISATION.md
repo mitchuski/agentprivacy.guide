@@ -40,7 +40,7 @@ A specialised instance dresses a seat by binding a persona to it:
 
 Record bindings in a small registry JSON (seat → persona → skills → mandate)
 and extend `engine/conform.mjs` to check that every seat's persona resolves
-and no seat carries an empty mandate. The tigzkp instance (see
+and no seat carries an empty mandate. The ZK constraint-reduction instance (see
 `HARNESS_PATHS.md`) carries the worked reference in its own canon registry.
 
 ## 2. The Game of 42 — fractal specialisation that follows structure
@@ -48,7 +48,7 @@ and no seat carries an empty mandate. The tigzkp instance (see
 The station pattern is how instances multiply WITHOUT drifting: **6 axes ×
 7 stations = 42**.
 
-- **Axes.** Each workshop instance sits on one axis of work (the tigzkp
+- **Axes.** Each workshop instance sits on one axis of work (the ZK
   instance holds the *compute* axis). Six axes bound a fleet; a new domain
   claims a vertex on an axis rather than inventing a new shape.
 - **Stations.** Within a workshop, each of the seven seats takes a station:

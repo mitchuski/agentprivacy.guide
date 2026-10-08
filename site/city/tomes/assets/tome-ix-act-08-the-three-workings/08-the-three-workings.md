@@ -17,7 +17,7 @@ v6_lineage: ["C13", "C82"]
 source_material:
   - "dual-agent-harness/examples/field-guide/frontier.json (the fold ladder, head 48d017e)"
   - "Lexon_pvm/frontier.json · the lexr2→lexr4 fold chronicles (head 10dad55)"
-  - "tig_zk_loop/privacy_pools_v2_mage/frontier.json · docs/REPORT_0XBOW_FROZEN.md · docs/POSITIONING.md (resolved 2026-07-11: the product extracted to ~/mana pools)"
+  - "zk_mage/privacy_pools_v2_mage/frontier.json · docs/REPORT_0XBOW_FROZEN.md · docs/POSITIONING.md (resolved 2026-07-11: the product extracted to ~/mana pools)"
   - "agentprivacy-docs/research/2026-07-09_circuit_workshop_trust_gated_optimization_note.md"
   - "agentprivacy-docs/chronicles/2026-07-11_lexon_pvm_research_chronicle.md"
 honesty_label: "Operational for the three campaigns and their numbers as certified in their own repos under held-out gates. Architectural for the three new workshops and their vertices (V22 · V27 · V53) and for the naming of Skeva, Nomia and Limnia — these are canon cast additions, drawn but awaiting the First Person's diff-review to bind. INTENT — NOT DEPLOYED — for the Wellpool's water: the engine is built and proven, but no pool exists, no ceremony has run, and the two letters wait at the door in their ruled order (the gift before the deployment); Limnia keeps a dry well. Resonant for the billet, the touchstone, and the liquidity of knowledge. The numbers are the repos' numbers, not the tome's; the tome adds no digit to them."

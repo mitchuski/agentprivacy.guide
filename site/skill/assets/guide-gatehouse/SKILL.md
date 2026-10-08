@@ -128,7 +128,7 @@ proverb as a flourish.) Confirm `git check-ignore flow/gates.local.json`.
 
 ## Gate classes — declare one per gate
 
-- **letter-keyed** (gate 001 · TIG × AIDDA): tokens travel only inside sent
+- **letter-keyed** (gate 001 · a sent letter): tokens travel only inside sent
   documents. Proof of receipt. Genuinely strong.
 - **canon-keyed** (gate 002 · the Archon Exchange — sigil `(⚔️⊥⿻⊥🧙)😊`,
   proverb *three solar systems, one teaching*): both tokens public canon.

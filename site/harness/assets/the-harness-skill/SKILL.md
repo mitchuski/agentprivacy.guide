@@ -95,7 +95,7 @@ traced through `SOURCES.md`) ·
 `engine/conform.mjs` (the gate that proves the algebra rather than asserting
 it) · `examples/field-guide/` (a runnable spar) · `SPECIALISATION.md`
 (personas, spells, and the Game of 42 station pattern) · `HARNESS_PATHS.md`
-(the origin fleet — fifteen real instances, grouped by how much of the loop
+(the origin fleet — eighteen real instances, grouped by how much of the loop
 each runs; evidence, not part of the system you adopt) ·
 `WIKI.md` (the Observe lane — auto-populating a federated wiki + the
 knowledge-graph asset for agents) ·

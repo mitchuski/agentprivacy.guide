@@ -70,7 +70,7 @@ Do not change these; everything else is yours.
 
 ## Pathways
 
-`HARNESS_PATHS.md` is the origin fleet — nineteen embodiments, grouped by how much of the loop they run; `CHALLENGE_LANES.md` is what the arena lanes taught (rules A1-A40, seats, templates). `RESEARCH.md` states the claim, what is borrowed, the evidence and its limits. `chronicles/` records every defect found by running (numbered; fifteen at the last count) and every fold. `universe/` is one project's corpus behind a seam; delete it and every gate still passes. The fleet's numbers, census-traced, live in a sibling instance and are rendered at agentprivacy.org/harness. To name the harness in public: *Harness: <your runtime> with the agentprivacy dual-agent harness (<your instance> instance)*.
+`HARNESS_PATHS.md` is the origin fleet — eighteen embodiments, grouped by how much of the loop they run; `CHALLENGE_LANES.md` is what the arena lanes taught (rules A1-A40, seats, templates). `RESEARCH.md` states the claim, what is borrowed, the evidence and its limits. `chronicles/` records every defect found by running (numbered; fifteen at the last count) and every fold. `universe/` is one project's corpus behind a seam; delete it and every gate still passes. The fleet's numbers, census-traced, live in a sibling instance and are rendered at agentprivacy.org/harness. To name the harness in public: *Harness: <your runtime> with the agentprivacy dual-agent harness (<your instance> instance)*.
 
 ---
 
@@ -119,7 +119,7 @@ The runnable spar has a real advancing frontier: its guide compressed from a
 each held to an 8/8 held-out gate on independent witness draws, the last two
 closed by an exhaustive fact census
 (`examples/field-guide/frontier.json` is the authority; its `chronicles/`
-tell the story). Nineteen real embodiments — quantum circuits, ZK constraint
+tell the story). Eighteen real embodiments — quantum circuits, ZK constraint
 systems, research pipelines, consent agreements, an acceptance registry
 whose first external run came from another organisation's machine, and one
 deliberate failure — are catalogued in `HARNESS_PATHS.md`. **That catalogue
@@ -228,7 +228,7 @@ Claude Code's Workflow tool (the reference multi-agent runtime), or through any
    a harness yet (and may want an auditor instead).
 8. **When it earns it, specialise** — `SPECIALISATION.md` binds personas and
    spells to seats and seats instances on the Game-of-42 lattice;
-   `HARNESS_PATHS.md` shows nineteen real configs at every weight — including
+   `HARNESS_PATHS.md` shows eighteen real configs at every weight — including
    one seat that was held open by invitation until its acceptor signed, which
    is also a thing a harness can be.
 
@@ -465,7 +465,7 @@ here any more than it moves in the loop.
    nothing, and reports `VALIDATED`. Measure your baseline before you claim a
    best — the template ships both `null` on purpose.
 4. Bundle and run: `node tools/bundle.mjs my/harness.config.mjs my/harness.workflow.mjs`
-5. Read `HARNESS_PATHS.md` for nineteen real instances — quantum circuits, ZK
+5. Read `HARNESS_PATHS.md` for eighteen real instances — quantum circuits, ZK
    constraint systems, research papers, consent agreements, a publishing
    loop, an acceptance registry, a lit-review adversary, and a descendant
    lane that inherited the constitution whole — the same skeleton under very
@@ -492,7 +492,7 @@ GROUND_RULES.md    GR-1..GR-10, pasted into every seat at boot
 ADOPTION.md        why the duality is topic-free + the mapping procedure
 SEAT_CONTRACT.md   what a config provides
 SPECIALISATION.md  personas, spells, the Game of 42
-HARNESS_PATHS.md   the origin fleet — nineteen instances of work done WITH the harness; evidence, not the system
+HARNESS_PATHS.md   the origin fleet — eighteen instances of work done WITH the harness; evidence, not the system
 CHALLENGE_LANES.md the arena tier — rules A1-A40 from seven leaderboard lanes; seats, templates, what shipped
 WORKFLOW.md        the operator's loop · choose-your-adventure · BYO-interface contracts
 GRAPH.md           the trust-graph dialect — proposed vs minted edges, the lattice, credential alignment

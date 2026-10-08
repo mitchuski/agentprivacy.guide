@@ -147,7 +147,7 @@ Before you write any of this, ask whether you need a harness at all:
 
 > **The Gap earns its cost only where the claim space is too large to check.**
 
-shor_mage samples 9,024 witnesses because you cannot run every input. tigzkp
+shor_mage samples 9,024 witnesses because you cannot run every input. The ZK instance
 samples held-out points because R1CS equivalence cannot be enumerated. There,
 sampling is a necessity and hashing the proposal is what makes it honest.
 

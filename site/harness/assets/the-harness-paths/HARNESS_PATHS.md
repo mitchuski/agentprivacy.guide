@@ -23,7 +23,7 @@ invitation — was signed on 2026-07-14; a twelfth carries the skeleton whole
 as a standalone sibling; two later runtimes carried the hold-apart into an
 agent-operated acceptance flow and into literature review, and the sixteenth
 accession is the first **descendant lane** — no loop at all, but the
-constitution inherited whole. **Nineteen entries stand** (three arena lanes and a second descendant joined on 2026-10-07; see `CHALLENGE_LANES.md`); numbering is by
+constitution inherited whole. **Eighteen entries stand** (three arena lanes and a second descendant joined on 2026-10-07; see `CHALLENGE_LANES.md`); numbering is by
 accession and never reused, so one number sits empty (withdrawn before its
 counterpart work published — the door decides what is named here, and when).
 Grouping is by weight.
@@ -39,7 +39,6 @@ reading a complete one.
 | instance | domain | objective | the Gap | weight |
 |---|---|---|---|---|
 | shor_mage | quantum circuits | product: qubits × Toffoli, ↓ | 9,024 witnesses hashed from the circuit's own op stream | full |
-| tigzkp_mage | ZK constraint count | R1CS constraints, ↓ | held-out points, Fiat-Shamir per round | full + specialised |
 | V6 rehydration | research documents | fidelity across audiences | adversarial reviewer who never sees the canon | full, non-numeric |
 | privacy_pools_v2_mage | ZK, real upstream target | R1CS constraints, ↓ | as above, per-rewrite certificates | full, **mechanically fitted** |
 | lexon_pvm | controlled-grammar semantic base (Lexon × PVM) | coverage-debt, ↓ | 5 held-out census terms + 3 regression entries hashed from the proposal | full, **mechanically fitted** |
@@ -89,7 +88,7 @@ impossible.
 > **the Gap:** a GPU island search reseeded by Fiat-Shamir from the op-stream hash · **lenses:** gate-minimiser ⊥ qubit-minimiser (the complement pair), with a cliff-watcher scoring the whole product (break-even ≈ 1,184 Toffoli per qubit) · **canary:** the unoptimized reference circuit — passes its own witnesses by construction
 > **weight:** full loop · private · **the lesson it carries:** MIRAGE got its name here; killed ≠ impossible — seventeen kill entries, each with a re-open condition.
 
-### 2 · tigzkp_mage — ZK circuit constraint reduction
+### 2 · ZK circuit constraint reduction
 
 *(private instance of the author — a full workshop directory with its own
 canon, gate ladder, and chronicles)*
@@ -137,7 +136,7 @@ read that became **the door** (T6).
 
 ### 4 · privacy_pools_v2_mage — the fitted successor
 
-*(private instance of the author — the tigzkp_mage method turned on the real
+*(private instance of the author — the ZK constraint-reduction method turned on the real
 upstream target: the 0xbow privacy-pools-core v2 circuit suite)*
 
 The direct successor of instance 2, and the first instance to be **mechanically
@@ -753,7 +752,7 @@ the compiled registry crate passes; no public note quotes a root before then.
 Proverb minted under: *the decimal travels; the root stays.*
 ## What travels, what stays, and how the fleet syncs
 
-Read these nineteen and you will notice the same skeleton under nineteen
+Read these eighteen and you will notice the same skeleton under eighteen
 unrecognisably different bodies: an objective (or an honest absence of one), a
 hard constraint, a gate the proposer cannot choose, a ledger only one seat
 writes, and a door only a person opens. And one body carries no skeleton at
@@ -764,16 +763,16 @@ They also **sync into one universe**, and that is not decoration — it is the
 fractal claim of `SPECIALISATION.md` §2 made real:
 
 - **One inscription, in all of them.** `(⚔️⊥⿻⊥🧙)😊 = neg ⊕ bnot → succ` is
-  stamped on shor_mage's chronicles, tigzkp's harness algebra, MyTerms'
+  stamped on shor_mage's chronicles, the ZK instance's harness algebra, MyTerms'
   boundary code, the Gatehouse door, and every Game-of-42 seal. Proving that
   identity rather than asserting it is the same gate idiom everywhere.
 - **One cast.** Personas are role classes from a shared skills corpus, bound
-  per seat. The support seats of shor_mage and tigzkp are literally the *same*
+  per seat. The support seats of shor_mage and the ZK instance are literally the *same*
   City-of-Mages keepers. A new instance claims a vertex on an axis rather than
-  inventing a new shape — tigzkp holds the compute axis.
+  inventing a new shape — the ZK instance holds the compute axis.
 - **One anchor law.** The complement pair whose vertices XOR to 63 — Aletheia
   (V38) ⊕ Lethe (V25) — is the same pair in the Game of 42's lattice and in
-  tigzkp's conformance gate: `bnot` made structural, checked in two places
+  the ZK instance's conformance gate: `bnot` made structural, checked in two places
   that never import each other.
 - **One sharing surface.** When an instance has something to send, it goes
   through the Gatehouse — and sending is always the door, the First Person's

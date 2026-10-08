@@ -128,7 +128,7 @@ re-verifies the load-bearing parts in one command.
   witnesses are of unknown origin and voids the round (GR-4). The static run
   viewer and the live console both re-derive this in front of the reader rather
   than trusting a stored value.
-- **Fifteen embodiments, one skeleton.** `HARNESS_PATHS.md` catalogues fifteen
+- **Eighteen embodiments, one skeleton.** `HARNESS_PATHS.md` catalogues eighteen
   instances wearing the same architecture over topically unrelated bodies —
   quantum resource estimation, ZK constraint reduction, research-document
   rehydration, a controlled grammar, consent agreements, a publishing loop,

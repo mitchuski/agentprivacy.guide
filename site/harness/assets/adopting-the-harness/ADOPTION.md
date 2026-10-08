@@ -93,7 +93,7 @@ hard constraint, Gap recipe — and only there. The skeleton is invariant;
 
 ### 7. The evidence, and the honest boundary
 
-Fifteen embodiments in `HARNESS_PATHS.md` wear this skeleton over bodies that
+Eighteen embodiments in `HARNESS_PATHS.md` wear this skeleton over bodies that
 share nothing topically: quantum resource estimation, ZK constraint
 reduction, research-document rehydration, a controlled grammar, consent
 agreements, a publishing loop, a fleet-scale measure seat, a checked lattice,
@@ -104,7 +104,7 @@ this repo, whose frontier moved under two independent draws and an
 exhaustive census. Same trusts, same ground rules, same verdict vocabulary,
 different configs.
 
-And one of the fifteen is a **failure, kept on purpose**: the universe-builder
+And one of the eighteen is a **failure, kept on purpose**: the universe-builder
 spent ~1.4M tokens learning that a map making ~100 *enumerable* claims never
 needed a harness — an auditor checks them all for free, and against an
 exhaustive check a mirage is impossible. So the generality claim gates
@@ -252,7 +252,7 @@ delegates, whatever the topic.
 |---|---|---|---|---|---|
 | document compression (the spar) | the guide | words | the ORIGINAL's numbered facts | self-contained instructions | the original itself |
 | quantum circuits (shor_mage) | point-add circuit | qubits × Toffoli | witnesses hashed from the op stream | full clean run, zero failures | the unoptimized circuit |
-| ZK systems (tigzkp / pools_v2) | R1CS system | constraints | held-out evaluation points per round | witness-computability | the reference circuit |
+| ZK systems (pools_v2) | R1CS system | constraints | held-out evaluation points per round | witness-computability | the reference circuit |
 | research docs (V6 pipeline) | audience artifacts | fidelity gaps | an adversarial reviewer who never sees the canon | no drift from canon | the canon itself |
 | controlled grammar (lexon_pvm) | the lexicon | coverage-debt | 5 unseen census terms + 3 regressions, hashed from the recipe | spec-checker round-trip | an already-covered term |
 | consent agreements (MyTerms) | the bilateral record | Φ product | registry + unlock lattice + constellation hash | identical immutable copies | the proffered baseline terms |
