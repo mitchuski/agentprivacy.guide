@@ -37,8 +37,11 @@ export function vertexFromDims(list) {
 }
 /** Parse "101100" | "protection memory" | "d1 d3" | "V44" | "44" → vertex or null. */
 export function parsePosture(raw) {
-  const s = String(raw || '').trim();
+  // `raw ?? ''`, not `raw || ''`: vertex 0 is a posture, not an empty input.
+  if (Number.isInteger(raw) && raw >= 0 && raw < 64) return raw;
+  const s = String(raw ?? '').trim();
   if (!s) return null;
+  if (/^none$/i.test(s)) return 0;   // postureText writes vertex 0's dims as "none"
   if (/^[01]{6}$/.test(s)) return fromBits(s);
   const mv = s.match(/^v?(\d{1,2})$/i); if (mv) { const n = +mv[1]; return n >= 0 && n < 64 ? n : null; }
   const toks = s.split(/[\s,+·|]+/).filter(Boolean).map(t => t.replace(/^d([1-6])$/i, (_, k) => DIMS[+k - 1].id));
