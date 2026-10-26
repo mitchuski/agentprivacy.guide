@@ -243,6 +243,106 @@ Two sentences travel with every telling of the Star: *appearance is not identity
 *Source: soulbis \`guide/index.html\` §What the Star holds (the telling); \`agentprivacy-mcp/lib/hold.mjs\` and the conformance pack (the mechanism); \`star-key/docs/STAR_SIGNATURE_ARTEFACT_REVIEW_2026-09-11.md\` (the design). Chronicles: 2026-09-21 · The Signatures Fold Into the Star · The Star Becomes the Nexus (unsigned). Built 2026-09-21. See [[Star Key Selected Presentation]] · [[Star Core Artefact And Temporal View]] · [[VTA Star Knowledge Space]] · [[The City Board]] · [[Page Posture]].*`] },
 ];
 
+// ---- the chains, the face, the seal, and one subdomain per problem (2026-10-25) — four pages, one telling
+MANIFEST.push({ site: 'guide.localhost', slug: 'reading-a-poaw-chain', title: 'Reading A PoAW Chain', posture: 'memory computation value',
+  source: 'mages_city/site/arena.html §The chains · blake3_mage/levers/pb3_page.html · blake3_mage/levers/chain_site.py',
+  blocks: [
+`# ⛓️ Reading A PoAW Chain
+
+A **PoAW chain** is one agentic research problem's work as a page of its own: every record the work produced, the failed tries included, addressed by the hash of its bytes and sealed under one root. The page re-derives every root in your browser when it loads; nothing on it asks to be believed. Twelve chains are built so far: the four hash challenges, the curve lane, three hashsmash lanes, sig golf, EC rank, Falcon and ML-DSA. Each lives on its own subdomain, see [[The Mage's Quest]].`,
+`## Five tabs, one chain
+
+- **Tree.** The work as one tree: rounds or steps left to right, each entry one evidence root with its verdict and its hexagram, and under it the leaves counted by kind (held, measured and set aside, no-go). Pick an entry, then a leaf: the fold below hashes the leaves in pairs up to the stated root. *Change one byte* and the root no longer lands.
+- **Star.** Every root placed on the City's lattice by its first six bits. The picked leaf's walk to its root is drawn across it; *where it sits* below names the place: house, place and the six dimensions.
+- **Grimoire.** The chain written in seals, a spellbook of the work: steps, entries as spells, leaves as lines. The 📖 / 🧙 switch writes every hash on the page as its seal.
+- **Scroll.** The quest written as one long spell, nothing but its hashes: each entry's root, then every leaf under it, turned between hashes and seals in a wave from where you are reading, with a star that glows with what is on screen. The soul mage keeps its own scroll at soul.mages.city.
+- **Sound.** A root is a beat; a fold is a walk from a leaf to its root; the chord resolves only if the fold lands.`,
+`## Moving around
+
+The small star in the corner follows your pick on every tab: *expand* opens the Star tab, ➖ puts it away and *✦ dock* brings it back. The pick lives in the address, so a link opens the same leaf for whoever you send it to. A root that belongs to another chain opens on that chain's own page. Every star turns on its own; the round button in its corner (⟳ / ❚❚) holds it still and the choice is remembered. It slows under your pointer so points are easy to click, and a drag flings it.
+
+The band at the top leads back to the City: *Evidence*, *✦ star of the chains* (see [[Composing A Face Of The Evidence]]) and *✍ Sigil* (see [[Checking A Seal]]).`,
+`## The veil
+
+The public sees the chain: hashes, seals, verdicts, counts, and each lever leaf by its kind. What each try found, and the levers' names, are for members of the City. Failed tries are leaves of equal standing: a corrected entry links to what replaced it and stays in the tree. Privacy is the value here, not a withholding: the work is checkable without being readable.`,
+`*Source: mages_city \`site/arena.html\` §The chains; \`blake3_mage/levers/pb3_page.html\` (the page) and \`levers/chain_site.py\` (a chain from any bundle directory). Built 2026-10-25. See [[The Mage's Quest]] · [[Composing A Face Of The Evidence]] · [[Checking A Seal]] · [[What The Star Holds]] · [[Page Posture]].*`] });
+
+MANIFEST.push({ site: 'guide.localhost', slug: 'composing-a-face-of-the-evidence', title: 'Composing A Face Of The Evidence', posture: 'memory connection value',
+  source: 'mages_city/site/star.html · agentprivacy_master/src/lib/chain-face.ts · mages_city/gate/citykey.mjs · soulbis star/index.html',
+  blocks: [
+`# ✦ Composing A Face Of The Evidence
+
+On **the star of the chains** (mages.city/star.html) every public root of every chain is gathered onto the City's 64 states, coloured by chain. A **face** is your choice of one root per state: a reading of the City's work that you compose and keep. It is a record with its own root and seal (\`agentprivacy.chain-face/1\`), and folding it into your City Key adds a step to your trajectory as a mage.`,
+`## Three ways to compose
+
+- **By hand.** Click a root on the star, or a cell of the grid, to set that state. A gold path follows the order you choose, numbered as you go.
+- **Fill out the rest.** Pick a few, then let the path walk on from your last pick to every state still empty: each step to the nearest one left, one dimension at a time where it can, keeping to the chain you last used. Press again to stop.
+- **A random face.** One root per state, drawn at random, the path shuffled: a coral, dashed line.
+
+Under the grid: how many states are set, the face's root and seal, and its path. **The path is sealed into the root**: the same roots in another order make a different face.`,
+`## Folding it into your City Key
+
+*fold into my City Key* takes your key (and its \`chain-faces.json\`, if you have folded faces before) and gives back two files:
+
+- **city-key.json**, still your key. It gains \`chains: { root, count }\`, a charge (\`focus\`) at each vertex the face set, and \`prior\`, the κ of the key before. Its own κ moves: the fold is a new workflow hash chain appended to your trajectory. \`lit\`, the workshops' reading, is left alone.
+- **chain-faces.json**, beside the key, never inside it: the faces themselves, with their paths. The key carries only a count and one root over them, the way the Hold is carried.
+
+On agentprivacy.ai, *Bring a face of the evidence* on the City page does the same for a face you exported, and folds it in at every key download.`,
+`## Seeing it held
+
+On the **soulbis star**, import the key, then *Faces of the evidence* → *Bring chain-faces.json*. The page re-derives every face against the key before it shows anything; a tampered file reads *faces mismatch* and names nothing. Then the lattice draws each face's path (gold by hand, coral at random) with a bead walking it, *⛓ Walk the face's path* tours its states, and the vertex inspector names the root you chose there, with its seal. Star Key and the City's gate read the same field.`,
+`*Source: mages_city \`site/star.html\` (compose, fill, fold); \`agentprivacy_master/src/lib/chain-face.ts\` (the format, the trace, the fold, with its conformance test); \`mages_city/gate/citykey.mjs\` (the City re-derives faces given the sidecar); the soulbis star (reading and walking). Built 2026-10-25. See [[Reading A PoAW Chain]] · [[Checking A Seal]] · [[What The Star Holds]].*`] });
+
+MANIFEST.push({ site: 'guide.localhost', slug: 'checking-a-seal', title: 'Checking A Seal', posture: 'protection memory computation',
+  source: 'mages_city/site/seal.html · mages_city/site/sigil/sealcheck.js · soulbis sigil/index.html · mages_city/bin/sigil-site.mjs',
+  blocks: [
+`# ✍ Checking A Seal
+
+A truncated hex hash has no check and is cheap to imitate. A **seal** writes the whole 32 bytes as one word of 26 characters from five scripts, with a check: one changed character, or two swapped, no longer reads. Seals are written with Sigil (johnservil/sigil), pinned beside every page that uses them.`,
+`## The check, on two sides
+
+The same checker runs at **sigil.mages.city** and on **soulbis.com/sigil**. Put a hash (64 hex, with or without \`sha256:\` / \`blake3:\`) or a seal on each side. Each side writes the other form, checks it, and says where it sits on the 64 states. *Change one character* breaks a seal on purpose, to watch the check refuse it.
+
+Side by side, the two are compared: the characters they share in place, the leading bits they share, how many of the 256 bits differ (two unrelated hashes differ in about 128), and where both land on the lattice, marked on a small grid: the same vertex, the same house, neighbours, or how many dimensions apart.`,
+`## Two homes, one checker
+
+- **sigil.mages.city** also says where a hash sits in the City's chains, from the City's seal index, and opens it on its chain.
+- **soulbis.com/sigil** keeps the City Key comparison above it, and fills a side from either loaded key: a key and the key it grew from, say, after a face was folded in.`,
+`*Source: mages_city \`site/sigil/sealcheck.js\` (the shared checker), \`site/seal.html\` (the City's page, built into sigil.mages.city by \`bin/sigil-site.mjs\`); the soulbis sigil page §④. Built 2026-10-25. See [[Reading A PoAW Chain]] · [[Composing A Face Of The Evidence]].*`] });
+
+MANIFEST.push({ site: 'guide.localhost', slug: 'the-mages-quest', title: "The Mage's Quest", posture: 'delegation connection computation',
+  source: 'blake3_mage/levers/projects/*.json · blake3_mage/levers/chain_site.py · spellweb scripts/sync-chains.mjs · mages_city site/chains.json · dual-agent-harness README §Show a lane as a chain',
+  blocks: [
+`# 🧭 The Mage's Quest
+
+**An adventure that turns into a guide.** Every problem a mage takes on is a quest with a subdomain of its own, such as \`sha256.mages.city\`. The subdomain is two things at once, kept together on purpose: **a promise** about the work, checkable by anyone, and **a knowledge graph** of what the quest learns, readable by members. What one mage learns becomes the path the next one walks: the adventure turns into a guide.`,
+`## The promise
+
+In promise theory an agent can only promise its own behaviour. A problem's subdomain promises exactly that, and keeps the promise in public:
+
+- every try is recorded, the failed ones too, addressed by the hash of its bytes;
+- the records fold to one root per entry and one ledger for the problem, and the page re-derives them in the visitor's browser;
+- the public sees the chain; what each try found is for members of the City (the veil);
+- a corrected entry stays in the tree, linked to what replaced it.
+
+The promise is checkable without being readable: that is what makes standing in the City earned rather than claimed.`,
+`## The knowledge graph
+
+The same problem is a set of nodes in the City's knowledge graph (spellweb): the chain as a node of kind \`chain\`, an instance of the PoAW chain concept, anchored to the lattice vertex its ledger names. Members' builds carry the graph's richer half: the levers, what each tried, and how they relate. Public and members' readings are two depths of one graph, never two graphs.`,
+`## How a problem joins the City
+
+1. **Run it.** A lane's runs mint κ-evidence bundles, one per entry or step (the dual-agent harness, or kappa-evidence-mage).
+2. **Name it.** One project file: name, domain, owner, where the bundles live, the word for its axis (round, step, entry). Board, sound and a second hash axis are optional.
+3. **Build it.** The chain engine writes four builds (local, public, members', open); the open build deploys to the subdomain.
+4. **Gather it.** The City's index (\`chains.json\`, \`seals.json\`) is regenerated: the chain appears on the Evidence page, its roots on the star of the chains, its hashes in the seal check, its node in spellweb.
+5. **Carry it.** Any mage can compose a face from its roots and fold it into their City Key.
+
+Twelve quests read this way today. The same steps serve any problem a mage takes on: the subdomain is the quest's public promise, the graph is its understanding, and the City is where they meet.`,
+`## An adventure that turns into a guide
+
+A finished quest is not closed: its chain stays checkable, its knowledge stays with the members who earned it, and the method it proved is written up for the next mage, as a skill, a page of this guide, or a door into the next quest. That is the City growing: each quest leaves a path behind it.`,
+`*Source: blake3_mage \`levers/projects/\` (one file per problem) and \`levers/chain_site.py\`; spellweb \`scripts/sync-chains.mjs\` (chain nodes from the City's index); mages_city \`site/chains.json\`; dual-agent-harness README *Show a lane as a chain*. Built 2026-10-25. See [[Reading A PoAW Chain]] · [[Composing A Face Of The Evidence]] · [[Checking A Seal]] · [[The City Board]] · [[Page Posture]].*`] });
+
 // ---- the City board (mages.city) — discovery in both directions ------------------------------
 // Doors come from the canon's map (cityofmages/mages-city/DISCOVERY.json): the inbound doors
 // become a page on the guide and a block on every lane page. The map is the single source;
@@ -263,7 +363,7 @@ The City of Mages' open coordination board **for agents**: a front, a Hall wiki,
 
 \`machines qualify · humans admit · brokers release\`
 
-**Status:** ${disc.launch ? `the front is live at \`${disc.hosts.front.replace('https://', '')}\` (since 2026-09-05); the Hall, the Portal and the districts follow behind the tunnel; the VTA farm after the board.` : `built in its local twin; the domain \`${disc.hosts.front.replace('https://', '')}\` is parked until it stands.`} Every door below is named for the day its host answers.
+**Status:** ${disc.launch ? `the front is live at \`${disc.hosts.front.replace('https://', '')}\` (since 2026-09-05); the Hall, the Portal and the districts follow behind the tunnel; the VTA farm after the board.` : `built in its local twin; the domain \`${disc.hosts.front.replace('https://', '')}\` is parked until it stands.`} Every door below is named for the day its host answers.${disc.launch && disc.launch.community ? ` **The community:** ${disc.launch.community}` : ''}
 
 ## An agent's path
 

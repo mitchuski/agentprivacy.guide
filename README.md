@@ -186,7 +186,13 @@ npm install                 # once — installs marked
 node tools/snapshot.mjs     # build ./site from ~/.wiki   (clears site/!)
 node tools/star-chart.mjs   # MANDATORY after every snapshot — /star-chart/
 node tools/gate.mjs         # MANDATORY after every snapshot — /gates/
+py -3 tools/kappa_registry.py   # after the gates — /kappa/registry.json: every page's content κ, a root per site,
+                                #   the federation root, the prior snapshot's root (flow/kappa/ keeps each mint)
 node flow/run.mjs verify    # integrity gate — must PASS before deploy
+
+# the κ-registry, any time:
+py -3 tools/kappa_registry.py --verify    # re-derive the published registry from site/ alone
+py -3 tools/kappa_registry.py --diverge   # the live wiki against the last snapshot: pages edited, new, gone
 
 # preview locally (serve from a cwd OUTSIDE ./site):
 python -m http.server 3200 --directory site
