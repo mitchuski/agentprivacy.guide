@@ -30,13 +30,14 @@
   <article><div class="md"><h1>Toroidal Witness</h1>
 <p><strong>Category</strong> role · <strong>Version</strong> 5.2</p>
 <p><strong>Equation term</strong> <code>T_∫(π) path integral, witness space topology</code></p>
-<p>Infinite witness space from toroidal topology. Activates when discussing cyclic paths through the lattice, unbounded witnesses, computational hardness from path enumeration, toroidal wrap, or why witness extraction is infeasible.</p>
+<p>Unbounded path space from toroidal topology (paths, not group witnesses: two per transition). Activates when discussing cyclic paths through the lattice, unbounded paths, computational hardness from path enumeration, toroidal wrap, or why witness extraction is infeasible.</p>
 </div>
 <div class="md"><p><strong>Source:</strong> UOR Framework + Privacy Value Model V5.2 + First Person Spellbook Act XXII<br><strong>Target context:</strong> Cryptographers, ZK researchers, topology-aware protocol designers<br><strong>Architecture:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · <strong>Sync:</strong> <a href="https://sync.soulbis.com">sync.soulbis.com</a> · <strong>Contact:</strong> <a href="mailto:mage@agentprivacy.ai">mage@agentprivacy.ai</a></p>
 </div>
 <div class="md"><h2>What this is</h2>
-<p>The sovereignty lattice has toroidal topology—edges that exit one face re-enter the opposite face. This creates cyclic paths through the lattice. Unlike a flat space where paths between points are finite, the torus allows infinite distinct paths. This property is the source of zero-knowledge soundness.</p>
-<p><strong>The torus wraps. The paths multiply. The witness space becomes infinite. And infinite witnesses cannot be enumerated.</strong></p>
+<p>The sovereignty lattice has toroidal topology—edges that exit one face re-enter the opposite face. This creates cyclic paths through the lattice. Unlike a flat space where paths between points are finite, the torus allows infinite distinct paths. This property hides the route; it is not by itself the source of zero knowledge, which must rest on the hiding of the proof system.</p>
+<p><strong>The torus wraps. The paths multiply. The path space becomes unbounded. And unbounded paths cannot be enumerated — though between any two vertices the group carries exactly two witnesses.</strong></p>
+<p><em>Scope note, 2026-10-25 (V7 formal audit, agentprivacy-docs <code>research/2026-10-25_v7_formal_audit.md</code>, F6, F7; Lean receipts in formal_mage).</em> The infinity in this skill counts <strong>paths</strong>: walks that may repeat cycles, told apart by their winding. That set is genuinely unbounded. It is not a count of group witnesses: on the 64-vertex lattice, for every start and target vertex exactly <strong>two</strong> elements of ⟨neg, bnot⟩ carry one to the other (Lean <code>exactly_two_witnesses</code>). Witness multiplicity does not by itself give zero knowledge; any ZK claim must rest on the hiding of the proof system. <em>Corrected 2026-10-26 under the V7 formal audit (agentprivacy-docs <code>research/2026-10-25_v7_formal_audit.md</code>, F7; Lean receipts in formal_mage).</em> The lines above once read &quot;infinite witnesses&quot;; they now read &quot;unbounded paths&quot;.</p>
 <h2>Flat vs Toroidal</h2>
 <h3>Flat Lattice</h3>
 <p>On a flat 6-dimensional hypercube:</p>
@@ -138,7 +139,7 @@ Path C: 0 → 1 → 3 → 7 → [wrap] → 0 → ... (n cycles added)
 </ul>
 <p>The ceremony can verify equivalence class membership without identifying specific path.</p>
 <h3>Proof Size</h3>
-<p>Despite infinite witnesses, proofs remain finite:</p>
+<p>Despite an unbounded path space, proofs remain finite:</p>
 <ul>
 <li>Prove you COULD take a path (existential)</li>
 <li>Don&#39;t enumerate the path (avoid linear size)</li>
@@ -174,13 +175,13 @@ Path C: 0 → 1 → 3 → 7 → [wrap] → 0 → ... (n cycles added)
 </tr>
 </tbody></table>
 <h2>Connection to Holographic Bound</h2>
-<p>The 96-edge boundary wraps the 64-vertex bulk:</p>
+<p>The holographic reading sets a 96 against the 64-vertex bulk. That 96 is the UOR Atlas vertex count, imported: no stated graph on the 64 vertices has 96 edges (Q₆ has 192; succ ∪ complement has 94), and C4 is reopened (audit F6). If a 96-edge graph on the lattice is declared, this is how the reading would go:</p>
 <ul>
 <li>Boundary IS where cycles live</li>
 <li>Holographic encoding includes cycle structure</li>
 <li>96/64 = 1.5 reflects the boundary &quot;excess&quot; needed for wrap</li>
 </ul>
-<p>The torus is not separate from the holographic principle—it IS the holographic principle in topological form.</p>
+<p>That the torus IS the holographic principle in topological form is a conjecture (C6, open).</p>
 <h2>Proverb</h2>
 <blockquote>
 <p>&quot;The flat space counts its paths and finds them finite. The torus counts its paths and loses count. In that losing, sovereignty lives—for what cannot be enumerated cannot be captured.&quot;</p>

@@ -6,7 +6,7 @@ description: >
   equation, proven bounds (reconstruction ceiling: capacity-sum bound and
   Fano floor Proven in the conditional regime, strict R < 1 only under a
   declared capacity deficit; time-indexed as R(t) with shelf life t* at V6), conjectured
-  properties (golden ratio φ optimality), or any foundational question about
+  properties (golden ratio φ as a threshold, C1 challenged), or any foundational question about
   how privacy creates measurable value. Use when the user needs the complete
   model, equation term definitions, or version lineage. V4 is the lineage
   stage this skill was first written against; V6 is current.
@@ -49,7 +49,7 @@ V6 takes the t in the signature seriously everywhere. The reconstruction term is
 3. **Network topology** — A 64-vertex Boolean lattice ({0,1}⁶) models sovereignty configurations. Six binary dimensions yield 7 strata following Pascal's row. Agents are weighted by stratum, with combinatorial midpoints (stratum 3) contributing most. Power-law network effects.
 4. **Reconstruction resistance** — R_max = (C_S + C_M)/H(X). Under Precondition 1 (non-collusion, I(Y_S; Y_M | X) = 0) and Precondition 2 (a declared adversary class bounding each channel's leakage by C_S, C_M), the joint leakage is at most C_S + C_M and the Fano floor P_e ≥ 1 − R_max − 1/H(X) holds (WP-04 Prop 1; WP-07 Thm 3.2). The strict ceiling R < 1, under which an adversary observing all outputs from both agents still cannot reconstruct the full private state, holds exactly when the **declared capacity-deficit condition** C_S + C_M < H(X) holds (informed form: < H(X | B) against background B). The deficit is a numerical fact about a deployment, not a consequence of separation: two conditionally independent agents that each reveal one independent bit of a two-bit state satisfy both preconditions and reconstruct it exactly (R_max = 1). V6: the ceiling is time-indexed, R(t) = (C_S(t) + C_M(t))/H(X) with shelf life t* (C82, ~65%); what expires at t* is the deficit, not the architecture.
 5. **Market conditions** — User sophistication × market maturity. Captures adoption readiness.
-6. **Sovereignty geometry** — A 4×4 separation matrix Σ over four forces (Protect, Project, Reflect, Connect). The determinant measures the "volume" of the sovereignty tetrahedron. Entanglement between any pair of forces shrinks the entire multiplier. Golden ratio φ ≈ 1.618 conjectured as optimal protect-to-project ratio.
+6. **Sovereignty geometry** — A 4×4 separation matrix Σ over four forces (Protect, Project, Reflect, Connect). The determinant measures the "volume" of the sovereignty tetrahedron. Entanglement between any pair of forces shrinks the entire multiplier. Golden ratio φ ≈ 1.618 enters as a threshold on the protect-to-project ratio: below φ is penalised, at or above φ scores the same (C1 challenged as an optimum; V7 formal audit F1, F2).
 
 ## Key architectural concepts
 
@@ -57,7 +57,7 @@ V6 takes the t in the signature seriously everywhere. The reconstruction term is
 
 **Four sovereignty forces.** Protect and Project are primary. Reflect (temporal integral of protection decisions) and Connect (network effect of delegation patterns) emerge from sustained operation. These four forces form a tetrahedron whose volume (det(Σ)) gates the entire model.
 
-**Edge value T(π).** Prior models measured what an agent *is* at a configuration. V4 adds what an agent *does* — its trajectory through sovereignty space. The 64-vertex lattice has 192 undirected edges; the transition space dominates the state space. Vertical moves (activating/deactivating sovereignty dimensions) are weighted more than lateral moves. Repetition decays.
+**Edge value T(π).** Prior models measured what an agent *is* at a configuration. V4 adds what an agent *does* — its trajectory through sovereignty space. The 64-vertex lattice has 192 undirected edges; the transition space dominates the state space. Vertical moves (activating/deactivating sovereignty dimensions) are weighted more than lateral moves, which are two-edge composites: every edge of the lattice changes the stratum by one (V7 formal audit F4). Repetition decays.
 
 **Stratum logic.** The 64 vertices sit across 7 strata (0–6 active dimensions). Distribution follows binomial coefficients: 1, 6, 15, 20, 15, 6, 1. Stratum 0 = full surveillance; stratum 6 = full sovereignty. Network value peaks at combinatorial midpoints.
 
@@ -82,7 +82,7 @@ V6 takes the t in the signature seriously everywhere. The reconstruction term is
 | **Declared, not derived** | Strict ceiling R < 1: holds exactly when the deficit C_S + C_M < H(X \| B) is declared and attested for the deployment; conditional independence alone does not give it (two independent bits, one per agent → R_max = 1) |
 | **Proven · conditional regime** | Additive (not multiplicative) information bounds from agent separation, inside Precondition 1: I(X; Y_S, Y_M) = I(X; Y_S) + I(X; Y_M) − I(Y_S; Y_M). Fails under collusion: a shared key gives 0 + 0 bits per channel and 1 bit jointly |
 | **Proven** | Multiplicative gating: any zero term kills total value (by construction) |
-| **Open (C1)** | Golden ratio φ as optimal protect/project balance |
+| **Challenged (C1)** | Golden ratio φ as optimal protect/project balance: refuted as worded for the stated Φ, restated as a threshold (modelling choice; audit F2) |
 | **Open (C2)** | Logarithmic growth of temporal memory (vs. power-law or sigmoid) |
 | **Challenged (C3)** | Edge value additivity; the path integral T_∫(π) replaces it |
 | **Resolved (C4)** | The 96 vs 64 discrepancy (holographic + algebraic) |

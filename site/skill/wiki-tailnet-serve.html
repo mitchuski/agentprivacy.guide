@@ -1,0 +1,118 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki Tailnet Serve · agentprivacy guide</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+    .guide-collections{position:relative}.guide-collections summary,.guide-directory summary{cursor:pointer;color:var(--cyan);padding:8px 0}
+    .guide-collections:not([open])>.sites{display:none!important}
+    .guide-collections[open]>.sites{position:absolute;top:100%;left:0;width:min(700px,85vw);max-height:65vh;overflow:auto;display:flex!important;flex-wrap:wrap;background:var(--navy);padding:18px;border:1px solid var(--border-hi);box-shadow:0 12px 40px #0008}
+    .star-connection{position:relative}.star-connection summary{cursor:pointer;color:var(--cyan)}.star-connection-body{position:absolute;right:0;top:100%;width:min(360px,85vw);padding:18px;background:var(--navy);border:1px solid var(--border-hi);box-shadow:0 12px 40px #0008;font-size:14px;z-index:25}.star-connection:not([open])>.star-connection-body{display:none}.star-connect{padding:8px 12px;border:1px solid var(--border-hi);border-radius:8px;white-space:nowrap;font-size:13px}
+    .guide-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+    .guide-paths a{border:1px solid var(--border-hi);border-radius:12px;padding:18px;background:var(--surface)}
+    .guide-paths strong,.guide-paths span{display:block}.guide-paths span,.guide-context{font-size:14px;color:var(--dim);margin-top:8px}
+    .guide-directory{border-top:1px solid var(--border);margin-top:24px;padding-top:12px}
+    .page article{overflow-wrap:anywhere}.page article p,.page article li{line-height:1.8}
+    :focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+    @media(max-width:700px){.guide-paths{grid-template-columns:1fr}.top{gap:10px}.guide-collections{position:static}.guide-collections[open]>.sites{left:10px;width:calc(100vw - 20px)}.star-connect{font-size:12px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style><link rel="stylesheet" href="/assets/star-connect.css"></head><body data-guidespace="1" data-site="skill">
+<header class="top">
+    <a class="brand" href="/">guide <em>to</em> agentprivacy</a>
+    <details class="guide-collections"><summary>Browse collections</summary><nav class="sites" aria-label="Guide collections"><a class="nav-site" href="/codexmage/welcome-visitors.html"><span>🧙</span>Codex Mage</a><a class="nav-site" href="/guide/welcome-visitors.html"><span>🏛</span>Guide</a><a class="nav-site" href="/spellbooks/welcome-visitors.html"><span>📚</span>Spellbooks</a><a class="nav-site" href="/grimoire/welcome-visitors.html"><span>🔮</span>Grimoire</a><a class="nav-site" href="/research/welcome-visitors.html"><span>🧮</span>Research</a><a class="nav-site" href="/atlas/welcome-visitors.html"><span>🌐</span>Atlas</a><a class="nav-site on" href="/skill/welcome-visitors.html"><span>🗃️</span>Skill</a><a class="nav-site" href="/harness/welcome-visitors.html"><span>⿻</span>Harness</a><a class="nav-site" href="/lexon/welcome-visitors.html"><span>⚖️</span>Lexon</a><a class="nav-site" href="/myterms/welcome-visitors.html"><span>📜</span>MyTerms</a><a class="nav-site" href="/dtg/welcome-visitors.html"><span>🕸️</span>DTG</a><a class="nav-site" href="/kyra/welcome-visitors.html"><span>⛩️</span>Kyra Gate</a><a class="nav-site" href="/fieldguide/welcome-visitors.html"><span>🧭</span>Field Guide</a><a class="nav-site" href="/city/welcome-visitors.html"><span>🏛️</span>City of Mages</a><span class="nav-sep"></span><a class="nav-site" href="/improbable-engine/welcome-visitors.html"><span>🌀</span>Improbable Engine</a><a class="nav-site" href="/game42/welcome-visitors.html"><span>🎲</span>Game of 42</a><a class="nav-site" href="/mouse-spellbook/welcome-visitors.html"><span>🐭</span>Mouse Spellbook</a><a class="nav-site" href="/vision/welcome-visitors.html"><span>🐬</span>Vision</a><a class="nav-site" href="/vpk/welcome-visitors.html"><span>🔑</span>VPK</a><a class="nav-site" href="/tiles/welcome-visitors.html"><span>🧩</span>Root Tiles</a><a class="nav-site" href="/gates/"><span>⚔️</span>Gatehouse</a></nav></details>
+    <a class="nav-viz" href="/star-chart/?site=skill" title="the Star Chart — the fedwiki space as constellations"><span>✨</span>Visualise</a>
+    <details class="star-connection"><summary class="star-connect">Connect with Star</summary><div class="star-connection-body"><strong>Your VTA, your chosen perspective</strong><p>The planned connection uses your VTA and the Trust Spanning Protocol to carry a scoped exchange for you or your agent. You choose what is presented; the receiving service checks the request before a view is shared.</p><p>This guide has no VTA connection adapter yet. Opening Star does not connect an identity or send a key.</p><a href="https://soulbis.com/star">Open Star ↗</a> · <a href="https://agentprivacy.ai/city">Inspect your City Key ↗</a></div></details><div class="search"><input id="q" aria-label="Search the guide" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
+  </header>
+<main class="page">
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki Tailnet Serve</span></div>
+  <article><div class="md"><h1>Wiki Tailnet Serve</h1>
+<p><strong>Category</strong> wikis · <strong>Alignment</strong> balanced · <strong>Version</strong> 1.0</p>
+<p>Start a local FedWiki farm and serve it on a Tailscale tailnet — private, WireGuard-encrypted, never public — and SYNC the full farm roster onto per-site hostnames under a private DNS zone: &quot;review my local wikis and give them to the network&quot;. Use when asked to start the wiki farm, serve the wikis on the tailnet, share local wikis with peers, sync the farm to the network, or report what is currently shared. Covers start/status/sync/off/peers, the three-door architecture (pinned ts.net ports, a Host-routed front door, an optional token-grant lane), verification probes, and the encoding/startup gotchas. Kept by the Librarian 🗃️; the front-door allowlist is the Sentinel&#39;s wall.</p>
+</div>
+<div class="md"><p><strong>🗃️🕸️ Tailnet Wiki Serve — the farm, given to the network you chose</strong><br>Keeper: the Librarian 🗃️ · Wall: the Sentinel 🗡️🛡️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: distribution</p>
+<blockquote>
+<p>Shared is not published: the tailnet is a room with a door, not a street.</p>
+</blockquote>
+<p>One orchestrator puts the whole local FedWiki farm on the tailnet —<br>tailnet-only, WireGuard-encrypted, never public. <strong>Tailscale Funnel is<br>deliberately unused.</strong></p>
+<pre><code class="language-powershell">powershell -ExecutionPolicy Bypass -File &lt;home&gt;\.wiki\_tailnet_share.ps1 &lt;action&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>action</th>
+<th>what it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>start</code></td>
+<td>farm () + Host-rewrite proxy + <code>tailscale serve</code> maps + auto-sync. Idempotent, detached (survives sessions).</td>
+</tr>
+<tr>
+<td><code>sync</code></td>
+<td><strong>review the farm and give it to the network</strong>: every populated <code>*.localhost</code> site → <code>&lt;name&gt;.&lt;private-zone&gt;</code> (dots → dashes), written to <code>&lt;home&gt;/.wiki/_tailnet_sites.json</code>. The proxy re-reads the file within ~2 s — no restart. Prints the full roster.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>farm/proxy up? + <code>tailscale serve status</code></td>
+</tr>
+<tr>
+<td><code>off</code></td>
+<td>remove <code>tailscale serve</code> maps only (farm + proxy keep running)</td>
+</tr>
+<tr>
+<td><code>peers</code></td>
+<td>list tailnet devices + probe them for fedwikis (ports 80 / 3000 / 3030)</td>
+</tr>
+<tr>
+<td><code>grants</code> / <code>revoke</code> / <code>index</code> / <code>runtime</code></td>
+<td>the optional token-grant lane (door 3)</td>
+</tr>
+</tbody></table>
+<p><code>&lt;private-zone&gt;</code> is a DNS zone that resolves only inside your tailnet (a peer&#39;s<br>DNS, or Tailscale split-DNS, pointing the zone + wildcard at this machine&#39;s<br>tailnet IP). Never a public zone.</p>
+<h2>Architecture (three doors)</h2>
+<ol>
+<li><strong>Pinned ts.net ports</strong> — <code>tailscale serve</code> → proxy (313x) → farm  with<br>the Host header rewritten, one pinned port per flagship site on<br><code>&lt;machine&gt;.&lt;tailnet&gt;.ts.net</code>, e.g. <code>:80</code>=guide <code>:8081</code>=skill <code>:8082</code>=tomes<br><code>:8083</code>=research <code>:8084</code>=atlas <code>:8085</code>=embassy.</li>
+<li><strong>:80 front door</strong> — the proxy binds <code>0.0.0.0:80</code> through a firewall rule<br>scoped to the tailnet interface (<code>tailscale serve</code> must NOT hold :80). A<br>Host-routed <strong>allowlist</strong>: curated <code>ALIASES</code> in <code>_tailnet_proxy.js</code> (e.g.<br><code>skills.&lt;private-zone&gt;</code> → <code>skillsync</code>, <code>library.</code> → <code>library</code>)<br>win over the synced map in <code>_tailnet_sites.json</code>; bare <code>*.&lt;private-zone&gt;</code><br>passes through (the farm namespace); everything else gets <strong>403</strong>.</li>
+<li><strong>Token-grant lane (optional)</strong> — <code>&lt;site&gt;-&lt;token&gt;.&lt;private-zone&gt;</code> on the same<br>:80 door, checked first, for per-pathway grants that can be revoked. Synced<br>names whose last dash-segment is 8–16 hex are <strong>skipped</strong> so they can never<br>shadow a grant.</li>
+</ol>
+<p>Farm launch canon (wiki npm package):<br><code>wiki --farm --port 3030 --security_type friends --data &lt;home&gt;/.wiki</code></p>
+<h2>Verify (always, after start or sync)</h2>
+<pre><code class="language-powershell"># a pinned tailnet lane
+Invoke-WebRequest http://&lt;machine&gt;.&lt;tailnet&gt;.ts.net/system/sitemap.json -UseBasicParsing
+# a synced hostname
+Invoke-WebRequest http://&lt;site&gt;.&lt;private-zone&gt;/system/sitemap.json -UseBasicParsing
+</code></pre>
+<p>A sitemap returning 200 with a JSON page array = that door is live end-to-end.<br>Probe from a second tailnet device too — a probe from the host itself can pass<br>through loopback and prove nothing about the network.</p>
+<h2>Gotchas</h2>
+<ul>
+<li><code>status</code> right after <code>start</code> can report <code>farm  DOWN</code> — a startup race;<br>probe again after ~5 s before diagnosing.</li>
+<li>On Windows PowerShell 5.1, keep the orchestrator <strong>UTF-8 with BOM</strong>: PS 5.1<br>reads BOM-less files as ANSI, and a mangled em-dash becomes a smart quote that<br>terminates strings → parser errors. Keep new strings ASCII or re-save with BOM.</li>
+<li>After editing the proxy: <code>node --check</code> it, kill the PID listening on the<br>proxy port (<code>Get-NetTCPConnection -LocalPort &lt;port&gt; -State Listen</code>), then<br><code>start</code> again. Editing <code>_tailnet_sites.json</code> alone needs no restart.</li>
+<li><strong>An unknown Host reaching the farm auto-creates an empty site dir</strong> — the<br>proxy allowlist exists to prevent exactly this. Never point <code>tailscale serve</code><br>straight at .</li>
+<li>New curated names (e.g. a friendly alias like <code>skills.</code> for <code>skillsync.</code>) go in<br><code>ALIASES</code>; the synced map handles everything mechanical.</li>
+<li>Sharing to the tailnet still shares: run the leak/coverage audit<br>(<code>agentprivacy-wiki-sync</code> gates) before <code>sync</code> puts a new site in front of peers.</li>
+</ul>
+<h2>Share-safe note</h2>
+<p>This twin names no machine, tailnet, IP or zone. Your own values — machine name,<br>tailnet suffix, tailnet IP, private zone — live only in the local orchestrator<br>and its JSON, never in a published skill.</p>
+</div>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-tailnet-serve</code>, v1.0).<br>Source of truth: <code>agentprivacy-skills</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 wiki-tailnet-serve</span><a class="asset-file" href="/skill/assets/wiki-tailnet-serve/SKILL.md" download>SKILL.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
+</div></article>
+  <footer class="page-foot">
+    <div class="lineage">1 revision</div>
+    <a class="json-link" href="wiki-tailnet-serve.json">view page JSON · forkable into any wiki ↗</a>
+  </footer>
+</main>
+<script src="/assets/app.js"></script>
+<script id="guide-star-runtime" type="module" src="/assets/star-connect.mjs"></script></body></html>

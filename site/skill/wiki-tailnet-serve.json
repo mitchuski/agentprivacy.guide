@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Tailnet Serve",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "f3589ca03e497c32",
+      "text": "# Wiki Tailnet Serve\n\n**Category** wikis · **Alignment** balanced · **Version** 1.0\n\nStart a local FedWiki farm and serve it on a Tailscale tailnet — private, WireGuard-encrypted, never public — and SYNC the full farm roster onto per-site hostnames under a private DNS zone: \"review my local wikis and give them to the network\". Use when asked to start the wiki farm, serve the wikis on the tailnet, share local wikis with peers, sync the farm to the network, or report what is currently shared. Covers start/status/sync/off/peers, the three-door architecture (pinned ts.net ports, a Host-routed front door, an optional token-grant lane), verification probes, and the encoding/startup gotchas. Kept by the Librarian 🗃️; the front-door allowlist is the Sentinel's wall."
+    },
+    {
+      "type": "markdown",
+      "id": "bea4b882b528c3a6",
+      "text": "**🗃️🕸️ Tailnet Wiki Serve — the farm, given to the network you chose**\nKeeper: the Librarian 🗃️ · Wall: the Sentinel 🗡️🛡️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: distribution\n\n> Shared is not published: the tailnet is a room with a door, not a street.\n\nOne orchestrator puts the whole local FedWiki farm on the tailnet —\ntailnet-only, WireGuard-encrypted, never public. **Tailscale Funnel is\ndeliberately unused.**\n\n```powershell\npowershell -ExecutionPolicy Bypass -File <home>\\.wiki\\_tailnet_share.ps1 <action>\n```\n\n| action | what it does |\n|---|---|\n| `start` | farm () + Host-rewrite proxy + `tailscale serve` maps + auto-sync. Idempotent, detached (survives sessions). |\n| `sync` | **review the farm and give it to the network**: every populated `*.localhost` site → `<name>.<private-zone>` (dots → dashes), written to `<home>/.wiki/_tailnet_sites.json`. The proxy re-reads the file within ~2 s — no restart. Prints the full roster. |\n| `status` | farm/proxy up? + `tailscale serve status` |\n| `off` | remove `tailscale serve` maps only (farm + proxy keep running) |\n| `peers` | list tailnet devices + probe them for fedwikis (ports 80 / 3000 / 3030) |\n| `grants` / `revoke` / `index` / `runtime` | the optional token-grant lane (door 3) |\n\n`<private-zone>` is a DNS zone that resolves only inside your tailnet (a peer's\nDNS, or Tailscale split-DNS, pointing the zone + wildcard at this machine's\ntailnet IP). Never a public zone.\n\n## Architecture (three doors)\n\n1. **Pinned ts.net ports** — `tailscale serve` → proxy (313x) → farm  with\n   the Host header rewritten, one pinned port per flagship site on\n   `<machine>.<tailnet>.ts.net`, e.g. `:80`=guide `:8081`=skill `:8082`=tomes\n   `:8083`=research `:8084`=atlas `:8085`=embassy.\n2. **:80 front door** — the proxy binds `0.0.0.0:80` through a firewall rule\n   scoped to the tailnet interface (`tailscale serve` must NOT hold :80). A\n   Host-routed **allowlist**: curated `ALIASES` in `_tailnet_proxy.js` (e.g.\n   `skills.<private-zone>` → `skillsync.guide.agentprivacy.ai`, `library.` → `library.guide.agentprivacy.ai`)\n   win over the synced map in `_tailnet_sites.json`; bare `*.<private-zone>`\n   passes through (the farm namespace); everything else gets **403**.\n3. **Token-grant lane (optional)** — `<site>-<token>.<private-zone>` on the same\n   :80 door, checked first, for per-pathway grants that can be revoked. Synced\n   names whose last dash-segment is 8–16 hex are **skipped** so they can never\n   shadow a grant.\n\nFarm launch canon (wiki npm package):\n`wiki --farm --port 3030 --security_type friends --data <home>/.wiki`\n\n## Verify (always, after start or sync)\n\n```powershell\n# a pinned tailnet lane\nInvoke-WebRequest http://<machine>.<tailnet>.ts.net/system/sitemap.json -UseBasicParsing\n# a synced hostname\nInvoke-WebRequest http://<site>.<private-zone>/system/sitemap.json -UseBasicParsing\n```\n\nA sitemap returning 200 with a JSON page array = that door is live end-to-end.\nProbe from a second tailnet device too — a probe from the host itself can pass\nthrough loopback and prove nothing about the network.\n\n## Gotchas\n\n- `status` right after `start` can report `farm  DOWN` — a startup race;\n  probe again after ~5 s before diagnosing.\n- On Windows PowerShell 5.1, keep the orchestrator **UTF-8 with BOM**: PS 5.1\n  reads BOM-less files as ANSI, and a mangled em-dash becomes a smart quote that\n  terminates strings → parser errors. Keep new strings ASCII or re-save with BOM.\n- After editing the proxy: `node --check` it, kill the PID listening on the\n  proxy port (`Get-NetTCPConnection -LocalPort <port> -State Listen`), then\n  `start` again. Editing `_tailnet_sites.json` alone needs no restart.\n- **An unknown Host reaching the farm auto-creates an empty site dir** — the\n  proxy allowlist exists to prevent exactly this. Never point `tailscale serve`\n  straight at .\n- New curated names (e.g. a friendly alias like `skills.` for `skillsync.`) go in\n  `ALIASES`; the synced map handles everything mechanical.\n- Sharing to the tailnet still shares: run the leak/coverage audit\n  (`agentprivacy-wiki-sync` gates) before `sync` puts a new site in front of peers.\n\n## Share-safe note\n\nThis twin names no machine, tailnet, IP or zone. Your own values — machine name,\ntailnet suffix, tailnet IP, private zone — live only in the local orchestrator\nand its JSON, never in a published skill."
+    },
+    {
+      "type": "markdown",
+      "id": "34704e6897842fed",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis"
+    },
+    {
+      "type": "markdown",
+      "id": "88e2db90a822bb2a",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-tailnet-serve`, v1.0).\nSource of truth: `agentprivacy-skills`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "7512a4c146c4ca75",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "f529e6f50cd64e21",
+      "text": "wiki-tailnet-serve"
+    },
+    {
+      "type": "markdown",
+      "id": "98bcc5483e9a5fec",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Tailnet Serve",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "f3589ca03e497c32",
+            "text": "# Wiki Tailnet Serve\n\n**Category** wikis · **Alignment** balanced · **Version** 1.0\n\nStart a local FedWiki farm and serve it on a Tailscale tailnet — private, WireGuard-encrypted, never public — and SYNC the full farm roster onto per-site hostnames under a private DNS zone: \"review my local wikis and give them to the network\". Use when asked to start the wiki farm, serve the wikis on the tailnet, share local wikis with peers, sync the farm to the network, or report what is currently shared. Covers start/status/sync/off/peers, the three-door architecture (pinned ts.net ports, a Host-routed front door, an optional token-grant lane), verification probes, and the encoding/startup gotchas. Kept by the Librarian 🗃️; the front-door allowlist is the Sentinel's wall."
+          },
+          {
+            "type": "markdown",
+            "id": "bea4b882b528c3a6",
+            "text": "**🗃️🕸️ Tailnet Wiki Serve — the farm, given to the network you chose**\nKeeper: the Librarian 🗃️ · Wall: the Sentinel 🗡️🛡️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: distribution\n\n> Shared is not published: the tailnet is a room with a door, not a street.\n\nOne orchestrator puts the whole local FedWiki farm on the tailnet —\ntailnet-only, WireGuard-encrypted, never public. **Tailscale Funnel is\ndeliberately unused.**\n\n```powershell\npowershell -ExecutionPolicy Bypass -File <home>\\.wiki\\_tailnet_share.ps1 <action>\n```\n\n| action | what it does |\n|---|---|\n| `start` | farm () + Host-rewrite proxy + `tailscale serve` maps + auto-sync. Idempotent, detached (survives sessions). |\n| `sync` | **review the farm and give it to the network**: every populated `*.localhost` site → `<name>.<private-zone>` (dots → dashes), written to `<home>/.wiki/_tailnet_sites.json`. The proxy re-reads the file within ~2 s — no restart. Prints the full roster. |\n| `status` | farm/proxy up? + `tailscale serve status` |\n| `off` | remove `tailscale serve` maps only (farm + proxy keep running) |\n| `peers` | list tailnet devices + probe them for fedwikis (ports 80 / 3000 / 3030) |\n| `grants` / `revoke` / `index` / `runtime` | the optional token-grant lane (door 3) |\n\n`<private-zone>` is a DNS zone that resolves only inside your tailnet (a peer's\nDNS, or Tailscale split-DNS, pointing the zone + wildcard at this machine's\ntailnet IP). Never a public zone.\n\n## Architecture (three doors)\n\n1. **Pinned ts.net ports** — `tailscale serve` → proxy (313x) → farm  with\n   the Host header rewritten, one pinned port per flagship site on\n   `<machine>.<tailnet>.ts.net`, e.g. `:80`=guide `:8081`=skill `:8082`=tomes\n   `:8083`=research `:8084`=atlas `:8085`=embassy.\n2. **:80 front door** — the proxy binds `0.0.0.0:80` through a firewall rule\n   scoped to the tailnet interface (`tailscale serve` must NOT hold :80). A\n   Host-routed **allowlist**: curated `ALIASES` in `_tailnet_proxy.js` (e.g.\n   `skills.<private-zone>` → `skillsync.guide.agentprivacy.ai`, `library.` → `library.guide.agentprivacy.ai`)\n   win over the synced map in `_tailnet_sites.json`; bare `*.<private-zone>`\n   passes through (the farm namespace); everything else gets **403**.\n3. **Token-grant lane (optional)** — `<site>-<token>.<private-zone>` on the same\n   :80 door, checked first, for per-pathway grants that can be revoked. Synced\n   names whose last dash-segment is 8–16 hex are **skipped** so they can never\n   shadow a grant.\n\nFarm launch canon (wiki npm package):\n`wiki --farm --port 3030 --security_type friends --data <home>/.wiki`\n\n## Verify (always, after start or sync)\n\n```powershell\n# a pinned tailnet lane\nInvoke-WebRequest http://<machine>.<tailnet>.ts.net/system/sitemap.json -UseBasicParsing\n# a synced hostname\nInvoke-WebRequest http://<site>.<private-zone>/system/sitemap.json -UseBasicParsing\n```\n\nA sitemap returning 200 with a JSON page array = that door is live end-to-end.\nProbe from a second tailnet device too — a probe from the host itself can pass\nthrough loopback and prove nothing about the network.\n\n## Gotchas\n\n- `status` right after `start` can report `farm  DOWN` — a startup race;\n  probe again after ~5 s before diagnosing.\n- On Windows PowerShell 5.1, keep the orchestrator **UTF-8 with BOM**: PS 5.1\n  reads BOM-less files as ANSI, and a mangled em-dash becomes a smart quote that\n  terminates strings → parser errors. Keep new strings ASCII or re-save with BOM.\n- After editing the proxy: `node --check` it, kill the PID listening on the\n  proxy port (`Get-NetTCPConnection -LocalPort <port> -State Listen`), then\n  `start` again. Editing `_tailnet_sites.json` alone needs no restart.\n- **An unknown Host reaching the farm auto-creates an empty site dir** — the\n  proxy allowlist exists to prevent exactly this. Never point `tailscale serve`\n  straight at .\n- New curated names (e.g. a friendly alias like `skills.` for `skillsync.`) go in\n  `ALIASES`; the synced map handles everything mechanical.\n- Sharing to the tailnet still shares: run the leak/coverage audit\n  (`agentprivacy-wiki-sync` gates) before `sync` puts a new site in front of peers.\n\n## Share-safe note\n\nThis twin names no machine, tailnet, IP or zone. Your own values — machine name,\ntailnet suffix, tailnet IP, private zone — live only in the local orchestrator\nand its JSON, never in a published skill."
+          },
+          {
+            "type": "markdown",
+            "id": "34704e6897842fed",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis"
+          },
+          {
+            "type": "markdown",
+            "id": "88e2db90a822bb2a",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-tailnet-serve`, v1.0).\nSource of truth: `agentprivacy-skills`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "7512a4c146c4ca75",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "f529e6f50cd64e21",
+            "text": "wiki-tailnet-serve"
+          },
+          {
+            "type": "markdown",
+            "id": "98bcc5483e9a5fec",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1794496817064
+    }
+  ]
+}

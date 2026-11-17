@@ -1,0 +1,86 @@
+{
+  "title": "Wiki Transcribe",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "338b65cefbe50efb",
+      "text": "# Wiki Transcribe\n\n**Category** wikis · **Alignment** mage · **Version** 1.0\n\nTranscribe video/audio assets hosted on a FedWiki (Smallest Federated Wiki) page using local whisper.cpp, then turn the transcripts into wiki pages. Use when pointed at a FedWiki page or assets folder (e.g. http://<wiki-host>/view/<page>) and asked for transcripts or subtitles. Enumerates the assets folder through the assets plugin's hidden list endpoint, streams each file over the network, extracts 16 kHz mono audio with ffmpeg, runs whisper.cpp (large-v3-turbo) to produce .txt/.srt/.vtt, and assembles video pages, answer pages, hub cards, an index and a workshop page. Local only — no audio leaves the machine. Kept by the Librarian 🗃️."
+    },
+    {
+      "type": "markdown",
+      "id": "76e11502ef1288c9",
+      "text": "**🗃️🎙️ FedWiki video transcription — local, streamed, shelved**\nKeeper: the Librarian 🗃️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: onboarding\n\n> The recording stays where it was; the words come home.\n\nEnd-to-end flow: **FedWiki assets folder → list files → stream audio (ffmpeg) →\ntranscribe (whisper.cpp) → .txt/.srt/.vtt → wiki pages**. Everything runs on\nyour machine; nothing is uploaded to a transcription service.\n\n## When to use\n\nYou're pointed at a FedWiki page or assets folder hosting videos and asked for\ntranscripts. FedWiki URLs look like `http://<host>/view/<page>/view/<page>`;\nthe videos live in an **assets** story item that names a folder (e.g.\n`workshop-videos`).\n\n## Prerequisites\n\n- **whisper.cpp** built: `<whisper.cpp>/build/bin/Release/whisper-cli(.exe)`\n- **Model**: `<whisper.cpp>/models/ggml-large-v3-turbo-q5_0.bin` (high accuracy, multilingual)\n- **ffmpeg** on PATH (or pass `-Ffmpeg <full path>`)\n\nBuilding whisper.cpp fresh needs CMake + a C++ compiler. On Windows, VS Build\nTools bundles both: `cmake -B build -G \"Visual Studio 16 2019\" -A x64` then\n`cmake --build build --config Release`.\n\n## How enumeration works (the key trick)\n\nFedWiki's assets plugin renders the file list **client-side**, so the folder URL\njust returns the SPA shell. The real listing endpoint — found by reading\n`/plugins/assets/assets.js` — is:\n\n```\nGET {WikiBase}/plugin/assets/list?assets={folder}   ->   {\"error\":null,\"files\":[ ... ]}\n```\n\nIndividual files are served (no auth) at `{WikiBase}/assets/{folder}/{filename}`.\nFilenames may contain spaces/apostrophes (`Groundhog Day.mov`, `don't-panic.mov`)\nso URL-encode each segment.\n\nNote: the wiki may print asset URLs with hostname `public.guide.agentprivacy.ai` (only\nresolves on the host machine). Substitute the host you can actually reach.\n\n## Run it\n\n```powershell\n& \"<skill-dir>/agentprivacy-wiki-transcribe/transcribe-assets.ps1\" `\n    -WikiBase \"http://<wiki-host>\" `\n    -AssetsFolder \"workshop-videos\"\n```\n\nUseful params: `-OutDir` (default `$env:USERPROFILE\\transcripts`),\n`-Exclude @(\"file.mov\")`, `-Include @(...)`, `-KeepWav`, `-Language en|auto`,\n`-Model <path>`, `-Cli <path>`, `-Ffmpeg <path>`, `-Threads 16`.\n\nThe script is **idempotent**: a video whose `<base>.txt` already exists is\nskipped, so it resumes after interruption. It streams audio (never saves the\nmulti-GB video), deletes the temp WAV on success, and logs to\n`<OutDir>/_batch_log.txt`. Run large batches in the background and tail the log —\ntranscription is CPU-bound, roughly real-time per video with the large model.\n\n**Loop guard:** whisper can fall into a degenerate repetition loop (one line\nrepeated for the rest of the file). The script counts the longest run of\nidentical lines; at ≥30 it retries once with `-mc 0` (no prior-text context),\nwhich breaks the feedback that sustains the loop.\n\n## Manual single-file equivalent\n\n```powershell\n& ffmpeg -y -i \"http://<wiki-host>/assets/workshop-videos/session_01.mov\" -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav\n& <whisper-cli> -m <model.bin> -f out.wav -t 16 -otxt -osrt -ovtt -of out\n```\n\n## From transcripts to pages\n\nThe summary (title, summary, key points, action items) is **agent work** — read\nthe transcript and write it into a `<base>.content.json`\n(`{ title, videoUrl, caption, summary, keyPoints[], actionItems[], see[] }`).\nThe scripts do the mechanical JSON:\n\n| Script | Does |\n|---|---|\n| `make-wiki-page.ps1` | Assemble a \"Video Template\"-shaped page: `video` item + Summary / Key points / Action items / See. Transcript either as a collapsed section after a `pagefold` (`-TranscriptFile`) or as a downloadable asset (`-TranscriptAsset`). Accepts `-FromJson`. |\n| `stage-wiki-pages.ps1` | Copy every `*.page.json` to `wiki-pages/<slug>` (no extension — that IS the FedWiki page filename). |\n| `attach-transcripts-as-assets.ps1` | Move transcripts out of the page JSON into `assets/<slug>/` (`<slug>.txt/.srt/.vtt`, self-describing downloads), regenerate pages with an `assets` item, re-seed. Keeps titles/slugs so links still resolve. |\n| `build-index-page.ps1` | Write a `workshop-videos` hub linking every generated page, and patch `welcome-visitors` to link the hub — FedWiki navigation is link-driven; an unlinked page is unreachable. |\n| `build-workshop-page.ps1` | A master page: session links, a \"how it was made\" note, and an `assets` item exposing every transcript, summary and page JSON (plus these scripts) for download. |\n| `build-answer-pages.js` | The five question-answer pages per session (`<prefix>: <session>`), in the structured timeline shape. |\n| `build-hub-cards.js` | The five Question-Card hub pages, reusing the canonical card text from a `<srcBase>` wiki and rewriting the \"Answers across the timeline\" list. |\n| `push-page.js` | Push one page JSON via the fork action (`WIKI_BASE`, `WIKI_SESSION`/`WIKI_COOKIE`, `DRY=1`). For anything beyond an ad-hoc push, use the broker in `agentprivacy-wiki-cohere-sync` so the cookie never enters context. |\n\n## Notes / gotchas\n\n- whisper.cpp's built-in decoder reads WAV/MP3 but **not video containers** — hence ffmpeg.\n- whisper wants 16 kHz mono PCM; `-ar 16000 -ac 1 -c:a pcm_s16le` produces exactly that.\n- Non-English audio: `-Language auto` (the turbo model is multilingual).\n- Faster at some accuracy cost: point `-Model` at `ggml-base.en.bin` or a `small` model.\n- Write page JSON **UTF-8 without BOM** — FedWiki's `JSON.parse` rejects a BOM.\n  On Windows PowerShell 5.1, read UTF-8 explicitly (`[IO.File]::ReadAllText(..., UTF8)`);\n  `Get-Content` misreads BOM-less UTF-8 as ANSI and mojibakes em-dashes and quotes.\n- Native tools write progress to stderr; under `$ErrorActionPreference = \"Stop\"`\n  PS 5.1 turns that into a terminating error — switch to manual exit-code checks\n  around ffmpeg/whisper (the script does).\n- Transcripts of other people's sessions are *their* words: publish summaries and\n  transcripts only on the wiki the recordings came from, or with the speakers' say."
+    },
+    {
+      "type": "markdown",
+      "id": "6404c6d1a26e9df2",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis"
+    },
+    {
+      "type": "markdown",
+      "id": "27fb76f13221f24f",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-transcribe`, v1.0).\nSource of truth: `agentprivacy-skills`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+    },
+    {
+      "type": "markdown",
+      "id": "2d5136c309b3ebb5",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "a1adbdcbd8cf1ffc",
+      "text": "wiki-transcribe"
+    },
+    {
+      "type": "markdown",
+      "id": "faa877a3c581851f",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "Wiki Transcribe",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "338b65cefbe50efb",
+            "text": "# Wiki Transcribe\n\n**Category** wikis · **Alignment** mage · **Version** 1.0\n\nTranscribe video/audio assets hosted on a FedWiki (Smallest Federated Wiki) page using local whisper.cpp, then turn the transcripts into wiki pages. Use when pointed at a FedWiki page or assets folder (e.g. http://<wiki-host>/view/<page>) and asked for transcripts or subtitles. Enumerates the assets folder through the assets plugin's hidden list endpoint, streams each file over the network, extracts 16 kHz mono audio with ffmpeg, runs whisper.cpp (large-v3-turbo) to produce .txt/.srt/.vtt, and assembles video pages, answer pages, hub cards, an index and a workshop page. Local only — no audio leaves the machine. Kept by the Librarian 🗃️."
+          },
+          {
+            "type": "markdown",
+            "id": "76e11502ef1288c9",
+            "text": "**🗃️🎙️ FedWiki video transcription — local, streamed, shelved**\nKeeper: the Librarian 🗃️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: onboarding\n\n> The recording stays where it was; the words come home.\n\nEnd-to-end flow: **FedWiki assets folder → list files → stream audio (ffmpeg) →\ntranscribe (whisper.cpp) → .txt/.srt/.vtt → wiki pages**. Everything runs on\nyour machine; nothing is uploaded to a transcription service.\n\n## When to use\n\nYou're pointed at a FedWiki page or assets folder hosting videos and asked for\ntranscripts. FedWiki URLs look like `http://<host>/view/<page>/view/<page>`;\nthe videos live in an **assets** story item that names a folder (e.g.\n`workshop-videos`).\n\n## Prerequisites\n\n- **whisper.cpp** built: `<whisper.cpp>/build/bin/Release/whisper-cli(.exe)`\n- **Model**: `<whisper.cpp>/models/ggml-large-v3-turbo-q5_0.bin` (high accuracy, multilingual)\n- **ffmpeg** on PATH (or pass `-Ffmpeg <full path>`)\n\nBuilding whisper.cpp fresh needs CMake + a C++ compiler. On Windows, VS Build\nTools bundles both: `cmake -B build -G \"Visual Studio 16 2019\" -A x64` then\n`cmake --build build --config Release`.\n\n## How enumeration works (the key trick)\n\nFedWiki's assets plugin renders the file list **client-side**, so the folder URL\njust returns the SPA shell. The real listing endpoint — found by reading\n`/plugins/assets/assets.js` — is:\n\n```\nGET {WikiBase}/plugin/assets/list?assets={folder}   ->   {\"error\":null,\"files\":[ ... ]}\n```\n\nIndividual files are served (no auth) at `{WikiBase}/assets/{folder}/{filename}`.\nFilenames may contain spaces/apostrophes (`Groundhog Day.mov`, `don't-panic.mov`)\nso URL-encode each segment.\n\nNote: the wiki may print asset URLs with hostname `public.guide.agentprivacy.ai` (only\nresolves on the host machine). Substitute the host you can actually reach.\n\n## Run it\n\n```powershell\n& \"<skill-dir>/agentprivacy-wiki-transcribe/transcribe-assets.ps1\" `\n    -WikiBase \"http://<wiki-host>\" `\n    -AssetsFolder \"workshop-videos\"\n```\n\nUseful params: `-OutDir` (default `$env:USERPROFILE\\transcripts`),\n`-Exclude @(\"file.mov\")`, `-Include @(...)`, `-KeepWav`, `-Language en|auto`,\n`-Model <path>`, `-Cli <path>`, `-Ffmpeg <path>`, `-Threads 16`.\n\nThe script is **idempotent**: a video whose `<base>.txt` already exists is\nskipped, so it resumes after interruption. It streams audio (never saves the\nmulti-GB video), deletes the temp WAV on success, and logs to\n`<OutDir>/_batch_log.txt`. Run large batches in the background and tail the log —\ntranscription is CPU-bound, roughly real-time per video with the large model.\n\n**Loop guard:** whisper can fall into a degenerate repetition loop (one line\nrepeated for the rest of the file). The script counts the longest run of\nidentical lines; at ≥30 it retries once with `-mc 0` (no prior-text context),\nwhich breaks the feedback that sustains the loop.\n\n## Manual single-file equivalent\n\n```powershell\n& ffmpeg -y -i \"http://<wiki-host>/assets/workshop-videos/session_01.mov\" -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav\n& <whisper-cli> -m <model.bin> -f out.wav -t 16 -otxt -osrt -ovtt -of out\n```\n\n## From transcripts to pages\n\nThe summary (title, summary, key points, action items) is **agent work** — read\nthe transcript and write it into a `<base>.content.json`\n(`{ title, videoUrl, caption, summary, keyPoints[], actionItems[], see[] }`).\nThe scripts do the mechanical JSON:\n\n| Script | Does |\n|---|---|\n| `make-wiki-page.ps1` | Assemble a \"Video Template\"-shaped page: `video` item + Summary / Key points / Action items / See. Transcript either as a collapsed section after a `pagefold` (`-TranscriptFile`) or as a downloadable asset (`-TranscriptAsset`). Accepts `-FromJson`. |\n| `stage-wiki-pages.ps1` | Copy every `*.page.json` to `wiki-pages/<slug>` (no extension — that IS the FedWiki page filename). |\n| `attach-transcripts-as-assets.ps1` | Move transcripts out of the page JSON into `assets/<slug>/` (`<slug>.txt/.srt/.vtt`, self-describing downloads), regenerate pages with an `assets` item, re-seed. Keeps titles/slugs so links still resolve. |\n| `build-index-page.ps1` | Write a `workshop-videos` hub linking every generated page, and patch `welcome-visitors` to link the hub — FedWiki navigation is link-driven; an unlinked page is unreachable. |\n| `build-workshop-page.ps1` | A master page: session links, a \"how it was made\" note, and an `assets` item exposing every transcript, summary and page JSON (plus these scripts) for download. |\n| `build-answer-pages.js` | The five question-answer pages per session (`<prefix>: <session>`), in the structured timeline shape. |\n| `build-hub-cards.js` | The five Question-Card hub pages, reusing the canonical card text from a `<srcBase>` wiki and rewriting the \"Answers across the timeline\" list. |\n| `push-page.js` | Push one page JSON via the fork action (`WIKI_BASE`, `WIKI_SESSION`/`WIKI_COOKIE`, `DRY=1`). For anything beyond an ad-hoc push, use the broker in `agentprivacy-wiki-cohere-sync` so the cookie never enters context. |\n\n## Notes / gotchas\n\n- whisper.cpp's built-in decoder reads WAV/MP3 but **not video containers** — hence ffmpeg.\n- whisper wants 16 kHz mono PCM; `-ar 16000 -ac 1 -c:a pcm_s16le` produces exactly that.\n- Non-English audio: `-Language auto` (the turbo model is multilingual).\n- Faster at some accuracy cost: point `-Model` at `ggml-base.en.bin` or a `small` model.\n- Write page JSON **UTF-8 without BOM** — FedWiki's `JSON.parse` rejects a BOM.\n  On Windows PowerShell 5.1, read UTF-8 explicitly (`[IO.File]::ReadAllText(..., UTF8)`);\n  `Get-Content` misreads BOM-less UTF-8 as ANSI and mojibakes em-dashes and quotes.\n- Native tools write progress to stderr; under `$ErrorActionPreference = \"Stop\"`\n  PS 5.1 turns that into a terminating error — switch to manual exit-code checks\n  around ffmpeg/whisper (the script does).\n- Transcripts of other people's sessions are *their* words: publish summaries and\n  transcripts only on the wiki the recordings came from, or with the speakers' say."
+          },
+          {
+            "type": "markdown",
+            "id": "6404c6d1a26e9df2",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis"
+          },
+          {
+            "type": "markdown",
+            "id": "27fb76f13221f24f",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-transcribe`, v1.0).\nSource of truth: `agentprivacy-skills`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
+          },
+          {
+            "type": "markdown",
+            "id": "2d5136c309b3ebb5",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "a1adbdcbd8cf1ffc",
+            "text": "wiki-transcribe"
+          },
+          {
+            "type": "markdown",
+            "id": "faa877a3c581851f",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
+          }
+        ]
+      },
+      "date": 1794496817068
+    }
+  ]
+}

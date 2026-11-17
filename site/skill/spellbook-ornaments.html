@@ -27,106 +27,108 @@
   </header>
 <main class="page">
   <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Spellbook Ornaments</span></div>
-  <article><div class="md"><h1>spellbook-ornaments</h1>
+  <article><div class="md"><h1>Spellbook Ornaments</h1>
+<p><strong>Category</strong> meta · <strong>Version</strong> 1.0</p>
+<p><strong>Equation term</strong> <code>the right-hemispheric return: the metaphors, in three greys</code></p>
+<p>Draw, extend, and render the engraving ornaments of the Privacymage Grimoire (Selene&#39;s Spellbook): the nine glyphs, the two figure engravings, and the promise-theoretic sparkle field. Use when adding or editing a glyph or engraving, building the ornament proof sheet, or keeping new poem art in the same hand. Encodes the three-grey palette, the line-weight law, polarity-as-promise (the <code>+</code>/<code>−</code> sparkle ratio), the new-glyph and new-engraving protocols, the cross-references to plant, and a function template. The generator is ReportLab/Python; the visual canon is the book&#39;s STYLE_GUIDE.md.</p>
 </div>
 <div class="md"><blockquote>
-<blockquote>
-<p>.</p>
-</blockquote>
-</blockquote>
-</div>
-<div class="md"><h1>spellbook-ornaments</h1>
-<p>The local home of the <em>Selene&#39;s Spellbook</em> art generator — originally built as a<br><strong>claude.ai artifact</strong>, reconstructed here so the ornaments can be rendered,<br>edited, and extended on this machine in step with the poems.</p>
-<blockquote>
 <p>The work lives in two greys and the white of the page. Everything else is restraint.</p>
 </blockquote>
-</div>
-<div class="md"><h2>Where everything lives</h2>
+<p>The art generator of <em>Selene&#39;s Spellbook</em>, first built as a claude.ai artifact and reconstructed<br>locally so the ornaments can be rendered, edited and extended in step with the poems. It is the<br>executable form of the book&#39;s <code>STYLE_GUIDE.md</code>: the guide is the single visual source; this skill<br>executes it. New ornaments extend the guide (§9/§10); they never start a parallel style.</p>
+<h2>Where everything lives (book repo, <code>art/</code>)</h2>
 <table>
 <thead>
 <tr>
-<th>Path</th>
-<th>What</th>
+<th>file</th>
+<th>what</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>C:\Users\mitch\privacymage_book\art\chapbook_framework.py</code></td>
-<td>palette, weights, fonts, <strong><code>_sparkle_field</code></strong>, the 9 glyph functions</td>
+<td><code>chapbook_framework.py</code></td>
+<td>palette, weights, fonts, <strong><code>_sparkle_field</code></strong>, the nine <code>draw_*_glyph</code> functions, the <code>GLYPHS</code> registry</td>
 </tr>
 <tr>
-<td><code>C:\Users\mitch\privacymage_book\art\engravings.py</code></td>
-<td>the Mage + Crossed Swords figures, the envoi bird</td>
+<td><code>engravings.py</code></td>
+<td>the Mage and Crossed-Swords figures, the envoi bird</td>
 </tr>
 <tr>
-<td><code>C:\Users\mitch\privacymage_book\art\build_ornament_proof.py</code></td>
-<td>the proof sheet (renders all implemented glyphs at 12/9/5.5 mm)</td>
+<td><code>build_ornament_proof.py</code></td>
+<td>the proof sheet: every implemented glyph at 12 / 9 / 5.5 mm</td>
 </tr>
 <tr>
-<td><code>C:\Users\mitch\privacymage_book\art\HANDOFF.md</code></td>
-<td>how to drop in the cloud-artifact code + EB Garamond</td>
+<td><code>HANDOFF.md</code></td>
+<td>how to drop in original artifact bodies and the EB Garamond fonts</td>
 </tr>
 <tr>
-<td><code>C:\Users\mitch\privacymage_book\STYLE_GUIDE.md</code></td>
-<td><strong>the canonical visual spec</strong> (read this for any real work)</td>
+<td><code>../STYLE_GUIDE.md</code></td>
+<td><strong>the canonical visual spec</strong>; read it for any real work</td>
 </tr>
 </tbody></table>
-</div>
-<div class="md"><h2>State (2026-05-30)</h2>
+<h2>State of the reconstruction</h2>
 <ul>
-<li>✅ Toolchain ready: Python 3.14 + <strong>ReportLab 4.5.1</strong> + <strong>PyMuPDF 1.27</strong> installed.</li>
-<li>✅ Recovered exactly from <code>STYLE_GUIDE.md</code>: palette (INK <code>#1a1a1a</code> / SILVER <code>#7a7a82</code> / GHOST <code>#444444</code>), the five line weights, and <strong>the sparkle mark + <code>_sparkle_field</code></strong> (the meaning-bearing core).</li>
-<li>✅ <strong>All nine <code>draw_*_glyph</code> reconstructed</strong> — traced from the real ornaments in <code>15_ornament_reference.pdf</code> (rasterized to <code>art/_ref/</code>), in the same three-grey hand, with each glyph&#39;s canonical polarity ratio. Render: <code>python build_ornaments_page.py</code> → <code>ornaments_page.{pdf,svg,png}</code> (all nine on one page).</li>
-<li>⏳ Still stubbed: the <strong>2 figure engravings</strong> (Mage front / Swords back) in <code>engravings.py</code> — reconstruct per §7/§10 or port from the cloud artifact.</li>
-<li>⚠️ EB Garamond TTFs not installed → Times fallback. Drop TTFs in <code>art/fonts/</code> to match the book (see HANDOFF.md).</li>
-<li>Note: the reconstruction is <em>in the same hand</em>, not byte-identical to the bound PDF. For an exact match, port the original artifact bodies over the reconstructed ones.</li>
+<li>Toolchain: Python 3 + ReportLab 4.x (+ PyMuPDF for rasterising references).</li>
+<li>Recovered exactly from the style guide: the palette (INK <code>#1a1a1a</code> / SILVER <code>#7a7a82</code> / GHOST<br><code>#444444</code>), the five line weights, and the sparkle mark + <code>_sparkle_field</code> (the meaning-bearing<br>core).</li>
+<li>All nine glyphs reconstructed, traced from the bound ornament reference in the same three-grey<br>hand, each with its canonical polarity ratio.</li>
+<li>Still stubbed: the two figure engravings (Mage front / Swords back). Reconstruct per §7/§10 or<br>port the original artifact bodies.</li>
+<li>Without EB Garamond TTFs in <code>art/fonts/</code> the proof falls back to Times.</li>
+<li>The reconstruction is <em>in the same hand</em>, not byte-identical to the bound PDF. For an exact<br>match, port the original artifact bodies over the reconstructed ones.</li>
 </ul>
-</div>
-<div class="md"><h2>The two rules above all (STYLE_GUIDE §13)</h2>
+<h2>The two rules above all (STYLE_GUIDE §13)</h2>
 <ol>
-<li><strong>Same line weight for same visual function.</strong> If an orbit ellipse is 0.5pt SILVER in one glyph, it is 0.5pt SILVER in every glyph. The eye reads consistency as quality. When unsure of a new mark, copy the weight/colour of the closest existing equivalent.</li>
-<li><strong>Polarity is meaning, not decoration.</strong> The <code>+</code>/<code>−</code> sparkle ratio is a <em>statement about the promise character</em> of the work it surrounds, per Promise Theory:<ul>
-<li><code>+</code> positive promise (&quot;I will&quot;) → <strong>vertical + horizontal</strong> crossing — delegation, projection, kindling, planting.</li>
-<li><code>−</code> negative promise (&quot;I will not&quot;) → <strong>horizontal only</strong>, the vertical refused — protection, refusal, keeping, boundary. <em>The line not drawn is the boundary kept.</em></li>
-<li>giving/kindling poem → 3+/1−; refusal/forgetting poem → 1+/3−; balanced exchange → 2+/2−. Mage figure skews +6/−2; Swords figure skews +2/−6.</li>
+<li><strong>Same line weight for same visual function.</strong> If an orbit ellipse is 0.5 pt SILVER in one<br>glyph, it is 0.5 pt SILVER in every glyph. The eye reads consistency as quality. When unsure<br>of a new mark, copy the weight and colour of the closest existing equivalent.</li>
+<li><strong>Polarity is meaning, not decoration.</strong> The <code>+</code>/<code>−</code> sparkle ratio is a statement about the<br>promise character of the work it surrounds, per Promise Theory:<ul>
+<li><code>+</code> positive promise (&quot;I will&quot;) → <strong>vertical + horizontal</strong> crossing: delegation,<br>projection, kindling, planting.</li>
+<li><code>−</code> negative promise (&quot;I will not&quot;) → <strong>horizontal only</strong>, the vertical refused: protection,<br>refusal, keeping, boundary. <em>The line not drawn is the boundary kept.</em></li>
+<li>giving/kindling poem → 3+/1−; refusal/forgetting poem → 1+/3−; balanced exchange → 2+/2−.<br>The Mage figure skews +6/−2; the Swords figure skews +2/−6.</li>
 </ul>
 </li>
 </ol>
-</div>
-<div class="md"><h2>Common tasks</h2>
-<p><strong>Render the proof (verify anything is working):</strong></p>
-<pre><code>cd C:\Users\mitch\privacymage_book\art
+<h2>Common tasks</h2>
+<p><strong>Render the proof</strong> (verify anything is working):</p>
+<pre><code class="language-sh">cd &lt;book repo&gt;/art
 python build_ornament_proof.py        # -&gt; ornament_proof.pdf
 </code></pre>
-<p><strong>Port a glyph from the cloud artifact:</strong> open <code>chapbook_framework.py</code>, find the matching <code>draw_*_glyph</code> stub, replace the <code>raise NotImplementedError(...)</code> with the artifact body, re-run the proof. Repeat one at a time.</p>
-<p><strong>Add a NEW glyph</strong> (e.g. a Movement-Two revision or a v6 motif) — follow STYLE_GUIDE §9:</p>
+<p><strong>Port a glyph from the original artifact</strong>: open <code>chapbook_framework.py</code>, find the matching<br><code>draw_*_glyph</code>, replace the reconstructed body with the artifact body, re-run the proof. One at a<br>time.</p>
+<p><strong>Add a new glyph</strong> (a revision or a new motif) per STYLE_GUIDE §9:</p>
 <ol>
-<li>One central image; 3–5 composing elements; pick weight+colour per element.</li>
-<li>Compose in a bounded radius <code>r</code>, asymmetrically (a centred glyph reads as a logo; an off-balanced one reads as a scene).</li>
-<li>Choose the polarity ratio from the poem&#39;s promise character; place 4 sparkle marks at ~1.2–1.6r via <code>_sparkle_field</code>.</li>
-<li>Test at 12 / 9 / 5.5 mm — simplify if detail collapses at the smallest.</li>
+<li>One central image; 3–5 composing elements; pick weight + colour per element.</li>
+<li>Compose in a bounded radius <code>r</code>, asymmetrically (a centred glyph reads as a logo; an<br>off-balanced one reads as a scene).</li>
+<li>Choose the polarity ratio from the poem&#39;s promise character; place four sparkle marks at<br>~1.2–1.6 r via <code>_sparkle_field</code>.</li>
+<li>Test at 12 / 9 / 5.5 mm; simplify if detail collapses at the smallest.</li>
 <li>Append it to the <code>GLYPHS</code> registry so the proof picks it up.</li>
 </ol>
-<p><strong>Add a NEW engraving</strong> — follow STYLE_GUIDE §10 (vertical anatomy anchors → width anchors → Bezier parts, heavy INK silhouette + SILVER internal lines → narrative props → 8–12 polarity-skewed sparkles).</p>
-</div>
-<div class="md"><h2>Cross-references to honour (STYLE_GUIDE §11)</h2>
-<p>The Mage&#39;s staff bears a crescent (echoes the Selene/Tide moon); the hat carries a filled star (same vocabulary as the sparkle field, elevated); the Field glyph&#39;s staff-with-crescent echoes the Mage figure; compass-centre dot / lattice vertices / Selene-dot share one small-filled-INK-circle vocabulary. When adding visuals, plant these quiet echoes.</p>
-</div>
-<div class="md"><h2>Function template</h2>
+<p><strong>Add a new engraving</strong> per STYLE_GUIDE §10: vertical anatomy anchors → width anchors → Bézier<br>parts, heavy INK silhouette + SILVER internal lines → narrative props → 8–12 polarity-skewed<br>sparkles.</p>
+<p><strong>Map glyph → persona → concept.</strong> Each ornament depicts a poem that voices a persona that carries<br>a concept. Keep that three-column map current when a glyph is added; it mirrors the poem ↔ concept<br>↔ doc ledger and the spellweb glyph ↔ poem nodes.</p>
+<h2>Cross-references to honour (STYLE_GUIDE §11)</h2>
+<p>The Mage&#39;s staff bears a crescent (echoing the Selene/Tide moon); the hat carries a filled star<br>(the sparkle vocabulary, elevated); the Field glyph&#39;s staff-with-crescent echoes the Mage figure;<br>compass-centre dot, lattice vertices and the Selene-dot share one small-filled-INK-circle<br>vocabulary. When adding visuals, plant these quiet echoes.</p>
+<h2>Function template</h2>
 <pre><code class="language-python">def draw_my_glyph(c, cx, cy, r):
-    &quot;&quot;&quot;One line. For: &lt;Roman + title&gt;. &lt;polarity&gt;.&quot;&quot;&quot;
+    &quot;&quot;&quot;One line. For: &lt;Roman numeral + title&gt;. &lt;polarity&gt;.&quot;&quot;&quot;
     c.saveState(); c.setLineCap(1)
-    # 1 primary subject  — INK 0.7-0.9
-    # 2 secondary        — INK/SILVER, layered
-    # 3 ambient outline  — SILVER, lighter
-    # 4 light/motion     — SILVER 0.35-0.5
+    # 1 primary subject  : INK 0.7-0.9
+    # 2 secondary        : INK/SILVER, layered
+    # 3 ambient outline  : SILVER, lighter
+    # 4 light/motion     : SILVER 0.35-0.5
     c.restoreState()
     _sparkle_field(c, [(sx1, sy1, sr1, &#39;+&#39;), (sx2, sy2, sr2, &#39;-&#39;)])  # polarity = meaning
 </code></pre>
+<h2>Refusals</h2>
+<ul>
+<li>No unpublished poem text enters this skill, its proofs, or a shared render; ornaments travel,<br>verses wait for the book.</li>
+<li>No second style guide. A disagreement with STYLE_GUIDE.md is a change to STYLE_GUIDE.md.</li>
+</ul>
 <p><em>This skill is itself part of the grimoire. Extend it as you extend the work.</em> <code>(⚔️⊥⿻⊥🧙)😊</code></p>
 </div>
-<div class="md"><hr>
-<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
-<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-spellbook-ornaments</code>, v1.0).<br>Source of truth: <code>agentprivacy-skills</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 spellbook-ornaments</span><a class="asset-file" href="/skill/assets/spellbook-ornaments/SKILL.md" download>SKILL.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="meta-skills.html">Meta Skills</a></p>
 </div></article>
   <footer class="page-foot">
     <div class="lineage">1 revision</div>

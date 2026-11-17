@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fedwiki Transcribe · agentprivacy guide</title>
+<title>Skillsync Spell Search · agentprivacy guide</title>
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,63 +26,68 @@
     <details class="star-connection"><summary class="star-connect">Connect with Star</summary><div class="star-connection-body"><strong>Your VTA, your chosen perspective</strong><p>The planned connection uses your VTA and the Trust Spanning Protocol to carry a scoped exchange for you or your agent. You choose what is presented; the receiving service checks the request before a view is shared.</p><p>This guide has no VTA connection adapter yet. Opening Star does not connect an identity or send a key.</p><a href="https://soulbis.com/star">Open Star ↗</a> · <a href="https://agentprivacy.ai/city">Inspect your City Key ↗</a></div></details><div class="search"><input id="q" aria-label="Search the guide" type="search" placeholder="search the canon…" autocomplete="off"><div id="results"></div></div>
   </header>
 <main class="page">
-  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Fedwiki Transcribe</span></div>
-  <article><div class="md"><h1>FedWiki video transcription</h1>
+  <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Skillsync Spell Search</span></div>
+  <article><div class="md"><h1>Skillsync Spell Search</h1>
+<p><strong>Category</strong> wikis · <strong>Alignment</strong> mage · <strong>Version</strong> 1.0</p>
+<p>Observe the directories a keeper has been working in, find the ones rich with un-minted skills (written methods that actually ran), draft SKILL.md packets from their evidence, and publish them into Skill Sync after review. Use when asked for a &quot;spell search&quot;, to &quot;survey my directories for skills&quot;, &quot;mine this repo for skills&quot;, &quot;make a skill out of this project/method&quot;, or when a project&#39;s method docs + run history deserve to become a shareable skill. Drafting is agent work; publishing rides the existing harvest → shelf → tailnet pipeline with its leak scan and PII neutralization. Vendored work is never ours to mint. Kept by the Librarian 🗃️; drafted in the Chronicler&#39;s hand.</p>
 </div>
-<div class="md"><blockquote>
-<p>Transcribe video/audio assets hosted on a FedWiki (Smallest Federated Wiki) page using local whisper.</p>
+<div class="md"><p><strong>🧙📖🔍 Spell search — skills are spells that already worked</strong><br>Keeper: the Librarian 🗃️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: onboarding</p>
+<blockquote>
+<p>A spell is not what was planned; it is what was cast and held.</p>
 </blockquote>
-</div>
-<div class="md"><h1>FedWiki video transcription</h1>
-<p>End-to-end flow: <strong>FedWiki assets folder → list files → stream audio (ffmpeg) → transcribe (whisper.cpp) → .txt/.srt/.vtt</strong>.</p>
-</div>
-<div class="md"><h2>When to use</h2>
-<p>The user references a FedWiki page or assets folder hosting videos and wants transcripts. FedWiki URLs look like <code>http://&lt;host&gt;/view/&lt;page&gt;/view/&lt;page&gt;</code>; the videos live in an <strong>assets</strong> story item that names a folder (e.g. <code>workshop-videos</code>).</p>
-</div>
-<div class="md"><h2>Prerequisites (already installed on this machine)</h2>
+<p>This skill finds methods in the field and mints them. Home: the Skill Sync kit<br>(<code>&lt;skill-sync&gt;/</code> — <code>SPEC.md</code> = packet format; <code>README.md</code> = the system).</p>
+<h2>1. Survey (mechanical)</h2>
+<pre><code>cd &lt;skill-sync&gt;
+node bin/spellsearch.js                # every top-level dir under &lt;home&gt;
+node bin/spellsearch.js &lt;dir&gt;          # one directory, any depth
+</code></pre>
+<p>Score = un-catalogued SKILL.md (×10) + method docs (×3) + run-evidence dirs (×4)</p>
 <ul>
-<li><strong>whisper.cpp</strong> built: <code>C:\Users\mitch\whisper.cpp-master\build\bin\Release\whisper-cli.exe</code></li>
-<li><strong>Model</strong>: <code>C:\Users\mitch\whisper.cpp-master\models\ggml-large-v3-turbo-q5_0.bin</code> (high accuracy, multilingual)</li>
-<li><strong>ffmpeg</strong>: <code>...\WinGet\Packages\Gyan.FFmpeg_*\ffmpeg-*-full_build\bin\ffmpeg.exe</code></li>
+<li>docs×runs bonus (+6) + agent-memory files present (+3) + recency. Results land<br>in <code>surveys/</code>.</li>
 </ul>
-<p>If building whisper.cpp fresh: it needs CMake + a C++ compiler. VS Build Tools 2019 bundles both —<br><code>cmake -B build -G &quot;Visual Studio 16 2019&quot; -A x64</code> then <code>cmake --build build --config Release</code>.<br>(CMake is at <code>...\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe</code>.)</p>
-</div>
-<div class="md"><h2>How enumeration works (the key trick)</h2>
-<p>FedWiki&#39;s assets plugin renders the file list <strong>client-side</strong>, so the folder URL just returns the SPA<br>shell. The real listing endpoint — discovered from <code>/plugins/assets/assets.js</code> — is:</p>
-<pre><code>GET {WikiBase}/plugin/assets/list?assets={folder}   -&gt;   {&quot;error&quot;:null,&quot;files&quot;:[ ... ]}
+<p><strong>Vendored dirs score 0 by rule</strong> (by convention, folders ending <code>-main</code> are<br>unpacked upstream archives) — others&#39; work is never ours to publish; only a<br>method layer we wrapped around it is.</p>
+<h2>2. Choose with the keeper</h2>
+<p>Present the top candidates with their evidence. The keeper picks; don&#39;t mint<br>speculatively. Prefer dirs where the method RAN more than once (<code>runs/</code> +<br><code>chronicles/</code>) over dirs that only contain plans.</p>
+<h2>3. Draft (agent work)</h2>
+<p>For a chosen directory:</p>
+<ol>
+<li>Read the evidence the scanner listed: method docs, GROUND_RULES / METHOD /<br>spec files, one or two run chronicles (how it actually went, including the<br>failures).</li>
+<li>Draft <code>drafts/&lt;skill-name&gt;/SKILL.md</code> inside the Skill Sync home — <strong>NEVER<br>into the source repo</strong>:<ul>
+<li>frontmatter: <code>name</code>, <code>description</code> (trigger-rich, like the corpus),<br>optional <code>metadata</code> (category, origin, version 0.1)</li>
+<li>body: what the method is · when it fires · the steps as actually run ·<br>the gotchas the chronicles recorded · pointers to the source repo (relative<br>path only)</li>
+</ul>
+</li>
+<li>Voice: second person to the practicing agent, first person never. The<br>harvest neutralizer scrubs stray PII, but write neutral from the start.</li>
+<li>One skill = one repeatable method. A rich repo may yield several small skills<br>rather than one saga.</li>
+</ol>
+<h2>4. Review, then publish</h2>
+<p>The keeper reviews the draft. On approval the pipeline does the rest —<br><code>drafts/</code> is already a harvest source (category <code>drafted</code>):</p>
+<pre><code>node bin/harvest.js &amp;&amp; node bin/build-wiki.js &amp;&amp; node bin/build-static.js
 </code></pre>
-<p>Individual files are served (no auth) at <code>{WikiBase}/assets/{folder}/{filename}</code>. Filenames may contain<br>spaces/apostrophes (<code>Groundhog Day.mov</code>, <code>don&#39;t-panic.mov</code>) so URL-encode each segment.</p>
-<p>Note: the wiki may print asset URLs with hostname <code>public</code> (only resolves on the host machine).<br>Substitute the host you can actually reach (e.g. <code>david.local</code>).</p>
-</div>
-<div class="md"><h2>Run it</h2>
-<pre><code class="language-powershell">&amp; &quot;C:\Users\mitch\.claude\skills\fedwiki-transcribe\transcribe-assets.ps1&quot; `
-    -WikiBase &quot;http://david.local&quot; `
-    -AssetsFolder &quot;workshop-videos&quot;
-</code></pre>
-<p>Useful params: <code>-OutDir</code> (default <code>C:\Users\mitch\transcripts</code>), <code>-Exclude @(&quot;file.mov&quot;)</code>,<br><code>-KeepWav</code>, <code>-Language en|auto</code>, <code>-Model &lt;path&gt;</code>, <code>-Threads 16</code>.</p>
-<p>The script is <strong>idempotent</strong>: a video whose <code>&lt;base&gt;.txt</code> already exists is skipped, so it can be<br>resumed after interruption. It streams audio (does not save the multi-GB video), deletes the temp WAV<br>on success, and logs to <code>&lt;OutDir&gt;\_batch_log.txt</code>. Run it in the background for large batches and tail<br>the log — transcription is CPU-bound (no GPU here), roughly real-time per video with the large model.</p>
-</div>
-<div class="md"><h2>Manual single-file equivalent</h2>
-<pre><code class="language-powershell">$ff=&quot;...\ffmpeg.exe&quot;; $cli=&quot;...\whisper-cli.exe&quot;; $m=&quot;...\ggml-large-v3-turbo-q5_0.bin&quot;
-&amp; $ff -y -i &quot;http://david.local/assets/workshop-videos/max_timeline_01.mov&quot; -vn -ar 16000 -ac 1 -c:a pcm_s16le out.wav
-&amp; $cli -m $m -f out.wav -t 16 -otxt -osrt -ovtt -of out
-</code></pre>
-</div>
-<div class="md"><h2>Notes / gotchas</h2>
+<p>That mints the packet (leak-scanned, neutralized, hashed), shelves the card on<br>the local shelf site and its tailnet hostname, and updates the static garden.<br>The next <code>agentprivacy-skillsync-dreamloop</code> pass announces it to the network.</p>
+<h2>Guardrails</h2>
 <ul>
-<li>whisper.cpp&#39;s built-in miniaudio decodes WAV/MP3 directly but <strong>not video containers</strong> — hence ffmpeg.</li>
-<li>whisper wants 16 kHz mono PCM; the ffmpeg flags above produce exactly that.</li>
-<li>For non-English audio, pass <code>-Language auto</code> (the turbo model is multilingual).</li>
-<li>To speed up a large batch at some accuracy cost, point <code>-Model</code> at <code>ggml-base.en.bin</code> or a <code>small</code> model.</li>
+<li>Never publish from a vendored dir; never write drafts into source repos.</li>
+<li>Benchmark / solver material stays behind <code>exclude_patterns</code> unless the keeper<br>says otherwise.</li>
+<li>A draft that quotes a chronicle must drop names, machine names and absolute<br>paths.</li>
+<li>Drafting ≠ adopting: the skill enters the inbox like any other packet, and<br>earns standing by use.</li>
 </ul>
 </div>
-<div class="md"><hr>
-<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
-<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis</p>
+</div>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-skillsync-spell-search</code>, v1.0).<br>Source of truth: <code>agentprivacy-skills</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 skillsync-spell-search</span><a class="asset-file" href="/skill/assets/skillsync-spell-search/SKILL.md" download>SKILL.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
 </div></article>
   <footer class="page-foot">
     <div class="lineage">1 revision</div>
-    <a class="json-link" href="fedwiki-transcribe.json">view page JSON · forkable into any wiki ↗</a>
+    <a class="json-link" href="skillsync-spell-search.json">view page JSON · forkable into any wiki ↗</a>
   </footer>
 </main>
 <script src="/assets/app.js"></script>

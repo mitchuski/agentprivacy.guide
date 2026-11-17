@@ -216,8 +216,10 @@ npx wrangler deploy --assets site --name agentprivacy-guide --compatibility-date
 
 ## 7. Status
 
-**2,195 pages** across 14 federation sites + 5 sibling wikis, **0 broken links /
-0 empty pages / 0 dev-host leaks** (integrity-audited every build). Built from
+**2,396 pages** across 22 sites in the κ-registry of 12 November 2026 (federation
+root `sha256:b8b24034…`, prior `b3268e21…`), the skill site at 217 pages from
+`agentprivacy-skills`; **0 broken links / 0 empty pages / 0 dev-host leaks**
+(integrity-audited every build). Built from
 the live `~/.wiki` farm; canon at grimoire v10.4 / conjecture register **C97**.
 Two gates stand in the Gatehouse; the Star Chart seats every page as a star.
 

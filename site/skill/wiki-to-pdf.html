@@ -27,58 +27,62 @@
   </header>
 <main class="page">
   <div class="crumb"><a href="/">guide</a> / <a href="/skill/welcome-visitors.html">Skill</a> / <span>Wiki To Pdf</span></div>
-  <article><div class="md"><h1>wiki-to-pdf</h1>
+  <article><div class="md"><h1>Wiki To Pdf</h1>
+<p><strong>Category</strong> wikis · <strong>Alignment</strong> mage · <strong>Version</strong> 1.0</p>
+<p>Pull FedWiki timeline pages and render formal executive-brief PDFs — one brief per timeline plus a combined dossier whose &quot;Unified Summary&quot; layer is built from the In-brief summaries. Use when turning the *.timeline.ide.earth subdomain wikis (or any same-shaped FedWiki answer pages) into shareable, executive-style PDF documents, or when re-rendering offline from a cached model. ReportLab only — no LaTeX, GTK or browser engine. Kept by the Librarian 🗃️; the Unified Summary is the Chronicler&#39;s compression.</p>
 </div>
-<div class="md"><blockquote>
-<p>Pull FedWiki timeline pages and render formal executive-brief PDFs - one brief per timeline plus a combined dossier whose .</p>
+<div class="md"><p><strong>🗃️📄 Wiki to PDF — the federation, bound for people who read on paper</strong><br>Keeper: the Librarian 🗃️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: distribution</p>
+<blockquote>
+<p>One core, many bindings: the brief is the wiki folded small.</p>
 </blockquote>
-</div>
-<div class="md"><h1>wiki-to-pdf</h1>
-<p>Turns the federated timeline wikis into formal PDF documents. Source of truth is the<br><strong>live</strong> <code>*.timeline.ide.earth</code> subdomains, read over public GET (no cookie needed).</p>
-</div>
-<div class="md"><h2>What it produces (into <code>out/</code>, inside this skill dir)</h2>
+<p>Turns the federated timeline wikis into formal PDF documents. Source of truth<br>is the <strong>live</strong> <code>*.timeline.ide.earth</code> subdomains, read over public GET (no<br>cookie needed).</p>
+<h2>What it produces (into <code>out/</code> beside the script, or <code>--out</code>)</h2>
 <ul>
-<li><code>&lt;sub&gt;-brief.pdf</code> - one executive brief per timeline (cover -&gt; overview -&gt; In-brief -&gt; Key Points / Action Items -&gt; the five questions in detail).</li>
-<li><code>timeline-dossier.pdf</code> - combined dossier: <strong>cover -&gt; Contents -&gt; Unified Summary (every In-brief, all 12 milestones) -&gt; Milestones in Detail</strong>.</li>
-<li><code>model.json</code> - the pulled, parsed content model (re-render offline with <code>--model</code>).</li>
+<li><code>&lt;sub&gt;-brief.pdf</code> — one executive brief per timeline (cover → overview →<br>In brief → Key Points / Action Items → the five questions in detail).</li>
+<li><code>timeline-dossier.pdf</code> — combined dossier: <strong>cover → Contents → Unified<br>Summary (every In brief, all milestones) → Milestones in Detail</strong>.</li>
+<li><code>model.json</code> (with <code>--dump</code>) — the pulled, parsed content model, for offline<br>re-render with <code>--model</code>.</li>
 </ul>
-<p>The <strong>Unified Summary</strong> section is deliberate: it is the shared semantic core (each<br>milestone compressed to its five answers) from which the detailed sections - and any<br>community-specific retelling produced by the <code>understanding-compression</code> skill - expand.</p>
-</div>
-<div class="md"><h2>Run</h2>
-<pre><code>python wiki_pdf.py                      # all 12 timelines + dossier -&gt; out/
-python wiki_pdf.py --sub agm            # one timeline brief
-python wiki_pdf.py --no-dossier         # briefs only
-python wiki_pdf.py --dump out/model.json   # pull + cache the model
+<p>The <strong>Unified Summary</strong> section is deliberate: it is the shared semantic core<br>(each milestone compressed to its five answers) from which the detailed<br>sections — and any community-specific retelling produced by<br><code>understanding-compression</code> — expand.</p>
+<h2>Run</h2>
+<pre><code>python wiki_pdf.py                         # all timelines + dossier -&gt; out/
+python wiki_pdf.py --sub agm               # one timeline brief
+python wiki_pdf.py --no-dossier            # briefs only
+python wiki_pdf.py --dump out/model.json   # pull + cache the model, then render
 python wiki_pdf.py --model out/model.json  # render from cache (no network)
+python wiki_pdf.py --out &lt;dir&gt;             # write somewhere else
 </code></pre>
-</div>
-<div class="md"><h2>How it works</h2>
+<h2>How it works</h2>
 <ol>
-<li><strong>Pull</strong> - for each timeline: the video/primary page (title, date object, video URL,<br>Overview, Key Points, Action Items) + the 5 question pages (<code>who-cares</code>,<br><code>who-is-involved</code>, <code>what-changes</code>, <code>proof--realness</code>, <code>becoming-real</code>).</li>
-<li><strong>Parse</strong> - FedWiki <code>story[]</code> items -&gt; structured record. For each question page it<br>separates the <code>## In brief</code> summary from the verbatim answer body and drops the<br>navigation chrome (the intro line and <code># See</code> block).</li>
-<li><strong>Render</strong> - ReportLab (Platypus). A minimal markdown-&gt;flowables converter handles<br>headings, bullets, numbered lists, bold/italic/code, and <code>wiki links</code>.</li>
+<li><strong>Pull</strong> — for each timeline: the video / primary page (title, <code>date</code> item,<br>video URL, Overview, Key Points, Action Items) + the five question pages<br>(<code>who-cares</code>, <code>who-is-involved</code>, <code>what-changes</code>, <code>proof--realness</code>,<br><code>becoming-real</code>).</li>
+<li><strong>Parse</strong> — FedWiki <code>story[]</code> items → a structured record. For each question<br>page it separates the <code>## In brief</code> summary from the verbatim answer body and<br>drops the navigation chrome (the &quot;Below we summarise&quot; intro line and the<br><code># See</code> block).</li>
+<li><strong>Render</strong> — ReportLab (Platypus). A minimal markdown → flowables converter<br>handles headings, bullets, numbered lists, bold / italic / code, and<br><code>&lt;a class=&quot;wlink&quot; href=&quot;wiki-links.html&quot;&gt;wiki links&lt;/a&gt;</code> (rendered as accent-colored text).</li>
 </ol>
-</div>
-<div class="md"><h2>Config</h2>
-<p>The timeline family, chronological order, video-slug map, and question slugs are at the<br>top of <code>wiki_pdf.py</code> (<code>TIMELINES</code>, <code>QUESTIONS</code>). Add/replace a milestone there.</p>
-</div>
-<div class="md"><h2>Dependencies</h2>
+<h2>Config</h2>
+<p>The timeline family, chronological order, video-slug map, and question slugs are<br>at the top of <code>wiki_pdf.py</code> (<code>TIMELINES</code>, <code>QUESTIONS</code>, <code>HOST</code>). Add or replace a<br>milestone there; retarget another federation by changing <code>HOST</code> and the lists.<br>Cover kicker / dossier titles are in <code>render_brief</code> / <code>render_dossier</code>.</p>
+<h2>Dependencies</h2>
 <ul>
-<li>Python 3 + <code>reportlab</code> (<code>pip install reportlab</code>). No LaTeX / GTK / wkhtmltopdf needed.</li>
-<li>weasyprint is NOT used (its GTK libs are broken on this box); ReportLab is the engine.</li>
+<li>Python 3 + <code>reportlab</code> (<code>pip install reportlab</code>). No LaTeX / GTK / wkhtmltopdf.</li>
+<li>weasyprint is deliberately not used — its GTK libraries are fragile on Windows;<br>ReportLab is the engine.</li>
+</ul>
+<h2>Notes / gotchas</h2>
+<ul>
+<li>Dates are read from each video page&#39;s <code>date</code> story item and shown verbatim.</li>
+<li>The combined dossier paginates one milestone per section (~64 pp for 12).</li>
+<li>A missing or renamed question page renders as &quot;(missing: …)&quot; rather than<br>failing the whole run.</li>
+<li>The PDFs carry other people&#39;s answers: share them where the timeline wikis are<br>already shared, and keep <code>out/</code> out of any repo.</li>
 </ul>
 </div>
-<div class="md"><h2>Notes / gotchas</h2>
-<ul>
-<li>Dates are read from each video page&#39;s <code>date</code> story item and shown verbatim (&quot;date object true&quot;).</li>
-<li>The combined dossier paginates one milestone per section; ~64 pp for the current 12.</li>
-<li>If a question page is missing/renamed, that answer renders as &quot;(missing: ...)&quot; rather<br>than failing the whole run.</li>
-<li>Pairs with <code>fedwiki-cohere-sync</code> (which keeps the source pages coherent) and feeds<br><code>understanding-compression</code> (which re-expresses the Unified Summary per community).</li>
-</ul>
+<div class="md"><p><strong>Verify:</strong> <a href="https://agentprivacy.ai">agentprivacy.ai</a> · kept by the Librarian 🗃️ in the Tower&#39;s Wikis</p>
 </div>
-<div class="md"><hr>
-<p><em>upstream: <code>~/.claude/skills</code> (local workbench; not yet promoted into <code>agentprivacy-skills-v5</code> — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊</em></p>
-<p>← <a class="wlink" href="the-workbench-skills.html">The Workbench Skills</a> · <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a></p>
+<div class="md"><h2>Provenance</h2>
+<p>Forkable skill page migrated from the agentprivacy skills repo (<code>persona/agentprivacy-wiki-to-pdf</code>, v1.0).<br>Source of truth: <code>agentprivacy-skills</code>. Fork this page to materialize a local <code>SKILL.md</code> via <code>fedwiki-to-skill</code>.</p>
+<p><em>origin: 0xagentprivacy · author: Mitchell Travers</em></p>
+</div>
+<div class="md"><h1>Assets</h1>
+</div>
+<div class="assets-box"><span class="assets-slug">📎 wiki-to-pdf</span><a class="asset-file" href="/skill/assets/wiki-to-pdf/SKILL.md" download>SKILL.md</a></div>
+<div class="md"><h2>Navigation</h2>
+<p>← <a class="wlink" href="welcome-visitors.html">Welcome Visitors</a> · <a class="wlink" href="the-wikis.html">The Wikis</a></p>
 </div></article>
   <footer class="page-foot">
     <div class="lineage">1 revision</div>

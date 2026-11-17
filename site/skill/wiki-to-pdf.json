@@ -3,53 +3,38 @@
   "story": [
     {
       "type": "markdown",
-      "id": "26d7002184447fd7",
-      "text": "# wiki-to-pdf"
+      "id": "7e36a30e9f84b178",
+      "text": "# Wiki To Pdf\n\n**Category** wikis · **Alignment** mage · **Version** 1.0\n\nPull FedWiki timeline pages and render formal executive-brief PDFs — one brief per timeline plus a combined dossier whose \"Unified Summary\" layer is built from the In-brief summaries. Use when turning the *.timeline.ide.earth subdomain wikis (or any same-shaped FedWiki answer pages) into shareable, executive-style PDF documents, or when re-rendering offline from a cached model. ReportLab only — no LaTeX, GTK or browser engine. Kept by the Librarian 🗃️; the Unified Summary is the Chronicler's compression."
     },
     {
       "type": "markdown",
-      "id": "315eb813ee2741ca",
-      "text": "> Pull FedWiki timeline pages and render formal executive-brief PDFs - one brief per timeline plus a combined dossier whose ."
+      "id": "53a432b1e4b00ed5",
+      "text": "**🗃️📄 Wiki to PDF — the federation, bound for people who read on paper**\nKeeper: the Librarian 🗃️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: distribution\n\n> One core, many bindings: the brief is the wiki folded small.\n\nTurns the federated timeline wikis into formal PDF documents. Source of truth\nis the **live** `*.timeline.ide.earth` subdomains, read over public GET (no\ncookie needed).\n\n## What it produces (into `out/` beside the script, or `--out`)\n\n- `<sub>-brief.pdf` — one executive brief per timeline (cover → overview →\n  In brief → Key Points / Action Items → the five questions in detail).\n- `timeline-dossier.pdf` — combined dossier: **cover → Contents → Unified\n  Summary (every In brief, all milestones) → Milestones in Detail**.\n- `model.json` (with `--dump`) — the pulled, parsed content model, for offline\n  re-render with `--model`.\n\nThe **Unified Summary** section is deliberate: it is the shared semantic core\n(each milestone compressed to its five answers) from which the detailed\nsections — and any community-specific retelling produced by\n`understanding-compression` — expand.\n\n## Run\n\n```\npython wiki_pdf.py                         # all timelines + dossier -> out/\npython wiki_pdf.py --sub agm               # one timeline brief\npython wiki_pdf.py --no-dossier            # briefs only\npython wiki_pdf.py --dump out/model.json   # pull + cache the model, then render\npython wiki_pdf.py --model out/model.json  # render from cache (no network)\npython wiki_pdf.py --out <dir>             # write somewhere else\n```\n\n## How it works\n\n1. **Pull** — for each timeline: the video / primary page (title, `date` item,\n   video URL, Overview, Key Points, Action Items) + the five question pages\n   (`who-cares`, `who-is-involved`, `what-changes`, `proof--realness`,\n   `becoming-real`).\n2. **Parse** — FedWiki `story[]` items → a structured record. For each question\n   page it separates the `## In brief` summary from the verbatim answer body and\n   drops the navigation chrome (the \"Below we summarise\" intro line and the\n   `# See` block).\n3. **Render** — ReportLab (Platypus). A minimal markdown → flowables converter\n   handles headings, bullets, numbered lists, bold / italic / code, and\n   `[[wiki links]]` (rendered as accent-colored text).\n\n## Config\n\nThe timeline family, chronological order, video-slug map, and question slugs are\nat the top of `wiki_pdf.py` (`TIMELINES`, `QUESTIONS`, `HOST`). Add or replace a\nmilestone there; retarget another federation by changing `HOST` and the lists.\nCover kicker / dossier titles are in `render_brief` / `render_dossier`.\n\n## Dependencies\n\n- Python 3 + `reportlab` (`pip install reportlab`). No LaTeX / GTK / wkhtmltopdf.\n- weasyprint is deliberately not used — its GTK libraries are fragile on Windows;\n  ReportLab is the engine.\n\n## Notes / gotchas\n\n- Dates are read from each video page's `date` story item and shown verbatim.\n- The combined dossier paginates one milestone per section (~64 pp for 12).\n- A missing or renamed question page renders as \"(missing: …)\" rather than\n  failing the whole run.\n- The PDFs carry other people's answers: share them where the timeline wikis are\n  already shared, and keep `out/` out of any repo."
     },
     {
       "type": "markdown",
-      "id": "d27c3b47f11ba343",
-      "text": "# wiki-to-pdf\n\nTurns the federated timeline wikis into formal PDF documents. Source of truth is the\n**live** `*.timeline.ide.earth` subdomains, read over public GET (no cookie needed)."
+      "id": "944aa97384657e8e",
+      "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis"
     },
     {
       "type": "markdown",
-      "id": "8f19c8ef0fd187b0",
-      "text": "## What it produces (into `out/`, inside this skill dir)\n- `<sub>-brief.pdf` - one executive brief per timeline (cover -> overview -> In-brief -> Key Points / Action Items -> the five questions in detail).\n- `timeline-dossier.pdf` - combined dossier: **cover -> Contents -> Unified Summary (every In-brief, all 12 milestones) -> Milestones in Detail**.\n- `model.json` - the pulled, parsed content model (re-render offline with `--model`).\n\nThe **Unified Summary** section is deliberate: it is the shared semantic core (each\nmilestone compressed to its five answers) from which the detailed sections - and any\ncommunity-specific retelling produced by the `understanding-compression` skill - expand."
+      "id": "2109edb52582cc2b",
+      "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-to-pdf`, v1.0).\nSource of truth: `agentprivacy-skills`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
     },
     {
       "type": "markdown",
-      "id": "a1f791386591c1f0",
-      "text": "## Run\n```\npython wiki_pdf.py                      # all 12 timelines + dossier -> out/\npython wiki_pdf.py --sub agm            # one timeline brief\npython wiki_pdf.py --no-dossier         # briefs only\npython wiki_pdf.py --dump out/model.json   # pull + cache the model\npython wiki_pdf.py --model out/model.json  # render from cache (no network)\n```"
+      "id": "6c18f630b87e7104",
+      "text": "# Assets"
+    },
+    {
+      "type": "assets",
+      "id": "ef839bd64f620b3d",
+      "text": "wiki-to-pdf"
     },
     {
       "type": "markdown",
-      "id": "616b3472c10336b2",
-      "text": "## How it works\n1. **Pull** - for each timeline: the video/primary page (title, date object, video URL,\n   Overview, Key Points, Action Items) + the 5 question pages (`who-cares`,\n   `who-is-involved`, `what-changes`, `proof--realness`, `becoming-real`).\n2. **Parse** - FedWiki `story[]` items -> structured record. For each question page it\n   separates the `## In brief` summary from the verbatim answer body and drops the\n   navigation chrome (the intro line and `# See` block).\n3. **Render** - ReportLab (Platypus). A minimal markdown->flowables converter handles\n   headings, bullets, numbered lists, bold/italic/code, and `wiki links`."
-    },
-    {
-      "type": "markdown",
-      "id": "b02623664b082c04",
-      "text": "## Config\nThe timeline family, chronological order, video-slug map, and question slugs are at the\ntop of `wiki_pdf.py` (`TIMELINES`, `QUESTIONS`). Add/replace a milestone there."
-    },
-    {
-      "type": "markdown",
-      "id": "b2cf9a6fabb5f4bb",
-      "text": "## Dependencies\n- Python 3 + `reportlab` (`pip install reportlab`). No LaTeX / GTK / wkhtmltopdf needed.\n- weasyprint is NOT used (its GTK libs are broken on this box); ReportLab is the engine."
-    },
-    {
-      "type": "markdown",
-      "id": "f2792a7656203ebf",
-      "text": "## Notes / gotchas\n- Dates are read from each video page's `date` story item and shown verbatim (\"date object true\").\n- The combined dossier paginates one milestone per section; ~64 pp for the current 12.\n- If a question page is missing/renamed, that answer renders as \"(missing: ...)\" rather\n  than failing the whole run.\n- Pairs with `fedwiki-cohere-sync` (which keeps the source pages coherent) and feeds\n  `understanding-compression` (which re-expresses the Unified Summary per community)."
-    },
-    {
-      "type": "markdown",
-      "id": "337ae5e8dba59290",
-      "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+      "id": "acbf99f4e28b78e6",
+      "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
     }
   ],
   "journal": [
@@ -60,57 +45,42 @@
         "story": [
           {
             "type": "markdown",
-            "id": "26d7002184447fd7",
-            "text": "# wiki-to-pdf"
+            "id": "7e36a30e9f84b178",
+            "text": "# Wiki To Pdf\n\n**Category** wikis · **Alignment** mage · **Version** 1.0\n\nPull FedWiki timeline pages and render formal executive-brief PDFs — one brief per timeline plus a combined dossier whose \"Unified Summary\" layer is built from the In-brief summaries. Use when turning the *.timeline.ide.earth subdomain wikis (or any same-shaped FedWiki answer pages) into shareable, executive-style PDF documents, or when re-rendering offline from a cached model. ReportLab only — no LaTeX, GTK or browser engine. Kept by the Librarian 🗃️; the Unified Summary is the Chronicler's compression."
           },
           {
             "type": "markdown",
-            "id": "315eb813ee2741ca",
-            "text": "> Pull FedWiki timeline pages and render formal executive-brief PDFs - one brief per timeline plus a combined dossier whose ."
+            "id": "53a432b1e4b00ed5",
+            "text": "**🗃️📄 Wiki to PDF — the federation, bound for people who read on paper**\nKeeper: the Librarian 🗃️ · Authored by the Chronicler 🧙📖 · Category: wikis · Layer: distribution\n\n> One core, many bindings: the brief is the wiki folded small.\n\nTurns the federated timeline wikis into formal PDF documents. Source of truth\nis the **live** `*.timeline.ide.earth` subdomains, read over public GET (no\ncookie needed).\n\n## What it produces (into `out/` beside the script, or `--out`)\n\n- `<sub>-brief.pdf` — one executive brief per timeline (cover → overview →\n  In brief → Key Points / Action Items → the five questions in detail).\n- `timeline-dossier.pdf` — combined dossier: **cover → Contents → Unified\n  Summary (every In brief, all milestones) → Milestones in Detail**.\n- `model.json` (with `--dump`) — the pulled, parsed content model, for offline\n  re-render with `--model`.\n\nThe **Unified Summary** section is deliberate: it is the shared semantic core\n(each milestone compressed to its five answers) from which the detailed\nsections — and any community-specific retelling produced by\n`understanding-compression` — expand.\n\n## Run\n\n```\npython wiki_pdf.py                         # all timelines + dossier -> out/\npython wiki_pdf.py --sub agm               # one timeline brief\npython wiki_pdf.py --no-dossier            # briefs only\npython wiki_pdf.py --dump out/model.json   # pull + cache the model, then render\npython wiki_pdf.py --model out/model.json  # render from cache (no network)\npython wiki_pdf.py --out <dir>             # write somewhere else\n```\n\n## How it works\n\n1. **Pull** — for each timeline: the video / primary page (title, `date` item,\n   video URL, Overview, Key Points, Action Items) + the five question pages\n   (`who-cares`, `who-is-involved`, `what-changes`, `proof--realness`,\n   `becoming-real`).\n2. **Parse** — FedWiki `story[]` items → a structured record. For each question\n   page it separates the `## In brief` summary from the verbatim answer body and\n   drops the navigation chrome (the \"Below we summarise\" intro line and the\n   `# See` block).\n3. **Render** — ReportLab (Platypus). A minimal markdown → flowables converter\n   handles headings, bullets, numbered lists, bold / italic / code, and\n   `[[wiki links]]` (rendered as accent-colored text).\n\n## Config\n\nThe timeline family, chronological order, video-slug map, and question slugs are\nat the top of `wiki_pdf.py` (`TIMELINES`, `QUESTIONS`, `HOST`). Add or replace a\nmilestone there; retarget another federation by changing `HOST` and the lists.\nCover kicker / dossier titles are in `render_brief` / `render_dossier`.\n\n## Dependencies\n\n- Python 3 + `reportlab` (`pip install reportlab`). No LaTeX / GTK / wkhtmltopdf.\n- weasyprint is deliberately not used — its GTK libraries are fragile on Windows;\n  ReportLab is the engine.\n\n## Notes / gotchas\n\n- Dates are read from each video page's `date` story item and shown verbatim.\n- The combined dossier paginates one milestone per section (~64 pp for 12).\n- A missing or renamed question page renders as \"(missing: …)\" rather than\n  failing the whole run.\n- The PDFs carry other people's answers: share them where the timeline wikis are\n  already shared, and keep `out/` out of any repo."
           },
           {
             "type": "markdown",
-            "id": "d27c3b47f11ba343",
-            "text": "# wiki-to-pdf\n\nTurns the federated timeline wikis into formal PDF documents. Source of truth is the\n**live** `*.timeline.ide.earth` subdomains, read over public GET (no cookie needed)."
+            "id": "944aa97384657e8e",
+            "text": "**Verify:** [agentprivacy.ai](https://agentprivacy.ai) · kept by the Librarian 🗃️ in the Tower's Wikis"
           },
           {
             "type": "markdown",
-            "id": "8f19c8ef0fd187b0",
-            "text": "## What it produces (into `out/`, inside this skill dir)\n- `<sub>-brief.pdf` - one executive brief per timeline (cover -> overview -> In-brief -> Key Points / Action Items -> the five questions in detail).\n- `timeline-dossier.pdf` - combined dossier: **cover -> Contents -> Unified Summary (every In-brief, all 12 milestones) -> Milestones in Detail**.\n- `model.json` - the pulled, parsed content model (re-render offline with `--model`).\n\nThe **Unified Summary** section is deliberate: it is the shared semantic core (each\nmilestone compressed to its five answers) from which the detailed sections - and any\ncommunity-specific retelling produced by the `understanding-compression` skill - expand."
+            "id": "2109edb52582cc2b",
+            "text": "## Provenance\nForkable skill page migrated from the agentprivacy skills repo (`persona/agentprivacy-wiki-to-pdf`, v1.0).\nSource of truth: `agentprivacy-skills`. Fork this page to materialize a local `SKILL.md` via `fedwiki-to-skill`.\n\n*origin: 0xagentprivacy · author: Mitchell Travers*"
           },
           {
             "type": "markdown",
-            "id": "a1f791386591c1f0",
-            "text": "## Run\n```\npython wiki_pdf.py                      # all 12 timelines + dossier -> out/\npython wiki_pdf.py --sub agm            # one timeline brief\npython wiki_pdf.py --no-dossier         # briefs only\npython wiki_pdf.py --dump out/model.json   # pull + cache the model\npython wiki_pdf.py --model out/model.json  # render from cache (no network)\n```"
+            "id": "6c18f630b87e7104",
+            "text": "# Assets"
+          },
+          {
+            "type": "assets",
+            "id": "ef839bd64f620b3d",
+            "text": "wiki-to-pdf"
           },
           {
             "type": "markdown",
-            "id": "616b3472c10336b2",
-            "text": "## How it works\n1. **Pull** - for each timeline: the video/primary page (title, date object, video URL,\n   Overview, Key Points, Action Items) + the 5 question pages (`who-cares`,\n   `who-is-involved`, `what-changes`, `proof--realness`, `becoming-real`).\n2. **Parse** - FedWiki `story[]` items -> structured record. For each question page it\n   separates the `## In brief` summary from the verbatim answer body and drops the\n   navigation chrome (the intro line and `# See` block).\n3. **Render** - ReportLab (Platypus). A minimal markdown->flowables converter handles\n   headings, bullets, numbered lists, bold/italic/code, and `wiki links`."
-          },
-          {
-            "type": "markdown",
-            "id": "b02623664b082c04",
-            "text": "## Config\nThe timeline family, chronological order, video-slug map, and question slugs are at the\ntop of `wiki_pdf.py` (`TIMELINES`, `QUESTIONS`). Add/replace a milestone there."
-          },
-          {
-            "type": "markdown",
-            "id": "b2cf9a6fabb5f4bb",
-            "text": "## Dependencies\n- Python 3 + `reportlab` (`pip install reportlab`). No LaTeX / GTK / wkhtmltopdf needed.\n- weasyprint is NOT used (its GTK libs are broken on this box); ReportLab is the engine."
-          },
-          {
-            "type": "markdown",
-            "id": "f2792a7656203ebf",
-            "text": "## Notes / gotchas\n- Dates are read from each video page's `date` story item and shown verbatim (\"date object true\").\n- The combined dossier paginates one milestone per section; ~64 pp for the current 12.\n- If a question page is missing/renamed, that answer renders as \"(missing: ...)\" rather\n  than failing the whole run.\n- Pairs with `fedwiki-cohere-sync` (which keeps the source pages coherent) and feeds\n  `understanding-compression` (which re-expresses the Unified Summary per community)."
-          },
-          {
-            "type": "markdown",
-            "id": "337ae5e8dba59290",
-            "text": "---\n*upstream: `~/.claude/skills` (local workbench; not yet promoted into `agentprivacy-skills-v5` — that promotion is a First-Person call) · author: Mitchell Travers · (⚔️⊥⿻⊥🧙)😊*\n\n← [[The Workbench Skills]] · [[Welcome Visitors]]"
+            "id": "acbf99f4e28b78e6",
+            "text": "## Navigation\n\n← [[Welcome Visitors]] · [[The Wikis]]"
           }
         ]
       },
-      "date": 1785847280967
+      "date": 1794496817066
     }
   ]
 }
