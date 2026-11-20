@@ -44,16 +44,18 @@ const SITES = [
   { id: 'myterms',   label: 'MyTerms',    glyph: '📜', color: '#86a9c9', path: 'myterms',    group: 'federation', blurb: 'The Agreement Layer — MyTerms / IEEE Std 7012™-2025: the founding-member application to the MyTerms Alliance (Customer Commons), the integration plan, and the two browser familiars. The standard specifies agreement, not enforcement.' },
   { id: 'dtg',       label: 'DTG',        glyph: '🕸️', color: '#3a7c6f', path: 'dtg',        group: 'federation', blurb: 'The Trust Graph Lab — the DTG ZKP research corpus: the Predicate & Assurance-Boundary decision baseline (split per §), nineteen explorations, the lab evidence layer with real circuits, and the proposed ToIP trust-task families (agent-admission · understanding).' },
   { id: 'kyra',      label: 'Kyra Gate',  glyph: '⛩️', color: '#c96a5a', path: 'kyra',       group: 'federation', blurb: 'KYRA — Know Your Runtime Agent: the checkpoint where an AI agent earns, and loses, the right to act. Understanding as key, the witness draw, det(Σ) sovereignty volume, bilateral credentials, a tamper-evident audit rail.' },
-  { id: 'fieldguide', label: 'Field Guide', glyph: '🧭', color: '#4a8c5f', path: 'fieldguide', group: 'federation', blurb: 'The Field Guide trust overlay — the Hitchhikers walking AR client meets the trust-graph work: the Meet rite, eight suites and 124 properties, nine proverbs, and the rulings (audience is granted, not computed · a wiki fork is not an audience · shared quest is not consent).' },
   { id: 'transmediale', label: 'Improbable Engine', glyph: '🌀', color: '#5a7ca8', path: 'improbable-engine', host: 'transmediale', group: 'sibling', blurb: 'The lattice lab improbable engine — the 64-vertex sovereignty lattice closed into a torus, six strands, a live farm seated on the geometry.' },
   { id: 'city',      label: 'City of Mages', glyph: '🏛️', color: '#a23a3a', path: 'city', group: 'federation', blurb: 'The City of Mages — the Second Person Spellbook (“you”): the Tomes, its cast, and the City’s structural grimoire.' },
   { id: 'tomes',     label: 'Tomes',      glyph: '📖', color: '#a23a3a', path: 'city/tomes', group: 'federation', nested: 'city', blurb: 'The Second Person Spellbook (“you”) — City of Mages acts I–X (incl. IX the Horizon and X the Hearth) + cast + specs.' },
   { id: 'game42',    label: 'Game of 42', glyph: '🎲', color: '#c98a2a', path: 'game42',         group: 'sibling', blurb: 'The Game of 42 — its own wiki (sibling host).' },
   { id: 'spellbook', label: 'Mouse Spellbook', glyph: '🐭', color: '#6a8c3b', path: 'mouse-spellbook', group: 'sibling', host: 'spellbook', blurb: 'The Mouse Spellbook — a wiki-native agentic directory pathway (the mouse rendering of the First Person Spellbook), walked through in the wiki itself.' },
-  { id: 'vision',    label: 'Vision', glyph: '🐬', color: '#4aa3c9', path: 'vision', host: 'mitch.vision', group: 'sibling', blurb: 'The Hitchhiker vision — thirteen milestone timelines (Groundhog Day → AGM 2027), each answered five ways: what changes · who cares · who is involved · proof of realness · how it becomes real. The source wiki behind the public timeline subdomains.' },
   { id: 'vpk',       label: 'VPK', glyph: '🔑', color: '#c98a3a', path: 'vpk', group: 'sibling', blurb: 'Virtual Private Knowledge — handing someone a slice of a private knowledge base over a private network, at a fidelity they have earned: pathways as the primitive, the D0–D4 disclosure ladder, scoped grants read back as trust tasks, and what the whole thing does not prove.' },
   { id: 'plugin',    label: 'Root Tiles', glyph: '🧩', color: '#b0783a', path: 'tiles', group: 'sibling', blurb: 'The TileGlyph lab — colored glyph navigation tiles for the federation: the Root Tiles registry, the tile wall, the tile index, and the plugin that renders them.' },
 ];
+// NOT projected, 19 Nov 2026 (Mitch: these fedwiki pages are not part of the agentprivacy guides):
+// fieldguide.localhost (partner ARWorld documents, tailnet-only) · mitch.vision.localhost (team session
+// transcripts) · and the single page dtg/briefing-2026-07-18-zkp-explorations (draft, not for circulation).
+const NOT_PUBLIC = new Set(['dtg/briefing-2026-07-18-zkp-explorations']);
 // NOT projected (G1): chronicle.localhost (working chronicles — sealed) ·
 // embassy.localhost (tailnet-facing by design; carries a plan page) ·
 // *.timeline.localhost ×14 + the root wiki (♻️ projections/predecessors of vision).
@@ -334,6 +336,7 @@ for (const site of SITES) {
   SLUGS[site.id] = new Set(files);
   const tmap = {};
   for (const f of files) {
+    if (NOT_PUBLIC.has(site.id + '/' + f)) continue;
     try { const t = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')).title; if (t) tmap[asSlug(fixText(t))] = f; } catch {}
   }
   TITLES[site.id] = tmap;
@@ -350,6 +353,7 @@ for (const site of SITES) {
   const sitemap = [];
   let n = 0;
   for (const slug of entries) {
+    if (NOT_PUBLIC.has(site.id + '/' + slug)) continue;
     const raw = fs.readFileSync(path.join(pagesDir, slug), 'utf8');
     let page; try { page = JSON.parse(raw); } catch { continue; }
     const title = fixText(page.title || slug);
@@ -426,7 +430,7 @@ const siteRows = WEBSITES.map(w =>
     <div class="site-wikis">${w.wikis.map(wikiLink).join(' · ')}</div>
   </div>`).join('');
 
-fs.writeFileSync(path.join(OUT, 'index.html'), shell({
+const hubHtml = shell({
   title: 'The Guide', site: 'guide', slug: 'index', lineage: '',
   body: `<section class="hero">
     <h1>Guide<br><em>to Privacy</em></h1>
@@ -457,7 +461,17 @@ fs.writeFileSync(path.join(OUT, 'index.html'), shell({
   <section class="hub-grid">${sibCards}</section>
 
   <p class="enter-guide"><a href="/guide/welcome-visitors.html">Enter the Guide hub →</a></p>`,
-}));
+});
+// The front door, 20 Nov 2026: when tools/home/index.html exists it is the home page ("Privacy is value. Here is
+// how to play."), and the generated hub of every collection moves to /collections/. Its images live in root/assets/home.
+const HOME_SRC = path.join(path.dirname(fileURLToPath(import.meta.url)), 'home', 'index.html');
+if (fs.existsSync(HOME_SRC)) {
+  fs.mkdirSync(path.join(OUT, 'collections'), { recursive: true });
+  fs.writeFileSync(path.join(OUT, 'collections', 'index.html'), hubHtml);
+  fs.copyFileSync(HOME_SRC, path.join(OUT, 'index.html'));
+} else {
+  fs.writeFileSync(path.join(OUT, 'index.html'), hubHtml);
+}
 
 fs.mkdirSync(path.join(OUT, 'assets'), { recursive: true });
 // favicon — the guide's compass-star: navy ground · cyan 8-point star · coral core

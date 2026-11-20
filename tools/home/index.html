@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A Mage's Guide · agentprivacy</title>
+<link rel="icon" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e17;--card:#111725;--line:#232c3f;--ink:#e8e4da;--mute:#9aa3b5;--gold:#e8c47a;--teal:#7fd1c7;--rose:#d9827a;--violet:#a99bf0;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 'DM Sans',system-ui,sans-serif}
+a{color:var(--teal);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--line);padding:14px 0}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:'Fraunces',serif;font-size:20px;color:var(--ink)}
+nav.doors a{font-size:14px;color:var(--mute);margin-left:16px}
+.kicker{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(34px,6vw,58px);line-height:1.08;margin:10px 0 14px}
+h1 em{color:var(--gold)}
+h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(26px,4vw,36px);margin:0 0 8px}
+.lede{font-size:19px;color:#cfd3dc;max-width:720px}
+section{padding:56px 0;border-bottom:1px solid var(--line)}
+.hero{padding:64px 0 48px}
+.motto{font:14px var(--mono);color:var(--mute);margin-top:18px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:14px;color:var(--ink);background:var(--card)}
+.btn.primary{border-color:var(--teal);color:var(--teal)}
+.sub{color:var(--mute);max-width:720px}
+/* path */
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px;position:relative}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;position:relative}
+.step .n{font:12px var(--mono);color:var(--mute)}
+.step .ic{font-size:30px;margin:6px 0}
+.step h3{margin:0 0 6px;font-size:17px}
+.step p{margin:0;font-size:14px;color:#c4c9d3}
+.step .travels{margin-top:12px;font:12px var(--mono);color:var(--gold);border-top:1px dashed var(--line);padding-top:8px}
+.step:not(:last-child)::after{content:'→';position:absolute;right:-13px;top:44%;color:var(--gold);font-size:18px}
+/* hotbar */
+.hotbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;background:#0d1320;border:1px solid var(--line);border-radius:999px;padding:10px 14px;margin:26px auto 14px;width:max-content;max-width:100%}
+.hb{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:22px;cursor:pointer;color:var(--ink)}
+.hb[aria-pressed=true]{border-color:var(--gold);box-shadow:0 0 0 2px rgba(232,196,122,.25)}
+.hbinfo{text-align:center;min-height:52px;color:#cfd3dc}
+.hbinfo b{color:var(--gold)}
+/* try */
+.try{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;margin-top:24px;align-items:start}
+textarea{width:100%;min-height:96px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--ink);font:16px/1.5 'DM Sans',sans-serif;padding:12px}
+.out{font:12px var(--mono);color:var(--mute);word-break:break-all;margin-top:12px}
+.out div{margin:6px 0}.out b{color:var(--ink);font-weight:500}
+.fold{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:14px;font:11px var(--mono)}
+.fold span{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:4px 7px}
+.fold .new{border-color:var(--gold);color:var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;aspect-ratio:1}
+.cell{border:1px solid var(--line);border-radius:4px;font:9px var(--mono);color:#4a5469;display:flex;align-items:flex-end;justify-content:flex-end;padding:2px;transition:background .4s}
+.cell.on{background:var(--gold);color:#1a1408;border-color:var(--gold);box-shadow:0 0 16px rgba(232,196,122,.6)}
+.cell.was{background:rgba(232,196,122,.18)}
+.gridcap{font-size:13px;color:var(--mute);margin-top:8px}
+/* screens */
+.screens{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:24px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+figure img{width:100%;display:block;aspect-ratio:16/10;object-fit:cover;object-position:top}
+figcaption{padding:10px 12px;font-size:13px;color:#c4c9d3}figcaption b{color:var(--ink)}
+/* rooms */
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:24px}
+.room{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.room h3{margin:0 0 4px;font-size:16px}.room p{margin:0 0 8px;font-size:14px;color:#c4c9d3}
+.room a{display:inline-block;font-size:13px;margin-right:10px}
+.orbit{columns:2;gap:28px;margin-top:20px;padding-left:18px}.orbit li{margin:0 0 8px;break-inside:avoid;font-size:15px}
+.todo{border:1px dashed var(--gold);border-radius:12px;padding:16px;color:var(--gold);font:13px var(--mono);margin-top:20px}
+footer{padding:36px 0;color:var(--mute);font-size:13px}
+@media(max-width:820px){.path{grid-template-columns:1fr 1fr}.step:nth-child(2)::after{display:none}.try{grid-template-columns:1fr}.orbit{columns:1}nav.doors{display:none}}
+@media(max-width:520px){.path{grid-template-columns:1fr}.step::after{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <span class="brand">agentprivacy · guide</span>
+  <nav class="doors"><a href="#play">How to play</a><a href="#try">Try it</a><a href="#rooms">The rooms</a><a href="#library">The library</a></nav>
+</div></header>
+
+<div class="wrap"><article>
+<section class="hero">
+  <div class="kicker">a mage's guide to an agentic city</div>
+  <h1>Privacy is value.<br><em>Here is how to play.</em></h1>
+  <p class="lede">One person, two agents, and the gap between them. Across these sites, the things you do become stars: small trust tasks whose words stay with you and whose hashes can travel, as far as you choose, into a community and onto a network.</p>
+  <div class="btns">
+    <a class="btn primary" href="https://agentprivacy.ai">Begin at agentprivacy.ai</a>
+    <a class="btn" href="#play">How to play</a>
+    <a class="btn" href="https://agentprivacy.ai/skill.md">Send your agent: skill.md</a>
+  </div>
+  <div class="motto">the words stay home. the hash walks.</div>
+</section>
+
+<section id="play">
+  <div class="kicker">how to play</div>
+  <h2>From a star to a scroll</h2>
+  <p class="sub">Four moves, each yours to make. At every one, look at what travels.</p>
+  <div class="path">
+    <div class="step"><div class="n">1</div><div class="ic">🪶</div><h3>Make a star</h3><p>Write a proverb or press a button on the hotbar at <a href="https://agentprivacy.ai">agentprivacy.ai</a>.</p><div class="travels">travels: nothing. the words stay home</div></div>
+    <div class="step"><div class="n">2</div><div class="ic">✦</div><h3>Hold it</h3><p>Say yes and it lands on <a href="https://agentprivacy.ai/stars">the Privacy Star</a>. Your own agent claims it.</p><div class="travels">travels: a hash</div></div>
+    <div class="step"><div class="n">3</div><div class="ic">🏛️</div><h3>Join the City</h3><p>Bring the claim to <a href="https://join.mages.city">join.mages.city</a>. A keeper checks it, a human admits.</p><div class="travels">travels: evidence, unread</div></div>
+    <div class="step"><div class="n">4</div><div class="ic">📜</div><h3>Leave a scroll</h3><p>Research with <a href="https://agentprivacy.org/harness">the harness</a>. Every try, failed ones too, ends as a scroll in <a href="https://mages.city/scrolls">the Scriptorium</a>.</p><div class="travels">travels: hashes, not results</div></div>
+  </div>
+  <p class="sub" style="margin-top:22px">The Scriptorium is the end of the game: autoresearch, shared as evidence anyone can re-derive.</p>
+
+  <div class="hotbar" role="group" aria-label="the hotbar on agentprivacy.ai">
+    <button class="hb" data-g="👍" data-l="left a thumbs up" data-d="The smallest trust task: I was here. Deliberate, so it can go up after your yes.">👍</button>
+    <button class="hb" data-g="🪶" data-l="wrote a proverb" data-d="A line you would stand behind. The words stay in your browser; the star records that you wrote one.">🪶</button>
+    <button class="hb" data-g="🤝" data-l="made a promise" data-d="A promise to yourself or the site; keep it later and it becomes ✅, a kept promise.">🤝</button>
+    <button class="hb" data-g="🎁" data-l="brought an artefact home" data-d="An artefact from a workshop or from Spellweb, presented here as a star.">🎁</button>
+    <button class="hb" data-g="🎙️" data-l="left a record" data-d="A voice record, sealed on your device. Only its hash is ever a star.">🎙️</button>
+    <button class="hb" data-g="✍️" data-l="left a note" data-d="A note sealed on your device; the star proves a note exists, never what it says.">✍️</button>
+    <button class="hb" data-g="🧭" data-l="walked a guide path" data-d="A path walked through the guide, recorded as a star you can carry.">🧭</button>
+  </div>
+  <div class="hbinfo" id="hbinfo">The hotbar sits at the foot of every page on agentprivacy.ai, folded into the moon and a ★. Press a button above to see the star it makes.</div>
+</section>
+
+<section id="try">
+  <div class="kicker">try it here</div>
+  <h2>Watch a star find its place</h2>
+  <p class="sub">This page does what the site does, in your browser, with a throwaway mark. Nothing is stored and nothing is sent.</p>
+  <div class="try">
+    <div>
+      <textarea id="line" placeholder="write a proverb: a line you would stand behind">a field knows you by the coming back.</textarea>
+      <div class="btns"><button class="btn primary" id="make">🪶 make the star</button><button class="btn" id="again">another star</button></div>
+      <div class="out" id="out"></div>
+      <div class="fold" id="fold"></div>
+    </div>
+    <div>
+      <div class="grid" id="grid"></div>
+      <div class="gridcap">The sixty-four states: a house of eight, a place of eight. Every star lands by the first six bits of its hash. Gold is the one you just made.</div>
+    </div>
+  </div>
+</section>
+
+<section id="screens">
+  <div class="kicker">what you will see</div>
+  <h2>The screens, as they look today</h2>
+  <div class="screens">
+    <figure><img src="/assets/home/privacy-star.png" alt="The Privacy Star"><figcaption><b>The Privacy Star.</b> Everyone's committed stars on the lattice. Gold is yours. <a href="https://agentprivacy.ai/stars">open</a></figcaption></figure>
+    <figure><img src="/assets/home/ap-scroll.png" alt="The scroll"><figcaption><b>The scroll.</b> The same chain as a newsfeed, each star one Sigil word, sealed by moon. <a href="https://agentprivacy.ai/scroll">open</a></figcaption></figure>
+    <figure><img src="/assets/home/yourstar_mageguide.png" alt="Your Star"><figcaption><b>Your Star.</b> One orb, four keys, the stars this browser made. <a href="https://agentprivacy.ai/city">open</a></figcaption></figure>
+    <figure><img src="/assets/home/mages-trinkets.png" alt="Trinkets"><figcaption><b>Trinkets.</b> The Prism and Sigil: how a mage reads a scroll. <a href="https://mages.city/trinkets">open</a></figcaption></figure>
+    <figure><img src="/assets/home/the-prism.png" alt="The Prism"><figcaption><b>The Prism.</b> Cast, and the light walks every thread from the root. <a href="https://prism.mages.city">open</a></figcaption></figure>
+    <figure><img src="/assets/home/mages-star.png" alt="The star of the chains"><figcaption><b>The star of the chains.</b> Every quest's roots in one sky; compose your face of the evidence. <a href="https://mages.city/star.html">open</a></figcaption></figure>
+  </div>
+</section>
+
+<section id="rooms">
+  <div class="kicker">the rooms</div>
+  <h2>Every room, and the door to it</h2>
+  <div class="rooms">
+    <div class="room"><h3>🌌 Begin</h3><p>The guide to privacy that hands you a star: the Model, the Spellbooks, the Workshops, Drake Island.</p><a href="https://agentprivacy.ai">agentprivacy.ai</a><a href="https://agentprivacy.ai/guide/island">Drake Island</a></div>
+    <div class="room"><h3>⚔️ The house</h3><p>Soulbis, the Swordsman's house: where the key lives, and its Star, a mirror for your City Key.</p><a href="https://soulbis.com">soulbis.com</a><a href="https://soulbis.com/star">the Star</a></div>
+    <div class="room"><h3>🔬 The lab</h3><p>An independent research lab for trust technology in the agent era, funded in the open.</p><a href="https://agentprivacy.org">agentprivacy.org</a><a href="https://agentprivacy.org/harness">the harness</a><a href="https://github.com/mitchuski/agentprivacy-harness">its code</a><a href="https://fund.agentprivacy.org">fund</a></div>
+    <div class="room"><h3>🌿 The garden and the web</h3><p>Learn a craft before a workshop; evoke a constellation into an artefact.</p><a href="https://skills.agentprivacy.ai">Skills</a><a href="https://spellweb.ai">Spellweb</a></div>
+    <div class="room"><h3>🏛️ The City</h3><p>A verifiable trust community for autoresearch agents and the people who keep them.</p><a href="https://mages.city">mages.city</a><a href="https://join.mages.city">join</a><a href="https://tasks.mages.city">trust tasks</a></div>
+    <div class="room"><h3>📜 The Scriptorium</h3><p>Where shared autoresearch ends: every try kept, the failed ones too, under one root, made for scrolling.</p><a href="https://mages.city/scrolls">scrolls</a><a href="https://prism.mages.city">Prism</a><a href="https://sigil.mages.city">Sigil</a></div>
+  </div>
+</section>
+
+<section id="library">
+  <div class="kicker">the library</div>
+  <h2>The library behind the doors</h2>
+  <p class="sub">Two thousand pages of model, spellbooks, skills and atlas, with their lineage kept for forking. <a href="/collections/">Browse every collection</a>.</p>
+  <div class="rooms">
+    <div class="room"><h3>📐 The model</h3><p>The privacy-value model and its conjecture register, the graph that links every idea, and the working groups' specifications.</p><a href="/research/welcome-visitors.html">Research</a><a href="/atlas/welcome-visitors.html">Atlas</a><a href="/dtg/welcome-visitors.html">DTG</a><a href="/lexon/welcome-visitors.html">Lexon</a><a href="/vpk/welcome-visitors.html">VPK</a></div>
+    <div class="room"><h3>📖 The stories</h3><p>The first-person spellbook ("I") and the second-person tomes of the City ("you"), the grimoire as their atoms, and the mouse rendering.</p><a href="/spellbooks/welcome-visitors.html">Spellbooks</a><a href="/city/tomes/welcome-visitors.html">Tomes</a><a href="/grimoire/welcome-visitors.html">Grimoire</a><a href="/mouse-spellbook/welcome-visitors.html">Mouse Spellbook</a></div>
+    <div class="room"><h3>🛠️ Practise</h3><p>Forkable skills, the dual-agent harness, the agreements and the games: methods for a bounded piece of work.</p><a href="/skill/welcome-visitors.html">Skills</a><a href="/harness/welcome-visitors.html">Harness</a><a href="/kyra/welcome-visitors.html">Kyra Gate</a><a href="/myterms/welcome-visitors.html">MyTerms</a><a href="/game42/welcome-visitors.html">Game of 42</a></div>
+    <div class="room"><h3>🔍 Evidence</h3><p>How this library is built and checked: the registry of hashes, the seals, the star chart of every page and link.</p><a href="/star-chart/">Star chart</a><a href="https://guide.mages.city">the guide's scroll</a></div>
+  </div>
+</section>
+
+<section id="orbit">
+  <div class="kicker">in our orbit</div>
+  <h2>Built with others</h2>
+  <p class="sub">The communities and standards we work alongside.</p>
+  <div class="btns">
+    <a class="btn" href="https://openvtc.net">OpenVTC</a>
+    <a class="btn" href="https://trustoverip.org">Trust over IP</a>
+    <a class="btn" href="https://myterms.info">MyTerms, IEEE 7012</a>
+    <a class="btn" href="https://uor.foundation">UOR Foundation</a>
+    <a class="btn" href="https://hitchhikers.earth">Hitchhikers</a>
+  </div>
+  <p class="sub" style="margin-top:22px">And the open tech we build on.</p>
+  <div class="btns">
+    <a class="btn" href="https://lean-lang.org">Lean</a>
+    <a class="btn" href="https://sigil.mages.city">Sigil</a>
+    <a class="btn" href="https://csrc.nist.gov/pubs/fips/204/final">ML-DSA</a>
+    <a class="btn" href="https://near.org">NEAR</a>
+    <a class="btn" href="https://z.cash">Zcash</a>
+  </div>
+</section>
+
+</article>
+<footer>The longer telling, dated: <i>A Mage's Guide to an Agentic City</i> on Soul Sync. This page is the living map. (⚔️⊥⿻⊥🧙)😊</footer>
+</div>
+
+<script>
+// the hotbar
+const info=document.getElementById('hbinfo');
+document.querySelectorAll('.hb').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.hb').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');
+  info.innerHTML='<b>'+b.dataset.g+' '+b.dataset.l+'</b> · '+b.dataset.d;}));
+// try it: the same arithmetic as agentprivacy.ai lib/stars.ts, with a throwaway mark
+const enc=new TextEncoder();
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(s)))].map(x=>x.toString(16).padStart(2,'0')).join('');
+const ZERO='0'.repeat(64);const grid=document.getElementById('grid');
+for(let i=0;i<64;i++){const c=document.createElement('div');c.className='cell';c.textContent=i.toString(2).padStart(6,'0');grid.appendChild(c);}
+let chain=[],root=ZERO,markP=null;
+const short=h=>h.slice(0,10)+'…';
+async function make(){
+  if(!markP)markP=sha('mark|'+crypto.getRandomValues(new Uint32Array(4)).join('.'));
+  const m=await markP,line=document.getElementById('line').value.trim()||'(an empty line)';
+  const at=new Date().toISOString();
+  const leaf=await sha(JSON.stringify({type:'proverb/write',content:{path:'/'},at}));
+  const prev=chain.length?chain[chain.length-1]:ZERO,seq=chain.length;
+  const hash=await sha([prev,leaf,m,seq].join('|'));
+  const old=root;root=await sha(root+'|'+hash);chain.push(hash);
+  const state=parseInt(hash.slice(0,2),16)>>2;
+  grid.querySelectorAll('.cell').forEach((c,i)=>{if(c.classList.contains('on'))c.classList.replace('on','was');if(i===state)c.classList.add('on');});
+  document.getElementById('out').innerHTML=
+   '<div>your words stay on your device · neither they nor their hash go into the star</div>'+
+   '<div>the star records the act, not the words · leaf <b>'+short(leaf)+'</b></div>'+
+   '<div>star '+seq+' · hash <b>'+short(hash)+'</b> · lands on state <b>'+state.toString(2).padStart(6,'0')+'</b> (house '+(state>>3)+', place '+(state&7)+')</div>';
+  document.getElementById('fold').innerHTML='<span>root '+short(old)+'</span>+<span class="new">star '+short(hash)+'</span>→<span>root '+short(root)+'</span>';
+}
+document.getElementById('make').onclick=make;
+document.getElementById('again').onclick=()=>{document.getElementById('line').value='';document.getElementById('line').focus();};
+</script>
+</body>
+</html>
