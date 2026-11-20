@@ -462,13 +462,16 @@ const hubHtml = shell({
 
   <p class="enter-guide"><a href="/guide/welcome-visitors.html">Enter the Guide hub →</a></p>`,
 });
-// The front door, 20 Nov 2026: when tools/home/index.html exists it is the home page ("Privacy is value. Here is
-// how to play."), and the generated hub of every collection moves to /collections/. Its images live in root/assets/home.
-const HOME_SRC = path.join(path.dirname(fileURLToPath(import.meta.url)), 'home', 'index.html');
+// The front door, 20 Nov 2026: when tools/home/body.html exists it is the home page's body ("Privacy is value. Here
+// is how to play."), set inside the same shell as every page so it keeps the header (collections, Connect with
+// Star, search). The collection cards and counts are filled in here. Its images live in root/assets/home.
+const HOME_SRC = path.join(path.dirname(fileURLToPath(import.meta.url)), 'home', 'body.html');
 if (fs.existsSync(HOME_SRC)) {
-  fs.mkdirSync(path.join(OUT, 'collections'), { recursive: true });
-  fs.writeFileSync(path.join(OUT, 'collections', 'index.html'), hubHtml);
-  fs.copyFileSync(HOME_SRC, path.join(OUT, 'index.html'));
+  const homeBody = fs.readFileSync(HOME_SRC, 'utf8')
+    .replace('{{FED_CARDS}}', () => fedCards)
+    .replace('{{SIB_CARDS}}', () => sibCards)
+    .replace('{{STAR_CHART_SITES}}', String(FEDERATION.length + SIBLINGS.length));
+  fs.writeFileSync(path.join(OUT, 'index.html'), shell({ title: 'The Guide', site: 'guide', slug: 'index', lineage: '', body: homeBody }));
 } else {
   fs.writeFileSync(path.join(OUT, 'index.html'), hubHtml);
 }

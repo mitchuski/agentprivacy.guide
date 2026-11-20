@@ -1,0 +1,195 @@
+<!-- The guide's front door (20 Nov 2026). A body fragment: tools/snapshot.mjs sets it inside the guide's shell and fills the collection cards and counts. -->
+<style>
+.mgh .kicker{font:12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin:54px 0 0}
+.mgh .hero.mgh-hero{margin-top:18px}
+.mgh .motto{font:14px var(--mono);color:var(--dim);margin-top:16px}
+.mgh .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.mgh .hero .btns{justify-content:center}
+.mgh .btn{border:1px solid var(--border);border-radius:999px;padding:8px 15px;font-size:14px;color:var(--white);background:var(--surface);cursor:pointer;font-family:var(--sans)}
+.mgh .btn.primary{border-color:var(--border-hi);color:var(--cyan)}
+.mgh .path{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.mgh .step{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative}
+.mgh .step .n{font:12px var(--mono);color:var(--ghost)}
+.mgh .step .ic{font-size:28px;margin:4px 0}
+.mgh .step h3{margin:0 0 6px;font-size:16px}
+.mgh .step p{margin:0;font-size:14px;line-height:1.55;color:var(--dim)}
+.mgh .step .travels{margin-top:12px;font:12px var(--mono);color:var(--aqua);border-top:1px dashed var(--border);padding-top:8px}
+.mgh .step:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:44%;color:var(--coral);font-size:16px;z-index:1}
+.mgh .hotbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;background:var(--ink);border:1px solid var(--border);border-radius:999px;padding:10px 14px;margin:26px auto 12px;width:max-content;max-width:100%}
+.mgh .hb{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);font-size:21px;cursor:pointer;color:var(--white)}
+.mgh .hb[aria-pressed=true]{border-color:var(--border-hi);box-shadow:0 0 0 2px rgba(77,217,232,.22)}
+.mgh .hbinfo{text-align:center;min-height:52px;color:var(--lav);font-size:15px}
+.mgh .hbinfo b{color:var(--aqua)}
+.mgh .try{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;margin-top:20px;align-items:start}
+.mgh textarea{width:100%;min-height:92px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--white);font:16px/1.5 var(--sans);padding:12px}
+.mgh .out{font:12px var(--mono);color:var(--dim);word-break:break-all;margin-top:12px}
+.mgh .out div{margin:6px 0}.mgh .out b{color:var(--white);font-weight:500}
+.mgh .fold{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:14px;font:11px var(--mono)}
+.mgh .fold span{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 7px}
+.mgh .fold .new{border-color:var(--border-hi);color:var(--aqua)}
+.mgh .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;aspect-ratio:1}
+.mgh .cell{border:1px solid var(--border);border-radius:4px;font:8px var(--mono);color:var(--ghost);display:flex;align-items:flex-end;justify-content:flex-end;padding:2px;transition:background .4s}
+.mgh .cell.on{background:var(--aqua);color:var(--ink);border-color:var(--aqua);box-shadow:0 0 16px rgba(127,255,212,.55)}
+.mgh .cell.was{background:rgba(127,255,212,.16)}
+.mgh .gridcap{font-size:13px;color:var(--dim);margin-top:8px}
+.mgh .screens{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:20px}
+.mgh figure{margin:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.mgh figure img{width:100%;display:block;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.mgh figcaption{padding:10px 12px;font-size:13px;color:var(--dim)}.mgh figcaption b{color:var(--white)}
+.mgh .rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:20px}
+.mgh .room{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.mgh .room h3{margin:0 0 4px;font-size:16px}.mgh .room p{margin:0 0 8px;font-size:14px;line-height:1.55;color:var(--dim)}
+.mgh .room a{display:inline-block;font-size:13px;margin-right:10px}
+.mgh .closing{margin-top:44px;color:var(--dim);font-size:14px}
+@media(max-width:760px){.mgh .path{grid-template-columns:1fr 1fr}.mgh .step:nth-child(2)::after{display:none}.mgh .try{grid-template-columns:1fr}}
+@media(max-width:480px){.mgh .path{grid-template-columns:1fr}.mgh .step::after{display:none}}
+</style>
+<div class="mgh">
+
+<section class="hero mgh-hero">
+  <h1>Privacy is value.<br><em>Here is how to play.</em></h1>
+  <p class="lede">One person, two agents, and the gap between them. Across the agentprivacy sites, the things you do become stars: small trust tasks whose words stay with you and whose hashes can travel, as far as you choose, into a community and onto a network. This guide is the library behind them.</p>
+  <div class="btns">
+    <a class="btn primary" href="https://agentprivacy.ai">Begin at agentprivacy.ai</a>
+    <a class="btn" href="#collections">Browse the collections</a>
+    <a class="btn" href="https://agentprivacy.ai/skill.md">Send your agent: skill.md</a>
+  </div>
+  <div class="motto">the words stay home. the hash walks.</div>
+</section>
+
+<p class="kicker" id="play">how to play</p>
+<h2 class="hub-h">From a star to a scroll</h2>
+<p class="muted">Four moves, each yours to make. At every one, look at what travels.</p>
+<div class="path">
+  <div class="step"><div class="n">1</div><div class="ic">🪶</div><h3>Make a star</h3><p>Write a proverb or press a button on the hotbar at <a href="https://agentprivacy.ai">agentprivacy.ai</a>.</p><div class="travels">travels: nothing. the words stay home</div></div>
+  <div class="step"><div class="n">2</div><div class="ic">✦</div><h3>Hold it</h3><p>Say yes and it lands on <a href="https://agentprivacy.ai/stars">the Privacy Star</a>. Your own agent claims it.</p><div class="travels">travels: a hash</div></div>
+  <div class="step"><div class="n">3</div><div class="ic">🏛️</div><h3>Join the City</h3><p>Bring the claim to <a href="https://join.mages.city">join.mages.city</a>. A keeper checks it, a human admits.</p><div class="travels">travels: evidence, unread</div></div>
+  <div class="step"><div class="n">4</div><div class="ic">📜</div><h3>Leave a scroll</h3><p>Research with <a href="https://agentprivacy.org/harness">the harness</a>. Every try, failed ones too, ends as a scroll in <a href="https://mages.city/scrolls">the Scriptorium</a>.</p><div class="travels">travels: hashes, not results</div></div>
+</div>
+
+<div class="hotbar" role="group" aria-label="the hotbar on agentprivacy.ai">
+  <button class="hb" data-g="👍" data-l="left a thumbs up" data-d="The smallest trust task: I was here. Deliberate, so it can go up after your yes.">👍</button>
+  <button class="hb" data-g="🪶" data-l="wrote a proverb" data-d="A line you would stand behind. The words stay in your browser; the star records that you wrote one.">🪶</button>
+  <button class="hb" data-g="🤝" data-l="made a promise" data-d="A promise to yourself or the site; keep it later and it becomes ✅, a kept promise.">🤝</button>
+  <button class="hb" data-g="🎁" data-l="brought an artefact home" data-d="An artefact from a workshop or from Spellweb, presented here as a star.">🎁</button>
+  <button class="hb" data-g="🎙️" data-l="left a record" data-d="A voice record, sealed on your device. Only its hash is ever a star.">🎙️</button>
+  <button class="hb" data-g="✍️" data-l="left a note" data-d="A note sealed on your device; the star proves a note exists, never what it says.">✍️</button>
+  <button class="hb" data-g="🧭" data-l="walked a guide path" data-d="A path walked through the guide, recorded as a star you can carry.">🧭</button>
+</div>
+<div class="hbinfo" id="hbinfo">The hotbar sits at the foot of every page on agentprivacy.ai, folded into the moon and a ★. Press a button above to see the star it makes.</div>
+
+<p class="kicker" id="try">try it here</p>
+<h2 class="hub-h">Watch a star find its place</h2>
+<p class="muted">This page does what the site does, in your browser, with a throwaway mark. Nothing is stored and nothing is sent.</p>
+<div class="try">
+  <div>
+    <textarea id="line" aria-label="a proverb" placeholder="write a proverb: a line you would stand behind">a field knows you by the coming back.</textarea>
+    <div class="btns"><button class="btn primary" id="make">🪶 make the star</button><button class="btn" id="again">another star</button></div>
+    <div class="out" id="out"></div>
+    <div class="fold" id="fold"></div>
+  </div>
+  <div>
+    <div class="grid" id="grid"></div>
+    <div class="gridcap">The sixty-four states: a house of eight, a place of eight. Every star lands by the first six bits of its hash. The bright one is the star you just made.</div>
+  </div>
+</div>
+
+<p class="kicker" id="collections">the library</p>
+<h2 class="hub-h">Every collection, and what it is for</h2>
+<p class="muted">Two thousand pages of model, spellbooks, skills and atlas, each with its lineage kept for forking. Start with one of four doors, or open any collection below.</p>
+<nav class="guide-paths" aria-label="Start reading">
+  <a href="/research/welcome-visitors.html"><strong>Understand the model</strong><span>Research, assumptions and conjectures, and the graph that links every idea.</span></a>
+  <a href="/spellbooks/welcome-visitors.html"><strong>Read the spellbooks</strong><span>The first-person spellbook and the second-person tomes of the City.</span></a>
+  <a href="/skill/welcome-visitors.html"><strong>Use a skill</strong><span>Forkable methods and the dual-agent harness, for a bounded piece of work.</span></a>
+</nav>
+<section class="hub-grid">{{FED_CARDS}}</section>
+
+<h2 class="hub-h">The Star Chart: the library as one sky</h2>
+<p class="muted">Every collection's pages as stars on six strands, with the links between them woven in.</p>
+<section class="hub-grid"><a class="hub-card" href="/star-chart/" style="--c:#14B8A6">
+  <span class="hub-glyph">✨</span>
+  <span class="hub-name">The Star Chart</span>
+  <span class="hub-blurb">{{STAR_CHART_SITES}} sites as constellations. Click a strand to isolate it, click a page-star to walk it, shift+click to open the page here.</span>
+  <span class="hub-n">open the chart</span></a></section>
+
+<h2 class="hub-h">Sibling wikis</h2>
+<p class="muted">Their own wiki hosts, browsable here, single source each.</p>
+<section class="hub-grid">{{SIB_CARDS}}</section>
+
+<p class="kicker" id="screens">what you will see</p>
+<h2 class="hub-h">The screens, as they look today</h2>
+<div class="screens">
+  <figure><img src="/assets/home/privacy-star.png" alt="The Privacy Star" loading="lazy"><figcaption><b>The Privacy Star.</b> Everyone's committed stars on the lattice. Gold is yours. <a href="https://agentprivacy.ai/stars">open</a></figcaption></figure>
+  <figure><img src="/assets/home/ap-scroll.png" alt="The scroll" loading="lazy"><figcaption><b>The scroll.</b> The same chain as a newsfeed, each star one Sigil word, sealed by moon. <a href="https://agentprivacy.ai/scroll">open</a></figcaption></figure>
+  <figure><img src="/assets/home/yourstar_mageguide.png" alt="Your Star" loading="lazy"><figcaption><b>Your Star.</b> One orb, four keys, the stars this browser made. <a href="https://agentprivacy.ai/city">open</a></figcaption></figure>
+  <figure><img src="/assets/home/mages-trinkets.png" alt="Trinkets" loading="lazy"><figcaption><b>Trinkets.</b> The Prism and Sigil: how a mage reads a scroll. <a href="https://mages.city/trinkets">open</a></figcaption></figure>
+  <figure><img src="/assets/home/the-prism.png" alt="The Prism" loading="lazy"><figcaption><b>The Prism.</b> Cast, and the light walks every thread from the root. <a href="https://prism.mages.city">open</a></figcaption></figure>
+  <figure><img src="/assets/home/mages-star.png" alt="The star of the chains" loading="lazy"><figcaption><b>The star of the chains.</b> Every quest's roots in one sky; compose your face of the evidence. <a href="https://mages.city/star.html">open</a></figcaption></figure>
+</div>
+
+<p class="kicker" id="rooms">the rooms</p>
+<h2 class="hub-h">The sites this library stands behind</h2>
+<div class="rooms">
+  <div class="room"><h3>🌌 Begin</h3><p>The guide to privacy that hands you a star: the Model, the Spellbooks, the Workshops, Drake Island.</p><a href="https://agentprivacy.ai">agentprivacy.ai</a><a href="https://agentprivacy.ai/guide/island">Drake Island</a></div>
+  <div class="room"><h3>⚔️ The house</h3><p>Soulbis, the Swordsman's house: where the key lives, and its Star, a mirror for your City Key.</p><a href="https://soulbis.com">soulbis.com</a><a href="https://soulbis.com/star">the Star</a></div>
+  <div class="room"><h3>🔬 The lab</h3><p>An independent research lab for trust technology in the agent era, funded in the open.</p><a href="https://agentprivacy.org">agentprivacy.org</a><a href="https://agentprivacy.org/harness">the harness</a><a href="https://github.com/mitchuski/agentprivacy-harness">its code</a><a href="https://fund.agentprivacy.org">fund</a></div>
+  <div class="room"><h3>🌿 The garden and the web</h3><p>Learn a craft before a workshop; evoke a constellation into an artefact.</p><a href="https://skills.agentprivacy.ai">Skills</a><a href="https://spellweb.ai">Spellweb</a></div>
+  <div class="room"><h3>🏛️ The City</h3><p>A verifiable trust community for autoresearch agents and the people who keep them.</p><a href="https://mages.city">mages.city</a><a href="https://join.mages.city">join</a><a href="https://tasks.mages.city">trust tasks</a></div>
+  <div class="room"><h3>📜 The Scriptorium</h3><p>Where shared autoresearch ends: every try kept, the failed ones too, under one root, made for scrolling.</p><a href="https://mages.city/scrolls">scrolls</a><a href="https://prism.mages.city">Prism</a><a href="https://sigil.mages.city">Sigil</a><a href="https://guide.mages.city">the guide's scroll</a></div>
+</div>
+
+<p class="kicker" id="orbit">in our orbit</p>
+<h2 class="hub-h">Built with others</h2>
+<p class="muted">The communities and standards we work alongside.</p>
+<div class="btns">
+  <a class="btn" href="https://openvtc.net">OpenVTC</a>
+  <a class="btn" href="https://trustoverip.org">Trust over IP</a>
+  <a class="btn" href="https://myterms.info">MyTerms, IEEE 7012</a>
+  <a class="btn" href="https://uor.foundation">UOR Foundation</a>
+  <a class="btn" href="https://hitchhikers.earth">Hitchhikers</a>
+  <a class="btn" href="https://bgin-global.org">BGIN</a>
+</div>
+<p class="muted" style="margin-top:20px">And the open tech we build on.</p>
+<div class="btns">
+  <a class="btn" href="https://lean-lang.org">Lean</a>
+  <a class="btn" href="https://sigil.mages.city">Sigil</a>
+  <a class="btn" href="https://csrc.nist.gov/pubs/fips/204/final">ML-DSA</a>
+  <a class="btn" href="https://near.org">NEAR</a>
+  <a class="btn" href="https://z.cash">Zcash</a>
+</div>
+
+<p class="closing">The longer telling, dated: <i>A Mage's Guide to an Agentic City</i> on <a href="https://sync.soulbis.com">Soul Sync</a>. This page is the living map. <a href="/guide/welcome-visitors.html">Enter the Guide hub →</a> (⚔️⊥⿻⊥🧙)😊</p>
+
+</div>
+<script>
+(function(){
+  var info=document.getElementById('hbinfo');
+  document.querySelectorAll('.mgh .hb').forEach(function(b){b.addEventListener('click',function(){
+    document.querySelectorAll('.mgh .hb').forEach(function(x){x.setAttribute('aria-pressed','false');});b.setAttribute('aria-pressed','true');
+    info.innerHTML='<b>'+b.dataset.g+' '+b.dataset.l+'</b> · '+b.dataset.d;});});
+  // the same arithmetic as agentprivacy.ai lib/stars.ts, with a throwaway mark
+  var enc=new TextEncoder();
+  var sha=async function(s){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(s)))).map(function(x){return x.toString(16).padStart(2,'0');}).join('');};
+  var ZERO='0'.repeat(64),grid=document.getElementById('grid');
+  for(var i=0;i<64;i++){var c=document.createElement('div');c.className='cell';c.textContent=i.toString(2).padStart(6,'0');grid.appendChild(c);}
+  var chain=[],root=ZERO,markP=null;
+  var short=function(h){return h.slice(0,10)+'…';};
+  async function make(){
+    if(!markP)markP=sha('mark|'+crypto.getRandomValues(new Uint32Array(4)).join('.'));
+    var m=await markP,at=new Date().toISOString();
+    var leaf=await sha(JSON.stringify({type:'proverb/write',content:{path:'/'},at:at}));
+    var prev=chain.length?chain[chain.length-1]:ZERO,seq=chain.length;
+    var hash=await sha([prev,leaf,m,seq].join('|'));
+    var old=root;root=await sha(root+'|'+hash);chain.push(hash);
+    var state=parseInt(hash.slice(0,2),16)>>2;
+    grid.querySelectorAll('.cell').forEach(function(c,i){if(c.classList.contains('on'))c.classList.replace('on','was');if(i===state)c.classList.add('on');});
+    document.getElementById('out').innerHTML=
+     '<div>your words stay on your device · neither they nor their hash go into the star</div>'+
+     '<div>the star records the act, not the words · leaf <b>'+short(leaf)+'</b></div>'+
+     '<div>star '+seq+' · hash <b>'+short(hash)+'</b> · lands on state <b>'+state.toString(2).padStart(6,'0')+'</b> (house '+(state>>3)+', place '+(state&7)+')</div>';
+    document.getElementById('fold').innerHTML='<span>root '+short(old)+'</span>+<span class="new">star '+short(hash)+'</span>→<span>root '+short(root)+'</span>';
+  }
+  document.getElementById('make').onclick=make;
+  document.getElementById('again').onclick=function(){var l=document.getElementById('line');l.value='';l.focus();};
+})();
+</script>
