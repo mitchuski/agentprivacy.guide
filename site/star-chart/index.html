@@ -644,7 +644,8 @@ async function loadWiki(){
   const alive = maps.filter(Boolean);
   let pageCount=0;
   const seated = [];   // [{site, pages}] — kept so links weave after ALL sites are seated
-  for(const {site, map} of alive){
+  for(let {site, map} of alive){
+    map = (Array.isArray(map) ? map : []).filter(pg => pg && typeof pg.slug === 'string' && pg.slug);   // a remote sitemap row without a slug once stopped every star from seating
     map.sort((a,b)=>(b.date||0)-(a.date||0));
     const pages = map.slice(0, cfg.pagesPerSite||24);
     for(const pg of pages){

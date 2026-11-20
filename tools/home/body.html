@@ -40,6 +40,14 @@
 .mgh .room{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
 .mgh .room h3{margin:0 0 4px;font-size:16px}.mgh .room p{margin:0 0 8px;font-size:14px;line-height:1.55;color:var(--dim)}
 .mgh .room a{display:inline-block;font-size:13px;margin-right:10px}
+.mgh .viz{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0 10px}
+.mgh .vizcard{display:block;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;color:var(--dim);transition:transform .2s,border-color .2s}
+.mgh .vizcard:hover{transform:translateY(-3px);border-color:var(--border-hi);color:var(--dim)}
+.mgh .vizcard img{width:100%;display:block;aspect-ratio:16/11;object-fit:cover}
+.mgh .vizcard span{display:block;padding:12px 14px;font-size:14px;line-height:1.55}
+.mgh .vizcard b{color:var(--white);font-family:var(--serif);font-style:italic;font-size:19px;font-weight:400;display:block;margin-bottom:2px}
+.mgh .vizcard i{color:var(--cyan);font-style:normal;font:12px var(--mono);display:block;margin-top:8px}
+@media(max-width:620px){.mgh .viz{grid-template-columns:1fr}}
 .mgh .closing{margin-top:44px;color:var(--dim);font-size:14px}
 @media(max-width:760px){.mgh .path{grid-template-columns:1fr 1fr}.mgh .step:nth-child(2)::after{display:none}.mgh .try{grid-template-columns:1fr}}
 @media(max-width:480px){.mgh .path{grid-template-columns:1fr}.mgh .step::after{display:none}}
@@ -104,13 +112,12 @@
 </nav>
 <section class="hub-grid">{{FED_CARDS}}</section>
 
-<h2 class="hub-h">The Star Chart: the library as one sky</h2>
-<p class="muted">Every collection's pages as stars on six strands, with the links between them woven in.</p>
-<section class="hub-grid"><a class="hub-card" href="/star-chart/" style="--c:#14B8A6">
-  <span class="hub-glyph">✨</span>
-  <span class="hub-name">The Star Chart</span>
-  <span class="hub-blurb">{{STAR_CHART_SITES}} sites as constellations. Click a strand to isolate it, click a page-star to walk it, shift+click to open the page here.</span>
-  <span class="hub-n">open the chart</span></a></section>
+<h2 class="hub-h" id="sky">The library as one sky: the torus and the sphere</h2>
+<p class="muted">Two ways to see every page at once. Click either to open it.</p>
+<div class="viz">
+  <a class="vizcard" href="/star-chart/"><img src="/assets/home/torus.jpg" alt="The star chart: the guide's pages as stars on a torus" loading="lazy"><span><b>The torus</b>{{STAR_CHART_SITES}} sites as constellations on six strands, with the links between pages woven in. Click a strand to isolate it, a page-star to walk it.<i>open the star chart →</i></span></a>
+  <a class="vizcard" href="/star-chart/sphere/"><img src="/assets/home/sphere.jpg" alt="The sphere: every guide page placed by what its text says" loading="lazy"><span><b>The sphere</b>Every guide page placed by what its text says, read along six axes. Hover a star to read it, click to see where the torus puts it.<i>open the sphere →</i></span></a>
+</div>
 
 <h2 class="hub-h">Sibling wikis</h2>
 <p class="muted">Their own wiki hosts, browsable here, single source each.</p>
